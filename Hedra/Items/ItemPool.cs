@@ -9,7 +9,6 @@
 
 using System;
 using System.Linq;
-using Hedra.Core;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ItemSystem.Templates;
 using Hedra.Numerics;
@@ -17,7 +16,7 @@ using Hedra.Numerics;
 namespace Hedra.Items
 {
     /// <summary>
-    /// Description of ItemPool.
+    ///     Description of ItemPool.
     /// </summary>
     public static class ItemPool
     {
@@ -29,14 +28,14 @@ namespace Hedra.Items
 
         static ItemPool()
         {
-           WeaponEquipmentTypes =  new[]
+            WeaponEquipmentTypes = new[]
             {
                 EquipmentType.Axe, EquipmentType.Claw, EquipmentType.Bow,
                 EquipmentType.DoubleBlades, EquipmentType.Katar, EquipmentType.Staff,
                 EquipmentType.Knife, EquipmentType.Sword, EquipmentType.Hammer
             };
 
-           ArmorEquipmentTypes = new[]
+            ArmorEquipmentTypes = new[]
             {
                 EquipmentType.Boots, EquipmentType.Pants,
                 EquipmentType.Chestplate, EquipmentType.Helmet
@@ -53,7 +52,7 @@ namespace Hedra.Items
                 ItemType.Gold.ToString(),
                 ItemType.Glider.ToString()
             };
-            
+
             BlacklistedEquipment = new string[0];
         }
 
@@ -67,21 +66,19 @@ namespace Hedra.Items
                 Settings.SameTier ? Template.Tier == selectedTier : Template.Tier <= selectedTier).ToArray();
 
             if (Settings.EquipmentType != null)
-            {
-                newTemplates = newTemplates.Where(Template => Template.EquipmentType == Settings.EquipmentType).ToArray();
-            }
+                newTemplates = newTemplates.Where(Template => Template.EquipmentType == Settings.EquipmentType)
+                    .ToArray();
 
             if (newTemplates.Length == 0 && Settings.EquipmentType != null)
-            {
-                newTemplates = templates.Where(Template => Template.Tier <= selectedTier 
-                && Template.EquipmentType == Settings.EquipmentType).ToArray();
-            }
+                newTemplates = templates.Where(Template => Template.Tier <= selectedTier
+                                                           && Template.EquipmentType == Settings.EquipmentType)
+                    .ToArray();
             templates = newTemplates
                 .Where(Template => Array.IndexOf(BlacklistedEquipment, Template.EquipmentType) == -1)
                 .Where(Template => Array.IndexOf(BlacklistedItems, Template.Name) == -1)
                 .ToArray();
-            if (templates.Length == 0) throw new ArgumentOutOfRangeException($"No valid item template found.");
-            
+            if (templates.Length == 0) throw new ArgumentOutOfRangeException("No valid item template found.");
+
             var item = Item.FromTemplate(templates[rng.Next(0, templates.Length)]);
             return Grab(item.Name, Settings.Seed);
         }
@@ -91,17 +88,15 @@ namespace Hedra.Items
             if (Tier == 0) return Tier;
 
             var selectedTier = Tier;
-            for (var i = (int)Tier-1; i > -1; i--)
+            for (var i = (int)Tier - 1; i > -1; i--)
             {
                 var useThisTier = true;
-                for (var k = 0; k < (int) Tier-i+1; k++)
-                {
-                    useThisTier = useThisTier && Rng.Next(0, 4) == 1;
-                }
+                for (var k = 0; k < (int)Tier - i + 1; k++) useThisTier = useThisTier && Rng.Next(0, 4) == 1;
                 if (!useThisTier) continue;
-                selectedTier = (ItemTier) i;
+                selectedTier = (ItemTier)i;
                 break;
             }
+
             return selectedTier;
         }
 
@@ -114,24 +109,36 @@ namespace Hedra.Items
                 Item = RandomizeTier(Item, Rng);
                 var tierChanged = originalTier != Item.Tier;
                 Item.SetAttribute(CommonAttributes.Damage, Item.GetAttribute<float>(CommonAttributes.Damage)
-                    * (1.0f + (Rng.NextFloat() * (.1f + (tierChanged ? .1f * (int) Item.Tier : .0f) ) - .075f)));
+                                                           * (1.0f + (Rng.NextFloat() *
+                                                                      (.1f + (tierChanged
+                                                                          ? .1f * (int)Item.Tier
+                                                                          : .0f)) -
+                                                                      .075f)));
                 Item.SetAttribute(CommonAttributes.AttackSpeed, Item.GetAttribute<float>(CommonAttributes.AttackSpeed)
-                    * (1.0f + (Rng.NextFloat() * (.1f + (tierChanged ? .1f * (int)Item.Tier : .0f)) - .075f)));
-                if ( Item.Tier > ItemTier.Common && Rng.Next(0, 10) == 1)
-                {
-                    Item.SetAttribute(CommonAttributes.EffectType, EffectTypes[Rng.Next(0, EffectTypes.Length)].ToString());
-                }
+                                                                * (1.0f + (Rng.NextFloat() *
+                                                                           (.1f + (tierChanged
+                                                                               ? .1f * (int)Item.Tier
+                                                                               : .0f)) -
+                                                                           .075f)));
+                if (Item.Tier > ItemTier.Common && Rng.Next(0, 10) == 1)
+                    Item.SetAttribute(CommonAttributes.EffectType,
+                        EffectTypes[Rng.Next(0, EffectTypes.Length)].ToString());
             }
+
             if (isBuiltin && ArmorEquipmentTypes.Contains(equipmentType))
             {
-
             }
+
             if (isBuiltin && EquipmentType.Ring == equipmentType)
             {
-                Item.SetAttribute(CommonAttributes.MovementSpeed, Item.GetAttribute<float>(CommonAttributes.MovementSpeed) * (1.0f + (Rng.NextFloat() * .3f - .15f)));
-                Item.SetAttribute(CommonAttributes.AttackSpeed, Item.GetAttribute<float>(CommonAttributes.AttackSpeed) * (1.0f + (Rng.NextFloat() * .3f - .15f)));
-                Item.SetAttribute(CommonAttributes.Health, Item.GetAttribute<float>(CommonAttributes.Health) * (1.0f + (Rng.NextFloat() * .3f - .15f)));
+                Item.SetAttribute(CommonAttributes.MovementSpeed,
+                    Item.GetAttribute<float>(CommonAttributes.MovementSpeed) * (1.0f + (Rng.NextFloat() * .3f - .15f)));
+                Item.SetAttribute(CommonAttributes.AttackSpeed,
+                    Item.GetAttribute<float>(CommonAttributes.AttackSpeed) * (1.0f + (Rng.NextFloat() * .3f - .15f)));
+                Item.SetAttribute(CommonAttributes.Health,
+                    Item.GetAttribute<float>(CommonAttributes.Health) * (1.0f + (Rng.NextFloat() * .3f - .15f)));
             }
+
             return Item;
         }
 
@@ -145,40 +152,42 @@ namespace Hedra.Items
                 for (var k = 0; k < i; k++)
                 {
                     shouldConvert = Rng.NextBool() && Rng.NextBool();
-                    if(!shouldConvert) break;
+                    if (!shouldConvert) break;
                 }
+
                 if (shouldConvert)
                 {
                     newTier = (ItemTier)i;
                     break;
                 }
             }
+
             Item.Tier = newTier;
             return Item;
         }
 
         public static Item[] Matching(Predicate<ItemTemplate> Searcher)
         {
-            return ItemLoader.Templater.Templates.Where(I => Searcher(I)).Select(I => ItemPool.Grab(I.Name)).ToArray();
+            return ItemLoader.Templater.Templates.Where(I => Searcher(I)).Select(I => Grab(I.Name)).ToArray();
         }
 
         public static Item Grab(string Name)
         {
             return Item.FromTemplate(ItemLoader.Templater[Name]);
         }
-        
+
         public static Item Grab(string Name, int Seed)
         {
             var item = Item.FromTemplate(ItemLoader.Templater[Name]);
             item.SetAttribute(CommonAttributes.Seed.ToString(), Seed, true, null, true);
-            return ItemPool.Randomize(item, new Random(Seed));
+            return Randomize(item, new Random(Seed));
         }
 
         public static Item Grab(ItemType Type)
         {
             return Grab(Type.ToString());
         }
-        
+
         public static Item Grab(ItemTier Tier)
         {
             return Grab(new ItemPoolSettings(Tier));
@@ -205,7 +214,8 @@ namespace Hedra.Items
         }
     }
 
-    public enum EffectType{
+    public enum EffectType
+    {
         None,
         Bleed,
         Fire,

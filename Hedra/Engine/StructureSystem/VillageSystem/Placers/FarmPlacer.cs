@@ -1,5 +1,4 @@
 using System;
-using Hedra.Core;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using Hedra.Numerics;
@@ -9,10 +8,11 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
     public class FarmPlacer : Placer<FarmParameters>
     {
         private readonly FarmTemplate _farm;
-        private readonly WindmillDesignTemplate[] _windmillDesigns;
         private readonly FarmDesignTemplate[] _farmDesigns;
-        
-        public FarmPlacer(FarmTemplate Template, FarmDesignTemplate[] Farms, WindmillDesignTemplate[] Windmills, Random Rng) : base(Farms, Rng)
+        private readonly WindmillDesignTemplate[] _windmillDesigns;
+
+        public FarmPlacer(FarmTemplate Template, FarmDesignTemplate[] Farms, WindmillDesignTemplate[] Windmills,
+            Random Rng) : base(Farms, Rng)
         {
             _farm = Template;
             _farmDesigns = Farms;
@@ -32,7 +32,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
                 Rng = Rng
             };
         }
-        
+
         private T SelectProp<T>(T[] Templates) where T : class, IProbabilityTemplate
         {
             var rng = Rng.NextFloat();
@@ -43,6 +43,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
                     return Templates[i];
                 accum += Templates[i].Chance / 100f;
             }
+
             return null;
         }
     }

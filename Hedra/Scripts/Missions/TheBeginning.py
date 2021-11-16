@@ -1,13 +1,13 @@
 import clr
-from Hedra import World
-import MissionCore
 from Hedra.Components import TradeComponent, TalkComponent
-from Hedra.Mission import MissionBuilder, QuestTier, DialogObject, QuestReward
+from Hedra.Engine.WorldBuilding import NPCCreator
+from Hedra.Mission import MissionBuilder, QuestTier, QuestReward
 from Hedra.Mission.Blocks import TalkMission
-from System import Array, Object, Single
-from System.Numerics import Vector3
 from Hedra.Numerics import VectorExtensions
-from Hedra.Engine.WorldBuilding import NameGenerator, NPCCreator
+from System import Single
+from System.Numerics import Vector3
+
+import MissionCore
 
 clr.ImportExtensions(VectorExtensions)
 
@@ -16,6 +16,7 @@ QUEST_NAME = 'TheBeginning'
 QUEST_TIER = QuestTier.Easy
 IS_STORYLINE = True
 MAX_DISTANCE = 768
+
 
 def setup_timeline(position, giver, owner, rng):
     builder = MissionBuilder()
@@ -35,16 +36,17 @@ def setup_timeline(position, giver, owner, rng):
         talk = entity.SearchComponent[TalkComponent]()
         if talk: entity.RemoveComponent(talk)
         talk_to.append(entity)
-    
+
     for npc in talk_to:
         talk = TalkMission(MissionCore.create_dialog('quest_the_beginning_npc_dialog', [npc.Name]))
         talk.Humanoid = npc
         builder.Next(talk)
-    
+
     reward = QuestReward()
     reward.CustomDialog = MissionCore.create_dialog('quest_the_beginning_end_dialog')
     builder.SetReward(reward)
     return builder
+
 
 def can_give(position):
     return False

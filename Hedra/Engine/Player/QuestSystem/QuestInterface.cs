@@ -1,19 +1,12 @@
 using System;
+using System.Numerics;
 using Hedra.Core;
-using Hedra.Engine.Game;
-using Hedra.Engine.Input;
-using Hedra.Engine.Localization;
-using Hedra.Engine.Player.CraftingSystem;
 using Hedra.Engine.Player.Inventory;
-using Hedra.Engine.QuestSystem;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
-using Hedra.EntitySystem;
 using Hedra.Input;
 using Hedra.Localization;
-using Hedra.Sound;
-using System.Numerics;
 using Hedra.Numerics;
+using Hedra.Sound;
 using Silk.NET.Input;
 
 namespace Hedra.Engine.Player.QuestSystem
@@ -22,11 +15,10 @@ namespace Hedra.Engine.Player.QuestSystem
     {
         private const int Columns = 5;
         private const int Rows = 1;
-        public override Key OpeningKey => Controls.QuestLog;
         private readonly IPlayer _player;
-        private bool _show;
         private readonly QuestingJournal _questItemInterface;
         private readonly InventoryStateManager _stateManager;
+        private bool _show;
 
         public QuestInterface(IPlayer Player)
         {
@@ -39,33 +31,50 @@ namespace Hedra.Engine.Player.QuestSystem
             _stateManager.OnStateChange += Invoke;
             _player.Questing.QuestAccepted += O =>
             {
-                if(!O.ShowPlaque) return;
+                if (!O.ShowPlaque) return;
                 _player.MessageDispatcher.ShowPlaque(
                     $"{Translations.Get("new_quest")}{Environment.NewLine}{O.ShortDescription}", 1f
                 );
             };
             _player.Questing.QuestCompleted += O =>
             {
-                if(!O.ShowPlaque) return;
+                if (!O.ShowPlaque) return;
                 _player.MessageDispatcher.ShowPlaque(
                     $"{Translations.Get("quest_completed")}{Environment.NewLine}{O.ShortDescription}", 1f
                 );
             };
             _player.Questing.QuestAbandoned += O =>
             {
-                if(!O.ShowPlaque) return;
+                if (!O.ShowPlaque) return;
                 _player.MessageDispatcher.ShowPlaque(
                     $"{Translations.Get("quest_abandoned")}{Environment.NewLine}{O.ShortDescription}", 1f, false
                 );
             };
             _player.Questing.QuestFailed += O =>
             {
-                if(!O.ShowPlaque) return;
+                if (!O.ShowPlaque) return;
                 _player.MessageDispatcher.ShowPlaque(
                     $"{Translations.Get("quest_failed")}{Environment.NewLine}{O.ShortDescription}", 1f, false
                 );
             };
         }
+
+        public override Key OpeningKey => Controls.QuestLog;
+
+        public override bool Show
+        {
+            get => _show;
+            set
+            {
+                if (_show == value || _stateManager.GetState() != _show) return;
+                _show = value;
+                SetInventoryState(_show);
+                UpdateView();
+                SoundPlayer.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
+            }
+        }
+
+        protected override bool HasExitAnimation => true;
 
         private void UpdateView()
         {
@@ -75,7 +84,7 @@ namespace Hedra.Engine.Player.QuestSystem
         private void SetInventoryState(bool State)
         {
             _questItemInterface.Enabled = State;
-    
+
             if (State)
             {
                 _stateManager.CaptureState();
@@ -90,17 +99,18 @@ namespace Hedra.Engine.Player.QuestSystem
                 _stateManager.ReleaseState();
             }
         }
-        
+
         public void Update()
         {
             if (_show)
             {
                 _player.View.CameraHeight = Mathf.Lerp(_player.View.CameraHeight, Vector3.UnitY * 4,
                     Time.DeltaTime * 8f);
-                _player.View.TargetPitch = Mathf.Lerp(_player.View.TargetPitch, 0f, (float)Time.DeltaTime * 16f);
+                _player.View.TargetPitch = Mathf.Lerp(_player.View.TargetPitch, 0f, Time.DeltaTime * 16f);
                 _player.View.TargetDistance =
-                    Mathf.Lerp(_player.View.TargetDistance, 10f, (float)Time.DeltaTime * 16f);
-                _player.View.TargetYaw = Mathf.Lerp(_player.View.TargetYaw, (float)Math.Atan2(-_player.Orientation.Z, -_player.Orientation.X),
+                    Mathf.Lerp(_player.View.TargetDistance, 10f, Time.DeltaTime * 16f);
+                _player.View.TargetYaw = Mathf.Lerp(_player.View.TargetYaw,
+                    (float)Math.Atan2(-_player.Orientation.Z, -_player.Orientation.X),
                     Time.DeltaTime * 16f);
             }
         }
@@ -109,20 +119,5 @@ namespace Hedra.Engine.Player.QuestSystem
         {
             _questItemInterface.Reset();
         }
-        
-        public override bool Show
-        {
-            get => _show;
-            set
-            {
-                if (_show == value || _stateManager.GetState() != _show) return;
-                _show = value;
-                SetInventoryState(_show);
-                UpdateView();
-                SoundPlayer.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
-            }
-        }
-        
-        protected override bool HasExitAnimation => true;
     }
 }

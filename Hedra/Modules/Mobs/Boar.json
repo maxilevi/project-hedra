@@ -1,5 +1,5 @@
 ﻿{
-  "Name" : "Boar", 
+  "Name": "Boar",
   "MaxHealth": 234.0,
   "AttackDamage": 5.0,
   "Speed": 1.15,
@@ -34,5 +34,5 @@
         "Speed": 1.15
       }
     ]
-  } 
+  }
 }

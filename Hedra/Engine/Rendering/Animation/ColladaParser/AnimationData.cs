@@ -6,19 +6,19 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
 
 namespace Hedra.Engine.Rendering.Animation.ColladaParser
 {
     /// <summary>
-    /// Description of AnimationData.
+    ///     Description of AnimationData.
     /// </summary>
     public class AnimationData
     {
-        public readonly float LengthSeconds;
         public readonly KeyFrameData[] KeyFrames;
-        
-        public AnimationData(float LengthSeconds, KeyFrameData[] KeyFrames){
+        public readonly float LengthSeconds;
+
+        public AnimationData(float LengthSeconds, KeyFrameData[] KeyFrames)
+        {
             this.LengthSeconds = LengthSeconds;
             this.KeyFrames = KeyFrames;
         }

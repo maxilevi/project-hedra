@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.ClassSystem;
 
@@ -13,12 +12,13 @@ namespace Hedra.API
         protected override void DoAdd(Class Key, string Value)
         {
             var key = ClassDesign.FromString(Key.ToString()).GetType();
-            var values = new[] {Value};
+            var values = new[] { Value };
             if (RestrictionsFactory.Instance.Has(key))
             {
                 values = values.Concat(RestrictionsFactory.Instance.Get(key)).ToArray();
                 RestrictionsFactory.Instance.Unregister(key);
             }
+
             RestrictionsFactory.Instance.Register(key, values);
         }
 
@@ -27,7 +27,7 @@ namespace Hedra.API
             var key = ClassDesign.FromString(Key.ToString()).GetType();
             var values = RestrictionsFactory.Instance.Get(key);
             values = values.Where(V => V != Value).ToArray();
-            if(values.Length == 0)
+            if (values.Length == 0)
                 RestrictionsFactory.Instance.Unregister(ClassDesign.FromString(Key.ToString()).GetType());
             else
                 RestrictionsFactory.Instance.Register(ClassDesign.FromString(Key.ToString()).GetType(), values);

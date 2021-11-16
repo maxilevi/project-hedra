@@ -9,15 +9,14 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Numerics;
 using Hedra.API;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.Core;
-using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
-using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
@@ -25,44 +24,60 @@ using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
-using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Scenes;
-using Hedra.Engine.Sound;
+using Hedra.Engine.SkillSystem;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.StructureSystem.VillageSystem;
+using Hedra.Engine.Windowing;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
-using Hedra.Game;
-using Hedra.Items;
-using Hedra.Sound;
-using System.Numerics;
-using Hedra.Engine.Core;
-using Hedra.Engine.SkillSystem;
-using Hedra.Engine.Windowing;
-using Hedra.Numerics;
 using Hedra.Framework;
+using Hedra.Game;
+using Hedra.Numerics;
+using Hedra.Sound;
 using Hedra.Structures;
 
 namespace Hedra.Engine.Generation
 {
     public class WorldProvider : IWorldProvider
     {
+        private static readonly int[] _menuSeeds =
+        {
+            843966896,
+            365367015,
+            -1207602704,
+            -1316611004,
+            1711677118,
+            434316731,
+            -1521453338,
+            930356700,
+            2108869840,
+            247179995,
+            -488844428,
+            -1835204548,
+            -1527889388,
+            1436884727,
+            -1122906719,
+            1050378001,
+            -65738522,
+            1590961909
+        };
+
         private readonly RenderingComparer _renderingComparer;
-        private Vector3 _spawningVillagePoint;
-        private Vector3 _spawningPoint;
-        private WorldType _type;
+        private readonly Dictionary<Vector2, Chunk> _unculledChunks;
+        private readonly object _worldObjectsLock = new object();
         private int _previousId;
-        private WorldBuilder _builder;
-    
+        private WorldType _type;
+
         public WorldProvider()
         {
-            _builder = new WorldBuilder();
+            Builder = new WorldBuilder();
             _entities = new HashSet<IEntity>();
             _worldObjects = new HashSet<IWorldObject>();
             _chunks = new HashSet<Chunk>();
@@ -87,13 +102,14 @@ namespace Hedra.Engine.Generation
         public StructureHandler StructureHandler { get; private set; }
         public int Seed { get; private set; }
         public bool IsGenerated { get; private set; }
-        public WorldBuilder Builder => _builder;
-        public Vector3 SpawnPoint => _spawningPoint;
-        public Vector3 SpawnVillagePoint => _spawningVillagePoint;
+        public WorldBuilder Builder { get; }
+
+        public Vector3 SpawnPoint { get; private set; }
+
+        public Vector3 SpawnVillagePoint { get; private set; }
+
         public Dictionary<Vector2, Chunk> DrawingChunks { get; }
         public Dictionary<Vector2, Chunk> ShadowDrawingChunks { get; }
-        private readonly Dictionary<Vector2, Chunk> _unculledChunks;
-        private readonly object _worldObjectsLock = new object();
 
         public void Load()
         {
@@ -142,25 +158,20 @@ namespace Hedra.Engine.Generation
             get
             {
                 var newSeed = MenuSeed;
-                while (newSeed == MenuSeed)
-                {
-                    newSeed = Utils.Rng.Next(1, int.MaxValue / 2);
-                }
+                while (newSeed == MenuSeed) newSeed = Utils.Rng.Next(1, int.MaxValue / 2);
                 return newSeed;
             }
         }
 
         public void OccludeTest()
         {
-            if(!GameSettings.OcclusionCulling) return;
+            if (!GameSettings.OcclusionCulling) return;
             Occludable.Bind();
-            
+
             var chunks = Chunks;
             for (var i = 0; i < chunks.Count; ++i)
-            {
-                if(_unculledChunks.ContainsKey(chunks[i].Position.Xz()))
+                if (_unculledChunks.ContainsKey(chunks[i].Position.Xz()))
                     chunks[i].Mesh?.DrawQuery();
-            }
 
             Occludable.Unbind();
         }
@@ -182,48 +193,8 @@ namespace Hedra.Engine.Generation
                 GameSettings.OcclusionCulling = prevValue;
                 WorldRenderer.PrepareCameraMatrix();
             }
+
             _renderingComparer.Position = GameManager.Player.Position;
-        }
-
-        private static void AssertNoDuplicates(IList<Chunk> Chunks)
-        {
-            if(Chunks.Any(C => Chunks.Count(K => C.Position == K.Position) > 1))
-                throw new ArgumentException($"Found duplicate chunk at index {Chunks.IndexOf(Chunks.First(C => Chunks.Count(K => C.Position == K.Position) > 1))}");
-        }
-
-        private static void DoCullTest(ReadOnlyCollection<Chunk> ToDrawArray, Dictionary<Vector2, Chunk> Output, Dictionary<Vector2, Chunk> OutputIfFrustumCulled, bool IsRefractionPass = false)
-        {
-            for (var i = 0; i < ToDrawArray.Count; i++)
-            {
-                var chunk = ToDrawArray[i];
-                if(IsRefractionPass && !chunk.HasWater) continue;
-                if (chunk == null || chunk.Disposed)
-                {
-                    World.RemoveChunk(chunk);
-                    continue;
-                }
-                var offset = chunk.Position.Xz();
-                
-                if (WorldRenderer.EnableCulling)
-                {
-                    if (Culling.IsInside(chunk.Mesh))
-                    {
-                        if(!chunk.Mesh.Occluded)
-                            Output.Add(offset, chunk);
-                        OutputIfFrustumCulled?.Add(offset, chunk);
-                    }
-                }
-                else
-                {
-                    if (Output.ContainsKey(offset))
-                    {
-                        var b = Output[offset];
-                        int a = 0;
-                        continue;
-                    }
-                    Output.Add(offset, chunk);
-                }
-            }
         }
 
         public void Draw(WorldRenderType Type)
@@ -238,11 +209,11 @@ namespace Hedra.Engine.Generation
                         chunks[i].Mesh.Max + chunks[i].Mesh.Position, Vector4.One);
                 }*/
             }
-            
+
             var drawingChunks = DrawingChunks;
             var shadowDrawingChunks = ShadowDrawingChunks;
             var type = Type;
-            
+
             if (GameSettings.Wireframe) Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
 
             WorldRenderer.PrepareCameraMatrix();
@@ -251,46 +222,19 @@ namespace Hedra.Engine.Generation
             if (GameSettings.Wireframe) Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
         }
 
-        public void SaveChunk()
-        {
-            SaveRegion();
-        }
-
-        private void SaveRegion()
-        {
-            
-        }
-
-        public void Save(string Folder)
-        {
-            const int region = 12;
-            var regionSize = Math.Pow(2, 12);
-            var regions = new Dictionary<Vector2, List<Chunk>>();
-            var chunks = Chunks;
-            foreach (var chunk in chunks)
-            {
-                var src = new Vector2((chunk.OffsetX >> region) << region, (chunk.OffsetZ >> region) << region);
-                if (!regions.ContainsKey(src))
-                {
-                    regions[src] = new List<Chunk>();
-                }
-                regions[src].Add(chunk);
-            }
-        }
-        
         public float GetNoise(float X, float Y)
         {
             return (float)OpenSimplexNoise.Evaluate(X, Y); //_noise.GetSimplex(X, Y);
         }
-        
+
         public float GetNoise(float X, float Y, float Z)
         {
-            return (float) OpenSimplexNoise.Evaluate(X, Y, Z); //_noise.GetSimplex(X, Y, Z);
+            return (float)OpenSimplexNoise.Evaluate(X, Y, Z); //_noise.GetSimplex(X, Y, Z);
         }
 
         public void Update()
         {
-            _builder.Update();
+            Builder.Update();
         }
 
         public void Recreate(int NewSeed, WorldType Type)
@@ -304,12 +248,12 @@ namespace Hedra.Engine.Generation
             BiomePool = new BiomePool(_type);
             WorldBuilding = new WorldBuilding.WorldBuilding();
             OpenSimplexNoise.Load(NewSeed);
-            _builder.Discard();
-            _spawningPoint = FindSpawningPoint(GeneralSettings.SpawnPoint);
+            Builder.Discard();
+            SpawnPoint = FindSpawningPoint(GeneralSettings.SpawnPoint);
             var rng = new Random(Seed);
-            _spawningVillagePoint = FindSpawningPoint(
-                _spawningPoint
-                + new Vector3(rng.NextBool() ? -1 : 1, 0, rng.NextBool() ? -1 : 1) 
+            SpawnVillagePoint = FindSpawningPoint(
+                SpawnPoint
+                + new Vector3(rng.NextBool() ? -1 : 1, 0, rng.NextBool() ? -1 : 1)
                 * new Vector3(1.5f + rng.NextFloat() * 2, 0, 1.5f + rng.NextFloat() * 2)
                 * VillageDesign.MaxVillageRadius
             );
@@ -336,21 +280,20 @@ namespace Hedra.Engine.Generation
 
             var chunks = Chunks;
             for (var i = chunks.Count - 1; i > -1; i--)
-            {
                 try
                 {
-                    this.RemoveChunk(chunks[i]);
+                    RemoveChunk(chunks[i]);
                 }
                 catch (ArgumentOutOfRangeException e)
                 {
                     Log.WriteLine(e);
                 }
-            }
 
             var entities = Entities;
             for (var i = entities.Count - 1; i > -1; i--)
             {
-                if (entities[i] == LocalPlayer.Instance || entities[i] == LocalPlayer.Instance.Companion.Entity) continue;
+                if (entities[i] == LocalPlayer.Instance ||
+                    entities[i] == LocalPlayer.Instance.Companion.Entity) continue;
                 entities[i].Dispose();
             }
 
@@ -360,17 +303,17 @@ namespace Hedra.Engine.Generation
             CacheManager.Discard();
             MapBuilder.Discard();
 
-            this.AddEntity(GameManager.Player);
+            AddEntity(GameManager.Player);
 
             if (NewSeed == MenuSeed)
                 MenuBackground.Setup();
-            
+
             GC.Collect();
         }
 
         public void Discard()
         {
-            _builder.Discard();
+            Builder.Discard();
         }
 
         public T[] InRadius<T>(Vector3 Position, float Radius) where T : ISearchable
@@ -388,7 +331,7 @@ namespace Hedra.Engine.Generation
 
         public void AddChunkToQueue(Chunk Chunk, ChunkQueueType Type)
         {
-            _builder.Process(Chunk, Type);
+            Builder.Process(Chunk, Type);
         }
 
         public void AddEntity(IEntity Entity)
@@ -409,6 +352,7 @@ namespace Hedra.Engine.Generation
                 if (!_entities.Contains(Entity)) return;
                 _entities.Remove(Entity);
             }
+
             _isEntityCacheDirty = true;
         }
 
@@ -419,6 +363,7 @@ namespace Hedra.Engine.Generation
                 if (!_worldObjects.Contains(WorldObject)) return;
                 _worldObjects.Remove(WorldObject);
             }
+
             _isWorldObjectCacheDirty = true;
         }
 
@@ -432,9 +377,11 @@ namespace Hedra.Engine.Generation
                     {
                         _chunks.Add(Chunk);
                     }
+
                     SearcheableChunks.Add(new Vector2(Chunk.OffsetX, Chunk.OffsetZ), Chunk);
                 }
             }
+
             _isChunksCacheDirty = true;
         }
 
@@ -450,18 +397,14 @@ namespace Hedra.Engine.Generation
             {
                 if (entities[i] == null)
                 {
-                    this.RemoveEntity(entities[i]);
+                    RemoveEntity(entities[i]);
                     continue;
                 }
 
                 var entityPosition = World.ToChunkSpace(entities[i].Position);
                 if (entityPosition == Chunk.Position.Xz() || World.GetChunkByOffset(entityPosition) == null)
-                {
                     if (entities[i].Removable && !(entities[i] is IPlayer))
-                    {
                         entities[i].Dispose();
-                    }
-                }
             }
 
             var items = WorldObjects;
@@ -469,29 +412,29 @@ namespace Hedra.Engine.Generation
             {
                 if (items[i] == null)
                 {
-                    this.RemoveObject(items[i]);
+                    RemoveObject(items[i]);
                     continue;
                 }
 
                 var itemPosition = items[i].Position;
                 if (itemPosition.X < Chunk.OffsetX + Chunk.Width && itemPosition.X > Chunk.OffsetX &&
                     itemPosition.Z < Chunk.OffsetZ + Chunk.Width && itemPosition.Z > Chunk.OffsetZ)
-                {
                     items[i].Dispose();
-                }
             }
-            _builder.Remove(Chunk);
+
+            Builder.Remove(Chunk);
             Chunk.Dispose();
             lock (_chunks)
             {
                 _chunks.Remove(Chunk);
             }
+
             lock (SearcheableChunks)
             {
                 SearcheableChunks.Remove(new Vector2(Chunk.OffsetX, Chunk.OffsetZ));
             }
         }
-        
+
         public Chunk GetChunkByOffset(int OffsetX, int OffsetZ)
         {
             var offset = new Vector2(OffsetX, OffsetZ);
@@ -511,53 +454,48 @@ namespace Hedra.Engine.Generation
 
         public Vector3 ToBlockSpace(Vector3 Vec3)
         {
-            var chunkSpace = this.ToChunkSpace(Vec3);
-            var x = (int) Math.Abs(Math.Floor((Vec3.X - chunkSpace.X) / Chunk.BlockSize));
-            var z = (int) Math.Abs(Math.Floor((Vec3.Z - chunkSpace.Y) / Chunk.BlockSize));
+            var chunkSpace = ToChunkSpace(Vec3);
+            var x = (int)Math.Abs(Math.Floor((Vec3.X - chunkSpace.X) / Chunk.BlockSize));
+            var z = (int)Math.Abs(Math.Floor((Vec3.Z - chunkSpace.Y) / Chunk.BlockSize));
             return new Vector3(x, Math.Min(Vec3.Y / Chunk.BlockSize, Chunk.Height - 1), z);
         }
 
         public Vector2 ToChunkSpace(Vector3 Vec3)
         {
-            return new Vector2(((int) Vec3.X >> 7) << 7, ((int) Vec3.Z >> 7) << 7);
+            return new Vector2(((int)Vec3.X >> 7) << 7, ((int)Vec3.Z >> 7) << 7);
         }
 
         public Chunk GetChunkAt(Vector3 Coordinates)
         {
-            var chunkSpace = this.ToChunkSpace(Coordinates);
-            return GetChunkByOffset((int) chunkSpace.X, (int) chunkSpace.Y);
-        }
-
-        public Block GetBlockAt(int X, int Y, int Z)
-        {
-            return GetBlockAt(new Vector3(X, Y, Z));
+            var chunkSpace = ToChunkSpace(Coordinates);
+            return GetChunkByOffset((int)chunkSpace.X, (int)chunkSpace.Y);
         }
 
         public Block GetHighestBlockAt(int X, int Z)
         {
-            var chunkSpace = this.ToChunkSpace(X, Z);
-            var blockSpace = this.ToBlockSpace(X, Z);
+            var chunkSpace = ToChunkSpace(X, Z);
+            var blockSpace = ToBlockSpace(X, Z);
 
-            var blockChunk = GetChunkByOffset((int) chunkSpace.X, (int) chunkSpace.Y);
-            return blockChunk?.GetHighestBlockAt((int) blockSpace.X, (int) blockSpace.Z) ?? new Block();
+            var blockChunk = GetChunkByOffset((int)chunkSpace.X, (int)chunkSpace.Y);
+            return blockChunk?.GetHighestBlockAt((int)blockSpace.X, (int)blockSpace.Z) ?? new Block();
         }
 
         public int GetHighestY(int X, int Z)
         {
-            var chunkSpace = this.ToChunkSpace(X, Z);
-            var blockSpace = this.ToBlockSpace(X, Z);
+            var chunkSpace = ToChunkSpace(X, Z);
+            var blockSpace = ToBlockSpace(X, Z);
 
-            var blockChunk = GetChunkByOffset((int) chunkSpace.X, (int) chunkSpace.Y);
-            return blockChunk?.GetHighestY((int) blockSpace.X, (int) blockSpace.Z) ?? 0;
+            var blockChunk = GetChunkByOffset((int)chunkSpace.X, (int)chunkSpace.Y);
+            return blockChunk?.GetHighestY((int)blockSpace.X, (int)blockSpace.Z) ?? 0;
         }
 
         public float GetHighest(int X, int Z)
         {
-            var chunkSpace = this.ToChunkSpace(X, Z);
-            var blockSpace = this.ToBlockSpace(X, Z);
+            var chunkSpace = ToChunkSpace(X, Z);
+            var blockSpace = ToBlockSpace(X, Z);
 
-            var blockChunk = GetChunkByOffset((int) chunkSpace.X, (int) chunkSpace.Y);
-            return blockChunk?.GetHighest((int) blockSpace.X, (int) blockSpace.Z) ?? 0;
+            var blockChunk = GetChunkByOffset((int)chunkSpace.X, (int)chunkSpace.Y);
+            return blockChunk?.GetHighest((int)blockSpace.X, (int)blockSpace.Z) ?? 0;
         }
 
         public HighlightedAreaWrapper HighlightArea(Vector3 Position, Vector4 Color, float Radius, float Seconds)
@@ -573,9 +511,10 @@ namespace Hedra.Engine.Generation
                     throw new ArgumentException("WorldObject already exists in this world.");
                 _worldObjects.Add(WorldObject);
             }
+
             _isWorldObjectCacheDirty = true;
         }
-        
+
         public WorldItem DropItem(Item ItemSpec, Vector3 Position)
         {
             var model = new WorldItem(ItemSpec, Position);
@@ -596,6 +535,7 @@ namespace Hedra.Engine.Generation
                         {
                             World.DropItem(model.ItemSpecification, model.Position);
                         }
+
                         model.Dispose();
                     }
                 });
@@ -606,15 +546,17 @@ namespace Hedra.Engine.Generation
         public ISkilledAnimableEntity SpawnMob(string Type, Vector3 DesiredPosition, int MobSeed)
         {
             var mob = MobFactory.Build(Type, MobSeed);
-            var placeablePosition = this.FindPlaceablePosition(mob, new Vector3(DesiredPosition.X, Physics.HeightAtPosition(DesiredPosition.X, DesiredPosition.Z), DesiredPosition.Z));
+            var placeablePosition = FindPlaceablePosition(mob,
+                new Vector3(DesiredPosition.X, Physics.HeightAtPosition(DesiredPosition.X, DesiredPosition.Z),
+                    DesiredPosition.Z));
             mob.MobId = ++_previousId;
             mob.Seed = MobSeed;
-            mob.Model.TargetRotation = new Vector3(0, (new Random(MobSeed)).NextFloat() * 360f, 0);
+            mob.Model.TargetRotation = new Vector3(0, new Random(MobSeed).NextFloat() * 360f, 0);
             mob.Position = placeablePosition;
             mob.Model.Position = placeablePosition;
             MobFactory.Polish(mob);
 
-            this.AddEntity(mob);
+            AddEntity(mob);
             return mob;
         }
 
@@ -623,14 +565,16 @@ namespace Hedra.Engine.Generation
             if (_type != WorldType.Overworld) return Around;
             var point = Around;
             var rng = new Random(World.Seed + 43234);
+
             bool IsWater(Vector3 Point)
             {
                 var region = BiomePool.GetRegion(Point);
-                return region.Generation.GetMaxHeight(Point.X, Point.Z) < Engine.BiomeSystem.BiomePool.SeaLevel
-                    || region.Generation.RiverAtPoint(Point.X, Point.Z) > 0;
+                return region.Generation.GetMaxHeight(Point.X, Point.Z) < BiomeSystem.BiomePool.SeaLevel
+                       || region.Generation.RiverAtPoint(Point.X, Point.Z) > 0;
             }
 
             var structures = StructureHandler.StructureItems;
+
             bool IsInsideStructure(Vector3 Point)
             {
                 for (var i = 0; i < structures.Length; ++i)
@@ -642,11 +586,11 @@ namespace Hedra.Engine.Generation
 
                 return false;
             }
+
             while (IsWater(point) || IsInsideStructure(point))
-            {
-                point += 
-                    new Vector3( (192f * rng.NextFloat() - 96f) * Chunk.BlockSize, 0, (192f * rng.NextFloat() - 96f) * Chunk.BlockSize);
-            }
+                point +=
+                    new Vector3((192f * rng.NextFloat() - 96f) * Chunk.BlockSize, 0,
+                        (192f * rng.NextFloat() - 96f) * Chunk.BlockSize);
 
             return point;
         }
@@ -662,55 +606,40 @@ namespace Hedra.Engine.Generation
                 for (var i = 0; i < possibleWaypoints.Length; ++i)
                 {
                     var nearest = possibleWaypoints[i].GetNearestVertex(offset, out var distance);
-                    if (distance < Mathf.FastSqrt(32*32 + 32*32))
+                    if (distance < Mathf.FastSqrt(32 * 32 + 32 * 32))
                         return nearest.Position;
                 }
             }
 
             while (Mob.Physics.CollidesWithOffset(-Mob.Position + offset))
-            {
                 offset += new Vector3(Utils.Rng.NextFloat() * 32f - 16f, 0, Utils.Rng.NextFloat() * 32f - 16f);
-            }
             return offset;
-        }
-
-        private Vector3 ToBlockSpace(float X, float Z)
-        {
-            return ToBlockSpace(new Vector3(X, 0, Z));
-        }
-
-        private Vector2 ToChunkSpace(float X, float Z)
-        {
-            return ToChunkSpace(new Vector3(X, 0, Z));
         }
 
         public Block GetBlockAt(Vector3 Vec3)
         {
-            var chunkSpace = this.ToChunkSpace(Vec3);
-            var blockSpace = this.ToBlockSpace(Vec3);
+            var chunkSpace = ToChunkSpace(Vec3);
+            var blockSpace = ToBlockSpace(Vec3);
 
-            var blockChunk = GetChunkByOffset((int) chunkSpace.X, (int) chunkSpace.Y);
-            return blockChunk?.GetBlockAt((int) blockSpace.X, (int) (Vec3.Y / Chunk.BlockSize), (int) blockSpace.Z) ?? new Block();
+            var blockChunk = GetChunkByOffset((int)chunkSpace.X, (int)chunkSpace.Y);
+            return blockChunk?.GetBlockAt((int)blockSpace.X, (int)(Vec3.Y / Chunk.BlockSize), (int)blockSpace.Z) ??
+                   new Block();
         }
-        
+
         public float NearestWaterBlock(Vector3 Position, float SearchRange, out Vector3 WaterPosition)
         {
-            var nearest = Math.Pow(SearchRange+1, 2);
+            var nearest = Math.Pow(SearchRange + 1, 2);
             WaterPosition = Vector3.Zero;
             for (var x = -1; x < 2; x++)
+            for (var z = -1; z < 2; z++)
             {
-                for (var z = -1; z < 2; z++)
-                {
-                    var chunk = World.GetChunkAt(Position + new Vector3(x, 0, z) * Chunk.Width);
-                    if (chunk == null || !chunk.BuildedWithStructures || !chunk.HasWater)
-                    {
-                        continue;
-                    }
-                    var dist = NearestWaterBlockOnChunk(chunk, Position, out WaterPosition);
-                    if (dist < nearest) nearest = dist;
-                } 
+                var chunk = World.GetChunkAt(Position + new Vector3(x, 0, z) * Chunk.Width);
+                if (chunk == null || !chunk.BuildedWithStructures || !chunk.HasWater) continue;
+                var dist = NearestWaterBlockOnChunk(chunk, Position, out WaterPosition);
+                if (dist < nearest) nearest = dist;
             }
-            return (float) Math.Sqrt(nearest);
+
+            return (float)Math.Sqrt(nearest);
         }
 
         public unsafe float NearestWaterBlockOnChunk(Chunk Chunk, Vector3 Position, out Vector3 WaterPosition)
@@ -732,6 +661,7 @@ namespace Hedra.Engine.Generation
 
             return nearest;
         }
+
         public float NearestWaterBlockOnChunk(Vector3 Position, out Vector3 WaterPosition)
         {
             var nearest = float.MaxValue;
@@ -739,6 +669,89 @@ namespace Hedra.Engine.Generation
             WaterPosition = Vector3.Zero;
             if (chunk == null || !chunk.HasWater) return nearest;
             return NearestWaterBlockOnChunk(chunk, Position, out WaterPosition);
+        }
+
+        private static void AssertNoDuplicates(IList<Chunk> Chunks)
+        {
+            if (Chunks.Any(C => Chunks.Count(K => C.Position == K.Position) > 1))
+                throw new ArgumentException(
+                    $"Found duplicate chunk at index {Chunks.IndexOf(Chunks.First(C => Chunks.Count(K => C.Position == K.Position) > 1))}");
+        }
+
+        private static void DoCullTest(ReadOnlyCollection<Chunk> ToDrawArray, Dictionary<Vector2, Chunk> Output,
+            Dictionary<Vector2, Chunk> OutputIfFrustumCulled, bool IsRefractionPass = false)
+        {
+            for (var i = 0; i < ToDrawArray.Count; i++)
+            {
+                var chunk = ToDrawArray[i];
+                if (IsRefractionPass && !chunk.HasWater) continue;
+                if (chunk == null || chunk.Disposed)
+                {
+                    World.RemoveChunk(chunk);
+                    continue;
+                }
+
+                var offset = chunk.Position.Xz();
+
+                if (WorldRenderer.EnableCulling)
+                {
+                    if (Culling.IsInside(chunk.Mesh))
+                    {
+                        if (!chunk.Mesh.Occluded)
+                            Output.Add(offset, chunk);
+                        OutputIfFrustumCulled?.Add(offset, chunk);
+                    }
+                }
+                else
+                {
+                    if (Output.ContainsKey(offset))
+                    {
+                        var b = Output[offset];
+                        var a = 0;
+                        continue;
+                    }
+
+                    Output.Add(offset, chunk);
+                }
+            }
+        }
+
+        public void SaveChunk()
+        {
+            SaveRegion();
+        }
+
+        private void SaveRegion()
+        {
+        }
+
+        public void Save(string Folder)
+        {
+            const int region = 12;
+            var regionSize = Math.Pow(2, 12);
+            var regions = new Dictionary<Vector2, List<Chunk>>();
+            var chunks = Chunks;
+            foreach (var chunk in chunks)
+            {
+                var src = new Vector2((chunk.OffsetX >> region) << region, (chunk.OffsetZ >> region) << region);
+                if (!regions.ContainsKey(src)) regions[src] = new List<Chunk>();
+                regions[src].Add(chunk);
+            }
+        }
+
+        public Block GetBlockAt(int X, int Y, int Z)
+        {
+            return GetBlockAt(new Vector3(X, Y, Z));
+        }
+
+        private Vector3 ToBlockSpace(float X, float Z)
+        {
+            return ToBlockSpace(new Vector3(X, 0, Z));
+        }
+
+        private Vector2 ToChunkSpace(float X, float Z)
+        {
+            return ToChunkSpace(new Vector3(X, 0, Z));
         }
 
         #region Propierties
@@ -757,8 +770,10 @@ namespace Hedra.Engine.Generation
                     {
                         _chunksCache = _chunks.ToArray().ToList().AsReadOnly();
                     }
+
                     _isChunksCacheDirty = false;
                 }
+
                 lock (_chunksCache)
                 {
                     return _chunksCache;
@@ -770,6 +785,7 @@ namespace Hedra.Engine.Generation
         private bool _isWorldObjectCacheDirty = true;
         private readonly HashSet<IWorldObject> _worldObjects;
         private IWorldObject[] _itemsCache;
+
         public IWorldObject[] WorldObjects
         {
             get
@@ -780,8 +796,10 @@ namespace Hedra.Engine.Generation
                     {
                         _itemsCache = _worldObjects.ToArray();
                     }
+
                     _isWorldObjectCacheDirty = false;
                 }
+
                 lock (_itemsCache)
                 {
                     return _itemsCache;
@@ -803,36 +821,17 @@ namespace Hedra.Engine.Generation
                     {
                         _entityCache = _entities.ToArray().ToList().AsReadOnly();
                     }
+
                     _isEntityCacheDirty = false;
                 }
+
                 lock (_entityCache)
                 {
                     return _entityCache;
                 }
             }
         }
+
         #endregion
-        
-        private static int[] _menuSeeds = new int[]
-        {
-            843966896,
-            365367015,
-            -1207602704,
-            -1316611004,
-            1711677118,
-            434316731,
-            -1521453338,
-            930356700,
-            2108869840,
-            247179995,
-            -488844428,
-            -1835204548,
-            -1527889388,
-            1436884727,
-            -1122906719,
-            1050378001,
-            -65738522,
-            1590961909
-        };
     }
 }

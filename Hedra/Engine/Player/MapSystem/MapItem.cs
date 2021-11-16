@@ -1,55 +1,52 @@
-using Hedra.Engine.Management;
-using Hedra.Engine.Rendering;
 using System;
-using Hedra.Rendering;
 using System.Numerics;
+using Hedra.Engine.Management;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.Player.MapSystem
 {
     public class MapItem : IDisposable
     {
-        private readonly ObjectMesh _mesh;
-
         public MapItem(VertexData Data)
         {
-            _mesh = ObjectMesh.FromVertexData(Data, false);
-            DrawManager.RemoveObjectMesh(_mesh);
+            Mesh = ObjectMesh.FromVertexData(Data, false);
+            DrawManager.RemoveObjectMesh(Mesh);
         }
 
-        public void Draw()
-        {
-            _mesh.Draw();
-        }
-
-        public ObjectMesh Mesh => _mesh;
+        public ObjectMesh Mesh { get; }
 
         public bool Enabled
         {
-            get => _mesh.Enabled;
-            set => _mesh.Enabled = value;
+            get => Mesh.Enabled;
+            set => Mesh.Enabled = value;
         }
 
         public Vector3 Position
         {
-            get => _mesh.Position;
-            set => _mesh.Position = value;
+            get => Mesh.Position;
+            set => Mesh.Position = value;
         }
 
         public Vector3 Scale
         {
-            get => _mesh.Scale;
-            set => _mesh.Scale = value;
+            get => Mesh.Scale;
+            set => Mesh.Scale = value;
         }
 
         public Vector3 Rotation
         {
-            get => _mesh.LocalRotation;
-            set => _mesh.LocalRotation = value;
+            get => Mesh.LocalRotation;
+            set => Mesh.LocalRotation = value;
         }
 
         public void Dispose()
         {
-            _mesh.Dispose();
+            Mesh.Dispose();
+        }
+
+        public void Draw()
+        {
+            Mesh.Draw();
         }
     }
 }

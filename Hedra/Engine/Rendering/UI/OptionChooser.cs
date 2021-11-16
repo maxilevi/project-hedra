@@ -5,20 +5,36 @@
  *
  */
 
-using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Linq;
+using System.Numerics;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Windowing;
 using Hedra.Rendering.UI;
-using System.Numerics;
-
+using SixLabors.Fonts;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Rendering.UI
 {
     public class OptionChooser : UIElement
     {
+        private bool _mClickable = true;
+
+        private Vector2 _mPosition;
+
+        private Vector2 _mScale;
+
+        public OptionChooser(Vector2 Position, Vector2 Scale, Translation Text, Color C, Font F, Translation[] Options,
+            bool Centered = false)
+        {
+            Initialize(Position, Scale, Text, C, F, Options, Centered);
+        }
+
+        public OptionChooser(Vector2 Position, Vector2 Scale, string Text, Color C, Font F, string[] Options,
+            bool Centered = false)
+        {
+            Initialize(Position, Scale, Translation.Default(Text), C, F, Options.Select(Translation.Default).ToArray(),
+                Centered);
+        }
         // \u25C0 Left
         // \u25B6 Right        
 
@@ -30,6 +46,69 @@ namespace Hedra.Engine.Rendering.UI
         public Font Font { get; private set; }
         public Color Color { get; private set; }
         public Translation[] Options { get; private set; }
+
+        public bool Clickable
+        {
+            get => _mClickable;
+            set
+            {
+                LeftArrow.CanClick = value;
+                RightArrow.CanClick = value;
+                _mClickable = value;
+            }
+        }
+
+        public void Enable()
+        {
+            LeftArrow.Enable();
+            RightArrow.Enable();
+            Text.Enable();
+            CurrentValue.Enable();
+        }
+
+        public void Disable()
+        {
+            LeftArrow.Disable();
+            RightArrow.Disable();
+            Text.Disable();
+            CurrentValue.Disable();
+        }
+
+        public Vector2 Scale
+        {
+            get => _mScale;
+            set
+            {
+                _mScale = value;
+                Text.Scale = Scale;
+                LeftArrow.Scale = Scale;
+                RightArrow.Scale = Scale;
+                Text.Scale = Scale;
+                CurrentValue.Scale = Scale;
+            }
+        }
+
+        public Vector2 Position
+        {
+            get => _mPosition;
+            set
+            {
+                Text.Position = Text.Position - _mPosition + value;
+                LeftArrow.Position = LeftArrow.Position - _mPosition + value;
+                RightArrow.Position = RightArrow.Position - _mPosition + value;
+                CurrentValue.Position = CurrentValue.Position - _mPosition + value;
+                _mPosition = value;
+            }
+        }
+
+        public void Dispose()
+        {
+            Text?.Dispose();
+            Font?.Dispose();
+            LeftArrow?.Dispose();
+            RightArrow?.Dispose();
+            CurrentValue?.Dispose();
+        }
 
         private void Initialize(Vector2 Position, Vector2 Scale, Translation Translation, Color C, Font F,
             Translation[] Options, bool Centered)
@@ -84,19 +163,6 @@ namespace Hedra.Engine.Rendering.UI
             Update();
         }
 
-        public OptionChooser(Vector2 Position, Vector2 Scale, Translation Text, Color C, Font F, Translation[] Options,
-            bool Centered = false) : base()
-        {
-            Initialize(Position, Scale, Text, C, F, Options, Centered);
-        }
-
-        public OptionChooser(Vector2 Position, Vector2 Scale, string Text, Color C, Font F, string[] Options,
-            bool Centered = false) : base()
-        {
-            Initialize(Position, Scale, Translation.Default(Text), C, F, Options.Select(Translation.Default).ToArray(),
-                Centered);
-        }
-
         public void OnArrowClick(object Sender, MouseButtonEventArgs E)
         {
             Index--;
@@ -117,75 +183,6 @@ namespace Hedra.Engine.Rendering.UI
                 Index = Options.Length - 1;
 
             CurrentValue.SetTranslation(Options[Index]);
-        }
-
-        public void Enable()
-        {
-            LeftArrow.Enable();
-            RightArrow.Enable();
-            Text.Enable();
-            CurrentValue.Enable();
-        }
-
-        public void Disable()
-        {
-            LeftArrow.Disable();
-            RightArrow.Disable();
-            Text.Disable();
-            CurrentValue.Disable();
-        }
-
-        private bool _mClickable = true;
-
-        public bool Clickable
-        {
-            get => _mClickable;
-            set
-            {
-                LeftArrow.CanClick = value;
-                RightArrow.CanClick = value;
-                _mClickable = value;
-            }
-        }
-
-        private Vector2 _mScale;
-
-        public Vector2 Scale
-        {
-            get => _mScale;
-            set
-            {
-                _mScale = value;
-                Text.Scale = Scale;
-                LeftArrow.Scale = Scale;
-                RightArrow.Scale = Scale;
-                Text.Scale = Scale;
-                CurrentValue.Scale = Scale;
-            }
-        }
-
-        private Vector2 _mPosition;
-
-        public Vector2 Position
-        {
-            get => _mPosition;
-            set
-            {
-                Text.Position = Text.Position - _mPosition + value;
-                LeftArrow.Position = LeftArrow.Position - _mPosition + value;
-                RightArrow.Position = RightArrow.Position - _mPosition + value;
-                CurrentValue.Position = CurrentValue.Position - _mPosition + value;
-                _mPosition = value;
-            }
-        }
-
-        public void Dispose()
-        {
-            Text?.Dispose();
-            Font?.Dispose();
-            LeftArrow?.Dispose();
-            RightArrow?.Dispose();
-            CurrentValue?.Dispose();
         }
     }
 }

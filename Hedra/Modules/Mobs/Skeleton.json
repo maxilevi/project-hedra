@@ -1,5 +1,5 @@
 {
-  "Name" : "Skeleton",
+  "Name": "Skeleton",
   "MaxHealth": 334.0,
   "AttackDamage": 8.0,
   "AttackCooldown": 1.5,
@@ -15,7 +15,7 @@
     }
   ],
   "Model": {
-    "AlignWithTerrain" :  false,
+    "AlignWithTerrain": false,
     "Path": "$DataFile$/Assets/Chr/SkeletonIdle.dae",
     "Scale": 0.8,
     "IdleAnimations": [

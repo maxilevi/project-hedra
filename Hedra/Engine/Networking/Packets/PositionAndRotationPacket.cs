@@ -1,12 +1,12 @@
-using Hedra.EntitySystem;
 using System.Numerics;
+using Hedra.EntitySystem;
 
 namespace Hedra.Engine.Networking.Packets
 {
     public class PositionAndRotationPacket : NetworkPacket<PositionAndRotationPacket>
     {
         public override MessagePacketType Type => MessagePacketType.PositionAndRotationPacket;
-        
+
         /* Serves as humanoid ids and mob ids */
         public ulong Id { get; set; }
         public Vector3 Position { get; private set; }
@@ -21,7 +21,7 @@ namespace Hedra.Engine.Networking.Packets
                 Rotation = Entity.Rotation
             };
         }
-        
+
         protected override void DoParse(PacketReader Reader, PositionAndRotationPacket Empty)
         {
             Empty.Position = Reader.ReadVector3();

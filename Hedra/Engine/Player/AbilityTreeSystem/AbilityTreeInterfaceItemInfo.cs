@@ -1,17 +1,13 @@
 using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Globalization;
+using System.Numerics;
 using System.Text;
-using Hedra.Core;
-using Hedra.Engine.Localization;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.SkillSystem;
 using Hedra.Localization;
-using System.Numerics;
-using Hedra.Numerics;
 using Hedra.Rendering;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
 {

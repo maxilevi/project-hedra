@@ -7,12 +7,12 @@ namespace Hedra.Engine.StructureSystem
     public sealed class CachedVertexDataChunkWatcher : ChunkWatcher<CachedVertexData>
     {
         private readonly Func<CachedVertexData[]> _lambda;
-        
+
         public CachedVertexDataChunkWatcher(Func<CachedVertexData[]> Lambda)
         {
             _lambda = Lambda;
         }
-        
+
         protected override void Add(Chunk Object, CachedVertexData Value)
         {
             Object.AddStaticElement(Value.VertexData);

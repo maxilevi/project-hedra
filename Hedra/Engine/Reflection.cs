@@ -18,7 +18,10 @@ namespace Hedra.Engine
             {
                 types = e.Types.Where(T => T != null);
             }
-            return Namespace != null ? types.Where(T => string.Equals(T.Namespace, Namespace, StringComparison.InvariantCulture)) : types;
+
+            return Namespace != null
+                ? types.Where(T => string.Equals(T.Namespace, Namespace, StringComparison.InvariantCulture))
+                : types;
         }
     }
 }

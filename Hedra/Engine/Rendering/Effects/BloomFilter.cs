@@ -6,12 +6,7 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
-using Hedra.Engine.Core;
-using System.Numerics;
-using Hedra.Engine.Rendering.UI;
-using Hedra.Engine.EnvironmentSystem;
-using Hedra.Engine.Game;
+
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Windowing;
 using Hedra.Game;
@@ -19,7 +14,7 @@ using Hedra.Game;
 namespace Hedra.Engine.Rendering.Effects
 {
     /// <summary>
-    /// Description of BloomFilter.
+    ///     Description of BloomFilter.
     /// </summary>
     public class BloomFilter : Filter
     {
@@ -27,8 +22,8 @@ namespace Hedra.Engine.Rendering.Effects
         private static readonly Shader HBlurShader;
         private static readonly Shader VBlurShader;
         public FBO HBloomFbo = new FBO(GameSettings.Width / 4, GameSettings.Height / 4);
-        public FBO VBloomFbo = new FBO(GameSettings.Width / 4, GameSettings.Height / 4);
         public int TopColorUniform, BotColorUniform, HeightUniform;
+        public FBO VBloomFbo = new FBO(GameSettings.Width / 4, GameSettings.Height / 4);
 
         static BloomFilter()
         {
@@ -37,39 +32,40 @@ namespace Hedra.Engine.Rendering.Effects
             VBlurShader = Shader.Build("Shaders/VBlur.vert", "Shaders/Blur.frag");
         }
 
-        
-        public override void Pass(FBO Src, FBO Dst){
+
+        public override void Pass(FBO Src, FBO Dst)
+        {
             HBloomFbo.Bind();
             Bloom.Bind();
             Bloom["Modifier"] = GameSettings.BloomModifier;
             Renderer.Clear(ClearBufferMask.ColorBufferBit);
-            this.DrawQuad(Bloom, Src.TextureId[0]);
-            
+            DrawQuad(Bloom, Src.TextureId[0]);
+
             Bloom.Unbind();
             HBloomFbo.Unbind();
-            
+
             VBloomFbo.Bind();
             HBlurShader.Bind();
 
             Renderer.Clear(ClearBufferMask.ColorBufferBit);
-            this.DrawQuad(HBlurShader, HBloomFbo.TextureId[0]);
-            
+            DrawQuad(HBlurShader, HBloomFbo.TextureId[0]);
+
             HBlurShader.Unbind();
             VBloomFbo.Unbind();
-            
+
             HBloomFbo.Bind();
             VBlurShader.Bind();
 
             Renderer.Clear(ClearBufferMask.ColorBufferBit);
-            this.DrawQuad(VBlurShader, VBloomFbo.TextureId[0]);
-            
+            DrawQuad(VBlurShader, VBloomFbo.TextureId[0]);
+
             VBlurShader.Unbind();
             HBloomFbo.Unbind();
-            
+
             Dst.Bind();
             MainFBO.DefaultShader.Bind();
             Renderer.Clear(ClearBufferMask.ColorBufferBit);
-            this.DrawQuad(MainFBO.DefaultShader, HBloomFbo.TextureId[0], 0);
+            DrawQuad(MainFBO.DefaultShader, HBloomFbo.TextureId[0]);
             MainFBO.DefaultShader.Unbind();
             Dst.Unbind();
         }

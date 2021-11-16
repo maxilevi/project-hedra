@@ -9,7 +9,7 @@ namespace Hedra.Engine.Input
         public Action OnLeft { get; set; }
         public Action OnRight { get; set; }
         public Action OnEnter { get; set; }
-        
+
         public bool EnterPressed { get; set; }
         public bool LeftPressed { get; set; }
         public bool RightPressed { get; set; }

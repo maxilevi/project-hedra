@@ -13,6 +13,10 @@ namespace Hedra.Rendering.UI
         private static FontFamily _normalFamily = new FontFamily(GenericFontFamilies.Serif);
         private static FontFamily _boldFamily = new FontFamily(GenericFontFamilies.Serif);
 
+        public static Font Default => Get(_normalFamily, 10);
+
+        public static int Count => CachedFonts.Count;
+
         public static void SetFonts(FontFamily NormalCollection, FontFamily BoldCollection)
         {
             _normalFamily = NormalCollection;
@@ -45,8 +49,6 @@ namespace Hedra.Rendering.UI
             return CachedFonts[entry];
         }
 
-        public static Font Default => Get(_normalFamily, 10);
-
         public static Font GetNormal(float Size)
         {
             return Get(_normalFamily, Size);
@@ -56,8 +58,6 @@ namespace Hedra.Rendering.UI
         {
             return Get(_boldFamily, Size, FontStyle.Bold);
         }
-
-        public static int Count => CachedFonts.Count;
     }
 
     public class FontEntry

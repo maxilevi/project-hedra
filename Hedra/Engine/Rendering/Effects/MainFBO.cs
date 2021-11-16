@@ -5,16 +5,8 @@
  *
  */
 
-using System;
 using System.Numerics;
-using Hedra.Engine.Core;
 using Hedra.Engine.Management;
-using Hedra.Engine.EnvironmentSystem;
-using Hedra.Engine.Rendering.UI;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using Hedra.Engine.Game;
-using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.Frustum;
@@ -25,24 +17,21 @@ using Hedra.Rendering;
 namespace Hedra.Engine.Rendering.Effects
 {
     /// <summary>
-    /// Do Nothing.
+    ///     Do Nothing.
     /// </summary>
     public class MainFBO
     {
-        public static Shader DefaultShader { get; }
-        public static Shader FXAAShader { get; }
-        public bool Enabled { get; set; }
-        public FBO Default;
-        public FBO FinalFbo;
         public FBO AdditiveFbo;
-        public FBO WaterFbo;
-        public SSRFilter SSR;
-        public UnderWaterFilter UnderWater;
-        public DistortionFilter Distortion;
         public BloomFilter Bloom;
         public BlurFilter Blur;
+        public FBO Default;
+        public DistortionFilter Distortion;
+        public FBO FinalFbo;
         public DeferedRenderer Ssao;
+        public SSRFilter SSR;
         public FBO SSRFBO;
+        public UnderWaterFilter UnderWater;
+        public FBO WaterFbo;
 
         static MainFBO()
         {
@@ -66,6 +55,12 @@ namespace Hedra.Engine.Rendering.Effects
             Blur = new BlurFilter();
             SSR = new SSRFilter();
         }
+
+        public static Shader DefaultShader { get; }
+        public static Shader FXAAShader { get; }
+        public bool Enabled { get; set; }
+
+        public static MainFBO DefaultBuffer => DrawManager.MainBuffer;
 
         public void Draw()
         {
@@ -118,7 +113,7 @@ namespace Hedra.Engine.Rendering.Effects
                 Renderer.BindTexture(TextureTarget.Texture2D, Ssao.FirstPass.TextureId[2]);
 
                 Renderer.ActiveTexture(TextureUnit.Texture2);
-                Renderer.BindTexture(TextureTarget.Texture2D, (uint)Ssao.RandomTex);
+                Renderer.BindTexture(TextureTarget.Texture2D, Ssao.RandomTex);
 
                 Renderer.Uniform1(Ssao.PositionSampler, 0);
                 Renderer.Uniform1(Ssao.NormalSampler, 1);
@@ -221,7 +216,7 @@ namespace Hedra.Engine.Rendering.Effects
 
                 FinalFbo.Bind();
                 DefaultShader.Bind();
-                DrawQuad(Default.TextureId[0], 0, false);
+                DrawQuad(Default.TextureId[0]);
                 DefaultShader.Unbind();
                 FinalFbo.Unbind();
             }
@@ -243,7 +238,7 @@ namespace Hedra.Engine.Rendering.Effects
 
                 FinalFbo.Bind();
                 DefaultShader.Bind();
-                DrawQuad(Default.TextureId[0], 0);
+                DrawQuad(Default.TextureId[0]);
                 DefaultShader.Unbind();
                 FinalFbo.Unbind();
             }
@@ -336,8 +331,6 @@ namespace Hedra.Engine.Rendering.Effects
             else
                 Ssao.FirstPass.Unbind(); //Unbind ids the same
         }
-
-        public static MainFBO DefaultBuffer => DrawManager.MainBuffer;
 
         public void Dispose()
         {

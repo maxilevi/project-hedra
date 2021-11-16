@@ -1,9 +1,7 @@
+using System.Numerics;
 using Hedra.Core;
-using Hedra.Engine.Management;
-using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.SkillSystem;
-using System.Numerics;
 
 namespace Hedra.Engine.EntitySystem
 {
@@ -11,8 +9,6 @@ namespace Hedra.Engine.EntitySystem
     {
         private readonly Timer _blendTimer;
         private readonly Timer _playTimer;
-        public Animation AnimationBlending { get; private set; }
-        public Animation AnimationPlaying { get; private set; }
 
         public SkilledAnimableEntity()
         {
@@ -25,7 +21,10 @@ namespace Hedra.Engine.EntitySystem
                 AutoReset = false
             };
         }
-        
+
+        public Animation AnimationPlaying { get; private set; }
+        public Animation AnimationBlending { get; private set; }
+
         public void ResetModel()
         {
         }
@@ -36,7 +35,7 @@ namespace Hedra.Engine.EntitySystem
             _blendTimer.AlertTime = Animation?.Length ?? 1;
             _blendTimer.Reset();
         }
-        
+
         public void PlayAnimation(Animation Animation)
         {
             AnimationPlaying = Animation;
@@ -45,7 +44,7 @@ namespace Hedra.Engine.EntitySystem
         }
 
         public bool CaptureMovement { get; set; }
-        
+
         public void Orientate()
         {
         }
@@ -58,6 +57,7 @@ namespace Hedra.Engine.EntitySystem
                 AnimationBlending.DispatchEvents(_blendTimer.Progress);
                 _blendTimer.Tick();
             }
+
             if (AnimationPlaying != null)
             {
                 AnimationPlaying.DispatchEvents(_playTimer.Progress);

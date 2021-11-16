@@ -7,28 +7,30 @@ namespace Hedra.Engine.EntitySystem
 {
     public abstract class Component<T> : IUpdatable, IComponent<T> where T : IEntity
     {
-        protected bool Disposed { get; private set; }
-        protected T Parent { get; }
-
         protected Component(T Entity)
         {
             Parent = Entity;
             EnsureSingleBehaviour();
         }
 
-        private void EnsureSingleBehaviour()
+        protected bool Disposed { get; private set; }
+        protected T Parent { get; }
+
+        public virtual void Draw()
         {
-            if(Parent.SearchComponent<IBehaviourComponent>() != null && this is IBehaviourComponent)
-                throw new ArgumentException("Entity cannot have more than 2 behaviour components.");
         }
-        
-        public abstract void Update();
-        
-        public virtual void Draw(){}
-        
+
         public virtual void Dispose()
         {
-            this.Disposed = true;
+            Disposed = true;
+        }
+
+        public abstract void Update();
+
+        private void EnsureSingleBehaviour()
+        {
+            if (Parent.SearchComponent<IBehaviourComponent>() != null && this is IBehaviourComponent)
+                throw new ArgumentException("Entity cannot have more than 2 behaviour components.");
         }
     }
 }

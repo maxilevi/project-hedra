@@ -31,8 +31,10 @@ namespace Hedra.Engine.StructureSystem.Overworld
                     shapes[i].Transform(Structure.Position);
                     Structure.AddCollisionShape(shapes[i]);
                 }
+
                 Structure.AddStaticElement(model);
             }
+
             ((Campfire)Structure.WorldObject).SetCanCraft(false);
             //((Campfire) Structure.WorldObject).HasFire = false;
         }
@@ -40,7 +42,9 @@ namespace Hedra.Engine.StructureSystem.Overworld
         protected override IHumanoid CreateCampfireNPC(CollidableStructure Structure, Vector3 Position, Random Rng)
         {
             var hasCauldron = Structure.Parameters.Get<bool>("HasCauldron");
-            var quest = hasCauldron ? MissionPool.Grab(Quests.CraftAPotion) : MissionPool.Random(Position, QuestTier.Medium);
+            var quest = hasCauldron
+                ? MissionPool.Grab(Quests.CraftAPotion)
+                : MissionPool.Random(Position, QuestTier.Medium);
             var npc = NPCCreator.SpawnQuestGiver(Position, quest, Rng);
             return npc;
         }

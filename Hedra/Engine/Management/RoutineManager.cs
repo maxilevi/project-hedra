@@ -1,7 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Collections;
-using System.Linq;
+using System.Collections.Generic;
 using Hedra.Core;
 
 namespace Hedra.Engine.Management
@@ -21,34 +20,47 @@ namespace Hedra.Engine.Management
             Lock = new object();
         }
 
+        public static int Count
+        {
+            get
+            {
+                lock (Lock)
+                {
+                    return RoutinesToAdd.Count + Routines.Count;
+                }
+            }
+        }
+
         public static void StartRoutine(Func<IEnumerator> Func)
         {
-            lock(ToAddLock)
+            lock (ToAddLock)
+            {
                 RoutinesToAdd.Add(Func());
+            }
         }
 
         public static void StartRoutine(Func<object[], IEnumerator> Func, params object[] Param)
         {
-            lock(ToAddLock)
+            lock (ToAddLock)
+            {
                 RoutinesToAdd.Add(Func(Param));
+            }
         }
-         
+
         public static void Update()
         {
-            lock(Lock)
+            lock (Lock)
             {
                 lock (ToAddLock)
                 {
-                    for (var i = 0; i < RoutinesToAdd.Count; ++i)
-                    {
-                        Routines.Add(RoutinesToAdd[i]);
-                    }
+                    for (var i = 0; i < RoutinesToAdd.Count; ++i) Routines.Add(RoutinesToAdd[i]);
                     RoutinesToAdd.Clear();
                 }
-                for(var i = Routines.Count-1; i > -1; i--)
+
+                for (var i = Routines.Count - 1; i > -1; i--)
                 {
                     var passed = Routines[i].MoveNext();
-                    if(!passed)
+                    if (!passed)
                         Routines.RemoveAt(i);
                 }
             }
@@ -56,7 +68,7 @@ namespace Hedra.Engine.Management
 
         public static IEnumerator WaitForSeconds(float Seconds)
         {
-            var passedTime = 0f; 
+            var passedTime = 0f;
             while (passedTime < Seconds)
             {
                 passedTime += Time.DeltaTime;
@@ -66,18 +78,14 @@ namespace Hedra.Engine.Management
 
         public static void Clear()
         {
-            lock(Lock)
-                Routines.Clear();
-            lock(ToAddLock)
-                RoutinesToAdd.Clear();
-        }
-
-        public static int Count
-        {
-            get
+            lock (Lock)
             {
-                lock (Lock)
-                    return RoutinesToAdd.Count + Routines.Count;
+                Routines.Clear();
+            }
+
+            lock (ToAddLock)
+            {
+                RoutinesToAdd.Clear();
             }
         }
     }

@@ -1,36 +1,28 @@
 using System;
-using System.Collections.Generic;
-using Hedra.Core;
-using Hedra.Engine;
-using Hedra.Engine.Generation.ChunkSystem;
-using Hedra.Engine.Management;
-using Hedra.EntitySystem;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using Hedra.Components.Effects;
-using Hedra.Engine.Game;
 using System.Linq;
 using System.Numerics;
 using Hedra.Components;
+using Hedra.Components.Effects;
+using Hedra.Core;
+using Hedra.Engine;
 using Hedra.Engine.Scenes;
+using Hedra.EntitySystem;
 using Hedra.Numerics;
 
 namespace Hedra.AISystem.Behaviours
 {
     public class TraverseBehaviour : Behaviour
     {
-        protected WalkBehaviour Walk { get; }
-        private Vector2[] _currentPath;
-        private int _currentIndex;
-        private Vector3 _origin;
-        private Action _callback;
-        private float _speedBonus = 1;
-        private float _lastBonus = 1;
-        private SpeedBonusComponent _lastComponent;
-        private Vector3 _lastCanNotReachPosition;
-        private bool _hasTarget;
-        private bool _canReach;
         private readonly Timer _stuckTimer;
+        private Action _callback;
+        private bool _canReach;
+        private int _currentIndex;
+        private Vector2[] _currentPath;
+        private float _lastBonus = 1;
+        private Vector3 _lastCanNotReachPosition;
+        private SpeedBonusComponent _lastComponent;
+        private Vector3 _origin;
+        private float _speedBonus = 1;
 
         public TraverseBehaviour(IEntity Parent, bool UseCollision = false) : base(Parent)
         {
@@ -44,6 +36,22 @@ namespace Hedra.AISystem.Behaviours
             _stuckTimer = new Timer(1);
             CreateGraph();
         }
+
+        protected WalkBehaviour Walk { get; }
+
+        private WaypointGrid CurrentGrid => TraverseStorage.Instance[Parent];
+
+        public Vector2 GridSize => new Vector2(CurrentGrid.DimX, CurrentGrid.DimY);
+
+        public float ErrorMargin
+        {
+            get => Walk.ErrorMargin;
+            set => Walk.ErrorMargin = value;
+        }
+
+        public Vector3 Target { get; private set; }
+
+        public bool HasTarget { get; private set; }
 
         protected virtual void CreateGraph()
         {
@@ -74,7 +82,7 @@ namespace Hedra.AISystem.Behaviours
 
         public override void Update()
         {
-            if (!_hasTarget) return;
+            if (!HasTarget) return;
             if (!Walk.HasTarget || Parent.IsStuck) RebuildAndResetPathIfNecessary();
             Walk.Update();
             if (_canReach)
@@ -141,7 +149,7 @@ namespace Hedra.AISystem.Behaviours
             if ((Parent.Position - Position).LengthSquared() < ErrorMargin * ErrorMargin) return;
             Target = Position;
             _callback = Callback;
-            _hasTarget = true;
+            HasTarget = true;
             ForceRebuildGraph();
             RebuildPathIfNecessary();
             var traverse = Parent.SearchComponent<ITraverseAIComponent>();
@@ -152,7 +160,7 @@ namespace Hedra.AISystem.Behaviours
 
         public void Cancel()
         {
-            _hasTarget = false;
+            HasTarget = false;
             _callback?.Invoke();
         }
 
@@ -161,24 +169,10 @@ namespace Hedra.AISystem.Behaviours
             Walk.Cancel();
         }
 
-        private WaypointGrid CurrentGrid => TraverseStorage.Instance[Parent];
-
-        public Vector2 GridSize => new Vector2(CurrentGrid.DimX, CurrentGrid.DimY);
-
         public void ResizeGrid(Vector2 Size)
         {
             TraverseStorage.Instance.ResizeGrid(Parent, Size);
         }
-
-        public float ErrorMargin
-        {
-            get => Walk.ErrorMargin;
-            set => Walk.ErrorMargin = value;
-        }
-
-        public Vector3 Target { get; private set; }
-
-        public bool HasTarget => _hasTarget;
 
         public override void Dispose()
         {

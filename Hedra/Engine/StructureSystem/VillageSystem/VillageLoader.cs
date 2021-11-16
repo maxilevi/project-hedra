@@ -17,24 +17,22 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             Designs = new Dictionary<string, VillageRoot>();
             Designer = new VillageDesigner(Designs);
         }
-        
+
         public static void LoadModules(string AppPath)
         {
             Designs.Clear();
             var templates = Load<VillageTemplate>(AppPath + "/Modules/Villages/");
             foreach (var template in templates)
-            {
                 Designs.Add(template.Name.ToLowerInvariant(), VillageRoot.FromTemplate(template));
-            }
         }
-        
+
         private static T[] Load<T>(string CompletePath)
         {
             var list = new List<T>();
-            string[] modules = Directory.GetFiles(CompletePath, "*", SearchOption.AllDirectories);
-            foreach (string module in modules)
+            var modules = Directory.GetFiles(CompletePath, "*", SearchOption.AllDirectories);
+            foreach (var module in modules)
             {
-                string ext = Path.GetExtension(module);
+                var ext = Path.GetExtension(module);
                 if (ext != ".json") continue;
 
                 var obj = FromJson<T>(File.ReadAllText(module), out var result);
@@ -42,9 +40,10 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 
                 list.Add(obj);
             }
+
             return list.ToArray();
         }
-        
+
         private static T FromJson<T>(string Data, out bool Success)
         {
             try
@@ -58,7 +57,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                 Success = false;
                 Log.WriteLine(e.ToString());
             }
-            return default(T);
+
+            return default;
         }
     }
 }

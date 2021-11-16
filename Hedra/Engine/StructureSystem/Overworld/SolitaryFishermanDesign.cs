@@ -20,12 +20,16 @@ namespace Hedra.Engine.StructureSystem.Overworld
         protected override CacheItem? Cache => null;
         protected override BlockType PathType => BlockType.None;
 
+        protected override Vector3 NPCHorizontalOffset => Vector3.Zero;
+        protected override float QuestChance => 1f;
+
         protected override SolitaryFisherman Create(Vector3 Position, float Size)
         {
             return new SolitaryFisherman(Position);
         }
 
-        protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
+        protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome,
+            IRandom Rng)
         {
             return Rng.Next(0, StructureChance) == 1
                    && FishingPostDesign.IsWater(ChunkOffset.ToVector3(), Biome) &&
@@ -44,8 +48,5 @@ namespace Hedra.Engine.StructureSystem.Overworld
             npc.IsSitting = true;
             return npc;
         }
-
-        protected override Vector3 NPCHorizontalOffset => Vector3.Zero;
-        protected override float QuestChance => 1f;
     }
 }

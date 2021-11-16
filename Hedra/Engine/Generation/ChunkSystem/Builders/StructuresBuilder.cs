@@ -6,11 +6,11 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
         {
         }
 
+        protected override QueueType Type => QueueType.Structures;
+
         protected override void Work(Chunk Object)
         {
             Object.GenerateStructures();
         }
-
-        protected override QueueType Type => QueueType.Structures;
     }
 }

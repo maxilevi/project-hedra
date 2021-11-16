@@ -1,48 +1,31 @@
-using System;
 using System.Collections.Generic;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using System.Linq;
-using System.Reflection.Emit;
-using Hedra.Core;
+using System.Numerics;
 using Hedra.Engine.Localization;
-using Hedra.Engine.Management;
 using Hedra.Engine.Player.Inventory;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
-using Hedra.Engine.SkillSystem;
+using Hedra.Engine.Windowing;
 using Hedra.Localization;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-using System.Numerics;
-using Hedra.Engine.Windowing;
-using Hedra.Numerics;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
 {
     public class AbilityTreeInterface : InventoryArrayInterface
     {
-        private static uint LabelId { get; } = Graphics2D.LoadFromAssets("Assets/UI/SkillLabel.png");
-
-        private static Vector2 LabelSize { get; } =
-            Graphics2D.SizeFromAssets("Assets/UI/SkillLabel.png").As1920x1080() * UISizeMultiplier;
-
-        private static uint DefaultId { get; } = Graphics2D.LoadFromAssets("Assets/UI/AbilityTreeBackground.png");
-
-        private static Vector2 DefaultSize { get; } =
-            Graphics2D.SizeFromAssets("Assets/UI/AbilityTreeBackground.png").As1920x1080() * UISizeMultiplier;
-
-        private readonly Vector2 _targetResolution = new Vector2(1366, 768);
-        private readonly IPlayer _player;
-        private readonly GUIText _titleText;
         private readonly GUIText _availablePointsText;
         private readonly RenderableTexture _backgroundTexture;
-        private readonly RenderableTexture[] _skillPointsBackgroundTextures;
-        private readonly TreeLinesUI _linesUI;
-        private readonly SpecializationPanel _specializationPanel;
-        private AbilityTreeBlueprint _blueprint;
         private readonly Button _confirmButton;
         private readonly GUIText _confirmButtonText;
+        private readonly TreeLinesUI _linesUI;
+        private readonly IPlayer _player;
+        private readonly RenderableTexture[] _skillPointsBackgroundTextures;
+        private readonly SpecializationPanel _specializationPanel;
+
+        private readonly Vector2 _targetResolution = new Vector2(1366, 768);
+        private readonly GUIText _titleText;
+        private AbilityTreeBlueprint _blueprint;
 
         public AbilityTreeInterface(IPlayer Player, InventoryArray Array, int Offset, int Length, int SlotsPerLine)
             : base(Array, Offset, Length, SlotsPerLine, new Vector2(1.5f, 1.5f))
@@ -115,6 +98,20 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             _panel.AddElement(_availablePointsText);
             _panel.AddElement(_backgroundTexture);
         }
+
+        private static uint LabelId { get; } = Graphics2D.LoadFromAssets("Assets/UI/SkillLabel.png");
+
+        private static Vector2 LabelSize { get; } =
+            Graphics2D.SizeFromAssets("Assets/UI/SkillLabel.png").As1920x1080() * UISizeMultiplier;
+
+        private static uint DefaultId { get; } = Graphics2D.LoadFromAssets("Assets/UI/AbilityTreeBackground.png");
+
+        private static Vector2 DefaultSize { get; } =
+            Graphics2D.SizeFromAssets("Assets/UI/AbilityTreeBackground.png").As1920x1080() * UISizeMultiplier;
+
+        public SpecializationInfo SpecializationInfo => _specializationPanel.SpecializationInfo;
+
+        private bool IsTreeEnabled => _player.AbilityTree.IsTreeEnabled(_blueprint);
 
         private void ConfirmChanges(object Sender, MouseButtonEventArgs Args)
         {
@@ -225,8 +222,6 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             _linesUI.Update(vertexList.ToArray(), colorList.ToArray());
         }
 
-        public SpecializationInfo SpecializationInfo => _specializationPanel.SpecializationInfo;
-
 
         private void SetGrayscaleIfNecessary(int Index)
         {
@@ -237,15 +232,13 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 decomposedIndexX * 5 > _player.Level || !PreviousUnlocked(Index) || !IsTreeEnabled;
         }
 
-        private bool IsTreeEnabled => _player.AbilityTree.IsTreeEnabled(_blueprint);
-
         private bool PreviousUnlocked(int Index)
         {
             var decomposedIndexY = Index % AbilityTree.Columns;
             var decomposedIndexX = AbilityTree.AbilityCount / AbilityTree.Columns - 1 -
                                    (Index - decomposedIndexY) / AbilityTree.Columns;
             if (decomposedIndexX == 0) return true;
-            else if (!Array[Index + AbilityTree.Columns].GetAttribute<bool>("Enabled"))
+            if (!Array[Index + AbilityTree.Columns].GetAttribute<bool>("Enabled"))
                 return PreviousUnlocked(Index + AbilityTree.Columns);
             return Array[Index + AbilityTree.Columns].GetAttribute<int>("Level") > 0;
         }

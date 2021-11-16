@@ -1,14 +1,9 @@
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using Hedra.Core;
-using Hedra.Engine.Management;
-using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.UI;
+using System.Numerics;
 using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-using System.Numerics;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Player.Inventory
 {
@@ -19,13 +14,6 @@ namespace Hedra.Engine.Player.Inventory
         public static readonly Vector2 DefaultSize =
             Graphics2D.SizeFromAssets("Assets/UI/InventoryBackground.png").As1920x1080() *
             InventoryArrayInterface.UISizeMultiplier;
-
-        protected GUIText Name { get; }
-        protected GUIText Level { get; }
-        protected GUIText TopLeftText { get; }
-        protected GUIText BottomLeftText { get; }
-        protected GUIText TopRightText { get; }
-        protected GUIText BottomRightText { get; }
 
         public InventoryBackground(Vector2 Position) : base(Position, Vector2.One * .55f)
         {
@@ -51,6 +39,13 @@ namespace Hedra.Engine.Player.Inventory
             Panel.AddElement(TopRightText);
             Panel.AddElement(BottomRightText);
         }
+
+        protected GUIText Name { get; }
+        protected GUIText Level { get; }
+        protected GUIText TopLeftText { get; }
+        protected GUIText BottomLeftText { get; }
+        protected GUIText TopRightText { get; }
+        protected GUIText BottomRightText { get; }
 
         public virtual void UpdateView(IHumanoid Human)
         {

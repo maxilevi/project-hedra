@@ -1,5 +1,5 @@
 ﻿{
-  "Name" : "Turtle", 
+  "Name": "Turtle",
   "MaxHealth": 512.0,
   "AttackDamage": 7.0,
   "Speed": 1.0,

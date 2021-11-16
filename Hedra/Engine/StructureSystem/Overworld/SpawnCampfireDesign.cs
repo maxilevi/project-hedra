@@ -1,29 +1,26 @@
 using System;
+using System.Numerics;
 using Hedra.BiomeSystem;
-using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
-using Hedra.Engine.QuestSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Mission;
-using Hedra.Rendering;
-using System.Numerics;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
     public class SpawnCampfireDesign : CampfireDesign
     {
-        public static bool Spawned { get; set; }
         private static readonly Vector3 SpawnOffset = Vector3.UnitZ * 16f;
+        public static bool Spawned { get; set; }
         public override bool CanSpawnInside => true;
 
         public override void Build(CollidableStructure Structure)
         {
             var rng = BuildRng(Structure);
             BuildBaseCampfire(Structure.Position, Vector3.Zero, Structure, rng, out var transformationMatrix);
-            ((SpawnCampfire) Structure.WorldObject).Villager = CreateVillager(Structure, rng);
+            ((SpawnCampfire)Structure.WorldObject).Villager = CreateVillager(Structure, rng);
             SpawnCampfireMat(
                 Vector3.UnitX * -16f,
                 Vector3.Zero,
@@ -43,7 +40,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             villager.IsSitting = true;
             return villager;
         }
-        
+
         public static void AlignPlayer(IPlayer Player)
         {
             Player.Position = World.SpawnPoint + SpawnOffset;
@@ -51,7 +48,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             Player.Movement.Orientate();
             Player.IsSitting = true;
         }
-        
+
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
         {
             var realPosition = World.SpawnPoint;
@@ -62,7 +59,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
             return structure;
         }
 
-        public override bool ShouldSetup(Vector2 ChunkOffset, ref Vector3 TargetPosition, CollidableStructure[] Items, Region Biome, IRandom Rng)
+        public override bool ShouldSetup(Vector2 ChunkOffset, ref Vector3 TargetPosition, CollidableStructure[] Items,
+            Region Biome, IRandom Rng)
         {
             return ChunkOffset == World.ToChunkSpace(World.SpawnPoint) && !Spawned;
         }

@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 
 namespace Hedra.Engine.Player
@@ -19,13 +18,14 @@ namespace Hedra.Engine.Player
                 {
                     Handler.Dump(bw);
                 }
+
                 return ms.ToArray();
             }
         }
 
         public static void UnSerialize(this ISerializableHandler Handler, byte[] Data)
         {
-            if(Data.Length == 0) return;
+            if (Data.Length == 0) return;
             using (var ms = new MemoryStream(Data))
             {
                 using (var br = new BinaryReader(ms))

@@ -6,24 +6,31 @@ namespace Hedra.Engine.PhysicsSystem
 {
     public class BoneBox
     {
+        public static readonly uint[] Indices =
+        {
+            0, 1, 3, 3, 1, 2,
+            1, 5, 2, 2, 5, 6,
+            5, 4, 6, 6, 4, 7,
+            4, 0, 7, 7, 0, 3,
+            3, 2, 7, 7, 2, 6,
+            4, 5, 0, 0, 5, 1
+        };
+
+        public BoneBox(int JointId, Vector3[] Corners)
+        {
+            if (Corners.Length != 8) throw new ArgumentOutOfRangeException("Bone box should have 8 vertices.");
+            this.Corners = Corners;
+            this.JointId = JointId;
+            Size = Corners[7] - Corners[0];
+        }
+
         public int JointId { get; }
         public Vector3[] Corners { get; }
         public Vector3 Size { get; }
 
-        public BoneBox(int JointId, Vector3[] Corners)
-        {
-            if(Corners.Length != 8) throw new ArgumentOutOfRangeException($"Bone box should have 8 vertices.");
-            this.Corners = Corners;
-            this.JointId = JointId;
-            this.Size = Corners[7] - Corners[0];
-        }
-
         public void Transform(Matrix4x4 Transformation)
         {
-            for (var i = 0; i < Corners.Length; i++)
-            {
-                Corners[i] = Vector3.Transform(Corners[i], Transformation);
-            }
+            for (var i = 0; i < Corners.Length; i++) Corners[i] = Vector3.Transform(Corners[i], Transformation);
         }
 
         public CollisionShape ToShape()
@@ -37,14 +44,14 @@ namespace Hedra.Engine.PhysicsSystem
         {
             return new BoneBox(JointId, new[]
             {
-                this.Corners[0],
-                this.Corners[1],
-                this.Corners[2],
-                this.Corners[3],
-                this.Corners[4],
-                this.Corners[5],
-                this.Corners[6],
-                this.Corners[7]
+                Corners[0],
+                Corners[1],
+                Corners[2],
+                Corners[3],
+                Corners[4],
+                Corners[5],
+                Corners[6],
+                Corners[7]
             });
         }
 
@@ -66,17 +73,8 @@ namespace Hedra.Engine.PhysicsSystem
                 new Vector3(minX, maxY, minZ),
                 new Vector3(maxX, maxY, minZ),
                 new Vector3(minX, maxY, maxZ),
-                new Vector3(maxX, maxY, maxZ),
+                new Vector3(maxX, maxY, maxZ)
             });
         }
-
-        public static readonly uint[] Indices = {
-            0, 1, 3, 3, 1, 2,
-            1, 5, 2, 2, 5, 6,
-            5, 4, 6, 6, 4, 7,
-            4, 0, 7, 7, 0, 3,
-            3, 2, 7, 7, 2, 6,
-            4, 5, 0, 0, 5, 1
-        };
     }
 }

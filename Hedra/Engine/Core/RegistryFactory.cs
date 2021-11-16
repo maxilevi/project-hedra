@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,11 +15,13 @@ namespace Hedra.Engine.Core
 
         public static T1 Instance => _instance ?? (_instance = new T1());
 
+        protected T3 this[T2 Key] => _table[Key];
+
         public void Register(T2 Name, T3 ClassObject)
         {
             _table.Add(Name, ClassObject);
         }
-        
+
         public void Unregister(T2 Name)
         {
             _table.Remove(Name);
@@ -36,8 +37,9 @@ namespace Hedra.Engine.Core
             return _table.ContainsKey(Key);
         }
 
-        protected T3 this[T2 Key] => _table[Key];
-
-        protected T3[] GetAll() => _table.Values.ToArray();
+        protected T3[] GetAll()
+        {
+            return _table.Values.ToArray();
+        }
     }
 }

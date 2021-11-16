@@ -1,6 +1,5 @@
 using System.Linq;
 using Hedra.Core;
-using Hedra.Engine.Management;
 using Hedra.EntitySystem;
 
 namespace Hedra.AISystem.Behaviours
@@ -9,7 +8,7 @@ namespace Hedra.AISystem.Behaviours
     {
         private readonly Timer _timer;
         private IHumanoid _lookingAt;
-        
+
         public StareBehaviour(IEntity Parent) : base(Parent)
         {
             _timer = new Timer(.5f);
@@ -17,11 +16,9 @@ namespace Hedra.AISystem.Behaviours
 
         public override void Update()
         {
-            if(_timer.Tick()) _lookingAt = World.InRadius<IHumanoid>(Parent.Position, 16f).FirstOrDefault(H => !H.IsInvisible);
-            if (_lookingAt != null)
-            {
-                Parent.LookAt(_lookingAt);
-            }
+            if (_timer.Tick())
+                _lookingAt = World.InRadius<IHumanoid>(Parent.Position, 16f).FirstOrDefault(H => !H.IsInvisible);
+            if (_lookingAt != null) Parent.LookAt(_lookingAt);
         }
     }
 }

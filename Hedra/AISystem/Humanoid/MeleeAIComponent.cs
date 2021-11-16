@@ -1,4 +1,4 @@
- /*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 08/12/2016
@@ -9,28 +9,26 @@
 
 using System;
 using Hedra.Core;
-using Hedra.Engine;
-using Hedra.Engine.Management;
 using Hedra.EntitySystem;
 using Hedra.WeaponSystem;
-using System.Numerics;
 
 namespace Hedra.AISystem.Humanoid
 {
     /// <summary>
-    /// Description of WarriorAI.
+    ///     Description of WarriorAI.
     /// </summary>
     public class MeleeAIComponent : CombatAIComponent
     {
         private float _attackTimer;
-        protected override float SearchRadius => 64;
-        protected override float AttackRadius => throw new NotImplementedException();
-        protected override float ForgetRadius => 64;
 
         public MeleeAIComponent(IHumanoid Parent, bool IsFriendly) : base(Parent, IsFriendly)
         {
         }
-        
+
+        protected override float SearchRadius => 64;
+        protected override float AttackRadius => throw new NotImplementedException();
+        protected override float ForgetRadius => 64;
+
         protected override void DoUpdate()
         {
             _attackTimer -= Time.DeltaTime;
@@ -40,19 +38,15 @@ namespace Hedra.AISystem.Humanoid
         {
             if (!(_attackTimer < 0)) return;
             if (Utils.Rng.Next(0, 7) == 1)
-            {
                 Parent.LeftWeapon.Attack2(Parent, new AttackOptions
                 {
                     IgnoreEntities = IgnoreEntities
                 });
-            }
             else
-            {
                 Parent.LeftWeapon.Attack1(Parent, new AttackOptions
                 {
                     IgnoreEntities = IgnoreEntities
                 });
-            }
             _attackTimer = 1.25f;
         }
 

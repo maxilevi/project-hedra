@@ -1,5 +1,5 @@
-using Hedra.Engine.ItemSystem;
 using System.Numerics;
+using Hedra.Engine.ItemSystem;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Layout
 {
@@ -7,9 +7,9 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Layout
     {
         public PathVertex()
         {
-            Attributes = new AttributeArray();    
+            Attributes = new AttributeArray();
         }
-        
+
         public AttributeArray Attributes { get; }
         public Vector3 Point { get; set; }
 

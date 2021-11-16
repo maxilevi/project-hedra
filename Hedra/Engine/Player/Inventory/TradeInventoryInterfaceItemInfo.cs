@@ -1,23 +1,18 @@
-using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Management;
-using Hedra.Engine.Rendering.UI;
-using Hedra.Items;
-using Hedra.Rendering.UI;
 using System.Numerics;
 using Hedra.API;
-using Hedra.Engine.ClassSystem;
+using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Rendering.UI;
 using Hedra.Localization;
+using Hedra.Rendering.UI;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Player.Inventory
 {
     public class TradeInventoryInterfaceItemInfo : InventoryInterfaceItemInfo
     {
-        private TradeManager _manager;
-        private readonly BackgroundTexture _topTexture;
         private readonly GUIText _topText;
+        private readonly BackgroundTexture _topTexture;
+        private TradeManager _manager;
 
         public TradeInventoryInterfaceItemInfo()
         {

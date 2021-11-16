@@ -7,15 +7,13 @@
 
 using System.Collections.Generic;
 using Hedra.Engine.EnvironmentSystem;
-using Hedra.Engine.Game;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.QuestSystem;
-
 
 namespace Hedra.Engine.Management
 {
     /// <summary>
-    /// A static class which gathers all update functions
+    ///     A static class which gathers all update functions
     /// </summary>
     public static class UpdateManager
     {
@@ -29,6 +27,17 @@ namespace Hedra.Engine.Management
             UpdateFunctions = new HashSet<IUpdatable>();
             UpdateFunctionsList = new List<IUpdatable>();
             ToRemove = new List<IUpdatable>();
+        }
+
+        public static int UpdateCount
+        {
+            get
+            {
+                lock (Lock)
+                {
+                    return UpdateFunctionsList.Count;
+                }
+            }
         }
 
         public static void Add(IUpdatable Updatable)
@@ -56,7 +65,7 @@ namespace Hedra.Engine.Management
                 UpdateFunctionsList.Remove(Updatable);
             }
         }
-         
+
         public static void Update()
         {
             lock (Lock)
@@ -73,6 +82,7 @@ namespace Hedra.Engine.Management
 
                     UpdateFunctionsList[i].Update();
                 }
+
                 SkyManager.Update();
                 InventoryItemRenderer.Update();
                 EntityRenderer.Update();
@@ -81,22 +91,8 @@ namespace Hedra.Engine.Management
 
         private static void RemovePending()
         {
-            for(var i = 0; i < ToRemove.Count; i++)
-            {
-                DoRemove(ToRemove[i]);
-            }
+            for (var i = 0; i < ToRemove.Count; i++) DoRemove(ToRemove[i]);
             ToRemove.Clear();
-        }
-
-        public static int UpdateCount
-        {
-            get
-            {
-                lock (Lock)
-                {
-                    return UpdateFunctionsList.Count;
-                }
-            }
         }
     }
 }

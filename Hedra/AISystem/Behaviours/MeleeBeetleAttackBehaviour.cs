@@ -11,9 +11,17 @@ namespace Hedra.AISystem.Behaviours
         public MeleeBeetleAttackBehaviour(IEntity Parent) : base(Parent)
         {
         }
-        protected override Animation GetBiteAnimation(QuadrupedModel Model) => Model.AttackAnimations.First();
 
-        protected override Animation GetSpitAnimation(QuadrupedModel Model) => throw new NotImplementedException();
         protected override bool HasSpit => false;
+
+        protected override Animation GetBiteAnimation(QuadrupedModel Model)
+        {
+            return Model.AttackAnimations.First();
+        }
+
+        protected override Animation GetSpitAnimation(QuadrupedModel Model)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

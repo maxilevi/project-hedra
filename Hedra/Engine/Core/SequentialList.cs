@@ -7,7 +7,6 @@ namespace Hedra.Engine.Core
     {
         public SequentialList(ICollection<T> Collection) : base(Collection)
         {
-            
         }
     }
 }

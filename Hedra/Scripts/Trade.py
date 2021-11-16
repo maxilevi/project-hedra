@@ -1,16 +1,21 @@
 from Hedra.Items import ItemPool, ItemTier
+
 import Items
 
 AMOUNT_ATTRIBUTE = 'Amount'
 COMPANION_EQUIPMENT_TYPE = 'Pet'
-NORMAL_RECIPES = [x.Name for x in ItemPool.Matching(lambda x: x.IsRecipe and (x.Tier == ItemTier.Uncommon or x.Tier == ItemTier.Common))]
+NORMAL_RECIPES = [x.Name for x in ItemPool.Matching(
+    lambda x: x.IsRecipe and (x.Tier == ItemTier.Uncommon or x.Tier == ItemTier.Common))]
 RARE_RECIPES = [x.Name for x in ItemPool.Matching(lambda x: x.IsRecipe and x.Tier == ItemTier.Rare)]
-ARMOR_POOL = [x.Name for x in ItemPool.Matching(lambda x: x.IsArmor and (x.Tier == ItemTier.Uncommon or x.Tier == ItemTier.Common))]
+ARMOR_POOL = [x.Name for x in
+              ItemPool.Matching(lambda x: x.IsArmor and (x.Tier == ItemTier.Uncommon or x.Tier == ItemTier.Common))]
+
 
 def build_innkeeper_inventory(item_dict, inventory_size, rng):
     items = []
     add_items(items, item_dict)
-    
+
+
 def build_boat_merchant_inventory(item_dict, inventory_size, rng):
     items = [
         (inventory_size - 1, ItemPool.Grab(Items.BOAT)),
@@ -18,9 +23,9 @@ def build_boat_merchant_inventory(item_dict, inventory_size, rng):
         (0, get_infinity_item(Items.BAIT))
     ]
     add_items(items, item_dict)
-    
-def build_merchant_inventory(item_dict, inventory_size, rng):
 
+
+def build_merchant_inventory(item_dict, inventory_size, rng):
     items = [
         (inventory_size - 1, get_infinity_item(Items.BERRY)),
         (inventory_size - 2, get_infinity_item(Items.GLASS_FLASK)),
@@ -37,7 +42,7 @@ def build_merchant_inventory(item_dict, inventory_size, rng):
         items += fishing_items
     add_items(items, item_dict)
 
-    
+
 def build_travelling_merchant_inventory(item_dict, inventory_size, rng):
     build_merchant_inventory(item_dict, inventory_size, rng)
     special_items = [
@@ -59,6 +64,7 @@ def build_clothier_inventory(item_dict, inventory_size, rng):
     ]
     add_items(items, item_dict)
 
+
 def build_mason_inventory(item_dict, inventory_size, rng):
     items = [
         (1, ItemPool.Grab(ARMOR_POOL[rng.Next(0, len(ARMOR_POOL))])),
@@ -66,9 +72,11 @@ def build_mason_inventory(item_dict, inventory_size, rng):
     ]
     add_items(items, item_dict)
 
+
 def add_items(items, dict):
     for index, item in items:
         if item: dict.Add(index, item)
+
 
 def get_infinity_item(item_name):
     item = ItemPool.Grab(item_name)

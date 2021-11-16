@@ -4,25 +4,22 @@
  * Time: 12:00 a.m.
  *
  */
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
+using System.Numerics;
 using Hedra.BiomeSystem;
 using Hedra.Engine.BiomeSystem.GhostTown;
 using Hedra.Engine.BiomeSystem.NormalBiome;
 using Hedra.Engine.BiomeSystem.UndeadBiome;
-using Hedra.Engine.Game;
-using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
-using System.Numerics;
-using Hedra.Engine.BiomeSystem.Savanna;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.BiomeSystem
 {
     /// <summary>
-    /// Description of BiomePool.
+    ///     Description of BiomePool.
     /// </summary>
     public class BiomePool : IBiomePool
     {
@@ -36,19 +33,18 @@ namespace Hedra.Engine.BiomeSystem
         public const float RiverFloorLevel = RiverWaterLevel - BaseBiomeGenerationDesign.RiverDepth;
         public const int MaxRegionsPerBiome = 8;
         public const float RiverSeaFloorMin = RiverFloorLevel - BaseBiomeGenerationDesign.RiverDepth - 2 - 100;
-
-        private readonly WorldType _type;
-        private readonly Voronoi _voronoi;
-        private BiomeDesign[] _biomeDesigns;
-        private Dictionary<WorldType, Type> _generatorMap;
-        private Dictionary<WorldType, BiomeDesign[]> _designsMap;
+        private readonly RandomDistribution _biomeDistribution;
         private readonly Dictionary<int, Region> _regionCache;
         private readonly RandomDistribution _regionDistribution;
-        private readonly RandomDistribution _biomeDistribution;
+
+        private readonly Voronoi _voronoi;
+        private BiomeDesign[] _biomeDesigns;
+        private Dictionary<WorldType, BiomeDesign[]> _designsMap;
+        private Dictionary<WorldType, Type> _generatorMap;
 
         public BiomePool(WorldType Type)
         {
-            _type = Type;
+            this.Type = Type;
             _regionCache = new Dictionary<int, Region>();
             _regionDistribution = new RandomDistribution(true);
             _biomeDistribution = new RandomDistribution(true);
@@ -58,41 +54,42 @@ namespace Hedra.Engine.BiomeSystem
 
         public BiomeGenerator GetGenerator(Chunk Chunk)
         {
-            return (BiomeGenerator) Activator.CreateInstance(_generatorMap[_type], Chunk);
-        }
-
-        public BiomeDesign GetBiomeDesign(Vector3 Offset)
-        {
-            var voronoiHeight = this.VoronoiFormula(Offset);
-            return _biomeDesigns[new Random((int) voronoiHeight).Next(0, _biomeDesigns.Length)];
+            return (BiomeGenerator)Activator.CreateInstance(_generatorMap[Type], Chunk);
         }
 
         public Region GetRegion(Vector3 Position)
         {
             lock (_regionCache)
             {
-                var voronoiHeight = this.VoronoiFormula(Position.Xz().ToVector3());
+                var voronoiHeight = VoronoiFormula(Position.Xz().ToVector3());
 
-                this._regionDistribution.Seed = (int) voronoiHeight;
-                int regionIndex = _regionDistribution.Next(0, MaxRegionsPerBiome);
+                _regionDistribution.Seed = (int)voronoiHeight;
+                var regionIndex = _regionDistribution.Next(0, MaxRegionsPerBiome);
 
-                this._biomeDistribution.Seed = (int) voronoiHeight + 421;
-                int biomeIndex = _biomeDistribution.Next(0, _biomeDesigns.Length);
+                _biomeDistribution.Seed = (int)voronoiHeight + 421;
+                var biomeIndex = _biomeDistribution.Next(0, _biomeDesigns.Length);
 
                 if ((Position - World.SpawnPoint).Xz().LengthFast() < 5000) biomeIndex = 0;
 
-                int index = (regionIndex * 100 / 13 + biomeIndex * 100 / 11) * 100;
+                var index = (regionIndex * 100 / 13 + biomeIndex * 100 / 11) * 100;
 
                 if (_regionCache.ContainsKey(index))
                     return _regionCache[index];
 
-                var regionColors = new RegionColor(World.Seed + regionIndex + biomeIndex, _biomeDesigns[biomeIndex].ColorDesign);
-                var regionTrees = new RegionTree(World.Seed + regionIndex + biomeIndex, _biomeDesigns[biomeIndex].TreeDesign);
-                var regionStructures = new RegionStructure(World.Seed + regionIndex + biomeIndex, _biomeDesigns[biomeIndex].StructureDesign);
-                var regionSky = new RegionSky(World.Seed + regionIndex + biomeIndex, _biomeDesigns[biomeIndex].SkyDesign);
-                var regionMob = new RegionMob(World.Seed + regionIndex + biomeIndex, _biomeDesigns[biomeIndex].MobDesign);
-                var regionGeneration = new RegionGeneration(World.Seed + regionIndex + biomeIndex, _biomeDesigns[biomeIndex].GenerationDesign);
-                var regionEnviroment = new RegionEnviroment(World.Seed + regionIndex + biomeIndex, _biomeDesigns[biomeIndex].EnvironmentDesign);
+                var regionColors = new RegionColor(World.Seed + regionIndex + biomeIndex,
+                    _biomeDesigns[biomeIndex].ColorDesign);
+                var regionTrees = new RegionTree(World.Seed + regionIndex + biomeIndex,
+                    _biomeDesigns[biomeIndex].TreeDesign);
+                var regionStructures = new RegionStructure(World.Seed + regionIndex + biomeIndex,
+                    _biomeDesigns[biomeIndex].StructureDesign);
+                var regionSky = new RegionSky(World.Seed + regionIndex + biomeIndex,
+                    _biomeDesigns[biomeIndex].SkyDesign);
+                var regionMob = new RegionMob(World.Seed + regionIndex + biomeIndex,
+                    _biomeDesigns[biomeIndex].MobDesign);
+                var regionGeneration = new RegionGeneration(World.Seed + regionIndex + biomeIndex,
+                    _biomeDesigns[biomeIndex].GenerationDesign);
+                var regionEnviroment = new RegionEnviroment(World.Seed + regionIndex + biomeIndex,
+                    _biomeDesigns[biomeIndex].EnvironmentDesign);
                 var region = new Region
                 {
                     Colors = regionColors,
@@ -101,7 +98,7 @@ namespace Hedra.Engine.BiomeSystem
                     Sky = regionSky,
                     Mob = regionMob,
                     Generation = regionGeneration,
-                    Environment = regionEnviroment,
+                    Environment = regionEnviroment
                 };
 
                 _regionCache.Add(index, region);
@@ -109,24 +106,69 @@ namespace Hedra.Engine.BiomeSystem
                 return _regionCache[index];
             }
         }
-        
+
+        public RegionColor GetAverageRegionColor(Vector3 Offset)
+        {
+            var regionList = new List<RegionColor>
+            {
+                GetRegion(Offset).Colors
+            };
+            for (var x = -1; x < 1 + 1; x++)
+            {
+                if (x == 0) continue;
+                var offset = new Vector2(Offset.X + Chunk.BlockSize * x * 4f, Offset.Z + Chunk.BlockSize * 0 * 4f);
+                var region = GetRegion(offset.ToVector3());
+
+                regionList.Add(region.Colors);
+            }
+
+            for (var z = -1; z < 1 + 1; z++)
+            {
+                if (z == 0) continue;
+                var offset = new Vector2(Offset.X + Chunk.BlockSize * 0 * 4f, Offset.Z + Chunk.BlockSize * z * 4f);
+                var region = GetRegion(offset.ToVector3());
+
+                regionList.Add(region.Colors);
+            }
+
+            var firstReg = regionList.FirstOrDefault();
+            if (regionList.All(Reg => Reg == firstReg)) return firstReg;
+            return RegionColor.Interpolate(regionList.ToArray());
+        }
+
+        public Region GetPredominantBiome(Chunk Chunk)
+        {
+            return GetPredominantBiome(
+                new Vector2(Chunk.OffsetX + Chunk.Width * .5f, Chunk.OffsetZ + Chunk.Width * .5f));
+        }
+
+        public WorldType Type { get; }
+
+        public BiomeDesign GetBiomeDesign(Vector3 Offset)
+        {
+            var voronoiHeight = VoronoiFormula(Offset);
+            return _biomeDesigns[new Random((int)voronoiHeight).Next(0, _biomeDesigns.Length)];
+        }
+
         public Region GetAverageRegion(Vector3 Offset, float Spacing)
         {
             var regionList = new List<Region>();
-            for (int x = -1; x < 1 + 1; x++)
+            for (var x = -1; x < 1 + 1; x++)
             {
                 if (x == 0) continue;
-                var offset = new Vector2(Offset.X + Chunk.BlockSize * x * Spacing, Offset.Y + Chunk.BlockSize * 0 * Spacing);
-                var region = this.GetRegion(offset.ToVector3());
+                var offset = new Vector2(Offset.X + Chunk.BlockSize * x * Spacing,
+                    Offset.Y + Chunk.BlockSize * 0 * Spacing);
+                var region = GetRegion(offset.ToVector3());
 
                 regionList.Add(region);
             }
 
-            for (int z = -1; z < 1 + 1; z++)
+            for (var z = -1; z < 1 + 1; z++)
             {
                 if (z == 0) continue;
-                var offset = new Vector2(Offset.X + Chunk.BlockSize * 0 * Spacing, Offset.Y + Chunk.BlockSize * z * Spacing);
-                var region = this.GetRegion(offset.ToVector3());
+                var offset = new Vector2(Offset.X + Chunk.BlockSize * 0 * Spacing,
+                    Offset.Y + Chunk.BlockSize * z * Spacing);
+                var region = GetRegion(offset.ToVector3());
 
                 regionList.Add(region);
             }
@@ -137,50 +179,15 @@ namespace Hedra.Engine.BiomeSystem
             return Region.Interpolate(regionList.ToArray());
         }
 
-        public RegionColor GetAverageRegionColor(Vector3 Offset)
-        {
-            var regionList = new List<RegionColor>
-            {
-                this.GetRegion(Offset).Colors
-            };
-            for (int x = -1; x < 1 + 1; x++)
-            {
-                if (x == 0) continue;
-                var offset = new Vector2(Offset.X + Chunk.BlockSize * x * 4f, Offset.Z + Chunk.BlockSize * 0 * 4f);
-                var region = this.GetRegion(offset.ToVector3());
-
-                regionList.Add(region.Colors);
-            }
-
-            for (int z = -1; z < 1 + 1; z++)
-            {
-                if(z == 0) continue;
-                var offset = new Vector2(Offset.X + Chunk.BlockSize * 0 * 4f, Offset.Z + Chunk.BlockSize * z * 4f);
-                var region = this.GetRegion(offset.ToVector3());
-
-                regionList.Add(region.Colors);
-            }
-
-            var firstReg = regionList.FirstOrDefault();
-            if (regionList.All(Reg => Reg == firstReg)) return firstReg;
-            return RegionColor.Interpolate(regionList.ToArray());
-        }
-
         public float VoronoiFormula(Vector3 Offset)
         {
-            float wSeed = World.Seed * 0.0001f;
-            return (float) _voronoi.GetValue(Offset.X * .0001f + wSeed, Offset.Z * .0001f + wSeed) * 100f;
-
-        }
-
-        public Region GetPredominantBiome(Chunk Chunk)
-        {
-            return this.GetPredominantBiome(new Vector2(Chunk.OffsetX + Chunk.Width * .5f, Chunk.OffsetZ + Chunk.Width * .5f));
+            var wSeed = World.Seed * 0.0001f;
+            return (float)_voronoi.GetValue(Offset.X * .0001f + wSeed, Offset.Z * .0001f + wSeed) * 100f;
         }
 
         public Region GetPredominantBiome(Vector2 ChunkOffset)
         {
-            return this.GetRegion(new Vector3(ChunkOffset.X, 0, ChunkOffset.Y));
+            return GetRegion(new Vector3(ChunkOffset.X, 0, ChunkOffset.Y));
         }
 
         private void BuildMappings()
@@ -199,7 +206,7 @@ namespace Hedra.Engine.BiomeSystem
                             MobDesign = new NormalBiomeMobDesign(),
                             GenerationDesign = new NormalBiomeGenerationDesign(),
                             EnvironmentDesign = new NormalBiomeEnvironmentDesign()
-                        }/*,
+                        } /*,
                         
                         new BiomeDesign
                         {
@@ -231,12 +238,10 @@ namespace Hedra.Engine.BiomeSystem
             };
             _generatorMap = new Dictionary<WorldType, Type>
             {
-                {WorldType.Overworld, typeof(LandscapeGenerator)},
-                {WorldType.GhostTown, typeof(LandscapeGenerator)}
+                { WorldType.Overworld, typeof(LandscapeGenerator) },
+                { WorldType.GhostTown, typeof(LandscapeGenerator) }
             };
-            _biomeDesigns = _designsMap[_type];
+            _biomeDesigns = _designsMap[Type];
         }
-
-        public WorldType Type => _type;
     }
 }

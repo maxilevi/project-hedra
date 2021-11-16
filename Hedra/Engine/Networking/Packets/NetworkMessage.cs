@@ -15,38 +15,37 @@ namespace Hedra.Engine.Networking.Packets
         {
             Load();
         }
-        
+
         public static void Load()
         {
-            if(_loaded) return;
+            if (_loaded) return;
             var typeList = Assembly.GetExecutingAssembly().GetLoadableTypes(typeof(NetworkMessage).Namespace).ToArray();
             Log.WriteLine($"Network types found ('{typeList.Length}')");
-            for(var i = 0; i < typeList.Length; ++i)
+            for (var i = 0; i < typeList.Length; ++i)
             {
                 var isNetworkPacket = typeof(INetworkPacket<IPacket>).IsAssignableFrom(typeList[i]);
                 if (!isNetworkPacket || typeList[i].IsAbstract) continue;
 
-                var packet = (INetworkPacket<IPacket>) Activator.CreateInstance(typeList[i]);
+                var packet = (INetworkPacket<IPacket>)Activator.CreateInstance(typeList[i]);
                 PacketTypes.Add(packet);
             }
+
             Log.WriteLine($"Discovered '{PacketTypes.Count}' different hedra packets...");
             _loaded = true;
         }
-        
+
         public static void ParseIfType<T>(byte[] Message, Action<T> Lambda) where T : INetworkPacket<T>
         {
-            if(Message.Length == 0)
-                throw new ArgumentOutOfRangeException($"Network packet is empty");
-            
-            var type = (MessagePacketType) Message[0];
+            if (Message.Length == 0)
+                throw new ArgumentOutOfRangeException("Network packet is empty");
+
+            var type = (MessagePacketType)Message[0];
             for (var i = 0; i < PacketTypes.Count; ++i)
-            {
                 if (type == PacketTypes[i].Type && PacketTypes[i] is T)
                 {
-                    var packet = (T) PacketTypes[i];
+                    var packet = (T)PacketTypes[i];
                     Lambda(packet.Parse(Message.Skip(1).ToArray()));
                 }
-            }
         }
     }
 
@@ -58,6 +57,6 @@ namespace Hedra.Engine.Networking.Packets
         PeersPacket,
         AnimationStatePacket,
         PlayerAttributesPacket,
-        PositionAndRotationPacket,
+        PositionAndRotationPacket
     }
 }

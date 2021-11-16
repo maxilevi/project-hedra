@@ -1,27 +1,23 @@
 using System;
-using Hedra.Components;
-using Hedra.Core;
-using Hedra.Engine.EntitySystem;
+using System.Numerics;
 using Hedra.Engine.Generation;
-using Hedra.Engine.QuestSystem;
 using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using Hedra.Engine.WorldBuilding;
-using System.Numerics;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
     public abstract class LivableBuildingBuilder<T> : Builder<T> where T : ILivableBuildingParameters
     {
-        protected override bool LookAtCenter => true;
-        protected override bool GraduateColor => false;
-        protected float Width { get; private set; }
-        
         protected LivableBuildingBuilder(CollidableStructure Structure) : base(Structure)
         {
         }
-        
+
+        protected override bool LookAtCenter => true;
+        protected override bool GraduateColor => false;
+        protected float Width { get; private set; }
+
         public override bool Place(T Parameters, VillageCache Cache)
         {
             Width = Parameters.GetSize(Cache) * 2f;
@@ -41,7 +37,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         private BasePlateau CreatePlateau(T Parameters)
         {
             return GroundworkType.Squared == Parameters.GroundworkType
-                ? (BasePlateau) new SquaredPlateau(Parameters.Position.Xz(), Width) { Hardness = 3.0f }
+                ? (BasePlateau)new SquaredPlateau(Parameters.Position.Xz(), Width) { Hardness = 3.0f }
                 : new RoundedPlateau(Parameters.Position.Xz(), Width * .5f * 1.5f) { Hardness = 3.0f };
         }
 
@@ -56,7 +52,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             }
         }
 
-        public override BuildingOutput Build(T Parameters, DesignTemplate Design, VillageCache Cache, Random Rng, Vector3 VillageCenter)
+        public override BuildingOutput Build(T Parameters, DesignTemplate Design, VillageCache Cache, Random Rng,
+            Vector3 VillageCenter)
         {
             var output = base.Build(Parameters, Design, Cache, Rng, VillageCenter);
             var transformation = BuildTransformation(Parameters).ClearTranslation();

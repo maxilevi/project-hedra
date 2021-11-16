@@ -1,32 +1,24 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Numerics;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Core;
-using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
-using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Rendering.Particles;
+using Hedra.Engine.SkillSystem;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
-using Hedra.Items;
-using System.Numerics;
-using Hedra.Engine.SkillSystem;
 
 namespace Hedra.Engine.Generation
 {
     public interface IWorldProvider
     {
-        event ModulesReloadEvent ModulesReload;
-
         WorldBuilder Builder { get; }
-        
+
         Dictionary<Vector2, Chunk> SearcheableChunks { get; }
 
         AreaHighlighter Highlighter { get; }
@@ -47,30 +39,31 @@ namespace Hedra.Engine.Generation
         FishingZoneHandler FishingZoneHandler { get; }
 
         int Seed { get; }
-        
+
         Vector3 SpawnPoint { get; }
-        
+
         Vector3 SpawnVillagePoint { get; }
 
         bool IsGenerated { get; }
 
         IWorldObject[] WorldObjects { get; }
-        
+
         ReadOnlyCollection<Chunk> Chunks { get; }
 
         ReadOnlyCollection<IEntity> Entities { get; }
-        
+
         Dictionary<Vector2, Chunk> DrawingChunks { get; }
-        
+
         Dictionary<Vector2, Chunk> ShadowDrawingChunks { get; }
-
-        void Load();
-
-        void ReloadModules();
 
         int MenuSeed { get; }
 
         int RandomSeed { get; }
+        event ModulesReloadEvent ModulesReload;
+
+        void Load();
+
+        void ReloadModules();
 
         void CullTest();
 
@@ -129,11 +122,11 @@ namespace Hedra.Engine.Generation
         void SetupStructure(CollidableStructure Structure);
 
         void AddWorldObject(IWorldObject WorldObject);
-        
+
         float NearestWaterBlock(Vector3 Position, float SearchRange, out Vector3 WaterPosition);
-        
+
         float NearestWaterBlockOnChunk(Chunk Chunk, Vector3 Position, out Vector3 WaterPosition);
-        
+
         float NearestWaterBlockOnChunk(Vector3 Position, out Vector3 WaterPosition);
 
         float GetNoise(float X, float Y);

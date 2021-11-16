@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Hedra.Engine.Events;
-using Hedra.Engine.Game;
 using Hedra.Game;
 using Silk.NET.Input;
-
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -14,15 +12,6 @@ namespace Hedra.Engine.Rendering.UI
     {
         private static readonly List<PlayerInterface> Interfaces;
         private static PlayerInterface _openedInterface;
-        public event OnPlayerInterfaceStateChangeEventHandler OnPlayerInterfaceStateChange;
-        public static bool Showing => _openedInterface != null;
-        public abstract Key OpeningKey { get; }
-        public abstract bool Show { get; set; }
-
-        protected PlayerInterface()
-        {
-            Interfaces.Add(this);
-        }
 
         static PlayerInterface()
         {
@@ -30,7 +19,23 @@ namespace Hedra.Engine.Rendering.UI
             EventDispatcher.RegisterKeyDown(typeof(EventDispatcher), OnKeyDown);
         }
 
+        protected PlayerInterface()
+        {
+            Interfaces.Add(this);
+        }
+
+        public static bool Showing => _openedInterface != null;
+        public abstract Key OpeningKey { get; }
+        public abstract bool Show { get; set; }
+
         protected abstract bool HasExitAnimation { get; }
+
+        public void Dispose()
+        {
+            EventDispatcher.UnregisterKeyDown(typeof(EventDispatcher));
+        }
+
+        public event OnPlayerInterfaceStateChangeEventHandler OnPlayerInterfaceStateChange;
 
         protected void Invoke(bool Parameter)
         {
@@ -57,20 +62,15 @@ namespace Hedra.Engine.Rendering.UI
                 if (Interfaces[i].OpeningKey != Args.Key || GameSettings.Paused || GameManager.Player.IsDead ||
                     !GameManager.Player.CanInteract || GameManager.IsLoading) continue;
                 if (_openedInterface == null)
-                {
                     Interfaces[i].MarkAsShown();
-                }
-                else if(_openedInterface == Interfaces[i] && Interfaces[i].Show)
-                {
-                    Close(Interfaces[i]);
-                }
+                else if (_openedInterface == Interfaces[i] && Interfaces[i].Show) Close(Interfaces[i]);
             }
         }
 
         protected void MarkAsShown()
         {
             Show = true;
-            if(Show) _openedInterface = this;
+            if (Show) _openedInterface = this;
         }
 
         private static void OnEscapeDown(KeyEventArgs Args)
@@ -102,6 +102,7 @@ namespace Hedra.Engine.Rendering.UI
                         _openedInterface = null;
                     }
                 }
+
                 Interface.OnPlayerInterfaceStateChange += DelayedAction;
             }
             else
@@ -115,11 +116,6 @@ namespace Hedra.Engine.Rendering.UI
         {
             _openedInterface.Show = false;
             _openedInterface = null;
-        }
-
-        public void Dispose()
-        {
-            EventDispatcher.UnregisterKeyDown(typeof(EventDispatcher));
         }
     }
 }

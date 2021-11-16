@@ -5,7 +5,6 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
-using Hedra.Items;
 using Hedra.Numerics;
 using Hedra.Rendering;
 
@@ -38,17 +37,20 @@ namespace Hedra.Engine.StructureSystem
             chest.Rotation = Physics.DirectionToEuler(direction) + 90 * Vector3.UnitY;
             return chest;
         }
-        
+
         public static bool IsNotNearEnemies(Vector3 Position)
         {
             var mobs = World.Entities;
-            return mobs.Count(M => M.Distance(Position) < 32 && M.SearchComponent<IsStructureMemberComponent>() != null) == 0;
+            return mobs.Count(M =>
+                M.Distance(Position) < 32 && M.SearchComponent<IsStructureMemberComponent>() != null) == 0;
         }
-        
+
         public static bool IsNotNearLookingEnemies(Vector3 Position)
         {
             var mobs = World.Entities;
-            return mobs.Count(M => M.Distance(Position) < 32 && !M.Physics.StaticRaycast(Position) && M.SearchComponent<IsStructureMemberComponent>() != null) == 0;
+            return mobs.Count(M =>
+                M.Distance(Position) < 32 && !M.Physics.StaticRaycast(Position) &&
+                M.SearchComponent<IsStructureMemberComponent>() != null) == 0;
         }
     }
 }

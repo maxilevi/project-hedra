@@ -1,11 +1,9 @@
-using System.Diagnostics;
-
 namespace Hedra.Engine.Rendering.Core
 {
     public class ShaderHandler
     {
-        private uint _currentBound;
-        public uint Id => _currentBound;
+        public uint Id { get; private set; }
+
         public int Skipped { get; private set; }
 
         public void ResetStats()
@@ -15,13 +13,14 @@ namespace Hedra.Engine.Rendering.Core
 
         public void Use(uint Id)
         {
-            if (_currentBound == Id)
+            if (this.Id == Id)
             {
                 ++Skipped;
                 return;
             }
+
             Renderer.Provider.UseProgram(Id);
-            _currentBound = Id;
+            this.Id = Id;
         }
     }
 }

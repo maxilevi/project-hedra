@@ -6,13 +6,6 @@ namespace Hedra.Engine.StructureSystem
     {
         private readonly Vector3 _position;
 
-        public Vector3 Position => _position * Scale;
-        public Vector3 Scale { get; }
-
-        public bool InvertedPivot { get; }
-
-        public bool InvertedRotation { get; }
-
         public DoorSettings(Vector3 Position, Vector3 Scale, bool InvertedRotation, bool InvertedPivot)
         {
             _position = Position;
@@ -20,5 +13,12 @@ namespace Hedra.Engine.StructureSystem
             this.InvertedPivot = InvertedPivot;
             this.InvertedRotation = InvertedRotation;
         }
+
+        public Vector3 Position => _position * Scale;
+        public Vector3 Scale { get; }
+
+        public bool InvertedPivot { get; }
+
+        public bool InvertedRotation { get; }
     }
 }

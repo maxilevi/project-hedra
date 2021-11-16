@@ -1,5 +1,4 @@
 using Hedra.Core;
-using Hedra.Engine.Management;
 
 namespace Hedra.Engine.SkillSystem
 {
@@ -7,6 +6,7 @@ namespace Hedra.Engine.SkillSystem
     {
         private readonly Timer _timer = new Timer(.15f);
         private bool _isActive;
+        public override float IsAffectingModifier => _isActive ? 1 : 0;
 
         protected override void Add()
         {
@@ -36,6 +36,5 @@ namespace Hedra.Engine.SkillSystem
         protected abstract void DoRemove();
 
         protected abstract bool CheckIfCanDo();
-        public override float IsAffectingModifier => _isActive ? 1 : 0;
     }
 }

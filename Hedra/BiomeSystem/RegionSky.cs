@@ -4,7 +4,6 @@ namespace Hedra.BiomeSystem
 {
     public class RegionSky
     {
-
         public RegionSky(int Seed, BiomeSkyDesign Design)
         {
             CanRain = Design.CanRain(Seed);
@@ -27,7 +26,7 @@ namespace Hedra.BiomeSystem
         public Vector4 SunriseTop { get; }
         public Vector4 SunriseBot { get; }
         public Vector4 MiddayTop { get; }
-        public Vector4  MiddayBot { get; }
+        public Vector4 MiddayBot { get; }
         public float MinLight { get; }
         public float MaxLight { get; }
 

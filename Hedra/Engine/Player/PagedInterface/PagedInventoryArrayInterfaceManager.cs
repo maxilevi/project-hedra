@@ -1,27 +1,22 @@
-
-using Hedra.Core;
 using Hedra.Engine.Events;
 using Hedra.Engine.Input;
-using Hedra.Engine.Player.CraftingSystem;
 using Hedra.Engine.Player.Inventory;
+using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Windowing;
 using Hedra.Numerics;
 using Hedra.Sound;
-
-using Button = Hedra.Engine.Rendering.UI.Button;
-using KeyEventArgs = Hedra.Engine.Events.KeyEventArgs;
-
 
 namespace Hedra.Engine.Player.PagedInterface
 {
     public abstract class PagedInventoryArrayInterfaceManager : InventoryArrayInterfaceManager
     {
-        private readonly PagedInventoryArrayInterface _pagedInterface;
-        private readonly ArrowSelectorState _selectorState;
         private readonly int _columns;
+        private readonly PagedInventoryArrayInterface _pagedInterface;
         private readonly int _rows;
+        private readonly ArrowSelectorState _selectorState;
 
-        protected PagedInventoryArrayInterfaceManager(int Columns, int Rows, InventoryInterfaceItemInfo ItemInfoInterface,
+        protected PagedInventoryArrayInterfaceManager(int Columns, int Rows,
+            InventoryInterfaceItemInfo ItemInfoInterface,
             PagedInventoryArrayInterface Interface)
             : base(ItemInfoInterface, Interface)
         {
@@ -35,9 +30,9 @@ namespace Hedra.Engine.Player.PagedInterface
 
         protected override void Interact(object Sender, MouseButtonEventArgs EventArgs)
         {
-            var button = (Button) Sender;
+            var button = (Button)Sender;
             var item = ItemByButton(button);
-            if(item == null) return;
+            if (item == null) return;
             _pagedInterface.SelectedIndex = IndexByButton(button);
             UpdateView();
             SoundPlayer.PlayUISound(SoundType.ButtonClick);
@@ -60,13 +55,17 @@ namespace Hedra.Engine.Player.PagedInterface
             if (!Enabled) return;
             var newIndex = _pagedInterface.SelectedIndex;
             var rowIndex = newIndex / _rows;
-            
-            _selectorState.OnUp = () => newIndex = MoveSelector(newIndex, _rows, newIndex % _rows, (_columns - rowIndex - 1) * _rows + newIndex);
-            _selectorState.OnDown = () => newIndex = MoveSelector(newIndex, - _rows, newIndex % _rows, (_columns - rowIndex - 1) * _rows + newIndex);
-            _selectorState.OnRight = () => newIndex = MoveSelector(newIndex, +1, 0, _rows * _columns-1);
-            _selectorState.OnLeft = () => newIndex = MoveSelector(newIndex, -1, 0, _rows * _columns-1);
+
+            _selectorState.OnUp = () =>
+                newIndex = MoveSelector(newIndex, _rows, newIndex % _rows,
+                    (_columns - rowIndex - 1) * _rows + newIndex);
+            _selectorState.OnDown = () =>
+                newIndex = MoveSelector(newIndex, -_rows, newIndex % _rows,
+                    (_columns - rowIndex - 1) * _rows + newIndex);
+            _selectorState.OnRight = () => newIndex = MoveSelector(newIndex, +1, 0, _rows * _columns - 1);
+            _selectorState.OnLeft = () => newIndex = MoveSelector(newIndex, -1, 0, _rows * _columns - 1);
             _selectorState.OnEnter = OnEnterPressed;
-            
+
             ArrowSelector.ProcessKeyDown(EventArgs, _selectorState);
             _pagedInterface.SelectedIndex = newIndex;
             UpdateView();
@@ -75,13 +74,13 @@ namespace Hedra.Engine.Player.PagedInterface
         protected virtual void OnEnterPressed()
         {
         }
-        
+
         private void OnKeyUp(object Sender, KeyEventArgs EventArgs)
         {
             if (!Enabled) return;
             ArrowSelector.ProcessKeyUp(EventArgs, _selectorState);
         }
-        
+
         private int MoveSelector(int Index, int Direction, int Min, int Max)
         {
             SoundPlayer.PlayUISound(SoundType.ButtonClick);

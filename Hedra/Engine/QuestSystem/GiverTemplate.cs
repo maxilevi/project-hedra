@@ -1,6 +1,6 @@
+using System.Numerics;
 using Hedra.EntitySystem;
 using Newtonsoft.Json;
-using System.Numerics;
 
 namespace Hedra.Engine.QuestSystem
 {
@@ -14,7 +14,7 @@ namespace Hedra.Engine.QuestSystem
         [JsonIgnore]
         public Vector3 Position
         {
-            get => new Vector3(X,Y,Z);
+            get => new Vector3(X, Y, Z);
             private set
             {
                 X = value.X;

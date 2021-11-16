@@ -1,5 +1,4 @@
 using Hedra.Engine.ItemSystem;
-using Hedra.Items;
 using Hedra.Mission;
 
 namespace Hedra.Engine.QuestSystem

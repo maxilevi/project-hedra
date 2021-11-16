@@ -7,27 +7,17 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
-using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using System.Collections.Generic;
-using Hedra.Engine.CacheSystem;
-using Hedra.Engine.Core;
-using Hedra.Engine.Rendering;
-using Hedra.Engine.Management;
-using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Generation.ChunkSystem;
-using Hedra.Engine.PlantSystem;
 using System.Numerics;
+using Hedra.BiomeSystem;
+using Hedra.Engine.CacheSystem;
+using Hedra.Engine.PlantSystem;
+using Hedra.Engine.Rendering;
 using Hedra.Framework;
-using Hedra.Framework;
-using Region = Hedra.BiomeSystem.Region;
 
 namespace Hedra.Engine.Generation
 {
     /// <summary>
-    /// Description of HerbGenerator.
+    ///     Description of HerbGenerator.
     /// </summary>
     public class EnvironmentGenerator
     {

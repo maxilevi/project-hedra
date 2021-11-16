@@ -1,8 +1,6 @@
-using Hedra.Engine.Player.Inventory;
-using Hedra.Engine.QuestSystem;
-using Hedra.Engine.Rendering;
-using Hedra.Rendering;
 using System.Numerics;
+using Hedra.Engine.Player.Inventory;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.Player.QuestSystem.Views
 {
@@ -10,10 +8,10 @@ namespace Hedra.Engine.Player.QuestSystem.Views
     {
         private readonly ObjectMesh _currentItemMesh;
         private readonly Vector3 _currentItemMeshSize;
-  
+
         public ModelView(VertexData PreviewMesh)
         {
-            _currentItemMesh = 
+            _currentItemMesh =
                 InventoryItemRenderer.BuildModel(PreviewMesh, out _currentItemMeshSize);
             _currentItemMesh.ApplyNoiseTexture = true;
         }

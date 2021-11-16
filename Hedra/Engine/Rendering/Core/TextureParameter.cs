@@ -1,4 +1,3 @@
-using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
 
 namespace Hedra.Engine.Rendering.Core

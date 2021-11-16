@@ -1,5 +1,4 @@
 using System;
-using Hedra.Engine.Native;
 using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.Generation.ChunkSystem
@@ -9,9 +8,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private bool _disposed;
         private IntPtr _ptr;
 
-        public NativeMesher()
+        public void Dispose()
         {
-            //_ptr = HedraCoreNative.meshing_initialize();
+            _disposed = true;
+            //HedraCoreNative.meshing_destroy(_ptr);
         }
 
         public void CreateCell(ref GridCell Cell, int x, int y, int z, bool isWater, int lod, out bool success)
@@ -19,13 +19,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             //HedraCoreNative
             success = false;
         }
-        
-        public void Dispose()
-        {
-            _disposed = true;
-            //HedraCoreNative.meshing_destroy(_ptr);
-        }
-        
+
         ~NativeMesher()
         {
             if (!_disposed)

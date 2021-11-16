@@ -1,4 +1,4 @@
-  /*
+/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 13/09/2016
@@ -8,40 +8,34 @@
  */
 
 using System;
-using System.Numerics;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
-using System.Threading;
-using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
-using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.WorldBuilding;
-using Hedra.Engine.Game;
-using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Framework;
 using Hedra.Numerics;
 using Hedra.Structures;
 
-  namespace Hedra.Engine.StructureSystem
+namespace Hedra.Engine.StructureSystem
 {
     /// <summary>
-    /// Description of StructureGenerator.
+    ///     Description of StructureGenerator.
     /// </summary>
     public class StructureHandler
     {
-        private readonly object _lock = new object();
-        private readonly object _registerLock = new object();
-        public Voronoi SeedGenerator { get; }
         private readonly List<StructureWatcher> _itemWatchers;
+        private readonly object _lock = new object();
+        private readonly Dictionary<Vector3, CollidableStructure> _registeredPositions;
+        private readonly object _registerLock = new object();
+        private bool _dirtyStructures;
+        private bool _dirtyStructuresItems;
         private CollidableStructure[] _itemsCache;
         private BaseStructure[] _structureCache;
-        private readonly Dictionary<Vector3, CollidableStructure> _registeredPositions;
-        private bool _dirtyStructuresItems;
-        private bool _dirtyStructures;
-        
+
         public StructureHandler()
         {
             _registeredPositions = new Dictionary<Vector3, CollidableStructure>();
@@ -50,11 +44,54 @@ using Hedra.Structures;
             World.OnChunkDisposed += OnChunkDisposed;
         }
 
+        public Voronoi SeedGenerator { get; }
+
+        public CollidableStructure[] StructureItems
+        {
+            get
+            {
+                if (_dirtyStructuresItems || _itemsCache == null)
+                {
+                    _itemsCache = Watchers.Select(I => I.Structure).ToArray();
+                    _dirtyStructuresItems = false;
+                }
+
+                return _itemsCache;
+            }
+        }
+
+        public StructureWatcher[] Watchers
+        {
+            get
+            {
+                lock (_lock)
+                {
+                    return _itemWatchers.ToArray();
+                }
+            }
+        }
+
+        public BaseStructure[] Structures
+        {
+            get
+            {
+                if (_dirtyStructures || _structureCache == null)
+                {
+                    _structureCache = Watchers.SelectMany(
+                        I => I.Structure.WorldObject.Children.Concat(new[] { I.Structure.WorldObject })
+                    ).ToArray();
+                    _dirtyStructures = false;
+                }
+
+                return _structureCache;
+            }
+        }
+
         private void OnChunkDisposed(Chunk Chunk)
         {
             lock (_lock)
             {
-                for (var i = _itemWatchers.Count-1; i > -1; --i)
+                for (var i = _itemWatchers.Count - 1; i > -1; --i)
                 {
                     var item = _itemWatchers[i];
                     if (ShouldRemove(item.Structure))
@@ -64,29 +101,29 @@ using Hedra.Structures;
                         _itemWatchers.RemoveAt(i);
                     }
                 }
+
                 Dirty();
             }
         }
-        
+
         /* Used from MissionCore.py */
-        public static List<Pair<StructureDesign, Vector3>> NearbyStructuresPositionDesigns(Vector3 Position, Type Type, float MaxDistance)
+        public static List<Pair<StructureDesign, Vector3>> NearbyStructuresPositionDesigns(Vector3 Position, Type Type,
+            float MaxDistance)
         {
-            var radius = (int) (MaxDistance / Chunk.Width);
+            var radius = (int)(MaxDistance / Chunk.Width);
             var structs = new List<Pair<StructureDesign, Vector3>>();
             var chunkSpace = World.ToChunkSpace(Position);
             for (var x = -radius; x < radius; x++)
+            for (var z = -radius; z < radius; z++)
             {
-                for (var z = -radius; z < radius; z++)
-                {
-                    var finalPosition = new Vector3(chunkSpace.X + x * Chunk.Width, 0, chunkSpace.Y + z * Chunk.Width);
-                    if ((finalPosition - Position).Xz().LengthSquared() > MaxDistance * MaxDistance)
-                        continue;
-                    
-                    var region = World.BiomePool.GetRegion(finalPosition);
-                    var sample = MapBuilder.Sample(finalPosition, region);
-                    if (sample != null && sample.GetType() == Type)
-                        structs.Add(new Pair<StructureDesign, Vector3>(sample, finalPosition));
-                }
+                var finalPosition = new Vector3(chunkSpace.X + x * Chunk.Width, 0, chunkSpace.Y + z * Chunk.Width);
+                if ((finalPosition - Position).Xz().LengthSquared() > MaxDistance * MaxDistance)
+                    continue;
+
+                var region = World.BiomePool.GetRegion(finalPosition);
+                var sample = MapBuilder.Sample(finalPosition, region);
+                if (sample != null && sample.GetType() == Type)
+                    structs.Add(new Pair<StructureDesign, Vector3>(sample, finalPosition));
             }
 
             return structs;
@@ -106,13 +143,13 @@ using Hedra.Structures;
                 : World.BiomePool.GetRegion(ChunkOffset.ToVector3());
             CheckStructures(ChunkOffset, region.Structures.Designs);
         }
-        
+
         /* Used from MissionCore.py */
         public void CheckStructures(Vector2 ChunkOffset, StructureDesign[] Designs)
         {
             if (!World.IsChunkOffset(ChunkOffset))
                 throw new ArgumentException("Provided parameter does not represent a valid offset");
-            
+
             var underChunk = World.GetChunkAt(ChunkOffset.ToVector3());
             var region = underChunk != null
                 ? underChunk.Biome
@@ -120,18 +157,20 @@ using Hedra.Structures;
             var maxSearchRadius = Designs.Max(D => D.SearchRadius);
             /* Beware! This is created locally and we don't maintain a static instance because of multi-threading issues. */
             var distribution = new RandomDistribution(true);
-            for (var x = Math.Min(-2, -maxSearchRadius / Chunk.Width * 2); x < Math.Max(2, maxSearchRadius / Chunk.Width * 2); x++)
+            for (var x = Math.Min(-2, -maxSearchRadius / Chunk.Width * 2);
+                x < Math.Max(2, maxSearchRadius / Chunk.Width * 2);
+                x++)
+            for (var z = Math.Min(-2, -maxSearchRadius / Chunk.Width * 2);
+                z < Math.Max(2, maxSearchRadius / Chunk.Width * 2);
+                z++)
             {
-                for (var z = Math.Min(-2, -maxSearchRadius / Chunk.Width * 2); z < Math.Max(2, maxSearchRadius / Chunk.Width * 2); z++)
+                var offset = new Vector2(ChunkOffset.X + x * Chunk.Width, ChunkOffset.Y + z * Chunk.Width);
+                for (var i = 0; i < Designs.Length; i++)
                 {
-                    var offset = new Vector2(ChunkOffset.X + x * Chunk.Width, ChunkOffset.Y + z * Chunk.Width);
-                    for (var i = 0; i < Designs.Length; i++)
-                    {
-                        if (!IsWithinSearchRadius(Designs[i], offset, ChunkOffset)) continue;
-                        if (!Designs[i].MeetsRequirements(offset)) continue;
-                        
-                        Designs[i].CheckForDesign(offset, region, distribution);
-                    }
+                    if (!IsWithinSearchRadius(Designs[i], offset, ChunkOffset)) continue;
+                    if (!Designs[i].MeetsRequirements(offset)) continue;
+
+                    Designs[i].CheckForDesign(offset, region, distribution);
                 }
             }
         }
@@ -163,25 +202,26 @@ using Hedra.Structures;
             {
                 if (_registeredPositions.ContainsKey(Position))
                 {
-                    #if DEBUG
+#if DEBUG
                     if (_registeredPositions[Position] != Structure)
                     {
-                        int a = 0;
+                        var a = 0;
                     }
-                    #endif
+#endif
                     return;
                 }
+
                 _registeredPositions.Add(Position, Structure);
             }
         }
-        
+
         public void UnregisterStructure(Vector3 Position)
         {
             lock (_registerLock)
             {
                 /* This commented code fails when a structure setup method generates an exception, causing the structure to exist and dispose but not registeres */
 #if DEBUG
-                if(!_registeredPositions.ContainsKey(Position))
+                if (!_registeredPositions.ContainsKey(Position))
                     throw new ArgumentOutOfRangeException();
 #endif
                 _registeredPositions.Remove(Position);
@@ -212,17 +252,17 @@ using Hedra.Structures;
             var list = new List<CollidableStructure>();
             var items = StructureItems;
             for (var i = 0; i < items.Length; ++i)
-            {
                 if (Match(items[i]))
                     list.Add(items[i]);
-            }
             return list.ToArray();
         }
 
         public bool Has(CollidableStructure Structure)
         {
             lock (_lock)
+            {
                 return StructureItems.Any(S => S == Structure);
+            }
         }
 
         public static CollidableStructure[] GetNearStructures(Vector3 Position)
@@ -242,45 +282,9 @@ using Hedra.Structures;
                     _itemWatchers[i].Dispose();
                     _itemWatchers.RemoveAt(i);
                 }
+
                 _itemWatchers.Clear();
                 Dirty();
-            }
-        }
-
-        public CollidableStructure[] StructureItems
-        {
-            get
-            {
-                if (_dirtyStructuresItems || _itemsCache == null)
-                {
-                    _itemsCache = Watchers.Select(I => I.Structure).ToArray();
-                    _dirtyStructuresItems = false;
-                }
-                return _itemsCache;     
-            }
-        }
-
-        public StructureWatcher[] Watchers
-        {
-            get
-            {
-                lock(_lock) 
-                    return _itemWatchers.ToArray();
-            }
-        }
-        
-        public BaseStructure[] Structures
-        {
-            get
-            {
-                if (_dirtyStructures || _structureCache == null)
-                {
-                    _structureCache = Watchers.SelectMany(
-                        I => I.Structure.WorldObject.Children.Concat(new [] { I.Structure.WorldObject })
-                        ).ToArray();
-                    _dirtyStructures = false;
-                }
-                return _structureCache;
             }
         }
 

@@ -1,5 +1,5 @@
 ﻿{
-  "Name" : "Sheep", 
+  "Name": "Sheep",
   "MaxHealth": 150.0,
   "AttackDamage": 2.5,
   "Speed": 1.2,
@@ -42,5 +42,5 @@
         "Speed": 5.0
       }
     ]
-  } 
+  }
 }

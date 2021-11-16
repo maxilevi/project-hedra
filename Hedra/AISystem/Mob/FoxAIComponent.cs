@@ -7,7 +7,7 @@ namespace Hedra.AISystem.Mob
     {
         public FoxAIComponent(IEntity Parent) : base(Parent)
         {
-            this.AlterBehaviour<HostileBehaviour>(new FoxHostileBehaviour(Parent));
+            AlterBehaviour<HostileBehaviour>(new FoxHostileBehaviour(Parent));
         }
     }
 }

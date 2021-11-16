@@ -1,6 +1,5 @@
 using System;
 using Hedra.Engine.Player;
-using Hedra.Engine.Rendering.Animation;
 
 namespace Hedra.Engine.SkillSystem
 {
@@ -19,6 +18,12 @@ namespace Hedra.Engine.SkillSystem
             };
         }
 
+        protected abstract float Duration { get; }
+
+        protected abstract float CooldownDuration { get; }
+
+        public sealed override float MaxCooldown => _composition.MaxCooldown;
+
         public override void Update()
         {
             base.Update();
@@ -34,12 +39,6 @@ namespace Hedra.Engine.SkillSystem
         protected abstract void DoEnable();
 
         protected abstract void DoDisable();
-        
-        protected abstract float Duration { get; }
-        
-        protected abstract float CooldownDuration { get; }
-
-        public sealed override float MaxCooldown => _composition.MaxCooldown;
 
         private class ActivateDurationSkillComposition : ActivateDurationSkill<IPlayer>
         {
@@ -48,16 +47,27 @@ namespace Hedra.Engine.SkillSystem
             public override float ManaCost => throw new NotImplementedException();
             public override uint IconId => throw new NotImplementedException();
             protected override int MaxLevel => 1;
-            protected override void DoEnable() => DoEnablePublic();
-            protected override void DoDisable() => DoDisablePublic();
             protected override float Duration => DurationPublic;
             protected override float CooldownDuration => CooldownDurationPublic;
-            
-            public void DoUsePublic() => DoUse();
             public float DurationPublic { get; set; }
             public float CooldownDurationPublic { get; set; }
             public Action DoEnablePublic { get; set; }
             public Action DoDisablePublic { get; set; }
+
+            protected override void DoEnable()
+            {
+                DoEnablePublic();
+            }
+
+            protected override void DoDisable()
+            {
+                DoDisablePublic();
+            }
+
+            public void DoUsePublic()
+            {
+                DoUse();
+            }
         }
     }
 }

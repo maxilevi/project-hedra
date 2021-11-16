@@ -1,18 +1,20 @@
 using System.Diagnostics;
+using System.Numerics;
 using BulletSharp;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
-using System.Numerics;
 
 namespace Hedra.Engine.Bullet
 {
     public class PhysicsObjectInformation
     {
-        #if DEBUG
+#if DEBUG
         private StackTrace _trace = new StackTrace();
-        #endif
+#endif
         public int UsedBytes { get; set; }
+
         public string Name { get; set; }
+
         /* This is so projectiles don't collide with invisible walls if its not necessary */
         public bool DisableCollisionIfNoContactResponse { get; set; } = true;
         public CollisionFilterGroups Group { get; set; }
@@ -24,7 +26,7 @@ namespace Hedra.Engine.Bullet
         public bool IsSensor => (Group & CollisionFilterGroups.SensorTrigger) == CollisionFilterGroups.SensorTrigger;
         public bool IsDynamic { get; set; }
         public bool IsStatic { get; set; }
-        public bool IsPlayer  => Entity is IPlayer;
+        public bool IsPlayer => Entity is IPlayer;
         public Vector2[] StaticOffsets { get; set; }
         public bool ValidStaticObject => StaticOffsets != null;
     }

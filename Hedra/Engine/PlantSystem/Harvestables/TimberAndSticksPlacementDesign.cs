@@ -1,9 +1,7 @@
 using System;
-using Hedra.Core;
-using Hedra.Engine.CacheSystem;
+using System.Numerics;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
-using System.Numerics;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.PlantSystem
@@ -13,24 +11,27 @@ namespace Hedra.Engine.PlantSystem
         protected override PlantDesign[] Designs { get; } =
         {
             new TimberDesign(),
-            new StickDesign(),
+            new StickDesign()
         };
-        
+
         protected override BlockType[] Types { get; } =
         {
-            BlockType.Grass,
+            BlockType.Grass
         };
+
+        private PlantDesign TimberDesign => Designs[0];
+
+        private PlantDesign StickDesign => Designs[1];
 
         protected override PlantDesign SelectDesign(Random Rng)
         {
             return Rng.NextFloat() < .75f ? TimberDesign : StickDesign;
         }
 
-        private PlantDesign TimberDesign => Designs[0];
-
-        private PlantDesign StickDesign => Designs[1];
-        
-        protected override bool ShouldPlace(Random Rng) => Rng.Next(0, 2250) == 1;
+        protected override bool ShouldPlace(Random Rng)
+        {
+            return Rng.Next(0, 2250) == 1;
+        }
 
         public override bool ShouldPlace(Vector3 Position, Chunk UnderChunk)
         {

@@ -1,38 +1,28 @@
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using System.Drawing.Printing;
-using System.Linq;
-using Hedra.Core;
-using Hedra.Engine.ItemSystem;
+using System.Numerics;
 using Hedra.Engine.Localization;
-using Hedra.Engine.Management;
 using Hedra.Engine.Player.Inventory;
-using Hedra.Engine.Player.MapSystem;
 using Hedra.Engine.Player.PagedInterface;
-using Hedra.Engine.QuestSystem;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Localization;
 using Hedra.Mission;
-using Hedra.Mission.Blocks;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
-using System.Numerics;
-using Hedra.Numerics;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Player.QuestSystem
 {
     public sealed class QuestingJournal : PagedInventoryArrayInterface
     {
-        private readonly BackgroundTexture _journalBackground;
-        private readonly GUIText _descriptionText;
-        private readonly BackgroundTexture _renderTexture;
-        private readonly Vector2 _descriptionPosition;
         private readonly Button _abandonButton;
-        private readonly GUIText _storylineLabel;
-        private readonly BackgroundTexture _renderBackground;
+        private readonly Vector2 _descriptionPosition;
+        private readonly GUIText _descriptionText;
+        private readonly BackgroundTexture _journalBackground;
         private readonly IPlayer _player;
+        private readonly BackgroundTexture _renderBackground;
+        private readonly BackgroundTexture _renderTexture;
+        private readonly GUIText _storylineLabel;
 
         public QuestingJournal(IPlayer Player)
             : base(Player, null, 0, 0, Vector2.One)
@@ -110,6 +100,13 @@ namespace Hedra.Engine.Player.QuestSystem
             CurrentPageText.Position += rightJournalCorner;
         }
 
+        private MissionObject CurrentQuest =>
+            Quests.Length != 0 ? Quests[Mathf.Modulo(CurrentPage, Quests.Length)] : null;
+
+        protected override Translation TitleTranslation => Translation.Create("quests");
+
+        private MissionObject[] Quests => Player.Questing.ActiveQuests;
+
         public override void UpdateView()
         {
             if (Quests.Length != 0)
@@ -167,12 +164,5 @@ namespace Hedra.Engine.Player.QuestSystem
                 _player.Minimap.UnMarkQuest();
             }
         }
-
-        private MissionObject CurrentQuest =>
-            Quests.Length != 0 ? Quests[Mathf.Modulo(CurrentPage, Quests.Length)] : null;
-
-        protected override Translation TitleTranslation => Translation.Create("quests");
-
-        private MissionObject[] Quests => Player.Questing.ActiveQuests;
     }
 }

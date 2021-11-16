@@ -1,11 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem
 {
-    delegate bool SamplerType(Vector2 Position, out int Seed);
-    
+    internal delegate bool SamplerType(Vector2 Position, out int Seed);
+
     public static class StructureGrid
     {
         /* Big structures */
@@ -32,7 +31,7 @@ namespace Hedra.Engine.StructureSystem
         public const int TravellingMerchantChance = 8;
         public const int CottageWithFarmChance = 8;
         public const int SolitaryFisherman = 4;
-        
+
         /* Dead realm structures */
         public const int TombstoneChance = 2;
 
@@ -50,7 +49,7 @@ namespace Hedra.Engine.StructureSystem
                 SampleDefault
             };
         }
-        
+
         public static bool Sample(Vector2 Position, StructureDesign Design, StructureDesign[] Types)
         {
             var sampler = SelectSampler(Design);
@@ -69,14 +68,15 @@ namespace Hedra.Engine.StructureSystem
         private static int BaseSample(Vector2 Position, float Frequency)
         {
             var wSeed = World.Seed * 0.0001f;
-            return (int) ((float) World.StructureHandler.SeedGenerator.GetValue(Position.X * Frequency + wSeed, Position.Y * Frequency + wSeed) * 100f);
+            return (int)((float)World.StructureHandler.SeedGenerator.GetValue(Position.X * Frequency + wSeed,
+                Position.Y * Frequency + wSeed) * 100f);
         }
 
         private static bool Sample1024(Vector2 Position, out int Seed)
         {
             return Sampler(Position, I => I == BigSampleChance, 0.002f, out Seed);
         }
-        
+
         private static bool SampleDefault(Vector2 Position, out int Seed)
         {
             return Sampler(Position, I => I != BigSampleChance, 0.0075f, out Seed);
@@ -87,14 +87,17 @@ namespace Hedra.Engine.StructureSystem
             var baseSeed = BaseSample(Position, .0005f);
             Seed = BaseSample(Position, Frequency);
             var index = new Random(baseSeed).Next(0, SampleTypes);
-            return IsType(index) && IsPoint(Position, Frequency); 
+            return IsType(index) && IsPoint(Position, Frequency);
         }
-        
+
         private static bool IsPoint(Vector2 Position, float Frequency)
         {
             var wSeed = World.Seed * 0.0001f;
-            var pointCoords = World.StructureHandler.SeedGenerator.GetGridPoint(Position.X * Frequency + wSeed, Position.Y * Frequency + wSeed);
-            var chunkCoords = World.ToChunkSpace(new Vector2((int)((pointCoords.X - wSeed) / Frequency), (int)((pointCoords.Y - wSeed) / Frequency)));
+            var pointCoords =
+                World.StructureHandler.SeedGenerator.GetGridPoint(Position.X * Frequency + wSeed,
+                    Position.Y * Frequency + wSeed);
+            var chunkCoords = World.ToChunkSpace(new Vector2((int)((pointCoords.X - wSeed) / Frequency),
+                (int)((pointCoords.Y - wSeed) / Frequency)));
             var isPoint = chunkCoords == Position;
             return isPoint;
         }

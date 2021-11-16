@@ -1,27 +1,23 @@
 using System;
 using System.Diagnostics;
-using System.Drawing.Drawing2D;
 using System.Linq;
-using Hedra.BiomeSystem;
-using Hedra.Core;
-using Hedra.Engine.BiomeSystem;
-using Hedra.Engine.CacheSystem;
-using Hedra.Engine.Core;
-using Hedra.Engine.Generation;
-using Hedra.Engine.PlantSystem;
-using Hedra.Engine.PlantSystem.Harvestables;
-using Hedra.Engine.StructureSystem.VillageSystem.Builders;
-using Hedra.Engine.WorldBuilding;
-using Hedra.Rendering;
 using System.Numerics;
 using Hedra.AISystem;
 using Hedra.AISystem.Behaviours;
+using Hedra.BiomeSystem;
 using Hedra.Components;
+using Hedra.Engine.BiomeSystem;
+using Hedra.Engine.CacheSystem;
+using Hedra.Engine.Generation;
+using Hedra.Engine.PlantSystem.Harvestables;
 using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.StructureSystem.VillageSystem;
+using Hedra.Engine.StructureSystem.VillageSystem.Builders;
+using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Framework;
 using Hedra.Numerics;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.StructureSystem
 {
@@ -35,7 +31,7 @@ namespace Hedra.Engine.StructureSystem
         protected virtual BlockType PathType => BlockType.StonePath;
         protected virtual bool NoPlantsZone { get; }
         protected abstract CacheItem? Cache { get; }
-        
+
         public sealed override void Build(CollidableStructure Structure)
         {
             var originalModel = Cache != null ? CacheManager.GetModel(Cache.Value) : null;
@@ -60,18 +56,18 @@ namespace Hedra.Engine.StructureSystem
 
         protected virtual void ApplyColors(VertexData Model, RegionColor Colors)
         {
-            
         }
 
         protected virtual float BuildRotationAngle(Random Rng)
         {
             return Rng.NextFloat() * 360f;
         }
-        
-        protected virtual void DoBuild(CollidableStructure Structure, Matrix4x4 Rotation, Matrix4x4 Translation, Random Rng)
-        { 
+
+        protected virtual void DoBuild(CollidableStructure Structure, Matrix4x4 Rotation, Matrix4x4 Translation,
+            Random Rng)
+        {
         }
-        
+
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
         {
             var structure = base.Setup(TargetPosition, Rng, Create(TargetPosition, EffectivePlateauRadius));
@@ -83,7 +79,8 @@ namespace Hedra.Engine.StructureSystem
             return structure;
         }
 
-        protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
+        protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome,
+            IRandom Rng)
         {
             Debug.Assert(StructureChance != 1);
             return Rng.Next(0, StructureChance) == 1 &&
@@ -91,7 +88,8 @@ namespace Hedra.Engine.StructureSystem
                    Math.Abs(Biome.Generation.RiverAtPoint(TargetPosition.X, TargetPosition.Z)) < 0.005f;
         }
 
-        protected Door AddDoor(VertexData Model, Vector3 DoorPosition, Matrix4x4 RotationMatrix, CollidableStructure Structure, bool InvertedRotation, bool InvertedPivot)
+        protected Door AddDoor(VertexData Model, Vector3 DoorPosition, Matrix4x4 RotationMatrix,
+            CollidableStructure Structure, bool InvertedRotation, bool InvertedPivot)
         {
             var door = Builder<IBuildingParameters>.CreateDoor(
                 Model,
@@ -112,10 +110,11 @@ namespace Hedra.Engine.StructureSystem
         protected static void AddImmuneTag(IEntity Bandit)
         {
             Bandit.AddComponent(new IsStructureMemberComponent(Bandit));
-            Bandit.SearchComponent<DamageComponent>().Ignore(E => E.SearchComponent<IsStructureMemberComponent>() != null);
+            Bandit.SearchComponent<DamageComponent>()
+                .Ignore(E => E.SearchComponent<IsStructureMemberComponent>() != null);
             Bandit.SearchComponent<IBehaviouralAI>().AlterBehaviour<RoamBehaviour>(new DungeonRoamBehaviour(Bandit));
         }
-        
+
         protected static void AddPlant(IAllocator Allocator, Vector3 Position, HarvestableDesign Design, Random Rng)
         {
             World.EnvironmentGenerator.GeneratePlant(
@@ -123,10 +122,11 @@ namespace Hedra.Engine.StructureSystem
                 Position,
                 World.GetRegion(Position),
                 Design,
-                Matrix4x4.CreateScale(Design.Scale(Rng)) * Matrix4x4.CreateRotationY(Rng.NextFloat() * 360f) * Matrix4x4.CreateTranslation(Position)
+                Matrix4x4.CreateScale(Design.Scale(Rng)) * Matrix4x4.CreateRotationY(Rng.NextFloat() * 360f) *
+                Matrix4x4.CreateTranslation(Position)
             );
         }
-        
+
         protected abstract T Create(Vector3 Position, float Size);
     }
 }

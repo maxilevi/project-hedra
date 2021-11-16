@@ -1,45 +1,37 @@
 using System;
 using System.Collections;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Linq;
+using System.Numerics;
 using Hedra.Components;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.ClassSystem;
-using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
-using Hedra.Engine.Generation;
 using Hedra.Engine.Input;
 using Hedra.Engine.IO;
-using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
-using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
-using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Scenes;
-using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Game;
 using Hedra.Items;
-using Hedra.Sound;
-using System.Numerics;
 using Hedra.Numerics;
+using Hedra.Sound;
 
 namespace Hedra.Engine.Game
 {
     public class GameProvider : IGameProvider
     {
+        private bool _isNewRun;
+        private LoadingScreen _loadingScreen;
+        private IPlayer[] _players;
+        private bool _spawningEffect;
         public event EventHandler AfterSave;
         public event EventHandler BeforeSave;
         public bool Exists => Program.GameWindow.Exists;
         public bool IsExiting => Program.GameWindow.IsExiting;
         public KeyboardManager Keyboard { get; private set; }
         public bool IsLoading => _loadingScreen?.IsLoading ?? false;
-        private IPlayer[] _players;
-        private LoadingScreen _loadingScreen;
-        private bool _isNewRun;
-        private bool _spawningEffect;
 
         public void Load()
         {
@@ -86,18 +78,6 @@ namespace Hedra.Engine.Game
             RoutineManager.StartRoutine(MenuCoroutine);
             Player.Reset();
             Player.UI.ShowMenu();
-        }
-
-        private IEnumerator MenuCoroutine()
-        {
-            while (GameManager.InStartMenu)
-            {
-                var location = MenuBackground.NewLocation;
-                Player.Position = location;
-                Player.Model.Position = location;
-                Player.Model.Alpha = 0f;
-                yield return null;
-            }
         }
 
         public bool NearAnyPlayer(Vector3 Position, float Radius)
@@ -153,6 +133,86 @@ namespace Hedra.Engine.Game
             Player.Health = Information.Health;
         }
 
+        public void NewRun(PlayerInformation Information)
+        {
+            GameManager.MakeCurrent(Information);
+            Player.Realms.Reset();
+            Player.Realms.Create(World.RandomSeed);
+            Player.Realms.Create(World.RandomSeed, WorldType.GhostTown);
+            Player.Realms.GoTo(RealmHandler.Overworld);
+            Player.Model = new HumanoidModel(Player);
+            if (Player.Inventory.MainWeapon != null)
+            {
+                Player.Inventory.MainWeapon.FlushCache();
+                Player.SetWeapon(Player.Inventory.MainWeapon.Weapon);
+            }
+
+            SpawnCampfireDesign.AlignPlayer(Player);
+            Player.Health = Player.MaxHealth;
+            Player.Mana = Player.MaxMana;
+            Player.Questing.Empty();
+            Player.UI.HideMenu();
+            Player.UI.Hide = false;
+            Player.Enabled = true;
+            _isNewRun = true;
+        }
+
+        public void Unload()
+        {
+            BeforeSave?.Invoke(this, new EventArgs());
+        }
+
+        public void Reload()
+        {
+            AfterSave?.Invoke(this, new EventArgs());
+        }
+
+        public bool InStartMenu => World.Seed == World.MenuSeed;
+
+        public bool InMenu => Player != null && Player.UI.InMenu && !Player.UI.Hide && World.Seed != World.MenuSeed;
+
+        public bool SpawningEffect
+        {
+            get => _spawningEffect;
+            set
+            {
+                if (!value || SpawningEffect || GameSettings.Paused) return;
+                _spawningEffect = true;
+                GameSettings.BloomModifier = 8.0f;
+                TaskScheduler.While(() => Math.Abs(GameSettings.BloomModifier - 1.0f) > .005f,
+                    delegate
+                    {
+                        GameSettings.BloomModifier =
+                            Mathf.Lerp(GameSettings.BloomModifier, 1.0f, Time.IndependentDeltaTime);
+                    });
+                TaskScheduler.When(() => Math.Abs(GameSettings.BloomModifier - 1.0f) < .005f, delegate
+                {
+                    GameSettings.BloomModifier = 1.0f;
+                    _spawningEffect = false;
+                });
+            }
+        }
+
+        public IPlayer Player
+        {
+            get => _players[0];
+            set => _players[0] = value;
+        }
+
+        public bool PlayerExists => _players != null && _players.Length > 0;
+
+        private IEnumerator MenuCoroutine()
+        {
+            while (GameManager.InStartMenu)
+            {
+                var location = MenuBackground.NewLocation;
+                Player.Position = location;
+                Player.Model.Position = location;
+                Player.Model.Alpha = 0f;
+                yield return null;
+            }
+        }
+
         private void AddDefaultRecipes(PlayerInformation Information)
         {
             var defaultRecipes = new[]
@@ -190,30 +250,6 @@ namespace Hedra.Engine.Game
             Player.Inventory.AddRestriction(PlayerInventory.VehicleHolder, EquipmentType.Vehicle);
             Player.Inventory.AddRestriction(PlayerInventory.PetHolder, EquipmentType.Pet);
             Player.Inventory.AddRestriction(PlayerInventory.RingHolder, EquipmentType.Ring);
-        }
-
-        public void NewRun(PlayerInformation Information)
-        {
-            GameManager.MakeCurrent(Information);
-            Player.Realms.Reset();
-            Player.Realms.Create(World.RandomSeed);
-            Player.Realms.Create(World.RandomSeed, WorldType.GhostTown);
-            Player.Realms.GoTo(RealmHandler.Overworld);
-            Player.Model = new HumanoidModel(Player);
-            if (Player.Inventory.MainWeapon != null)
-            {
-                Player.Inventory.MainWeapon.FlushCache();
-                Player.SetWeapon(Player.Inventory.MainWeapon.Weapon);
-            }
-
-            SpawnCampfireDesign.AlignPlayer(Player);
-            Player.Health = Player.MaxHealth;
-            Player.Mana = Player.MaxMana;
-            Player.Questing.Empty();
-            Player.UI.HideMenu();
-            Player.UI.Hide = false;
-            Player.Enabled = true;
-            _isNewRun = true;
         }
 
         private IEnumerator SpawnCoroutine()
@@ -268,49 +304,5 @@ namespace Hedra.Engine.Game
                 }
             }
         }
-
-        public void Unload()
-        {
-            BeforeSave?.Invoke(this, new EventArgs());
-        }
-
-        public void Reload()
-        {
-            AfterSave?.Invoke(this, new EventArgs());
-        }
-
-        public bool InStartMenu => World.Seed == World.MenuSeed;
-
-        public bool InMenu => Player != null && Player.UI.InMenu && !Player.UI.Hide && World.Seed != World.MenuSeed;
-
-        public bool SpawningEffect
-        {
-            get => _spawningEffect;
-            set
-            {
-                if (!value || SpawningEffect || GameSettings.Paused) return;
-                _spawningEffect = true;
-                GameSettings.BloomModifier = 8.0f;
-                TaskScheduler.While(() => Math.Abs(GameSettings.BloomModifier - 1.0f) > .005f,
-                    delegate
-                    {
-                        GameSettings.BloomModifier =
-                            Mathf.Lerp(GameSettings.BloomModifier, 1.0f, Time.IndependentDeltaTime);
-                    });
-                TaskScheduler.When(() => Math.Abs(GameSettings.BloomModifier - 1.0f) < .005f, delegate
-                {
-                    GameSettings.BloomModifier = 1.0f;
-                    _spawningEffect = false;
-                });
-            }
-        }
-
-        public IPlayer Player
-        {
-            get => _players[0];
-            set => _players[0] = value;
-        }
-
-        public bool PlayerExists => _players != null && _players.Length > 0;
     }
 }

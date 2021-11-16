@@ -1,8 +1,4 @@
-using Hedra.Engine;
-using Hedra.Engine.Rendering;
-using Hedra.EntitySystem;
 using Hedra.Rendering;
-using System.Numerics;
 
 namespace Hedra.WeaponSystem
 {
@@ -11,15 +7,17 @@ namespace Hedra.WeaponSystem
         public FarmingRake(VertexData Contents) : base(Contents)
         {
         }
-        
+
         protected override float PrimarySpeed => 0.75f;
-        protected override string[] PrimaryAnimationsNames => new []
+
+        protected override string[] PrimaryAnimationsNames => new[]
         {
-            "Assets/Chr/WarriorRake.dae",
+            "Assets/Chr/WarriorRake.dae"
         };
+
         protected override float SecondarySpeed => 0.75f;
 
-        protected override string[] SecondaryAnimationsNames => new []
+        protected override string[] SecondaryAnimationsNames => new[]
         {
             "Assets/Chr/WarriorRake.dae"
         };

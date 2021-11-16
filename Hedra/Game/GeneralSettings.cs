@@ -12,11 +12,10 @@ using System.Numerics;
 namespace Hedra.Game
 {
     /// <summary>
-    /// Description of GeneralSettings.
+    ///     Description of GeneralSettings.
     /// </summary>
     public static class GeneralSettings
     {
-        public static readonly Vector3 SpawnPoint = new Vector3(5000, 0, 5000);
         public const float DrawDistanceSquared = 512 * 512;
         public const float UpdateDistanceSquared = 420 * 420;
         public const float Lod1DistanceSquared = 288 * 288;
@@ -31,5 +30,6 @@ namespace Hedra.Game
         public const int MaxLoadingRadius = 32;
         public const int MinLoadingRadius = 8;
         public const int MaxChunks = MaxLoadingRadius * MaxLoadingRadius;
+        public static readonly Vector3 SpawnPoint = new Vector3(5000, 0, 5000);
     }
 }

@@ -7,45 +7,38 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using System.Drawing.Text;
+using System.Numerics;
 using System.Reflection;
 using Hedra.Core;
-using Hedra.Engine.Game;
-using Hedra.Engine.Input;
 using Hedra.Engine.Localization;
-using System.Numerics;
 using Hedra.Engine.Management;
 using Hedra.Engine.Networking;
 using Hedra.Engine.Player;
-using Hedra.Engine.Steamworks;
 using Hedra.Game;
 using Hedra.Input;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Rendering.UI
 {
     public class UserInterface
     {
         public static Vector2 BlackBandSize = new Vector2(1f, 0.054f);
-        private readonly IPlayer _player;
-        public Panel Menu { get; }
-        private readonly HelpUI _helpPanel;
-        private readonly OptionsUI _optionsMenu;
-        public GameUI GamePanel { get; }
-        public CharacterSelectorUI CharacterSelector { get; }
-        public CharacterCreatorUI CharacterCreator { get; }
-        private readonly NetworkUI ConnectPanel;
-        private readonly BackgroundTexture _title;
-        private readonly Button _loadButton;
-        public bool InMenu => Menu.Enabled || _optionsMenu.Enabled || ConnectPanel.Enabled;
         private static readonly Color DefaultFontColor = Color.White;
+        private readonly HelpUI _helpPanel;
+        private readonly Button _loadButton;
+        private readonly OptionsUI _optionsMenu;
+        private readonly IPlayer _player;
+        private readonly BackgroundTexture _title;
+        private readonly NetworkUI ConnectPanel;
+        private bool _mEnabled;
+
+        private bool _showHelp;
+
+        private readonly List<bool> _wasEnabled = new List<bool>();
 
         public UserInterface(IPlayer Player)
         {
@@ -203,6 +196,62 @@ namespace Hedra.Engine.Rendering.UI
             }
         }
 
+        public Panel Menu { get; }
+        public GameUI GamePanel { get; }
+        public CharacterSelectorUI CharacterSelector { get; }
+        public CharacterCreatorUI CharacterCreator { get; }
+        public bool InMenu => Menu.Enabled || _optionsMenu.Enabled || ConnectPanel.Enabled;
+
+        public bool ShowHelp
+        {
+            get => _showHelp;
+            set
+            {
+                if (value && Hide)
+                    return;
+                _showHelp = value;
+                if (_showHelp)
+                    _helpPanel.Enable();
+                else
+                    _helpPanel.Disable();
+            }
+        }
+
+        public bool Hide
+        {
+            get => _mEnabled;
+            set
+            {
+                var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+                var k = 0;
+                for (var i = 0; i < GetType().GetFields(flags).Length; i++)
+                {
+                    var field = GetType().GetFields(flags)[i];
+                    if (typeof(Panel).IsAssignableFrom(field.FieldType))
+                    {
+                        if (value)
+                        {
+                            _wasEnabled.Add((field.GetValue(this) as Panel).Enabled);
+                            (field.GetValue(this) as Panel).Disable();
+                        }
+                        else
+                        {
+                            if (!_mEnabled)
+                                return;
+                            if (_wasEnabled[k])
+                                (field.GetValue(this) as Panel).Enable();
+                        }
+
+                        k++;
+                    }
+                }
+
+                if (!value)
+                    _wasEnabled.Clear();
+                _mEnabled = value;
+            }
+        }
+
         public void Update()
         {
             if (_player == null) return;
@@ -262,61 +311,6 @@ namespace Hedra.Engine.Rendering.UI
             ConnectPanel.Disable();
             Cursor.Show = false;
             Cursor.Center();
-        }
-
-        private bool _showHelp;
-
-        public bool ShowHelp
-        {
-            get => _showHelp;
-            set
-            {
-                if (value && Hide)
-                    return;
-                _showHelp = value;
-                if (_showHelp)
-                    _helpPanel.Enable();
-                else
-                    _helpPanel.Disable();
-            }
-        }
-
-        private List<bool> _wasEnabled = new List<bool>();
-        private bool _mEnabled;
-
-        public bool Hide
-        {
-            get => _mEnabled;
-            set
-            {
-                var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-                var k = 0;
-                for (var i = 0; i < GetType().GetFields(flags).Length; i++)
-                {
-                    var field = GetType().GetFields(flags)[i];
-                    if (typeof(Panel).IsAssignableFrom(field.FieldType))
-                    {
-                        if (value)
-                        {
-                            _wasEnabled.Add((field.GetValue(this) as Panel).Enabled);
-                            (field.GetValue(this) as Panel).Disable();
-                        }
-                        else
-                        {
-                            if (!_mEnabled)
-                                return;
-                            if (_wasEnabled[k])
-                                (field.GetValue(this) as Panel).Enable();
-                        }
-
-                        k++;
-                    }
-                }
-
-                if (!value)
-                    _wasEnabled.Clear();
-                _mEnabled = value;
-            }
         }
     }
 }

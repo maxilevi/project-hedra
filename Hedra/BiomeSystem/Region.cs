@@ -5,7 +5,7 @@ namespace Hedra.BiomeSystem
     public class Region
     {
         public RegionColor Colors { get; set; }
-        public RegionTree Trees{ get; set; }
+        public RegionTree Trees { get; set; }
         public RegionStructure Structures { get; set; }
         public RegionSky Sky { get; set; }
         public RegionMob Mob { get; set; }
@@ -22,7 +22,7 @@ namespace Hedra.BiomeSystem
                 Sky = RegionSky.Interpolate(Regions.Select(Reg => Reg.Sky).ToArray()),
                 Mob = RegionMob.Interpolate(Regions.Select(Reg => Reg.Mob).ToArray()),
                 Generation = RegionGeneration.Interpolate(Regions.Select(Reg => Reg.Generation).ToArray()),
-                Environment = RegionEnviroment.Interpolate(Regions.Select(Reg => Reg.Environment).ToArray()),
+                Environment = RegionEnviroment.Interpolate(Regions.Select(Reg => Reg.Environment).ToArray())
             };
 
             return reg;

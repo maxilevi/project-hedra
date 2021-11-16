@@ -1,7 +1,4 @@
-using Hedra.Engine.Generation;
-using Hedra.Engine.Player;
 using Hedra.EntitySystem;
-using System.Numerics;
 
 namespace Hedra.Engine.EntitySystem
 {
@@ -15,11 +12,13 @@ namespace Hedra.Engine.EntitySystem
             Parent.BonusHealth += _healthBonus;
         }
 
-        public override void Update(){}
+        public override void Update()
+        {
+        }
 
         public override void Dispose()
         {
-            if(Disposed) return;
+            if (Disposed) return;
             Parent.BonusHealth -= _healthBonus;
             base.Dispose();
         }

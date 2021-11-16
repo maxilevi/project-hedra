@@ -9,8 +9,8 @@ namespace Hedra.BiomeSystem
 
         public RegionEnviroment(int Seed, BiomeEnviromentDesign Design)
         {
-            this._seed = Seed;
-            this._design = Design;
+            _seed = Seed;
+            _design = Design;
         }
 
         public PlacementDesign[] Designs => _design.Designs;

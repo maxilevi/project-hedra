@@ -1,6 +1,5 @@
 using System;
 using SixLabors.ImageSharp;
-using SixLabors.Fonts;\
 
 nusing SixLabors.Fonts;
 using Hedra.Engine.Management;

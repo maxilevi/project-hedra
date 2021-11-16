@@ -1,22 +1,17 @@
-using Hedra.Core;
-using Hedra.Engine;
-using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Generation;
-using Hedra.Engine.ModuleSystem.AnimationEvents;
-using Hedra.Engine.Rendering.Particles;
+using System.Numerics;
 using Hedra.Engine.SkillSystem;
-using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
+using Hedra.Numerics;
 using Hedra.Rendering.Particles;
 using Hedra.Sound;
-using System.Numerics;
-using Hedra.Numerics;
 
 namespace Hedra.AnimationEvents
 {
     public class Slash : AnimationEvent
     {
-        public Slash(ISkilledAnimableEntity Parent) : base(Parent) {}
+        public Slash(ISkilledAnimableEntity Parent) : base(Parent)
+        {
+        }
 
         public override void Build()
         {
@@ -28,7 +23,9 @@ namespace Hedra.AnimationEvents
             World.Particles.PositionErrorMargin = new Vector3(4f, .5f, 4f);
             World.Particles.Shape = ParticleShape.Sphere;
             World.Particles.ParticleLifetime = 1.5f;
-            World.Particles.Position = position + new Vector3(Utils.Rng.NextFloat() * 2f - 1f, 0, Utils.Rng.NextFloat() * 2f - 1f) * 24f;
+            World.Particles.Position = position +
+                                       new Vector3(Utils.Rng.NextFloat() * 2f - 1f, 0,
+                                           Utils.Rng.NextFloat() * 2f - 1f) * 24f;
             World.Particles.Direction = (Utils.Rng.NextFloat() * .5f + .5f) * Vector3.UnitY * 2f;
             World.Particles.Color = Vector4.One;
             World.Particles.Emit();
@@ -39,6 +36,7 @@ namespace Hedra.AnimationEvents
                 if (Parent == entities[i] || !Parent.InAttackRange(entities[i], 2.0f)) continue;
                 entities[i].Damage(Parent.AttackDamage, Parent, out _);
             }
+
             SoundPlayer.PlaySound(SoundType.SlashSound, position, false, 1f, 5f);
         }
     }

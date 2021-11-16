@@ -1,6 +1,8 @@
+using System;
+
 namespace Hedra.Engine.Networking
 {
-    public class DummyConnection : BaseConnection 
+    public class DummyConnection : BaseConnection
     {
         public DummyConnection(ConnectionType Type) : base(Type)
         {
@@ -8,15 +10,15 @@ namespace Hedra.Engine.Networking
 
         public override ulong Myself { get; }
         public override event OnMessageReceived MessageReceived;
-        
+
         public override void SendMessage(ulong Peer, byte[] Buffer, int Count)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override void Setup()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

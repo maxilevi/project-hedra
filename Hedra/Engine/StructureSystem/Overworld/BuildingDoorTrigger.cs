@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Numerics;
-using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Numerics;
@@ -11,10 +10,10 @@ namespace Hedra.Engine.StructureSystem.Overworld
 {
     public class BuildingDoorTrigger : BaseStructure
     {
-        private readonly CollisionTrigger _outsideTrigger;
         private readonly CollisionTrigger _insideTrigger;
         private readonly Vector3 _offset;
-        
+        private readonly CollisionTrigger _outsideTrigger;
+
         public BuildingDoorTrigger(Vector3 Position, VertexData Mesh) : base(Position)
         {
             _offset = DetectMeshDirection(Mesh).NormalizedFast() * 2;
@@ -23,6 +22,19 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
             _insideTrigger.OnCollision += OnInsideCollision;
             _outsideTrigger.OnCollision += OnOutsideCollision;
+        }
+
+        public override Vector3 Position
+        {
+            get => base.Position;
+            set
+            {
+                if (_insideTrigger != null)
+                    _insideTrigger.Position = value + _offset;
+                if (_insideTrigger != null)
+                    _outsideTrigger.Position = value - _offset;
+                base.Position = value;
+            }
         }
 
         public void Leave(IEntity Entity)
@@ -38,7 +50,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 OnLeave(Entity);
             }
         }
-        
+
         protected void OnInsideCollision(IEntity Entity)
         {
             if (!Entity.IsInsideABuilding)
@@ -50,12 +62,10 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         protected virtual void OnEnter(IEntity Entity)
         {
-            
         }
 
         protected virtual void OnLeave(IEntity Entity)
         {
-            
         }
 
         public bool IsInside(IEntity Entity)
@@ -67,22 +77,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         private static Vector3 DetectMeshDirection(VertexData Mesh)
         {
-            if(Mesh.IsEmpty) throw new ArgumentOutOfRangeException();
+            if (Mesh.IsEmpty) throw new ArgumentOutOfRangeException();
             return Mesh.Normals.Aggregate((V1, V2) => V1 + V2) / Mesh.Normals.Count;
-        }
-
-        public override Vector3 Position
-        {
-            get => base.Position;
-            set
-            {
-                if(_insideTrigger != null)
-                    _insideTrigger.Position = value + _offset;
-                if(_insideTrigger != null)
-                    _outsideTrigger.Position = value - _offset;
-                base.Position = value;
-                
-            }
         }
 
         public override void Dispose()

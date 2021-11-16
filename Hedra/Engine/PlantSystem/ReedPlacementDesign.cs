@@ -1,23 +1,23 @@
 using System;
+using System.Numerics;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
-using System.Numerics;
 
 namespace Hedra.Engine.PlantSystem
 {
     public class ReedPlacementDesign : PlacementDesign
-    {        
+    {
         private readonly PlantDesign _reedDesign;
 
         public ReedPlacementDesign()
         {
             _reedDesign = new ReedDesign();
         }
-        
+
         public override bool CanBeHidden => true;
-              
+
         public override PlantDesign GetDesign(Vector3 Position, Chunk UnderChunk, Random Rng)
         {
             return _reedDesign;
@@ -27,7 +27,7 @@ namespace Hedra.Engine.PlantSystem
         {
             float diff;
             return World.GetHighestBlockAt(Position.X, Position.Z).Type == BlockType.Seafloor
-                   && (diff = BiomePool.SeaLevel - World.GetHighestY((int) Position.X, (int) Position.Z)) < 2.5
+                   && (diff = BiomePool.SeaLevel - World.GetHighestY((int)Position.X, (int)Position.Z)) < 2.5
                    && diff > .5
                    && World.GetNoise(Position.X * 0.004f, Position.Z * 0.004f) > .2f
                    && Vector3.Dot(Physics.NormalAtPosition(Position), Vector3.UnitY) > .75

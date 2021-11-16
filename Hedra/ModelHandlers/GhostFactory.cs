@@ -6,7 +6,7 @@ namespace Hedra.ModelHandlers
         {
             new PartGroup
             {
-                Paths = new []
+                Paths = new[]
                 {
                     "Assets/Chr/Mob/Ghost/GhostBody0.dae",
                     "Assets/Chr/Mob/Ghost/GhostBody1.dae",
@@ -15,18 +15,18 @@ namespace Hedra.ModelHandlers
                     "Assets/Chr/Mob/Ghost/GhostBody4.dae",
                     "Assets/Chr/Mob/Ghost/GhostBody5.dae",
                     "Assets/Chr/Mob/Ghost/GhostBody6.dae",
-                    "Assets/Chr/Mob/Ghost/GhostBody7.dae",
+                    "Assets/Chr/Mob/Ghost/GhostBody7.dae"
                 },
                 Optional = false
             },
             new PartGroup
             {
-                Paths = new []
+                Paths = new[]
                 {
                     "Assets/Chr/Mob/Ghost/GhostAccessory0.dae",
                     "Assets/Chr/Mob/Ghost/GhostAccessory1.dae",
                     "Assets/Chr/Mob/Ghost/GhostAccessory2.dae",
-                    "Assets/Chr/Mob/Ghost/GhostAccessory3.dae",
+                    "Assets/Chr/Mob/Ghost/GhostAccessory3.dae"
                 },
                 Optional = true,
                 Max = 2

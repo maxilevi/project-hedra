@@ -8,12 +8,8 @@
  */
 
 using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using Hedra.Core;
+using System.Numerics;
 using Hedra.Engine.EnvironmentSystem;
-using Hedra.Engine.Game;
-using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
@@ -22,39 +18,34 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Engine.Windowing;
 using Hedra.Game;
 using Hedra.Localization;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-using System.Numerics;
-using Hedra.Engine.Core;
-using Hedra.Engine.Windowing;
-using Hedra.Numerics;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Player.MapSystem
 {
     /// <summary>
-    /// Description of Minimap.
+    ///     Description of Minimap.
     /// </summary>
     public class Minimap : IRenderable, IAdjustable
     {
         private static readonly Shader Shader = Shader.Build("Shaders/GUI.vert", "Shaders/MinimapGUI.frag");
-        private readonly LocalPlayer _player;
-        private readonly Panel _panel;
-        private readonly BackgroundTexture _miniMap;
         private readonly RenderableTexture _mapCursor;
-        private readonly RenderableTexture _miniMapRing;
-        private readonly RenderableTexture _miniMapNorth;
-        private readonly RenderableTexture _miniMapMarker;
-        private readonly RenderableTexture _miniMapQuestMarker;
         private readonly FBO _mapFbo;
-        private bool _show;
-        public bool HasMarker { get; private set; }
-        public bool HasQuestMarker { get; private set; }
-        public Func<Vector3> MarkedQuestPosition { get; private set; }
-        public Vector3 MarkedDirection { get; private set; }
+        private readonly BackgroundTexture _miniMap;
+        private readonly RenderableTexture _miniMapMarker;
+        private readonly RenderableTexture _miniMapNorth;
+        private readonly RenderableTexture _miniMapQuestMarker;
+        private readonly RenderableTexture _miniMapRing;
+        private readonly Panel _panel;
+        private readonly LocalPlayer _player;
         private Vector3 _lastPosition;
         private int _previousActiveChunks;
+        private bool _show;
 
         public Minimap(LocalPlayer Player)
         {
@@ -108,9 +99,84 @@ namespace Hedra.Engine.Player.MapSystem
             _panel.Disable();
         }
 
+        public bool HasMarker { get; private set; }
+        public bool HasQuestMarker { get; private set; }
+        public Func<Vector3> MarkedQuestPosition { get; private set; }
+        public Vector3 MarkedDirection { get; private set; }
+
+        public bool Show
+        {
+            get => _show;
+            set
+            {
+                _show = value;
+                if (_show) _panel.Enable();
+                else _panel.Disable();
+            }
+        }
+
         public void Adjust()
         {
             _miniMap.TextureElement.Adjust();
+        }
+
+        public void Draw()
+        {
+            if (!GameSettings.ShowMinimap)
+            {
+                _mapCursor.Disable();
+                _miniMapRing.Disable();
+                _miniMapNorth.Disable();
+                _miniMapMarker.Disable();
+                return;
+            }
+
+            if (!_miniMap.TextureElement.Enabled) return;
+            _mapCursor.Enable();
+            _miniMapRing.Enable();
+            _miniMapNorth.Enable();
+            _miniMapNorth.BaseTexture.TextureElement.Angle = -_player.Model.LocalRotation.Y;
+
+            var markedQuestPosition = HasQuestMarker ? MarkedQuestPosition() : Vector3.Zero;
+            UpdateRingObject(_miniMapMarker, MarkedDirection, HasMarker);
+            UpdateRingObject(_miniMapQuestMarker,
+                (markedQuestPosition - _player.Position).Xz().NormalizedFast().ToVector3(), HasQuestMarker);
+            if ((markedQuestPosition - _player.Position).Xz().LengthSquared() < Chunk.Width * .1f * Chunk.Width * .1f)
+                _miniMapQuestMarker.Disable();
+
+            DrawMap();
+
+            Culling.SetViewport(GameSettings.DeviceWidth, GameSettings.DeviceHeight);
+            Shader.Bind();
+            Renderer.Enable(EnableCap.Blend);
+            Renderer.Disable(EnableCap.DepthTest);
+
+            Renderer.ActiveTexture(TextureUnit.Texture1);
+            Renderer.BindTexture(TextureTarget.Texture2D, _mapFbo.TextureId[0]);
+            Shader["Fill"] = 1;
+
+            Renderer.ActiveTexture(TextureUnit.Texture0);
+            Renderer.BindTexture(TextureTarget.Texture2D, _miniMap.TextureElement.TextureId);
+            Shader["Texture"] = 0;
+
+            Shader["Scale"] = _miniMap.TextureElement.Scale;
+            Shader["Position"] = _miniMap.TextureElement.AdjustedPosition;
+            Shader["Flipped"] = _miniMap.TextureElement.IdPointer == null && !_miniMap.TextureElement.Flipped ? 0 : 1;
+            Shader["Opacity"] = _miniMap.TextureElement.Opacity;
+            Shader["Grayscale"] = _miniMap.TextureElement.Grayscale ? 1 : 0;
+            Shader["Tint"] = _miniMap.TextureElement.Tint;
+            Shader["Rotation"] = Matrix4x4.CreateRotationZ(-_player.Model.LocalRotation.Y * Mathf.Radian);
+
+            DrawManager.UIRenderer.DrawQuad();
+
+            Renderer.Enable(EnableCap.DepthTest);
+            Renderer.Disable(EnableCap.Blend);
+            Renderer.Enable(EnableCap.CullFace);
+            Renderer.ActiveTexture(TextureUnit.Texture0);
+            Renderer.BindTexture(TextureTarget.Texture2D, 0);
+            Renderer.ActiveTexture(TextureUnit.Texture1);
+            Renderer.BindTexture(TextureTarget.Texture2D, 0);
+            Shader.Unbind();
         }
 
         public void Mark(Vector3 Direction)
@@ -206,65 +272,6 @@ namespace Hedra.Engine.Player.MapSystem
             }
         }
 
-        public void Draw()
-        {
-            if (!GameSettings.ShowMinimap)
-            {
-                _mapCursor.Disable();
-                _miniMapRing.Disable();
-                _miniMapNorth.Disable();
-                _miniMapMarker.Disable();
-                return;
-            }
-
-            if (!_miniMap.TextureElement.Enabled) return;
-            _mapCursor.Enable();
-            _miniMapRing.Enable();
-            _miniMapNorth.Enable();
-            _miniMapNorth.BaseTexture.TextureElement.Angle = -_player.Model.LocalRotation.Y;
-
-            var markedQuestPosition = HasQuestMarker ? MarkedQuestPosition() : Vector3.Zero;
-            UpdateRingObject(_miniMapMarker, MarkedDirection, HasMarker);
-            UpdateRingObject(_miniMapQuestMarker,
-                (markedQuestPosition - _player.Position).Xz().NormalizedFast().ToVector3(), HasQuestMarker);
-            if ((markedQuestPosition - _player.Position).Xz().LengthSquared() < Chunk.Width * .1f * Chunk.Width * .1f)
-                _miniMapQuestMarker.Disable();
-
-            DrawMap();
-
-            Culling.SetViewport(GameSettings.DeviceWidth, GameSettings.DeviceHeight);
-            Shader.Bind();
-            Renderer.Enable(EnableCap.Blend);
-            Renderer.Disable(EnableCap.DepthTest);
-
-            Renderer.ActiveTexture(TextureUnit.Texture1);
-            Renderer.BindTexture(TextureTarget.Texture2D, _mapFbo.TextureId[0]);
-            Shader["Fill"] = 1;
-
-            Renderer.ActiveTexture(TextureUnit.Texture0);
-            Renderer.BindTexture(TextureTarget.Texture2D, _miniMap.TextureElement.TextureId);
-            Shader["Texture"] = 0;
-
-            Shader["Scale"] = _miniMap.TextureElement.Scale;
-            Shader["Position"] = _miniMap.TextureElement.AdjustedPosition;
-            Shader["Flipped"] = _miniMap.TextureElement.IdPointer == null && !_miniMap.TextureElement.Flipped ? 0 : 1;
-            Shader["Opacity"] = _miniMap.TextureElement.Opacity;
-            Shader["Grayscale"] = _miniMap.TextureElement.Grayscale ? 1 : 0;
-            Shader["Tint"] = _miniMap.TextureElement.Tint;
-            Shader["Rotation"] = Matrix4x4.CreateRotationZ(-_player.Model.LocalRotation.Y * Mathf.Radian);
-
-            DrawManager.UIRenderer.DrawQuad();
-
-            Renderer.Enable(EnableCap.DepthTest);
-            Renderer.Disable(EnableCap.Blend);
-            Renderer.Enable(EnableCap.CullFace);
-            Renderer.ActiveTexture(TextureUnit.Texture0);
-            Renderer.BindTexture(TextureTarget.Texture2D, 0);
-            Renderer.ActiveTexture(TextureUnit.Texture1);
-            Renderer.BindTexture(TextureTarget.Texture2D, 0);
-            Shader.Unbind();
-        }
-
         private void UpdateRingObject(RenderableTexture Texture, Vector3 Direction, bool Condition)
         {
             if (Condition)
@@ -276,17 +283,6 @@ namespace Hedra.Engine.Player.MapSystem
             else
             {
                 Texture.Disable();
-            }
-        }
-
-        public bool Show
-        {
-            get => _show;
-            set
-            {
-                _show = value;
-                if (_show) _panel.Enable();
-                else _panel.Disable();
             }
         }
 

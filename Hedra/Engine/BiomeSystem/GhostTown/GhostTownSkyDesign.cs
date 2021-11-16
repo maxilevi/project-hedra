@@ -1,11 +1,14 @@
+using System.Numerics;
 using Hedra.BiomeSystem;
 using Hedra.Rendering;
-using System.Numerics;
 
 namespace Hedra.Engine.BiomeSystem.GhostTown
 {
     public class GhostTownSkyDesign : BiomeSkyDesign
     {
+        private Vector4 ClearTop { get; } = Colors.FromHtml("#2f8e62");
+        private Vector4 ClearBot { get; } = Colors.FromHtml("#2f5e62");
+
         public override Vector4 AfternoonTop(int Seed)
         {
             return Colors.FromHtml("#8f5543");
@@ -45,9 +48,6 @@ namespace Hedra.Engine.BiomeSystem.GhostTown
         {
             return ClearBot * .25f;
         }
-
-        private Vector4 ClearTop { get; } = Colors.FromHtml("#2f8e62");
-        private Vector4 ClearBot { get; } = Colors.FromHtml("#2f5e62");
 
         public override bool CanRain(int Seed)
         {

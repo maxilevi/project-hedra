@@ -1,5 +1,5 @@
 {
-  "Name" : "Ghost",
+  "Name": "Ghost",
   "MaxHealth": 416.0,
   "AttackDamage": 11.0,
   "AttackCooldown": 1.5,
@@ -16,7 +16,7 @@
   ],
   "Model": {
     "Handler": "Ghost",
-    "AlignWithTerrain" :  false,
+    "AlignWithTerrain": false,
     "Path": "$DataFile$/Assets/Chr/Mob/Ghost/GhostIdle.dae",
     "Scale": 1.0,
     "IdleAnimations": [

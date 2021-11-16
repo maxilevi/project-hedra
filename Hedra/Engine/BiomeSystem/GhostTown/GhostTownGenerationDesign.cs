@@ -1,9 +1,6 @@
 using System;
-using System.Collections.Generic;
-using Hedra.BiomeSystem;
-using Hedra.Engine.BiomeSystem.NormalBiome;
-using Hedra.Engine.Generation;
 using System.Numerics;
+using Hedra.Engine.Generation;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.BiomeSystem.GhostTown
@@ -24,10 +21,11 @@ namespace Hedra.Engine.BiomeSystem.GhostTown
             AddStones(X, Z, ref height, ref Blocktype);
 
             var multiplier = HeightMultiplier(new Vector2(X, Z));
-            return ((float)height * 1.5f * multiplier) + (BiomeGenerator.SmallFrequency(X, Z) * 1.5f);
+            return (float)height * 1.5f * multiplier + BiomeGenerator.SmallFrequency(X, Z) * 1.5f;
         }
-        
-        protected static void AddBaseHeight(float X, float Z, ref double Height, ref BlockType Type, out double BaseHeight)
+
+        protected static void AddBaseHeight(float X, float Z, ref double Height, ref BlockType Type,
+            out double BaseHeight)
         {
             const int baseHeight = BiomePool.SeaLevel;
             var grassHeight = (World.GetNoise(X * 0.004f, Z * 0.004f) + .25f) * 3.0f;
@@ -38,9 +36,9 @@ namespace Hedra.Engine.BiomeSystem.GhostTown
 
         private static float HeightMultiplier(Vector2 Position)
         {
-            return 1f - Math.Max(0, Math.Min(1, (Position - World.SpawnPoint.Xz()).LengthFast() / IslandRadius ));
+            return 1f - Math.Max(0, Math.Min(1, (Position - World.SpawnPoint.Xz()).LengthFast() / IslandRadius));
         }
-        
+
         private static void AddStones(float X, float Z, ref double Height, ref BlockType Type)
         {
             var stones = Math.Max(0, World.GetNoise(X * 0.005f, Z * 0.005f) - .5) * 48.0;

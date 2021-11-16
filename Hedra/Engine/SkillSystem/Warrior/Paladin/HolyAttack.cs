@@ -1,14 +1,10 @@
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using Hedra.Core;
-using Hedra.Engine.Localization;
-using Hedra.Engine.Rendering;
+using System.Numerics;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
 using Hedra.Localization;
-using Hedra.Rendering;
-using System.Numerics;
 using Hedra.Numerics;
+using Hedra.Rendering;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.SkillSystem.Warrior.Paladin
 {
@@ -20,11 +16,6 @@ namespace Hedra.Engine.SkillSystem.Warrior.Paladin
             AnimationLoader.LoadAnimation("Assets/Chr/WarriorImbueAttack.dae");
 
         protected override float AnimationSpeed => 1.25f;
-
-        protected override void ApplyBonusToEnemy(IEntity Victim, ref float Damage)
-        {
-            Damage *= 1 + DamageMultiplier;
-        }
 
         protected override Vector4 OutlineColor => Color.Gold.ToVector4();
         protected override int MaxLevel => 15;
@@ -38,5 +29,10 @@ namespace Hedra.Engine.SkillSystem.Warrior.Paladin
         {
             Translations.Get("holy_attack_damage_bonus_change", (int)(DamageMultiplier * 100))
         };
+
+        protected override void ApplyBonusToEnemy(IEntity Victim, ref float Damage)
+        {
+            Damage *= 1 + DamageMultiplier;
+        }
     }
 }

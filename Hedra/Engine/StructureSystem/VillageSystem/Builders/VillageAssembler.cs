@@ -2,30 +2,29 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.WorldBuilding;
-using Hedra.Rendering;
-using System.Numerics;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
     public class VillageAssembler
     {
-        private readonly VillageRoot _root;
-        private readonly HouseBuilder _houseBuilder;
-        private readonly FarmBuilder _farmBuilder;
         private readonly BlacksmithBuilder _blacksmithBuilder;
-        private readonly StableBuilder _stableBuilder;
-        private readonly MarketWellBuilder _marketWellBuilder;
-        private readonly MarketBuilder _marketBuilder;
-        private readonly GenericBuilderWithNPC _genericBuilder;
         private readonly IPlacementDesigner _designer;
+        private readonly FarmBuilder _farmBuilder;
+        private readonly GenericBuilderWithNPC _genericBuilder;
+        private readonly HouseBuilder _houseBuilder;
+        private readonly MarketBuilder _marketBuilder;
+        private readonly MarketWellBuilder _marketWellBuilder;
         private readonly Random _rng;
+        private readonly VillageRoot _root;
+        private readonly StableBuilder _stableBuilder;
         private readonly CollidableStructure _structure;
 
         public VillageAssembler(CollidableStructure Structure, VillageRoot Root, Random Rng)
@@ -40,7 +39,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             _genericBuilder = new GenericBuilderWithNPC(_structure);
             _root = Root;
             _rng = Rng;
-            Size = VillageDesign.MaxVillageSize;//Rng.Next(VillageDesign.MinVillageSize, VillageDesign.MaxVillageSize);
+            Size = VillageDesign.MaxVillageSize; //Rng.Next(VillageDesign.MinVillageSize, VillageDesign.MaxVillageSize);
             _designer = new GridPlacementDesigner(_root, new VillageConfiguration
             {
                 Size = Size
@@ -53,7 +52,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         {
             return _designer.CreateDesign();
         }
-        
+
         public void PlaceGroundwork(PlacementDesign Design)
         {
             Design.Markets = LoopStructures(Design.Markets, _marketBuilder, _marketWellBuilder);
@@ -65,43 +64,37 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             _designer.FinishPlacements(_structure, Design);
         }
 
-        private List<T> LoopStructures<T>(IList<T> Parameters, params Builder<T>[] Builders) where T : IBuildingParameters
+        private List<T> LoopStructures<T>(IList<T> Parameters, params Builder<T>[] Builders)
+            where T : IBuildingParameters
         {
             var list = Parameters.ToList();
             for (var i = 0; i < Parameters.Count; i++)
-            {
-                for(var j = 0; j < Builders.Length; j++)
+            for (var j = 0; j < Builders.Length; j++)
+                if (!Builders[j].Place(Parameters[i], _root.Cache))
                 {
-                    if (!Builders[j].Place(Parameters[i], _root.Cache))
-                    {
-                        list.Remove(Parameters[i]);
-                        break;
-                    }
+                    list.Remove(Parameters[i]);
+                    break;
                 }
-            }
 
-            var plateaus = _structure.Plateaux.Concat(new[] {_structure.Mountain}).ToArray();
+            var plateaus = _structure.Plateaux.Concat(new[] { _structure.Mountain }).ToArray();
             plateaus = plateaus.Select(P => P.Clone()).OrderByDescending(P => P.MaxHeight).ToArray();
             for (var i = 0; i < plateaus.Length; ++i)
-            {
-                plateaus[i].MaxHeight = 
-                        World.WorldBuilding.ApplyMultiple(plateaus[i].Position, plateaus[i].MaxHeight, plateaus.Take(i).ToArray());
-            }
+                plateaus[i].MaxHeight =
+                    World.WorldBuilding.ApplyMultiple(plateaus[i].Position, plateaus[i].MaxHeight,
+                        plateaus.Take(i).ToArray());
             for (var i = 0; i < Parameters.Count; i++)
-            {
-                if(IsUnderwater(Parameters[i].Position, plateaus))
+                if (IsUnderwater(Parameters[i].Position, plateaus))
                     list.Remove(Parameters[i]);
-            }
             return list;
         }
 
         private bool IsUnderwater(Vector3 Position, BasePlateau[] Plateaus)
         {
             return World.WorldBuilding.ApplyMultiple(
-                   Position.Xz(),
-                   World.BiomePool.GetRegion(Position).Generation.GetMaxHeight(Position.X, Position.Z),
-                   Plateaus
-            ) < BiomePool.SeaLevel-1;
+                Position.Xz(),
+                World.BiomePool.GetRegion(Position).Generation.GetMaxHeight(Position.X, Position.Z),
+                Plateaus
+            ) < BiomePool.SeaLevel - 1;
         }
 
         public void Build(PlacementDesign Design, CollidableStructure Structure)
@@ -114,31 +107,35 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             LoopAndBuild(Design, Structure, Design.Generics, _genericBuilder);
         }
 
-        private void LoopAndBuild<T>(PlacementDesign Design, CollidableStructure Structure, IList<T> Parameters, params Builder<T>[] Builders) where T : IBuildingParameters
+        private void LoopAndBuild<T>(PlacementDesign Design, CollidableStructure Structure, IList<T> Parameters,
+            params Builder<T>[] Builders) where T : IBuildingParameters
         {
-            ((Village) Structure.WorldObject).Graph = Design.Graph;
+            ((Village)Structure.WorldObject).Graph = Design.Graph;
             for (var i = 0; i < Parameters.Count; i++)
+            for (var j = 0; j < Builders.Length; j++)
             {
-                for (var j = 0; j < Builders.Length; j++)
-                {
-                    var output = Builders[j].Build(Parameters[i], Parameters[i].Design, _root.Cache, _rng, Design.Position);
-                    var finalOutput = Builders[j].Paint(Parameters[i], output);
+                var output = Builders[j].Build(Parameters[i], Parameters[i].Design, _root.Cache, _rng, Design.Position);
+                var finalOutput = Builders[j].Paint(Parameters[i], output);
 
-                    var k = j;
-                    var o = i;
-                    void PolishCallback() => Builders[k].Polish(Parameters[o], _root, _rng);
-                    //finalOutput.Models
-                    RoutineManager.StartRoutine(PlaceCoroutine, Parameters[i].Position, finalOutput.Compress(),
-                        Structure, (Action) PolishCallback);
+                var k = j;
+                var o = i;
+
+                void PolishCallback()
+                {
+                    Builders[k].Polish(Parameters[o], _root, _rng);
                 }
+
+                //finalOutput.Models
+                RoutineManager.StartRoutine(PlaceCoroutine, Parameters[i].Position, finalOutput.Compress(),
+                    Structure, (Action)PolishCallback);
             }
         }
 
         private IEnumerator PlaceCoroutine(object[] Arguments)
         {
-            var position = (Vector3) Arguments[0];
-            var buildingOutput = (CompressedBuildingOutput) Arguments[1];
-            var structure = (CollidableStructure) Arguments[2];
+            var position = (Vector3)Arguments[0];
+            var buildingOutput = (CompressedBuildingOutput)Arguments[1];
+            var structure = (CollidableStructure)Arguments[2];
             var callback = (Action)Arguments[3];
 
             var waiter = new WaitForChunk(position)

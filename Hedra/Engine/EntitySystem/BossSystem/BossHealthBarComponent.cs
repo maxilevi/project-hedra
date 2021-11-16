@@ -7,24 +7,19 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
-using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using Hedra.Core;
-using Hedra.Engine.Game;
-using Hedra.Engine.Management;
-using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.UI;
-using Hedra.EntitySystem;
-using Hedra.Game;
-using Hedra.Rendering;
-using Hedra.Rendering.UI;
 using System.Numerics;
 using Hedra.Components;
-using Hedra.Engine.Core;
+using Hedra.Core;
+using Hedra.Engine.Management;
+using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Windowing;
+using Hedra.EntitySystem;
+using Hedra.Game;
 using Hedra.Numerics;
+using Hedra.Rendering;
+using Hedra.Rendering.UI;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.EntitySystem.BossSystem
 {
@@ -35,22 +30,20 @@ namespace Hedra.Engine.EntitySystem.BossSystem
     public class BossHealthBarComponent : BaseHealthBarComponent, INamedHealthBar
     {
         private static uint _bossBarTexture;
+        private static readonly Vector2 _bossBarTextureSize;
+        private static readonly Vector2 _backgroundTextureSize;
+        private static uint _backgroundTextureId;
+        private readonly BackgroundTexture _backgroundTexture;
+        private readonly Vector2 _barDefaultPosition;
+        private readonly TexturedBar _healthBar;
+        private readonly GUIText _nameText;
+        private readonly Vector2[] _originalScales;
 
         private readonly Panel _panel;
-        private readonly TexturedBar _healthBar;
-        private readonly BackgroundTexture _backgroundTexture;
         private readonly GUIText _percentageText;
-        private readonly Vector2 _barDefaultPosition;
-        private readonly Vector2[] _originalScales;
-        private readonly GUIText _nameText;
+        private bool _initialized;
         private string _name;
         private float _targetSize;
-        private bool _initialized;
-        public bool Enabled { get; set; } = true;
-        public int ViewRange { get; set; } = 128;
-        private static Vector2 _bossBarTextureSize;
-        private static Vector2 _backgroundTextureSize;
-        private static uint _backgroundTextureId;
 
         static BossHealthBarComponent()
         {
@@ -59,7 +52,7 @@ namespace Hedra.Engine.EntitySystem.BossSystem
                 _bossBarTexture = Graphics2D.LoadTexture(new BitmapObject
                     {
                         Bitmap = Graphics2D.LoadBitmapFromAssets("Assets/UI/BossHealthBar.png"),
-                        Path = $"UI:Color:BossHealthBarComponent:BossHostile"
+                        Path = "UI:Color:BossHealthBarComponent:BossHostile"
                     }, TextureMinFilter.Nearest, TextureMagFilter.Nearest, TextureWrapMode.ClampToEdge
                 );
                 _backgroundTextureId = Graphics2D.LoadFromAssets("Assets/UI/BossHealthBarBackground.png");
@@ -114,6 +107,12 @@ namespace Hedra.Engine.EntitySystem.BossSystem
             );
         }
 
+        public bool Enabled { get; set; } = true;
+        public int ViewRange { get; set; } = 128;
+
+        private bool CanShow => Enabled && GameManager.Player.UI.GamePanel.Enabled &&
+                                (Parent.Position - GameManager.Player.Position).LengthSquared() < ViewRange * ViewRange;
+
         public string Name
         {
             get => _name;
@@ -162,9 +161,6 @@ namespace Hedra.Engine.EntitySystem.BossSystem
             else
                 Element.Enable();
         }
-
-        private bool CanShow => Enabled && GameManager.Player.UI.GamePanel.Enabled &&
-                                (Parent.Position - GameManager.Player.Position).LengthSquared() < ViewRange * ViewRange;
 
         public override void Dispose()
         {

@@ -3,15 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using Hedra.Core;
 using Hedra.Engine.Management;
-using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 
 namespace Hedra.Engine.EntitySystem
 {
     public class EntityComponentManager
     {
-        private readonly IEntity _parent;
         private readonly HashSet<IComponent<IEntity>> _components;
+        private readonly IEntity _parent;
 
         public EntityComponentManager(IEntity Parent)
         {
@@ -21,14 +20,14 @@ namespace Hedra.Engine.EntitySystem
 
         public void AddComponent(IComponent<IEntity> Component)
         {
-            if(_components.Contains(Component)) throw new ArgumentException("Provided component already exists.");
+            if (_components.Contains(Component)) throw new ArgumentException("Provided component already exists.");
             _components.Add(Component);
             _parent.AddComponent(Component);
         }
 
         public void RemoveComponent(IComponent<IEntity> Component)
         {
-            if(!_components.Contains(Component)) throw new KeyNotFoundException("Provided component does not exist.");
+            if (!_components.Contains(Component)) throw new KeyNotFoundException("Provided component does not exist.");
             _components.Remove(Component);
             _parent.RemoveComponent(Component);
         }
@@ -36,8 +35,13 @@ namespace Hedra.Engine.EntitySystem
         public void AddComponentWhile(IComponent<IEntity> Component, Func<bool> Condition)
         {
             var name = _parent.Name.Clone();
-            bool RealCondition() => Condition() && _parent.Name == name;
-            RoutineManager.StartRoutine(this.WhileCoroutine, Component, (Func<bool>) RealCondition);
+
+            bool RealCondition()
+            {
+                return Condition() && _parent.Name == name;
+            }
+
+            RoutineManager.StartRoutine(WhileCoroutine, Component, (Func<bool>)RealCondition);
         }
 
         private bool ContainsComponent(IComponent<IEntity> Component)
@@ -48,15 +52,12 @@ namespace Hedra.Engine.EntitySystem
         public void Clear()
         {
             var componentsCopy = new List<IComponent<IEntity>>(_components);
-            foreach (var component in componentsCopy)
-            {
-                this.RemoveComponent(component);
-            }
+            foreach (var component in componentsCopy) RemoveComponent(component);
         }
 
         public void AddComponentForSeconds(IComponent<IEntity> Component, float Seconds)
         {
-            RoutineManager.StartRoutine(this.ForCoroutine, Component, Seconds);
+            RoutineManager.StartRoutine(ForCoroutine, Component, Seconds);
         }
 
         private IEnumerator ForCoroutine(object[] Params)
@@ -64,29 +65,27 @@ namespace Hedra.Engine.EntitySystem
             var component = (IComponent<IEntity>)Params[0];
             var seconds = (float)Params[1];
 
-            this.AddComponent(component);
+            AddComponent(component);
             var k = 0f;
             while (k < seconds)
             {
                 k += Time.DeltaTime;
                 yield return null;
             }
-            if (!this.ContainsComponent(component)) yield break;
-            this.RemoveComponent(component);
+
+            if (!ContainsComponent(component)) yield break;
+            RemoveComponent(component);
         }
 
         private IEnumerator WhileCoroutine(object[] Params)
         {
-            var component = (IComponent<IEntity>) Params[0];
-            var condition = (Func<bool>) Params[1];
+            var component = (IComponent<IEntity>)Params[0];
+            var condition = (Func<bool>)Params[1];
 
-            this.AddComponent(component);
-            while (condition())
-            {
-                yield return null;
-            }
-            if(!this.ContainsComponent(component)) yield break;
-            this.RemoveComponent(component);
+            AddComponent(component);
+            while (condition()) yield return null;
+            if (!ContainsComponent(component)) yield break;
+            RemoveComponent(component);
         }
     }
 }

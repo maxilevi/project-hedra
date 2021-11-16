@@ -1,10 +1,9 @@
 using System;
 using System.Collections;
+using System.Numerics;
 using Hedra.Core;
-using Hedra.Engine.Input;
 using Hedra.Engine.Management;
 using Hedra.Input;
-using System.Numerics;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.Player.Inventory
@@ -14,27 +13,29 @@ namespace Hedra.Engine.Player.Inventory
     public class InventoryStateManager : StateManager
     {
         private bool _isExiting;
-        public event OnStateChangeEventHandler OnStateChange;
 
         public InventoryStateManager(IPlayer Player)
         {
-            this.RegisterStateItem(() => Player.View.TargetPitch, O => Player.View.TargetPitch = (float) O);
-            this.RegisterStateItem(() => Player.View.CameraHeight, O => Player.View.CameraHeight = (Vector3)O);
-            this.RegisterStateItem(() => Player.View.TargetDistance, O => Player.View.TargetDistance = (float)O);
-            this.RegisterStateItem(() => Player.View.TargetYaw, O => Player.View.TargetYaw = (float)O);
-            this.RegisterStateItem(() => Player.View.LockMouse, O => Player.View.LockMouse = (bool)O);
-            this.RegisterStateItem(() => Cursor.Show, O => Cursor.Show = (bool)O);
-            this.RegisterStateItem(() => Player.Movement.CaptureMovement, O => Player.Movement.CaptureMovement = (bool)O);
-            this.RegisterStateItem(() => Player.View.CaptureMovement, O => Player.View.CaptureMovement = (bool) O);
-            this.RegisterStateItem(() => Player.View.PositionDelegate, O => Player.View.PositionDelegate = (Func<Vector3>)O, true);
-            this.RegisterStateItem(() => Player.IsSitting, O => Player.IsSitting = (bool)O, true);
+            RegisterStateItem(() => Player.View.TargetPitch, O => Player.View.TargetPitch = (float)O);
+            RegisterStateItem(() => Player.View.CameraHeight, O => Player.View.CameraHeight = (Vector3)O);
+            RegisterStateItem(() => Player.View.TargetDistance, O => Player.View.TargetDistance = (float)O);
+            RegisterStateItem(() => Player.View.TargetYaw, O => Player.View.TargetYaw = (float)O);
+            RegisterStateItem(() => Player.View.LockMouse, O => Player.View.LockMouse = (bool)O);
+            RegisterStateItem(() => Cursor.Show, O => Cursor.Show = (bool)O);
+            RegisterStateItem(() => Player.Movement.CaptureMovement, O => Player.Movement.CaptureMovement = (bool)O);
+            RegisterStateItem(() => Player.View.CaptureMovement, O => Player.View.CaptureMovement = (bool)O);
+            RegisterStateItem(() => Player.View.PositionDelegate, O => Player.View.PositionDelegate = (Func<Vector3>)O,
+                true);
+            RegisterStateItem(() => Player.IsSitting, O => Player.IsSitting = (bool)O, true);
         }
+
+        public event OnStateChangeEventHandler OnStateChange;
 
         public override void ReleaseState()
         {
             if (!_state) throw new InvalidOperationException("Cannot release an empty state.");
             if (_isExiting) return;
-            TaskScheduler.Concurrent(this.LerpState);
+            TaskScheduler.Concurrent(LerpState);
         }
 
         public override void CaptureState()
@@ -47,21 +48,18 @@ namespace Hedra.Engine.Player.Inventory
         {
             _isExiting = true;
             foreach (var cacheItem in _cache)
-            {
                 if (cacheItem.Key.ReleaseFirst)
                     cacheItem.Key.Setter.Invoke(cacheItem.Value);
-            }
             while (_state)
             {
-                bool finishedLerp = false;
+                var finishedLerp = false;
                 foreach (var cacheItem in _cache)
-                {
                     if (cacheItem.Value is float)
                     {
                         var prevValue = (float)cacheItem.Key.Getter.Invoke();
                         cacheItem.Key.Setter.Invoke(
                             Mathf.Lerp((float)cacheItem.Key.Getter.Invoke(), (float)cacheItem.Value,
-                                (float)Time.DeltaTime * 16f)
+                                Time.DeltaTime * 16f)
                         );
                         finishedLerp = Math.Abs((float)cacheItem.Key.Getter.Invoke() - prevValue) < 0.01f;
                     }
@@ -70,18 +68,16 @@ namespace Hedra.Engine.Player.Inventory
                         var prevValue = (Vector3)cacheItem.Key.Getter.Invoke();
                         cacheItem.Key.Setter.Invoke(
                             Mathf.Lerp((Vector3)cacheItem.Key.Getter.Invoke(), (Vector3)cacheItem.Value,
-                                (float)Time.DeltaTime * 16f)
+                                Time.DeltaTime * 16f)
                         );
                         finishedLerp = ((Vector3)cacheItem.Key.Getter.Invoke() - prevValue).Length() < 0.01f;
                     }
-                }
+
                 if (finishedLerp) break;
                 yield return null;
             }
-            foreach (var cacheItem in _cache)
-            {
-                cacheItem.Key.Setter.Invoke(cacheItem.Value);
-            }
+
+            foreach (var cacheItem in _cache) cacheItem.Key.Setter.Invoke(cacheItem.Value);
             _cache.Clear();
             _state = false;
             OnStateChange?.Invoke(_state);

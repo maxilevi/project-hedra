@@ -1,10 +1,8 @@
 using System.Collections.Generic;
+using System.Numerics;
 using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Rendering;
-using System.Numerics;
-using Silk.NET.GLFW;
 
 namespace Hedra.Engine.Management
 {

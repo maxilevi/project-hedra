@@ -10,9 +10,8 @@
 namespace Hedra.Engine.Native
 {
     /// <summary>
-    /// Description of Platform.
+    ///     Description of Platform.
     /// </summary>
-        
     public enum Platform
     {
         Windows,

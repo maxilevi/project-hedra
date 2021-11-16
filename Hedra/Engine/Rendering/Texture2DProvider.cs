@@ -1,12 +1,9 @@
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Drawing.Imaging;
 using Hedra.Engine.IO;
 using Hedra.Engine.Rendering.Core;
-using System.Numerics;
-using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
-using PixelFormat = Hedra.Engine.Windowing.PixelFormat;
+using SixLabors.ImageSharp;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace Hedra.Engine.Rendering
 {
@@ -19,9 +16,9 @@ namespace Hedra.Engine.Rendering
             var id = Renderer.GenTexture();
             Renderer.BindTexture(TextureTarget.Texture2D, id);
             var bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly,
-                System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                PixelFormat.Format32bppArgb);
             Renderer.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmpData.Width, bmpData.Height, 0,
-                PixelFormat.Bgra, PixelType.UnsignedByte, bmpData.Scan0);
+                Windowing.PixelFormat.Bgra, PixelType.UnsignedByte, bmpData.Scan0);
 
             bmp.UnlockBits(bmpData);
 

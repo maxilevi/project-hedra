@@ -6,6 +6,8 @@ namespace Hedra.API
 {
     public class ModelHandlerRegistry : TypeRegistry
     {
+        protected override Type RegistryType { get; } = typeof(ModelHandler);
+
         protected override void DoAdd(string Key, Type Value)
         {
             ModelHandlerFactory.Instance.Register(Key, Value);
@@ -15,7 +17,5 @@ namespace Hedra.API
         {
             ModelHandlerFactory.Instance.Unregister(Key);
         }
-
-        protected override Type RegistryType { get; } = typeof(ModelHandler);
     }
 }

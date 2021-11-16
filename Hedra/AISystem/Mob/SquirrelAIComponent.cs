@@ -9,7 +9,7 @@ namespace Hedra.AISystem.Mob
         public SquirrelAIComponent(IEntity Parent) : base(Parent)
         {
         }
-        
+
         protected override float AlertTime => 4 + Utils.Rng.NextFloat() * 4f;
         protected override SoundType Sound => SoundType.None;
     }

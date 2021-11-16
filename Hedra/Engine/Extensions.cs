@@ -8,27 +8,20 @@
  */
 
 using System;
-using System.IO;
-using System.Xml;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Collections.Generic;
-using System.Reflection;
+using System.IO;
 using System.Linq;
-using System.Collections;
-using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
-using Hedra.Core;
-using Hedra.Engine.Core;
-using Newtonsoft.Json.Converters;
 using System.Numerics;
-using Hedra.Numerics;
+using System.Text.RegularExpressions;
+using System.Xml;
+using Hedra.Engine.Core;
 using Hedra.Framework;
+using Hedra.Numerics;
 
 namespace Hedra.Engine
 {
     /// <summary>
-    /// Description of Extensions.
+    ///     Description of Extensions.
     /// </summary>
     public static class Extensions
     {
@@ -121,7 +114,7 @@ namespace Hedra.Engine
                 return newList;
             }
 
-            throw new ArgumentException($"Cannot create a deep clone of Unclonable object");
+            throw new ArgumentException("Cannot create a deep clone of Unclonable object");
         }
 
         public static Quaternion FromMatrixExt(Matrix4x4 matrix)
@@ -187,10 +180,10 @@ namespace Hedra.Engine
             return result.NormalizedFast();
         }
 
-        ///<sumary>
-        /// Do NOT touch this function. It's not a real ToMatrix, it's an adhoc version.
-        /// For a real one look Matrix4x4.CreateFromQuaterion();
-        ///</sumary>
+        /// <sumary>
+        ///     Do NOT touch this function. It's not a real ToMatrix, it's an adhoc version.
+        ///     For a real one look Matrix4x4.CreateFromQuaterion();
+        /// </sumary>
         public static Matrix4x4 ToMatrix(this Quaternion Quat)
         {
             float x = Quat.X, y = Quat.Y, z = Quat.Z, w = Quat.W;

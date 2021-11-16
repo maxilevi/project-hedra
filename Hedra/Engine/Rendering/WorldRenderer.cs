@@ -8,43 +8,47 @@
  */
 
 using System;
-using Hedra.Engine.Generation;
-using Hedra.Engine.Management;
-using System.Numerics;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using Hedra.Core;
-using Hedra.Engine.Core;
+using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.IO;
+using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Windowing;
 using Hedra.Game;
 using Hedra.Numerics;
-using Hedra.Rendering;
 
 namespace Hedra.Engine.Rendering
 {
     /// <summary>
-    /// Description of WorldRenderer.
+    ///     Description of WorldRenderer.
     /// </summary>
     public static class WorldRenderer
     {
         public const int NoShadowsFlag = -1;
         public const int NoHighlightFlag = -2;
+        private static IntPtr[] _shadowOffsets;
+        private static uint[] _shadowCounts;
         public static Shader WaterShader { get; private set; }
         public static Shader StaticShader { get; private set; }
         public static float WaveMovement { get; private set; }
         public static BufferBalancer StaticBuffer { get; private set; }
         public static BufferBalancer InstanceBuffer { get; private set; }
         public static BufferBalancer WaterBuffer { get; private set; }
-        public static bool ShowWaterBackfaces {get; set;}
+        public static bool ShowWaterBackfaces { get; set; }
         public static Texture3D NoiseTexture { get; private set; }
         public static Texture2D DuDvMap { get; private set; }
         public static Texture2D NormalMap { get; private set; }
-        private static IntPtr[] _shadowOffsets;
-        private static uint[] _shadowCounts;
+        public static float WaterSmoothness { get; set; } = 1f;
+        public static bool EnableCulling { get; set; } = true;
+        public static Vector3 BakedOffset { get; set; }
+        public static Vector3 Scale { get; set; } = Vector3.One;
+        public static Vector3 Offset { get; set; }
+        public static Matrix4x4 TransformationMatrix { get; set; } = Matrix4x4.Identity;
 
         public static void Initialize()
         {
@@ -66,15 +70,10 @@ namespace Hedra.Engine.Rendering
             const int width = 16, height = 16, depth = 16;
             var noiseValues = new float[width * height * depth];
             for (var x = 0; x < width; x++)
-            {
-                for (var y = 0; y < height; y++)
-                {
-                    for (var z = 0; z < depth; z++)
-                    {
-                        noiseValues[x * depth * height + y * depth + z] = (float)OpenSimplexNoise.Evaluate(x * 0.6f,y * 0.6f,z * 0.6f) * .5f + .5f;
-                    }
-                }
-            }
+            for (var y = 0; y < height; y++)
+            for (var z = 0; z < depth; z++)
+                noiseValues[x * depth * height + y * depth + z] =
+                    (float)OpenSimplexNoise.Evaluate(x * 0.6f, y * 0.6f, z * 0.6f) * .5f + .5f;
 
             Width = width;
             Height = height;
@@ -107,36 +106,41 @@ namespace Hedra.Engine.Rendering
         {
             Culling.BuildFrustum(GameManager.Player.View.ModelViewMatrix);
         }
-        
+
         public static void PrepareShadowMatrix()
         {
             Culling.Frustum.SetMatrices(ShadowRenderer.DepthProj, ShadowRenderer.DepthView);
         }
 
-        public static void Render(Dictionary<Vector2, Chunk> ToDraw, Dictionary<Vector2, Chunk> ToDrawShadow, WorldRenderType Type)
+        public static void Render(Dictionary<Vector2, Chunk> ToDraw, Dictionary<Vector2, Chunk> ToDrawShadow,
+            WorldRenderType Type)
         {
-            if(ToDraw.Count == 0 || GameSettings.HideWorld) return;
-            if((Type & WorldRenderType.Static) == WorldRenderType.Static)
+            if (ToDraw.Count == 0 || GameSettings.HideWorld) return;
+            if ((Type & WorldRenderType.Static) == WorldRenderType.Static)
             {
                 TerrainDraw(ToDraw, ToDrawShadow);
                 if ((Type & WorldRenderType.Instance) == WorldRenderType.Instance) InstanceDraw(ToDraw);
                 StaticUnBind();
             }
-            else if(Type == WorldRenderType.Water)
+            else if (Type == WorldRenderType.Water)
             {
                 WaterDraw(ToDraw);
-            }    
+            }
         }
 
         private static void InstanceDraw(Dictionary<Vector2, Chunk> ToDraw)
         {
             StaticShader["Dither"] = GameSettings.SmoothLod ? 1 : 0;
-            StaticShader["MaxDitherDistance"] = GameSettings.Quality ? GeneralSettings.MaxLod2DitherDistance : GeneralSettings.MaxLod1DitherDistance;
-            StaticShader["MinDitherDistance"] = GameSettings.Quality ? GeneralSettings.MinLod2DitherDistance : GeneralSettings.MinLod1DitherDistance;
-            
+            StaticShader["MaxDitherDistance"] = GameSettings.Quality
+                ? GeneralSettings.MaxLod2DitherDistance
+                : GeneralSettings.MaxLod1DitherDistance;
+            StaticShader["MinDitherDistance"] = GameSettings.Quality
+                ? GeneralSettings.MinLod2DitherDistance
+                : GeneralSettings.MinLod1DitherDistance;
+
             InstanceBuffer.Draw(ToDraw);
         }
-        
+
         private static void TerrainDraw(Dictionary<Vector2, Chunk> ToDraw, Dictionary<Vector2, Chunk> ShadowDraw)
         {
             if (GameSettings.Shadows)
@@ -145,6 +149,7 @@ namespace Hedra.Engine.Rendering
                 StaticBuffer.DrawShadows(ShadowDraw, ref _shadowOffsets, ref _shadowCounts);
                 ShadowRenderer.UnBind();
             }
+
             StaticBind();
             StaticBuffer.Draw(ToDraw);
         }
@@ -158,7 +163,7 @@ namespace Hedra.Engine.Rendering
             WaterBind();
 
             WaterBuffer.Draw(ToDraw);
-                
+
             WaterUnBind();
         }
 
@@ -168,7 +173,7 @@ namespace Hedra.Engine.Rendering
             InstanceBuffer.Remove(ChunkOffset);
             WaterBuffer.Remove(ChunkOffset);
         }
-        
+
         public static bool UpdateStatic(Vector2 Offset, NativeVertexData Data)
         {
             return StaticBuffer.Update(Offset, Data);
@@ -197,9 +202,9 @@ namespace Hedra.Engine.Rendering
             WaterBuffer.ForceDiscard();
             InstanceBuffer.ForceDiscard();
         }
-        
+
         #region Binds
-        
+
         private static void StaticBind()
         {
             Renderer.Disable(EnableCap.Blend);
@@ -217,25 +222,25 @@ namespace Hedra.Engine.Rendering
             StaticShader["Scale"] = Scale;
             StaticShader["Offset"] = Offset;
             StaticShader["TransformationMatrix"] = TransformationMatrix;
-            
+
             var highlights = World.Highlighter.Highlights.Where(H => !H.OnlyWater).ToArray();
             StaticShader["AreaCount"] = highlights.Length;
             StaticShader["AreaPositions"] = highlights.Select(H => H.AreaPosition).ToArray();
             StaticShader["AreaColors"] = highlights.Select(H => H.AreaColor).ToArray();
-            
+
             Renderer.ActiveTexture(TextureUnit.Texture1);
             Renderer.BindTexture(TextureTarget.Texture3D, NoiseTexture.Id);
             StaticShader["noiseTexture"] = 1;
-            
+
             if (GameSettings.Shadows)
             {
                 StaticShader["ShadowMVP"] = ShadowRenderer.ShadowMvp;
                 Renderer.ActiveTexture(TextureUnit.Texture0);
                 Renderer.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFbo.TextureId[0]);
                 StaticShader["ShadowTex"] = 0;
-            }        
+            }
         }
-        
+
         private static void StaticUnBind()
         {
             /* Clear the texture units. */
@@ -245,12 +250,12 @@ namespace Hedra.Engine.Rendering
             Renderer.BindTexture(TextureTarget.Texture3D, 0);
             StaticShader.Unbind();
         }
-        
+
         private static void WaterBind()
         {
             Renderer.BlendEquation(BlendEquationMode.FuncAdd);
             Renderer.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-            if(!GameSettings.UseSSR)
+            if (!GameSettings.UseSSR)
                 Renderer.Enable(EnableCap.Blend);
 
             WaterShader.Bind();
@@ -258,12 +263,13 @@ namespace Hedra.Engine.Rendering
 
             WaterShader["depthMap"] = 0;
             Renderer.ActiveTexture(TextureUnit.Texture0);
-            Renderer.BindTexture(TextureTarget.Texture2D, GameSettings.SSAO && GameSettings.Quality ? DrawManager.MainBuffer.Ssao.FirstPass.TextureId[1] : 0);
-               
+            Renderer.BindTexture(TextureTarget.Texture2D,
+                GameSettings.SSAO && GameSettings.Quality ? DrawManager.MainBuffer.Ssao.FirstPass.TextureId[1] : 0);
+
             WaterShader["dudvMap"] = 1;
             Renderer.ActiveTexture(TextureUnit.Texture1);
             Renderer.BindTexture(TextureTarget.Texture2D, DuDvMap.Id);
-            
+
             WaterShader["normalMap"] = 2;
             Renderer.ActiveTexture(TextureUnit.Texture2);
             Renderer.BindTexture(TextureTarget.Texture2D, NormalMap.Id);
@@ -274,14 +280,14 @@ namespace Hedra.Engine.Rendering
             WaterShader["Offset"] = Offset;
             WaterShader["AreaCount"] = World.Highlighter.AreaCount;
             WaterShader["AreaPositions"] = World.Highlighter.AreaPositions;
-            WaterShader["AreaColors"] = World.Highlighter.AreaColors;        
+            WaterShader["AreaColors"] = World.Highlighter.AreaColors;
             WaterShader["WaveMovement"] = WaveMovement;
             WaterShader["Smoothness"] = WaterSmoothness;
             WaterShader["useSSR"] = GameSettings.UseSSR ? 1f : 0f;
 
             //if (ShowWaterBackfaces) Renderer.Disable(EnableCap.CullFace);
         }
-        
+
         private static void WaterUnBind()
         {
             Renderer.ActiveTexture(TextureUnit.Texture0);
@@ -292,19 +298,13 @@ namespace Hedra.Engine.Rendering
             Renderer.BindTexture(TextureTarget.Texture2D, 0);
             Renderer.ActiveTexture(TextureUnit.Texture3);
             Renderer.BindTexture(TextureTarget.Texture2D, 0);
-            
+
             Renderer.Disable(EnableCap.Blend);
             Renderer.Enable(EnableCap.CullFace);
             WaterShader.Unbind();
         }
 
         #endregion
-        public static float WaterSmoothness { get; set; } = 1f;
-        public static bool EnableCulling { get; set; } = true;
-        public static Vector3 BakedOffset { get; set; }
-        public static Vector3 Scale { get; set; } = Vector3.One;
-        public static Vector3 Offset { get; set; }
-        public static Matrix4x4 TransformationMatrix { get; set; } = Matrix4x4.Identity;
     }
 
     [Flags]

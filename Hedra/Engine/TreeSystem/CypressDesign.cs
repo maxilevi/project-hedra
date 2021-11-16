@@ -1,8 +1,7 @@
+using System.Numerics;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Management;
-using Hedra.Engine.Rendering;
 using Hedra.Rendering;
-using System.Numerics;
 
 namespace Hedra.Engine.TreeSystem
 {

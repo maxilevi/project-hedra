@@ -1,5 +1,5 @@
-using Hedra.Engine.WorldBuilding;
 using System.Numerics;
+using Hedra.Engine.WorldBuilding;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {

@@ -13,30 +13,27 @@ namespace Hedra.Engine.Rendering
 
         public void Enable(T Index)
         {
-            this.HandleRegistration(Index);
+            HandleRegistration(Index);
             if (!_state[Index])
             {
-                this.DoEnable(Index);
+                DoEnable(Index);
                 _state[Index] = true;
             }
         }
 
         public void Disable(T Index)
         {
-            this.HandleRegistration(Index);
+            HandleRegistration(Index);
             if (_state[Index])
             {
-                this.DoDisable(Index);
+                DoDisable(Index);
                 _state[Index] = false;
             }
         }
 
         private void HandleRegistration(T Index)
         {
-            if (!_state.ContainsKey(Index))
-            {
-                _state.Add(Index, false);
-            }
+            if (!_state.ContainsKey(Index)) _state.Add(Index, false);
         }
 
         protected abstract void DoEnable(T Index);

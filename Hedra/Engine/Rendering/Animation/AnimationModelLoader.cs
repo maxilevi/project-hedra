@@ -6,12 +6,12 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using System;
-using System.Text;
-using System.Numerics;
 using System.Collections.Generic;
 using System.Linq;
-using Hedra.Engine.Game;
+using System.Numerics;
+using System.Text;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
@@ -20,11 +20,12 @@ using Hedra.Game;
 namespace Hedra.Engine.Rendering.Animation
 {
     /// <summary>
-    /// Description of AnimationModelLoader.
+    ///     Description of AnimationModelLoader.
     /// </summary>
     public static class AnimationModelLoader
     {
-        private static readonly Dictionary<string, AnimatedModelData> ModelCache = new Dictionary<string, AnimatedModelData>();
+        private static readonly Dictionary<string, AnimatedModelData> ModelCache =
+            new Dictionary<string, AnimatedModelData>();
 
 
         /**
@@ -33,13 +34,13 @@ namespace Hedra.Engine.Rendering.Animation
          * joint heirarchy, and loads up the entity's texture.
          * 
          * @param entityFile
-         *            - the file containing the data for the entity.
+         * - the file containing the data for the entity.
          * @return The animated entity (no animation applied though)
          */
         public static AnimatedModel LoadEntity(AnimatedModelData EntityData)
-        {         
-            JointsData SkeletonData = EntityData.Joints;
-            Joint HeadJoint = CreateJoints(SkeletonData.HeadJoint);
+        {
+            var SkeletonData = EntityData.Joints;
+            var HeadJoint = CreateJoints(SkeletonData.HeadJoint);
             return new AnimatedModel(EntityData.Mesh, HeadJoint, SkeletonData.JointCount);
         }
 
@@ -55,14 +56,13 @@ namespace Hedra.Engine.Rendering.Animation
          * collada file.
          * 
          * @param data
-         *            - the joints data from the collada file for the head joint.
+         * - the joints data from the collada file for the head joint.
          * @return The created joint, with all its descendants added.
          */
-        private static Joint CreateJoints(JointData Data) {
+        private static Joint CreateJoints(JointData Data)
+        {
             var Joint = new Joint(Data.Index, Data.NameId, Data.BindLocalTransform);
-            for (int i = 0; i < Data.Children.Count; i++){
-                Joint.AddChild(CreateJoints(Data.Children[i]));
-            }
+            for (var i = 0; i < Data.Children.Count; i++) Joint.AddChild(CreateJoints(Data.Children[i]));
             return Joint;
         }
 
@@ -77,19 +77,22 @@ namespace Hedra.Engine.Rendering.Animation
                 }
                 else
                 {
-                    string fileContents = Encoding.ASCII.GetString(AssetManager.ReadPath(ModelFile));
+                    var fileContents = Encoding.ASCII.GetString(AssetManager.ReadPath(ModelFile));
                     entityData = ColladaLoader.LoadColladaModel(fileContents, LoadAllJoints);
-                    if(entityData.Joints.JointCount > GeneralSettings.MaxJoints)
-                        throw new ArgumentOutOfRangeException($"Max joint count is '{GeneralSettings.MaxJoints}' but model '{ModelFile}' has '{entityData.Joints.JointCount}'");
-                    Log.WriteLine($"Loaded model '{ModelFile}' with '{entityData.Joints.JointCount}' joints", LogType.System);
+                    if (entityData.Joints.JointCount > GeneralSettings.MaxJoints)
+                        throw new ArgumentOutOfRangeException(
+                            $"Max joint count is '{GeneralSettings.MaxJoints}' but model '{ModelFile}' has '{entityData.Joints.JointCount}'");
+                    Log.WriteLine($"Loaded model '{ModelFile}' with '{entityData.Joints.JointCount}' joints",
+                        LogType.System);
                     ModelCache.Add(ModelFile, entityData);
                 }
             }
+
             return entityData;
         }
 
         /// <summary>
-        /// Returns a new AnimatedModel with the replaced colors.
+        ///     Returns a new AnimatedModel with the replaced colors.
         /// </summary>
         /// <param name="Model">Original AnimatedModel</param>
         /// <param name="Path">File path of the original model</param>
@@ -97,24 +100,22 @@ namespace Hedra.Engine.Rendering.Animation
         /// <returns>A new AnimatedModel with the colors replaced.</returns>
         public static void Paint(AnimatedModel Model, string Path, Dictionary<Vector3, Vector3> ColorMap)
         {
-            Vector3[] colorData = AnimationModelLoader.GetEntityData(Path).Mesh.Colors.ToArray();
+            var colorData = GetEntityData(Path).Mesh.Colors.ToArray();
             for (var i = 0; i < colorData.Length; i++)
-            {
                 if (ColorMap.ContainsKey(colorData[i]))
-                {
                     colorData[i] = ColorMap[colorData[i]];
-                }
-            }
             Model.ReplaceColors(colorData);
         }
 
         /// <summary>
-        /// Empties the model cache
+        ///     Empties the model cache
         /// </summary>
         public static void EmptyCache()
         {
             lock (ModelCache)
+            {
                 ModelCache.Clear();
+            }
         }
     }
 }

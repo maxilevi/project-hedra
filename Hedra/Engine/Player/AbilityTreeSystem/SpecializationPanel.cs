@@ -1,33 +1,25 @@
 using System;
-using System.Collections.Generic;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using Hedra.Core;
+using System.Numerics;
 using Hedra.Engine.Events;
 using Hedra.Engine.Input;
-using Hedra.Engine.Localization;
-using Hedra.Engine.Management;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.PagedInterface;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Rendering.UI;
-using System.Numerics;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
 {
     public class SpecializationPanel : Panel
     {
-        private readonly IPlayer _player;
         private readonly Button _classSpecialization0;
+        private readonly BackgroundTexture _classSpecialization0Marker;
         private readonly Button _classSpecialization1;
+        private readonly BackgroundTexture _classSpecialization1Marker;
         private readonly Button _defaultClass;
         private readonly BackgroundTexture _defaultClassMarker;
-        private readonly BackgroundTexture _classSpecialization0Marker;
-        private readonly BackgroundTexture _classSpecialization1Marker;
-        private readonly RenderableTexture _specializationBackground;
-        private readonly SpecializationInfo _specializationInfo;
+        private readonly IPlayer _player;
         private readonly ArrowSelectorState _selectorState;
+        private readonly RenderableTexture _specializationBackground;
 
         public SpecializationPanel(IPlayer Player, RenderableButton[] Buttons, BackgroundTexture[] Textures,
             RenderableTexture BackgroundTexture)
@@ -85,7 +77,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             _classSpecialization1.Click += (S, A) =>
                 Show(Player.Class.SecondSpecializationTree, _player.AbilityTree.SecondTree);
 
-            _specializationInfo = new SpecializationInfo(_player);
+            SpecializationInfo = new SpecializationInfo(_player);
             _defaultClassMarker = new BackgroundTexture(PagedInventoryArrayInterface.SelectedId, _defaultClass.Position,
                 _defaultClass.Scale * 1.1f);
             _classSpecialization0Marker = new BackgroundTexture(PagedInventoryArrayInterface.SelectedId,
@@ -105,10 +97,26 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             {
                 if (E == PanelState.Disabled)
                     //Show(_player.Class.MainTree);
-                    _specializationInfo.ShowSpecialization(null);
+                    SpecializationInfo.ShowSpecialization(null);
             };
             EventDispatcher.RegisterKeyDown(this, OnKeyDown);
             EventDispatcher.RegisterKeyUp(this, OnKeyUp);
+        }
+
+        private bool IsMainTreeSelected => Blueprint.Icon == _defaultClass.Texture.TextureId;
+
+        private bool IsFirstTreeSelected => Blueprint.Icon == _classSpecialization0.Texture.TextureId;
+
+        private bool IsSecondTreeSelected => Blueprint.Icon == _classSpecialization1.Texture.TextureId;
+
+        public AbilityTreeBlueprint Blueprint { private get; set; }
+
+        public SpecializationInfo SpecializationInfo { get; }
+
+        public override Vector2 Scale
+        {
+            get => _specializationBackground.Scale;
+            set => throw new NotImplementedException();
         }
 
         public void UpdateView()
@@ -179,29 +187,13 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         private void Show(AbilityTreeBlueprint Blueprint, InventoryArray Array, bool ShowSpecializationInfo = true)
         {
             _player.AbilityTree.ShowBlueprint(Blueprint, Array, null);
-            _specializationInfo.ShowSpecialization(ShowSpecializationInfo ? Blueprint : null);
+            SpecializationInfo.ShowSpecialization(ShowSpecializationInfo ? Blueprint : null);
         }
-
-        private bool IsMainTreeSelected => Blueprint.Icon == _defaultClass.Texture.TextureId;
-
-        private bool IsFirstTreeSelected => Blueprint.Icon == _classSpecialization0.Texture.TextureId;
-
-        private bool IsSecondTreeSelected => Blueprint.Icon == _classSpecialization1.Texture.TextureId;
-
-        public AbilityTreeBlueprint Blueprint { private get; set; }
-
-        public SpecializationInfo SpecializationInfo => _specializationInfo;
 
         public void Dispose()
         {
             EventDispatcher.UnregisterKeyUp(this);
             EventDispatcher.UnregisterKeyDown(this);
-        }
-
-        public override Vector2 Scale
-        {
-            get => _specializationBackground.Scale;
-            set => throw new NotImplementedException();
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Hedra.AISystem
     {
         public BasicAIComponent Build(Entity Parent, string Key)
         {
-            return (BasicAIComponent) Activator.CreateInstance(this[Key], Parent);
-        }       
+            return (BasicAIComponent)Activator.CreateInstance(this[Key], Parent);
+        }
     }
 }

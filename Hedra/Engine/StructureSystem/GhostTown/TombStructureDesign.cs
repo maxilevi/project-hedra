@@ -1,8 +1,7 @@
-using System;
+using System.Numerics;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Rendering;
-using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.GhostTown
 {
@@ -14,13 +13,13 @@ namespace Hedra.Engine.StructureSystem.GhostTown
         protected override int StructureChance => StructureGrid.TombstoneChance;
         protected override CacheItem? Cache => CacheItem.Grave;
         public override bool CanSpawnInside => true;
-        
+
         protected override GhostTownTombstone Create(Vector3 Position, float Size)
         {
             return new GhostTownTombstone(Position);
         }
     }
-    
+
     public class GhostTownTombstone : Tombstone
     {
         public GhostTownTombstone(Vector3 Position) : base(Position)

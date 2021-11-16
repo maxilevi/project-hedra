@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 

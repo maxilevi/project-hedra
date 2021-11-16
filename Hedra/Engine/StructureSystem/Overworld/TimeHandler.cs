@@ -1,25 +1,19 @@
 using System;
-using Hedra.Core;
 using Hedra.Engine.EnvironmentSystem;
-using Hedra.Engine.Rendering.Particles;
 using Hedra.Game;
-using Hedra.Numerics;
 using Hedra.Sound;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
     public class TimeHandler
     {
-        private readonly int _targetSkyTime;
         private readonly SoundType _soundType;
-        private bool _restoreSoundPlayed;
-        private bool _isInsideZone;
+        private readonly int _targetSkyTime;
         private int _beforeSaveTime;
         private int _previousTime;
+        private bool _restoreSoundPlayed;
         private SkySettings _settings;
 
-        public bool IsActive => _isInsideZone;
-        
         public TimeHandler(int TargetSkyTime, SoundType Sound = SoundType.None)
         {
             _targetSkyTime = TargetSkyTime;
@@ -28,28 +22,30 @@ namespace Hedra.Engine.StructureSystem.Overworld
             GameManager.BeforeSave += BeforeSave;
         }
 
+        public bool IsActive { get; private set; }
+
         public void Update()
         {
-            this.HandleSky();
+            HandleSky();
         }
 
         public void Apply()
         {
-            if(_isInsideZone) return;
+            if (IsActive) return;
             SkyManager.PushTime();
             SkyManager.Enabled = false;
             SkyManager.DayTime = _targetSkyTime;
             SoundPlayer.PlayUISound(_soundType);
-            _isInsideZone = true;
+            IsActive = true;
         }
 
         public void Remove()
         {
-            if(!_isInsideZone) return;
+            if (!IsActive) return;
             SkyManager.PopTime();
-            _isInsideZone = false;
+            IsActive = false;
         }
-             
+
         private void HandleSky()
         {
             /*
@@ -62,16 +58,16 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 }
             }*/
         }
-        
+
         private void BeforeSave(object Invoker, EventArgs Args)
         {
-            if (_isInsideZone)
+            if (IsActive)
                 _settings = SkyManager.PopTime();
         }
-        
+
         private void AfterSave(object Invoker, EventArgs Args)
         {
-            if(_isInsideZone)
+            if (IsActive)
                 SkyManager.PushTime(_settings);
             _settings = null;
         }

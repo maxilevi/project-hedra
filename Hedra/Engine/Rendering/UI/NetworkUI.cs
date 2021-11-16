@@ -7,27 +7,20 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
-using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using System.Numerics;
-using Hedra.Engine.Generation;
-using Hedra.Engine.Management;
-using Hedra.Engine.Networking;
 using System.Collections.Generic;
-using Hedra.Engine.Game;
-using Hedra.Engine.Player;
+using System.Numerics;
 using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Rendering.UI
 {
     public class NetworkUI : Panel
     {
-        private TextField _ipField;
-        private List<UIElement> _joinButtons = new List<UIElement>();
-        private List<UIElement> _hostButtons = new List<UIElement>();
+        private readonly List<UIElement> _hostButtons = new List<UIElement>();
+        private readonly TextField _ipField;
+        private readonly List<UIElement> _joinButtons = new List<UIElement>();
 
         public NetworkUI()
         {

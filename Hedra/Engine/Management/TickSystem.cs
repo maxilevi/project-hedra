@@ -44,7 +44,7 @@ namespace Hedra.Engine.Management
                 {
                     var tickable = pair.Key;
                     var information = pair.Value;
-                    if(information.Tick())
+                    if (information.Tick())
                         tickable.Update(information.AlertTime);
                 }
             }
@@ -52,22 +52,20 @@ namespace Hedra.Engine.Management
 
         private void RemovePending()
         {
-            for (var i = 0; i < _toRemove.Count; ++i)
-            {
-                _tickables.Remove(_toRemove[i]);
-            }
+            for (var i = 0; i < _toRemove.Count; ++i) _tickables.Remove(_toRemove[i]);
             _toRemove.Clear();
         }
-        
+
         private class TickInformation
         {
             private float _alertTime;
+            private float _counter;
+
             public float AlertTime
             {
                 get => _alertTime;
                 set => _alertTime = 1f / value;
             }
-            private float _counter;
 
             public bool Tick()
             {

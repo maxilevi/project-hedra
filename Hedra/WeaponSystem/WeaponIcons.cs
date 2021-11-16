@@ -1,4 +1,3 @@
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Rendering;
 
@@ -51,7 +50,7 @@ namespace Hedra.WeaponSystem
             DefaultAttack = Graphics2D.LoadFromAssets("Assets/Skills/HolderSkill.png");
             FishingRodPrimaryAttack = Graphics2D.LoadFromAssets("Assets/Skills/FishingRodAttack1.png");
             FishingRodSecondaryAttack = Graphics2D.LoadFromAssets("Assets/Skills/FishingRodAttack2.png");
-            
+
             TextureRegistry.MarkStatic(SwordPrimaryAttack);
             TextureRegistry.MarkStatic(SwordSecondaryAttack);
             TextureRegistry.MarkStatic(KnifePrimaryAttack);

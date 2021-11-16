@@ -9,11 +9,8 @@
 
 using System;
 using System.Diagnostics;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using Hedra.Core;
-using Hedra.Engine.Game;
 using System.Numerics;
+using Hedra.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.UI;
@@ -25,18 +22,13 @@ namespace Hedra.Engine.Rendering
     public abstract class BaseBillboard : DrawableTexture, IRenderable, IDisposable, IUpdatable
     {
         private static Shader Shader;
-        protected abstract Vector2 Measurements { get; }
-        public bool Disposed { get; private set; }
-        public float VanishSpeed { get; set; } = 2;
-        public bool Vanish { get; set; }
-        public float Scalar { get; set; } = 1;
-        private Func<Vector3> _follow;
-
-        private Vector3 _position;
-        private Vector3 _addedPosition;
         private readonly float _maxLifetime;
+        private Vector3 _addedPosition;
+        private readonly Func<Vector3> _follow;
         private float _life;
         private float _opacity = 1;
+
+        private Vector3 _position;
         private StackTrace _trace = new StackTrace();
 
         protected BaseBillboard(float Lifetime, Func<Vector3> Follow)
@@ -48,12 +40,18 @@ namespace Hedra.Engine.Rendering
             UpdateManager.Add(this);
         }
 
-        public void Update()
+        protected abstract Vector2 Measurements { get; }
+        public bool Disposed { get; private set; }
+        public float VanishSpeed { get; set; } = 2;
+        public bool Vanish { get; set; }
+        public float Scalar { get; set; } = 1;
+
+        public virtual void Dispose()
         {
-            HandleVanish();
-            _position = Mathf.Lerp(_position, _follow(), Time.DeltaTime * 8f);
-            if (_life >= _maxLifetime) Dispose();
-            _life += Time.DeltaTime;
+            DrawManager.UIRenderer.Remove(this);
+            UpdateManager.Remove(this);
+            TextureRegistry.Remove(TextureId);
+            Disposed = true;
         }
 
         public void Draw()
@@ -77,19 +75,19 @@ namespace Hedra.Engine.Rendering
             GUIRenderer.UnsetDrawing(Shader);
         }
 
+        public void Update()
+        {
+            HandleVanish();
+            _position = Mathf.Lerp(_position, _follow(), Time.DeltaTime * 8f);
+            if (_life >= _maxLifetime) Dispose();
+            _life += Time.DeltaTime;
+        }
+
         private void HandleVanish()
         {
             if (!Vanish) return;
             _addedPosition += Vector3.UnitY * Time.DeltaTime * VanishSpeed;
             _opacity = 1f - _life / _maxLifetime;
-        }
-
-        public virtual void Dispose()
-        {
-            DrawManager.UIRenderer.Remove(this);
-            UpdateManager.Remove(this);
-            TextureRegistry.Remove(TextureId);
-            Disposed = true;
         }
     }
 }

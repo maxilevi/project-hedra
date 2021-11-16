@@ -7,16 +7,17 @@ namespace Hedra.Engine.BiomeSystem
     {
         private static readonly Dictionary<WorldType, Type> Map = new Dictionary<WorldType, Type>
         {
-            {WorldType.Overworld, typeof(OverworldHandler)},
-            {WorldType.GhostTown, typeof(GhostTownHandler)}
+            { WorldType.Overworld, typeof(OverworldHandler) },
+            { WorldType.GhostTown, typeof(GhostTownHandler) }
         };
-        
-        public abstract void Update();
+
         public abstract void Dispose();
+
+        public abstract void Update();
 
         public static WorldHandler Create(WorldType Type)
         {
-            return (WorldHandler) Activator.CreateInstance(Map[Type]);
+            return (WorldHandler)Activator.CreateInstance(Map[Type]);
         }
     }
 }

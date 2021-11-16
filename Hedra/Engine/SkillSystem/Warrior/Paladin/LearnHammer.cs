@@ -7,10 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
-using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
 using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Rendering;
@@ -18,18 +15,18 @@ using Hedra.Rendering;
 namespace Hedra.Engine.SkillSystem.Warrior.Paladin
 {
     /// <summary>
-    /// Description of Resistance.
+    ///     Description of Resistance.
     /// </summary>
     public class LearnHammer : LearningSkill
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Hammer.png");
-        
+
         protected override EquipmentType Equipment => EquipmentType.Hammer;
-        
+
         protected override int RestrictionIndex => PlayerInventory.WeaponHolder;
-        
+
         public override string Description => Translations.Get("learn_hammer_desc");
-        
+
         public override string DisplayName => Translations.Get("learn_hammer");
     }
 }

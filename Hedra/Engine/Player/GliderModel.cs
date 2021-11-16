@@ -7,7 +7,6 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
-using Hedra.Engine.EntitySystem;
 using System.Numerics;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
@@ -15,14 +14,13 @@ using Hedra.Rendering;
 
 namespace Hedra.Engine.Player
 {
-
     public class GliderModel : UpdatableObjectMeshModel
     {
         public GliderModel() : base(null)
         {
             Model = ObjectMesh.FromVertexData(
                 AssetManager.PLYLoader("Assets/Items/Misc/Glider.ply", Vector3.One * 2.0f)
-                );
+            );
         }
     }
 }

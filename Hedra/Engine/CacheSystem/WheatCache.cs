@@ -1,6 +1,5 @@
-
-using Hedra.Engine.Management;
 using System.Numerics;
+using Hedra.Engine.Management;
 
 namespace Hedra.Engine.CacheSystem
 {
@@ -16,9 +15,9 @@ namespace Hedra.Engine.CacheSystem
             var model = AssetManager.PLYLoader("Assets/Env/Wheat.ply", Vector3.One);
             model.AddWindValues();
 
-            this.AddModel(model);
+            AddModel(model);
         }
-        
+
         public override CacheItem Type => CacheItem.Wheat;
     }
 }

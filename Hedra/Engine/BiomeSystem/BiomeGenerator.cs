@@ -4,23 +4,32 @@
  * Time: 09:19 p.m.
  *
  */
+
 using System;
-using System.Collections.Generic;
-using Hedra.Core;
-using Hedra.Engine.Core;
 using System.Numerics;
+using Hedra.Core;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
-using Hedra.Engine.PlantSystem;
-using Hedra.Engine.StructureSystem;
 
 namespace Hedra.Engine.BiomeSystem
 {
     /// <summary>
-    /// Description of BiomeGenerator.
+    ///     Description of BiomeGenerator.
     /// </summary>
     public abstract class BiomeGenerator : IDisposable
     {
+        protected readonly FastNoiseSIMD Noise;
+
+        protected BiomeGenerator(Chunk Parent)
+        {
+            RandomGen = GenerateRng(new Vector2(Parent.OffsetX, Parent.OffsetZ));
+            OffsetX = Parent.OffsetX;
+            OffsetZ = Parent.OffsetZ;
+            this.Parent = Parent;
+            Seed = World.Seed;
+            Noise = new FastNoiseSIMD(Seed);
+        }
+
         protected int OffsetX { get; }
         protected int OffsetZ { get; }
         protected Chunk Parent { get; }
@@ -30,27 +39,21 @@ namespace Hedra.Engine.BiomeSystem
         public bool BlocksDefined { get; protected set; }
         public bool StructuresPlaced { get; protected set; }
         public bool FullyGenerated => StructuresPlaced && BlocksDefined;
-        protected readonly FastNoiseSIMD Noise;
 
-        protected BiomeGenerator(Chunk Parent)
+        public void Dispose()
         {
-            this.RandomGen = GenerateRng(new Vector2(Parent.OffsetX, Parent.OffsetZ));
-            this.OffsetX = Parent.OffsetX;
-            this.OffsetZ = Parent.OffsetZ;
-            this.Parent = Parent;
-            this.Seed = World.Seed;
-            this.Noise = new FastNoiseSIMD(Seed);
+            Noise.Dispose();
         }
 
         protected abstract void PlaceEnvironment(RegionCache Cache);
 
         protected abstract void DoTreeAndStructurePlacements(RegionCache Cache);
-        
+
         protected abstract ChunkDetails DefineBlocks(Block[] Blocks);
-        
+
         public ChunkDetails GenerateBlocks(Block[] Blocks)
         {
-            if (BlocksDefined) throw new ArgumentException($"Cannot generate a chunk multiple times");
+            if (BlocksDefined) throw new ArgumentException("Cannot generate a chunk multiple times");
             CheckForNearbyStructures();
             BlocksSetted = true;
             var details = DefineBlocks(Blocks);
@@ -60,9 +63,9 @@ namespace Hedra.Engine.BiomeSystem
 
         public void GenerateEnvironment(RegionCache Cache)
         {
-            if (StructuresPlaced) throw new ArgumentException($"Cannot generate a chunk multiple times");
-            this.DoTreeAndStructurePlacements(Cache);
-            this.PlaceEnvironment(Cache);
+            if (StructuresPlaced) throw new ArgumentException("Cannot generate a chunk multiple times");
+            DoTreeAndStructurePlacements(Cache);
+            PlaceEnvironment(Cache);
             StructuresPlaced = true;
         }
 
@@ -73,23 +76,17 @@ namespace Hedra.Engine.BiomeSystem
 
         public static float PathFormula(float X, float Z)
         {
-            return (float) Math.Max(0, (0.5 - Math.Abs(World.GetNoise(X * 0.0009f, Z *  0.0009f) - 0.2)) - 0.425f) * 1f;
+            return (float)Math.Max(0, 0.5 - Math.Abs(World.GetNoise(X * 0.0009f, Z * 0.0009f) - 0.2) - 0.425f) * 1f;
         }
-        
+
         public static float SmallFrequency(float X, float Z)
         {
-            return (float) (World.GetNoise(X * 0.2f, Z * 0.2f) * -0.15f * World.GetNoise(X * 0.035f, Z * 0.035f) * 2.0f);
+            return World.GetNoise(X * 0.2f, Z * 0.2f) * -0.15f * World.GetNoise(X * 0.035f, Z * 0.035f) * 2.0f;
         }
-        
+
         public static Random GenerateRng(Vector2 Offset)
         {
-            return new Random( Unique.GenerateSeed(Offset) );
-        }
-        
-        public void Dispose()
-        {
-            Noise.Dispose();
+            return new Random(Unique.GenerateSeed(Offset));
         }
     }
 }
- 

@@ -8,20 +8,18 @@ namespace Hedra.Engine.Rendering.Core
     {
         private const int MaxAttributes = 16;
         private readonly Dictionary<uint, bool> _states;
-        private uint _currentlyBound;
-        
+
         public VertexAttributeHandler()
         {
             _states = new Dictionary<uint, bool>();
-            for (var i = 0u; i < MaxAttributes; ++i)
-            {
-                _states.Add(i, false);
-            }
+            for (var i = 0u; i < MaxAttributes; ++i) _states.Add(i, false);
             Renderer.ShaderChanged += OnShaderChanged;
         }
 
         public int Count => _states.Count(S => S.Value);
-        
+
+        public uint Id { get; private set; }
+
         public bool IsEnabled(uint Index)
         {
             return _states[Index];
@@ -30,9 +28,9 @@ namespace Hedra.Engine.Rendering.Core
         public void Bind(uint Id)
         {
             Renderer.Provider.BindVertexArray(Id);
-            _currentlyBound = Id;
+            this.Id = Id;
         }
-        
+
         public void Enable(uint Index)
         {
             EnsureValidity();
@@ -48,10 +46,9 @@ namespace Hedra.Engine.Rendering.Core
         private void OnShaderChanged()
         {
             foreach (var state in _states)
-            {
-                if(state.Value)
-                    throw new ArgumentException($"Vertex attribute '{state.Key}' was enabled but not disabled after drawing.");
-            }
+                if (state.Value)
+                    throw new ArgumentException(
+                        $"Vertex attribute '{state.Key}' was enabled but not disabled after drawing.");
         }
 
         private static void EnsureValidity()
@@ -59,23 +56,21 @@ namespace Hedra.Engine.Rendering.Core
             if (Renderer.ShaderBound == 0)
                 throw new ArgumentException("A shader needs to be bound before using vertex array objects.");
         }
-        
+
         private void DoEnable(uint Index)
         {
-            if(Index > MaxAttributes)
+            if (Index > MaxAttributes)
                 throw new ArgumentOutOfRangeException($"A shader can only have up to '{MaxAttributes}'");
             Renderer.Provider.EnableVertexAttribArray(Index);
             _states[Index] = true;
         }
-        
+
         private void DoDisable(uint Index)
         {
-            if(Index > MaxAttributes)
+            if (Index > MaxAttributes)
                 throw new ArgumentOutOfRangeException($"A shader can only have up to '{MaxAttributes}'");
             Renderer.Provider.EnableVertexAttribArray(Index);
             _states[Index] = false;
         }
-
-        public uint Id => _currentlyBound;
     }
 }

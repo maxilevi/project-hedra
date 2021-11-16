@@ -1,5 +1,5 @@
 {
-  "Name" : "Ostrich",
+  "Name": "Ostrich",
   "MaxHealth": 280.0,
   "AttackDamage": 8.0,
   "Speed": 1.4,
@@ -8,7 +8,6 @@
   "AIType": "Neutral",
   "Effects": [],
   "Drops": [],
-
   "Model": {
     "Path": "$DataFile$/Assets/Chr/Mob/Ostrich/OstrichIdle.dae",
     "Scale": 2.15,

@@ -13,11 +13,11 @@ layout(location = 3)in vec3 in_jointIndices;
 layout(location = 4)in vec3 in_weights;
 
 layout(std140) uniform FogSettings {
-	vec4 U_BotColor;
-	vec4 U_TopColor;
-	float MinDist;
-	float MaxDist;	
-	float U_Height;
+    vec4 U_BotColor;
+    vec4 U_TopColor;
+    float MinDist;
+    float MaxDist;
+    float U_Height;
 };
 
 out vec3 base_vertex_position;
@@ -43,60 +43,60 @@ uniform float Alpha;
 
 void main(void)
 {
-	vec3 linear_color = srgb_to_linear(in_color);
-	base_vertex_position = in_position;
-	pass_height = U_Height;
-	pass_botColor = U_BotColor;
-	pass_topColor = U_TopColor;
-	
-	vec4 totalLocalPos = vec4(0.0, 0.0, 0.0, 0.0);
-	vec4 totalNormal = vec4(0.0, 0.0, 0.0, 0.0);
-	mat4 identity = mat4(
-        1.0, 0.0, 0.0, 0.0,
-        0.0, 1.0, 0.0, 0.0,
-        0.0, 0.0, 1.0, 0.0,
-        0.0, 0.0, 0.0, 1.0
-	);
-	
-	float sum = 0.0;
-	for(int i=0;i<MAX_WEIGHTS;i++){
-		mat4 jointTransform = jointTransforms[ int(in_jointIndices[i]) ];
-		vec4 posePosition = jointTransform * vec4(in_position, 1.0);
-		totalLocalPos += posePosition * in_weights[i];
-		sum += in_weights[i];
-		
-		vec4 worldNormal = jointTransform * vec4(in_normal, 0.0);
-		totalNormal += worldNormal * in_weights[i];
-	}
-	 
-	float DistanceToCamera = length(vec3(PlayerPosition - totalLocalPos.xyz).xz);
-	pass_visibility = clamp( (MaxDist - DistanceToCamera) / (MaxDist - MinDist), 0.0, 1.0);
+    vec3 linear_color = srgb_to_linear(in_color);
+    base_vertex_position = in_position;
+    pass_height = U_Height;
+    pass_botColor = U_BotColor;
+    pass_topColor = U_TopColor;
 
-	pass_position = totalLocalPos.xyz;
-	pass_normal = totalNormal.xyz; 
-	
-	vec3 unitNormal = normalize(pass_normal.xyz);
-	vec3 unitToLight = normalize(LightPosition);
-	vec3 unitToCamera = normalize((inverse(_modelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0) ).xyz - pass_position.xyz);
+    vec4 totalLocalPos = vec4(0.0, 0.0, 0.0, 0.0);
+    vec4 totalNormal = vec4(0.0, 0.0, 0.0, 0.0);
+    mat4 identity = mat4(
+    1.0, 0.0, 0.0, 0.0,
+    0.0, 1.0, 0.0, 0.0,
+    0.0, 0.0, 1.0, 0.0,
+    0.0, 0.0, 0.0, 1.0
+    );
 
-	vec3 FLightColor = calculate_lights(LightColor, totalLocalPos.xyz);
-	vec4 Rim = rim(linear_color, LightColor, unitToCamera, unitNormal);
+    float sum = 0.0;
+    for (int i=0;i<MAX_WEIGHTS;i++){
+        mat4 jointTransform = jointTransforms[int(in_jointIndices[i])];
+        vec4 posePosition = jointTransform * vec4(in_position, 1.0);
+        totalLocalPos += posePosition * in_weights[i];
+        sum += in_weights[i];
 
-	//Diffuse Lighting
-	vec3 FullLightColor = clamp(LightColor + FLightColor, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
-	vec4 Diffuse = diffuse(unitToLight, unitNormal, LightColor * 1.15);
-	vec4 lightDiffuse = diffuse(unitToLight, unitNormal, FLightColor);
-	vec4 final_color = Rim + (Diffuse + lightDiffuse) * vec4(linear_color,1.0);
+        vec4 worldNormal = jointTransform * vec4(in_normal, 0.0);
+        totalNormal += worldNormal * in_weights[i];
+    }
 
-	pass_color = vec4(final_color.xyz, Alpha);
-	
-	//Shadows Stuff
+    float DistanceToCamera = length(vec3(PlayerPosition - totalLocalPos.xyz).xz);
+    pass_visibility = clamp((MaxDist - DistanceToCamera) / (MaxDist - MinDist), 0.0, 1.0);
 
-	float ShadowDist = DistanceToCamera - (ShadowDistance - ShadowTransition);
-	ShadowDist /= ShadowTransition;
-	ShadowDist = clamp(1.0 - ShadowDist, 0.0, 1.0);
-	pass_coords = ShadowMVP * vec4(totalLocalPos.xyz,1.0);
+    pass_position = totalLocalPos.xyz;
+    pass_normal = totalNormal.xyz;
 
-	gl_Position = projectionViewMatrix * totalLocalPos;
+    vec3 unitNormal = normalize(pass_normal.xyz);
+    vec3 unitToLight = normalize(LightPosition);
+    vec3 unitToCamera = normalize((inverse(_modelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0)).xyz - pass_position.xyz);
+
+    vec3 FLightColor = calculate_lights(LightColor, totalLocalPos.xyz);
+    vec4 Rim = rim(linear_color, LightColor, unitToCamera, unitNormal);
+
+    //Diffuse Lighting
+    vec3 FullLightColor = clamp(LightColor + FLightColor, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
+    vec4 Diffuse = diffuse(unitToLight, unitNormal, LightColor * 1.15);
+    vec4 lightDiffuse = diffuse(unitToLight, unitNormal, FLightColor);
+    vec4 final_color = Rim + (Diffuse + lightDiffuse) * vec4(linear_color, 1.0);
+
+    pass_color = vec4(final_color.xyz, Alpha);
+
+    //Shadows Stuff
+
+    float ShadowDist = DistanceToCamera - (ShadowDistance - ShadowTransition);
+    ShadowDist /= ShadowTransition;
+    ShadowDist = clamp(1.0 - ShadowDist, 0.0, 1.0);
+    pass_coords = ShadowMVP * vec4(totalLocalPos.xyz, 1.0);
+
+    gl_Position = projectionViewMatrix * totalLocalPos;
 
 }

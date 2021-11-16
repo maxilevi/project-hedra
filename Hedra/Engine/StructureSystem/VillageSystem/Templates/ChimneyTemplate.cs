@@ -1,5 +1,5 @@
-using Hedra.Engine.Core;
 using System.Numerics;
+using Hedra.Engine.Core;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Templates
 {

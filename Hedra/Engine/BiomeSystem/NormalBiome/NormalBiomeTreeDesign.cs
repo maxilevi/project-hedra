@@ -1,5 +1,4 @@
 using Hedra.BiomeSystem;
-using Hedra.Engine.Generation;
 using Hedra.Engine.TreeSystem;
 
 namespace Hedra.Engine.BiomeSystem.NormalBiome
@@ -18,6 +17,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
                 new PineDesign()
             };
         }
+
         public override TreeDesign[] AvailableTypes { get; }
     }
 }

@@ -1,6 +1,5 @@
 using Hedra.Core;
 using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Management;
 
 namespace Hedra.AISystem.Behaviours
 {
@@ -22,23 +21,23 @@ namespace Hedra.AISystem.Behaviours
         {
             if (FollowTimer.Tick() || !Follow.Enabled)
             {
-                this.Target = null;
-                Follow.Target = this.Target;
+                Target = null;
+                Follow.Target = Target;
             }
-            var canGrowl = Target != null && GrowlTimer.Ready && (Parent.Position - Target.Position).LengthSquared() > 16 * 16 &&
-                (Parent.Position - Target.Position).LengthSquared() < 48 * 48;
+
+            var canGrowl = Target != null && GrowlTimer.Ready &&
+                           (Parent.Position - Target.Position).LengthSquared() > 16 * 16 &&
+                           (Parent.Position - Target.Position).LengthSquared() < 48 * 48;
 
             var inAttackRange = Target != null && (InAttackRange(Target) || canGrowl);
-            if (!Parent.Model.IsAttacking && Target != null && !inAttackRange)
-            {
-                Follow.Update();
-            }
+            if (!Parent.Model.IsAttacking && Target != null && !inAttackRange) Follow.Update();
             inAttackRange = Target != null && (InAttackRange(Target) || canGrowl);
             if (!Parent.Model.IsAttacking && Target != null && inAttackRange)
             {
                 FollowTimer.Reset();
-                this.Attack(1.75f);
+                Attack(1.75f);
             }
+
             GrowlTimer.Tick();
         }
 

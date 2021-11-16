@@ -8,26 +8,23 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hedra.Engine.Bullet;
 using Hedra.Engine.EnvironmentSystem;
-using Hedra.Engine.Generation;
 using Hedra.Engine.IO;
-using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.Effects;
 using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Engine.Windowing;
 using Hedra.Game;
 using Hedra.Rendering;
-using System.Numerics;
-using Hedra.Engine.Core;
-using Hedra.Engine.Windowing;
 
 namespace Hedra.Engine.Management
 {
     /// <summary>
-    /// A static class which acts as a layer between every Draw() method and the actual rendeirng 
+    ///     A static class which acts as a layer between every Draw() method and the actual rendeirng
     /// </summary>
     public static class DrawManager
     {
@@ -40,15 +37,6 @@ namespace Hedra.Engine.Management
         private static readonly List<ObjectMesh> ObjectMeshes;
         private static bool _initialized;
 
-        public static List<IRenderable> ParticleRenderer { get; }
-        public static List<IRenderable> TrailRenderer { get; }
-        public static GUIRenderer UIRenderer { get; }
-        public static int CullableObjectsCount { get; private set; }
-        public static int CulledObjectsCount { get; private set; }
-        public static int DrawCalls { get; private set; }
-        public static int VertsCount { get; private set; }
-        public static MainFBO MainBuffer { get; private set; }
-
         static DrawManager()
         {
             DrawFunctionsSet = new HashSet<IRenderable>();
@@ -60,11 +48,21 @@ namespace Hedra.Engine.Management
             UIRenderer = new GUIRenderer();
         }
 
+        public static List<IRenderable> ParticleRenderer { get; }
+        public static List<IRenderable> TrailRenderer { get; }
+        public static GUIRenderer UIRenderer { get; }
+        public static int CullableObjectsCount { get; private set; }
+        public static int CulledObjectsCount { get; private set; }
+        public static int DrawCalls { get; private set; }
+        public static int VertsCount { get; private set; }
+        public static MainFBO MainBuffer { get; private set; }
+
         public static void Add(IRenderable Renderable)
         {
 #if DEBUG
-            if(Renderable is ObjectMesh || Renderable is TrailRenderer || Renderable is ParticleSystem) 
-                throw new ArgumentOutOfRangeException($"This type of renderable ('{nameof(Renderable)}') is not supported");
+            if (Renderable is ObjectMesh || Renderable is TrailRenderer || Renderable is ParticleSystem)
+                throw new ArgumentOutOfRangeException(
+                    $"This type of renderable ('{nameof(Renderable)}') is not supported");
 #endif
             lock (Lock)
             {
@@ -73,12 +71,13 @@ namespace Hedra.Engine.Management
                 CullableObjectsCount = DrawFunctions.Sum(D => D is ICullable ? 1 : 0);
             }
         }
-        
+
         public static void Remove(IRenderable Renderable)
         {
 #if DEBUG
-            if(Renderable is ObjectMesh || Renderable is TrailRenderer || Renderable is ParticleSystem) 
-                throw new ArgumentOutOfRangeException($"This type of renderable ('{nameof(Renderable)}') is not supported");
+            if (Renderable is ObjectMesh || Renderable is TrailRenderer || Renderable is ParticleSystem)
+                throw new ArgumentOutOfRangeException(
+                    $"This type of renderable ('{nameof(Renderable)}') is not supported");
 #endif
             lock (Lock)
             {
@@ -90,25 +89,33 @@ namespace Hedra.Engine.Management
         public static void AddTransparent(IRenderable Renderable)
         {
             lock (TransparentLock)
+            {
                 TransparentObjects.Add(Renderable);
+            }
         }
 
         public static void RemoveTransparent(IRenderable Renderable)
         {
-            lock (TransparentLock)    
+            lock (TransparentLock)
+            {
                 TransparentObjects.Remove(Renderable);
+            }
         }
 
         public static void AddObjectMesh(ObjectMesh Mesh)
         {
-            lock(ObjectMeshLock)
+            lock (ObjectMeshLock)
+            {
                 ObjectMeshes.Add(Mesh);
+            }
         }
 
         public static void RemoveObjectMesh(ObjectMesh Mesh)
         {
-            lock(ObjectMeshLock)
+            lock (ObjectMeshLock)
+            {
                 ObjectMeshes.Remove(Mesh);
+            }
         }
 
         private static void SetupDrawing()
@@ -126,7 +133,7 @@ namespace Hedra.Engine.Management
             var drawedCullableObjects = 0;
             lock (Lock)
             {
-                for (var i = DrawFunctions.Count-1; i > -1; i--)
+                for (var i = DrawFunctions.Count - 1; i > -1; i--)
                 {
                     if (DrawFunctions[i] == null) continue;
 
@@ -146,24 +153,20 @@ namespace Hedra.Engine.Management
             }
 
             lock (ObjectMeshLock)
+            {
                 ObjectMeshBuffer.DrawBatched(ObjectMeshes);
-            Renderer.Enable(EnableCap.DepthTest);
-            if (!GameSettings.UseSSR) World.Draw(WorldRenderType.Water);
-            for (var i = TrailRenderer.Count - 1; i > -1; i--)
-            {
-                TrailRenderer[i].Draw();
-            }
-            for (var i = ParticleRenderer.Count-1; i > -1; i--)
-            {
-                ParticleRenderer[i].Draw();
             }
 
+            Renderer.Enable(EnableCap.DepthTest);
+            if (!GameSettings.UseSSR) World.Draw(WorldRenderType.Water);
+            for (var i = TrailRenderer.Count - 1; i > -1; i--) TrailRenderer[i].Draw();
+            for (var i = ParticleRenderer.Count - 1; i > -1; i--) ParticleRenderer[i].Draw();
+
             Culling.Draw();
-            Bullet.BulletPhysics.Draw();
+            BulletPhysics.Draw();
             lock (TransparentLock)
             {
                 for (var i = TransparentObjects.Count - 1; i > -1; i--)
-                {
                     if (TransparentObjects[i] is ICullable cullable)
                     {
                         if (!Culling.IsInside(cullable)) continue;
@@ -176,47 +179,47 @@ namespace Hedra.Engine.Management
                         TransparentObjects[i].Draw();
                         drawedObjects++;
                     }
-                }
             }
 
-            var worldCalls = 3;//Water + Static + Shadows
+            var worldCalls = 3; //Water + Static + Shadows
             CulledObjectsCount = CullableObjectsCount - drawedCullableObjects;
             DrawCalls = drawedObjects + UIRenderer.DrawCount + worldCalls;
         }
-        
+
         public static void Draw()
-        {    
-             VertsCount = 0;
-            if(MainBuffer.Enabled)
+        {
+            VertsCount = 0;
+            if (MainBuffer.Enabled)
             {
                 SetupDrawing();
                 MainBuffer.CaptureData();
                 BulkDraw();
                 MainBuffer.UnCaptureData();
             }
+
             MainBuffer.Draw();
-            
+
             UIRenderer.Draw();
-            
+
             MainBuffer.Clear();
-            
-            #if DEBUG
+
+#if DEBUG
             {
                 var code = Renderer.GetError();
-                if(code != ErrorCode.NoError)
-                    Log.WriteResult(false, "OpenGL error: "+code.ToString());
+                if (code != ErrorCode.NoError)
+                    Log.WriteResult(false, "OpenGL error: " + code);
             }
-            #endif
+#endif
         }
-         
-         public static void Load()
-         {
-             MainBuffer = new MainFBO
-             {
-                 Enabled = true
-             };
-             _initialized = true;
-         }
+
+        public static void Load()
+        {
+            MainBuffer = new MainFBO
+            {
+                Enabled = true
+            };
+            _initialized = true;
+        }
 
         public static void Dispose()
         {

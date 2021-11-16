@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using System.Linq;
 using System.Diagnostics;
+using System.Linq;
+using Hedra.Engine.Rendering.Core;
 using Hedra.Rendering;
+using SixLabors.Fonts;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -12,6 +13,17 @@ namespace Hedra.Engine.Rendering.UI
     {
         private static readonly object Lock = new object();
         private static readonly List<CacheOptions> Cache = new List<CacheOptions>();
+
+        public static int Count
+        {
+            get
+            {
+                lock (Lock)
+                {
+                    return Cache.Count;
+                }
+            }
+        }
 
         private static CacheOptions GetCache(string Text, Font TextFont, Color TextColor)
         {
@@ -90,29 +102,13 @@ namespace Hedra.Engine.Rendering.UI
                 if (--cache.Uses == 0)
                 {
                     Cache.Remove(cache);
-                    Core.TextureRegistry.Dispose(Id);
-                }
-            }
-        }
-
-        public static int Count
-        {
-            get
-            {
-                lock (Lock)
-                {
-                    return Cache.Count;
+                    TextureRegistry.Dispose(Id);
                 }
             }
         }
 
         private class CacheOptions
         {
-            public string Text { get; set; }
-            public Font TextFont { get; set; }
-            public Color TextColor { get; set; }
-            public uint Id { get; set; }
-            public uint Uses { get; set; }
             public StackTrace _stack;
 
             public CacheOptions()
@@ -121,6 +117,12 @@ namespace Hedra.Engine.Rendering.UI
                 _stack = new StackTrace();
 #endif
             }
+
+            public string Text { get; set; }
+            public Font TextFont { get; set; }
+            public Color TextColor { get; set; }
+            public uint Id { get; set; }
+            public uint Uses { get; set; }
 
             public override string ToString()
             {

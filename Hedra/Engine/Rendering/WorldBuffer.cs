@@ -6,53 +6,64 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using System;
-using System.Numerics;
-using Hedra.Engine.Core;
 using System.Collections.Generic;
 using System.Linq;
-using Hedra.Engine.Core;
-using Hedra.Engine.Game;
+using System.Numerics;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Windowing;
-using Hedra.Game;
-using Hedra.Rendering;
 using Hedra.Framework;
+using Hedra.Game;
 
 namespace Hedra.Engine.Rendering
 {
     /// <summary>
-    /// Description of WorldBuffer.
+    ///     Description of WorldBuffer.
     /// </summary>
-    public class WorldBuffer 
+    public class WorldBuffer
     {
-        private readonly object _lock = new object();
         private readonly Dictionary<Vector2, ChunkRenderCommand> _chunkDict;
+        private readonly object _lock = new object();
         private List<KeyValuePair<Vector2, ChunkRenderCommand>> _chunkPairs;
+        private uint[] _counts;
+        private IntPtr[] _offset;
+
+        public WorldBuffer(PoolSize Size)
+        {
+            const int megabyte = 1048576;
+            var realPoolSize = (int)Size / 100f * 3f;
+            Indices = new GeometryPool<uint>((int)(megabyte * 1.25f * realPoolSize), sizeof(uint),
+                VertexAttribPointerType.UnsignedInt, BufferTarget.ElementArrayBuffer, BufferUsageHint.DynamicDraw);
+            Vertices = new GeometryPool<Vector3>((int)(megabyte * 1f * realPoolSize), HedraSize.Vector3,
+                VertexAttribPointerType.Float, BufferTarget.ArrayBuffer, BufferUsageHint.DynamicDraw);
+            Normals = new GeometryPool<Vector3>((int)(megabyte * 1f * realPoolSize), HedraSize.Vector3,
+                VertexAttribPointerType.Float, BufferTarget.ArrayBuffer, BufferUsageHint.DynamicDraw);
+            Colors = new GeometryPool<Vector4>((int)(megabyte * 1f * realPoolSize), HedraSize.Vector4,
+                VertexAttribPointerType.Float, BufferTarget.ArrayBuffer, BufferUsageHint.DynamicDraw);
+            Data = new VAO<Vector3, Vector4, Vector3>(Vertices.Buffer, Colors.Buffer, Normals.Buffer);
+
+            _offset = new IntPtr[GeneralSettings.MaxChunks];
+            _counts = new uint[GeneralSettings.MaxChunks];
+            _chunkDict = new Dictionary<Vector2, ChunkRenderCommand>();
+        }
+
         public GeometryPool<uint> Indices { get; }
         public GeometryPool<Vector3> Vertices { get; }
         public GeometryPool<Vector3> Normals { get; }
         public GeometryPool<Vector4> Colors { get; }
         public VAO<Vector3, Vector4, Vector3> Data { get; }
         public IComparer<KeyValuePair<Vector2, ChunkRenderCommand>> Comparer { get; set; }
-        private IntPtr[] _offset;
-        private uint[] _counts;
-        
-        public WorldBuffer(PoolSize Size)
-        {
-            const int megabyte = 1048576;
-            var realPoolSize = ((int) Size / 100f) * 3f;
-            Indices = new GeometryPool<uint>( (int) (megabyte * 1.25f * realPoolSize), sizeof(uint), VertexAttribPointerType.UnsignedInt, BufferTarget.ElementArrayBuffer, BufferUsageHint.DynamicDraw);
-            Vertices = new GeometryPool<Vector3>( (int) (megabyte * 1f * realPoolSize), HedraSize.Vector3, VertexAttribPointerType.Float, BufferTarget.ArrayBuffer, BufferUsageHint.DynamicDraw);
-            Normals = new GeometryPool<Vector3>( (int) (megabyte * 1f * realPoolSize), HedraSize.Vector3, VertexAttribPointerType.Float, BufferTarget.ArrayBuffer, BufferUsageHint.DynamicDraw);
-            Colors = new GeometryPool<Vector4>( (int) (megabyte * 1f * realPoolSize), HedraSize.Vector4, VertexAttribPointerType.Float, BufferTarget.ArrayBuffer, BufferUsageHint.DynamicDraw);
-            Data = new VAO<Vector3, Vector4, Vector3>(Vertices.Buffer, Colors.Buffer, Normals.Buffer);
-            
-            _offset = new IntPtr[GeneralSettings.MaxChunks];
-            _counts = new uint[GeneralSettings.MaxChunks];
-            _chunkDict = new Dictionary<Vector2, ChunkRenderCommand>();
-        }
+
+        public IntPtr[] Offsets => _offset;
+
+        public uint[] Counts => _counts;
+
+        public int AvailableMemory => Indices.AvailableMemory + Vertices.AvailableMemory + Colors.AvailableMemory +
+                                      Normals.AvailableMemory;
+
+        public int TotalMemory => Indices.TotalMemory + Vertices.TotalMemory + Colors.TotalMemory + Normals.TotalMemory;
 
         public void Bind(bool EnableVertexAttributes = true)
         {
@@ -63,7 +74,7 @@ namespace Hedra.Engine.Rendering
         {
             Indices.Bind();
         }
-        
+
         public void UnbindIndices()
         {
             Indices.Unbind();
@@ -73,7 +84,7 @@ namespace Hedra.Engine.Rendering
         {
             Data.Unbind();
         }
-        
+
         public void Discard()
         {
             Indices.ObjectMap.Clear();
@@ -100,12 +111,11 @@ namespace Hedra.Engine.Rendering
 
         public bool Remove(Vector2 Offset)
         {
-            
-            lock(_lock)
+            lock (_lock)
             {
                 if (_chunkDict.ContainsKey(Offset))
-                {                    
-                    var command = _chunkDict[Offset];                    
+                {
+                    var command = _chunkDict[Offset];
                     Indices.ObjectMap.Remove(command.Entries[0]);
                     Vertices.ObjectMap.Remove(command.Entries[1]);
                     Normals.ObjectMap.Remove(command.Entries[2]);
@@ -113,25 +123,25 @@ namespace Hedra.Engine.Rendering
                     _chunkDict.Remove(Offset);
                 }
             }
+
             return true;
         }
 
         public bool Update(Vector2 Offset, NativeVertexData Data)
         {
-            if (Data.IsEmpty)
-            {
-                return Remove(Offset);
-            }
-            return Add(Offset, Data);      
+            if (Data.IsEmpty) return Remove(Offset);
+            return Add(Offset, Data);
         }
-        
+
         public bool Has(Vector2 Offset)
         {
             lock (_lock)
+            {
                 return _chunkDict.ContainsKey(Offset);
+            }
         }
 
-        private unsafe bool Add(Vector2 Offset, NativeVertexData Data)
+        private bool Add(Vector2 Offset, NativeVertexData Data)
         {
             if (this.Data == null) return false;
             Data.AssertTriangulated();
@@ -147,6 +157,7 @@ namespace Hedra.Engine.Rendering
                 _chunkPairs = _chunkDict.ToList();
                 _chunkPairs.Sort(Comparer);
             }
+
             return true;
         }
 
@@ -157,14 +168,12 @@ namespace Hedra.Engine.Rendering
             entries[2] = Normals.Allocate(Data.Normals.InternalArray, Data.Normals.Count * HedraSize.Vector3);
             entries[3] = Colors.Allocate(Data.Colors.InternalArray, Data.Colors.Count * HedraSize.Vector4);
 
-            entries[0] = this.ReplaceIndices(Data.Indices.InternalArray, Data.Indices.Count * sizeof(uint), new MemoryEntry(), entries);
+            entries[0] = ReplaceIndices(Data.Indices.InternalArray, Data.Indices.Count * sizeof(uint),
+                new MemoryEntry(), entries);
 
-            for (int i = 0; i < entries.Length; i++)
-            {
+            for (var i = 0; i < entries.Length; i++)
                 if (entries[i] == null)
                     throw new OutOfMemoryException("Geometry pool ran out of space");
-
-            }
 
             var command = new ChunkRenderCommand();
             command.VertexCount = Data.Vertices.Count;
@@ -180,17 +189,19 @@ namespace Hedra.Engine.Rendering
             var entries = new MemoryEntry[4];
 
             //Indices are a whole different thing
-            entries[1] = Vertices.Update(Data.Vertices.InternalArray, Data.Vertices.Count * HedraSize.Vector3, previousEntries[1]);
-            entries[2] = Normals.Update(Data.Normals.InternalArray, Data.Normals.Count * HedraSize.Vector3, previousEntries[2]);
-            entries[3] = Colors.Update(Data.Colors.InternalArray, Data.Colors.Count * HedraSize.Vector4, previousEntries[3]);
+            entries[1] = Vertices.Update(Data.Vertices.InternalArray, Data.Vertices.Count * HedraSize.Vector3,
+                previousEntries[1]);
+            entries[2] = Normals.Update(Data.Normals.InternalArray, Data.Normals.Count * HedraSize.Vector3,
+                previousEntries[2]);
+            entries[3] = Colors.Update(Data.Colors.InternalArray, Data.Colors.Count * HedraSize.Vector4,
+                previousEntries[3]);
 
-            entries[0] = this.ReplaceIndices(Data.Indices.InternalArray, Data.Indices.Count * sizeof(uint), previousEntries[0], entries);
+            entries[0] = ReplaceIndices(Data.Indices.InternalArray, Data.Indices.Count * sizeof(uint),
+                previousEntries[0], entries);
 
-            for (int i = 0; i < entries.Length; i++)
-            {
+            for (var i = 0; i < entries.Length; i++)
                 if (entries[i] == null)
                     throw new OutOfMemoryException("Geometry pool ran out of space.");
-            }
 
             var command = new ChunkRenderCommand
             {
@@ -202,28 +213,32 @@ namespace Hedra.Engine.Rendering
             _chunkDict[Offset] = command;
         }
 
-        private MemoryEntry ReplaceIndices(NativeArray<uint> Data, int SizeInBytes, MemoryEntry Entry, MemoryEntry[] Entries)
-          {            
-            if(Entry.Length != SizeInBytes)
+        private MemoryEntry ReplaceIndices(NativeArray<uint> Data, int SizeInBytes, MemoryEntry Entry,
+            MemoryEntry[] Entries)
+        {
+            if (Entry.Length != SizeInBytes)
             {
-                int Offset = 0;
+                var Offset = 0;
                 //Find a gap were this data can be inserted
-                Indices.ObjectMap.Sort( MemoryEntry.Compare  );
-                for(int i = 0; i < Indices.ObjectMap.Count; i++){
-                    
-                    if(i == 0 && Indices.ObjectMap[i].Offset > SizeInBytes)
+                Indices.ObjectMap.Sort(MemoryEntry.Compare);
+                for (var i = 0; i < Indices.ObjectMap.Count; i++)
+                {
+                    if (i == 0 && Indices.ObjectMap[i].Offset > SizeInBytes)
                     {
                         Offset = 0;
                         break;
                     }
-                    
-                    if(i == Indices.ObjectMap.Count-1)
+
+                    if (i == Indices.ObjectMap.Count - 1)
                     {
-                        Offset = Indices.ObjectMap[Indices.ObjectMap.Count-1].Offset + Indices.ObjectMap[Indices.ObjectMap.Count-1].Length;
+                        Offset = Indices.ObjectMap[Indices.ObjectMap.Count - 1].Offset +
+                                 Indices.ObjectMap[Indices.ObjectMap.Count - 1].Length;
                         break;
                     }
-                    
-                    if(Indices.ObjectMap[i] != Entry && Indices.ObjectMap[i+1].Offset - (Indices.ObjectMap[i].Offset + Indices.ObjectMap[i].Length) >= SizeInBytes)
+
+                    if (Indices.ObjectMap[i] != Entry &&
+                        Indices.ObjectMap[i + 1].Offset - (Indices.ObjectMap[i].Offset + Indices.ObjectMap[i].Length) >=
+                        SizeInBytes)
                     {
                         Offset = Indices.ObjectMap[i].Offset + Indices.ObjectMap[i].Length;
                         break;
@@ -232,27 +247,24 @@ namespace Hedra.Engine.Rendering
 
                 if (Offset + SizeInBytes > Indices.TotalMemory)
                 {
-                    this.Indices.DrawAndSave();
-                    this.Vertices.DrawAndSave();
+                    Indices.DrawAndSave();
+                    Vertices.DrawAndSave();
                     throw new OutOfMemoryException("GeometryPool<uint> is out of memory");
                 }
+
                 Entry.Offset = Offset;
                 Entry.Length = SizeInBytes;
-                if(Indices.ObjectMap.Contains(Entry))
+                if (Indices.ObjectMap.Contains(Entry))
                     Indices.ObjectMap.Remove(Entry);
-                
-                Indices.ObjectMap.Add(Entry);
 
+                Indices.ObjectMap.Add(Entry);
             }
-            
-            var newCount = (uint) (Entries[1].Offset / Vertices.TypeSizeInBytes);
-            for(var i = 0; i < Data.Length; i++)
-            {
-                Data[i] += newCount;
-            }
-            
+
+            var newCount = (uint)(Entries[1].Offset / Vertices.TypeSizeInBytes);
+            for (var i = 0; i < Data.Length; i++) Data[i] += newCount;
+
             Indices.UpdateBuffer(Data, Entry.Offset, SizeInBytes);
-            return Entry;                                   
+            return Entry;
         }
 
         public int BuildCounts(Dictionary<Vector2, Chunk> ToDraw)
@@ -266,30 +278,24 @@ namespace Hedra.Engine.Rendering
             var index = 0;
             lock (_lock)
             {
-                foreach(var pair in _chunkPairs)
-                {        
+                foreach (var pair in _chunkPairs)
+                {
                     var count = 0;
-                    var offset = 0;                
-                    if(ToDraw.ContainsKey(pair.Key))
-                    {    
+                    var offset = 0;
+                    if (ToDraw.ContainsKey(pair.Key))
+                    {
                         count = pair.Value.DrawCount;
-                        offset = pair.Value.Entries[0].Offset;                    
-                    }                
+                        offset = pair.Value.Entries[0].Offset;
+                    }
+
                     CountsArray[index] = (uint)count;
-                    OffsetsArray[index] = (IntPtr) offset;
+                    OffsetsArray[index] = (IntPtr)offset;
 
                     index++;
                 }
             }
+
             return _chunkPairs.Count;
         }
-
-        public IntPtr[] Offsets => _offset;
-        
-        public uint[] Counts => _counts;
-        
-        public int AvailableMemory => Indices.AvailableMemory + Vertices.AvailableMemory + Colors.AvailableMemory + Normals.AvailableMemory;
-        
-        public int TotalMemory => Indices.TotalMemory + Vertices.TotalMemory + Colors.TotalMemory + Normals.TotalMemory;
     }
 }

@@ -20,26 +20,26 @@ vec2 Unpack(float inp, int prec)
 }
 
 float not(float x){
-	return 1.0 - x;
+    return 1.0 - x;
 }
 
-float when_lt(float x, float y) {//smaller
-  return max(sign(y - x), 0.0);
+float when_lt(float x, float y) { //smaller
+    return max(sign(y - x), 0.0);
 }
 
 const int prec = int(2048.0);
 
 void main()
 {
-	vec3 Vertex = InVertex;
-	vec2 Unpacked = Unpack(InColor.a, prec);
-	float Addon = Fancy * ( cos(Time + Unpacked.y * 8.0) + 0.8) * 0.715 * Unpacked.x;
+    vec3 Vertex = InVertex;
+    vec2 Unpacked = Unpack(InColor.a, prec);
+    float Addon = Fancy * (cos(Time + Unpacked.y * 8.0) + 0.8) * 0.715 * Unpacked.x;
 
-	float invert_uk = when_lt(Unpacked.y, 0.5);
-	Vertex.x += invert_uk * Addon;
-	Vertex.z -= invert_uk * Addon;
-	Vertex.x -= not(invert_uk) * Addon;
-	Vertex.z += not(invert_uk) * Addon;
-	gl_Position = MVP * vec4(Vertex, 1.0);
-	Alpha = InColor.a;
+    float invert_uk = when_lt(Unpacked.y, 0.5);
+    Vertex.x += invert_uk * Addon;
+    Vertex.z -= invert_uk * Addon;
+    Vertex.x -= not(invert_uk) * Addon;
+    Vertex.z += not(invert_uk) * Addon;
+    gl_Position = MVP * vec4(Vertex, 1.0);
+    Alpha = InColor.a;
 }

@@ -1,15 +1,8 @@
 using System;
-using System.Linq;
-using Hedra.BiomeSystem;
-using Hedra.Core;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.PlantSystem.Harvestables;
-using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.Items;
-using Hedra.Rendering;
-using System.Numerics;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.PlantSystem
@@ -18,8 +11,11 @@ namespace Hedra.Engine.PlantSystem
     {
         public override CacheItem Type => CacheItem.Mushroom;
 
-        public override float Scale(Random Rng) => 1.0f + Rng.NextFloat() * .25f;
-        
         protected override Item ItemCollect => ItemPool.Grab(ItemType.Mushroom);
+
+        public override float Scale(Random Rng)
+        {
+            return 1.0f + Rng.NextFloat() * .25f;
+        }
     }
 }

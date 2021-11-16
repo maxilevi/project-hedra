@@ -12,7 +12,7 @@
     }
   ],
   "Class": "Warrior",
-  "Behaviour" : "Friendly",
+  "Behaviour": "Friendly",
   "Immune": true,
   "AttackPower": 1.0,
   "AttackSpeed": 1.0,

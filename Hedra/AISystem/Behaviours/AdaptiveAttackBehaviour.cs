@@ -3,7 +3,6 @@ using System.Linq;
 using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.EntitySystem;
 using Hedra.Numerics;
@@ -14,7 +13,7 @@ namespace Hedra.AISystem.Behaviours
     {
         private readonly AttackObject[] _attacks;
         private readonly Timer _cooldownTimer;
-        
+
         public AdaptiveAttackBehaviour(IEntity Parent, AttackAnimationTemplate[] Templates) : base(Parent)
         {
             if (!(Parent.Model is QuadrupedModel))
@@ -26,23 +25,23 @@ namespace Hedra.AISystem.Behaviours
             };
         }
 
+        private bool HasTarget => Target != null;
+
         public override void Update()
         {
             HandleFollowing();
-            var availableAttacks = HasTarget ? _attacks.Where(T => !T.InCooldown && Parent.IsNear(Target, T.Range)).ToArray() : null;
+            var availableAttacks = HasTarget
+                ? _attacks.Where(T => !T.InCooldown && Parent.IsNear(Target, T.Range)).ToArray()
+                : null;
             if (!Parent.Model.IsAttacking && HasTarget && Parent.Distance(Target) > GetLowestRange(availableAttacks))
-            {
                 Follow.Update();
-            }
-            else if(!Parent.Model.IsAttacking && HasTarget)
-            {
-                Parent.LookAt(Target);
-            }
+            else if (!Parent.Model.IsAttacking && HasTarget) Parent.LookAt(Target);
             if (CanAttack(availableAttacks))
             {
                 FollowTimer.Reset();
                 SelectAndDoAttack(availableAttacks);
             }
+
             UpdateCooldowns();
         }
 
@@ -69,6 +68,7 @@ namespace Hedra.AISystem.Behaviours
                     DoAttack(Array.IndexOf(_attacks, AvailableAttacks[i]));
                     break;
                 }
+
                 rng -= AvailableAttacks[i].Chance;
             }
         }
@@ -85,27 +85,20 @@ namespace Hedra.AISystem.Behaviours
         {
             var attacks = new AttackObject[Templates.Length];
             for (var i = 0; i < Templates.Length; ++i)
-            {
                 attacks[i] = new AttackObject
                 {
                     Chance = Templates[i].Chance,
                     MaxCooldown = Templates[i].Cooldown,
                     Range = Templates[i].Range
                 };
-            }
             return attacks;
         }
 
         private void UpdateCooldowns()
         {
             _cooldownTimer.Tick();
-            for (var i = 0; i < _attacks.Length; ++i)
-            {
-                _attacks[i].Cooldown -= Time.Frametime;
-            }
+            for (var i = 0; i < _attacks.Length; ++i) _attacks[i].Cooldown -= Time.Frametime;
         }
-
-        private bool HasTarget => Target != null;
 
         private class AttackObject
         {

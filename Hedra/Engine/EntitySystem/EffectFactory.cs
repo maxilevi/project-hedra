@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Hedra.Engine.Core;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.EntitySystem;
@@ -18,18 +17,18 @@ namespace Hedra.Engine.EntitySystem
 
         private ApplyEffectComponent ApplyEffectBuilder(EffectTemplate Template, IEntity Mob)
         {
-            return (ApplyEffectComponent) Activator.CreateInstance(
+            return (ApplyEffectComponent)Activator.CreateInstance(
                 this[Template.Name],
                 Mob,
-                (int) Template.Chance,
+                (int)Template.Chance,
                 Template.Damage,
                 Template.Duration
             );
         }
-        
+
         private EntityComponent DefaultBuilder(EffectTemplate Template, IEntity Mob)
         {
-            return (EntityComponent) Activator.CreateInstance(
+            return (EntityComponent)Activator.CreateInstance(
                 this[Template.Name],
                 Mob
             );

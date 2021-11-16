@@ -1,14 +1,9 @@
-using System.Linq;
 using System;
 using System.Collections.Generic;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using Hedra.Engine.Core;
+using System.Linq;
+using System.Numerics;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Rendering.Core;
-using Hedra.Rendering;
-using System.Numerics;
-using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
 
 namespace Hedra.Engine.Rendering
@@ -21,6 +16,13 @@ namespace Hedra.Engine.Rendering
         {
             _buffers = Buffers;
         }
+
+        public IComparer<KeyValuePair<Vector2, ChunkRenderCommand>> Comparer
+        {
+            set => Each(B => B.Comparer = value);
+        }
+
+        public int TotalMemory => _buffers.Sum(B => B.TotalMemory);
 
         public bool Remove(Vector2 Offset)
         {
@@ -100,12 +102,5 @@ namespace Hedra.Engine.Rendering
         {
             for (var i = 0; i < _buffers.Length; ++i) Buffer(_buffers[i]);
         }
-
-        public IComparer<KeyValuePair<Vector2, ChunkRenderCommand>> Comparer
-        {
-            set => Each(B => B.Comparer = value);
-        }
-
-        public int TotalMemory => _buffers.Sum(B => B.TotalMemory);
     }
 }

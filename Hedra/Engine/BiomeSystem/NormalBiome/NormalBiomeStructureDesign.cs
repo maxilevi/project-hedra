@@ -1,6 +1,4 @@
 using Hedra.BiomeSystem;
-using Hedra.Engine.StructureSystem;
-using Hedra.Engine.StructureSystem.GhostTown;
 using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.Structures;
@@ -14,7 +12,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             /* Default structures */
             AddDesign(new SpawnCampfireDesign());
             AddDesign(new SpawnVillageDesign());
-            
+
             AddDesign(new VillageDesign());
             AddDesign(new GraveyardDesign());
             AddDesign(new GiantTreeDesign());

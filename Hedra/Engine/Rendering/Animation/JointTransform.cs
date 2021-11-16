@@ -6,23 +6,24 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using System;
 using System.Numerics;
 
 namespace Hedra.Engine.Rendering.Animation
 {
     /// <summary>
-    /// Description of JointTransform.
+    ///     Description of JointTransform.
     /// </summary>
     public struct JointTransform : IEquatable<JointTransform>
     {
         public Vector3 Position { get; }
         public Quaternion Rotation { get; }
-        
+
         private Matrix4x4 _lastLocalTransform;
         private Quaternion _lastRotation;
         private Vector3 _lastPosition;
-    
+
         public JointTransform(Vector3 Position, Quaternion Rotation)
         {
             this.Position = Position;
@@ -31,7 +32,7 @@ namespace Hedra.Engine.Rendering.Animation
             _lastRotation = Quaternion.Identity;
             _lastPosition = Vector3.Zero;
         }
-    
+
         /**
          * In this method the bone-space transform matrix is constructed by
          * translating an identity matrix using the position variable and then
@@ -40,8 +41,8 @@ namespace Hedra.Engine.Rendering.Animation
          * transform matrix.
          * 
          * @return This bone-space joint transform as a matrix. The exact same
-         *         transform as represented by the position and rotation in this
-         *         instance, just in matrix form.
+         * transform as represented by the position and rotation in this
+         * instance, just in matrix form.
          */
         public Matrix4x4 LocalTransform
         {
@@ -55,7 +56,7 @@ namespace Hedra.Engine.Rendering.Animation
                 return _lastLocalTransform = matrix;
             }
         }
-    
+
         /**
          * Interpolates between two transforms based on the progression value. The
          * result is a new transform which is part way between the two original
@@ -66,15 +67,15 @@ namespace Hedra.Engine.Rendering.Animation
          * interpolate between Euler rotations.
          * 
          * @param frameA
-         *            - the previous transform
+         * - the previous transform
          * @param frameB
-         *            - the next transform
+         * - the next transform
          * @param progression
-         *            - a number between 0 and 1 indicating how far between the two
-         *            transforms to interpolate. A progression value of 0 would
-         *            return a transform equal to "frameA", a value of 1 would
-         *            return a transform equal to "frameB". Everything else gives a
-         *            transform somewhere in-between the two.
+         * - a number between 0 and 1 indicating how far between the two
+         * transforms to interpolate. A progression value of 0 would
+         * return a transform equal to "frameA", a value of 1 would
+         * return a transform equal to "frameB". Everything else gives a
+         * transform somewhere in-between the two.
          * @return
          */
         public static JointTransform Interpolate(JointTransform FrameA, JointTransform FrameB, float Progression)
@@ -83,18 +84,18 @@ namespace Hedra.Engine.Rendering.Animation
             var rot = Extensions.SlerpExt(FrameA.Rotation, FrameB.Rotation, Progression);
             return new JointTransform(pos, rot);
         }
-        
+
         /**
          * Linearly interpolates between two translations based on a "progression"
          * value.
          * 
          * @param start
-         *            - the start translation.
+         * - the start translation.
          * @param end
-         *            - the end translation.
+         * - the end translation.
          * @param progression
-         *            - a value between 0 and 1 indicating how far to interpolate
-         *            between the two translations.
+         * - a value between 0 and 1 indicating how far to interpolate
+         * between the two translations.
          * @return
          */
         private static Vector3 Interpolate(Vector3 Start, Vector3 End, float Progression)
@@ -113,8 +114,8 @@ namespace Hedra.Engine.Rendering.Animation
         public override bool Equals(object Obj)
         {
             if (ReferenceEquals(null, Obj)) return false;
-            if (Obj.GetType() != this.GetType()) return false;
-            return Equals((JointTransform) Obj);
+            if (Obj.GetType() != GetType()) return false;
+            return Equals((JointTransform)Obj);
         }
 
         public override int GetHashCode()
@@ -129,7 +130,7 @@ namespace Hedra.Engine.Rendering.Animation
         {
             return new JointTransform(Position, Rotation);
         }
-        
+
         public static JointTransform Default { get; } = new JointTransform(Vector3.Zero, Quaternion.Identity);
     }
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Threading;
-using Hedra.Engine.Game;
 using Hedra.Engine.IO;
 using Hedra.Game;
 
@@ -8,22 +7,24 @@ namespace Hedra.Engine.Generation.ChunkSystem
 {
     public class Worker
     {
-        private Thread _workerThread;
-        private readonly AutoResetEvent _resetEvent;
-        private object _owner;
-        private Action _action;
         private const int MB = 1024 * 1024;
+        private readonly AutoResetEvent _resetEvent;
+        private Action _action;
+        private readonly Thread _workerThread;
 
         public Worker()
         {
             _resetEvent = new AutoResetEvent(false);
-            _workerThread = new Thread(this.Update, MB * 4)
+            _workerThread = new Thread(Update, MB * 4)
             {
                 IsBackground = true,
                 Priority = ThreadPriority.Lowest
             };
             _workerThread.Start();
         }
+
+        public bool IsWorking => _action != null;
+        public object Owner { get; private set; }
 
         public void Update()
         {
@@ -33,7 +34,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 try
                 {
                     _action.Invoke();
-                    _owner = null;
+                    Owner = null;
                     _action = null;
                 }
                 catch (Exception e)
@@ -46,11 +47,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public void Do(Action Job, object Owner)
         {
             _action = Job;
-            _owner = Owner;
+            this.Owner = Owner;
             _resetEvent.Set();
         }
-
-        public bool IsWorking => _action != null;
-        public object Owner => _owner;
     }
 }

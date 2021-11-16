@@ -1,26 +1,23 @@
 using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
+using System.Numerics;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player.Inventory;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
-using Hedra.Items;
+using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-using System.Numerics;
 
 namespace Hedra.Engine.Player.ToolbarSystem
 {
     public class ToolbarInventoryInterface : InventoryArrayInterface
     {
-        private readonly IPlayer _player;
         private readonly Panel _panel;
+        private readonly IPlayer _player;
         private readonly RenderableTexture[] _textBackgrounds;
-        private ObjectMesh _foodMesh;
-        private Item _foodItem;
         private Item _builtFoodItem;
+        private Item _foodItem;
+        private ObjectMesh _foodMesh;
         private Vector3 _foodSize;
 
         public ToolbarInventoryInterface(IPlayer Player, InventoryArray Array, int Offset, int Length, int SlotsPerLine,
@@ -51,44 +48,6 @@ namespace Hedra.Engine.Player.ToolbarSystem
             Buttons[Buttons.Length - 1].Texture.IdPointer = () => _foodItem != null
                 ? InventoryItemRenderer.Draw(_foodMesh, _foodItem, true, _foodSize)
                 : GUIRenderer.TransparentTexture;
-        }
-
-        public override void UpdateView()
-        {
-            for (var i = 0; i < _textBackgrounds.Length; i++)
-            {
-                if (Enabled) _textBackgrounds[i].Enable();
-                if (Array[i].HasAttribute("AbilityType") && Array[i].GetAttribute<Type>("AbilityType") == null)
-                {
-                    ButtonsText[i].Text = string.Empty;
-                    _textBackgrounds[i].Disable();
-                }
-                else
-                {
-                    ButtonsText[i].Text = i < Toolbar.InteractableItems
-                        ? (i + 1).ToString()
-                        : i == Toolbar.InteractableItems
-                            ? "M1"
-                            : i == Toolbar.InteractableItems + 1
-                                ? "M2"
-                                : Hedra.Localization.Controls.Eat.ToString().ToUpperInvariant();
-                }
-            }
-        }
-
-        public void Update()
-        {
-            _foodItem = _player.Inventory.Food;
-            if (_foodItem != _builtFoodItem && _foodItem != null)
-            {
-                _foodMesh = InventoryItemRenderer.BuildModel(_foodItem.Model, out _foodSize);
-                _builtFoodItem = _foodItem;
-            }
-        }
-
-        private void OnInventoryUpdated()
-        {
-            //this.ButtonsText[this.ButtonsText.Length - 1].Text = _player.Inventory.Food?.GetAttribute<int>(CommonAttributes.Amount).ToString() ?? string.Empty;
         }
 
         public override bool Enabled
@@ -142,6 +101,44 @@ namespace Hedra.Engine.Player.ToolbarSystem
                     _textBackgrounds[i].Position = _textBackgrounds[i].Position - base.Position + value;
                 base.Position = value;
             }
+        }
+
+        public override void UpdateView()
+        {
+            for (var i = 0; i < _textBackgrounds.Length; i++)
+            {
+                if (Enabled) _textBackgrounds[i].Enable();
+                if (Array[i].HasAttribute("AbilityType") && Array[i].GetAttribute<Type>("AbilityType") == null)
+                {
+                    ButtonsText[i].Text = string.Empty;
+                    _textBackgrounds[i].Disable();
+                }
+                else
+                {
+                    ButtonsText[i].Text = i < Toolbar.InteractableItems
+                        ? (i + 1).ToString()
+                        : i == Toolbar.InteractableItems
+                            ? "M1"
+                            : i == Toolbar.InteractableItems + 1
+                                ? "M2"
+                                : Controls.Eat.ToString().ToUpperInvariant();
+                }
+            }
+        }
+
+        public void Update()
+        {
+            _foodItem = _player.Inventory.Food;
+            if (_foodItem != _builtFoodItem && _foodItem != null)
+            {
+                _foodMesh = InventoryItemRenderer.BuildModel(_foodItem.Model, out _foodSize);
+                _builtFoodItem = _foodItem;
+            }
+        }
+
+        private void OnInventoryUpdated()
+        {
+            //this.ButtonsText[this.ButtonsText.Length - 1].Text = _player.Inventory.Food?.GetAttribute<int>(CommonAttributes.Amount).ToString() ?? string.Empty;
         }
     }
 }

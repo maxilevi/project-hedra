@@ -1,15 +1,12 @@
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Linq;
+using System.Numerics;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Rendering.Geometry;
-using Hedra.Rendering;
-using System.Numerics;
-using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
 using Hedra.Numerics;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.EnvironmentSystem
 {
@@ -17,11 +14,9 @@ namespace Hedra.Engine.EnvironmentSystem
     {
         private static readonly Bitmap DefaultBitmap;
         private static readonly Shader Shader;
-        private readonly VBO<Vector3> _vertices;
         private readonly VAO<Vector3> _buffer;
         private readonly Cubemap _map;
-        public Matrix4x4 TransformationMatrix { get; set; } = Matrix4x4.Identity;
-        public Vector4 ColorMultiplier { get; set; } = Vector4.One;
+        private readonly VBO<Vector3> _vertices;
 
         static SkyOverlay()
         {
@@ -41,6 +36,9 @@ namespace Hedra.Engine.EnvironmentSystem
                 VertexAttribPointerType.Float);
             _buffer = new VAO<Vector3>(_vertices);
         }
+
+        public Matrix4x4 TransformationMatrix { get; set; } = Matrix4x4.Identity;
+        public Vector4 ColorMultiplier { get; set; } = Vector4.One;
 
         public void Draw()
         {

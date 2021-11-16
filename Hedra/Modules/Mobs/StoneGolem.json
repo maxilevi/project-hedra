@@ -1,5 +1,5 @@
 {
-  "Name" : "StoneGolem",
+  "Name": "StoneGolem",
   "MaxHealth": 680.0,
   "AttackDamage": 13.0,
   "AttackCooldown": 1.5,
@@ -10,7 +10,7 @@
   "Effects": [],
   "Drops": [],
   "Model": {
-    "AlignWithTerrain" :  false,
+    "AlignWithTerrain": false,
     "Path": "$DataFile$/Assets/Chr/Mob/StoneGolem/StoneGolem0Idle.dae",
     "Scale": 3.0,
     "IdleAnimations": [

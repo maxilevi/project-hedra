@@ -10,17 +10,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Linq;
+using System.Numerics;
 using Hedra.Core;
-using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Events;
-using Hedra.Engine.Game;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
-using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Rendering.Core;
@@ -31,8 +27,7 @@ using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
-using System.Numerics;
-
+using SixLabors.ImageSharp;
 
 namespace Hedra.Components
 {
@@ -40,23 +35,23 @@ namespace Hedra.Components
 
     public class TalkComponent : Component<IHumanoid>
     {
-        public event OnTalkEventHandler OnTalkingEnded;
-        public event OnTalkEventHandler OnTalkingStarted;
-        public bool Talking { get; private set; }
-        public bool CanTalk { get; set; } = true;
-        public bool AutoRemove { get; set; }
-
         private const float CharacterThreshold = .05f;
         public const int TalkRadius = 12;
         private static uint _talkBackground;
         private static Vector2 _talkBackgroundSize;
+
+        private static readonly Translation[] Phrases =
+        {
+            Translation.Default("...")
+        };
+
         private readonly List<Translation> _lines;
         private readonly Animation _talkingAnimation;
-        private bool _shouldTalk;
-        private bool _dialogCreated;
         private TextBillboard _board;
-        private Translation _thought;
+        private bool _dialogCreated;
+        private bool _shouldTalk;
         private IHumanoid _talker;
+        private Translation _thought;
         private bool _wasAvailableToTalk;
 
         static TalkComponent()
@@ -86,6 +81,14 @@ namespace Hedra.Components
                     _shouldTalk = true;
             });
         }
+
+        public bool Talking { get; private set; }
+        public bool CanTalk { get; set; } = true;
+        public bool AutoRemove { get; set; }
+
+        private ThoughtsComponent ThoughtComponent => Parent.SearchComponent<ThoughtsComponent>();
+        public event OnTalkEventHandler OnTalkingEnded;
+        public event OnTalkEventHandler OnTalkingStarted;
 
         private bool IsAvailableToTalk()
         {
@@ -270,12 +273,5 @@ namespace Hedra.Components
             base.Dispose();
             EventDispatcher.UnregisterKeyDown(this);
         }
-
-        private static readonly Translation[] Phrases =
-        {
-            Translation.Default("...")
-        };
-
-        private ThoughtsComponent ThoughtComponent => Parent.SearchComponent<ThoughtsComponent>();
     }
 }

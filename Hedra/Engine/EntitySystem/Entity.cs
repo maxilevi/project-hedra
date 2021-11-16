@@ -7,32 +7,31 @@
 
 using System;
 using System.Collections.Generic;
-using Hedra.AISystem.Humanoid;
+using System.Numerics;
 using Hedra.Components;
 using Hedra.Components.Effects;
 using Hedra.Core;
 using Hedra.Engine.Bullet;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem.BossSystem;
-using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
-using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
+using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Game;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Sound;
 using Hedra.WeaponSystem;
-using System.Numerics;
-using Hedra.Numerics;
 
 namespace Hedra.Engine.EntitySystem
 {
-    /// <summary>S
+    /// <summary>
+    ///     S
     ///     Description of Class1.
     /// </summary>
     public delegate void OnDamagingEventHandler(IEntity Victim, float Amount);
@@ -44,29 +43,43 @@ namespace Hedra.Engine.EntitySystem
     public delegate void OnComponentAdded(IComponent<IEntity> Component);
 
     public delegate void OnKillEventHandler(DeadEventArgs Args);
-    
+
     public class Entity : IEntity
     {
+        private readonly List<IComponent<IEntity>> _components = new List<IComponent<IEntity>>();
         private readonly object _componentsLock = new object();
-        public virtual float AttackingSpeedModifier => 0.75f;
+        private readonly TickSystem _tickSystem;
         private DamageComponent _damageManager;
         private int _drowningSoundTimer;
         private float _health = 100f;
         private int _isHumanoid = -1;
+        private bool _isUnderwater;
         private bool _knocked;
+        private float _knockedTime;
+        private BaseUpdatableModel _model;
         private string _name;
         private float _oxygen = 30;
         private float _prevHeight;
         private bool _spawningWithAnimation;
-        private float _knockedTime;
-        private bool _isUnderwater;
-        private Timer _splashTimer;
-        private readonly TickSystem _tickSystem;
-        private BaseUpdatableModel _model;
-        public IPhysicsComponent Physics { get; }
+        private readonly Timer _splashTimer;
 
-        private readonly List<IComponent<IEntity>> _components = new List<IComponent<IEntity>>();
+        public Entity()
+        {
+            _tickSystem = new TickSystem();
+            Attributes = new EntityAttributes();
+            ComponentManager = new EntityComponentManager(this);
+            Physics = new PhysicsComponent(this);
+            _splashTimer = new Timer(1f) { AutoReset = false };
+            BeforeDamaging += OnBeforeDamaging;
+            AfterDamaging += OnAfterDamaging;
+        }
+
         private bool Splashed { get; set; }
+
+        public bool IsActive { get; set; }
+        public bool IsBoss { get; set; }
+        public virtual float AttackingSpeedModifier => 0.75f;
+        public IPhysicsComponent Physics { get; }
 
         public event OnComponentAdded ComponentAdded;
         public event OnDamagingEventHandler AfterDamaging;
@@ -101,16 +114,17 @@ namespace Hedra.Engine.EntitySystem
                 if (value < 0)
                 {
                     IsDead = true;
-                    this.Dispose();
+                    Dispose();
                 }
+
                 _health = Math.Min(value, MaxHealth);
             }
         }
 
-        public bool InUpdateRange => (Physics.RigidbodyPosition - LocalPlayer.Instance.Model.Position).Xz().LengthSquared() < GeneralSettings.UpdateDistanceSquared;
+        public bool InUpdateRange =>
+            (Physics.RigidbodyPosition - LocalPlayer.Instance.Model.Position).Xz().LengthSquared() <
+            GeneralSettings.UpdateDistanceSquared;
 
-        public bool IsActive { get; set; }
-        public bool IsBoss { get; set; }
         public bool IsDead { get; set; }
         public virtual bool IsFriendly { get; set; }
         public bool IsGrounded { get; set; }
@@ -129,7 +143,7 @@ namespace Hedra.Engine.EntitySystem
         {
             get
             {
-                var dmg = this.SearchComponent<DamageComponent>();
+                var dmg = SearchComponent<DamageComponent>();
                 return dmg != null && dmg.Immune;
             }
         }
@@ -144,7 +158,7 @@ namespace Hedra.Engine.EntitySystem
             {
                 if (value == _knocked) return;
                 _knocked = value;
-                this.ShowIcon(_knocked ? (CacheItem?) CacheItem.KnockedIcon : null);
+                ShowIcon(_knocked ? (CacheItem?)CacheItem.KnockedIcon : null);
             }
         }
 
@@ -154,7 +168,7 @@ namespace Hedra.Engine.EntitySystem
         {
             get
             {
-                bool result = Enum.TryParse(Type, true, out MobType enumeration);
+                var result = Enum.TryParse(Type, true, out MobType enumeration);
                 return result ? enumeration : MobType.Unknown;
             }
 
@@ -183,8 +197,8 @@ namespace Hedra.Engine.EntitySystem
             {
                 if (_name != null) return _name;
 
-                var bar = this.SearchComponent<HealthBarComponent>();
-                var bossHealthBar = this.SearchComponent<BossHealthBarComponent>();
+                var bar = SearchComponent<HealthBarComponent>();
+                var bossHealthBar = SearchComponent<BossHealthBarComponent>();
                 if (bar != null)
                     return bar.Name;
 
@@ -193,7 +207,7 @@ namespace Hedra.Engine.EntitySystem
             set
             {
                 _name = value;
-                var healthBar = this.SearchComponent<INamedHealthBar>();
+                var healthBar = SearchComponent<INamedHealthBar>();
                 if (healthBar != null) healthBar.Name = _name;
             }
         }
@@ -209,7 +223,7 @@ namespace Hedra.Engine.EntitySystem
             get => Physics.RigidbodyPosition;
             set => Physics.Translate(-Position + value);
         }
-        
+
         public bool IsInsideABuilding { get; set; }
 
         public Vector3 Rotation
@@ -220,46 +234,21 @@ namespace Hedra.Engine.EntitySystem
 
         public string Type { get; set; } = MobType.None.ToString();
 
-        public Entity()
-        {
-            _tickSystem = new TickSystem();
-            Attributes = new EntityAttributes();
-            ComponentManager = new EntityComponentManager(this);
-            Physics = new PhysicsComponent(this);
-            _splashTimer = new Timer(1f) { AutoReset = false };
-            BeforeDamaging += OnBeforeDamaging;
-            AfterDamaging += OnAfterDamaging;
-        }
-        
-        private void OnBeforeDamaging(IEntity Victim, float Damage)
-        {
-            Victim.SearchComponent<DamageComponent>().OnDeadEvent += OnDead;
-        }
-        
-        private void OnAfterDamaging(IEntity Victim, float Damage)
-        {
-            Victim.SearchComponent<DamageComponent>().OnDeadEvent -= OnDead;
-        }
-
-        private void OnDead(DeadEventArgs Args)
-        {
-            Kill?.Invoke(Args);
-        }
-
         public void ShowIcon(CacheItem? IconType)
         {
-            this.ShowIcon(IconType, -1);
+            ShowIcon(IconType, -1);
         }
 
         public void ShowIcon(CacheItem? IconType, float Seconds)
         {
-            var iconComponent = this.SearchComponent<HeadIconComponent>();
+            var iconComponent = SearchComponent<HeadIconComponent>();
             if (iconComponent == null)
             {
                 iconComponent = new HeadIconComponent(this);
-                this.AddComponent(iconComponent);
+                AddComponent(iconComponent);
             }
-            if(Seconds < 0)
+
+            if (Seconds < 0)
                 iconComponent.ShowIcon(IconType);
             else
                 iconComponent.ShowIconFor(IconType, Seconds);
@@ -270,18 +259,18 @@ namespace Hedra.Engine.EntitySystem
             Damage(Amount, Damager, out Exp, out _, PlaySound, PushBack);
         }
 
-        public void Damage(float Amount, IEntity Damager, out float Exp, out float Inflicted, bool PlaySound = true, bool PushBack = true)
+        public void Damage(float Amount, IEntity Damager, out float Exp, out float Inflicted, bool PlaySound = true,
+            bool PushBack = true)
         {
             Damage(Amount, Damager, out Exp, out Inflicted, PlaySound, PushBack, DamageType.Unknown);
         }
 
-        public void Damage(float Amount, IEntity Damager, out float Exp, out float Inflicted, bool PlaySound, bool PushBack, DamageType DamageType)
+        public void Damage(float Amount, IEntity Damager, out float Exp, out float Inflicted, bool PlaySound,
+            bool PushBack, DamageType DamageType)
         {
             for (var i = 0; i < _components.Count; i++)
-            {
                 if (_components[i] is DamageComponent dmg)
                     _damageManager = dmg;
-            }
 
             Exp = 0;
             Inflicted = 0;
@@ -291,7 +280,7 @@ namespace Hedra.Engine.EntitySystem
             Damager?.InvokeBeforeDamaging(this, Amount);
             Damager?.InvokeDamageModifier(this, ref Amount);
             _damageManager.Damage(Amount, Damager, out Exp, out Inflicted, PlaySound, PushBack, DamageType);
-            if(Inflicted > 0)
+            if (Inflicted > 0)
                 Damager?.InvokeAfterDamaging(this, Amount);
         }
 
@@ -299,7 +288,7 @@ namespace Hedra.Engine.EntitySystem
         {
             BeforeDamaging?.Invoke(Invoker, Damage);
         }
-        
+
         public void InvokeAfterDamaging(IEntity Invoker, float Damage)
         {
             AfterDamaging?.Invoke(Invoker, Damage);
@@ -332,74 +321,50 @@ namespace Hedra.Engine.EntitySystem
 
         public void AddComponent(IComponent<IEntity> Component)
         {
-            if(Component == null) throw new ArgumentNullException($"{this.GetType()} component cannot be null");
+            if (Component == null) throw new ArgumentNullException($"{GetType()} component cannot be null");
             ComponentAdded?.Invoke(Component);
-            lock(_componentsLock)
+            lock (_componentsLock)
+            {
                 _components.Add(Component);
-            if(Component is ITickable tickable) _tickSystem.Add(tickable);
+            }
+
+            if (Component is ITickable tickable) _tickSystem.Add(tickable);
         }
 
         public void RemoveComponent(IComponent<IEntity> Component, bool Dispose = true)
         {
-            if (Component == null) throw new ArgumentNullException($"{this.GetType()} component cannot be null");
-            lock(_componentsLock)
+            if (Component == null) throw new ArgumentNullException($"{GetType()} component cannot be null");
+            lock (_componentsLock)
+            {
                 _components.Remove(Component);
+            }
+
             if (Component is ITickable tickable) _tickSystem.Remove(tickable);
-            if (Dispose)Component.Dispose();
+            if (Dispose) Component.Dispose();
         }
 
         public void RemoveComponentsOfType<T>() where T : IComponent<IEntity>
         {
-            var component = (IComponent<IEntity>) null;
-            while ((component = SearchComponent<T>()) != null)
-            {
-                RemoveComponent(component);
-            }
+            var component = (IComponent<IEntity>)null;
+            while ((component = SearchComponent<T>()) != null) RemoveComponent(component);
         }
 
         public T SearchComponent<T>()
         {
             for (var i = 0; i < _components.Count; i++)
-            {
                 if (_components[i] is T variable)
                     return variable;
-            }
 
-            return default(T);
+            return default;
         }
-        
+
         public T[] GetComponents<T>()
         {
             var list = new List<T>();
             for (var i = 0; i < _components.Count; i++)
-            {
                 if (_components[i] is T variable)
                     list.Add(variable);
-            }
             return list.ToArray();
-        }
-
-        private void UpdateEnvironment()
-        {
-            var underChunk = World.GetChunkAt(Position);
-            var currentBlock = World.GetBlockAt(Position + Vector3.UnitY * Model.Height);
-            var downBlock = World.GetBlockAt(Position + Vector3.UnitY * Model.Height * .6f);
-            if (currentBlock.Type == BlockType.Water)
-            {
-                if (!Splashed && _splashTimer.Tick())
-                {
-                    SplashEffect(underChunk);
-                    _splashTimer.Reset();
-                    Splashed = true;
-                }
-                IsUnderwater = true;
-            }
-            else if(downBlock.Type != BlockType.Water)
-            {
-                IsUnderwater = false;
-                Splashed = false;
-            }
-            this.HandleOxygen(currentBlock.Type);
         }
 
         public bool IsUnderwater
@@ -422,14 +387,122 @@ namespace Hedra.Engine.EntitySystem
 
                 _isUnderwater = value;
             }
-            
         }
-        
+
+        public void KnockForSeconds(float Seconds)
+        {
+            IsKnocked = true;
+            var accum = 0f;
+            TaskScheduler.While(
+                () => accum < 7.5f,
+                () =>
+                {
+                    var curr = 40f * Time.DeltaTime;
+                    accum += curr;
+                    Physics.Translate(Vector3.UnitY * curr);
+                }
+            );
+            _knockedTime = Seconds;
+        }
+
+        public virtual void Dispose()
+        {
+            if (Disposed) return;
+
+            Disposed = true;
+            World.RemoveEntity(this);
+            var components = _components.ToArray();
+            for (var i = components.Length - 1; i > -1; --i) components[i]?.Dispose();
+
+            (Model as IAudible)?.StopSound();
+
+            Physics.Dispose();
+            Model?.Dispose();
+            AfterDisposed?.Invoke();
+        }
+
+        public virtual void Draw()
+        {
+            if (IsDead) return;
+
+            Physics.Draw();
+            for (var i = _components.Count - 1; i > -1; --i)
+                if (!(_components[i] is IRenderable))
+                    _components[i].Draw();
+        }
+
+        public virtual void Update()
+        {
+            Model.Update();
+            Physics.Update();
+
+            if (IsDead) return;
+            SpawnAnimation();
+            UpdateEnvironment();
+            _tickSystem.Tick();
+            UpdateComponents(C => C != null && !(C is HealthBarComponent || C is BossHealthBarComponent));
+
+            if (IsKnocked)
+            {
+                _knockedTime -= Time.DeltaTime;
+                if (Model is HumanoidModel model) model.Human.IsRiding = false;
+                if (_knockedTime < 0) IsKnocked = false;
+            }
+        }
+
+        public void UpdateCriticalComponents()
+        {
+            UpdateComponents(C => C is HealthBarComponent || C is BossHealthBarComponent);
+            Model.BaseUpdate();
+        }
+
+        public bool Disposed { get; private set; }
+
+        private void OnBeforeDamaging(IEntity Victim, float Damage)
+        {
+            Victim.SearchComponent<DamageComponent>().OnDeadEvent += OnDead;
+        }
+
+        private void OnAfterDamaging(IEntity Victim, float Damage)
+        {
+            Victim.SearchComponent<DamageComponent>().OnDeadEvent -= OnDead;
+        }
+
+        private void OnDead(DeadEventArgs Args)
+        {
+            Kill?.Invoke(Args);
+        }
+
+        private void UpdateEnvironment()
+        {
+            var underChunk = World.GetChunkAt(Position);
+            var currentBlock = World.GetBlockAt(Position + Vector3.UnitY * Model.Height);
+            var downBlock = World.GetBlockAt(Position + Vector3.UnitY * Model.Height * .6f);
+            if (currentBlock.Type == BlockType.Water)
+            {
+                if (!Splashed && _splashTimer.Tick())
+                {
+                    SplashEffect(underChunk);
+                    _splashTimer.Reset();
+                    Splashed = true;
+                }
+
+                IsUnderwater = true;
+            }
+            else if (downBlock.Type != BlockType.Water)
+            {
+                IsUnderwater = false;
+                Splashed = false;
+            }
+
+            HandleOxygen(currentBlock.Type);
+        }
+
         private void HandleOxygen(BlockType Type)
         {
             // If the character is not moving and it's on the surface, then we shouldnt reduce the oxygen levels.
             if (Type == BlockType.Water) Oxygen -= Time.DeltaTime * 2f;
-            else if(Type == BlockType.Air) Oxygen += Time.DeltaTime * 4f;
+            else if (Type == BlockType.Air) Oxygen += Time.DeltaTime * 4f;
 
             if (!(Oxygen <= 0) || !(Time.DeltaTime > 0)) return;
             Damage(Time.DeltaTime * 5f, null, out _, _drowningSoundTimer == 128);
@@ -453,28 +526,12 @@ namespace Hedra.Engine.EntitySystem
             for (var i = 0; i < 30; i++) World.Particles.Emit();
         }
 
-        public void KnockForSeconds(float Seconds)
-        {
-            IsKnocked = true;
-            var accum = 0f;
-            TaskScheduler.While(
-                () => accum < 7.5f,
-                () =>
-                {
-                    var curr = 40f * Time.DeltaTime;
-                    accum += curr;
-                    Physics.Translate(Vector3.UnitY * curr);
-                }
-            );
-            _knockedTime = Seconds;
-        }
-
         public void SpawnAnimation()
         {
             if (PlaySpawningAnimation)
             {
                 PlaySpawningAnimation = false;
-                if(Model.Enabled)
+                if (Model.Enabled)
                     SoundPlayer.PlaySound(SoundType.GlassBreakInverted, Position, false, 1f, .8f);
 
                 if (Model is IDisposeAnimation animable)
@@ -489,8 +546,8 @@ namespace Hedra.Engine.EntitySystem
                     Model.Alpha = 1;
                 }
             }
+
             if (_spawningWithAnimation)
-            {
                 if (Model is IDisposeAnimation animable)
                 {
                     if (animable.DisposeTime < 0)
@@ -499,83 +556,23 @@ namespace Hedra.Engine.EntitySystem
                         animable.Recompose();
                         Model.Alpha = 1;
                     }
+
                     Model.Alpha += Time.IndependentDeltaTime * 2.0f * .25f;
                     animable.DisposeTime -= Time.IndependentDeltaTime * 2.0f;
                 }
-            }
-        }
-
-        public virtual void Dispose()
-        {
-            if (Disposed) return;
-
-            Disposed = true;
-            World.RemoveEntity(this);
-            var components = _components.ToArray(); 
-            for (var i = components.Length-1; i > -1; --i)
-            {
-                components[i]?.Dispose();
-            }
-
-            (Model as IAudible)?.StopSound();
-
-            Physics.Dispose();
-            Model?.Dispose();
-            AfterDisposed?.Invoke();
-        }
-
-        public virtual void Draw()
-        {
-            if (IsDead) return;
-
-            Physics.Draw();
-            for (var i = _components.Count - 1; i > -1; --i)
-            {
-                if (!(_components[i] is IRenderable))
-                    _components[i].Draw();
-            }
-        }
-
-        public virtual void Update()
-        {
-            this.Model.Update();
-            this.Physics.Update();
-
-            if (IsDead) return;
-            this.SpawnAnimation();
-            this.UpdateEnvironment();
-            this._tickSystem.Tick();
-            UpdateComponents(C => C != null && !(C is HealthBarComponent || C is BossHealthBarComponent));
-
-            if (IsKnocked)
-            {
-                _knockedTime -= Time.DeltaTime;
-                if (Model is HumanoidModel model)
-                {
-                    model.Human.IsRiding = false;
-                }
-                if (_knockedTime < 0) IsKnocked = false;
-            }
-        }
-
-        public void UpdateCriticalComponents()
-        {
-            UpdateComponents(C => C is HealthBarComponent || C is BossHealthBarComponent);
-            Model.BaseUpdate();
         }
 
         private void UpdateComponents(Func<IComponent<IEntity>, bool> Filter)
         {
             var beforeComponents = default(IComponent<IEntity>[]);
             lock (_componentsLock)
-                beforeComponents = _components.ToArray();
-            for (var i = beforeComponents.Length - 1; i > -1; --i)
             {
-                if(Filter(beforeComponents[i]))
-                    beforeComponents[i]?.Update();
+                beforeComponents = _components.ToArray();
             }
-        }
 
-        public bool Disposed { get; private set; }
+            for (var i = beforeComponents.Length - 1; i > -1; --i)
+                if (Filter(beforeComponents[i]))
+                    beforeComponents[i]?.Update();
+        }
     }
 }

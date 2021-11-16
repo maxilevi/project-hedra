@@ -1,22 +1,15 @@
-using System;
-using Hedra.Engine.EntitySystem;
+using System.Numerics;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.ModuleSystem;
-using Hedra.Engine.Player;
-using Hedra.EntitySystem;
-using Hedra.Items;
-using System.Numerics;
-using Hedra.API;
 
 namespace Hedra.Engine.WorldBuilding
 {
     public interface IWorldBuilding
     {
-        BasePlateau[] GetPlateausFor(Vector2 Position);
-        IGroundwork[] GetGroundworksFor(Vector2 Position);
         BasePlateau[] Plateaux { get; }
         IGroundwork[] Groundworks { get; }
+        BasePlateau[] GetPlateausFor(Vector2 Position);
+        IGroundwork[] GetGroundworksFor(Vector2 Position);
         Chest SpawnChest(Vector3 Position, Item Item);
         string GenerateName();
         void SetupStructure(CollidableStructure Structure);

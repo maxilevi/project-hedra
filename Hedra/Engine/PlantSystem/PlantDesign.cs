@@ -1,14 +1,10 @@
 using System;
-using System.Collections.Generic;
+using System.Numerics;
 using Hedra.BiomeSystem;
-using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
-using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Rendering;
-using System.Numerics;
 
 namespace Hedra.Engine.PlantSystem
 {
@@ -18,17 +14,21 @@ namespace Hedra.Engine.PlantSystem
 
         public VertexData Model => CacheManager.GetModel(Type);
 
+        public virtual bool HasCustomPlacement => false;
+
+        public virtual bool AffectedByLod => true;
+
         public abstract Matrix4x4 TransMatrix(Vector3 Position, Random Rng);
 
         public abstract NativeVertexData Paint(NativeVertexData Data, Region Region, Random Rng);
 
-        public virtual void AddShapes(Chunk UnderChunk, Matrix4x4 TransMatrix){}
+        public virtual void AddShapes(Chunk UnderChunk, Matrix4x4 TransMatrix)
+        {
+        }
 
-        public virtual bool HasCustomPlacement => false;
-        
-        public virtual bool AffectedByLod => true;
-        
         public virtual void CustomPlacement(NativeVertexData Data, Matrix4x4 TransMatrix, Chunk UnderChunk)
-            => throw new NotImplementedException();
+        {
+            throw new NotImplementedException();
+        }
     }
 }

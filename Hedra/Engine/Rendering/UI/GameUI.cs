@@ -8,41 +8,34 @@
  */
 
 using System;
-using System.Collections.Generic;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Game;
-using Hedra.Engine.Localization;
 using System.Numerics;
-using Hedra.API;
-using Hedra.Engine.Management;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
-using Hedra.Engine.Player.QuestSystem;
 using Hedra.Game;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Rendering.UI
 {
     /// <summary>
-    /// Description of GameUI.
+    ///     Description of GameUI.
     /// </summary>
     public class GameUI : Panel
     {
-        private readonly ProfileUIElement _playerProfile;
-        public readonly BackgroundTexture Cross;
         private readonly BackgroundTexture _compass;
-        private readonly RenderableTexture _oxygenBackground;
-        private readonly RenderableTexture _staminaBackground;
-        private readonly RenderableTexture _staminaIcon;
-        private readonly RenderableTexture _oxygenIcon;
-        private readonly TexturedBar _oxygenBar;
-        private readonly TexturedBar _staminaBar;
         private readonly GUIText _consecutiveHits;
-        private readonly SlingShotAnimation _slingShot;
+        private readonly RenderableTexture _oxygenBackground;
+        private readonly TexturedBar _oxygenBar;
+        private readonly RenderableTexture _oxygenIcon;
         private readonly IPlayer _player;
+        private readonly ProfileUIElement _playerProfile;
+        private readonly SlingShotAnimation _slingShot;
+        private readonly RenderableTexture _staminaBackground;
+        private readonly TexturedBar _staminaBar;
+        private readonly RenderableTexture _staminaIcon;
+        public readonly BackgroundTexture Cross;
         private string _currentClass;
         private bool _shouldPlay;
 
@@ -144,6 +137,44 @@ namespace Hedra.Engine.Rendering.UI
             };
         }
 
+        private bool Oxygen
+        {
+            set
+            {
+                if (value)
+                {
+                    _oxygenBar.Enable();
+                    _oxygenBackground.Enable();
+                    _oxygenIcon.Enable();
+                }
+                else
+                {
+                    _oxygenBackground.Disable();
+                    _oxygenBar.Disable();
+                    _oxygenIcon.Disable();
+                }
+            }
+        }
+
+        private bool Stamina
+        {
+            set
+            {
+                if (value)
+                {
+                    _staminaBar.Enable();
+                    _staminaBackground.Enable();
+                    _staminaIcon.Enable();
+                }
+                else
+                {
+                    _staminaBackground.Disable();
+                    _staminaBar.Disable();
+                    _staminaIcon.Disable();
+                }
+            }
+        }
+
         public void Update()
         {
             _compass.Disable();
@@ -199,44 +230,6 @@ namespace Hedra.Engine.Rendering.UI
             _playerProfile.ClassLogo.BaseTexture.TextureElement.TextureId =
                 Graphics2D.LoadFromAssets(_player.Class.Logo);
             _playerProfile.ClassLogo.Scale = Graphics2D.SizeFromAssets(_player.Class.Logo).As1920x1080();
-        }
-
-        private bool Oxygen
-        {
-            set
-            {
-                if (value)
-                {
-                    _oxygenBar.Enable();
-                    _oxygenBackground.Enable();
-                    _oxygenIcon.Enable();
-                }
-                else
-                {
-                    _oxygenBackground.Disable();
-                    _oxygenBar.Disable();
-                    _oxygenIcon.Disable();
-                }
-            }
-        }
-
-        private bool Stamina
-        {
-            set
-            {
-                if (value)
-                {
-                    _staminaBar.Enable();
-                    _staminaBackground.Enable();
-                    _staminaIcon.Enable();
-                }
-                else
-                {
-                    _staminaBackground.Disable();
-                    _staminaBar.Disable();
-                    _staminaIcon.Disable();
-                }
-            }
         }
     }
 }

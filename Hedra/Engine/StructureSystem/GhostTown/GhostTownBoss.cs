@@ -1,18 +1,18 @@
-using Facepunch.Steamworks;
+using System.Numerics;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Structures;
-using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.GhostTown
 {
     public class GhostTownBoss : BaseStructure, ICompletableStructure
     {
-        public IEntity Boss { get; set; }
         public GhostTownBoss(Vector3 Position) : base(Position)
         {
         }
+
+        public IEntity Boss { get; set; }
 
         public override void Dispose()
         {

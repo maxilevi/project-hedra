@@ -1,7 +1,5 @@
 using System;
 using Hedra.Engine.Generation;
-using Hedra.Engine.Generation.ChunkSystem;
-using System.Numerics;
 
 namespace Hedra.Engine.PlantSystem
 {
@@ -12,9 +10,12 @@ namespace Hedra.Engine.PlantSystem
         protected override BlockType[] Types { get; } =
         {
             BlockType.Grass,
-            BlockType.Stone,
+            BlockType.Stone
         };
 
-        protected override bool ShouldPlace(Random Rng) => Rng.Next(0, 3000) == 1;
+        protected override bool ShouldPlace(Random Rng)
+        {
+            return Rng.Next(0, 3000) == 1;
+        }
     }
 }

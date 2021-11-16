@@ -1,7 +1,6 @@
 using System;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.SkillSystem;
-using Hedra.WeaponSystem;
 
 namespace Hedra.Engine.Player
 {

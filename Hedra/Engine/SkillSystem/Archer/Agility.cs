@@ -9,10 +9,7 @@
 
 using System;
 using System.Globalization;
-using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
-using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Rendering;
 
@@ -20,10 +17,21 @@ namespace Hedra.Engine.SkillSystem.Archer
 {
     public class Agility : PassiveSkill
     {
+        protected override int MaxLevel => 10;
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Agility.png");
+        public override string Description => Translations.Get("agility_skill_desc");
+        public override string DisplayName => Translations.Get("agility_skill");
+
+        public override string[] Attributes => new[]
+        {
+            Translations.Get("agility_cost_change",
+                (-StaminaFormula(true)).ToString("0.0", CultureInfo.InvariantCulture))
+        };
+
         private float StaminaFormula(bool Clamp = false)
         {
-            if(Clamp)
-                return -1f * Math.Max(Level,1);
+            if (Clamp)
+                return -1f * Math.Max(Level, 1);
             return -1f * Level;
         }
 
@@ -36,14 +44,5 @@ namespace Hedra.Engine.SkillSystem.Archer
         {
             User.DodgeCost = Humanoid.DefaultDodgeCost;
         }
-
-        protected override int MaxLevel => 10;
-        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Agility.png");
-        public override string Description => Translations.Get("agility_skill_desc");
-        public override string DisplayName => Translations.Get("agility_skill");
-        public override string[] Attributes => new[]
-        {
-            Translations.Get("agility_cost_change", (-StaminaFormula(true)).ToString("0.0", CultureInfo.InvariantCulture))
-        };
     }
 }

@@ -1,9 +1,7 @@
 using System;
-using System.Numerics;
 using Hedra.Components;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 using Hedra.Game;
@@ -13,14 +11,14 @@ namespace Hedra.Engine.QuestSystem
 {
     public class QuestGiverComponent : QuestComponent
     {
-        private readonly TalkComponent _talk;
         private readonly IMissionDesign _questArchetype;
-        private MissionObject _quest;
+        private readonly TalkComponent _talk;
         private bool _canGiveQuest = true;
+        private MissionObject _quest;
 
         public QuestGiverComponent(IHumanoid Parent, IMissionDesign QuestArchetype) : base(Parent)
         {
-            if(Parent.SearchComponent<TalkComponent>() != null)
+            if (Parent.SearchComponent<TalkComponent>() != null)
                 throw new ArgumentException("There can only be 1 talk component");
             _questArchetype = QuestArchetype;
             Parent.ShowIcon(AlertIcon);
@@ -30,21 +28,21 @@ namespace Hedra.Engine.QuestSystem
             Parent.AddComponent(_talk);
         }
 
+        protected virtual CacheItem AlertIcon => CacheItem.AttentionIcon;
+
         public override void Update()
         {
             _talk.CanTalk = _canGiveQuest;
             if (Parent.IsNear(GameManager.Player, 16) && !_talk.Talking && !Parent.IsMoving)
-            {
                 Parent.LookAt(GameManager.Player);
-            }
         }
 
         private void OnQuestCompleted(MissionObject Object)
         {
-            if(Object == _quest)
+            if (Object == _quest)
                 Parent.RemoveComponent(this);
         }
-        
+
         private void OnQuestAbandoned(MissionObject Object)
         {
             if (Object == _quest)
@@ -53,7 +51,8 @@ namespace Hedra.Engine.QuestSystem
 
         private void AddQuest(IEntity Talker)
         {
-            if(!(Talker is IPlayer player) || (Parent.Position - player.Position).LengthSquared() > 32 * 32 || _quest == null) return;
+            if (!(Talker is IPlayer player) || (Parent.Position - player.Position).LengthSquared() > 32 * 32 ||
+                _quest == null) return;
             _canGiveQuest = false;
             player.Questing.Start(Parent, _quest);
             player.Questing.QuestAbandoned += OnQuestAbandoned;
@@ -85,7 +84,7 @@ namespace Hedra.Engine.QuestSystem
 
         private void RemoveThoughtsIfNecessary()
         {
-            if(Parent.SearchComponent<ThoughtsComponent>() != null)
+            if (Parent.SearchComponent<ThoughtsComponent>() != null)
                 Parent.RemoveComponent(Parent.SearchComponent<ThoughtsComponent>());
         }
 
@@ -96,11 +95,10 @@ namespace Hedra.Engine.QuestSystem
                 _quest.Owner.Questing.QuestAbandoned -= OnQuestAbandoned;
                 _quest.Owner.Questing.QuestCompleted -= OnQuestCompleted;
             }
+
             Parent.RemoveComponent(_talk);
             Parent.ShowIcon(null);
             base.Dispose();
         }
-
-        protected virtual CacheItem AlertIcon => CacheItem.AttentionIcon;
     }
 }

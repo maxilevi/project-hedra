@@ -1,7 +1,6 @@
 using Hedra.Components.Effects;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Scripting;
 using Hedra.Rendering;
 
@@ -31,7 +30,8 @@ namespace Hedra.Items
             if (Item.Name == PotionType.StaminaPotion.ToString())
             {
                 Owner.AddComponentForSeconds(
-                    new StaminaRegenComponent(Owner, Owner.StaminaRegen * Item.GetAttribute<float>(PotionAttributes.PotionBonus.ToString())),
+                    new StaminaRegenComponent(Owner,
+                        Owner.StaminaRegen * Item.GetAttribute<float>(PotionAttributes.PotionBonus.ToString())),
                     Item.GetAttribute<int>(PotionAttributes.PotionDuration.ToString())
                 );
                 VisualEffects.Outline(Owner, Colors.Yellow, 1);
@@ -41,7 +41,8 @@ namespace Hedra.Items
             if (Item.Name == PotionType.StrengthPotion.ToString())
             {
                 Owner.AddComponentForSeconds(
-                    new AttackPowerBonusComponent(Owner, Owner.AttackPower * Item.GetAttribute<float>(PotionAttributes.PotionBonus.ToString())),
+                    new AttackPowerBonusComponent(Owner,
+                        Owner.AttackPower * Item.GetAttribute<float>(PotionAttributes.PotionBonus.ToString())),
                     Item.GetAttribute<int>(PotionAttributes.PotionDuration.ToString())
                 );
                 VisualEffects.Outline(Owner, Colors.Magenta, 1);

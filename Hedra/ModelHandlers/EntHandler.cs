@@ -1,4 +1,3 @@
-using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 
@@ -10,12 +9,8 @@ namespace Hedra.ModelHandlers
         {
             var region = World.BiomePool.GetRegion(Mob.Position);
             var woodColor = region.Colors.WoodColors[Utils.Rng.Next(0, region.Colors.WoodColors.Length)];
-            Model.Paint(new []
-            {
-                woodColor,
-                region.Colors.LeavesColors[Utils.Rng.Next(0, region.Colors.LeavesColors.Length)],
-                woodColor * .65f
-            });
+            Model.Paint(woodColor, region.Colors.LeavesColors[Utils.Rng.Next(0, region.Colors.LeavesColors.Length)],
+                woodColor * .65f);
         }
     }
 }

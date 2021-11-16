@@ -5,12 +5,12 @@ namespace Hedra.Engine.Player.BoatSystem
 {
     public class Boat : IBoat, IDisposable
     {
-        private readonly IHumanoid _human;
-        private readonly BoatStateHandler _stateHandler;
-        private readonly BoatModelHandler _modelHandler;
         private readonly BoatAudioHandler _audioHandler;
+        private readonly IHumanoid _human;
+        private readonly BoatModelHandler _modelHandler;
+        private readonly BoatStateHandler _stateHandler;
 
-        
+
         public Boat(IHumanoid Humanoid)
         {
             _human = Humanoid;
@@ -37,7 +37,7 @@ namespace Hedra.Engine.Player.BoatSystem
         {
             Enabled = false;
         }
-        
+
         public bool Enabled
         {
             get => _stateHandler.Enabled;

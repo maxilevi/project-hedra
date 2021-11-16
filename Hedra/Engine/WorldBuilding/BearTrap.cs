@@ -1,30 +1,28 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using Hedra.Core;
-using Hedra.Sound;
 using Hedra.Engine.Management;
-using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
-using System.Numerics;
+using Hedra.Sound;
 
 namespace Hedra.Engine.WorldBuilding
 {
     public sealed class BearTrap : WorldObject
     {
         private static readonly VertexData TrapModel;
-        private readonly List<Predicate<IEntity>> _ignore;
-        private readonly Timer _timer;
-        private readonly bool _stun;
         private readonly float _damage;
+        private readonly List<Predicate<IEntity>> _ignore;
+        private readonly bool _stun;
+        private readonly Timer _timer;
 
         static BearTrap()
         {
             TrapModel = AssetManager.PLYLoader("Assets/Env/BearTrap.ply", Vector3.One * 2.5f);
         }
-        
+
         public BearTrap(IEntity Parent, Vector3 Position, float Duration, float Damage, bool Stun) : base(Parent)
         {
             Model = ObjectMesh.FromVertexData(TrapModel.Clone());
@@ -45,10 +43,7 @@ namespace Hedra.Engine.WorldBuilding
                 Position.Z
             );*/
             HandleCollision();
-            if (_timer.Tick())
-            {
-                Dispose();
-            }
+            if (_timer.Tick()) Dispose();
         }
 
         private void HandleCollision()
@@ -56,8 +51,8 @@ namespace Hedra.Engine.WorldBuilding
             var entities = World.Entities;
             for (var i = 0; i < entities.Count - 1; ++i)
             {
-                if(entities[i] == Parent) continue;
-                if(_ignore.Any(X => X(entities[i]))) continue;
+                if (entities[i] == Parent) continue;
+                if (_ignore.Any(X => X(entities[i]))) continue;
                 if ((Position - entities[i].Position).LengthSquared() < 6 * 6)
                 {
                     Activate(entities[i]);
@@ -73,7 +68,7 @@ namespace Hedra.Engine.WorldBuilding
 
         private void Activate(IEntity Target)
         {
-            if(_stun) Target.KnockForSeconds(5);
+            if (_stun) Target.KnockForSeconds(5);
             SoundPlayer.PlaySound(SoundType.BearTrap, Target.Position);
             Target.Damage(_damage, Parent, out var exp);
             if (Parent is IHumanoid human) human.XP += exp;

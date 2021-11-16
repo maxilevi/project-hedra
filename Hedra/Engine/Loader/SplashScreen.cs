@@ -1,27 +1,23 @@
 using System;
+using System.Numerics;
 using Hedra.Core;
-using Hedra.Engine.Game;
 using Hedra.Engine.Management;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Game;
-using Hedra.Rendering;
-using System.Numerics;
 using Hedra.Numerics;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.Loader
 {
     public class SplashScreen
     {
-        private readonly GUITexture _studioLogo;
         private readonly GUITexture _studioBackground;
-        private bool _finishedLoading;
-        private float _splashOpacity = 1;
+        private readonly GUITexture _studioLogo;
+        private readonly float _splashOpacity = 1;
 
         public SplashScreen()
         {
-            
             _studioLogo = new GUITexture(Graphics2D.LoadFromAssets("Assets/splash-logo.png"),
                 Graphics2D.SizeFromAssets("Assets/splash-logo.png"), Vector2.Zero)
             {
@@ -35,27 +31,27 @@ namespace Hedra.Engine.Loader
                 Enabled = true,
                 Opacity = 0
             };
-            
+
 //#if !DEBUG
             //TaskScheduler.After(4, () => _splashOpacity = 0);
 //#endif
 //#if DEBUG
-            this._finishedLoading = true;
+            FinishedLoading = true;
 //#endif
-
         }
+
+        public bool FinishedLoading { get; private set; }
 
         public void Update()
         {
-            if (!this._finishedLoading)
+            if (!FinishedLoading)
             {
-                _studioBackground.Opacity = Mathf.Lerp(_studioBackground.Opacity, _splashOpacity, Time.IndependentDeltaTime);
+                _studioBackground.Opacity =
+                    Mathf.Lerp(_studioBackground.Opacity, _splashOpacity, Time.IndependentDeltaTime);
                 _studioLogo.Opacity = Mathf.Lerp(_studioLogo.Opacity, _splashOpacity, Time.IndependentDeltaTime);
 
                 if (_splashOpacity < 0.05f && Math.Abs(_studioLogo.Opacity - _splashOpacity) < 0.05f)
-                {
-                    this._finishedLoading = true;
-                }
+                    FinishedLoading = true;
             }
         }
 
@@ -64,7 +60,5 @@ namespace Hedra.Engine.Loader
             Renderer.Viewport(0, 0, GameSettings.Width, GameSettings.Height);
             DrawManager.UIRenderer.Draw(_studioBackground);
         }
-
-        public bool FinishedLoading => _finishedLoading;
     }
 }

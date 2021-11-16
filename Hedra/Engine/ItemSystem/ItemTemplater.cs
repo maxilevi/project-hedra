@@ -12,7 +12,7 @@ namespace Hedra.Engine.ItemSystem
         public ItemTemplater(Dictionary<string, ItemTemplate> TemplatesDict, object Lock)
         {
             _itemTemplates = TemplatesDict;
-            ItemTemplater._lock = Lock;
+            _lock = Lock;
         }
 
         public ItemTemplate[] Templates

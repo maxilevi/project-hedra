@@ -6,9 +6,9 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using System.Numerics;
 using Hedra.Engine.Management;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
@@ -16,11 +16,10 @@ using Hedra.Rendering;
 namespace Hedra.Engine.Player
 {
     /// <summary>
-    /// Description of Lamp.
+    ///     Description of Lamp.
     /// </summary>
     public class HandLamp
     {
-        private IHumanoid Humanoid { get; }
         private readonly WorldLight _lamp;
         private bool _enabled;
 
@@ -36,11 +35,7 @@ namespace Hedra.Engine.Player
             UpdateManager.Remove(_lamp);
         }
 
-        public void Update()
-        {
-            _lamp.Position = Humanoid.Position;
-            _lamp.Update();
-        }
+        private IHumanoid Humanoid { get; }
 
         public bool Enabled
         {
@@ -54,7 +49,13 @@ namespace Hedra.Engine.Player
         }
 
         public PointLight LightObject => _lamp.LightObject;
-        
+
+        public void Update()
+        {
+            _lamp.Position = Humanoid.Position;
+            _lamp.Update();
+        }
+
         public void Dispose()
         {
             _lamp.Dispose();

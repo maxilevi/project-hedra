@@ -1,7 +1,7 @@
 using System;
+using System.Numerics;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.StructureSystem.VillageSystem.Templates;
-using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
 {

@@ -1,18 +1,11 @@
 using Hedra.AISystem.Behaviours;
-using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Game;
-using System.Numerics;
 
 namespace Hedra.AISystem
 {
     public class HostileAIComponent : BasicAIComponent
     {
-        protected RoamBehaviour Roam { get; }
-        protected RetaliateBehaviour Retaliate { get; }
-        protected HostileBehaviour Hostile { get; }
-
         public HostileAIComponent(IEntity Parent) : base(Parent)
         {
             Roam = new RoamBehaviour(Parent)
@@ -23,6 +16,12 @@ namespace Hedra.AISystem
             Hostile = new HostileBehaviour(Parent);
         }
 
+        protected RoamBehaviour Roam { get; }
+        protected RetaliateBehaviour Retaliate { get; }
+        protected HostileBehaviour Hostile { get; }
+
+        public override AIType Type => AIType.Hostile;
+
         public override void Update()
         {
             if (Retaliate.Enabled)
@@ -32,13 +31,10 @@ namespace Hedra.AISystem
             else
             {
                 Hostile.Update();
-                if (!Hostile.Enabled)
-                {
-                    Roam.Update();
-                }
+                if (!Hostile.Enabled) Roam.Update();
             }
         }
-        
+
         public override void Draw()
         {
             if (GameSettings.DebugAI)
@@ -46,16 +42,16 @@ namespace Hedra.AISystem
                 DrawDebugCollision();
                 if (Retaliate.Enabled)
                     Retaliate.Draw();
-                else if(Hostile.Enabled)
+                else if (Hostile.Enabled)
                     Hostile.Draw();
             }
         }
-        
+
         public void SetTarget(IEntity Entity)
         {
             Hostile.SetTarget(Entity);
         }
-        
+
         public override void Dispose()
         {
             base.Dispose();
@@ -63,7 +59,5 @@ namespace Hedra.AISystem
             Hostile.Dispose();
             Retaliate.Dispose();
         }
-
-        public override AIType Type => AIType.Hostile;
     }
 }

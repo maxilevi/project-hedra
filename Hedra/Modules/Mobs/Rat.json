@@ -1,5 +1,5 @@
 ﻿{
-  "Name" : "Rat", 
+  "Name": "Rat",
   "MaxHealth": 120.0,
   "AttackDamage": 1.0,
   "Speed": 1.25,
@@ -7,9 +7,7 @@
   "Level": 1,
   "AIType": "Hostile",
   "Effects": [],
-  
   "Drops": [],
-  
   "Model": {
     "Path": "$DataFile$/Assets/Chr/RatIdle.dae",
     "Scale": 1.0,
@@ -31,5 +29,5 @@
         "Speed": 1.15
       }
     ]
-  } 
+  }
 }

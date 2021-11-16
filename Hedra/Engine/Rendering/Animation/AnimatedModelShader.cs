@@ -6,27 +6,27 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.Shaders;
-using Newtonsoft.Json.Serialization;
 
 namespace Hedra.Engine.Rendering.Animation
 {
     /// <summary>
-    /// Description of AnimatedModelShader.
+    ///     Description of AnimatedModelShader.
     /// </summary>
     public class AnimatedModelShader
     {
         /// <summary>
-        /// Kind of hacky but replaces some shader variables to generate a compatible shader
+        ///     Kind of hacky but replaces some shader variables to generate a compatible shader
         /// </summary>
         /// <returns></returns>
         public static Shader GenerateDeathShader()
         {
             string VertexSource()
             {
-                string sourceV = AssetManager.ReadShader("Shaders/AnimatedModel.vert");
+                var sourceV = AssetManager.ReadShader("Shaders/AnimatedModel.vert");
                 if (CompatibilityManager.SupportsGeometryShaders)
                 {
                     sourceV = sourceV.Replace("pass_color", "pass_colors");
@@ -34,6 +34,7 @@ namespace Hedra.Engine.Rendering.Animation
                     sourceV = sourceV.Replace("pass_normal", "pass_normals");
                     sourceV = sourceV.Replace("pass_lightDiffuse", "pass_lightDiffuses");
                 }
+
                 return sourceV;
             }
 
@@ -44,11 +45,9 @@ namespace Hedra.Engine.Rendering.Animation
 
             string FragmentSource()
             {
-                string sourceF = AssetManager.ReadShader("Shaders/AnimatedModel.frag");
+                var sourceF = AssetManager.ReadShader("Shaders/AnimatedModel.frag");
                 if (CompatibilityManager.SupportsGeometryShaders)
-                {
                     sourceF = sourceF.Replace("pass_visibility);", "1.0);");
-                }
                 return sourceF;
             }
 

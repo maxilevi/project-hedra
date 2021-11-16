@@ -1,14 +1,8 @@
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
+using System.Numerics;
 using Hedra.Engine.ItemSystem.Templates;
 using Hedra.Engine.Management;
-using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Rendering;
-using System.Numerics;
 
 namespace Hedra.Engine.ItemSystem
 {
@@ -28,10 +22,9 @@ namespace Hedra.Engine.ItemSystem
             lock (Lock)
             {
                 if (!ModelCache.ContainsKey(path))
-                {
                     ModelCache.Add(path, AdjustModel(AssetManager.LoadModel(path, Vector3.One)));
-                }
             }
+
             var returnModel = ModelCache[path].Clone();
             returnModel.Transform(Matrix4x4.CreateScale(ModelTemplate.Scale));
             return returnModel;
@@ -40,8 +33,8 @@ namespace Hedra.Engine.ItemSystem
         private static VertexData AdjustModel(VertexData Model)
         {
             //var center = Model.Vertices.Aggregate( (V1,V2) => V1+V2) / Model.Vertices.Count;
-           // Model.Vertices = Model.Vertices.Select(V => V-center).ToList();
-            
+            // Model.Vertices = Model.Vertices.Select(V => V-center).ToList();
+
             return Model;
         }
     }

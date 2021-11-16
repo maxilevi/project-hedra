@@ -6,17 +6,11 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using Hedra.Engine.Core;
-using System;
-using Hedra.Core;
-using Hedra.Engine.Rendering;
+
 using System.Numerics;
-using Hedra.Engine.Management;
+using Hedra.Core;
 using Hedra.Engine.EnvironmentSystem;
-using Hedra.Engine.Game;
-using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.IO;
-using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Windowing;
@@ -26,16 +20,10 @@ using Hedra.Numerics;
 namespace Hedra.Engine.Rendering
 {
     /// <summary>
-    /// Description of ShadowRenderer.
+    ///     Description of ShadowRenderer.
     /// </summary>
     public static class ShadowRenderer
     {
-        public static Vector3 LightPosition { get; set; }
-        public static Shader Shader { get; set; }
-        public static FBO ShadowFbo { get; set; }
-        public static Matrix4x4 DepthProj { get; set; }
-        public static Matrix4x4 DepthView { get; set; }
-        public static Matrix4x4 ShadowMvp { get; set; }
         private static float _shadowDistance;
         private static uint _prevFbo;
 
@@ -46,6 +34,13 @@ namespace Hedra.Engine.Rendering
             ShadowDistance = 1400;
             SetQuality(GameSettings.ShadowQuality);
         }
+
+        public static Vector3 LightPosition { get; set; }
+        public static Shader Shader { get; set; }
+        public static FBO ShadowFbo { get; set; }
+        public static Matrix4x4 DepthProj { get; set; }
+        public static Matrix4x4 DepthView { get; set; }
+        public static Matrix4x4 ShadowMvp { get; set; }
 
         public static float ShadowDistance
         {
@@ -58,17 +53,21 @@ namespace Hedra.Engine.Rendering
                     -_shadowDistance, _shadowDistance,
                     -_shadowDistance, _shadowDistance);
             }
-        }        
+        }
 
         public static void Bind()
         {
             _prevFbo = Renderer.FBOBound;
             ShadowFbo.Bind();
-            
-            var position = GameManager.Player.View.CameraEyePosition.Xz().ToVector3() + Vector3.UnitY * (GameManager.Player.Position.Y + 512);
-            var normalizedLight = (new Vector3(LightPosition.X, LightPosition.Y, LightPosition.Z)).NormalizedFast();
-            var invertedLight = Matrix4x4.CreateRotationY(SkyManager.DayTime / 24000f * 360f * Mathf.Radian).Inverted().Transposed();
-            normalizedLight = Vector3.TransformNormal(new Vector3(normalizedLight.X, normalizedLight.Y, normalizedLight.Z), invertedLight);
+
+            var position = GameManager.Player.View.CameraEyePosition.Xz().ToVector3() +
+                           Vector3.UnitY * (GameManager.Player.Position.Y + 512);
+            var normalizedLight = new Vector3(LightPosition.X, LightPosition.Y, LightPosition.Z).NormalizedFast();
+            var invertedLight = Matrix4x4.CreateRotationY(SkyManager.DayTime / 24000f * 360f * Mathf.Radian).Inverted()
+                .Transposed();
+            normalizedLight =
+                Vector3.TransformNormal(new Vector3(normalizedLight.X, normalizedLight.Y, normalizedLight.Z),
+                    invertedLight);
 
             DepthView = Matrix4x4.CreateLookAt(normalizedLight + position, position, Vector3.UnitY);
             ShadowMvp = DepthView * DepthProj;
@@ -80,7 +79,7 @@ namespace Hedra.Engine.Rendering
             Renderer.CullFace(CullFaceMode.Front);
             Renderer.Enable(EnableCap.CullFace);
         }
-        
+
         public static void UnBind()
         {
             Culling.SetViewport();
@@ -88,7 +87,7 @@ namespace Hedra.Engine.Rendering
             Renderer.CullFace(CullFaceMode.Back);
             Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, _prevFbo);
         }
-        
+
         public static void SetQuality(int Quality)
         {
             Log.WriteLine($"Setting shadow quality to {Quality}");
@@ -101,20 +100,20 @@ namespace Hedra.Engine.Rendering
                     break;
                 case 2:
                     size = new Vector2(2048, 2048);
-                    break;                
+                    break;
                 case 3:
                     size = new Vector2(4096, 4096);
                     break;
                 default:
                     return;
-                    
             }
+
             ShadowFbo = new FBO((int)size.X, (int)size.Y, FramebufferAttachment.DepthAttachment,
                 PixelInternalFormat.DepthComponent16, new TextureParameter
                 {
                     Name = TextureParameterName.TextureCompareMode,
-                    Value = (int) TextureCompareMode.CompareRefToTexture
-                });       
+                    Value = (int)TextureCompareMode.CompareRefToTexture
+                });
         }
 
         public static void Dispose()

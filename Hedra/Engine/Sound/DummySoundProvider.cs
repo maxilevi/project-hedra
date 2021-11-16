@@ -8,7 +8,7 @@ namespace Hedra.Engine.Sound
     {
         public float Volume { get; set; }
         public Vector3 ListenerPosition { get; private set; }
-        
+
         public void Setup()
         {
         }
@@ -38,7 +38,7 @@ namespace Hedra.Engine.Sound
 
         public BufferFormat GetSoundFormat(int Channels, int Bits)
         {
-            return default(BufferFormat);
+            return default;
         }
 
         public void LoadSound(string Name, params string[] Names)

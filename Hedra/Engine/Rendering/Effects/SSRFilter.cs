@@ -1,6 +1,6 @@
+using System;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
-using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
 
 namespace Hedra.Engine.Rendering.Effects
@@ -13,7 +13,7 @@ namespace Hedra.Engine.Rendering.Effects
         {
             Dst.Bind();
             Bind();
-            
+
             DrawManager.UIRenderer.DrawQuad();
 
             UnBind();
@@ -26,16 +26,16 @@ namespace Hedra.Engine.Rendering.Effects
 
             SSRShader["projection"] = Renderer.ProjectionMatrix;
             SSRShader["view"] = Renderer.ModelViewMatrix;
-            
+
             SSRShader["gPosition"] = 0;
             Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.Texture2D, DrawManager.MainBuffer.Ssao.FirstPass.TextureId[1]);
-            
-            
+
+
             SSRShader["gNormal"] = 1;
             Renderer.ActiveTexture(TextureUnit.Texture1);
             Renderer.BindTexture(TextureTarget.Texture2D, DrawManager.MainBuffer.Ssao.FirstPass.TextureId[2]);
-            
+
             SSRShader["gFinalImage"] = 2;
             Renderer.ActiveTexture(TextureUnit.Texture2);
             Renderer.BindTexture(TextureTarget.Texture2D, DrawManager.MainBuffer.FinalFbo.TextureId[0]);
@@ -52,14 +52,14 @@ namespace Hedra.Engine.Rendering.Effects
             SSRShader.Unbind();
             Renderer.Enable(EnableCap.DepthTest);
             Renderer.Enable(EnableCap.CullFace);
-            
+
             Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.Texture2D, 0);
         }
-        
+
         public override void Dispose()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

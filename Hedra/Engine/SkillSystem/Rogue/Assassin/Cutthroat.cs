@@ -1,7 +1,4 @@
 using Hedra.Core;
-using Hedra.Engine.Localization;
-using Hedra.Engine.Rendering;
-using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
@@ -12,12 +9,29 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
 {
     public class Cutthroat : SingleAnimationSkill<IPlayer>
     {
-        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Cutthroat.png");
-        protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/RogueCutthroat.dae");
-        protected override bool CanMoveWhileCasting => false;
-        protected override float AnimationSpeed => 1.25f;
         private readonly Timer _updateStatusTimer = new Timer(.1f);
         private bool _canDo;
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Cutthroat.png");
+
+        protected override Animation SkillAnimation { get; } =
+            AnimationLoader.LoadAnimation("Assets/Chr/RogueCutthroat.dae");
+
+        protected override bool CanMoveWhileCasting => false;
+        protected override float AnimationSpeed => 1.25f;
+
+        protected override bool ShouldDisable => !_canDo;
+        protected override int MaxLevel => 15;
+        public override float MaxCooldown => 55 - 10f * (Level / (float)MaxLevel);
+        public override float ManaCost => 40;
+        private float DamagePercentage => .1f + .15f * (Level / (float)MaxLevel);
+        public override string Description => Translations.Get("cutthroat_desc");
+        public override string DisplayName => Translations.Get("cutthroat_skill");
+
+        public override string[] Attributes => new[]
+        {
+            Translations.Get("cutthroat_damage_change", (int)(DamagePercentage * 100)),
+            Translations.Get("cutthroat_bonus")
+        };
 
         protected override void OnAnimationMid()
         {
@@ -46,18 +60,5 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
         {
             return base.MeetsRequirements() && SkillUtils.IsBehindAny(User, out var entity) && entity is IHumanoid;
         }
-
-        protected override bool ShouldDisable => !_canDo;
-        protected override int MaxLevel => 15;
-        public override float MaxCooldown => 55 - 10f * (Level / (float)MaxLevel);
-        public override float ManaCost => 40;
-        private float DamagePercentage => .1f + .15f * (Level / (float) MaxLevel);
-        public override string Description => Translations.Get("cutthroat_desc");
-        public override string DisplayName => Translations.Get("cutthroat_skill");
-        public override string[] Attributes => new[]
-        {
-            Translations.Get("cutthroat_damage_change", (int)(DamagePercentage * 100)),
-            Translations.Get("cutthroat_bonus")
-        };
     }
 }

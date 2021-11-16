@@ -7,33 +7,31 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
+using System.Numerics;
 using Hedra.Core;
-using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
-using System.Numerics;
 
 namespace Hedra.Components.Effects
 {
     /// <summary>
-    /// Description of BurningComponent.
+    ///     Description of BurningComponent.
     /// </summary>
     public class FreezingComponent : EntityComponent
     {
-        private readonly float _totalTime;
-        private float _time;
-        private readonly float _totalDamage;
-        private int _pTime;
         private readonly IEntity _damager;
-        
+        private readonly float _totalDamage;
+        private readonly float _totalTime;
+        private int _pTime;
+        private float _time;
+
         public FreezingComponent(IEntity Parent, IEntity Damager, float TotalTime, float TotalDamage) : base(Parent)
         {
             _totalTime = TotalTime;
             _totalDamage = TotalDamage;
             _damager = Damager;
-            this.Start();
+            Start();
         }
 
         private void Start()
@@ -52,21 +50,18 @@ namespace Hedra.Components.Effects
                 Parent.Model.Pause = true;
             }
         }
-        
+
         public override void Update()
         {
             _time += Time.DeltaTime;
             if (!(_time >= 1)) return;
             _pTime++;
             _time = 0;
-            Parent.Damage( (_totalDamage / _totalTime), _damager, out var exp);
-            if(_damager != null && _damager is IHumanoid humanoid)
+            Parent.Damage(_totalDamage / _totalTime, _damager, out var exp);
+            if (_damager != null && _damager is IHumanoid humanoid)
                 humanoid.XP += exp;
 
-            if (!(_totalTime > _pTime && !Parent.IsDead && !Disposed))
-            {
-                Parent.RemoveComponent(this);
-            }
+            if (!(_totalTime > _pTime && !Parent.IsDead && !Disposed)) Parent.RemoveComponent(this);
         }
 
         public override void Dispose()

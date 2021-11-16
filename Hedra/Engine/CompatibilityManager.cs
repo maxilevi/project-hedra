@@ -1,24 +1,26 @@
 using System;
 using System.IO;
+using System.Numerics;
 using System.Text;
 using Hedra.Engine.IO;
-using Hedra.Engine.Native;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Rendering.Core;
-using System.Numerics;
-using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
-
 
 namespace Hedra.Engine
 {
     /// <summary>
-    /// For some reason, certain OpenGL functions explode on specific video cards.
-    /// This is a wrapper to avoid this issue and provide workarounds to that methods
+    ///     For some reason, certain OpenGL functions explode on specific video cards.
+    ///     This is a wrapper to avoid this issue and provide workarounds to that methods
     /// </summary>
-    public static  class CompatibilityManager
+    public static class CompatibilityManager
     {
-        public static Action<PrimitiveType, uint[], DrawElementsType, IntPtr[], int> MultiDrawElementsMethod { get; private set; }
+        public static Action<PrimitiveType, uint[], DrawElementsType, IntPtr[], int> MultiDrawElementsMethod
+        {
+            get;
+            private set;
+        }
+
         public static bool SupportsGeometryShaders { get; private set; } = true;
 
         public static void Load()
@@ -47,6 +49,7 @@ namespace Hedra.Engine
             {
                 Renderer.Severity = previousSeverity;
             }
+
             Log.WriteLine($"Geometry shaders are {(SupportsGeometryShaders ? "ENABLED" : "DISABLED")}");
         }
 
@@ -74,14 +77,15 @@ namespace Hedra.Engine
             {
                 var testVAO = PrepareTestData(out var indices, out var buffer);
                 Renderer.Severity = ErrorSeverity.High;
-                
+
                 Shader.Passthrough.Bind();
                 testVAO.Bind();
                 indices.Bind();
-                
+
                 Renderer.Provider
-                    .MultiDrawElements(PrimitiveType.Triangles, new []{3u}, DrawElementsType.UnsignedInt, new []{IntPtr.Zero}, 0);
-                
+                    .MultiDrawElements(PrimitiveType.Triangles, new[] { 3u }, DrawElementsType.UnsignedInt,
+                        new[] { IntPtr.Zero }, 0);
+
                 testVAO.Unbind();
                 Shader.Passthrough.Unbind();
                 indices.Unbind();
@@ -98,6 +102,7 @@ namespace Hedra.Engine
             {
                 Renderer.Severity = previousSeverity;
             }
+
             Log.WriteLine($"Compatibility mode is {(useCompatibilityFunction ? "ON" : "OFF")}...");
             if (useCompatibilityFunction)
             {
@@ -106,9 +111,7 @@ namespace Hedra.Engine
                     IntPtr[] Offsets, int Length)
                 {
                     for (var i = 0; i < Length; i++)
-                    {
                         Renderer.Provider.DrawElements(PrimitiveType.Triangles, (int)Counts[i], DrawType, Offsets[i]);
-                    }
                 };
             }
             else
@@ -116,21 +119,23 @@ namespace Hedra.Engine
                 MultiDrawElementsMethod =
                     delegate(PrimitiveType Type, uint[] Counts, DrawElementsType DrawType, IntPtr[] Offsets, int Length)
                     {
-                        Renderer.Provider.MultiDrawElements(PrimitiveType.Triangles, Counts, DrawElementsType.UnsignedInt, Offsets, Length);
+                        Renderer.Provider.MultiDrawElements(PrimitiveType.Triangles, Counts,
+                            DrawElementsType.UnsignedInt, Offsets, Length);
                     };
             }
         }
 
         private static VAO<Vector3> PrepareTestData(out VBO<uint> Indices, out VBO<Vector3> Buffer)
         {
-            var verts = new []
+            var verts = new[]
             {
-                new Vector3(0,0,1),
-                new Vector3(0,1,0), 
-                new Vector3(1,0,0)
+                new Vector3(0, 0, 1),
+                new Vector3(0, 1, 0),
+                new Vector3(1, 0, 0)
             };
             Buffer = new VBO<Vector3>(verts, verts.Length * HedraSize.Vector3, VertexAttribPointerType.Float);
-            Indices = new VBO<uint>(new uint[] {0, 1, 2}, sizeof(uint) * verts.Length, VertexAttribPointerType.UnsignedInt);
+            Indices = new VBO<uint>(new uint[] { 0, 1, 2 }, sizeof(uint) * verts.Length,
+                VertexAttribPointerType.UnsignedInt);
             return new VAO<Vector3>(Buffer);
         }
         /*

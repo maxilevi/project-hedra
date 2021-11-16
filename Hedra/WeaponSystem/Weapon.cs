@@ -10,29 +10,65 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Reflection;
 using Hedra.Core;
-using Hedra.Engine;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
-using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
-using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
 using Hedra.Items;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Sound;
-using System.Numerics;
-using Hedra.Numerics;
 
 namespace Hedra.WeaponSystem
 {
     /// <summary>
-    /// Description of Weapon.
+    ///     Description of Weapon.
     /// </summary>
     public abstract class Weapon : IModel
     {
+        private float _alpha = 1f;
+        private Animation[] _animations;
+        private float _animationSpeed = 1f;
+        private float[] _animationSpeeds;
+        private bool _applyFog;
+        private AttackOptions _currentAttackOption;
+        private EffectDescriber _describer;
+        private bool _effectApplied;
+
+        private bool _enabled = true;
+        private bool _onAttackStance;
+        private bool _outline;
+        private Vector4 _outlineColor;
+        private float _passedTimeInAttackStance;
+        private bool _pause;
+        private Animation[] _primaryAnimations;
+        private Vector3 _scale = Vector3.One;
+
+        private Animation[] _secondaryAnimations;
+        private Vector3 _targetPosition;
+        private bool WeaponCoroutineExists;
+
+        protected Weapon(VertexData MeshData)
+        {
+            if (MeshData != null)
+            {
+                var baseMesh = MeshData.Clone();
+                baseMesh.Scale(Vector3.One * 1.75f);
+                MainMesh = ObjectMesh.FromVertexData(baseMesh, true, false);
+                this.MeshData = baseMesh;
+            }
+            else
+            {
+                MainMesh = new ObjectMesh(VertexData.Empty);
+            }
+
+            CreateAnimations();
+        }
+
         public ObjectMesh MainMesh { get; }
         public ObjectMesh[] Meshes { get; private set; }
         public VertexData MeshData { get; }
@@ -46,10 +82,7 @@ namespace Hedra.WeaponSystem
         protected virtual bool ContinousAttack => false;
         public abstract bool IsMelee { get; }
         public bool LockWeapon { get; set; } = false;
-        private bool WeaponCoroutineExists;
         public bool Disposed { get; private set; }
-        public Vector4 BaseTint { get; set; }
-        public Vector4 Tint { get; set; }
         protected IHumanoid Owner { get; set; }
         protected bool SecondaryAttack { get; set; }
         protected bool PrimaryAttack { get; set; }
@@ -61,34 +94,13 @@ namespace Hedra.WeaponSystem
         public float ChargingIntensity { get; set; }
         protected virtual bool ShouldPlaySound { get; set; } = true;
         public float PrimaryAttackAnimationSpeed { get; set; } = 1.0f;
-        public float SecondaryAttackAnimationSpeed { get; set; } = 1.0f;     
-        public virtual bool PrimaryAttackEnabled { get; set; } = true;       
+        public float SecondaryAttackAnimationSpeed { get; set; } = 1.0f;
+        public virtual bool PrimaryAttackEnabled { get; set; } = true;
         public virtual bool SecondaryAttackEnabled { get; set; } = true;
         public virtual bool PrimaryAttackHasCooldown { get; set; }
         public virtual bool SecondaryAttackHasCooldown { get; set; }
         public virtual float PrimaryAttackCooldown { get; set; }
         public virtual float SecondaryAttackCooldown { get; set; }
-
-        private Animation[] _secondaryAnimations;
-        private Animation[] _primaryAnimations;
-        private Animation[] _animations;
-        private float[] _animationSpeeds;
-        private EffectDescriber _describer;
-        private bool _onAttackStance;
-        private Vector3 _scale = Vector3.One;
-        private float _alpha = 1f;
-        private float _animationSpeed = 1f;
-        private bool _applyFog;
-        private bool _pause;
-        private float _passedTimeInAttackStance;
-        private bool _outline;
-        private Vector4 _outlineColor;
-        private bool _effectApplied;
-        private Vector3 _targetPosition;
-        private AttackOptions _currentAttackOption;
-        
-        protected abstract void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options);
-        protected abstract void OnPrimaryAttackEvent(AttackEventType Type, AttackOptions Options);
         protected abstract string AttackStanceName { get; }
         protected abstract string[] PrimaryAnimationsNames { get; }
         protected abstract string[] SecondaryAnimationsNames { get; }
@@ -97,21 +109,196 @@ namespace Hedra.WeaponSystem
         public abstract uint PrimaryAttackIcon { get; }
         public abstract uint SecondaryAttackIcon { get; }
 
-        protected Weapon(VertexData MeshData)
+        public float PrimaryAttackDuration => NextPrimaryAnimation.Length / NextPrimaryAnimationSpeed;
+
+        public float SecondaryAttackDuration => NextSecondaryAnimation.Length / NextSecondaryAnimationSpeed;
+
+        private float NextPrimaryAnimationSpeed => _animationSpeeds[Array.IndexOf(_animations, NextPrimaryAnimation)] *
+                                                   Owner.AttackSpeed * PrimaryAttackAnimationSpeed;
+
+        private float NextSecondaryAnimationSpeed =>
+            _animationSpeeds[Array.IndexOf(_animations, NextSecondaryAnimation)] * Owner.AttackSpeed *
+            SecondaryAttackAnimationSpeed;
+
+        private Animation NextPrimaryAnimation => _primaryAnimations[ParsePrimaryIndex(PrimaryAnimationsIndex)];
+
+        private Animation NextSecondaryAnimation => _secondaryAnimations[ParseSecondaryIndex(SecondaryAnimationsIndex)];
+
+        public virtual Vector3 WeaponTip =>
+            Vector3.Transform((-Vector3.UnitY * 1.5f + Vector3.UnitX * 3f) * 2F, Owner.Model.LeftWeaponMatrix);
+
+        public EffectDescriber Describer
         {
-            if (MeshData != null)
+            get => _describer;
+            set
             {
-                var baseMesh = MeshData.Clone();
-                baseMesh.Scale(Vector3.One * 1.75f);
-                MainMesh = ObjectMesh.FromVertexData(baseMesh, CullPrematurely: true, UpdateInBackground: false);
-                this.MeshData = baseMesh;
+                _describer = value;
+                _effectApplied = false;
             }
-            else
-            {
-                MainMesh = new ObjectMesh(VertexData.Empty);
-            }
-            CreateAnimations();
         }
+
+        public bool InAttackStance
+        {
+            get
+            {
+                if (_onAttackStance) return true;
+
+                if (Owner == null)
+                    return false;
+
+                return Owner.Model.AnimationBlending == AttackStanceAnimation ||
+                       Owner.Model.AnimationBlending == ChargeStanceAnimation;
+            }
+            set
+            {
+                if (value) _passedTimeInAttackStance = 0;
+                if (_onAttackStance == value) return;
+                if (value)
+                    RoutineManager.StartRoutine(WasAttackingCoroutine);
+                else
+                    _onAttackStance = false;
+            }
+        }
+
+        public bool Sheathed => !LockWeapon && !PrimaryAttack && !SecondaryAttack &&
+                                Owner != null && !Owner.WasAttacking &&
+                                !InAttackStance;
+
+        public static Weapon Empty => new Hands();
+        public Vector4 BaseTint { get; set; }
+        public Vector4 Tint { get; set; }
+
+        public bool Enabled
+        {
+            get => _enabled;
+            set
+            {
+                GatherMembers();
+                for (var i = 0; i < Meshes.Length; i++) Meshes[i].Enabled = value;
+                _enabled = value;
+            }
+        }
+
+        public bool ApplyFog
+        {
+            get => _applyFog;
+            set
+            {
+                if (_applyFog == value) return;
+                _applyFog = value;
+                GatherMembers();
+                for (var i = 0; i < Meshes.Length; i++) Meshes[i].ApplyFog = _applyFog;
+            }
+        }
+
+        public bool Pause
+        {
+            get => _pause;
+            set
+            {
+                if (_pause == value) return;
+                _pause = value;
+                GatherMembers();
+                for (var i = 0; i < Meshes.Length; i++) Meshes[i].Pause = _pause;
+            }
+        }
+
+        public Vector3 Scale
+        {
+            get => _scale;
+            set
+            {
+                if (_scale == value) return;
+                _scale = value;
+                GatherMembers();
+                for (var i = 0; i < Meshes.Length; i++) Meshes[i].Scale = _scale;
+            }
+        }
+
+        public float Alpha
+        {
+            get => _alpha;
+            set
+            {
+                if (_alpha == value) return;
+
+                GatherMembers();
+                _alpha = value;
+                for (var i = 0; i < Meshes.Length; i++) Meshes[i].Alpha = _alpha;
+            }
+        }
+
+        public bool Outline
+        {
+            get => _outline;
+            set
+            {
+                if (_outline == value) return;
+
+                GatherMembers();
+                _outline = value;
+                for (var i = 0; i < Meshes.Length; i++) Meshes[i].Outline = _outline;
+            }
+        }
+
+        public Vector4 OutlineColor
+        {
+            get => _outlineColor;
+            set
+            {
+                if (_outlineColor == value) return;
+
+                GatherMembers();
+                _outlineColor = value;
+                for (var i = 0; i < Meshes.Length; i++) Meshes[i].OutlineColor = _outlineColor;
+            }
+        }
+
+        public float AnimationSpeed
+        {
+            get => _animationSpeed;
+            set
+            {
+                if (_animationSpeed == value) return;
+
+                GatherMembers();
+                _animationSpeed = value;
+                for (var i = 0; i < Meshes.Length; i++) Meshes[i].AnimationSpeed = _animationSpeed;
+            }
+        }
+
+        public Vector3 Position
+        {
+            get => MainMesh.Position;
+            set => MainMesh.Position = value;
+        }
+
+        public Vector3 LocalRotation
+        {
+            get => MainMesh.LocalRotation;
+            set => MainMesh.LocalRotation = value;
+        }
+
+        public virtual void Dispose()
+        {
+            GatherMembers(true);
+            foreach (var mesh in Meshes) mesh.Dispose();
+
+            var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+            foreach (var field in GetType().GetFields(flags))
+            {
+                if (field.FieldType != typeof(ObjectMesh[])) continue;
+
+                var meshArray = field.GetValue(this) as ObjectMesh[];
+                if (meshArray == Meshes) continue;
+                foreach (var meshItem in meshArray) meshItem.Dispose();
+            }
+
+            Disposed = true;
+        }
+
+        protected abstract void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options);
+        protected abstract void OnPrimaryAttackEvent(AttackEventType Type, AttackOptions Options);
 
         private void CreateAnimations()
         {
@@ -123,62 +310,55 @@ namespace Hedra.WeaponSystem
                 _primaryAnimations[i] = AnimationLoader.LoadAnimation(PrimaryAnimationsNames[i]);
                 _primaryAnimations[i].Speed = PrimarySpeed;
                 _primaryAnimations[i].Loop = false;
-                _primaryAnimations[i].OnAnimationStart += 
+                _primaryAnimations[i].OnAnimationStart +=
                     Sender =>
                     {
                         Owner.InvokeBeforeAttackEvent(_currentAttackOption);
                         OnPrimaryAttackEvent(AttackEventType.Start, _currentAttackOption);
                     };
-                _primaryAnimations[i].OnAnimationMid += 
+                _primaryAnimations[i].OnAnimationMid +=
                     Sender => OnPrimaryAttackEvent(AttackEventType.Mid, _currentAttackOption);
-                _primaryAnimations[i].OnAnimationEnd += 
+                _primaryAnimations[i].OnAnimationEnd +=
                     Sender =>
                     {
                         Owner.InvokeAfterAttackEvent(_currentAttackOption);
                         OnPrimaryAttackEvent(AttackEventType.End, _currentAttackOption);
                     };
             }
-            
+
             _secondaryAnimations = new Animation[SecondaryAnimationsNames.Length];
             for (var i = 0; i < _secondaryAnimations.Length; i++)
             {
                 _secondaryAnimations[i] = AnimationLoader.LoadAnimation(SecondaryAnimationsNames[i]);
                 _secondaryAnimations[i].Speed = SecondarySpeed;
                 _secondaryAnimations[i].Loop = false;
-                _secondaryAnimations[i].OnAnimationStart += 
+                _secondaryAnimations[i].OnAnimationStart +=
                     Sender =>
                     {
                         Owner.InvokeBeforeAttackEvent(_currentAttackOption);
                         OnSecondaryAttackEvent(AttackEventType.Start, _currentAttackOption);
                     };
-                _secondaryAnimations[i].OnAnimationMid += 
+                _secondaryAnimations[i].OnAnimationMid +=
                     Sender => OnSecondaryAttackEvent(AttackEventType.Mid, _currentAttackOption);
-                _secondaryAnimations[i].OnAnimationEnd += 
+                _secondaryAnimations[i].OnAnimationEnd +=
                     Sender =>
                     {
                         Owner.InvokeAfterAttackEvent(_currentAttackOption);
                         OnSecondaryAttackEvent(AttackEventType.End, _currentAttackOption);
                     };
             }
+
             RegisterAnimationSpeeds();
         }
 
         private void RegisterAnimationSpeeds()
         {
             _animations = new Animation[_primaryAnimations.Length + _secondaryAnimations.Length];
-            for (var i = 0; i < _primaryAnimations.Length; i++)
-            {
-                _animations[i] = _primaryAnimations[i];
-            }
+            for (var i = 0; i < _primaryAnimations.Length; i++) _animations[i] = _primaryAnimations[i];
             for (var i = 0; i < _secondaryAnimations.Length; i++)
-            {
                 _animations[i + _primaryAnimations.Length] = _secondaryAnimations[i];
-            }
             _animationSpeeds = new float[_animations.Length];
-            for (var i = 0; i < _animations.Length; i++)
-            {
-                _animationSpeeds[i] = _animations[i].Speed;
-            }
+            for (var i = 0; i < _animations.Length; i++) _animationSpeeds[i] = _animations[i].Speed;
         }
 
         protected void SetToDefault(ObjectMesh Mesh)
@@ -200,7 +380,7 @@ namespace Hedra.WeaponSystem
             var translation =
                 Matrix4x4.CreateTranslation(-Owner.Position + Owner.Model.ChestPosition + Vector3.UnitY * 1f);
             var chest = Owner.Model.ChestMatrix.ClearTranslation();
-            Mesh.TransformationMatrix = (chest * translation);
+            Mesh.TransformationMatrix = chest * translation;
             Mesh.Position = Owner.Position;
             Mesh.Rotation = SheathedRotation;
             Mesh.BeforeRotation =
@@ -210,7 +390,7 @@ namespace Hedra.WeaponSystem
         protected void SetToMainHand(ObjectMesh Mesh)
         {
             var mat4 = Owner.Model.LeftWeaponMatrix.ClearTranslation() *
-                           Matrix4x4.CreateTranslation(-Owner.Position + Owner.Model.LeftWeaponPosition);
+                       Matrix4x4.CreateTranslation(-Owner.Position + Owner.Model.LeftWeaponPosition);
 
             Mesh.TransformationMatrix = mat4;
             Mesh.Position = Owner.Position;
@@ -230,7 +410,7 @@ namespace Hedra.WeaponSystem
         {
             return Index;
         }
-        
+
         public void Attack1(IHumanoid Human)
         {
             Attack1(Human, new AttackOptions());
@@ -260,7 +440,7 @@ namespace Hedra.WeaponSystem
         {
             Attack2(Human, new AttackOptions());
         }
-        
+
         public virtual void Attack2(IHumanoid Human, AttackOptions Options)
         {
             if (!MeetsRequirements()) return;
@@ -296,16 +476,15 @@ namespace Hedra.WeaponSystem
         protected void BaseAttack(IHumanoid Human, AttackOptions Options)
         {
             Owner = Human;
-            
+
             _currentAttackOption = Options;
             if (ShouldPlaySound && !IsMelee)
                 SoundPlayer.PlaySoundWithVariation(SoundType, Human.Position);
 
             if (IsMelee && Owner.Movement.IsMovingBackwards)
-            {
                 TaskScheduler.DelayFrames(1,
                     () => TaskScheduler.While(
-                        () => Human.IsAttacking/*Human.Model.IsWalking && !Human.IsMoving*/,
+                        () => Human.IsAttacking /*Human.Model.IsWalking && !Human.IsMoving*/,
                         delegate
                         {
                             Human.Movement.Orientate();
@@ -313,15 +492,12 @@ namespace Hedra.WeaponSystem
                         }
                     )
                 );
-            }
             else
-            {
-                TaskScheduler.DelayFrames(1, 
+                TaskScheduler.DelayFrames(1,
                     () => TaskScheduler.While(() => Human.IsAttacking,
                         () => Human.Physics.Move(Options.RunMovespeed)
                     )
                 );
-            }
             if (Orientate) Human.Movement.Orientate();
             StartWasAttackingCoroutine();
         }
@@ -348,18 +524,18 @@ namespace Hedra.WeaponSystem
                 primaryAttack = true;
                 break;
             }
+
             PrimaryAttack = primaryAttack;
 
             var secondaryAttack = false;
-            for (int i = 0; i < _secondaryAnimations.Length; i++)
-            {
+            for (var i = 0; i < _secondaryAnimations.Length; i++)
                 if (_secondaryAnimations[i] == Owner.Model.AnimationPlaying ||
                     _secondaryAnimations[i] == Owner.Model.AnimationBlending)
                 {
                     secondaryAttack = true;
                     break;
                 }
-            }
+
             SecondaryAttack = secondaryAttack;
 
             if (!attacking && Owner.Model.Human.IsAttacking)
@@ -370,82 +546,63 @@ namespace Hedra.WeaponSystem
 
             Owner.IsAttacking = attacking;
             SetToDefault(MainMesh);
-            
+
             if (Sheathed)
                 OnSheathed();
 
-            if (InAttackStance || Owner.WasAttacking || (ContinousAttack && Owner.IsAttacking))
+            if (InAttackStance || Owner.WasAttacking || ContinousAttack && Owner.IsAttacking)
                 OnAttackStance();
-            
+
             if (PrimaryAttack)
                 OnPrimaryAttack();
 
             if (SecondaryAttack)
                 OnSecondaryAttack();
-            
+
             if (PrimaryAttack || SecondaryAttack)
                 OnAttack();
 
-            if (Owner.IsAttacking)
-            {
-                Owner.Movement.Orientate();
-            }
+            if (Owner.IsAttacking) Owner.Movement.Orientate();
 
             ApplyEffects(MainMesh);
 
             if (Describer != null && Describer.Type != EffectType.None)
-            {
                 if (!_effectApplied)
                 {
                     Owner.ApplyEffectWhile(Describer.Type, () => Owner.LeftWeapon == this);
                     _effectApplied = true;
                 }
-            }
         }
-        
-        public float PrimaryAttackDuration => NextPrimaryAnimation.Length / NextPrimaryAnimationSpeed;
-
-        public float SecondaryAttackDuration => NextSecondaryAnimation.Length / NextSecondaryAnimationSpeed;
-        
-        private float NextPrimaryAnimationSpeed => _animationSpeeds[Array.IndexOf(_animations, NextPrimaryAnimation)] * Owner.AttackSpeed * PrimaryAttackAnimationSpeed;
-
-        private float NextSecondaryAnimationSpeed => _animationSpeeds[Array.IndexOf(_animations, NextSecondaryAnimation)] * Owner.AttackSpeed * SecondaryAttackAnimationSpeed;
-
-        private Animation NextPrimaryAnimation => _primaryAnimations[ParsePrimaryIndex(PrimaryAnimationsIndex)];
-        
-        private Animation NextSecondaryAnimation => _secondaryAnimations[ParseSecondaryIndex(SecondaryAnimationsIndex)];
 
         protected virtual void OnAttackStance()
         {
-            if(IsCharging)
+            if (IsCharging)
                 OnChargeStance();
             else
-                OnPostAttackStance();               
+                OnPostAttackStance();
         }
 
         protected virtual void OnChargeStance()
         {
-            
         }
 
         protected virtual void OnPostAttackStance()
         {
-            
         }
 
         protected virtual void OnSheathed()
         {
         }
 
-        
+
         protected virtual void OnPrimaryAttack()
         {
         }
-        
+
         protected virtual void OnSecondaryAttack()
         {
         }
-        
+
         protected virtual void OnAttack()
         {
             if (Orientate) Owner.Movement.Orientate();
@@ -455,21 +612,19 @@ namespace Hedra.WeaponSystem
         {
             Mesh.BaseTint = BaseTint;
             Mesh.Tint = Tint;
-            if (Describer != null && Describer.Type != EffectType.None)
-            {
-                Mesh.BaseTint = Describer.EffectColor;
-            }
+            if (Describer != null && Describer.Type != EffectType.None) Mesh.BaseTint = Describer.EffectColor;
 
             if (Charging)
             {
                 var time = Time.AccumulatedFrameTime * 40f;
-                var intensity = (float) Math.Pow(ChargingIntensity, 1);
-                var offset = new Vector3((float) Math.Cos(time), 0, (float) Math.Sin(time)) * intensity;
+                var intensity = (float)Math.Pow(ChargingIntensity, 1);
+                var offset = new Vector3((float)Math.Cos(time), 0, (float)Math.Sin(time)) * intensity;
                 Owner.Model.LeftShoulderJoint.TransformationMatrix = Matrix4x4.CreateTranslation(offset * .05f);
                 Owner.Model.LeftWeaponJoint.TransformationMatrix = Matrix4x4.CreateTranslation(offset * .075f);
                 Owner.Model.LeftElbowJoint.TransformationMatrix = Matrix4x4.CreateTranslation(offset * .1f);
-                
-                Owner.Model.RightShoulderJoint.TransformationMatrix = Owner.Model.LeftShoulderJoint.TransformationMatrix;
+
+                Owner.Model.RightShoulderJoint.TransformationMatrix =
+                    Owner.Model.LeftShoulderJoint.TransformationMatrix;
                 Owner.Model.RightElbowJoint.TransformationMatrix = Owner.Model.LeftElbowJoint.TransformationMatrix;
                 Owner.Model.RightWeaponJoint.TransformationMatrix = Owner.Model.LeftWeaponJoint.TransformationMatrix;
                 Mesh.BaseTint += new Vector4(1, 0, 0, 1) * intensity;
@@ -484,188 +639,6 @@ namespace Hedra.WeaponSystem
                 Owner.Model.RightWeaponJoint.TransformationMatrix = Matrix4x4.Identity;
             }
         }
-
-        public virtual Vector3 WeaponTip =>
-            Vector3.Transform((-Vector3.UnitY * 1.5f + Vector3.UnitX * 3f) * 2F, Owner.Model.LeftWeaponMatrix);
-
-        public EffectDescriber Describer
-        {
-            get => _describer;
-            set
-            {
-                _describer = value;
-                _effectApplied = false;
-            }
-        }
-
-        public bool InAttackStance
-        {
-            get
-            {
-                if (_onAttackStance) return true;
-
-                if (Owner == null)
-                    return false;
-
-                return Owner.Model.AnimationBlending == AttackStanceAnimation || Owner.Model.AnimationBlending == ChargeStanceAnimation;
-            }
-            set
-            {
-                if(value) _passedTimeInAttackStance = 0;
-                if (_onAttackStance == value) return;
-                if (value)
-                {
-                    RoutineManager.StartRoutine(WasAttackingCoroutine);
-                }
-                else
-                {
-                    _onAttackStance = false;
-                }
-            }
-        }
-
-        private bool _enabled = true;
-
-        public bool Enabled
-        {
-            get => _enabled;
-            set
-            {
-                GatherMembers();
-                for (var i = 0; i < Meshes.Length; i++)
-                {
-                    Meshes[i].Enabled = value;
-                }
-                _enabled = value;
-            }
-        }
-
-        public bool ApplyFog
-        {
-            get => _applyFog;
-            set
-            {
-                if (_applyFog == value) return;
-                _applyFog = value;
-                GatherMembers();
-                for (var i = 0; i < Meshes.Length; i++)
-                {
-                    Meshes[i].ApplyFog = _applyFog;
-                }
-            }
-        }
-
-        public bool Pause
-        {
-            get => _pause;
-            set
-            {
-                if (_pause == value) return;
-                _pause = value;
-                GatherMembers();
-                for (var i = 0; i < Meshes.Length; i++)
-                {
-                    Meshes[i].Pause = _pause;
-                }
-            }
-        }
-
-        public Vector3 Scale
-        {
-            get => _scale;
-            set
-            {
-                if (_scale == value) return;
-                _scale = value;
-                GatherMembers();
-                for (var i = 0; i < Meshes.Length; i++)
-                {
-                    Meshes[i].Scale = _scale;
-                }
-            }
-        }
-
-        public float Alpha
-        {
-            get => _alpha;
-            set
-            {
-                if (_alpha == value) return;
-
-                GatherMembers();
-                _alpha = value;
-                for (var i = 0; i < Meshes.Length; i++)
-                {
-                    Meshes[i].Alpha = _alpha;
-                }
-            }
-        }
-
-        public bool Outline
-        {
-            get => _outline;
-            set
-            {
-                if (_outline == value) return;
-
-                GatherMembers();
-                _outline = value;
-                for (var i = 0; i < Meshes.Length; i++)
-                {
-                    Meshes[i].Outline = _outline;
-                }
-            }
-        }
-        
-        public Vector4 OutlineColor
-        {
-            get => _outlineColor;
-            set
-            {
-                if (_outlineColor == value) return;
-
-                GatherMembers();
-                _outlineColor = value;
-                for (var i = 0; i < Meshes.Length; i++)
-                {
-                    Meshes[i].OutlineColor = _outlineColor;
-                }
-            }
-        }
-        
-        public float AnimationSpeed
-        {
-            get => _animationSpeed;
-            set
-            {
-                if (_animationSpeed == value) return;
-
-                GatherMembers();
-                _animationSpeed = value;
-                for (var i = 0; i < Meshes.Length; i++)
-                {
-                    Meshes[i].AnimationSpeed = _animationSpeed;
-                }
-            }
-        }
-
-        public Vector3 Position
-        {
-            get => MainMesh.Position;
-            set => MainMesh.Position = value;
-        }
-
-        public Vector3 LocalRotation
-        {
-            get => MainMesh.LocalRotation;
-            set => MainMesh.LocalRotation = value;
-        }
-
-        public bool Sheathed => !LockWeapon && !PrimaryAttack && !SecondaryAttack &&
-                                Owner != null && !Owner.WasAttacking &&
-                                !InAttackStance;
-
-        public static Weapon Empty => new Hands();
 
         public void GatherMembers(bool Force = false)
         {
@@ -684,11 +657,15 @@ namespace Hedra.WeaponSystem
                 if (field.FieldType == typeof(ObjectMesh)) meshList.Add(field.GetValue(this) as ObjectMesh);
                 if (field.FieldType == typeof(Weapon)) meshList.Add((field.GetValue(this) as Weapon)?.MainMesh);
             }
+
             foreach (var property in propierties)
             {
-                if (property.PropertyType == typeof(ObjectMesh)) meshList.Add(property.GetValue(this, null) as ObjectMesh);
-                if (property.PropertyType == typeof(Weapon)) meshList.Add((property.GetValue(this, null) as Weapon)?.MainMesh);
+                if (property.PropertyType == typeof(ObjectMesh))
+                    meshList.Add(property.GetValue(this, null) as ObjectMesh);
+                if (property.PropertyType == typeof(Weapon))
+                    meshList.Add((property.GetValue(this, null) as Weapon)?.MainMesh);
             }
+
             Meshes = meshList.ToArray();
         }
 
@@ -703,13 +680,13 @@ namespace Hedra.WeaponSystem
                     var animation = field.GetValue(this) as Animation;
                     if (!animation.Loop) animList.Add(animation);
                 }
+
                 if (field.FieldType != typeof(Animation[])) continue;
                 var array = field.GetValue(this) as Animation[];
                 if (array == null) continue;
                 for (var i = 0; i < array.Length; i++)
-                {
-                    if (!array[i].Loop) animList.Add(array[i]);
-                }
+                    if (!array[i].Loop)
+                        animList.Add(array[i]);
             }
         }
 
@@ -731,6 +708,7 @@ namespace Hedra.WeaponSystem
 
                 yield return null;
             }
+
             if (Owner != null)
                 Owner.WasAttacking = false;
         }
@@ -740,8 +718,7 @@ namespace Hedra.WeaponSystem
             _onAttackStance = true;
             if (WeaponCoroutineExists)
                 yield break;
-            else
-                WeaponCoroutineExists = true;
+            WeaponCoroutineExists = true;
             RoutineManager.StartRoutine(DisableWasAttacking);
             _passedTimeInAttackStance = 0;
             while (_passedTimeInAttackStance < 5f && _onAttackStance && !Disposed)
@@ -758,29 +735,10 @@ namespace Hedra.WeaponSystem
                 _passedTimeInAttackStance += Time.DeltaTime;
                 yield return null;
             }
-            if (Owner != null && !Owner.IsAttacking)
-            {
-                Owner.Model.DefaultBlending = null;
-            }
+
+            if (Owner != null && !Owner.IsAttacking) Owner.Model.DefaultBlending = null;
             _onAttackStance = false;
             WeaponCoroutineExists = false;
-        }
-
-        public virtual void Dispose()
-        {
-            GatherMembers(true);
-            foreach (ObjectMesh mesh in Meshes) mesh.Dispose();
-
-            var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-            foreach (var field in GetType().GetFields(flags))
-            {
-                if (field.FieldType != typeof(ObjectMesh[])) continue;
-
-                var meshArray = field.GetValue(this) as ObjectMesh[];
-                if (meshArray == Meshes) continue;
-                foreach (ObjectMesh meshItem in meshArray) meshItem.Dispose();
-            }
-            Disposed = true;
         }
     }
 

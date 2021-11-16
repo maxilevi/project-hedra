@@ -1,14 +1,15 @@
-import MissionCore
 from Core import translate
-from System import Array, Object, Single
-from System.Numerics import Vector3
-from Hedra.Items import ItemPool, ItemTier
-from Hedra.Mission import MissionBuilder, QuestTier, DialogObject, QuestReward, ItemCollect, QuestPriority
-from Hedra.Mission.Blocks import FindEntityMission, DefeatEntityMission, CollectMission
 from Hedra.AISystem import IBasicAIComponent
 from Hedra.AISystem.Humanoid import EscapeAIComponent, CombatAIComponent
-from Hedra.Engine.WorldBuilding import NPCCreator, BanditOptions, NameGenerator
 from Hedra.Engine.EntitySystem import DropComponent
+from Hedra.Engine.WorldBuilding import NPCCreator, BanditOptions
+from Hedra.Items import ItemPool, ItemTier
+from Hedra.Mission import MissionBuilder, QuestTier, QuestReward, ItemCollect, QuestPriority
+from Hedra.Mission.Blocks import FindEntityMission, DefeatEntityMission, CollectMission
+from System import Array, Single
+from System.Numerics import Vector3
+
+import MissionCore
 
 IS_QUEST = True
 QUEST_NAME = 'RetrieveStolenItems'
@@ -16,22 +17,23 @@ QUEST_TIER = QuestTier.Medium
 QUEST_PRIORITY = QuestPriority.Low
 MAX_SPAWN_DISTANCE = 768
 
+
 def setup_timeline(position, giver, owner, rng):
     builder = MissionBuilder()
-    
+
     items = create_items(rng)
-    
+
     builder.OpeningDialog = MissionCore.create_dialog('quest_retrieve_stolen_items_dialog')
-    
+
     criminals = create_criminals(builder, owner, giver, items, rng)
     for criminal, item in zip(criminals, items):
         find = FindEntityMission(criminals[0])
         find.MissionBlockEnd += lambda: on_found(owner, criminal, rng)
         builder.Next(find)
-        
+
         defeat = DefeatEntityMission(criminal)
         builder.Next(defeat)
-    
+
         item_collect = MissionCore.to_item_collect(item)
         collect = CollectMission()
         collect.SetDescription(translate('quest_collect_description_alternative', item_collect.ToString()))
@@ -40,9 +42,10 @@ def setup_timeline(position, giver, owner, rng):
         collect.MissionBlockEnd += collect.ConsumeItems
         builder.Next(collect)
 
-    reward = create_reward(items, rng)  
+    reward = create_reward(items, rng)
     builder.SetReward(reward)
     return builder
+
 
 def create_criminals(builder, owner, giver, items, rng):
     criminals = []
@@ -61,6 +64,7 @@ def create_criminals(builder, owner, giver, items, rng):
         criminals.append(bandit)
     return criminals
 
+
 def on_found(owner, npc, rng):
     if rng.Next(0, 3) == 1:
         ai = npc.SearchComponent[IBasicAIComponent]()
@@ -70,7 +74,8 @@ def on_found(owner, npc, rng):
         comp = npc.SearchComponent[CombatAIComponent]()
         if comp:
             comp.SetTarget(owner)
-    
+
+
 def create_items(rng):
     count = rng.Next(1, 4)
     items = []
@@ -81,11 +86,13 @@ def create_items(rng):
         )
     return items
 
+
 def create_reward(items, rng):
     reward = QuestReward()
     reward.Gold = rng.Next(19, 52)
     reward.Item = items[rng.Next(0, len(items))] if rng.Next(0, 3) == 1 else None
     return reward
+
 
 def can_give(position):
     return True

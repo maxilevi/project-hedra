@@ -1,7 +1,6 @@
-using Hedra.Engine.CacheSystem;
-using Hedra.Engine.Localization;
-using Hedra.Rendering;
 using System.Numerics;
+using Hedra.Engine.CacheSystem;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
@@ -17,9 +16,10 @@ namespace Hedra.Engine.StructureSystem.Overworld
         protected override Vector3 NPCHeightOffset => GazeboCache.OffsetFromGround;
         protected override float QuestChance => 1;
         public override bool CanSpawnInside => true;
+
         protected override Gazebo Create(Vector3 Position, float Size)
         {
             return new Gazebo(Position, Size);
-        }    
+        }
     }
 }

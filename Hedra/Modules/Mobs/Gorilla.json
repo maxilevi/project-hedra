@@ -1,5 +1,5 @@
 {
-  "Name" : "Gorilla",
+  "Name": "Gorilla",
   "MaxHealth": 488.0,
   "AttackDamage": 20.0,
   "AttackCooldown": 2.5,
@@ -28,7 +28,7 @@
       {
         "Path": "$DataFile$/Assets/Chr/GorillaAttack0.dae",
         "Speed": 1.5,
-        "OnAnimationMid" : "Quake"
+        "OnAnimationMid": "Quake"
       }
     ]
   }

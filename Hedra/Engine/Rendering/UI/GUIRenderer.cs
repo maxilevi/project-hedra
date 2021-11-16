@@ -1,15 +1,12 @@
 using System;
 using System.Collections.Generic;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Linq;
-using Hedra.Engine.Game;
+using System.Numerics;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
-using Hedra.Rendering;
-using System.Numerics;
-using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
+using Hedra.Rendering;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -19,19 +16,13 @@ namespace Hedra.Engine.Rendering.UI
     public class GUIRenderer : IDisposable
     {
         public static Shader Shader;
-        public static uint TransparentTexture { get; private set; }
-        public static uint[] ImmortalTextures { get; private set; }
-        private readonly HashSet<TextureCommand> _renderableUISet;
-        private readonly List<TextureCommand> _renderableUIList;
-        private readonly List<GUITexture> _textures;
         private static bool _inited;
         private static VAO<Vector2> _vao;
         private static VBO<Vector2> _vbo;
         private readonly object _lock;
-
-        public int DrawCount { get; private set; }
-        public int RenderableCount => _renderableUISet.Count;
-        public int TextureCount => _textures.Count;
+        private readonly List<TextureCommand> _renderableUIList;
+        private readonly HashSet<TextureCommand> _renderableUISet;
+        private readonly List<GUITexture> _textures;
 
         public GUIRenderer()
         {
@@ -60,6 +51,18 @@ namespace Hedra.Engine.Rendering.UI
                 Path = "UI:TransparentTexture"
             });
             ImmortalTextures = new[] { TransparentTexture };
+        }
+
+        public static uint TransparentTexture { get; private set; }
+        public static uint[] ImmortalTextures { get; private set; }
+
+        public int DrawCount { get; private set; }
+        public int RenderableCount => _renderableUISet.Count;
+        public int TextureCount => _textures.Count;
+
+        public void Dispose()
+        {
+            _vbo.Dispose();
         }
 
         public void DrawQuad()
@@ -238,11 +241,6 @@ namespace Hedra.Engine.Rendering.UI
         private static bool IsValidId(uint Id)
         {
             return Id != TransparentTexture && Id != 0;
-        }
-
-        public void Dispose()
-        {
-            _vbo.Dispose();
         }
     }
 }

@@ -7,24 +7,28 @@
 
 using System;
 using System.Collections.Generic;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using System.IO;
+using System.Numerics;
 using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Rendering;
-using System.Numerics;
-using Image = Silk.NET.GLFW.Image;
-
 
 namespace Hedra.Engine.Management
 {
     /// <summary>
-    /// Description of AssetManager.
+    ///     Description of AssetManager.
     /// </summary>
     public static class AssetManager
     {
+        static AssetManager()
+        {
+            ColorCode0 = new Vector4(.0f, .0f, .0f, 1f);
+            ColorCode1 = new Vector4(.2f, .2f, .2f, 1f);
+            ColorCode2 = new Vector4(.4f, .4f, .4f, 1f);
+            ColorCode3 = new Vector4(.6f, .6f, .6f, 1f);
+            ColorCodes = new[] { ColorCode0, ColorCode1, ColorCode2, ColorCode3 };
+            Provider = new CompressedAssetProvider();
+        }
+
         public static string ShaderResource => Provider.ShaderResource;
         public static string SoundResource => Provider.SoundResource;
         public static string AssetsResource => Provider.AssetsResource;
@@ -35,16 +39,6 @@ namespace Hedra.Engine.Management
         public static Vector4 ColorCode3 { get; }
         public static Vector4[] ColorCodes { get; }
         public static IAssetProvider Provider { get; set; }
-
-        static AssetManager()
-        {
-            ColorCode0 = new Vector4(.0f, .0f, .0f, 1f);
-            ColorCode1 = new Vector4(.2f, .2f, .2f, 1f);
-            ColorCode2 = new Vector4(.4f, .4f, .4f, 1f);
-            ColorCode3 = new Vector4(.6f, .6f, .6f, 1f);
-            ColorCodes = new[] { ColorCode0, ColorCode1, ColorCode2, ColorCode3 };
-            Provider = new CompressedAssetProvider();
-        }
 
         public static string AppPath => Provider.AppPath;
         public static string AppData => Provider.AppData;

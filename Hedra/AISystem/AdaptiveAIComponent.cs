@@ -6,11 +6,11 @@ namespace Hedra.AISystem
 {
     public class AdaptiveAIComponent : HostileAIComponent
     {
-        private AttackAnimationTemplate[] _templates;
-        
+        private readonly AttackAnimationTemplate[] _templates;
+
         public AdaptiveAIComponent(Entity Parent) : base(Parent)
         {
-            var asQuadruped = (QuadrupedModel) Parent.Model;
+            var asQuadruped = (QuadrupedModel)Parent.Model;
             _templates = asQuadruped.AttackTemplates;
             AlterBehaviour<AttackBehaviour>(new AdaptiveAttackBehaviour(Parent, _templates));
         }

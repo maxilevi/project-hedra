@@ -1,47 +1,47 @@
 ﻿{
-	"DisplayName": "Beetle",
-	"Name" : "GiantBeetle",
-	"MaxHealth": 688.0,
-	"AttackDamage": 22.0,
-	"AttackCooldown": 1.0,
-	"Speed": 1.45,
-	"XP": 20.0,
-	"Level": 18,
-	"AIType": "GiantBeetle",
-	"Effects": [
-		{
-			"Name": "Poison",
-			"Chance": 15.0,
-			"Damage": 8.0,
-			"Duration": 5.0
-		}
-	],
-	"Drops": [],
-	"Model": {
-		"Path": "$DataFile$/Assets/Chr/GiantBeetleIdle.dae",
-		"Scale": 2.75,
-		"Handler": "Beetle",
-		"IdleAnimations": [
-			{
-				"Path": "$DataFile$/Assets/Chr/BeetleIdle.dae",
-				"Speed": 1.0
-			}
-		],
-		"WalkAnimations": [
-			{
-				"Path": "$DataFile$/Assets/Chr/BeetleWalk.dae",
-				"Speed": 1.0
-			}
-		],
-		"AttackAnimations": [
-			{
-				"Path": "$DataFile$/Assets/Chr/BeetleAttack0.dae",
-				"Speed": 1.5
-			},
-			{
-				"Path": "$DataFile$/Assets/Chr/BeetleAttack1.dae",
-				"Speed": 1.0
-			}
-		]
-	}
+  "DisplayName": "Beetle",
+  "Name": "GiantBeetle",
+  "MaxHealth": 688.0,
+  "AttackDamage": 22.0,
+  "AttackCooldown": 1.0,
+  "Speed": 1.45,
+  "XP": 20.0,
+  "Level": 18,
+  "AIType": "GiantBeetle",
+  "Effects": [
+    {
+      "Name": "Poison",
+      "Chance": 15.0,
+      "Damage": 8.0,
+      "Duration": 5.0
+    }
+  ],
+  "Drops": [],
+  "Model": {
+    "Path": "$DataFile$/Assets/Chr/GiantBeetleIdle.dae",
+    "Scale": 2.75,
+    "Handler": "Beetle",
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/BeetleIdle.dae",
+        "Speed": 1.0
+      }
+    ],
+    "WalkAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/BeetleWalk.dae",
+        "Speed": 1.0
+      }
+    ],
+    "AttackAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/BeetleAttack0.dae",
+        "Speed": 1.5
+      },
+      {
+        "Path": "$DataFile$/Assets/Chr/BeetleAttack1.dae",
+        "Speed": 1.0
+      }
+    ]
+  }
 }

@@ -1,17 +1,15 @@
 using System;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
-using System.Numerics;
 
 namespace Hedra.Components.Effects
 {
     public class AttackSpeedBonusComponent : Component<IHumanoid>
     {
         private readonly float _attackSpeedBonus;
-        private readonly bool _showParticles; 
+        private readonly bool _showParticles;
 
         public AttackSpeedBonusComponent(IHumanoid Parent, float AttackSpeed, bool ShowParticles = false) : base(Parent)
         {
@@ -22,7 +20,7 @@ namespace Hedra.Components.Effects
 
         public override void Update()
         {
-            if(Parent is Humanoid human && human.IsRiding || !Parent.IsMoving || !_showParticles) return;
+            if (Parent is Humanoid human && human.IsRiding || !Parent.IsMoving || !_showParticles) return;
             if (_attackSpeedBonus > 0)
             {
                 Parent.Model.Outline = true;
@@ -36,9 +34,9 @@ namespace Hedra.Components.Effects
 
         public override void Dispose()
         {
-            if(Disposed) return;
-            Parent.AttackSpeed = Parent.BaseAttackSpeed  - _attackSpeedBonus;
-            if(_showParticles)
+            if (Disposed) return;
+            Parent.AttackSpeed = Parent.BaseAttackSpeed - _attackSpeedBonus;
+            if (_showParticles)
                 Parent.Model.Outline = false;
         }
     }

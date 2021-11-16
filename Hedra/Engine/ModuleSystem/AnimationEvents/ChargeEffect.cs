@@ -1,9 +1,6 @@
-using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Generation;
-using Hedra.Engine.Rendering.Particles;
+using System.Numerics;
 using Hedra.EntitySystem;
 using Hedra.Rendering.Particles;
-using System.Numerics;
 
 namespace Hedra.Engine.ModuleSystem.AnimationEvents
 {
@@ -19,10 +16,7 @@ namespace Hedra.Engine.ModuleSystem.AnimationEvents
             World.Particles.Scale = new Vector3(1.5f, 1.5f, 1.5f);
             World.Particles.ParticleLifetime = 2;
             World.Particles.PositionErrorMargin = Entity.Size * .5f;
-            for (var i = 0; i < 4; i++)
-            {
-                World.Particles.Emit();
-            }
+            for (var i = 0; i < 4; i++) World.Particles.Emit();
         }
     }
 }

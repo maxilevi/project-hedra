@@ -1,5 +1,5 @@
 {
-  "Name" : "Crow",
+  "Name": "Crow",
   "MaxHealth": 220.0,
   "AttackDamage": 6.0,
   "Speed": 1.75,

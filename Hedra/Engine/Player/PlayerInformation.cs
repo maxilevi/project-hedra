@@ -6,23 +6,38 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using System.Collections.Generic;
 using System.Linq;
-using Hedra.Engine.ClassSystem;
-using Hedra.Engine.Game;
 using System.Numerics;
+using Hedra.Engine.ClassSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.QuestSystem;
-using Hedra.Items;
-
 
 namespace Hedra.Engine.Player
 {
     /// <summary>
-    /// Object to transfer player information.
+    ///     Object to transfer player information.
     /// </summary>
     public class PlayerInformation
     {
+        private Dictionary<int, Item> _items;
+        private List<string> _learnedRecipes;
+        private List<SerializedQuest> _quests;
+
+        public PlayerInformation()
+        {
+            Level = 1;
+            Health = int.MaxValue;
+            Mana = int.MaxValue;
+            _items = new Dictionary<int, Item>();
+            _learnedRecipes = new List<string>();
+            _quests = new List<SerializedQuest>();
+            ToolbarData = new byte[4];
+            SkillsData = new byte[20];
+            RealmData = new byte[0];
+        }
+
         public string Name { get; set; }
         public int Level { get; set; }
         public float Xp { get; set; }
@@ -35,32 +50,6 @@ namespace Hedra.Engine.Player
         public ClassDesign Class { get; set; }
         public CustomizationData Customization { get; set; }
         public float RandomFactor { get; set; }
-        private Dictionary<int, Item> _items;
-        private List<string> _learnedRecipes;
-        private List<SerializedQuest> _quests;
-
-        public PlayerInformation()
-        {
-            this.Level = 1;
-            this.Health = int.MaxValue;
-            this.Mana = int.MaxValue;
-            this._items = new Dictionary<int, Item>();
-            this._learnedRecipes = new List<string>();
-            this._quests = new List<SerializedQuest>();
-            this.ToolbarData = new byte[4];
-            this.SkillsData = new byte[20];
-            this.RealmData = new byte[0];
-        }
-
-        public void AddItem(int Index, Item ItemSpecification)
-        {
-            _items.Add(Index, ItemSpecification);
-        }
-        
-        public void AddRecipe(string RecipeName)
-        {
-            _learnedRecipes.Add(RecipeName);
-        }
 
         public KeyValuePair<int, Item>[] Items
         {
@@ -81,5 +70,15 @@ namespace Hedra.Engine.Player
         }
 
         public bool IsCorrupt => Rotation.IsInvalid() || Xp.IsInvalid() || Mana.IsInvalid() || Health.IsInvalid();
+
+        public void AddItem(int Index, Item ItemSpecification)
+        {
+            _items.Add(Index, ItemSpecification);
+        }
+
+        public void AddRecipe(string RecipeName)
+        {
+            _learnedRecipes.Add(RecipeName);
+        }
     }
 }

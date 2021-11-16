@@ -5,8 +5,8 @@
  *
  */
 
-using Hedra.Engine.Rendering.Core;
 using System.Numerics;
+using Hedra.Engine.Rendering.Core;
 
 namespace Hedra.Engine.Rendering
 {
@@ -15,7 +15,7 @@ namespace Hedra.Engine.Rendering
         VBO<Vector3> Vertices { get; }
         VBO<Vector4> Colors { get; }
         VBO<uint> Indices { get; }
-        VBO<Vector3> Normals { get;  }
+        VBO<Vector3> Normals { get; }
         VAO<Vector3, Vector4, Vector3> Data { get; }
 
         void Draw();

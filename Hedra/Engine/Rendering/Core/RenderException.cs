@@ -6,7 +6,6 @@ namespace Hedra.Engine.Rendering.Core
     {
         public RenderException(string Message) : base(Message)
         {
-            
         }
     }
 }

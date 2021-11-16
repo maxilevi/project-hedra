@@ -1,6 +1,3 @@
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-
 namespace Hedra.Engine.Rendering
 {
     public class BitmapObject

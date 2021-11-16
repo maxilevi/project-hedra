@@ -1,29 +1,25 @@
 using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
+using System.Numerics;
 using Hedra.Core;
-using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.IO;
-using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-using System.Numerics;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Game
 {
     public class LoadingScreen : IUpdatable, IDisposable
     {
         private readonly BackgroundTexture _loadingScreen;
-        private readonly GUIText _playerText;
         private readonly IPlayer _player;
-        private float _time;
+        private readonly GUIText _playerText;
         private string _text;
+        private float _time;
 
         public LoadingScreen(IPlayer Player)
         {
@@ -36,6 +32,15 @@ namespace Hedra.Engine.Game
             Log.WriteLine("Created loading screen.");
 
             UpdateManager.Add(this);
+        }
+
+        public bool IsLoading { get; private set; }
+
+        public bool ShouldShow => !IsLoaded();
+
+        public void Dispose()
+        {
+            UpdateManager.Remove(this);
         }
 
         public void Update()
@@ -96,15 +101,6 @@ namespace Hedra.Engine.Game
             if (IsLoaded() || !Program.GameWindow.FinishedLoadingSplashScreen) return;
             IsLoading = true;
             _text = Translations.Get("loading");
-        }
-
-        public bool IsLoading { get; private set; }
-
-        public bool ShouldShow => !IsLoaded();
-
-        public void Dispose()
-        {
-            UpdateManager.Remove(this);
         }
     }
 }

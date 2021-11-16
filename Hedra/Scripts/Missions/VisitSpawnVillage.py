@@ -10,17 +10,19 @@ QUEST_NAME = 'VisitSpawnVillage'
 QUEST_TIER = QuestTier.Easy
 CAN_SAVE = True
 
+
 def setup_timeline(position, giver, owner, rng):
     builder = MissionBuilder()
-    
+
     find = FindStructureMission()
     find.Design = SpawnVillageDesign()
     find.Position = World.SpawnVillagePoint
     find.OverrideOpeningDialog(create_dialog(find.Design.DisplayName))
-    
+
     builder.Next(find)
     builder.ReturnToComplete = False
     return builder
+
 
 def create_dialog(name):
     dialog = DialogObject()
@@ -28,6 +30,7 @@ def create_dialog(name):
     dialog.Arguments = Array[Object]([])
     dialog.AddAfterLine(translate('quest_generic_find_structure', Array[Object]([name])))
     return dialog
+
 
 def can_give(position):
     return False

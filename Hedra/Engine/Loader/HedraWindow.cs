@@ -1,9 +1,9 @@
 using System;
 using System.Diagnostics;
+using System.Numerics;
 using System.Threading;
 using Hedra.Engine.Events;
 using Hedra.Engine.Windowing;
-using System.Numerics;
 using Silk.NET.GLFW;
 using Silk.NET.Input;
 using Silk.NET.Maths;
@@ -14,15 +14,15 @@ namespace Hedra.Engine.Loader
 {
     public abstract class HedraWindow : IEventProvider, IHedraWindow
     {
-        public IWindow Window { get; }
-        
+        private readonly Stopwatch _watch;
+
         private bool _cursorVisible;
         private bool _fullscreen;
-        private readonly Stopwatch _watch;
-        private SpinWait _spinner;
         private Vector2 _mousePosition;
+        private SpinWait _spinner;
 
-        protected HedraWindow(int Width, int Height, IMonitor Monitor, ContextProfile Profile, ContextFlags Flags, APIVersion Version) : base()
+        protected HedraWindow(int Width, int Height, IMonitor Monitor, ContextProfile Profile, ContextFlags Flags,
+            APIVersion Version)
         {
             _watch = new Stopwatch();
             _spinner = new SpinWait();
@@ -33,7 +33,7 @@ namespace Hedra.Engine.Loader
                 ShouldSwapAutomatically = true,
                 IsVisible = true,
                 Title = "Project Hedra",
-                VSync = false,
+                VSync = false
             };
             Window = Monitor.CreateWindow(options);
             Window.Load += Load;
@@ -48,14 +48,17 @@ namespace Hedra.Engine.Loader
             var keyboard = input.Keyboards[0];
             keyboard.KeyDown += ProcessKeyDown;
             input.Keyboards[0].KeyUp += ProcessKeyUp;
-            
+
             var mouse = input.Mice[0];
-            mouse.MouseMove += (_, Point) => MouseMove?.Invoke(new MouseMoveEventArgs(_mousePosition = new Vector2(Point.X, Point.Y)));
-            mouse.MouseDown += (_, Button) => MouseDown?.Invoke(new MouseButtonEventArgs(Button, InputAction.Press, _mousePosition));
-            mouse.MouseUp += (_, Button) => MouseUp?.Invoke(new MouseButtonEventArgs(Button, InputAction.Release, _mousePosition));
+            mouse.MouseMove += (_, Point) =>
+                MouseMove?.Invoke(new MouseMoveEventArgs(_mousePosition = new Vector2(Point.X, Point.Y)));
+            mouse.MouseDown += (_, Button) =>
+                MouseDown?.Invoke(new MouseButtonEventArgs(Button, InputAction.Press, _mousePosition));
+            mouse.MouseUp += (_, Button) =>
+                MouseUp?.Invoke(new MouseButtonEventArgs(Button, InputAction.Release, _mousePosition));
             mouse.Scroll += (_, Wheel) => MouseWheel?.Invoke(new MouseWheelEventArgs(Wheel.X, Wheel.Y));
             HedraCursor.Mouse = mouse;
-            
+
             unsafe
             {
                 GlfwProvider.GLFW.Value.SetCharCallback(
@@ -65,13 +68,16 @@ namespace Hedra.Engine.Loader
             }
         }
 
-        protected abstract void RenderFrame(double Delta);
-        protected abstract void UpdateFrame(double Delta);
-        protected abstract void Unload();
-        protected abstract void FocusChanged(bool IsFocused);
-        protected abstract void Load();
-        protected abstract void Resize(Vector2D<int> Size);
-        
+        public IWindow Window { get; }
+
+        public event Action<MouseButtonEventArgs> MouseUp;
+        public event Action<MouseButtonEventArgs> MouseDown;
+        public event Action<MouseWheelEventArgs> MouseWheel;
+        public event Action<MouseMoveEventArgs> MouseMove;
+        public event Action<KeyboardKeyEventArgs> KeyDown;
+        public event Action<KeyboardKeyEventArgs> KeyUp;
+        public event Action<string> CharWritten;
+
         public void Run()
         {
             Window.IsVisible = true;
@@ -80,27 +86,18 @@ namespace Hedra.Engine.Loader
             Window.Run();
         }
 
-        private void ProcessKeyDown(IKeyboard Keyboard, Key Key, int Mods)
-        {
-            KeyDown?.Invoke(new KeyboardKeyEventArgs(Key, (KeyModifiers) Mods));
-        }
-
-        private void ProcessKeyUp(IKeyboard Keyboard, Key Key, int Mods)
-        {
-            KeyUp?.Invoke(new KeyboardKeyEventArgs(Key, (KeyModifiers) Mods));
-        }
-
         public int Width
         {
             get => Window.Size.X;
             set => Window.Size = new Vector2D<int>(value, Window.Size.Y);
         }
+
         public int Height
         {
             get => Window.Size.Y;
             set => Window.Size = new Vector2D<int>(Window.Size.X, value);
         }
-        
+
         public double TargetFramerate { get; set; }
 
         public bool IsExiting => Window.Handle == IntPtr.Zero || Window.IsClosing;
@@ -123,11 +120,6 @@ namespace Hedra.Engine.Loader
         {
             get => Window.Title;
             set => Window.Title = value;
-        }
-
-        public void Dispose()
-        {
-            Window.Close();
         }
 
         public void Close()
@@ -170,13 +162,27 @@ namespace Hedra.Engine.Loader
                 }
             }
         }
-        
-        public event Action<MouseButtonEventArgs> MouseUp;
-        public event Action<MouseButtonEventArgs> MouseDown;
-        public event Action<MouseWheelEventArgs> MouseWheel;
-        public event Action<MouseMoveEventArgs> MouseMove;
-        public event Action<KeyboardKeyEventArgs> KeyDown;
-        public event Action<KeyboardKeyEventArgs> KeyUp;
-        public event Action<string> CharWritten;
+
+        protected abstract void RenderFrame(double Delta);
+        protected abstract void UpdateFrame(double Delta);
+        protected abstract void Unload();
+        protected abstract void FocusChanged(bool IsFocused);
+        protected abstract void Load();
+        protected abstract void Resize(Vector2D<int> Size);
+
+        private void ProcessKeyDown(IKeyboard Keyboard, Key Key, int Mods)
+        {
+            KeyDown?.Invoke(new KeyboardKeyEventArgs(Key, (KeyModifiers)Mods));
+        }
+
+        private void ProcessKeyUp(IKeyboard Keyboard, Key Key, int Mods)
+        {
+            KeyUp?.Invoke(new KeyboardKeyEventArgs(Key, (KeyModifiers)Mods));
+        }
+
+        public void Dispose()
+        {
+            Window.Close();
+        }
     }
 }

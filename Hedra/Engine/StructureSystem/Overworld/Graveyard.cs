@@ -8,30 +8,22 @@
  */
 
 using System.Linq;
+using System.Numerics;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
-using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.WorldBuilding;
-using Hedra.Localization;
-using Hedra.Mission;
-using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
     /// <inheritdoc cref="BaseStructure" />
     /// <summary>
-    /// Description of Cementary.
+    ///     Description of Cementary.
     /// </summary>
     public sealed class Graveyard : BaseStructureWithChest, IUpdatable, ICompletableStructure
     {
         private readonly GraveyardAmbientHandler _ambientHandler;
-        public Entity[] Enemies { get; set; }
-        public float Radius { get; }
-        public bool Completed => Enemies != null && EnemiesLeft == 0;
-        public int EnemiesLeft => Enemies.Count(E => !E.IsDead);
-        public HighlightedAreaWrapper AreaWrapper { get; set; }
 
         public Graveyard(Vector3 Position, float Radius) : base(Position)
         {
@@ -39,7 +31,24 @@ namespace Hedra.Engine.StructureSystem.Overworld
             _ambientHandler = new GraveyardAmbientHandler(this);
             UpdateManager.Add(this);
         }
-        
+
+        public Entity[] Enemies { get; set; }
+        public float Radius { get; }
+        public int EnemiesLeft => Enemies.Count(E => !E.IsDead);
+        public HighlightedAreaWrapper AreaWrapper { get; set; }
+        public bool Completed => Enemies != null && EnemiesLeft == 0;
+
+        public override void Dispose()
+        {
+            if (Enemies != null)
+                for (var i = 0; i < Enemies.Length; i++)
+                    Enemies[i].Dispose();
+            AreaWrapper?.Dispose();
+            _ambientHandler.Dispose();
+            UpdateManager.Remove(this);
+            base.Dispose();
+        }
+
         public void Update()
         {
             _ambientHandler.Update();
@@ -48,21 +57,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 AreaWrapper?.Dispose();
                 AreaWrapper = null;
             }
-        }
-        
-        public override void Dispose()
-        {
-            if (Enemies != null)
-            {
-                for (var i = 0; i < Enemies.Length; i++)
-                {
-                    Enemies[i].Dispose();
-                }
-            }
-            AreaWrapper?.Dispose();
-            _ambientHandler.Dispose();
-            UpdateManager.Remove(this);
-            base.Dispose();
         }
     }
 }

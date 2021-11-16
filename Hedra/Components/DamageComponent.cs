@@ -10,10 +10,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Linq;
+using System.Numerics;
 using Hedra.AISystem;
+using Hedra.Components.Effects;
 using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Management;
@@ -21,16 +21,15 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Game;
+using Hedra.Numerics;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
-using System.Numerics;
-using Hedra.Components.Effects;
-using Hedra.Numerics;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Components
 {
     /// <summary>
-    /// Description of DamageComponent.
+    ///     Description of DamageComponent.
     /// </summary>
     public delegate void OnDamageEventHandler(DamageEventArgs Args);
 
@@ -38,27 +37,16 @@ namespace Hedra.Components
 
     public class DamageComponent : SingularComponent<DamageComponent, IEntity>
     {
+        public const float DefaultMissChance = 0.05f;
         private static readonly Vector4 DamageTint = new Vector4(2.0f, 0.1f, 0.1f, 1);
         private static readonly Vector4 DamageTint2 = Vector4.One;
-
-        public const float DefaultMissChance = 0.05f;
-        public event OnDamageEventHandler OnDamageEvent;
-        public event OnDeadEvent OnDeadEvent;
-        public float XpToGive { get; set; } = 8;
-        public bool Immune { get; set; }
-        public bool Delete { get; set; } = true;
-        public bool PlayDeleteAnimation { get; set; } = true;
-        public bool PushOnHit { get; set; } = true;
-        public bool AICanReach { get; set; } = true;
-        public float MissChance { get; set; } = DefaultMissChance;
         private readonly List<BaseBillboard> _damageLabels;
         private readonly List<Predicate<IEntity>> _ignoreList;
-        private float _tintTimer;
-        private Vector4 _targetTint;
         private float _attackedTimer;
-        private bool _hasBeenAttacked;
-        private bool _wasDead;
+        private Vector4 _targetTint;
         private float _tintStrength;
+        private float _tintTimer;
+        private bool _wasDead;
 
         public DamageComponent(IEntity Parent) : base(Parent)
         {
@@ -75,6 +63,25 @@ namespace Hedra.Components
             };
         }
 
+        public float XpToGive { get; set; } = 8;
+        public bool Immune { get; set; }
+        public bool Delete { get; set; } = true;
+        public bool PlayDeleteAnimation { get; set; } = true;
+        public bool PushOnHit { get; set; } = true;
+        public bool AICanReach { get; set; } = true;
+        public float MissChance { get; set; } = DefaultMissChance;
+
+        public BaseBillboard[] Labels => _damageLabels.ToArray();
+
+        /// <summary>
+        ///     Returns a bool representing if the Entity has been attacked in the last six seconds.
+        /// </summary>
+        public bool HasBeenAttacked { get; private set; }
+
+        public float XPObtained => XpToGive * Balancer.XPObtainedMultiplier;
+        public event OnDamageEventHandler OnDamageEvent;
+        public event OnDeadEvent OnDeadEvent;
+
         public override void Update()
         {
             if ((Parent.Model.Tint - _targetTint).LengthFast() > 0.005f)
@@ -88,7 +95,7 @@ namespace Hedra.Components
             if (HasBeenAttacked)
             {
                 _attackedTimer -= Time.IndependentDeltaTime;
-                if (_attackedTimer < 0) _hasBeenAttacked = false;
+                if (_attackedTimer < 0) HasBeenAttacked = false;
             }
 
             for (var i = _damageLabels.Count - 1; i > -1; i--)
@@ -129,7 +136,7 @@ namespace Hedra.Components
 
             var shouldMiss = Parent is LocalPlayer && Utils.Rng.NextFloat() < MissChance;
             _attackedTimer = 6;
-            _hasBeenAttacked = true;
+            HasBeenAttacked = true;
             var isImmune = Immune; // || (Parent.IsStuck && !Parent.Model.Pause) || !AICanReach;
 
             if (!Parent.IsStatic && PlaySound &&
@@ -233,25 +240,10 @@ namespace Hedra.Components
         {
             return _ignoreList.Any(P => P(Entity));
         }
-
-        public BaseBillboard[] Labels => _damageLabels.ToArray();
-
-        /// <summary>
-        /// Returns a bool representing if the Entity has been attacked in the last six seconds.
-        /// </summary>
-        public bool HasBeenAttacked => _hasBeenAttacked;
-
-        public float XPObtained => XpToGive * Balancer.XPObtainedMultiplier;
     }
 
     public class DamageEventArgs : EventArgs
     {
-        public IEntity Victim { get; }
-        public IEntity Damager { get; }
-        public float Amount { get; }
-        public float Experience { get; }
-        public DamageType DamageType { get; }
-
         public DamageEventArgs(IEntity Victim, IEntity Damager, float Amount, float Experience, DamageType DamageType)
         {
             this.Victim = Victim;
@@ -260,6 +252,12 @@ namespace Hedra.Components
             this.Experience = Experience;
             this.DamageType = DamageType;
         }
+
+        public IEntity Victim { get; }
+        public IEntity Damager { get; }
+        public float Amount { get; }
+        public float Experience { get; }
+        public DamageType DamageType { get; }
     }
 
     public class DeadEventArgs : DamageEventArgs

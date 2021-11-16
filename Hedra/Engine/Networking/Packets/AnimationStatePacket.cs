@@ -5,7 +5,7 @@ namespace Hedra.Engine.Networking.Packets
     public class AnimationStatePacket : NetworkPacket<AnimationStatePacket>
     {
         public override MessagePacketType Type => MessagePacketType.AnimationStatePacket;
-        
+
         public bool[] AnimationStates { get; private set; }
 
         public static AnimationStatePacket From(IHumanoid Humanoid)
@@ -20,7 +20,7 @@ namespace Hedra.Engine.Networking.Packets
         {
             Humanoid.Model.StateHandler.ModifiableStates = Packet.AnimationStates;
         }
-        
+
         protected override void DoParse(PacketReader Reader, AnimationStatePacket Empty)
         {
             Empty.AnimationStates = Reader.ReadArray(Reader.ReadBoolean);

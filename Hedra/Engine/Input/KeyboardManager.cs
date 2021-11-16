@@ -16,11 +16,11 @@ namespace Hedra.Engine.Input
             for (var i = 0; i < values.Length; i++)
             {
                 var key = (int)values.GetValue(i);
-                if(!_mappings.ContainsKey(key))
+                if (!_mappings.ContainsKey(key))
                     _mappings.Add(key, false);
             }
 
-            EventDispatcher.RegisterKeyDown(this, (O,E) => _mappings[(int)E.Key] = true);
+            EventDispatcher.RegisterKeyDown(this, (O, E) => _mappings[(int)E.Key] = true);
             EventDispatcher.RegisterKeyUp(this, (O, E) => _mappings[(int)E.Key] = false);
         }
 

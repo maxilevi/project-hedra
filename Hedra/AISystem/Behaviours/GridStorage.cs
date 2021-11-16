@@ -1,24 +1,18 @@
 using System;
 using Hedra.Core;
-using Hedra.Engine;
-using Hedra.Engine.Management;
-using Hedra.EntitySystem;
-using System.Numerics;
 using Hedra.Engine.Scenes;
+using Hedra.EntitySystem;
 
 namespace Hedra.AISystem.Behaviours
 {
     public delegate void OnGridUpdated(WaypointGrid UpdatedGrid);
-    
+
     public class GridStorage
     {
-        public event OnGridUpdated GridUpdated;
-        public WaypointGrid Storage { get; set; }
         private readonly Timer _rebuildPathTimer;
         private float _currentTimeBetweenTargets;
         private float _lastTimeBetweenTargets;
         private bool _useRebuildTimer;
-        public int ReferenceCounter { get; set; } = 1;
 
         public GridStorage(WaypointGrid Storage)
         {
@@ -28,7 +22,11 @@ namespace Hedra.AISystem.Behaviours
                 AutoReset = false
             };
         }
-        
+
+        public WaypointGrid Storage { get; set; }
+        public int ReferenceCounter { get; set; } = 1;
+        public event OnGridUpdated GridUpdated;
+
         public bool RebuildIfNecessary(IEntity Parent, bool NewTarget)
         {
             var needsRebuild = _useRebuildTimer ? _rebuildPathTimer.Ready : NewTarget;
@@ -48,11 +46,12 @@ namespace Hedra.AISystem.Behaviours
             UpdateStrategy();
             _rebuildPathTimer.Tick();
         }
-        
+
         private void UpdateStrategy()
         {
             _currentTimeBetweenTargets += Time.DeltaTime;
-            _useRebuildTimer = Math.Max(_currentTimeBetweenTargets, _lastTimeBetweenTargets) < _rebuildPathTimer.AlertTime;
+            _useRebuildTimer = Math.Max(_currentTimeBetweenTargets, _lastTimeBetweenTargets) <
+                               _rebuildPathTimer.AlertTime;
         }
 
         private void UpdateGrid(IEntity Parent)

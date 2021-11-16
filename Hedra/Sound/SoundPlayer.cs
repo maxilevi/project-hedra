@@ -6,18 +6,15 @@
  */
 
 using System;
-using System.Reflection;
-using Hedra.Core;
-using Hedra.Engine;
-using Hedra.Engine.Sound;
 using System.Numerics;
+using Hedra.Engine.Sound;
 using Hedra.Numerics;
 using Silk.NET.OpenAL;
 
 namespace Hedra.Sound
 {
     /// <summary>
-    /// Use for playing sound effects.
+    ///     Use for playing sound effects.
     /// </summary>
     public static class SoundPlayer
     {
@@ -30,7 +27,7 @@ namespace Hedra.Sound
             get => Provider.Volume;
             set => Provider.Volume = value;
         }
-        
+
         public static void Load()
         {
             Provider.Setup();
@@ -41,24 +38,28 @@ namespace Hedra.Sound
             Provider.Update(Position);
         }
 
-        public static void PlaySound(SoundType Sound, Vector3 Location, bool Looping = false, float Pitch = 1, float Gain = 1)
+        public static void PlaySound(SoundType Sound, Vector3 Location, bool Looping = false, float Pitch = 1,
+            float Gain = 1)
         {
             PlaySound(Sound.ToString(), Location, Looping, Pitch, Gain);
         }
-        
-        public static void PlaySound(string SoundName, Vector3 Location, bool Looping = false, float Pitch = 1, float Gain = 1)
+
+        public static void PlaySound(string SoundName, Vector3 Location, bool Looping = false, float Pitch = 1,
+            float Gain = 1)
         {
             Provider.PlaySound(SoundName, Location, Looping, Pitch, Gain);
         }
-        
+
         public static void PlayUISound(SoundType Sound, float Pitch = 1, float Gain = 1)
         {
             PlaySound(Sound, ListenerPosition, false, Pitch, Gain);
         }
-        
-        public static void PlaySoundWithVariation(SoundType Sound, Vector3 Location, float BasePitch = 1f, float BaseGain = 1f)
+
+        public static void PlaySoundWithVariation(SoundType Sound, Vector3 Location, float BasePitch = 1f,
+            float BaseGain = 1f)
         {
-            PlaySound(Sound, Location, false, BasePitch + Utils.Rng.NextFloat() * .2f - .1f, BaseGain + Utils.Rng.NextFloat() * .2f - .1f);
+            PlaySound(Sound, Location, false, BasePitch + Utils.Rng.NextFloat() * .2f - .1f,
+                BaseGain + Utils.Rng.NextFloat() * .2f - .1f);
         }
 
         public static void PlaySoundWhile(SoundType Sound, Func<bool> Lambda, Func<float> Pitch, Func<float> Gain)
@@ -85,7 +86,7 @@ namespace Hedra.Sound
         {
             Provider.LoadSound(Name.ToString(), Names);
         }
-        
+
         public static void LoadSound(string Name, params string[] Names)
         {
             Provider.LoadSound(Name, Names);
@@ -96,7 +97,7 @@ namespace Hedra.Sound
             Provider.MarkAsReady();
         }
     }
-    
+
     public enum SoundType
     {
         None,

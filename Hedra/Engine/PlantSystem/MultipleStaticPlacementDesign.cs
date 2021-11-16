@@ -9,15 +9,15 @@ namespace Hedra.Engine.PlantSystem
     {
         protected abstract PlantDesign[] Designs { get; }
 
+        protected abstract BlockType[] Types { get; }
+
         protected abstract PlantDesign SelectDesign(Random Rng);
 
         public override PlantDesign GetDesign(Vector3 Position, Chunk UnderChunk, Random Rng)
         {
             return SelectDesign(Rng);
         }
-        
-        protected abstract BlockType[] Types { get; }
-        
+
         protected abstract bool ShouldPlace(Random Rng);
 
         public override bool ShouldPlace(Vector3 Position, Chunk UnderChunk)

@@ -6,13 +6,13 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
+
 using Hedra.Sound;
 
 namespace Hedra.Engine.Sound
 {
     /// <summary>
-    /// Description of SoundEffect.
+    ///     Description of SoundEffect.
     /// </summary>
     public struct SoundEffect
     {
@@ -20,7 +20,7 @@ namespace Hedra.Engine.Sound
         public bool RandomPitch;
         public bool RandomVolume;
         public bool Initialized;
-        
+
         public SoundEffect(SoundType Type, bool RandomPitch, bool RandomVolume, float Pitch, float Volume)
         {
             this.Type = Type;
@@ -28,7 +28,7 @@ namespace Hedra.Engine.Sound
             this.RandomVolume = RandomVolume;
             //this.m_Pitch = Pitch;
             //this.m_Volume = Volume;
-            this.Initialized = true;
+            Initialized = true;
         }
         /*
         private float m_Pitch;

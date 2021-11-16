@@ -12,7 +12,7 @@
     }
   ],
   "Class": "Mage",
-  "Behaviour" : "Hostile",
+  "Behaviour": "Hostile",
   "Weapons": [
     {
       "Tier": "Rare",

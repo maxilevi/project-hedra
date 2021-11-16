@@ -2,28 +2,42 @@ using System.Numerics;
 
 namespace Hedra.Engine.Rendering.UI
 {
-    public abstract class TextureAnimation<T>  where T : class, ISimpleTexture
+    public abstract class TextureAnimation<T> where T : class, ISimpleTexture
     {
+        private T _handle;
         public float Intensity { get; set; } = 1;
         public bool Active => Handle != null;
-        private T _handle;
+
+        private TextureState State { get; set; }
+
+        private T Handle
+        {
+            get => _handle;
+            set
+            {
+                if (_handle != null) End(_handle, State);
+                _handle = value;
+                State = _handle != null ? TextureState.From(_handle) : null;
+                if (_handle != null) Start(_handle, State);
+            }
+        }
 
         public void Update()
         {
-            if(Handle == null) return;
-            Process(this.Handle, this.State);
+            if (Handle == null) return;
+            Process(Handle, State);
         }
 
         public void Play(T Texture)
         {
-            this.Handle = Texture;
+            Handle = Texture;
         }
 
         public void Stop()
         {
-            this.Handle = null;
+            Handle = null;
         }
-        
+
         protected virtual void Start(T Texture, TextureState State)
         {
         }
@@ -35,20 +49,6 @@ namespace Hedra.Engine.Rendering.UI
             Texture.Position = State.Position;
             Texture.Scale = State.Scale;
         }
-
-        private TextureState State { get; set; }
-        
-        private T Handle
-        {
-            get => _handle;
-            set
-            {
-                if(_handle != null) this.End(_handle, State);
-                _handle = value;
-                State = _handle != null ? TextureState.From(_handle) : null;
-                if(_handle != null) this.Start(_handle, State);
-            }
-        }
     }
 
     public class TextureState
@@ -57,7 +57,7 @@ namespace Hedra.Engine.Rendering.UI
         public Vector2 Scale { get; private set; }
         public bool Flipped { get; private set; }
         public float Opacity { get; private set; }
-        public bool Enabled {get; private set;}
+        public bool Enabled { get; private set; }
         public Vector4 Tint { get; private set; }
         public bool Grayscale { get; private set; }
         public float Angle { get; private set; }

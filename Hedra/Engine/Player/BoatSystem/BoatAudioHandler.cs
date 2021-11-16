@@ -1,16 +1,16 @@
 using System;
+using System.Numerics;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
 using Hedra.Sound;
-using System.Numerics;
 
 namespace Hedra.Engine.Player.BoatSystem
 {
     public class BoatAudioHandler : IDisposable
     {
-        private readonly BoatStateHandler _stateHandler;
-        private readonly IHumanoid _humanoid;
         private readonly AreaSound _areaSound;
+        private readonly IHumanoid _humanoid;
+        private readonly BoatStateHandler _stateHandler;
 
         public BoatAudioHandler(IHumanoid Humanoid, BoatStateHandler StateHandler)
         {
@@ -19,17 +19,17 @@ namespace Hedra.Engine.Player.BoatSystem
             _areaSound = new AreaSound(SoundType.BoatMove, Vector3.Zero, 16f);
         }
 
+        public void Dispose()
+        {
+            _areaSound.Dispose();
+        }
+
         public void Update()
         {
             /*
             _areaSound.Position = _player.Position;
             _areaSound.Update(_stateHandler.Enabled && _stateHandler.Velocity.LengthFast() > 15);
             */
-        }
-
-        public void Dispose()
-        {
-            _areaSound.Dispose();
         }
     }
 }

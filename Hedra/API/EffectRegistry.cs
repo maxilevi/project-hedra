@@ -6,6 +6,8 @@ namespace Hedra.API
 {
     public class EffectRegistry : TypeRegistry
     {
+        protected override Type RegistryType => typeof(ApplyEffectComponent);
+
         protected override void DoAdd(string Key, Type Value)
         {
             EffectFactory.Instance.Register(Key, Value);
@@ -15,7 +17,5 @@ namespace Hedra.API
         {
             EffectFactory.Instance.Unregister(Key);
         }
-
-        protected override Type RegistryType => typeof(ApplyEffectComponent);
     }
 }

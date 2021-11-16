@@ -1,9 +1,7 @@
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Localization;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Items
 {

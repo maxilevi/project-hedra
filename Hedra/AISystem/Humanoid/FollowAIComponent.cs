@@ -8,24 +8,18 @@
  */
 
 using Hedra.AISystem.Behaviours;
-using Hedra.Core;
-using Hedra.Engine;
-using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Game;
-using Hedra.Engine.PhysicsSystem;
 using Hedra.EntitySystem;
-using Hedra.Game;
-using Hedra.Numerics;
 
 namespace Hedra.AISystem.Humanoid
 {
     /// <inheritdoc />
     /// <summary>
-    /// Description of OldManAIComponent.
+    ///     Description of OldManAIComponent.
     /// </summary>
     public class FollowAIComponent : BasicAIComponent
     {
         private readonly FollowBehaviour _follow;
+
         public FollowAIComponent(IEntity Parent, IEntity ToFollow) : base(Parent)
         {
             _follow = new FollowBehaviour(Parent)
@@ -33,14 +27,14 @@ namespace Hedra.AISystem.Humanoid
                 Target = ToFollow
             };
         }
-        
+
+        public override AIType Type => AIType.Neutral;
+
         public override void Update()
         {
             _follow.Update();
         }
 
-        public override AIType Type => AIType.Neutral;
-        
         public override void Dispose()
         {
             base.Dispose();

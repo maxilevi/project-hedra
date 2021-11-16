@@ -11,9 +11,9 @@ out vec2 InScale;
 out vec2 UV;
 
 void main(){
-	InScale = Scale;	
-	gl_Position = vec4( InVertex * Scale + Position, 0.0, 1.0);
-	UV = vec2((InVertex.x+1.0)/2.0, 1.0 - (InVertex.y+1.0)/2.0);
-	FixedPos = InVertex * Scale;
-	Gradient = FixedPos.y;
+    InScale = Scale;
+    gl_Position = vec4(InVertex * Scale + Position, 0.0, 1.0);
+    UV = vec2((InVertex.x+1.0)/2.0, 1.0 - (InVertex.y+1.0)/2.0);
+    FixedPos = InVertex * Scale;
+    Gradient = FixedPos.y;
 }

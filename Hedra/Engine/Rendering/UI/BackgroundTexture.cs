@@ -7,25 +7,20 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
-using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Numerics;
 using Hedra.Engine.Management;
-using System.IO;
-using Hedra.Engine.Game;
 using Hedra.Game;
 using Hedra.Rendering;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Rendering.UI
 {
     /// <summary>
-    /// Description of Texture.
+    ///     Description of Texture.
     /// </summary>
     public class BackgroundTexture : UIElement
     {
         public GUITexture TextureElement;
-        public bool Enabled { get; private set; }
 
         public BackgroundTexture(string AssetPath, Vector2 Position, Vector2 Scale)
         {
@@ -59,21 +54,7 @@ namespace Hedra.Engine.Rendering.UI
             DrawManager.UIRenderer.Add(TextureElement);
         }
 
-        private uint CreateGradient(Vector2 Scale, Color GradientColor0, Color GradientColor1, GradientType Type)
-        {
-            var bmp = new Bitmap((int)(Scale.X * GameSettings.Width + 1), (int)(Scale.Y * GameSettings.Height + 1));
-            bmp = Graphics2D.CreateGradient(GradientColor0, GradientColor1, Type, bmp);
-            return Graphics2D.LoadTexture(new BitmapObject
-            {
-                Bitmap = bmp,
-                Path = $"UI:Gradient:{GradientColor0}-{GradientColor1}"
-            });
-        }
-
-        public void SendBack()
-        {
-            DrawManager.UIRenderer.SendBack(TextureElement);
-        }
+        public bool Enabled { get; private set; }
 
         public Vector2 Scale
         {
@@ -103,6 +84,22 @@ namespace Hedra.Engine.Rendering.UI
         {
             DrawManager.UIRenderer.Remove(TextureElement);
             TextureElement.Dispose();
+        }
+
+        private uint CreateGradient(Vector2 Scale, Color GradientColor0, Color GradientColor1, GradientType Type)
+        {
+            var bmp = new Bitmap((int)(Scale.X * GameSettings.Width + 1), (int)(Scale.Y * GameSettings.Height + 1));
+            bmp = Graphics2D.CreateGradient(GradientColor0, GradientColor1, Type, bmp);
+            return Graphics2D.LoadTexture(new BitmapObject
+            {
+                Bitmap = bmp,
+                Path = $"UI:Gradient:{GradientColor0}-{GradientColor1}"
+            });
+        }
+
+        public void SendBack()
+        {
+            DrawManager.UIRenderer.SendBack(TextureElement);
         }
     }
 }

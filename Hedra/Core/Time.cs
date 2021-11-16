@@ -8,23 +8,18 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using Hedra.Engine.Game;
 using Hedra.Game;
 
 namespace Hedra.Core
 {
     /// <summary>
-    /// Time manager.
+    ///     Time manager.
     /// </summary>
     public static class Time
     {
         private static readonly Dictionary<int, TimeProvider> Providers = new Dictionary<int, TimeProvider>();
         public static float TimeScale { get; private set; } = 1;
         public static bool Paused => TimeScale <= 0.005f;
-        public static void IncrementFrame(double Time) => IncrementFrame((float)Time);
-        public static void IncrementFrame(float Time) => Current.IncrementFrame(Time);
-        public static void Set(double Time, bool UpdateCounter = true) => Set((float) Time, UpdateCounter);
-        public static void Set(float Time, bool UpdateCounter) => Current.Set(Time, UpdateCounter);
         private static TimeProvider Current => Providers[Thread.CurrentThread.ManagedThreadId];
         public static int Framerate => Current.Framerate;
         public static float Frametime => Current.Frametime;
@@ -34,9 +29,29 @@ namespace Hedra.Core
         public static float IndependentAccumulatedFrameTime => Current.IndependentAccumulatedFrameTime;
         public static float LastFrameUpdate => Current.LastFrameUpdate;
 
+        public static void IncrementFrame(double Time)
+        {
+            IncrementFrame((float)Time);
+        }
+
+        public static void IncrementFrame(float Time)
+        {
+            Current.IncrementFrame(Time);
+        }
+
+        public static void Set(double Time, bool UpdateCounter = true)
+        {
+            Set((float)Time, UpdateCounter);
+        }
+
+        public static void Set(float Time, bool UpdateCounter)
+        {
+            Current.Set(Time, UpdateCounter);
+        }
+
         public static void RegisterThread()
         {
-            if(!Providers.ContainsKey(Thread.CurrentThread.ManagedThreadId))
+            if (!Providers.ContainsKey(Thread.CurrentThread.ManagedThreadId))
                 Providers.Add(Thread.CurrentThread.ManagedThreadId, new TimeProvider());
         }
 
@@ -62,11 +77,12 @@ namespace Hedra.Core
                 DeltaTime = IndependentDeltaTime * TimeScale;
                 if (Math.Abs(LastFrameUpdate - Environment.TickCount) > 1000 && UpdateCounter)
                 {
-                    Framerate = (int) (1.0 / Time);
-                    Frametime = (float) Time;
+                    Framerate = (int)(1.0 / Time);
+                    Frametime = Time;
                     LastFrameUpdate = Environment.TickCount;
                 }
             }
+
             public void IncrementFrame(float Time)
             {
                 AccumulatedFrameTime += Time * TimeScale;

@@ -9,16 +9,14 @@
 
 using System;
 using System.Globalization;
-using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
 using Hedra.Localization;
 using Hedra.Rendering;
 
 namespace Hedra.Engine.SkillSystem.Rogue
 {
     /// <summary>
-    /// Description of WeaponThrow.
+    ///     Description of WeaponThrow.
     /// </summary>
     public class BurstOfSpeed : CappedSkill<IPlayer>
     {
@@ -37,17 +35,19 @@ namespace Hedra.Engine.SkillSystem.Rogue
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/BurstOfSpeed.png");
         protected override int MaxLevel => 15;
 
+        public override string Description => Translations.Get("burst_of_speed_desc");
+        public override string DisplayName => Translations.Get("burst_of_speed_skill");
+
+        public override string[] Attributes => new[]
+        {
+            Translations.Get("burst_of_speed_duration_change",
+                EffectDuration.ToString("0.0", CultureInfo.InvariantCulture)),
+            Translations.Get("burst_of_speed_bonus_change", Speed.ToString("0.0", CultureInfo.InvariantCulture))
+        };
+
         protected override void DoUse()
         {
             User.AddBonusSpeedForSeconds(Speed, EffectDuration);
         }
-
-        public override string Description => Translations.Get("burst_of_speed_desc");
-        public override string DisplayName => Translations.Get("burst_of_speed_skill");
-        public override string[] Attributes => new []
-        {
-            Translations.Get("burst_of_speed_duration_change", EffectDuration.ToString("0.0", CultureInfo.InvariantCulture)),
-            Translations.Get("burst_of_speed_bonus_change", Speed.ToString("0.0", CultureInfo.InvariantCulture))
-        };
     }
 }

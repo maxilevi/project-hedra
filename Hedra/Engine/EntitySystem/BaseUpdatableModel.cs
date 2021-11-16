@@ -1,6 +1,6 @@
+using System.Numerics;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.EntitySystem;
-using System.Numerics;
 
 namespace Hedra.Engine.EntitySystem
 {
@@ -27,13 +27,13 @@ namespace Hedra.Engine.EntitySystem
         public abstract Vector3 Position { get; set; }
         public abstract Vector3 LocalRotation { get; set; }
         public abstract Vector3 Scale { get; set; }
-        public abstract Vector3 TargetRotation { get; set; }     
+        public abstract Vector3 TargetRotation { get; set; }
         public abstract Vector4 OutlineColor { get; set; }
+        public bool IsUndead { get; protected set; }
         public abstract void Update();
         public abstract void BaseUpdate();
         public abstract bool CanAttack(IEntity Victim, float RangeModifier);
         public abstract void Attack(IEntity Victim, float RangeModifier);
         public abstract void Dispose();
-        public bool IsUndead { get; protected set; }
     }
 }

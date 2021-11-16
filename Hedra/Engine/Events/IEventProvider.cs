@@ -1,7 +1,5 @@
 using System;
-
 using Hedra.Engine.Windowing;
-
 
 namespace Hedra.Engine.Events
 {

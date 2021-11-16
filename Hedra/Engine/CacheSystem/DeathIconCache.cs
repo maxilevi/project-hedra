@@ -1,5 +1,5 @@
-using Hedra.Engine.Management;
 using System.Numerics;
+using Hedra.Engine.Management;
 
 namespace Hedra.Engine.CacheSystem
 {
@@ -9,7 +9,7 @@ namespace Hedra.Engine.CacheSystem
         {
             AddModel(AssetManager.PLYLoader("Assets/Env/DeathIcon.ply", Vector3.One));
         }
-        
+
         public override CacheItem Type => CacheItem.DeathIcon;
     }
 }

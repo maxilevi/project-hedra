@@ -2,17 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Hedra.Core;
+using System.Numerics;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.Player;
 using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Game;
-using Hedra.Rendering;
-using System.Numerics;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
@@ -36,15 +33,17 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                     LightColor = WorldLight.DefaultColor
                 });
             }
+
             PlaceWhenWorldReady(TargetPosition, Place, () => Structure.Disposed);
         }
-        
-        public static void PlaceBench(Vector3 TargetPosition, bool IsInIntersection, 
+
+        public static void PlaceBench(Vector3 TargetPosition, bool IsInIntersection,
             Vector3 Orientation, CollidableStructure Structure, VillageRoot Root, Random Rng)
         {
             var template = SelectTemplate(Root.Template.Decorations.Benches.ToArray(), Rng);
             var bench = Root.Cache.GrabModel(template.Path);
             var shapes = Root.Cache.GrabShapes(template.Path);
+
             void Place(Vector3 Position)
             {
                 var rotation = Vector3.UnitY * (IsInIntersection ? 90 : 0);
@@ -61,6 +60,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                     )
                 );
             }
+
             PlaceWhenWorldReady(TargetPosition, Place, () => Structure.Disposed);
         }
 
@@ -76,12 +76,12 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         {
             return Templates[Rng.Next(0, Templates.Count)];
         }
-        
+
         private static IEnumerator DoPlace(object[] Params)
         {
-            var position = (Vector3) Params[0];
-            var lambda = (Action<Vector3>) Params[1];
-            var shouldDispose = (Func<bool>) Params[2];
+            var position = (Vector3)Params[0];
+            var lambda = (Action<Vector3>)Params[1];
+            var shouldDispose = (Func<bool>)Params[2];
             var waiter = new WaitForChunk(position)
             {
                 DisposeCondition = shouldDispose
@@ -94,6 +94,6 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             }
 
             lambda(new Vector3(position.X, Physics.HeightAtPosition(position), position.Z));
-        }       
+        }
     }
 }

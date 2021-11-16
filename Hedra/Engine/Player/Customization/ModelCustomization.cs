@@ -4,10 +4,12 @@ namespace Hedra.Engine.Player.Customization
     {
         static ModelCustomization()
         {
-            Default = new ModelCustomization();    
+            Default = new ModelCustomization();
         }
 
-        private ModelCustomization() { }
+        private ModelCustomization()
+        {
+        }
 
         public static ModelCustomization Default { get; }
     }

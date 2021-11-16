@@ -5,6 +5,8 @@ namespace Hedra.API
 {
     public class AIRegistry : TypeRegistry
     {
+        protected override Type RegistryType { get; } = typeof(BasicAIComponent);
+
         protected override void DoAdd(string Name, Type ClassType)
         {
             AIFactory.Instance.Register(Name, ClassType);
@@ -14,7 +16,5 @@ namespace Hedra.API
         {
             AIFactory.Instance.Unregister(Name);
         }
-
-        protected override Type RegistryType { get; } = typeof(BasicAIComponent);
     }
 }

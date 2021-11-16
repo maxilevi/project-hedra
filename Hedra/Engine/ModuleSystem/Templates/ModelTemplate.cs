@@ -1,5 +1,4 @@
 using System;
-using System.Numerics;
 
 namespace Hedra.Engine.ModuleSystem.Templates
 {
@@ -19,13 +18,11 @@ namespace Hedra.Engine.ModuleSystem.Templates
         {
             var eachChance = CalculateChanceForUnassigned(AttackAnimations);
             for (var i = 0; i < AttackAnimations.Length; ++i)
-            {
                 AttackAnimations[i].Chance = Math.Abs(AttackAnimations[i].Chance) < 0.005f
                     ? eachChance
                     : AttackAnimations[i].Chance;
-            }
         }
-        
+
         private static float CalculateChanceForUnassigned(AttackAnimationTemplate[] Templates)
         {
             var used = 0f;
@@ -36,6 +33,7 @@ namespace Hedra.Engine.ModuleSystem.Templates
                     unusedCount++;
                 used += Templates[i].Chance;
             }
+
             return unusedCount == 0 ? 0 : (1 - used) / unusedCount;
         }
     }

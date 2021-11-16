@@ -6,50 +6,53 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
-using System.Numerics;
 
 namespace Hedra.Engine.EntitySystem
 {
     /// <summary>
-    /// Description of StaticModel.
+    ///     Description of StaticModel.
     /// </summary>
     public class StaticModel : UpdatableObjectMeshModel
     {
-        public override bool IsStatic => true;
-
         public StaticModel(IEntity Parent, VertexData BaseMesh) : base(Parent)
         {
-            this.SetModel(BaseMesh);
+            SetModel(BaseMesh);
         }
 
-        public StaticModel(VertexData BaseMesh) : this(null, BaseMesh) { }
+        public StaticModel(VertexData BaseMesh) : this(null, BaseMesh)
+        {
+        }
+
+        public override bool IsStatic => true;
 
         public void SetModel(VertexData Mesh)
         {
             var model = ObjectMesh.FromVertexData(Mesh);
             if (Model != null)
             {
-                model.Position = this.Position;
-                model.LocalRotation = this.LocalRotation;
-                model.LocalRotationPoint = this.LocalRotationPoint;
-                model.Rotation = this.Rotation;
-                model.LocalPosition = this.LocalPosition;
-                model.BeforeRotation = this.BeforeRotation;
-                model.TransformationMatrix = this.TransformationMatrix;
-                model.Scale = this.Scale;
-                model.Alpha = this.Alpha;
-                model.ApplyFog = this.ApplyFog;
-                model.Outline = this.Outline;
-                model.Pause = this.Pause;
-                model.Enabled = this.Enabled;
+                model.Position = Position;
+                model.LocalRotation = LocalRotation;
+                model.LocalRotationPoint = LocalRotationPoint;
+                model.Rotation = Rotation;
+                model.LocalPosition = LocalPosition;
+                model.BeforeRotation = BeforeRotation;
+                model.TransformationMatrix = TransformationMatrix;
+                model.Scale = Scale;
+                model.Alpha = Alpha;
+                model.ApplyFog = ApplyFog;
+                model.Outline = Outline;
+                model.Pause = Pause;
+                model.Enabled = Enabled;
                 Model.Dispose();
             }
-            this.Model = model;
+
+            Model = model;
         }
-        
+
         public override void Dispose()
         {
             Model.Dispose();

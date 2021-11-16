@@ -8,36 +8,30 @@
  */
 
 using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Linq;
+using System.Numerics;
 using Hedra.Core;
 using Hedra.Engine.Events;
-using Hedra.Engine.Game;
 using Hedra.Engine.Localization;
-using Hedra.Engine.Management;
 using Hedra.Engine.Windowing;
 using Hedra.Game;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-using Hedra.Sound;
-using System.Numerics;
-using Hedra.Numerics;
 using Silk.NET.Input;
-
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Rendering.UI
 {
     public class ControlsUI : Panel
     {
-        private readonly GUIText[] _labels;
         private readonly Button[] _backgrounds;
-        private readonly GUIText[] _keys;
         private readonly string[] _controlMapKeys;
         private readonly Vector2[] _keyPositions;
-        private readonly GUIText _resetToDefaultsText;
+        private readonly GUIText[] _keys;
+        private readonly GUIText[] _labels;
         private readonly Button _resetToDefaults;
+        private readonly GUIText _resetToDefaultsText;
         private readonly Timer _timer;
         private int _currentSelected = -1;
 

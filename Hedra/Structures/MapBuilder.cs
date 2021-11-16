@@ -1,10 +1,9 @@
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using Hedra.BiomeSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.StructureSystem;
-using System.Numerics;
 using Hedra.Numerics;
 
 namespace Hedra.Structures
@@ -25,10 +24,11 @@ namespace Hedra.Structures
         {
             if (_cache.TryGetValue(Position, out var cachedDesign))
                 return cachedDesign;
-            
-            var designAtPosition = World.StructureHandler.StructureItems.FirstOrDefault(C => C.MapPosition == World.ToChunkSpace(Position))?.Design;
+
+            var designAtPosition = World.StructureHandler.StructureItems
+                .FirstOrDefault(C => C.MapPosition == World.ToChunkSpace(Position))?.Design;
             if (designAtPosition != null) return designAtPosition;
-            
+
             var chunkOffset = World.ToChunkSpace(Position);
             for (var i = 0; i < Biome.Structures.Designs.Length; i++)
             {
@@ -39,15 +39,18 @@ namespace Hedra.Structures
                     return design;
                 }
             }
+
             _cache.TryAdd(Position, null);
             return null;
         }
 
-        public static bool SampleDesign(StructureDesign Design, Vector2 ChunkPosition, Region Biome, RandomDistribution Distribution, CollidableStructure[] Items, out Vector3 TargetPosition)
+        public static bool SampleDesign(StructureDesign Design, Vector2 ChunkPosition, Region Biome,
+            RandomDistribution Distribution, CollidableStructure[] Items, out Vector3 TargetPosition)
         {
             Distribution.Seed = StructureDesign.BuildRngSeed(ChunkPosition);
             TargetPosition = StructureDesign.BuildTargetPosition(ChunkPosition, Distribution);
-            return Design.ShouldSetup(ChunkPosition, ref TargetPosition, Items, Biome, Distribution) && !StructureDesign.InterferesWithAnotherStructure(TargetPosition);
+            return Design.ShouldSetup(ChunkPosition, ref TargetPosition, Items, Biome, Distribution) &&
+                   !StructureDesign.InterferesWithAnotherStructure(TargetPosition);
         }
 
         public static void Discard()

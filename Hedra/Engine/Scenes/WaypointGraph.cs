@@ -1,24 +1,21 @@
 using System;
-using System.Buffers;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Hedra.Engine.Rendering;
 using Hedra.Framework;
-using Hedra.Game;
 using Hedra.Rendering;
 
 namespace Hedra.Engine.Scenes
 {
     /// <summary>
-    /// Undirected graph
+    ///     Undirected graph
     /// </summary>
     public class WaypointGraph
     {
-        private Dictionary<Waypoint, HashSet<Waypoint>> _adjacencyList;
         private readonly ObjectPool<Dictionary<Waypoint, Waypoint>> _parentsPool;
         private readonly ObjectPool<Queue<Waypoint>> _queuePool;
+        private Dictionary<Waypoint, HashSet<Waypoint>> _adjacencyList;
 
         public WaypointGraph()
         {
@@ -27,9 +24,13 @@ namespace Hedra.Engine.Scenes
             _queuePool = new ObjectPool<Queue<Waypoint>>(() => new Queue<Waypoint>());
         }
 
+        public Pair<Waypoint, Waypoint>[] Edges => GetEdges();
+
+        public Waypoint[] Vertices => _adjacencyList.Keys.ToArray();
+
         public void AddVertex(Waypoint A)
         {
-            if(!_adjacencyList.ContainsKey(A))
+            if (!_adjacencyList.ContainsKey(A))
                 _adjacencyList.Add(A, new HashSet<Waypoint>());
         }
 
@@ -46,24 +47,19 @@ namespace Hedra.Engine.Scenes
             _adjacencyList[A].Remove(B);
             _adjacencyList[B].Remove(A);
         }
-        
+
         public Waypoint[] Adjacent(Waypoint A)
         {
             return _adjacencyList[A].ToArray();
         }
-        
+
         public virtual void Draw()
         {
             var vertices = Vertices;
-            for (var i = 0; i < vertices.Length; ++i)
-            {
-                BasicGeometry.DrawPoint(vertices[i].Position, Colors.Red, 6f);
-            }
+            for (var i = 0; i < vertices.Length; ++i) BasicGeometry.DrawPoint(vertices[i].Position, Colors.Red, 6f);
             var edges = Edges;
             for (var i = 0; i < edges.Length; ++i)
-            {
                 BasicGeometry.DrawLine(edges[i].One.Position, edges[i].Two.Position, Colors.Red, 2f);
-            }
         }
 
         private Pair<Waypoint, Waypoint>[] GetEdges()
@@ -76,7 +72,7 @@ namespace Hedra.Engine.Scenes
                 for (var j = 0; j < adjacent.Length; ++j)
                 {
                     var pair = new Pair<Waypoint, Waypoint>(vertices[i], adjacent[j]);
-                    if(!edges.Contains(pair) && !edges.Contains(pair.Inverted()))
+                    if (!edges.Contains(pair) && !edges.Contains(pair.Inverted()))
                         edges.Add(pair);
                 }
             }
@@ -88,7 +84,7 @@ namespace Hedra.Engine.Scenes
         {
             return GetNearestVertex(Point, out _);
         }
-        
+
         public Waypoint GetNearestVertex(Vector3 Point, out float Distance)
         {
             return GetNearestVertex(Point, W => false, out Distance);
@@ -101,7 +97,7 @@ namespace Hedra.Engine.Scenes
             Distance = float.MaxValue;
             for (var i = 0; i < vertices.Length; ++i)
             {
-                if(Filter(vertices[i])) continue;
+                if (Filter(vertices[i])) continue;
                 var newDist = (vertices[i].Position - Point).LengthSquared();
                 if (newDist < Distance)
                 {
@@ -123,9 +119,10 @@ namespace Hedra.Engine.Scenes
                 path.Push(current);
                 current = Parents[current];
             }
+
             return path.ToArray();
         }
-        
+
         public Waypoint[] GetShortestPath(Waypoint Source, Waypoint Target, out bool CanReach)
         {
             CanReach = true;
@@ -140,7 +137,7 @@ namespace Hedra.Engine.Scenes
                 _queuePool.PutObject(queue);
                 _parentsPool.PutObject(parents);
             }
-            
+
             parents.Add(Source, default);
             queue.Enqueue(Source);
             while (queue.Count > 0)
@@ -148,7 +145,7 @@ namespace Hedra.Engine.Scenes
                 var v = queue.Dequeue();
                 foreach (var w in Adjacent(v))
                 {
-                    if(parents.ContainsKey(w)) continue;
+                    if (parents.ContainsKey(w)) continue;
                     parents.Add(w, v);
                     if (w.Position == Target.Position)
                     {
@@ -156,6 +153,7 @@ namespace Hedra.Engine.Scenes
                         Cleanup();
                         return path;
                     }
+
                     queue.Enqueue(w);
                 }
             }
@@ -169,17 +167,15 @@ namespace Hedra.Engine.Scenes
         {
             _adjacencyList.Clear();
         }
-        
-                
+
+
         public virtual void MergeGraph(WaypointGraph Graph, int MergeStep)
         {
             var set = new Dictionary<Vector3, Waypoint>();
             foreach (var v in Vertices)
-            {
                 set.Add(
-                    new Vector3((int) (v.Position.X / MergeStep), (int) (v.Position.Y / MergeStep),
-                        (int) (v.Position.Z / MergeStep)), v);
-            }
+                    new Vector3((int)(v.Position.X / MergeStep), (int)(v.Position.Y / MergeStep),
+                        (int)(v.Position.Z / MergeStep)), v);
 
             /* Doing lookups in a smaller set is always faster */
             var vertices = Graph.Vertices;
@@ -189,29 +185,24 @@ namespace Hedra.Engine.Scenes
                 var isContained = set.ContainsKey(vertices[i].Position);
                 canBeConvex |= isContained;
             }
-            if(!canBeConvex) return;
+
+            if (!canBeConvex) return;
 
             foreach (var v in vertices)
             {
                 var n = v;
-                var quantized = new Vector3((int) (v.Position.X / MergeStep), (int) (v.Position.Y / MergeStep), (int) (v.Position.Z / MergeStep));
+                var quantized = new Vector3((int)(v.Position.X / MergeStep), (int)(v.Position.Y / MergeStep),
+                    (int)(v.Position.Z / MergeStep));
                 if (set.TryGetValue(quantized, out var m)) n = m;
-                foreach (var w in Graph.Adjacent(v))
-                {
-                    AddEdge(n, w);
-                }
+                foreach (var w in Graph.Adjacent(v)) AddEdge(n, w);
             }
         }
 
         public void AddGraph(WaypointGraph Graph)
         {
             foreach (var v in Graph.Vertices)
-            {
-                foreach (var w in Graph.Adjacent(v))
-                {
-                    AddEdge(v, w);
-                }
-            }
+            foreach (var w in Graph.Adjacent(v))
+                AddEdge(v, w);
         }
 
         public void Copy(WaypointGraph Graph)
@@ -223,14 +214,10 @@ namespace Hedra.Engine.Scenes
         {
             var graph = new WaypointGraph
             {
-                _adjacencyList = new Dictionary<Waypoint, HashSet<Waypoint>>(_adjacencyList),
+                _adjacencyList = new Dictionary<Waypoint, HashSet<Waypoint>>(_adjacencyList)
             };
             return graph;
         }
-        
-        public Pair<Waypoint, Waypoint>[] Edges => GetEdges();
-
-        public Waypoint[] Vertices => _adjacencyList.Keys.ToArray();
     }
 
     public struct Waypoint

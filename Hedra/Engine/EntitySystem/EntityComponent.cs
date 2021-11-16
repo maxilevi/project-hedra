@@ -5,15 +5,13 @@
  *
  */
 
-using System.Reflection;
-using Hedra.Engine.Management;
 using Hedra.EntitySystem;
 
 namespace Hedra.Engine.EntitySystem
 {
     /// <inheritdoc />
     /// <summary>
-    /// Description of EntityComponent.
+    ///     Description of EntityComponent.
     /// </summary>
     public abstract class EntityComponent : Component<IEntity>
     {

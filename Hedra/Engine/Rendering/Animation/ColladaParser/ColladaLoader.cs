@@ -6,28 +6,26 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
-using System.Xml;
 
 namespace Hedra.Engine.Rendering.Animation.ColladaParser
 {
     /// <summary>
-    /// Description of ColladaLoader.
+    ///     Description of ColladaLoader.
     /// </summary>
     public static class ColladaLoader
     {
         public static IColladaProvider Provider { get; set; } = new ColladaProvider();
-        
+
         public static AnimatedModelData LoadColladaModel(string ColladaFile, bool LoadAllJoints = false)
         {
             return Provider.LoadColladaModel(ColladaFile, LoadAllJoints);
         }
-        
+
         public static ModelData LoadModel(string ColladaFile)
         {
             return Provider.LoadModel(ColladaFile);
         }
-    
+
         public static AnimationData LoadColladaAnimation(string ColladaFile)
         {
             return Provider.LoadColladaAnimation(ColladaFile);

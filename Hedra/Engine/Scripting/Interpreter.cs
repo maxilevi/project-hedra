@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
-using Hedra.Engine.Game;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Game;
-using Hedra.Rendering;
 using IronPython.Hosting;
 using IronPython.Modules;
-using IronPython.Runtime.Types;
 using Microsoft.Scripting.Hosting;
+using Silk.NET.Input;
 
 namespace Hedra.Engine.Scripting
 {
@@ -21,6 +20,40 @@ namespace Hedra.Engine.Scripting
         private const string CoreLibrary = "Core.py";
         private static readonly ScriptEngine _engine;
         private static readonly Runner _runner;
+
+        static Interpreter()
+        {
+            SearchPath = Directory.Exists(EditorSearchPath) ? EditorSearchPath : DefaultSearchPath;
+            var watch = new Stopwatch();
+            watch.Start();
+            Log.WriteLine("Loading Python engine...");
+            _engine = Python.CreateEngine();
+            var searchPaths = Directory.GetDirectories(SearchPath, "*", SearchOption.AllDirectories)
+                .Concat(new[] { SearchPath }).ToList();
+            _engine.SetSearchPaths(searchPaths);
+            _engine.Runtime.LoadAssembly(Assembly.Load(typeof(Interpreter).Assembly.FullName));
+            _engine.Runtime.LoadAssembly(Assembly.Load(typeof(Vector4).Assembly.FullName));
+            _engine.Runtime.LoadAssembly(Assembly.Load(typeof(Key).Assembly.FullName));
+            _engine.Runtime.LoadAssembly(Assembly.Load(typeof(PythonHeapq).Assembly.FullName));
+            _runner = new CompiledRunner(_engine);
+            Log.WriteLine($"Python engine was successfully loaded in {watch.ElapsedMilliseconds} MS");
+
+            watch.Reset();
+        }
+
+        public static string SearchPath { get; }
+
+        private static string EditorSearchPath
+        {
+            get
+            {
+                if (GameSettings.DebugMode && !GameSettings.TestingMode)
+                    return "../../Scripts/";
+                return $"{AssetManager.AppPath}/Scripts/";
+            }
+        }
+
+        private static string DefaultSearchPath => $"{AssetManager.AppPath}/Scripts/";
 
         public static void Load()
         {
@@ -31,25 +64,6 @@ namespace Hedra.Engine.Scripting
                 if (!name.EndsWith(".py")) continue;
                 _runner.Prepare(name);
             }
-        }
-
-        static Interpreter()
-        {
-            SearchPath = Directory.Exists(EditorSearchPath) ? EditorSearchPath : DefaultSearchPath;
-            var watch = new Stopwatch();
-            watch.Start();
-            Log.WriteLine("Loading Python engine...");
-            _engine = Python.CreateEngine();
-            var searchPaths = Directory.GetDirectories(SearchPath, "*", SearchOption.AllDirectories).Concat<string>(new []{SearchPath}).ToList();
-            _engine.SetSearchPaths(searchPaths);
-            _engine.Runtime.LoadAssembly(Assembly.Load(typeof(Interpreter).Assembly.FullName));
-            _engine.Runtime.LoadAssembly(Assembly.Load(typeof(System.Numerics.Vector4).Assembly.FullName));
-            _engine.Runtime.LoadAssembly(Assembly.Load(typeof(Silk.NET.Input.Key).Assembly.FullName));
-            _engine.Runtime.LoadAssembly(Assembly.Load(typeof(PythonHeapq).Assembly.FullName));
-            _runner = new CompiledRunner(_engine);
-            Log.WriteLine($"Python engine was successfully loaded in {watch.ElapsedMilliseconds} MS");
-
-            watch.Reset();
         }
 
         public static Function GetFunction(string Library, string Function)
@@ -83,9 +97,9 @@ namespace Hedra.Engine.Scripting
 
         public static T GetMember<T>(string Library, string Variable)
         {
-            return (T) _runner.GetFunction(Library, Variable);
+            return (T)_runner.GetFunction(Library, Variable);
         }
-        
+
         public static bool HasMember(string Library, string Variable)
         {
             return _runner.HasMember(Library, Variable);
@@ -95,20 +109,5 @@ namespace Hedra.Engine.Scripting
         {
             _runner.Reload();
         }
-
-        public static string SearchPath { get; }
-
-        private static string EditorSearchPath
-        {
-
-            get
-            {
-                if (GameSettings.DebugMode && !GameSettings.TestingMode)
-                    return $"../../Scripts/";
-                return $"{AssetManager.AppPath}/Scripts/";
-            }
-        }
-        
-        private static string DefaultSearchPath => $"{AssetManager.AppPath}/Scripts/";
     }
 }

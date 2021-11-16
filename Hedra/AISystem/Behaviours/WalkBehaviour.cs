@@ -1,10 +1,9 @@
 using System;
+using System.Numerics;
 using Hedra.Core;
 using Hedra.Engine;
-using Hedra.Engine.EntitySystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.EntitySystem;
-using System.Numerics;
 using Hedra.Numerics;
 
 namespace Hedra.AISystem.Behaviours
@@ -12,8 +11,6 @@ namespace Hedra.AISystem.Behaviours
     public class WalkBehaviour : Behaviour
     {
         public const float DefaultErrorMargin = 4;
-        public Vector3 Target { get; private set; }
-        public float ErrorMargin { get; set; } = DefaultErrorMargin;
         private bool _arrived;
         private Action _callback;
 
@@ -21,21 +18,26 @@ namespace Hedra.AISystem.Behaviours
         {
         }
 
+        public Vector3 Target { get; private set; }
+        public float ErrorMargin { get; set; } = DefaultErrorMargin;
+
+        public bool HasTarget { get; private set; }
+
         public void Cancel()
         {
-            this._arrived = true;
-            this._callback?.Invoke();
-            this._callback = null;
-            this.Target = Vector3.Zero;
-            this.HasTarget = false;
+            _arrived = true;
+            _callback?.Invoke();
+            _callback = null;
+            Target = Vector3.Zero;
+            HasTarget = false;
         }
 
         public void SetTarget(Vector3 Point, Action Callback = null)
         {
-            this._arrived = false;
-            this._callback = Callback;
-            this.Target = Point;
-            this.HasTarget = true;
+            _arrived = false;
+            _callback = Callback;
+            Target = Point;
+            HasTarget = true;
         }
 
         public override void Update()
@@ -52,17 +54,12 @@ namespace Hedra.AISystem.Behaviours
                 }
                 else
                 {
-                    int a = 0;
+                    var a = 0;
                 }
-                
+
                 Parent.Physics.Move();
-                if ((Target - Parent.Position).Xz().LengthSquared() < ErrorMargin * ErrorMargin)
-                {
-                    this.Cancel();
-                }
+                if ((Target - Parent.Position).Xz().LengthSquared() < ErrorMargin * ErrorMargin) Cancel();
             }
         }
-        
-        public bool HasTarget { get; private set; }
     }
 }

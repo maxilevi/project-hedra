@@ -1,6 +1,6 @@
 namespace Hedra.Engine.Steamworks
 {
-    public enum Achievement : int
+    public enum Achievement
     {
         ACH_LEARN_ASSASSIN,
         ACH_LEARN_NINJA,

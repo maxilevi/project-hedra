@@ -1,10 +1,6 @@
 using System.Collections.Generic;
-using Hedra.Engine.Core;
-using Hedra.Engine.Rendering.Geometry;
-using Hedra.Rendering;
-using Microsoft.Scripting.Utils;
 using System.Numerics;
-using Hedra.Framework;
+using Hedra.Engine.Rendering.Geometry;
 using Hedra.Framework;
 
 namespace Hedra.Engine.Rendering
@@ -16,20 +12,17 @@ namespace Hedra.Engine.Rendering
         public abstract List<Vector4> Colors { get; set; }
         public abstract List<uint> Indices { get; set; }
         public abstract List<float> Extradata { get; set; }
-        
+
         public bool HasColors => Colors.Count != 0;
         public bool HasExtradata => Extradata.Count == Vertices.Count;
-        
+
         public static void TrimExcess<T>(List<T> List)
         {
-            var excess = (List.Count % 3);
+            var excess = List.Count % 3;
             if (excess == 0) return;
-            for (var i = 0; i < (3-excess); ++i)
-            {
-                List.Add(List[List.Count - 1]);
-            }
+            for (var i = 0; i < 3 - excess; ++i) List.Add(List[List.Count - 1]);
         }
-        
+
         public void Trim()
         {
             TrimExcess(Vertices);
@@ -38,7 +31,7 @@ namespace Hedra.Engine.Rendering
             TrimExcess(Indices);
             TrimExcess(Extradata);
         }
-        
+
         public Vector3 SupportPoint(Vector3 Direction)
         {
             return MeshOperations.SupportPoint(Vertices, Colors, Direction);
@@ -53,7 +46,7 @@ namespace Hedra.Engine.Rendering
         {
             MeshOperations.FlatMesh(Allocator, Indices, Vertices, Normals, Colors, Extradata);
         }
-        
+
         public void UniqueVertices()
         {
             MeshOperations.UniqueVertices(Indices, Vertices, Normals, Colors, Extradata);

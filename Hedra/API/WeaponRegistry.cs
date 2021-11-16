@@ -5,6 +5,8 @@ namespace Hedra.API
 {
     public class WeaponRegistry : TypeRegistry
     {
+        protected override Type RegistryType { get; } = typeof(Weapon);
+
         protected override void DoAdd(string Name, Type ClassType)
         {
             WeaponFactory.Register(Name, ClassType);
@@ -14,7 +16,5 @@ namespace Hedra.API
         {
             WeaponFactory.Unregister(Name);
         }
-
-        protected override Type RegistryType { get; } = typeof(Weapon);
     }
 }

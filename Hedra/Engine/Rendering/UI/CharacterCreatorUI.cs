@@ -8,47 +8,64 @@
  */
 
 using System;
-using Hedra.Engine.Core;
-using Hedra.Engine.Management;
-using Hedra.Engine.Player;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using System.Numerics;
-using System.Collections;
+using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Numerics;
 using Hedra.Components;
 using Hedra.Core;
 using Hedra.Engine.ClassSystem;
-using Hedra.Engine.Game;
-using Hedra.Engine.Generation.ChunkSystem;
-using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
+using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.Rendering.Animation;
+using Hedra.Engine.Player;
+using Hedra.Engine.Scenes;
 using Hedra.Engine.Windowing;
-using Hedra.EntitySystem;
 using Hedra.Framework;
 using Hedra.Game;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-using TaskScheduler = Hedra.Core.TaskScheduler;
-
+using SixLabors.Fonts;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Rendering.UI
 {
     /// <summary>
-    /// Description of Panel.
+    ///     Description of Panel.
     /// </summary>
     public class CharacterCreatorUI : Panel, IUpdatable
     {
-        private readonly Humanoid _human;
+        private static readonly Vector4[] _skinColors =
+        {
+            Colors.FromHtml("#FFBFA1"),
+            Colors.FromHtml("#743D2B"),
+            Colors.FromHtml("#EDD8C7"),
+            Colors.FromHtml("#4A332D"),
+            Colors.FromHtml("#D19477"),
+            Colors.FromHtml("#DFAA8B"),
+            Colors.FromHtml("#E5B5A1"),
+            Colors.FromHtml("#FEE3D4")
+        };
+
+        private static Vector4[] _hairColors =
+        {
+            Colors.FromHtml("#4E3616"),
+            Colors.FromHtml("#8E7B6A"),
+            Colors.FromHtml("#B2ABA7"),
+            Colors.FromHtml("#59442F"),
+            Colors.FromHtml("#FFFFFF")
+            //Colors.FromHtml("#FFBFA1"),
+            //Colors.FromHtml("#FFBFA1"),
+            //Colors.FromHtml("#FFBFA1"),
+            //Colors.FromHtml("#FFBFA1"),
+        };
+
         private readonly Timer _clickTimer;
+        private readonly Humanoid _human;
         private readonly Button _openFolder;
-        private float _newRot;
         private ClassDesign _classType;
         private CustomizationData _customization;
+        private float _newRot;
         private ColorPicker _secondHairColorPicker;
 
         public CharacterCreatorUI(IPlayer Player)
@@ -70,7 +87,7 @@ namespace Hedra.Engine.Rendering.UI
 
             _openFolder = new Button(new Vector2(0.8f, bandPosition.Y), new Vector2(0.15f, 0.05f),
                 Translation.Create("character_folder"), Color.White, FontCache.GetNormal(13));
-            _openFolder.Click += delegate { System.Diagnostics.Process.Start(DataManager.CharactersFolder); };
+            _openFolder.Click += delegate { Process.Start(DataManager.CharactersFolder); };
 
             _human = new Humanoid
             {
@@ -80,7 +97,7 @@ namespace Hedra.Engine.Rendering.UI
             {
                 LocalRotation = Vector3.UnitY * -90,
                 TargetRotation = Vector3.UnitY * -90,
-                Position = Scenes.MenuBackground.PlatformPosition,
+                Position = MenuBackground.PlatformPosition,
                 ApplyFog = true,
                 Enabled = true
             };
@@ -126,6 +143,33 @@ namespace Hedra.Engine.Rendering.UI
             OnPanelStateChange += PanelStateChange;
             OnEscapePressed += EscapePressed;
             UpdateManager.Add(this);
+        }
+
+        public void Update()
+        {
+            _human.Model.Enabled = Enabled;
+            if (Enabled)
+            {
+                if (_clickTimer.Tick())
+                    _openFolder.CanClick = true;
+                _human.Update();
+                _human.UpdateCriticalComponents();
+                _newRot += Time.IndependentDeltaTime * 30f;
+                _human.Model.LocalRotation = Vector3.UnitY * -90 + Vector3.UnitY * _newRot;
+                _human.Model.TargetRotation = Vector3.UnitY * -90 + Vector3.UnitY * _newRot;
+                _human.Position = new Vector3(MenuBackground.PlatformPosition.X, _human.Position.Y,
+                    MenuBackground.PlatformPosition.Z);
+                if (_human.Position.Y <= Physics.HeightAtPosition(_human.Position))
+                    _human.Position = new Vector3(_human.Position.X, Physics.HeightAtPosition(_human.Position),
+                        _human.Position.Z);
+                _human.IsKnocked = false;
+
+                if (_customization.Gender == HumanGender.Female && _classType.HasSecondFemaleHairColor ||
+                    _customization.Gender == HumanGender.Male && _classType.HasSecondHairColor)
+                    _secondHairColorPicker?.Enable();
+                else
+                    _secondHairColorPicker?.Disable();
+            }
         }
 
         private void CreateColorPickers(Panel InPanel)
@@ -241,10 +285,10 @@ namespace Hedra.Engine.Rendering.UI
             switch (State)
             {
                 case PanelState.Disabled:
-                    Scenes.MenuBackground.Creator = false;
+                    MenuBackground.Creator = false;
                     break;
                 case PanelState.Enabled:
-                    Scenes.MenuBackground.Creator = true;
+                    MenuBackground.Creator = true;
                     _openFolder.CanClick = false;
                     _clickTimer.Reset();
                     break;
@@ -257,62 +301,10 @@ namespace Hedra.Engine.Rendering.UI
             GameManager.Player.UI.CharacterSelector.Enable();
         }
 
-        public void Update()
-        {
-            _human.Model.Enabled = Enabled;
-            if (Enabled)
-            {
-                if (_clickTimer.Tick())
-                    _openFolder.CanClick = true;
-                _human.Update();
-                _human.UpdateCriticalComponents();
-                _newRot += Time.IndependentDeltaTime * 30f;
-                _human.Model.LocalRotation = Vector3.UnitY * -90 + Vector3.UnitY * _newRot;
-                _human.Model.TargetRotation = Vector3.UnitY * -90 + Vector3.UnitY * _newRot;
-                _human.Position = new Vector3(Scenes.MenuBackground.PlatformPosition.X, _human.Position.Y,
-                    Scenes.MenuBackground.PlatformPosition.Z);
-                if (_human.Position.Y <= Physics.HeightAtPosition(_human.Position))
-                    _human.Position = new Vector3(_human.Position.X, Physics.HeightAtPosition(_human.Position),
-                        _human.Position.Z);
-                _human.IsKnocked = false;
-
-                if (_customization.Gender == HumanGender.Female && _classType.HasSecondFemaleHairColor ||
-                    _customization.Gender == HumanGender.Male && _classType.HasSecondHairColor)
-                    _secondHairColorPicker?.Enable();
-                else
-                    _secondHairColorPicker?.Disable();
-            }
-        }
-
         public override void Dispose()
         {
             base.Dispose();
             UpdateManager.Remove(this);
         }
-
-        private static Vector4[] _skinColors = new[]
-        {
-            Colors.FromHtml("#FFBFA1"),
-            Colors.FromHtml("#743D2B"),
-            Colors.FromHtml("#EDD8C7"),
-            Colors.FromHtml("#4A332D"),
-            Colors.FromHtml("#D19477"),
-            Colors.FromHtml("#DFAA8B"),
-            Colors.FromHtml("#E5B5A1"),
-            Colors.FromHtml("#FEE3D4")
-        };
-
-        private static Vector4[] _hairColors = new[]
-        {
-            Colors.FromHtml("#4E3616"),
-            Colors.FromHtml("#8E7B6A"),
-            Colors.FromHtml("#B2ABA7"),
-            Colors.FromHtml("#59442F"),
-            Colors.FromHtml("#FFFFFF")
-            //Colors.FromHtml("#FFBFA1"),
-            //Colors.FromHtml("#FFBFA1"),
-            //Colors.FromHtml("#FFBFA1"),
-            //Colors.FromHtml("#FFBFA1"),
-        };
     }
 }

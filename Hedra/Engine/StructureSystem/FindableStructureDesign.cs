@@ -1,5 +1,3 @@
-using Hedra.Rendering;
-
 namespace Hedra.Engine.StructureSystem
 {
     public abstract class FindableStructureDesign : StructureDesign, IFindableStructureDesign

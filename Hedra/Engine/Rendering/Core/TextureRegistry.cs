@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.UI;
-using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
 
 namespace Hedra.Engine.Rendering.Core
@@ -12,7 +12,12 @@ namespace Hedra.Engine.Rendering.Core
     public static class TextureRegistry
     {
         private const uint DefaultId = 0;
-        private static readonly Dictionary<uint, TextureInformation> Textures = new Dictionary<uint, TextureInformation>();
+
+        private static readonly Dictionary<uint, TextureInformation> Textures =
+            new Dictionary<uint, TextureInformation>();
+
+        public static int Count => Textures.Count;
+        public static uint[] All => Textures.Keys.ToArray();
 
         public static void Use(uint Id)
         {
@@ -34,13 +39,14 @@ namespace Hedra.Engine.Rendering.Core
                 Uses = 0
             });
         }
-        
+
         public static void Unregister(uint Id)
         {
             Textures.Remove(Id);
         }
-        
-        public static bool Contains(string Path, TextureMinFilter Min, TextureMagFilter Mag, TextureWrapMode Wrap, out uint Id)
+
+        public static bool Contains(string Path, TextureMinFilter Min, TextureMagFilter Mag, TextureWrapMode Wrap,
+            out uint Id)
         {
             Id = 0;
             var cache = Textures.FirstOrDefault(P => P.Value.IsSame(Path, Min, Mag, Wrap));
@@ -53,7 +59,7 @@ namespace Hedra.Engine.Rendering.Core
         {
             return DefaultId == Id || Textures[Id].IsDefault || Textures[Id].Uses > 0;
         }
-        
+
         public static void Add(uint Id, string Path, TextureMinFilter Min, TextureMagFilter Mag, TextureWrapMode Wrap)
         {
             if (Id == 0) throw new ArgumentOutOfRangeException();
@@ -81,55 +87,58 @@ namespace Hedra.Engine.Rendering.Core
         public static void Remove(uint Id)
         {
             if (Id == 0) return;
-            if(Textures[Id].Static) return;
+            if (Textures[Id].Static) return;
             Textures[Id].Uses--;
             if (Textures[Id].Uses == 0)
             {
-                if(Textures[Id].Static)
+                if (Textures[Id].Static)
                     throw new ArgumentOutOfRangeException();
                 Dispose(Id);
             }
         }
+
         public static void Dispose(uint Id)
         {
-            if (TextCache.Exists(Id)) throw new ArgumentOutOfRangeException("Textures should not be in any cache when disposing of them.");
+            if (TextCache.Exists(Id))
+                throw new ArgumentOutOfRangeException("Textures should not be in any cache when disposing of them.");
+
             void DisposeProcess()
             {
                 Renderer.TextureHandler.Delete(Id);
                 Textures.Remove(Id);
             }
-            if(System.Threading.Thread.CurrentThread.ManagedThreadId != Loader.Hedra.MainThreadId)
+
+            if (Thread.CurrentThread.ManagedThreadId != Loader.Hedra.MainThreadId)
                 Executer.ExecuteOnMainThread(DisposeProcess);
             else
                 DisposeProcess();
         }
-        
-        public static int Count => Textures.Count;
-        public static uint[] All => Textures.Keys.ToArray();
 
         private class TextureInformation
         {
             private const string DefaultPath = "UNASSIGNED";
+
             public static readonly TextureInformation Default = new TextureInformation
             {
                 Path = DefaultPath
             };
-            
+
+            private StackTrace _trace = new StackTrace();
+
             public string Path { get; set; }
             public TextureMinFilter Min { get; set; }
             public TextureMagFilter Mag { get; set; }
             public TextureWrapMode Wrap { get; set; }
             public int Uses { get; set; }
             public bool Static { get; set; }
-            private StackTrace _trace = new StackTrace();
+
+            public bool IsDefault => Path == DefaultPath;
 
             public bool IsSame(string Path, TextureMinFilter Min, TextureMagFilter Mag, TextureWrapMode Wrap)
             {
                 return this.Path == Path && this.Min == Min && this.Mag == Mag && this.Wrap == Wrap;
             }
 
-            public bool IsDefault => Path == DefaultPath;
-            
             public override string ToString()
             {
                 return $"{Path}|{Uses}";

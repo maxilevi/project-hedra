@@ -9,6 +9,7 @@ namespace Hedra.Engine.TreeSystem
     {
         public override float Spacing => 80f;
         public override VertexData Model => CacheManager.GetModel(CacheItem.WillowTrees);
+
         public override VertexData Paint(VertexData Data, Vector4 WoodColor, Vector4 LeafColor)
         {
             Data.Color(AssetManager.ColorCode0, WoodColor * .75f);

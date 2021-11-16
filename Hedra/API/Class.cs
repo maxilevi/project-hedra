@@ -16,7 +16,7 @@ namespace Hedra.API
         Ninja = 256,
         Necromancer = 512,
         Paladin = 1024,
-        Berserker = 2048,    
+        Berserker = 2048,
         None = 4096
     }
 }

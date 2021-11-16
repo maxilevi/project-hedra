@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using System.Numerics;
+using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {
@@ -22,10 +22,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         public void Translate(Vector3 Translation)
         {
             var parameters = Parameters;
-            for (var i = 0; i < parameters.Length; i++)
-            {
-                parameters[i].Position += Translation;
-            }
+            for (var i = 0; i < parameters.Length; i++) parameters[i].Position += Translation;
             Position += Translation;
         }
     }

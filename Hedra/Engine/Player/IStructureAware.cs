@@ -4,10 +4,10 @@ namespace Hedra.Engine.Player
 {
     public interface IStructureAware
     {
+        CollisionGroup[] NearCollisions { get; }
         event OnStructureEnter StructureEnter;
         event OnStructureLeave StructureLeave;
         event OnStructureCompleted StructureCompleted;
-        CollisionGroup[] NearCollisions { get; }
         void Discard();
         void Update();
     }

@@ -7,30 +7,29 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
+using System.Numerics;
 using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Management;
 using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
-using System.Numerics;
 
 namespace Hedra.Components
 {
     public class HeadIconComponent : EntityComponent
     {
-        private ObjectMesh _iconMesh;
         private readonly Humanoid _humanoidParent;
-        private bool ParentIsHumanoid => _humanoidParent != null;
-        public bool RotateIcon { get; set; } = true;
+        private ObjectMesh _iconMesh;
 
         public HeadIconComponent(IEntity Parent) : base(Parent)
         {
             _humanoidParent = Parent as Humanoid;
         }
+
+        private bool ParentIsHumanoid => _humanoidParent != null;
+        public bool RotateIcon { get; set; } = true;
 
         public void ShowIcon(CacheItem? IconType)
         {
@@ -50,27 +49,20 @@ namespace Hedra.Components
 
         public void ShowIconFor(CacheItem? IconType, float Seconds)
         {
-            this.ShowIcon(IconType);
-            TaskScheduler.After(Seconds, () => this.ShowIcon(null));
+            ShowIcon(IconType);
+            TaskScheduler.After(Seconds, () => ShowIcon(null));
         }
 
         public override void Update()
         {
             if (_iconMesh != null)
             {
-                if (RotateIcon)
-                {
-                    _iconMesh.LocalRotation += Vector3.UnitY * (float) Time.DeltaTime * 35f;
-                }
+                if (RotateIcon) _iconMesh.LocalRotation += Vector3.UnitY * Time.DeltaTime * 35f;
                 Vector3 headOffset;
                 if (ParentIsHumanoid)
-                {
                     headOffset = _humanoidParent.Model.HeadPosition + Vector3.UnitY * 2f;
-                }
                 else
-                {
                     headOffset = Parent.Position + Vector3.UnitY * (2f + Parent.Model.Height);
-                }
                 _iconMesh.Position = headOffset;
                 _iconMesh.Enabled =
                     (LocalPlayer.Instance.Position - Parent.Position).LengthSquared() < 128 * 128;

@@ -5,28 +5,25 @@ namespace Hedra.AISystem
 {
     public class FearAIComponent : BasicAIComponent
     {
-        protected RunAwayBehaviour RunAway { get; }
-
         public FearAIComponent(IEntity Parent, IEntity Attacker) : base(Parent)
         {
             RunAway = new RunAwayBehaviour(Parent, Attacker);
         }
 
+        protected RunAwayBehaviour RunAway { get; }
+
+
+        public override AIType Type => AIType.Neutral;
+
         public override void Update()
         {
-            if (RunAway.Enabled)
-            {
-                RunAway.Update();
-            }
+            if (RunAway.Enabled) RunAway.Update();
         }
-        
+
         public override void Dispose()
         {
             base.Dispose();
             RunAway.Dispose();
         }
-        
-
-        public override AIType Type => AIType.Neutral;
     }
 }

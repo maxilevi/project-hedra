@@ -1,35 +1,18 @@
 using System;
+using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Rendering;
-using System.Numerics;
 
 namespace Hedra.Engine.Rendering
 {
     public class CachedVertexData : CompressedVertexData, IDisposable, IPositionable, ISearchable
     {
-        public string Name { get; set; }
         private Vector3 _bounds;
-        private Vector3 _position;
-        private bool _positionInitialized;
         private bool _boundsInitialized;
         private VertexData _cache;
-
-        public Vector3 Position
-        {
-            get
-            {
-                if (_positionInitialized) return _position;
-                var sum = Vector3.Zero;
-                var verts = Vertices;
-                for (var i = 0; i < verts.Count; i++)
-                {
-                    sum += verts[i];
-                }
-                _position = sum / verts.Count;
-                _positionInitialized = true;
-                return _position;
-            }
-        }
+        private Vector3 _position;
+        private bool _positionInitialized;
+        public string Name { get; set; }
 
         public Vector3 Bounds
         {
@@ -43,21 +26,22 @@ namespace Hedra.Engine.Rendering
                 return _bounds;
             }
         }
-        
-        private Vector3 SupportPoint(Vector3 Direction)
-        {
-            var highest = float.MinValue;
-            var support = Vector3.Zero;
-            var verts = Vertices;
-            for (var i = verts.Count-1; i > -1; i--)
-            {
-                var dot = Vector3.Dot(Direction, verts[i]);
-                if (dot < highest) continue;
-                highest = dot;
-                support = verts[i];
-            }
 
-            return support;
+        public VertexData VertexData
+        {
+            get
+            {
+                if (_cache == null)
+                    _cache = new VertexData
+                    {
+                        Vertices = Vertices,
+                        Colors = Colors,
+                        Normals = Normals,
+                        Indices = Indices,
+                        Extradata = Extradata
+                    };
+                return _cache;
+            }
         }
 
         public void Dispose()
@@ -68,7 +52,37 @@ namespace Hedra.Engine.Rendering
             Indices.Clear();
             Extradata.Clear();
         }
-        
+
+        public Vector3 Position
+        {
+            get
+            {
+                if (_positionInitialized) return _position;
+                var sum = Vector3.Zero;
+                var verts = Vertices;
+                for (var i = 0; i < verts.Count; i++) sum += verts[i];
+                _position = sum / verts.Count;
+                _positionInitialized = true;
+                return _position;
+            }
+        }
+
+        private Vector3 SupportPoint(Vector3 Direction)
+        {
+            var highest = float.MinValue;
+            var support = Vector3.Zero;
+            var verts = Vertices;
+            for (var i = verts.Count - 1; i > -1; i--)
+            {
+                var dot = Vector3.Dot(Direction, verts[i]);
+                if (dot < highest) continue;
+                highest = dot;
+                support = verts[i];
+            }
+
+            return support;
+        }
+
         public static CachedVertexData FromVertexData(VertexData Data)
         {
             return new CachedVertexData
@@ -78,27 +92,8 @@ namespace Hedra.Engine.Rendering
                 Normals = Data.Normals,
                 Indices = Data.Indices,
                 Extradata = Data.Extradata,
-                Name = Data.Name,
+                Name = Data.Name
             };
-        }
-
-        public VertexData VertexData
-        {
-            get
-            {
-                if (_cache == null)
-                {
-                    _cache = new VertexData
-                    {
-                        Vertices = Vertices,
-                        Colors = Colors,
-                        Normals = Normals,
-                        Indices = Indices,
-                        Extradata = Extradata
-                    };
-                }
-                return _cache;
-            }
         }
     }
 }

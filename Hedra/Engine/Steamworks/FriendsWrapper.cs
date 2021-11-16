@@ -1,5 +1,4 @@
 using Facepunch.Steamworks;
-using Hedra.Engine.Core;
 
 namespace Hedra.Engine.Steamworks
 {

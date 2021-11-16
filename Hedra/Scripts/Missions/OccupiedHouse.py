@@ -1,21 +1,23 @@
-import MissionCore
-import FarmCore
-from System import Single, Array
 from Core import translate, load_translation
-from Hedra.AISystem import HostileAIComponent, IBasicAIComponent
-from Hedra.Components import TalkComponent, DamageComponent
-from Hedra.Mission import MissionBuilder, QuestTier, DialogObject, QuestReward
-from Hedra.Mission.Blocks import FindStructureMission, TalkMission, DefeatEntityMission, WaitForTimeMission
-from Hedra.Engine.StructureSystem.Overworld import CottageWithVegetablePlotDesign
+from Hedra.AISystem import IBasicAIComponent
 from Hedra.AISystem.Humanoid import FollowAIComponent
-from Hedra.EntitySystem import IEntity
+from Hedra.Components import TalkComponent, DamageComponent
 from Hedra.Engine.CacheSystem import CacheItem
-from Hedra.Engine.WorldBuilding import NPCCreator, BanditOptions
 from Hedra.Engine.EnvironmentSystem import SkyManager
+from Hedra.Engine.StructureSystem.Overworld import CottageWithVegetablePlotDesign
+from Hedra.Engine.WorldBuilding import NPCCreator, BanditOptions
+from Hedra.EntitySystem import IEntity
+from Hedra.Mission import MissionBuilder, QuestTier
+from Hedra.Mission.Blocks import FindStructureMission, TalkMission, DefeatEntityMission, WaitForTimeMission
+from System import Array
+
+import FarmCore
+import MissionCore
 
 IS_QUEST = True
 QUEST_NAME = 'OccupiedHouse'
 QUEST_TIER = QuestTier.Medium
+
 
 def setup_timeline(position, giver, owner, rng):
     builder = MissionBuilder()
@@ -61,14 +63,17 @@ def setup_timeline(position, giver, owner, rng):
     builder.MissionDispose += lambda: on_dispose(giver, is_day, wait)
     return builder
 
+
 def on_dispose(giver, is_day, wait):
     MissionCore.remove_component_if_exists(giver, FollowAIComponent)
     if is_day:
         wait.Pop()
-    
+
+
 def fail_when(giver, cottage_structure):
     return giver.IsDead or not MissionCore.is_within_distance(giver.Position, cottage_structure.Position)
-    
+
+
 def spawn_bandits(builder, cottage, owner, rng):
     bandits = []
     count = len(cottage.BanditPositions)
@@ -79,13 +84,14 @@ def spawn_bandits(builder, cottage, owner, rng):
         bandits.append(bandit)
     return bandits
 
+
 def on_arrived(giver, owner, is_day):
     MissionCore.remove_component_if_exists(giver, TalkComponent)
     MissionCore.remove_component_if_exists(giver, IBasicAIComponent)
 
     talk = TalkComponent(giver)
     giver.AddComponent(talk)
-    
+
     if is_day:
         talk.AddDialogLine(load_translation('quest_occupied_house_arrive'))
         owner.IsSitting = True
@@ -96,6 +102,7 @@ def on_arrived(giver, owner, is_day):
     talk.AutoRemove = True
     talk.TalkToPlayer()
 
+
 def on_mission_start(giver, target):
     MissionCore.make_follow(giver, target)
     giver.SearchComponent[DamageComponent]().Immune = False
@@ -103,5 +110,5 @@ def on_mission_start(giver, target):
 
 
 def can_give(position):
-    return len(MissionCore.nearby_structs_designs(position, CottageWithVegetablePlotDesign)) > 0\
+    return len(MissionCore.nearby_structs_designs(position, CottageWithVegetablePlotDesign)) > 0 \
            and not MissionCore.is_inside_structure(position, CottageWithVegetablePlotDesign)

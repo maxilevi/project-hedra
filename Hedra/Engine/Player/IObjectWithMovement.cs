@@ -1,5 +1,3 @@
-using Hedra.Engine.Game;
-
 namespace Hedra.Engine.Player
 {
     public interface IObjectWithMovement

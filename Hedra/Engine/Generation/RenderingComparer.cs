@@ -1,8 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Hedra.Engine.Rendering;
 using System.Numerics;
+using Hedra.Engine.Rendering;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.Generation
@@ -10,14 +9,15 @@ namespace Hedra.Engine.Generation
     public class RenderingComparer : IComparer<KeyValuePair<Vector2, ChunkRenderCommand>>
     {
         public Vector3 Position { get; set; }
-        
+
         /// <summary>
-        /// Compares 2 objects for sorting.
+        ///     Compares 2 objects for sorting.
         /// </summary>
         /// <param name="A"></param>
         /// <param name="B"></param>
         /// <returns>Return -1 if B is greater than A, 1 is viceversa and 0 if equal</returns>
-        public virtual int Compare(KeyValuePair<Vector2, ChunkRenderCommand> A, KeyValuePair<Vector2, ChunkRenderCommand> B)
+        public virtual int Compare(KeyValuePair<Vector2, ChunkRenderCommand> A,
+            KeyValuePair<Vector2, ChunkRenderCommand> B)
         {
             if (A.Key == B.Key && A.Value == B.Value) return 0;
 

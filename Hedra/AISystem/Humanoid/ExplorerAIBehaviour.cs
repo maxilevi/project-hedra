@@ -1,8 +1,7 @@
 using System;
 using System.Linq;
-using Hedra.Core;
-using Hedra.EntitySystem;
 using System.Numerics;
+using Hedra.EntitySystem;
 using Hedra.Numerics;
 
 namespace Hedra.AISystem.Humanoid
@@ -10,10 +9,9 @@ namespace Hedra.AISystem.Humanoid
     public class ExplorerAIBehaviour : BanditAIBehaviour
     {
         private readonly IHumanoid[] _crew;
-        private IHumanoid Leader => _crew.First(C => !C.Disposed && !C.IsDead);
-        private float _angle;
         private readonly Random _rng;
-        
+        private float _angle;
+
         public ExplorerAIBehaviour(IHumanoid Parent, IHumanoid[] Crew, Random Rng) : base(Parent)
         {
             _crew = Crew;
@@ -21,6 +19,10 @@ namespace Hedra.AISystem.Humanoid
             _angle = _rng.NextFloat() * 360;
             Parent.SearchComponent<CombatAIComponent>().IgnoreEntities = _crew;
         }
+
+        private IHumanoid Leader => _crew.First(C => !C.Disposed && !C.IsDead);
+
+        public override float WaitTime => 0;
 
         public override Vector3 FindPoint()
         {
@@ -39,7 +41,7 @@ namespace Hedra.AISystem.Humanoid
         {
             for (var i = 0; i < _crew.Length; ++i)
             {
-                if(_crew[i].IsDead || _crew[i].Disposed) continue;
+                if (_crew[i].IsDead || _crew[i].Disposed) continue;
                 if ((Entity.Position - _crew[i].Position).LengthSquared() > Math.Pow(CombatAIComponent.StareRadius, 2))
                 {
                     var component = _crew[i].SearchComponent<CombatAIComponent>();
@@ -47,18 +49,16 @@ namespace Hedra.AISystem.Humanoid
                 }
             }
         }
-        
+
         public override void SetTarget(IEntity Entity)
         {
             for (var i = 0; i < _crew.Length; ++i)
             {
-                if(_crew[i].IsDead || _crew[i].Disposed) continue;
+                if (_crew[i].IsDead || _crew[i].Disposed) continue;
                 var component = _crew[i].SearchComponent<CombatAIComponent>();
                 if (component != null)
-                {
                     if (!component.IsChasing)
                         component.SetTarget(Entity);
-                }
             }
         }
 
@@ -66,7 +66,5 @@ namespace Hedra.AISystem.Humanoid
         {
             _angle = _rng.NextFloat() * 360;
         }
-
-        public override float WaitTime => 0;
     }
 }

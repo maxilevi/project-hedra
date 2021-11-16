@@ -1,12 +1,11 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
+using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
-using System;
-using System.Collections;
-using Hedra.Engine.Generation;
-using Hedra.Engine.Management;
-using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
@@ -17,12 +16,14 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         public List<CollisionShape> Shapes { get; set; }
         public List<BaseStructure> Structures { get; set; }
 
+        public bool IsEmpty => Models.Count == 0 && Instances.Count == 0 && Shapes.Count == 0 && Structures.Count == 0;
+
         public void Dispose()
         {
             for (var i = 0; i < Structures.Count; i++)
                 Structures[i].Dispose();
         }
-      
+
         public IEnumerator Place(Vector3 Position)
         {
             var height = Physics.HeightAtPosition(Position);
@@ -39,7 +40,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                     if (waiter.Disposed) yield break;
                     yield return null;
                 }
-                
+
                 var block = World.GetHighestBlockAt(position.X, position.Z);
                 if (Instances[i].PlaceCondition == null || Instances[i].PlaceCondition(block.Type))
                 {
@@ -52,7 +53,5 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 }
             }
         }
-
-        public bool IsEmpty => Models.Count == 0 && Instances.Count == 0 && Shapes.Count == 0 && Structures.Count == 0; 
     }
 }

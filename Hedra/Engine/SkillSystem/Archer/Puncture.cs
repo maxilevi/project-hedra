@@ -9,10 +9,6 @@
 
 using System.Globalization;
 using Hedra.Components.Effects;
-using Hedra.Core;
-using Hedra.Engine.Localization;
-using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Numerics;
@@ -23,7 +19,7 @@ using Hedra.WorldObjects;
 namespace Hedra.Engine.SkillSystem.Archer
 {
     /// <summary>
-    /// Description of Resistance.
+    ///     Description of Resistance.
     /// </summary>
     public class Puncture : SpecialAttackPassiveSkill<Bow>
     {
@@ -32,6 +28,16 @@ namespace Hedra.Engine.SkillSystem.Archer
         private float TotalTime => 2 + Level / 10.0f;
         private float BleedChance => .1f;
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/PierceArrows.png");
+
+        public override string Description => Translations.Get("puncture_skill_desc");
+        public override string DisplayName => Translations.Get("puncture_skill");
+
+        public override string[] Attributes => new[]
+        {
+            Translations.Get("puncture_damage_change", TotalDamage.ToString("0.0", CultureInfo.InvariantCulture)),
+            Translations.Get("puncture_bleed_time_change", TotalTime.ToString("0.0", CultureInfo.InvariantCulture)),
+            Translations.Get("puncture_bleed_change", (int)(BleedChance * 100))
+        };
 
         protected override void BeforeUse(Bow Weapon, AttackOptions Options)
         {
@@ -43,25 +49,14 @@ namespace Hedra.Engine.SkillSystem.Archer
         {
             Weapon.BowModifiers -= PierceModifier;
         }
-        
+
         private void PierceModifier(Projectile ArrowProj)
         {
             ArrowProj.HitEventHandler += delegate(Projectile Sender, IEntity Hit)
             {
-                if(Utils.Rng.NextFloat() < BleedChance && Hit.SearchComponent<BleedingComponent>() == null)
-                {
-                    Hit.AddComponent( new BleedingComponent(Hit, User, TotalTime, TotalDamage));
-                }
+                if (Utils.Rng.NextFloat() < BleedChance && Hit.SearchComponent<BleedingComponent>() == null)
+                    Hit.AddComponent(new BleedingComponent(Hit, User, TotalTime, TotalDamage));
             };
         }
-
-        public override string Description => Translations.Get("puncture_skill_desc");
-        public override string DisplayName => Translations.Get("puncture_skill");
-        public override string[] Attributes => new []
-        {
-            Translations.Get("puncture_damage_change", TotalDamage.ToString("0.0", CultureInfo.InvariantCulture)),
-            Translations.Get("puncture_bleed_time_change", TotalTime.ToString("0.0", CultureInfo.InvariantCulture)),
-            Translations.Get("puncture_bleed_change", (int)(BleedChance * 100))
-        };
     }
 }

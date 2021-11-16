@@ -8,27 +8,41 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
 using System.Text;
-using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.Game;
-using Hedra.Engine.Localization;
 using Hedra.Engine.Native;
 using Hedra.Engine.Rendering;
 using Hedra.Localization;
-using Hedra.Sound;
-using System.Numerics;
 using Hedra.Numerics;
+using Hedra.Sound;
 using Silk.NET.Windowing;
-
 
 namespace Hedra.Game
 {
     [Obfuscation(Exclude = false, Feature = "-rename")]
     public static class GameSettings
     {
-        public const int MaxCharacters = 4; 
+        public const int MaxCharacters = 4;
+        public static float AmbientOcclusionIntensity = 1;
+        public static bool DarkEffect = false;
+        public static bool DistortEffect = false;
+        public static bool GlobalShadows = true;
+        public static bool Hardcore = false;
+        public static bool UnderWaterEffect = false;
+        private static int _shadowQuality = 2;
+        private static int _frameLimit;
+
+        static GameSettings()
+        {
+//#if DEBUG
+            DebugMode = true;
+//#endif
+            WatchScriptChanges = false; // DebugMode;
+        }
+
         public static bool HideWorld { get; set; }
         public static bool ContinousMove { get; set; }
         public static float SurfaceWidth { get; set; }
@@ -49,43 +63,27 @@ namespace Hedra.Game
         public static bool WatchScriptChanges { get; set; }
         public static bool UseSSR => SSAO && EnableReflections;
         public static bool Paused { get; set; }
-        public static float AmbientOcclusionIntensity = 1;
         public static bool BlurFilter { get; set; } = false;
         public static bool DebugAI { get; set; }
         public static bool DebugFrustum { get; set; }
         public static bool DepthEffect { get; set; }
         public static bool DebugNavMesh { get; set; }
         public static bool NewWorld { get; set; }
-        public static bool DarkEffect = false;
-        public static bool DistortEffect = false;
-        public static bool GlobalShadows = true;
-        public static bool Hardcore = false;
-        public static bool UnderWaterEffect = false;
-        private static int _shadowQuality = 2;
-        private static int _frameLimit;
         public static bool Loaded => LoadedWindowSettings && LoadedNormalSettings && LoadedSetupSettings;
         public static bool LoadedWindowSettings { get; private set; }
         public static bool LoadedNormalSettings { get; private set; }
         public static bool LoadedSetupSettings { get; private set; }
 
-        static GameSettings()
-        {
-//#if DEBUG
-            DebugMode = true;
-//#endif
-            WatchScriptChanges = false; // DebugMode;
-        }
-
         public static string SettingsPath => $"{GameLoader.AppData}settings.cfg";
-        
+
         public static bool Shadows => ShadowQuality != 0 && GlobalShadows;
-        
+
         [Setting] public static bool OcclusionCulling { get; set; } = false;
-        
+
         [Setting] public static bool Quality { get; set; } = true;
-        
+
         [Setting] public static bool SmoothLod { get; set; } = true;
-        
+
         [Setting] public static bool Bloom { get; set; } = true;
 
         [Setting] public static bool Autosave { get; set; } = true;
@@ -103,16 +101,16 @@ namespace Hedra.Game
         [Setting] public static bool ShowMinimap { get; set; } = true;
 
         [Setting] public static bool SSAO { get; set; } = true;
-        
+
         [Setting] public static bool EnableReflections { get; set; } = true;
-        
+
         [Setting] public static bool FXAA { get; set; } = true;
-        
+
         [Setting] public static float FieldOfView { get; set; } = 85f;
 
         [SetupSetting] public static int ResolutionIndex { get; set; } = -1;
         [SetupSetting] public static float UIScaling { get; set; } = 1;
-        
+
         [Setting]
         public static int FrameLimit
         {
@@ -139,7 +137,7 @@ namespace Hedra.Game
             set
             {
                 Program.GameWindow.Fullscreen = value;
-                if(!value) Program.GameWindow.WindowState = WindowState.Maximized;
+                if (!value) Program.GameWindow.WindowState = WindowState.Maximized;
             }
         }
 
@@ -156,7 +154,7 @@ namespace Hedra.Game
             get => SoundPlayer.Volume;
             set => SoundPlayer.Volume = value;
         }
-        
+
         [Setting]
         public static string Language
         {
@@ -167,7 +165,7 @@ namespace Hedra.Game
         [Setting]
         public static int ShadowQuality
         {
-            get => (int) Mathf.Clamp(_shadowQuality, 0, 3);
+            get => (int)Mathf.Clamp(_shadowQuality, 0, 3);
             set
             {
                 _shadowQuality = value;
@@ -188,9 +186,7 @@ namespace Hedra.Game
             var builder = new StringBuilder();
             var properties = GatherProperties();
             for (var i = 0; i < properties.Length; i++)
-            {
                 builder.AppendLine($"{properties[i].Name}={properties[i].GetValue(null, null)}");
-            }
             File.WriteAllText(Path, builder.ToString());
         }
 
@@ -203,10 +199,12 @@ namespace Hedra.Game
 
         public static void LoadNormalSettings(string Path)
         {
-            Load(Path, P => !P.IsDefined(typeof(WindowSettingAttribute)) && !P.IsDefined(typeof(SetupSettingAttribute), true), LoadDefaultSettings);
+            Load(Path,
+                P => !P.IsDefined(typeof(WindowSettingAttribute)) && !P.IsDefined(typeof(SetupSettingAttribute), true),
+                LoadDefaultSettings);
             LoadedNormalSettings = true;
         }
-        
+
         public static void LoadWindowSettings(string Path)
         {
             Load(Path, P => P.IsDefined(typeof(WindowSettingAttribute), true), LoadDefaultSettings);
@@ -215,7 +213,7 @@ namespace Hedra.Game
 
         public static void LoadSetupSettings(string Path)
         {
-            Load(Path, P => P.IsDefined(typeof(SetupSettingAttribute), true), () => {});
+            Load(Path, P => P.IsDefined(typeof(SetupSettingAttribute), true), () => { });
             LoadedSetupSettings = true;
         }
 
@@ -249,7 +247,7 @@ namespace Hedra.Game
                 typeof(GameSettings).GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
                     .Where(P => P.IsDefined(typeof(SettingAttribute), true)).ToArray();
         }
-        
+
         private static object ConvertString(string Value, Type Type)
         {
             return Type.IsEnum ? Enum.Parse(Type, Value) : Convert.ChangeType(Value, Type);

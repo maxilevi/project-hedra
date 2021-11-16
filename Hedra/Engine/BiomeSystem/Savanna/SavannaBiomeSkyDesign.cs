@@ -4,6 +4,5 @@ namespace Hedra.Engine.BiomeSystem.Savanna
 {
     public class SavannaBiomeSkyDesign : NormalBiomeSkyDesign
     {
-        
     }
 }

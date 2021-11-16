@@ -7,14 +7,13 @@ namespace Hedra.AISystem.Humanoid
     {
         public CommandBasedAIComponent(IHumanoid Entity) : base(Entity)
         {
-
         }
+
+        protected override bool ShouldSleep => false;
 
         public void WalkTo(Vector3 TargetPoint, float ErrorMargin = DefaultErrorMargin)
         {
-            base.MoveTo(TargetPoint, ErrorMargin);
+            MoveTo(TargetPoint, ErrorMargin);
         }
-        
-        protected override bool ShouldSleep => false;
     }
 }

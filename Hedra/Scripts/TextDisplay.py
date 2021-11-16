@@ -22,11 +22,14 @@ PERCENTAGE_DISPLAY = 'Percentage'
 COLORED_PERCENTAGE_DISPLAY = 'ColoredPercentage'
 FLAT_DISPLAY = 'Flat'
 
+
 def abs_percentage(number):
     return str(abs(int(number * 100.0))) + '%'
 
+
 def display_percentage(number):
     return ('-' if number < 0 else '') + abs_percentage(number)
+
 
 def display_colored_percentage(number):
     percentage = ('-' if number < 0 else '+') + abs_percentage(number)
@@ -34,8 +37,10 @@ def display_colored_percentage(number):
         return '$(BOLD)(GREEN){' + percentage + '}'
     return '$(BOLD)(RED){' + percentage + '}'
 
+
 def display_flat(number):
     return '{:.2f}'.format(float(number))
+
 
 DISPLAY_METHODS = {
     PERCENTAGE_DISPLAY: display_percentage,
@@ -43,12 +48,15 @@ DISPLAY_METHODS = {
     FLAT_DISPLAY: display_flat
 }
 
+
 def format(value, display_type):
     return DISPLAY_METHODS[display_type](value)
+
 
 def modify(string, *modifiers):
     buffer = ''.join(modifiers)
     return '$' + buffer + '{' + '{0}'.format(string) + '}'
+
 
 assert DISPLAY_METHODS[FLAT_DISPLAY](1) == '1.00'
 assert DISPLAY_METHODS[FLAT_DISPLAY](1.000) == '1.00'

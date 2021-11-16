@@ -13,7 +13,7 @@ namespace Hedra.Engine.Scripting
         {
             return Interpreter.GetFunction(_name, Function);
         }
-        
+
         public bool HasMember(string Member)
         {
             return Interpreter.HasMember(_name, Member);
@@ -23,12 +23,12 @@ namespace Hedra.Engine.Scripting
         {
             return Interpreter.GetFunction(_name, Function).Invoke<T>(Params);
         }
-        
+
         public void Execute(string Function, params object[] Params)
         {
             Interpreter.GetFunction(_name, Function).Invoke(Params);
         }
-        
+
         public T Get<T>(string Member)
         {
             return Interpreter.GetMember<T>(_name, Member);

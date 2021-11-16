@@ -10,8 +10,8 @@ layout(location = 0)out vec4 OutColor;
 
 void main(){
 
-	vec4 SkyColor = vec4( mix(BotColor, TopColor, (gl_FragCoord.y / Height)) );
-	vec4 NewColor = mix(SkyColor, Color, Visibility);
+    vec4 SkyColor = vec4(mix(BotColor, TopColor, (gl_FragCoord.y / Height)));
+    vec4 NewColor = mix(SkyColor, Color, Visibility);
 
-	OutColor = NewColor;	
+    OutColor = NewColor;
 }

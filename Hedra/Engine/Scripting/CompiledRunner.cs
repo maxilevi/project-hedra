@@ -9,14 +9,18 @@ namespace Hedra.Engine.Scripting
 {
     public class CompiledRunner : Runner
     {
-        private readonly Dictionary<string, DateTime> _sources;
         private readonly Dictionary<string, ScriptScope> _scripts;
+        private readonly Dictionary<string, DateTime> _sources;
+
         public CompiledRunner(ScriptEngine Engine) : base(Engine)
         {
             _scripts = new Dictionary<string, ScriptScope>();
             _sources = new Dictionary<string, DateTime>();
         }
-        
+
+        private static string DirectoryPath => Interpreter.SearchPath;
+        private static bool WatchChanges => GameSettings.WatchScriptChanges;
+
         public override void Reload()
         {
             _scripts.Clear();
@@ -38,10 +42,7 @@ namespace Hedra.Engine.Scripting
         {
             if (!WatchChanges && _scripts.ContainsKey(Library)) return _scripts[Library];
             var lastWrite = _sources.ContainsKey(Library) ? _sources[Library] : DateTime.MinValue;
-            if (ScriptChanged(Library, lastWrite, out var newWrite))
-            {
-                return Compile(Library, Get(Library), newWrite);
-            }
+            if (ScriptChanged(Library, lastWrite, out var newWrite)) return Compile(Library, Get(Library), newWrite);
             return _scripts[Library];
         }
 
@@ -60,12 +61,12 @@ namespace Hedra.Engine.Scripting
                     {
                         if (_scripts.ContainsKey(Name))
                             _scripts.Remove(Name);
-                        
+
                         _scripts.Add(Name, scope);
-                        
+
                         if (_sources.ContainsKey(Name))
                             _sources.Remove(Name);
-                        
+
                         _sources.Add(Name, Date);
                     }
                 }
@@ -74,6 +75,7 @@ namespace Hedra.Engine.Scripting
                     listener.LogAll(Name);
                 }
             }
+
             return scope;
         }
 
@@ -94,7 +96,7 @@ namespace Hedra.Engine.Scripting
 
         private static bool ScriptChanged(string Name, DateTime LastTime, out DateTime NewWrite)
         {
-            NewWrite = default(DateTime);
+            NewWrite = default;
             try
             {
                 NewWrite = File.GetLastWriteTime($"{DirectoryPath}{Name}");
@@ -119,8 +121,5 @@ namespace Hedra.Engine.Scripting
                 return null;
             }
         }
-
-        private static string DirectoryPath => Interpreter.SearchPath;
-        private static bool WatchChanges => GameSettings.WatchScriptChanges;
     }
 }

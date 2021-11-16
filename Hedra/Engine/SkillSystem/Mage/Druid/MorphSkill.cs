@@ -1,11 +1,10 @@
 using System;
 using System.Linq;
-using Hedra.Engine.ItemSystem;
+using System.Numerics;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.WeaponSystem;
-using System.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Mage.Druid
 {
@@ -13,10 +12,19 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
     {
         private const string EquipmentRestriction = "WerewolfHands";
         private static bool _isMorphed;
-        private AnimatedModel _oldModel;
         private AnimatedModel _newModel;
+        private AnimatedModel _oldModel;
         private string[] _oldRestrictions;
         private bool _oldUpdateDefaultModels;
+
+        protected abstract HumanType Type { get; }
+        protected abstract bool CanUseOtherSkills { get; }
+        protected sealed override float Duration => 18 + 32 * (Level / (float)MaxLevel);
+        protected sealed override float CooldownDuration => 28;
+        protected sealed override int MaxLevel => 15;
+        protected override bool ShouldDisable => _isMorphed;
+        protected abstract bool RestrictWeapons { get; }
+        protected virtual Weapon CustomWeapon => throw new NotImplementedException();
 
         protected sealed override void DoEnable()
         {
@@ -45,7 +53,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
             {
                 _oldRestrictions = User.Inventory.GetRestrictions(PlayerInventory.WeaponHolder);
                 var oldWeapon = User.Inventory.MainWeapon;
-                User.Inventory.SetRestrictions(PlayerInventory.WeaponHolder, new []{EquipmentRestriction});
+                User.Inventory.SetRestrictions(PlayerInventory.WeaponHolder, new[] { EquipmentRestriction });
                 User.Inventory.SetItem(PlayerInventory.WeaponHolder, null);
                 if (oldWeapon != null) User.Inventory.AddItem(oldWeapon);
                 User.SetWeapon(CustomWeapon);
@@ -59,7 +67,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
         {
             SkillUtils.SpawnParticles(User.Position, Vector4.One);
         }
-        
+
         private void UnMorph()
         {
             _isMorphed = false;
@@ -79,6 +87,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
                     User.Inventory.SetItem(PlayerInventory.WeaponHolder, weapon);
                 }
             }
+
             MorphEffect();
             Casting = false;
         }
@@ -93,16 +102,6 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
 
         protected virtual void ApplyVisuals(AnimatedModel Model, string ModelPath)
         {
-            
         }
-        
-        protected abstract HumanType Type { get; }
-        protected abstract bool CanUseOtherSkills { get; }
-        protected sealed override float Duration => 18 + 32 * (Level / (float) MaxLevel);
-        protected sealed override float CooldownDuration => 28;
-        protected sealed override int MaxLevel => 15;
-        protected override bool ShouldDisable => _isMorphed;
-        protected abstract bool RestrictWeapons { get; }
-        protected virtual Weapon CustomWeapon => throw new NotImplementedException();
     }
 }

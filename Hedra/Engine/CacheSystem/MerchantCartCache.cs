@@ -1,5 +1,5 @@
-using Hedra.Engine.Management;
 using System.Numerics;
+using Hedra.Engine.Management;
 
 namespace Hedra.Engine.CacheSystem
 {
@@ -7,11 +7,11 @@ namespace Hedra.Engine.CacheSystem
     {
         public MerchantCartCache()
         {
-            this.AddModel(AssetManager.PLYLoader("Assets/Env/MerchantCart.ply", Vector3.One));
-            
-            this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/MerchantCart.ply", 14, Vector3.One));
+            AddModel(AssetManager.PLYLoader("Assets/Env/MerchantCart.ply", Vector3.One));
+
+            AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/MerchantCart.ply", 14, Vector3.One));
         }
-        
+
         public override CacheItem Type => CacheItem.MerchantCart;
     }
 }

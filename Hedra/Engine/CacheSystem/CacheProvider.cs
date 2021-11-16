@@ -8,32 +8,27 @@
  */
 
 using System;
-using System.Numerics;
 using System.Collections.Generic;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using System.Globalization;
 using System.Linq;
-using Hedra.Engine.Rendering;
-using Hedra.Engine.PhysicsSystem;
+using System.Numerics;
 using System.Reflection;
 using Hedra.Engine.IO;
+using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Rendering;
 using Hedra.Rendering;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace Hedra.Engine.CacheSystem
 {
     /// <summary>
-    /// Description of CacheManager.
+    ///     Description of CacheManager.
     /// </summary>
     public class CacheProvider : ICacheProvider
     {
-        public Dictionary<object, List<float>> CachedExtradata { get; private set; }
-        public Dictionary<object, List<Vector4>> CachedColors { get; private set; }
         private readonly Dictionary<string, CacheType> _caches = new Dictionary<string, CacheType>();
         private readonly object _colorLock = new object();
         private readonly object _extradataLock = new object();
+        public Dictionary<object, List<float>> CachedExtradata { get; private set; }
+        public Dictionary<object, List<Vector4>> CachedColors { get; private set; }
 
         public void Load()
         {
@@ -129,6 +124,8 @@ namespace Hedra.Engine.CacheSystem
             }
         }
 
+        public int UsedBytes { get; private set; }
+
         public static object MakeHash(IList<Vector4> Colors)
         {
             var sum = default(Vector4);
@@ -142,7 +139,5 @@ namespace Hedra.Engine.CacheSystem
             for (var i = 0; i < Extradata.Count; ++i) sum += Extradata[i];
             return sum * Extradata.Count;
         }
-
-        public int UsedBytes { get; private set; }
     }
 }

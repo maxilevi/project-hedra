@@ -1,14 +1,13 @@
-using Hedra.Engine.Player;
+using System.Numerics;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
-using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
     public class Gazebo : BaseStructure, IQuestStructure
     {
         private readonly WorldLight _light;
-        
+
         public Gazebo(Vector3 Position, float Radius) : base(Position)
         {
             _light = new WorldLight(Position)

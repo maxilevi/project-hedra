@@ -1,10 +1,7 @@
 using System;
-using Hedra.Engine.Generation;
-using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.Particles;
+using System.Numerics;
 using Hedra.Items;
 using Hedra.Rendering;
-using System.Numerics;
 
 namespace Hedra.Engine.ItemSystem
 {
@@ -17,8 +14,8 @@ namespace Hedra.Engine.ItemSystem
         {
             return new EffectDescriber
             {
-                Type = EffectDescriber.EffectTypeFromItem(Item),
-                EffectColor = EffectDescriber.EffectColorFromItem(Item),
+                Type = EffectTypeFromItem(Item),
+                EffectColor = EffectColorFromItem(Item)
             };
         }
 

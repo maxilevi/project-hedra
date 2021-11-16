@@ -8,18 +8,18 @@ namespace Hedra.Engine.Player.Inventory
 
         public RestrictionsInterface(InventoryArray Array)
         {
-            this._array = Array;
+            _array = Array;
         }
 
         public void AddRestriction(int Index, string Type)
         {
-            if(HasRestriction(Index, Type)) return;
+            if (HasRestriction(Index, Type)) return;
             _array.AppendRestriction(Index, Type);
         }
-        
+
         public void RemoveRestriction(int Index, string Type)
         {
-            if(!HasRestriction(Index, Type)) return;
+            if (!HasRestriction(Index, Type)) return;
             _array.RemoveRestriction(Index, Type);
         }
 

@@ -1,27 +1,16 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using Hedra.Components;
-using Hedra.Core;
+using System.Numerics;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.Core;
-using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Localization;
-using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.PlantSystem;
 using Hedra.Engine.PlantSystem.Harvestables;
-using Hedra.Engine.Player;
+using Hedra.Engine.Scenes;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
-using Hedra.EntitySystem;
+using Hedra.Framework;
 using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Rendering;
-using System.Numerics;
-using Hedra.Engine.Scenes;
-using Hedra.Framework;
-using Hedra.Framework;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
@@ -36,12 +25,16 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public override string DisplayName => Translations.Get("structure_witch_hut");
         public override bool CanSpawnInside => false;
 
-        protected override void DoBuild(CollidableStructure Structure, Matrix4x4 Rotation, Matrix4x4 Translation, Random Rng)
+        protected override void DoBuild(CollidableStructure Structure, Matrix4x4 Rotation, Matrix4x4 Translation,
+            Random Rng)
         {
             base.DoBuild(Structure, Rotation, Translation, Rng);
-            Structure.Waypoints = WaypointLoader.Load($"Assets/Env/Structures/WitchHut/WitchHut0-Pathfinding.ply", WitchHutCache.Scale, Rotation * Translation);
-            var door0 = AddDoor(WitchHutCache.Hut0Door0, WitchHutCache.Hut0Door0Position, Rotation, Structure, WitchHutCache.Hut0Door0InvertedRotation, WitchHutCache.Hut0Door0InvertedPivot);
-            var door1 = AddDoor(WitchHutCache.Hut0Door1, WitchHutCache.Hut0Door1Position, Rotation, Structure, WitchHutCache.Hut0Door1InvertedRotation, WitchHutCache.Hut0Door1InvertedPivot);
+            Structure.Waypoints = WaypointLoader.Load("Assets/Env/Structures/WitchHut/WitchHut0-Pathfinding.ply",
+                WitchHutCache.Scale, Rotation * Translation);
+            var door0 = AddDoor(WitchHutCache.Hut0Door0, WitchHutCache.Hut0Door0Position, Rotation, Structure,
+                WitchHutCache.Hut0Door0InvertedRotation, WitchHutCache.Hut0Door0InvertedPivot);
+            var door1 = AddDoor(WitchHutCache.Hut0Door1, WitchHutCache.Hut0Door1Position, Rotation, Structure,
+                WitchHutCache.Hut0Door1InvertedRotation, WitchHutCache.Hut0Door1InvertedPivot);
             PlacePlants(Structure, Translation, Rotation, StructureOffset, Rng);
 
             var hut = (WitchHut)Structure.WorldObject;
@@ -49,7 +42,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             hut.Witch0Position = Vector3.Transform(WitchHutCache.Hut0Witch0Position, Rotation * Translation);
             hut.Witch1Position = Vector3.Transform(WitchHutCache.Hut0Witch1Position, Rotation * Translation);
             hut.EnsureWitchesSpawned();
-            
+
             AddDelivery(hut, Rng);
             AddReward(hut, Rng);
             door0.InvokeInteraction(hut.Enemies[0]);
@@ -66,7 +59,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 ItemType.Mushroom,
                 ItemType.Onion
             };
-            var possibleAmounts = new[] {1, 2, 3};
+            var possibleAmounts = new[] { 1, 2, 3 };
             var item = ItemPool.Grab(possibleItems[Rng.Next(0, possibleItems.Length)]);
             item.SetAttribute(CommonAttributes.Amount, possibleAmounts[Rng.Next(0, possibleAmounts.Length)]);
             //Structure.PickupItem = item;
@@ -82,7 +75,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
             });*/
         }
 
-        public static void PlacePlants(CollidableStructure Structure, Matrix4x4 Translation, Matrix4x4 Rotation, Vector3 StructureOffset, Random Rng)
+        public static void PlacePlants(CollidableStructure Structure, Matrix4x4 Translation, Matrix4x4 Rotation,
+            Vector3 StructureOffset, Random Rng)
         {
             DecorationsPlacer.PlaceWhenWorldReady(Structure.Position,
                 P =>
@@ -94,14 +88,13 @@ namespace Hedra.Engine.StructureSystem.Overworld
                         new OnionDesign(),
                         new CarrotDesign(),
                         new PeasDesign(),
-                        new MushroomDesign(), 
-                        new TomatoDesign(),
+                        new MushroomDesign(),
+                        new TomatoDesign()
                     };
 
                     using (var allocator = new HeapAllocator(Allocator.Megabyte))
                     {
                         for (var i = 0; i < designs.Length; ++i)
-                        {
                             AddPlantLine(
                                 allocator,
                                 Vector3.Transform(WitchHutCache.PlantRows[i], Rotation * Translation) + StructureOffset,
@@ -110,17 +103,17 @@ namespace Hedra.Engine.StructureSystem.Overworld
                                 WitchHutCache.PlantWidths[i],
                                 Rng
                             );
-                        }
                     }
                 }, () => Structure.Disposed);
         }
-        
-        private static void AddPlantLine(IAllocator Allocator, Vector3 Position, Vector3 UnitOffset, HarvestableDesign Design, int Count, Random Rng)
+
+        private static void AddPlantLine(IAllocator Allocator, Vector3 Position, Vector3 UnitOffset,
+            HarvestableDesign Design, int Count, Random Rng)
         {
             var offset = UnitOffset;
             for (var i = 0; i < Count; ++i)
             {
-                if(Rng.Next(0, 7) != 1)
+                if (Rng.Next(0, 7) != 1)
                     AddPlant(Allocator, Position + offset * (float)Math.Pow(-1, i), Design, Rng);
                 offset += UnitOffset * 2;
             }

@@ -1,29 +1,23 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing.Imaging;
 using System.Linq;
-using System.Text;
-using Hedra.Core;
-using Hedra.Engine.Game;
-using Hedra.Engine.Management;
-using Hedra.Engine.Player;
-using Hedra.Engine.IO;
-using Hedra.Game;
 using System.Numerics;
+using Hedra.Core;
+using Hedra.Engine.IO;
+using Hedra.Engine.Management;
+using Hedra.Game;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.Generation
 {
     public class AreaHighlighter
     {
-        private readonly HighlightedArea[] _highlightedAreas;
-
         public AreaHighlighter()
         {
-            _highlightedAreas = new HighlightedArea[8];
-            for (var i = 0; i < _highlightedAreas.Length; i++)
-                _highlightedAreas[i] = new HighlightedArea();
+            Highlights = new HighlightedArea[8];
+            for (var i = 0; i < Highlights.Length; i++)
+                Highlights[i] = new HighlightedArea();
         }
 
         public Vector4[] AreaPositions
@@ -31,8 +25,8 @@ namespace Hedra.Engine.Generation
             get
             {
                 var areaPositions = new List<Vector4>();
-                for (var i = 0; i < _highlightedAreas.Length; i++)
-                    areaPositions.Add(_highlightedAreas[i].AreaPosition);
+                for (var i = 0; i < Highlights.Length; i++)
+                    areaPositions.Add(Highlights[i].AreaPosition);
 
                 return areaPositions.ToArray();
             }
@@ -43,37 +37,40 @@ namespace Hedra.Engine.Generation
             get
             {
                 var areaColors = new List<Vector4>();
-                for (var i = 0; i < _highlightedAreas.Length; i++)
-                    areaColors.Add(_highlightedAreas[i].AreaColor);
+                for (var i = 0; i < Highlights.Length; i++)
+                    areaColors.Add(Highlights[i].AreaColor);
 
                 return areaColors.ToArray();
             }
         }
 
-        public int AreaCount => _highlightedAreas.Sum(H => !H.IsEmpty ? 1 : 0);
+        public int AreaCount => Highlights.Sum(H => !H.IsEmpty ? 1 : 0);
+
+        public HighlightedArea[] Highlights { get; }
 
         public HighlightedAreaWrapper HighlightAreaPermanently(Vector3 Position, Vector4 Color, float Radius)
         {
             return HighlightArea(Position, Color, Radius, -1);
         }
-        
+
         public HighlightedAreaWrapper HighlightArea(Vector3 Position, Vector4 Color, float Radius, float Seconds)
         {
             const float fadeSpeed = 32f;
 
             var area = new HighlightedArea(Position, Color, Radius);
             int i;
-            for (i = 0; i < _highlightedAreas.Length; i++)
+            for (i = 0; i < Highlights.Length; i++)
             {
-
-                if (!_highlightedAreas[i].IsEmpty) continue;
-                _highlightedAreas[i] = area;
+                if (!Highlights[i].IsEmpty) continue;
+                Highlights[i] = area;
                 break;
             }
+
             var k = i;
-            if (k >= _highlightedAreas.Length)
+            if (k >= Highlights.Length)
             {
-                Log.WriteLine($"There are no available highlights. Skipping...");//throw new ArgumentException($"There are no available highlights");
+                Log.WriteLine(
+                    "There are no available highlights. Skipping..."); //throw new ArgumentException($"There are no available highlights");
                 return null;
             }
 
@@ -81,13 +78,16 @@ namespace Hedra.Engine.Generation
             if (isPermanent)
             {
                 var wrapper = new HighlightedAreaWrapper();
-                RoutineManager.StartRoutine(CycleHighlight, _highlightedAreas[k], World.Seed, wrapper);
+                RoutineManager.StartRoutine(CycleHighlight, Highlights[k], World.Seed, wrapper);
                 return wrapper;
             }
+
             area.Position = Position - Vector3.UnitY * 16;
             RoutineManager.StartRoutine(FadeHighlight, area, Position, Seconds, false);
             const float fadeTime = 1.5f;
-            TaskScheduler.After(Seconds, () => RoutineManager.StartRoutine(FadeHighlight, _highlightedAreas[k], area.Position - Vector3.UnitY * 8, fadeTime, true));        
+            TaskScheduler.After(Seconds,
+                () => RoutineManager.StartRoutine(FadeHighlight, Highlights[k], area.Position - Vector3.UnitY * 8,
+                    fadeTime, true));
             return null;
         }
 
@@ -95,8 +95,8 @@ namespace Hedra.Engine.Generation
         {
             var area = (HighlightedArea)Params[0];
             var targetPosition = (Vector3)Params[1];
-            var time = (float) Params[2];
-            var isFadingOut = (bool) Params[3];
+            var time = (float)Params[2];
+            var isFadingOut = (bool)Params[3];
 
             var passedTime = 0f;
             const float fadeSpeed = 32;
@@ -108,6 +108,7 @@ namespace Hedra.Engine.Generation
                     passedTime += Time.DeltaTime;
                     yield return null;
                 }
+
                 area.Reset();
             }
             else
@@ -124,25 +125,24 @@ namespace Hedra.Engine.Generation
         private IEnumerator CycleHighlight(object[] Params)
         {
             var area = (HighlightedArea)Params[0];
-            var seed = (int) Params[1];
-            var wrapper = (HighlightedAreaWrapper) Params[2];
+            var seed = (int)Params[1];
+            var wrapper = (HighlightedAreaWrapper)Params[2];
             var areaClone = wrapper.Area = new HighlightedArea(area.Position, area.Color, area.Radius);
             var player = GameManager.Player;
-            
+
             while (World.Seed == seed && !areaClone.Stop)
             {
                 if ((player.Position.Xz() - areaClone.Position.Xz()).LengthFast() < areaClone.Radius + 256)
                 {
                     if (area == null)
                     {
-                        for (var i = 0; i < _highlightedAreas.Length; i++)
-                        {
-                            if (_highlightedAreas[i].IsEmpty)
+                        for (var i = 0; i < Highlights.Length; i++)
+                            if (Highlights[i].IsEmpty)
                             {
-                                area = _highlightedAreas[i];
+                                area = Highlights[i];
                                 break;
                             }
-                        }
+
                         if (area == null) throw new ArgumentException("Highlighted areas exceded maxium count.");
                         area.Copy(areaClone);
                     }
@@ -155,27 +155,22 @@ namespace Hedra.Engine.Generation
                         area = null;
                     }
                 }
+
                 area?.Copy(areaClone);
                 yield return null;
             }
 
-            if (area != null)
-            {
-                area.Reset();
-            }
-
+            if (area != null) area.Reset();
         }
 
         public void Reset()
         {
-            for (int i = 0; i < _highlightedAreas.Length; i++)
+            for (var i = 0; i < Highlights.Length; i++)
             {
-                _highlightedAreas[i].Position = Vector3.Zero;
-                _highlightedAreas[i].Color = Vector4.Zero;
-                _highlightedAreas[i].Radius = 0f;
+                Highlights[i].Position = Vector3.Zero;
+                Highlights[i].Color = Vector4.Zero;
+                Highlights[i].Radius = 0f;
             }
         }
-
-        public HighlightedArea[] Highlights => _highlightedAreas;
     }
 }

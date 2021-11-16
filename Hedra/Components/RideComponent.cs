@@ -7,40 +7,35 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
+using System.Numerics;
 using Hedra.AISystem;
 using Hedra.Components.Effects;
-using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Events;
-using Hedra.Engine.Localization;
-using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Localization;
-using System.Numerics;
 using Hedra.Numerics;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Components
 {
     /// <summary>
-    /// Description of RideComponent.
+    ///     Description of RideComponent.
     /// </summary>
     public class RideComponent : EntityComponent
     {
         public const float SpeedMultiplier = 1.75f;
-        public IHumanoid Rider => _hasRider ? _rider : null;
-        private IHumanoid _rider;
+        private readonly float _normalizedHeightOffset;
         private BasicAIComponent _ai;
-        private HealthBarComponent _healthBar;
-        private bool _hasRider;
-        private bool _shouldRide;
-        private bool _shouldUnride;
         private bool _canRide;
         private bool _canUnride;
-        private readonly float _normalizedHeightOffset;
+        private bool _hasRider;
+        private HealthBarComponent _healthBar;
+        private IHumanoid _rider;
+        private bool _shouldRide;
+        private bool _shouldUnride;
 
         public RideComponent(IEntity Parent, float NormalizedHeightOffset) : base(Parent)
         {
@@ -51,6 +46,8 @@ namespace Hedra.Components
                 _shouldUnride = EventArgs.Key == Controls.Descend && _canUnride;
             });
         }
+
+        public IHumanoid Rider => _hasRider ? _rider : null;
 
         public override void Update()
         {

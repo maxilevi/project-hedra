@@ -1,30 +1,22 @@
 using System;
 using System.Collections.Generic;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using System.Linq;
-using System.Text;
 using Hedra.AISystem.Humanoid;
 using Hedra.Components;
-using Hedra.Core;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.Player;
-using Hedra.Engine.Scripting;
 using Hedra.EntitySystem;
 using Hedra.Items;
 using Hedra.WeaponSystem;
-using Microsoft.Scripting;
 
 namespace Hedra.Engine.ModuleSystem
 {
     public static class HumanoidFactory
     {
-        private static Dictionary<string, HumanoidConfiguration> _behaviours;
-        private static Dictionary<string, Type> _ais;
+        private static readonly Dictionary<string, HumanoidConfiguration> _behaviours;
+        private static readonly Dictionary<string, Type> _ais;
 
         static HumanoidFactory()
         {

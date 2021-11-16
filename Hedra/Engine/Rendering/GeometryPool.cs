@@ -9,28 +9,42 @@
 
 using System;
 using System.Collections.Generic;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Drawing.Imaging;
 using System.IO;
 using Hedra.Engine.IO;
-using Hedra.Core;
-using Hedra.Engine.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
-using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
-using Hedra.Numerics;
 using Hedra.Framework;
+using Hedra.Numerics;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Rendering
 {
     /// <summary>
-    /// One huge VBO with reduced fragmentation
+    ///     One huge VBO with reduced fragmentation
     /// </summary>
     public class GeometryPool<T> : IDisposable where T : unmanaged
     {
         private readonly int _poolSize;
+
+
+        public GeometryPool(int SizeInBytes, int TypeSizeInBytes, VertexAttribPointerType PointerType,
+            BufferTarget BufferTarget = BufferTarget.ArrayBuffer, BufferUsageHint Hint = BufferUsageHint.StaticDraw)
+        {
+            ObjectMap = new List<MemoryEntry>();
+            Buffer = new VBO<T>(new T[0], 0, PointerType, BufferTarget, Hint);
+
+            _poolSize = SizeInBytes;
+            this.TypeSizeInBytes = TypeSizeInBytes;
+
+            Buffer.Update(new T[0], TotalMemory);
+
+            var error = Renderer.GetError();
+            if (error != ErrorCode.NoError)
+                Log.WriteLine($"GLError when creating GeometryPool<{typeof(T)}> {error}");
+        }
+
         public List<MemoryEntry> ObjectMap { get; }
         public VBO<T> Buffer { get; }
 
@@ -46,21 +60,9 @@ namespace Hedra.Engine.Rendering
 
         public int TypeSizeInBytes { get; }
 
-
-        public GeometryPool(int SizeInBytes, int TypeSizeInBytes, VertexAttribPointerType PointerType,
-            BufferTarget BufferTarget = BufferTarget.ArrayBuffer, BufferUsageHint Hint = BufferUsageHint.StaticDraw)
+        public void Dispose()
         {
-            ObjectMap = new List<MemoryEntry>();
-            Buffer = new VBO<T>(new T[0], 0, PointerType, BufferTarget, Hint);
-
-            _poolSize = (int)SizeInBytes;
-            this.TypeSizeInBytes = TypeSizeInBytes;
-
-            Buffer.Update(new T[0], TotalMemory);
-
-            var error = Renderer.GetError();
-            if (error != ErrorCode.NoError)
-                Log.WriteLine($"GLError when creating GeometryPool<{typeof(T)}> {error}");
+            Buffer.Dispose();
         }
 
         public void Bind()
@@ -164,11 +166,6 @@ namespace Hedra.Engine.Rendering
         {
             ObjectMap.Clear();
             Buffer.Update(new T[0], TotalMemory);
-        }
-
-        public void Dispose()
-        {
-            Buffer.Dispose();
         }
     }
 }

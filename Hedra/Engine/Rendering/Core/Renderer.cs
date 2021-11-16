@@ -9,8 +9,8 @@
 
 using System;
 using System.Numerics;
-using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
+using Hedra.Game;
 using GLDebugProc = Silk.NET.OpenGL.DebugProc;
 using GLDrawBuffersEnum = Silk.NET.OpenGL.GLEnum;
 
@@ -18,11 +18,21 @@ using GLDrawBuffersEnum = Silk.NET.OpenGL.GLEnum;
 namespace Hedra.Engine.Rendering.Core
 {
     public delegate void ShaderChangeEvent();
+
     public static class Renderer
     {
-        public static event ShaderChangeEvent ShaderChanged;
+        static Renderer()
+        {
+            CapHandler = new CapHandler();
+            TextureHandler = new TextureHandler();
+            ShaderHandler = new ShaderHandler();
+            VertexAttributeHandler = new VertexAttributeHandler();
+            BufferHandler = new BufferHandler();
+            FramebufferHandler = new FramebufferHandler();
+        }
+
         public static IGLProvider Provider { get; set; }
-        
+
         public static uint ShaderBound => ShaderHandler.Id;
         public static uint FBOBound => FramebufferHandler.Id;
         public static uint VAOBound => VertexAttributeHandler.Id;
@@ -38,36 +48,35 @@ namespace Hedra.Engine.Rendering.Core
         public static FramebufferHandler FramebufferHandler { get; }
         public static BufferHandler BufferHandler { get; }
 
-        static Renderer()
+        public static ErrorSeverity Severity
         {
-            CapHandler = new CapHandler();
-            TextureHandler = new TextureHandler();
-            ShaderHandler = new ShaderHandler();
-            VertexAttributeHandler = new VertexAttributeHandler();
-            BufferHandler = new BufferHandler();
-            FramebufferHandler = new FramebufferHandler();
+            get => Provider.Severity;
+            set => Provider.Severity = value;
         }
+
+        public static event ShaderChangeEvent ShaderChanged;
 
         public static void LoadProvider()
         {
             Provider = new GLProvider();
         }
-        
+
         public static void Load()
         {
             BlendEquation(BlendEquationMode.FuncAdd);
             BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             Shader.ShaderChanged += () => ShaderChanged?.Invoke();
         }
-        
-        public static void MultiDrawElements(PrimitiveType Type, uint[] Counts, DrawElementsType ElementsType, IntPtr[] Offsets, int Length)
+
+        public static void MultiDrawElements(PrimitiveType Type, uint[] Counts, DrawElementsType ElementsType,
+            IntPtr[] Offsets, int Length)
         {
 #if DEBUG
             DrawAsserter.AssertMultiDrawElement(Type, Counts, ElementsType, Offsets, Length);
 #endif
             CompatibilityManager.MultiDrawElementsMethod(Type, Counts, ElementsType, Offsets, Length);
         }
-        
+
         public static void DrawArrays(PrimitiveType Type, int Offset, int Count)
         {
 #if DEBUG
@@ -84,19 +93,20 @@ namespace Hedra.Engine.Rendering.Core
             Provider.DrawElements(Primitive, Count, Type, Indices);
         }
 
-        public static void DrawElementsInstanced(PrimitiveType Primitive, int Count, DrawElementsType Type, IntPtr Indices, int InstanceCount)
+        public static void DrawElementsInstanced(PrimitiveType Primitive, int Count, DrawElementsType Type,
+            IntPtr Indices, int InstanceCount)
         {
 #if DEBUG
             DrawAsserter.AssertDrawElementsInstanced(Primitive, Count, Type, Indices, InstanceCount);
 #endif
             Provider.DrawElementsInstanced(Primitive, Count, Type, Indices, InstanceCount);
         }
-        
+
         public static void BindBuffer(BufferTarget Target, uint V0)
         {
             BufferHandler.Bind(Target, V0);
         }
-        
+
         public static void BindTexture(TextureTarget Target, uint Id)
         {
             TextureHandler.Bind(Target, Id);
@@ -106,12 +116,12 @@ namespace Hedra.Engine.Rendering.Core
         {
             VertexAttributeHandler.Bind(Id);
         }
-        
+
         public static void BindFramebuffer(FramebufferTarget Target, uint Id)
         {
             FramebufferHandler.Bind(Target, Id);
         }
-        
+
         public static void Enable(EnableCap Cap)
         {
             CapHandler.Enable(Cap);
@@ -121,7 +131,7 @@ namespace Hedra.Engine.Rendering.Core
         {
             CapHandler.Disable(Cap);
         }
-        
+
         public static void GetProgram(int ShaderId, GetProgramParameterName ParameterName, out int Value)
         {
             Provider.GetProgram(ShaderId, ParameterName, out Value);
@@ -151,7 +161,7 @@ namespace Hedra.Engine.Rendering.Core
         {
             ShaderHandler.Use(Id);
         }
-        
+
         public static void ActiveTexture(TextureUnit Unit)
         {
             TextureHandler.Active(Unit);
@@ -166,7 +176,7 @@ namespace Hedra.Engine.Rendering.Core
         public static void LoadModelView(Matrix4x4 ModelView)
         {
             ModelViewMatrix = ModelView;
-            ViewMatrix = Hedra.Game.GameManager.Player.View.ModelViewMatrix;//ModelView.ClearTranslation();
+            ViewMatrix = GameManager.Player.View.ModelViewMatrix; //ModelView.ClearTranslation();
             RebuildMVP();
         }
 
@@ -174,7 +184,7 @@ namespace Hedra.Engine.Rendering.Core
         {
             ModelViewProjectionMatrix = ModelViewMatrix * ProjectionMatrix;
         }
-        
+
         public static void DrawBuffer(DrawBufferMode Mode)
         {
             Provider.DrawBuffer(Mode);
@@ -215,21 +225,24 @@ namespace Hedra.Engine.Rendering.Core
             Provider.BufferData(Target, Size, Data, Hint);
         }
 
-        public static void BufferData<T>(BufferTarget Target, IntPtr Size, T[] Data, BufferUsageHint Hint) where T : unmanaged
+        public static void BufferData<T>(BufferTarget Target, IntPtr Size, T[] Data, BufferUsageHint Hint)
+            where T : unmanaged
         {
             Provider.BufferData(Target, Size, Data, Hint);
         }
 
-        public static void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, ref T Data) where T : unmanaged
+        public static void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, ref T Data)
+            where T : unmanaged
         {
             Provider.BufferSubData(Target, Ptr0, Offset, ref Data);
         }
 
-        public static void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, T[] Data) where T : unmanaged
+        public static void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, T[] Data)
+            where T : unmanaged
         {
             Provider.BufferSubData(Target, Ptr0, Offset, Data);
         }
-        
+
         public static void BufferSubData(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, IntPtr Data)
         {
             Provider.BufferSubData(Target, Ptr0, Offset, Data);
@@ -237,7 +250,7 @@ namespace Hedra.Engine.Rendering.Core
 
         public static FramebufferErrorCode CheckFramebufferStatus(FramebufferTarget Target)
         {
-           return Provider.CheckFramebufferStatus(Target);
+            return Provider.CheckFramebufferStatus(Target);
         }
 
         public static void Clear(ClearBufferMask Mask)
@@ -325,12 +338,14 @@ namespace Hedra.Engine.Rendering.Core
             Provider.EndQuery(Target);
         }
 
-        public static void FramebufferTexture(FramebufferTarget Framebuffer, FramebufferAttachment DepthAttachment, uint Id, int V0)
+        public static void FramebufferTexture(FramebufferTarget Framebuffer, FramebufferAttachment DepthAttachment,
+            uint Id, int V0)
         {
             Provider.FramebufferTexture(Framebuffer, DepthAttachment, Id, V0);
         }
 
-        public static void FramebufferTexture2D(FramebufferTarget Target, FramebufferAttachment Attachment, TextureTarget Textarget, uint Texture, int Level)
+        public static void FramebufferTexture2D(FramebufferTarget Target, FramebufferAttachment Attachment,
+            TextureTarget Textarget, uint Texture, int Level)
         {
             Provider.FramebufferTexture2D(Target, Attachment, Textarget, Texture, Level);
         }
@@ -367,7 +382,7 @@ namespace Hedra.Engine.Rendering.Core
 
         public static void GetActiveUniformBlock(int V0, int V1, ActiveUniformBlockParameter Parameter, out int V3)
         {
-            Provider.GetActiveUniformBlock((uint) V0, (uint) V1, Parameter, out V3);
+            Provider.GetActiveUniformBlock((uint)V0, (uint)V1, Parameter, out V3);
         }
 
         public static ErrorCode GetError()
@@ -379,7 +394,7 @@ namespace Hedra.Engine.Rendering.Core
         {
             return Provider.GetInteger(PName);
         }
-        
+
         public static void GetQueryObject(int QueryObject, GetQueryObjectParam Parameter, out int Value)
         {
             Provider.GetQueryObject((uint)QueryObject, Parameter, out Value);
@@ -419,7 +434,7 @@ namespace Hedra.Engine.Rendering.Core
         {
             Provider.PointSize(Size);
         }
-        
+
         public static void LineWidth(float Width)
         {
             Provider.LineWidth(Width);
@@ -445,19 +460,22 @@ namespace Hedra.Engine.Rendering.Core
             Provider.ShaderSource(V0, Source);
         }
 
-        public static void TexImage2D(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2, int V3,
+        public static void TexImage2D(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2,
+            int V3,
             PixelFormat Format, PixelType Type, IntPtr Ptr)
         {
             Provider.TexImage2D(Target, V0, InternalFormat, V1, V2, V3, Format, Type, Ptr);
         }
 
-        public static void TexImage2DMultisample(TextureTargetMultisample Target, int Samples, PixelInternalFormat InternalFormat,
+        public static void TexImage2DMultisample(TextureTargetMultisample Target, int Samples,
+            PixelInternalFormat InternalFormat,
             int Width, int Height, bool FixedLocations)
         {
             Provider.TexImage2DMultisample(Target, Samples, InternalFormat, Width, Height, FixedLocations);
         }
 
-        public static void TexImage3D<T>(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2, int V3,
+        public static void TexImage3D<T>(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1,
+            int V2, int V3,
             int V4, PixelFormat Format, PixelType Type, T[] Pixels) where T : unmanaged
         {
             Provider.TexImage3D(Target, V0, InternalFormat, V1, V2, V3, V4, Format, Type, Pixels);
@@ -533,12 +551,6 @@ namespace Hedra.Engine.Rendering.Core
         public static void Viewport(int V0, int V1, int V2, int V3)
         {
             Provider.Viewport(V0, V1, V2, V3);
-        }
-
-        public static ErrorSeverity Severity
-        {
-            get => Provider.Severity;
-            set => Provider.Severity = value;
         }
     }
 }

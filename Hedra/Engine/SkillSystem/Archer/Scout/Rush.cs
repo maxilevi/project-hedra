@@ -1,9 +1,5 @@
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Globalization;
 using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Localization;
-using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Rendering;
@@ -12,22 +8,8 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
 {
     public class Rush : PlayerActivateDurationSkill
     {
-        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Rush.png");
         private InfiniteStaminaComponent _staminaComponent;
-
-        protected override void DoEnable()
-        {
-            User.Model.Outline = true;
-            User.Model.OutlineColor = Colors.Yellow;
-            User.AddComponent(_staminaComponent = new InfiniteStaminaComponent(User));
-        }
-
-        protected override void DoDisable()
-        {
-            User.Model.Outline = false;
-            User.RemoveComponent(_staminaComponent);
-            _staminaComponent = null;
-        }
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Rush.png");
 
         protected override float Duration => 5f + Level / 15f * 8f;
         protected override int MaxLevel => 15;
@@ -43,6 +25,20 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
         {
             Translations.Get("ruse_time_change", Duration.ToString("0.0", CultureInfo.InvariantCulture))
         };
+
+        protected override void DoEnable()
+        {
+            User.Model.Outline = true;
+            User.Model.OutlineColor = Colors.Yellow;
+            User.AddComponent(_staminaComponent = new InfiniteStaminaComponent(User));
+        }
+
+        protected override void DoDisable()
+        {
+            User.Model.Outline = false;
+            User.RemoveComponent(_staminaComponent);
+            _staminaComponent = null;
+        }
 
         private class InfiniteStaminaComponent : Component<IHumanoid>
         {

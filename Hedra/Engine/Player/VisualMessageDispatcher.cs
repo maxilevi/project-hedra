@@ -1,13 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Linq;
+using System.Numerics;
 using System.Threading;
 using Hedra.Core;
-using Hedra.Engine.Game;
-using Hedra.Engine.Generation;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
@@ -15,25 +12,25 @@ using Hedra.Engine.Rendering.UI;
 using Hedra.Game;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
-using System.Numerics;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Player
 {
     public class VisualMessageDispatcher : IMessageDispatcher
     {
         private const float FadeSpeed = 2f;
-        private readonly LocalPlayer _player;
-        private static readonly Color DefaultColor = Color.White;
         private const float MessageSpeed = .1f;
+        private static readonly Color DefaultColor = Color.White;
         private readonly GUIText _mainText;
-        private readonly GUIText _playerText;
-        private bool _messageRunningWhile;
-        private float _messageSeconds;
-        private Func<bool> _currentCondition;
-        private bool _isRunning;
+        private readonly List<MessageItem> _messageQueue;
         private readonly GUIText _notificationText;
         private readonly Plaque _plaqueText;
-        private readonly List<MessageItem> _messageQueue;
+        private readonly LocalPlayer _player;
+        private readonly GUIText _playerText;
+        private Func<bool> _currentCondition;
+        private bool _isRunning;
+        private bool _messageRunningWhile;
+        private float _messageSeconds;
 
         public VisualMessageDispatcher(LocalPlayer Player)
         {
@@ -61,6 +58,94 @@ namespace Hedra.Engine.Player
             Player.UI.GamePanel.AddElement(_playerText);
 
             RoutineManager.StartRoutine(ProcessMessages);
+        }
+
+        public void ShowPlaque(string Message, float Seconds, bool PlaySound = true)
+        {
+            if (_messageQueue.Any(Item => Item.Content == Message.ToUpperInvariant())) return;
+            var item = new MessageItem
+            {
+                Type = MessageType.Plaque,
+                Content = Message.ToUpperInvariant(),
+                Time = Seconds,
+                PlaySound = PlaySound,
+                UIObject = _plaqueText
+            };
+            _messageQueue.Add(item);
+        }
+
+        public bool HasTitleMessages => _messageQueue.Any(M => M.Type == MessageType.Title);
+
+        public void ShowTitleMessage(string Message, float Seconds)
+        {
+            ShowTitleMessage(Message, Seconds, Color.FromArgb(255, 40, 40, 40));
+        }
+
+        public void ShowMessage(string Message, float Seconds)
+        {
+            ShowMessage(Message, Seconds, DefaultColor);
+        }
+
+        public void ShowMessage(string Message, float Seconds, Color TextColor)
+        {
+            if (_messageQueue.Any(Item => Item.Content == Message.ToUpperInvariant())) return;
+            var item = new MessageItem
+            {
+                Type = MessageType.Normal,
+                Content = Message.ToUpperInvariant(),
+                Time = Seconds,
+                Color = TextColor
+            };
+            _messageQueue.Add(item);
+        }
+
+        public void ShowMessageWhile(string Message, Func<bool> Condition)
+        {
+            ShowMessageWhile(Message, Color.White, Condition);
+        }
+
+        public void ShowMessageWhile(string Message, Color TextColor, Func<bool> Condition)
+        {
+            if (!Condition()) return;
+            try
+            {
+                if (_messageQueue.Any(Item => Item.Content == Message.ToUpperInvariant())) return;
+            }
+            catch (InvalidOperationException e)
+            {
+                Log.WriteLine(e.Message);
+                return;
+            }
+
+            var item = new MessageItem
+            {
+                Type = MessageType.While,
+                Content = Message.ToUpperInvariant(),
+                Color = TextColor,
+                Condition = Condition
+            };
+
+            _messageQueue.Add(item);
+        }
+
+        public void ShowNotification(string Message, Color FontColor, float Seconds)
+        {
+            ShowNotification(Message, FontColor, Seconds, true);
+        }
+
+        public void ShowNotification(string Message, Color FontColor, float Seconds, bool PlaySound)
+        {
+            if (_messageQueue.Any(Item => Item.Content == Message.ToUpperInvariant())) return;
+            var item = new MessageItem
+            {
+                Type = MessageType.Notification,
+                Content = Message.ToUpperInvariant(),
+                Time = Seconds,
+                Color = FontColor,
+                PlaySound = PlaySound,
+                UIObject = _notificationText
+            };
+            _messageQueue.Add(item);
         }
 
         private IEnumerator ProcessMessages()
@@ -120,20 +205,6 @@ namespace Hedra.Engine.Player
             }
         }
 
-        public void ShowPlaque(string Message, float Seconds, bool PlaySound = true)
-        {
-            if (_messageQueue.Any(Item => Item.Content == Message.ToUpperInvariant())) return;
-            var item = new MessageItem
-            {
-                Type = MessageType.Plaque,
-                Content = Message.ToUpperInvariant(),
-                Time = Seconds,
-                PlaySound = PlaySound,
-                UIObject = _plaqueText
-            };
-            _messageQueue.Add(item);
-        }
-
         private void ProcessPlaqueMessage(MessageItem Item, Action Callback)
         {
             _plaqueText.Text = Item.Content;
@@ -143,13 +214,6 @@ namespace Hedra.Engine.Player
                 SoundPlayer.PlaySound(SoundType.NotificationSound, _player.Position);
 
             FadeAndShow(Item, Callback);
-        }
-
-        public bool HasTitleMessages => _messageQueue.Any(M => M.Type == MessageType.Title);
-
-        public void ShowTitleMessage(string Message, float Seconds)
-        {
-            ShowTitleMessage(Message, Seconds, Color.FromArgb(255, 40, 40, 40));
         }
 
         private void ShowTitleMessage(string Message, float Seconds, Color TextColor)
@@ -176,24 +240,6 @@ namespace Hedra.Engine.Player
             FadeAndShow(Item, Callback);
         }
 
-        public void ShowMessage(string Message, float Seconds)
-        {
-            ShowMessage(Message, Seconds, DefaultColor);
-        }
-
-        public void ShowMessage(string Message, float Seconds, Color TextColor)
-        {
-            if (_messageQueue.Any(Item => Item.Content == Message.ToUpperInvariant())) return;
-            var item = new MessageItem
-            {
-                Type = MessageType.Normal,
-                Content = Message.ToUpperInvariant(),
-                Time = Seconds,
-                Color = TextColor
-            };
-            _messageQueue.Add(item);
-        }
-
         private void ProcessNormalMessage(MessageItem Item, Action Callback)
         {
             _playerText.TextColor = Item.Color;
@@ -208,35 +254,6 @@ namespace Hedra.Engine.Player
                 }, Callback);
             else
                 Callback();
-        }
-
-        public void ShowMessageWhile(string Message, Func<bool> Condition)
-        {
-            ShowMessageWhile(Message, Color.White, Condition);
-        }
-
-        public void ShowMessageWhile(string Message, Color TextColor, Func<bool> Condition)
-        {
-            if (!Condition()) return;
-            try
-            {
-                if (_messageQueue.Any(Item => Item.Content == Message.ToUpperInvariant())) return;
-            }
-            catch (InvalidOperationException e)
-            {
-                Log.WriteLine(e.Message);
-                return;
-            }
-
-            var item = new MessageItem
-            {
-                Type = MessageType.While,
-                Content = Message.ToUpperInvariant(),
-                Color = TextColor,
-                Condition = Condition
-            };
-
-            _messageQueue.Add(item);
         }
 
         private void ProcessWhileMessage(MessageItem Item, Action Callback)
@@ -254,26 +271,6 @@ namespace Hedra.Engine.Player
                 }, Callback);
             else
                 Callback();
-        }
-
-        public void ShowNotification(string Message, Color FontColor, float Seconds)
-        {
-            ShowNotification(Message, FontColor, Seconds, true);
-        }
-
-        public void ShowNotification(string Message, Color FontColor, float Seconds, bool PlaySound)
-        {
-            if (_messageQueue.Any(Item => Item.Content == Message.ToUpperInvariant())) return;
-            var item = new MessageItem
-            {
-                Type = MessageType.Notification,
-                Content = Message.ToUpperInvariant(),
-                Time = Seconds,
-                Color = FontColor,
-                PlaySound = PlaySound,
-                UIObject = _notificationText
-            };
-            _messageQueue.Add(item);
         }
 
         private void ProcessNotificationMessage(MessageItem Item, Action Callback)
@@ -330,13 +327,13 @@ namespace Hedra.Engine.Player
 
     public class MessageItem
     {
+        public Color Color;
+        public Func<bool> Condition;
+        public string Content;
+        public bool PlaySound;
+        public float Time;
         public MessageType Type;
         public ITransparent UIObject;
-        public string Content;
-        public Color Color;
-        public float Time;
-        public bool PlaySound;
-        public Func<bool> Condition;
     }
 
     public enum MessageType

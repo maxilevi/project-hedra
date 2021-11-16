@@ -5,15 +5,15 @@ namespace Hedra.Engine.CacheSystem
 {
     public class Dungeon1Cache : CacheType
     {
-        public override CacheItem Type => CacheItem.Dungeon1;
-        
         public Dungeon1Cache()
         {
             AddModel(AssetManager.PLYLoader("Assets/Env/Structures/Dungeon/Dungeon1.ply", Vector3.One));
-            
+
             AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Structures/Dungeon/Dungeon1.ply", Vector3.One));
         }
-        
+
+        public override CacheItem Type => CacheItem.Dungeon1;
+
         public static Vector3[] Doors { get; } = new Vector3[7]
         {
             new Vector3(-1.11255f, 13.51773f, -131.26634f),
@@ -24,12 +24,12 @@ namespace Hedra.Engine.CacheSystem
             new Vector3(-7.49554f, 12.70829f, 3.41794f),
             new Vector3(7.35316f, 12.70829f, 3.41794f)
         };
-        
+
         public static Vector3 Lever0 => new Vector3(77.18913f, 4.50017f, 69.75796f);
         public static Vector3 Lever1 => new Vector3(-80.5652f, 4.50017f, 68.96364f);
 
         public static Vector3 Scale { get; } = Vector3.One;
-        
+
         public static Vector3 Offset { get; } = Vector3.UnitY * 8.5f + Vector3.UnitX * -0.75f + Vector3.UnitZ * 0.75f;
     }
 }

@@ -4,19 +4,20 @@
  * Time: 01:26 a.m.
  *
  */
+
 using System;
 using Silk.NET.OpenAL;
 
 namespace Hedra.Engine.Sound
 {
     /// <summary>
-    /// Description of SoundBuffer.
+    ///     Description of SoundBuffer.
     /// </summary>
     public class SoundBuffer : IDisposable
     {
-        public readonly uint Id;
         private readonly AL _al;
-        
+        public readonly uint Id;
+
         public unsafe SoundBuffer(short[] Data, BufferFormat Format, int SampleRate)
         {
             _al = AL.GetApi();
@@ -29,7 +30,7 @@ namespace Hedra.Engine.Sound
 
             Id = id;
         }
-        
+
         public unsafe void Dispose()
         {
             var id = Id;

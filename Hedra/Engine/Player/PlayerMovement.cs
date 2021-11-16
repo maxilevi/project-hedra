@@ -1,27 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.IO;
+using System.Numerics;
 using Hedra.Core;
+using Hedra.Engine.Bullet;
+using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Events;
-using Hedra.Engine.Game;
-using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
-using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
-using Hedra.Engine.Sound;
 using Hedra.Engine.Windowing;
 using Hedra.Game;
 using Hedra.Localization;
-using Hedra.Sound;
-using Hedra.User;
-using System.Numerics;
 using Hedra.Numerics;
+using Hedra.Sound;
 using Silk.NET.Input;
-using KeyEventArgs = Hedra.Engine.Events.KeyEventArgs;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Player
 {
@@ -29,12 +23,12 @@ namespace Hedra.Engine.Player
     {
         private readonly LocalPlayer _player;
         private readonly Dictionary<Key, Action> _registeredKeys;
-        private float _characterRotation;
-        private float _yaw;
-        private float _targetYaw;
         private Vector3 _angles;
+        private float _characterRotation;
         private Vector3 _targetAngles;
+        private float _targetYaw;
         private float _vehicleCooldown;
+        private float _yaw;
 
         public PlayerMovement(LocalPlayer Player) : base(Player)
         {
@@ -44,6 +38,12 @@ namespace Hedra.Engine.Player
             EventDispatcher.RegisterMouseDown(this, OnMouseButtonDown);
             EventDispatcher.RegisterKeyDown(this, OnKeyDown);
             RegisterListeners();
+        }
+
+        public void Dispose()
+        {
+            EventDispatcher.UnregisterMouseDown(this);
+            EventDispatcher.UnregisterKeyDown(this);
         }
 
         private void OnMouseButtonDown(object Sender, MouseButtonEventArgs EventArgs)
@@ -119,8 +119,8 @@ namespace Hedra.Engine.Player
                 _targetAngles.Z = limit / 2 * (_player.View.StackedYaw - _yaw);
                 _targetAngles = Mathf.Clamp(_targetAngles, -limit, limit);
                 _angles = Mathf.Lerp(_angles, _targetAngles * (GameManager.Keyboard[Controls.Forward] ? 1.0F : 0.0F),
-                    (float)Time.DeltaTime * 8f);
-                _yaw = Mathf.Lerp(_yaw, _player.View.StackedYaw, (float)Time.DeltaTime * 2f);
+                    Time.DeltaTime * 8f);
+                _yaw = Mathf.Lerp(_yaw, _player.View.StackedYaw, Time.DeltaTime * 2f);
                 IsMovingForward = GameManager.Keyboard[Controls.Forward];
                 IsMovingBackwards = GameManager.Keyboard[Controls.Backward];
                 if (GameManager.Keyboard[Controls.Forward] || GameSettings.ContinousMove)
@@ -264,7 +264,7 @@ namespace Hedra.Engine.Player
                 delegate
                 {
                     Chat.Log(
-                        $"ObjectsInSimulation = '{Bullet.BulletPhysics.ObjectsInSimulation}'; RigidbodyCount = '{Bullet.BulletPhysics.RigidbodyCount}'");
+                        $"ObjectsInSimulation = '{BulletPhysics.ObjectsInSimulation}'; RigidbodyCount = '{BulletPhysics.RigidbodyCount}'");
                 });
         }
 
@@ -307,7 +307,7 @@ namespace Hedra.Engine.Player
             if (EventArgs.Key == Key.O && _player.CanInteract) GameSettings.LockFrustum = !GameSettings.LockFrustum;
 
             if (EventArgs.Key == Key.Number7 && _player.CanInteract)
-                EnvironmentSystem.SkyManager.Sky.Enabled = !EnvironmentSystem.SkyManager.Sky.Enabled;
+                SkyManager.Sky.Enabled = !SkyManager.Sky.Enabled;
 
             if (EventArgs.Key == Key.J)
                 World.AddChunkToQueue(World.GetChunkByOffset(World.ToChunkSpace(_player.Position)),
@@ -330,12 +330,6 @@ namespace Hedra.Engine.Player
 
             if (EventArgs.Key == Key.F11) GameManager.LoadCharacter(DataManager.PlayerFiles[0]);
 #endif
-        }
-
-        public void Dispose()
-        {
-            EventDispatcher.UnregisterMouseDown(this);
-            EventDispatcher.UnregisterKeyDown(this);
         }
     }
 }

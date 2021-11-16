@@ -1,21 +1,17 @@
 using System;
 using System.Linq;
-using System.Security.Cryptography;
+using System.Numerics;
 using Hedra.Components;
 using Hedra.Core;
 using Hedra.Engine;
-using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
-using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Game;
-using System.Numerics;
 using Hedra.Numerics;
 
 namespace Hedra.AISystem.Humanoid
@@ -24,25 +20,21 @@ namespace Hedra.AISystem.Humanoid
     {
         private const int BenchSearchRadius = 24;
         private const int TalkSearchRadius = 8;
-        protected override bool ShouldSleep => true;
-        private float MaxSpeed { get; }
-        private VillageGraph Graph { get; }
-        private Timer LookTimer { get; }
-        private Vector2 _targetVertex;
-        private Vector2 _partialTargetVertex;
-        private GraphEdge _currentEdge;
-        private bool _reachedTarget;
-        private readonly Timer _timeoutTimer;
-        private Action _reachedCallback;
-        private float _errorMargin = DefaultErrorMargin;
         private readonly Timer _interactionTimer;
-        private Vector2 _lastPosition;
-        private bool _isInteracting;
+        private readonly Timer _movementTimer;
         private readonly Timer _sitTimer;
         private readonly Timer _talkTimer;
+        private readonly Timer _timeoutTimer;
+        private GraphEdge _currentEdge;
+        private float _errorMargin = DefaultErrorMargin;
+        private bool _isInteracting;
+        private Vector2 _lastPosition;
+        private Vector2 _partialTargetVertex;
+        private Action _reachedCallback;
+        private bool _reachedTarget;
         private float _targetSpeed;
-        private readonly Timer _movementTimer;
-        
+        private Vector2 _targetVertex;
+
         public RoamingVillagerAIComponent(IHumanoid Parent, VillageGraph Graph) : base(Parent)
         {
             this.Graph = Graph;
@@ -63,11 +55,29 @@ namespace Hedra.AISystem.Humanoid
             LookTimer = new Timer(Utils.Rng.NextFloat() * 8f + 6);
         }
 
+        protected override bool ShouldSleep => true;
+        private float MaxSpeed { get; }
+        private VillageGraph Graph { get; }
+        private Timer LookTimer { get; }
+
+        private Vector2 RandomPointInsideVillage =>
+            new Vector2(Utils.Rng.NextFloat() * 2 - 1, Utils.Rng.NextFloat() * 2 - 1) * .25f * Graph.Size +
+            Parent.Position.Xz();
+
+        private bool ShouldSit => Utils.Rng.Next(0, 2) == 1;
+
+        private bool ShouldTalk => true; //Utils.Rng.Next(0, 2) == 1;
+
+        protected float WaitTime => 8 + Utils.Rng.NextFloat() * 10;
+
+        protected Vector3 NewPoint => Graph.GetNearestVertex(RandomPointInsideVillage).ToVector3();
+
         public override void Update()
         {
-            if (!base.CanUpdate) return;
+            if (!CanUpdate) return;
 
-            if (Parent.IsNear(GameManager.Player, 16) && !_isInteracting || (Parent.SearchComponent<TalkComponent>()?.Talking ?? false))
+            if (Parent.IsNear(GameManager.Player, 16) && !_isInteracting ||
+                (Parent.SearchComponent<TalkComponent>()?.Talking ?? false))
             {
                 Parent.LookAt(GameManager.Player);
                 _targetSpeed = 0;
@@ -86,7 +96,7 @@ namespace Hedra.AISystem.Humanoid
                     if (_timeoutTimer.Tick())
                         _reachedTarget = true;
                     else
-                        base.Move(_partialTargetVertex.ToVector3(), _errorMargin);
+                        Move(_partialTargetVertex.ToVector3(), _errorMargin);
                 }
 
                 if (!_isInteracting)
@@ -95,16 +105,18 @@ namespace Hedra.AISystem.Humanoid
                 _sitTimer.Tick();
                 _targetSpeed = MaxSpeed;
             }
+
             Parent.Speed = Mathf.Lerp(Parent.Speed, _targetSpeed, Time.DeltaTime);
         }
 
         private void LookAtRandom()
         {
             Physics.DirectionToEuler(
-                (new Vector3(Utils.Rng.NextFloat(), Utils.Rng.NextFloat(), Utils.Rng.NextFloat()) * 2 - Vector3.One).Xz().NormalizedFast().ToVector3()
+                (new Vector3(Utils.Rng.NextFloat(), Utils.Rng.NextFloat(), Utils.Rng.NextFloat()) * 2 - Vector3.One)
+                .Xz().NormalizedFast().ToVector3()
             );
         }
-        
+
         private void FindLocation()
         {
             if (Utils.Rng.Next(0, 5) == 1)
@@ -115,7 +127,7 @@ namespace Hedra.AISystem.Humanoid
 
         private void ManageInteractions()
         {
-            if ((Parent.Position.Xz() - _lastPosition).LengthSquared() < Chunk.BlockSize*Chunk.BlockSize) return;
+            if ((Parent.Position.Xz() - _lastPosition).LengthSquared() < Chunk.BlockSize * Chunk.BlockSize) return;
             _lastPosition = Parent.Position.Xz();
             if (ShouldSit && CanSit(out var bench))
                 Sit(bench);
@@ -127,21 +139,21 @@ namespace Hedra.AISystem.Humanoid
         private bool CanSit(out Bench Bench)
         {
             return null != (Bench = World.InRadius<Bench>(Parent.Position, BenchSearchRadius).FirstOrDefault(
-                            B => !B.IsOccupied
-                       )) && _sitTimer.Ready;
+                B => !B.IsOccupied
+            )) && _sitTimer.Ready;
         }
 
         private bool CanTalk(out IHumanoid Human)
         {
             return null != (Human = World.InRadius<IHumanoid>(Parent.Position, TalkSearchRadius)
-                       .FirstOrDefault(
-                           V => V.SearchComponent<RoamingVillagerAIComponent>() != null 
-                                && V != Parent
-                                && (!V.SearchComponent<TalkComponent>()?.Talking ?? false)
-                           )
-                       ) && _talkTimer.Ready;
+                    .FirstOrDefault(
+                        V => V.SearchComponent<RoamingVillagerAIComponent>() != null
+                             && V != Parent
+                             && (!V.SearchComponent<TalkComponent>()?.Talking ?? false)
+                    )
+                ) && _talkTimer.Ready;
         }
-        
+
         private void Talk(IHumanoid NearestVillager)
         {
             MoveTo(NearestVillager.Position.Xz(), delegate
@@ -153,7 +165,7 @@ namespace Hedra.AISystem.Humanoid
             }, 8);
             _isInteracting = true;
         }
-        
+
         /* Called from RoamingVillagerAIComponent::Talk */
         private void TalkWith(IHumanoid Humanoid, float Time)
         {
@@ -167,7 +179,7 @@ namespace Hedra.AISystem.Humanoid
             _reachedTarget = true;
             _isInteracting = true;
         }
-        
+
         private void Sit(InteractableStructure NearestBench)
         {
             MoveTo(NearestBench.Position.Xz(), delegate
@@ -184,23 +196,22 @@ namespace Hedra.AISystem.Humanoid
             }, 8);
             _isInteracting = true;
         }
-        
+
         private void GoToMarket()
         {
-            var nearestVillage = World.InRadius<Village>(Parent.Position, VillageDesign.MaxVillageRadius).FirstOrDefault();
+            var nearestVillage = World.InRadius<Village>(Parent.Position, VillageDesign.MaxVillageRadius)
+                .FirstOrDefault();
             if (nearestVillage == null) return;
-            MoveTo(nearestVillage.Position.Xz(), delegate
-            {
-                _interactionTimer.MarkReady();
-            }, MarketParameters.MarketSize * .25f);
+            MoveTo(nearestVillage.Position.Xz(), delegate { _interactionTimer.MarkReady(); },
+                MarketParameters.MarketSize * .25f);
         }
-        
+
         private void FindRandomSpot()
         {
             _targetVertex = NewPoint.Xz();
             SelectNextEdge();
         }
-        
+
         private void SelectNextEdge()
         {
             var currentVertex = Graph.GetNearestVertex(Parent.Position.Xz());
@@ -228,14 +239,14 @@ namespace Hedra.AISystem.Humanoid
                 var randomUnit = new Vector2(Utils.Rng.NextFloat() * 2 - 1, Utils.Rng.NextFloat() * 2 - 1);
                 MoveTo(lowestVertex + randomUnit * 24f, delegate
                 {
-                    if(_targetVertex == _partialTargetVertex) 
+                    if (_targetVertex == _partialTargetVertex)
                         _reachedTarget = true;
                     else
                         SelectNextEdge();
                 }, 12);
             }
         }
-        
+
         protected override void OnTargetPointReached()
         {
             _reachedCallback?.Invoke();
@@ -255,16 +266,5 @@ namespace Hedra.AISystem.Humanoid
             _reachedCallback = Callback;
             _errorMargin = ErrorMargin;
         }
-
-        private Vector2 RandomPointInsideVillage => 
-            new Vector2(Utils.Rng.NextFloat() * 2 - 1, Utils.Rng.NextFloat() * 2 - 1) * .25f * Graph.Size + Parent.Position.Xz();
-
-        private bool ShouldSit => Utils.Rng.Next(0, 2) == 1;
-
-        private bool ShouldTalk => true;//Utils.Rng.Next(0, 2) == 1;
-        
-        protected float WaitTime => 8 + Utils.Rng.NextFloat() * 10;
-
-        protected Vector3 NewPoint => Graph.GetNearestVertex(RandomPointInsideVillage).ToVector3();
     }
 }

@@ -8,9 +8,10 @@ namespace Hedra.Engine.Networking.Packets
     {
         int Seed { get; set; }
     }
-    
+
     public abstract class WorldPacket<T> : NetworkPacket<T>, IWorldPacket where T : IWorldPacket, new()
     {
+        public override MessagePacketType Type => MessagePacketType.WorldPacket;
         public int Seed { get; set; }
 
         protected override void DoParse(PacketReader Reader, T Empty)
@@ -22,7 +23,5 @@ namespace Hedra.Engine.Networking.Packets
         {
             Writer.Write(Seed);
         }
-
-        public override MessagePacketType Type => MessagePacketType.WorldPacket;
     }
 }

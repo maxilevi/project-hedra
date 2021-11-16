@@ -9,10 +9,10 @@ namespace Hedra.Components.Effects
         {
         }
 
+        public int Power => 6;
+
         public override void Update()
         {
         }
-
-        public int Power => 6;
     }
 }

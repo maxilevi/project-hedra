@@ -1,6 +1,5 @@
 using Hedra.Core;
 using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Management;
 using Hedra.EntitySystem;
 using Hedra.WeaponSystem;
 
@@ -9,6 +8,8 @@ namespace Hedra.Engine.SkillSystem
     public abstract class ChargeablePassiveSkill : PassiveSkill
     {
         private ChargeableComponent _component;
+
+        public override float IsAffectingModifier => _component?.IsAffectingModifier ?? 0;
 
         protected override void Remove()
         {
@@ -29,13 +30,10 @@ namespace Hedra.Engine.SkillSystem
 
         protected abstract ChargeableComponent CreateComponent();
 
-        public override float IsAffectingModifier => _component?.IsAffectingModifier ?? 0;
-
         protected abstract class ChargeableComponent : Component<IHumanoid>
         {
-            public event OnStateUpdated StateUpdated;
-            private readonly Timer _enemyTimer;
             private readonly Timer _betweenCharges;
+            private readonly Timer _enemyTimer;
             private bool _shouldCharge;
 
             protected ChargeableComponent(IHumanoid Entity, float ChargeTime) : base(Entity)
@@ -47,6 +45,9 @@ namespace Hedra.Engine.SkillSystem
                 };
                 Parent.BeforeAttack += BeforeAttack;
             }
+
+            public float IsAffectingModifier => _betweenCharges.Progress;
+            public event OnStateUpdated StateUpdated;
 
             public override void Update()
             {
@@ -61,10 +62,7 @@ namespace Hedra.Engine.SkillSystem
                     }
                 }
 
-                if (_shouldCharge)
-                {
-                    _betweenCharges.Tick();
-                }
+                if (_shouldCharge) _betweenCharges.Tick();
             }
 
             private void BeforeAttack(AttackOptions Options)
@@ -82,8 +80,6 @@ namespace Hedra.Engine.SkillSystem
                 base.Dispose();
                 Parent.BeforeAttack -= BeforeAttack;
             }
-
-            public float IsAffectingModifier => _betweenCharges.Progress;
         }
     }
 }

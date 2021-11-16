@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace Hedra.Engine.IO
@@ -15,14 +14,14 @@ namespace Hedra.Engine.IO
             _values = new Dictionary<string, object>();
         }
 
-        public T Get<T> (string Key)
+        public T Get<T>(string Key)
         {
-            if(typeof(T) != typeof(ValueType) && typeof(T) != typeof(string))
+            if (typeof(T) != typeof(ValueType) && typeof(T) != typeof(string))
                 throw new ArgumentException("Configuration files only support value types and strings.");
 
             if (_values.ContainsKey(Key))
-                return (T) _values[Key];
-            return default(T);
+                return (T)_values[Key];
+            return default;
         }
 
         public void Set(string Key, object Value)
@@ -39,10 +38,7 @@ namespace Hedra.Engine.IO
         public void Save(string Path)
         {
             var builder = new StringBuilder();
-            foreach (var pair in _values)
-            {
-                builder.AppendLine(pair.Key + "=" + pair.Value);
-            }
+            foreach (var pair in _values) builder.AppendLine(pair.Key + "=" + pair.Value);
             File.WriteAllText(Path, builder.ToString());
         }
 
@@ -51,13 +47,14 @@ namespace Hedra.Engine.IO
             if (!File.Exists(Path)) return;
 
             var values = new Dictionary<string, object>();
-            string[] lines = File.ReadAllLines(Path);
+            var lines = File.ReadAllLines(Path);
 
-            for (int i = 0; i < lines.Length; i++)
+            for (var i = 0; i < lines.Length; i++)
             {
-                string[] parts = lines[i].Split('=');
+                var parts = lines[i].Split('=');
                 values.Add(parts[0], parts[1]);
             }
+
             _values = values;
         }
     }

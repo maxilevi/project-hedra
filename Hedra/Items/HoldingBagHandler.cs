@@ -2,7 +2,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.ItemSystem.Templates;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.Inventory;
 using Newtonsoft.Json;
@@ -13,6 +12,7 @@ namespace Hedra.Items
     public class HoldingBagHandler : ItemHandler
     {
         public const int Size = 24;
+
         public override bool Consume(IPlayer Owner, Item Item)
         {
             ReadInventory(Item);
@@ -29,6 +29,7 @@ namespace Hedra.Items
                 var index = int.Parse(prop.Name);
                 inventoryArray.SetItem(index, Item.FromArray(Encoding.UTF8.GetBytes(prop.Value.ToString())));
             }
+
             Bag.SetAttribute("Inventory", inventoryArray, true);
         }
 
@@ -43,12 +44,14 @@ namespace Hedra.Items
                 writer.WriteStartObject();
                 for (var i = 0; i < Array.Length; ++i)
                 {
-                    if(Array[i] == null) continue;
+                    if (Array[i] == null) continue;
                     writer.WritePropertyName(i.ToString());
                     writer.WriteValue(Encoding.UTF8.GetString(Array[i].ToArray()));
                 }
+
                 writer.WriteEndObject();
             }
+
             Bag.SetAttribute("Objects", JObject.Parse(sb.ToString()));
         }
     }

@@ -1,5 +1,5 @@
 {
-  "Name" : "PossessedCow",
+  "Name": "PossessedCow",
   "MaxHealth": 400.0,
   "AttackDamage": 8.0,
   "Speed": 1.15,

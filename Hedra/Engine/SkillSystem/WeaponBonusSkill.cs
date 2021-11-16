@@ -1,8 +1,7 @@
+using System.Numerics;
 using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.WeaponSystem;
-using System.Numerics;
 
 namespace Hedra.Engine.SkillSystem
 {
@@ -11,7 +10,12 @@ namespace Hedra.Engine.SkillSystem
         private Weapon _activeWeapon;
         private bool _isAttacking;
         protected bool IsActive { get; set; }
-        
+
+        protected abstract Vector4 OutlineColor { get; }
+        protected override bool HasCooldown => !ShouldDisable;
+        public override float IsAffectingModifier => IsActive ? 1 : 0;
+        protected override bool ShouldDisable => IsActive;
+
         protected override void DoUse()
         {
             User.DamageModifiers += ApplyBonusToEnemyWrapper;
@@ -19,7 +23,7 @@ namespace Hedra.Engine.SkillSystem
             User.AfterAttack += AfterAttack;
             IsActive = true;
         }
-        
+
         private void AfterDamaging(IEntity Victim, float Damage)
         {
             User.DamageModifiers -= ApplyBonusToEnemyWrapper;
@@ -34,8 +38,8 @@ namespace Hedra.Engine.SkillSystem
         private void AfterAttack(AttackOptions Options)
         {
             _isAttacking = false;
-            if(IsActive)
-                AfterDamaging(default(IEntity), default(float));
+            if (IsActive)
+                AfterDamaging(default, default);
         }
 
         private void BeforeAttack(AttackOptions Options)
@@ -45,7 +49,7 @@ namespace Hedra.Engine.SkillSystem
 
         private void ApplyBonusToEnemyWrapper(IEntity Victim, ref float Damage)
         {
-            if(_isAttacking)
+            if (_isAttacking)
                 ApplyBonusToEnemy(Victim, ref Damage);
         }
 
@@ -62,10 +66,5 @@ namespace Hedra.Engine.SkillSystem
                 _activeWeapon.OutlineColor = OutlineColor;
             }
         }
-
-        protected abstract Vector4 OutlineColor { get; }
-        protected override bool HasCooldown => !ShouldDisable;
-        public override float IsAffectingModifier => IsActive ? 1 : 0;
-        protected override bool ShouldDisable => IsActive;
     }
 }

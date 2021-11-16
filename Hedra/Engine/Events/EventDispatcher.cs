@@ -4,11 +4,12 @@
  * Time: 01:34 a.m.
  *
  */
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Hedra.Engine.Windowing;
 using System.Numerics;
+using Hedra.Engine.Windowing;
 using Silk.NET.GLFW;
 using Silk.NET.Input;
 
@@ -16,7 +17,6 @@ namespace Hedra.Engine.Events
 {
     public static class EventDispatcher
     {
-
         private static readonly List<IEventListener> EventListeners;
         private static readonly Dictionary<object, EventHandler<KeyEventArgs>> HighKeyDownHandlers;
         private static readonly Dictionary<object, EventHandler<KeyEventArgs>> NormalKeyDownHandlers;
@@ -31,49 +31,7 @@ namespace Hedra.Engine.Events
         private static readonly Dictionary<object, Action<string>> CharWrittenHandlers;
         private static readonly object Lock = new object();
 
-        private static event EventHandler<KeyEventArgs> HighOnKeyDownEvent;
-        private static event EventHandler<KeyEventArgs> NormalOnKeyDownEvent;
-        private static event EventHandler<KeyEventArgs> LowOnKeyDownEvent;
-        private static event EventHandler<KeyEventArgs> HighOnKeyUpEvent;
-        private static event EventHandler<KeyEventArgs> NormalOnKeyUpEvent;
-        private static event EventHandler<KeyEventArgs> LowOnKeyUpEvent;
-        private static event EventHandler<MouseMoveEventArgs> OnMouseMoveEvent;
-        private static event EventHandler<MouseButtonEventArgs> OnMouseButtonUpEvent;
-        private static event EventHandler<MouseButtonEventArgs> OnMouseButtonDownEvent;
-        private static event EventHandler<MouseWheelEventArgs> OnMouseWheelEvent;
-        private static event Action<string> OnCharWrittenEvent;
-
-        public static Vector2 Mouse { get; set; } = Vector2.Zero;
-
         private static IEventProvider _provider;
-        public static IEventProvider Provider
-        {
-            get => _provider;
-            set
-            {
-                if (Provider != null)
-                {
-                    Provider.MouseUp -= OnMouseButtonUp;
-                    Provider.MouseDown -= OnMouseButtonDown;
-                    Provider.MouseWheel -= OnMouseWheel;
-                    Provider.MouseMove -= OnMouseMove;
-                    Provider.KeyDown -= OnKeyDown;
-                    Provider.KeyUp -= OnKeyUp;
-                    Provider.CharWritten -= OnCharWritten;
-                }
-                _provider = value;
-                if (Provider != null)
-                {
-                    Provider.MouseUp += OnMouseButtonUp;
-                    Provider.MouseDown += OnMouseButtonDown;
-                    Provider.MouseWheel += OnMouseWheel;
-                    Provider.MouseMove += OnMouseMove;
-                    Provider.KeyDown += OnKeyDown;
-                    Provider.KeyUp += OnKeyUp;
-                    Provider.CharWritten += OnCharWritten;
-                }
-            }
-        }
 
         static EventDispatcher()
         {
@@ -89,8 +47,52 @@ namespace Hedra.Engine.Events
             MouseButtonUpHandlers = new Dictionary<object, EventHandler<MouseButtonEventArgs>>();
             MouseButtonDownHandlers = new Dictionary<object, EventHandler<MouseButtonEventArgs>>();
             CharWrittenHandlers = new Dictionary<object, Action<string>>();
-            Provider = (IEventProvider) Program.GameWindow;
+            Provider = (IEventProvider)Program.GameWindow;
         }
+
+        public static Vector2 Mouse { get; set; } = Vector2.Zero;
+
+        public static IEventProvider Provider
+        {
+            get => _provider;
+            set
+            {
+                if (Provider != null)
+                {
+                    Provider.MouseUp -= OnMouseButtonUp;
+                    Provider.MouseDown -= OnMouseButtonDown;
+                    Provider.MouseWheel -= OnMouseWheel;
+                    Provider.MouseMove -= OnMouseMove;
+                    Provider.KeyDown -= OnKeyDown;
+                    Provider.KeyUp -= OnKeyUp;
+                    Provider.CharWritten -= OnCharWritten;
+                }
+
+                _provider = value;
+                if (Provider != null)
+                {
+                    Provider.MouseUp += OnMouseButtonUp;
+                    Provider.MouseDown += OnMouseButtonDown;
+                    Provider.MouseWheel += OnMouseWheel;
+                    Provider.MouseMove += OnMouseMove;
+                    Provider.KeyDown += OnKeyDown;
+                    Provider.KeyUp += OnKeyUp;
+                    Provider.CharWritten += OnCharWritten;
+                }
+            }
+        }
+
+        private static event EventHandler<KeyEventArgs> HighOnKeyDownEvent;
+        private static event EventHandler<KeyEventArgs> NormalOnKeyDownEvent;
+        private static event EventHandler<KeyEventArgs> LowOnKeyDownEvent;
+        private static event EventHandler<KeyEventArgs> HighOnKeyUpEvent;
+        private static event EventHandler<KeyEventArgs> NormalOnKeyUpEvent;
+        private static event EventHandler<KeyEventArgs> LowOnKeyUpEvent;
+        private static event EventHandler<MouseMoveEventArgs> OnMouseMoveEvent;
+        private static event EventHandler<MouseButtonEventArgs> OnMouseButtonUpEvent;
+        private static event EventHandler<MouseButtonEventArgs> OnMouseButtonDownEvent;
+        private static event EventHandler<MouseWheelEventArgs> OnMouseWheelEvent;
+        private static event Action<string> OnCharWrittenEvent;
 
         public static void RegisterCharWritten(object Key, Action<string> EventHandler)
         {
@@ -155,7 +157,8 @@ namespace Hedra.Engine.Events
             }
         }
 
-        public static void RegisterKeyDown(object Key, EventHandler<KeyEventArgs> EventHandler, EventPriority Priority = EventPriority.Normal)
+        public static void RegisterKeyDown(object Key, EventHandler<KeyEventArgs> EventHandler,
+            EventPriority Priority = EventPriority.Normal)
         {
             lock (Lock)
             {
@@ -199,7 +202,8 @@ namespace Hedra.Engine.Events
             }
         }
 
-        public static void RegisterKeyUp(object Key, EventHandler<KeyEventArgs> EventHandler, EventPriority Priority = EventPriority.Normal)
+        public static void RegisterKeyUp(object Key, EventHandler<KeyEventArgs> EventHandler,
+            EventPriority Priority = EventPriority.Normal)
         {
             lock (Lock)
             {
@@ -245,14 +249,18 @@ namespace Hedra.Engine.Events
 
         public static void Add(IEventListener E)
         {
-            lock(Lock)
+            lock (Lock)
+            {
                 EventListeners.Add(E);
+            }
         }
-        
+
         public static void Remove(IEventListener A)
         {
-            lock(Lock)
+            lock (Lock)
+            {
                 EventListeners.Remove(A);
+            }
         }
 
         public static void OnCharWritten(string Char)
@@ -260,31 +268,23 @@ namespace Hedra.Engine.Events
             lock (Lock)
             {
                 OnCharWrittenEvent?.Invoke(Char);
-                for (var i = 0; i < EventListeners.Count; i++)
-                {
-                    EventListeners[i].OnCharWritten(Char);
-                }
+                for (var i = 0; i < EventListeners.Count; i++) EventListeners[i].OnCharWritten(Char);
             }
         }
-        
+
         public static void OnMouseButtonDown(MouseButtonEventArgs E)
         {
             lock (Lock)
             {
                 OnMouseButtonDownEvent?.Invoke(null, E);
-                for (var i = 0; i < EventListeners.Count; i++)
-                {
-                    EventListeners[i].OnMouseButtonDown(null, E);
-                }
+                for (var i = 0; i < EventListeners.Count; i++) EventListeners[i].OnMouseButtonDown(null, E);
             }
         }
 
         public static void OnMouseButtonUp(MouseButtonEventArgs E)
         {
             OnMouseButtonUpEvent?.Invoke(null, E);
-            for (var i = 0;i<EventListeners.Count; i++){
-                EventListeners[i].OnMouseButtonUp(null, E);
-            }
+            for (var i = 0; i < EventListeners.Count; i++) EventListeners[i].OnMouseButtonUp(null, E);
         }
 
         public static void OnMouseWheel(MouseWheelEventArgs E)
@@ -292,10 +292,7 @@ namespace Hedra.Engine.Events
             lock (Lock)
             {
                 OnMouseWheelEvent?.Invoke(null, E);
-                for (var i = 0; i < EventListeners.Count; i++)
-                {
-                    EventListeners[i].OnMouseWheel(null, E);
-                }
+                for (var i = 0; i < EventListeners.Count; i++) EventListeners[i].OnMouseWheel(null, E);
             }
         }
 
@@ -305,10 +302,7 @@ namespace Hedra.Engine.Events
             {
                 Mouse = new Vector2(E.X, E.Y);
                 OnMouseMoveEvent?.Invoke(null, E);
-                for (var i = 0; i < EventListeners.Count; i++)
-                {
-                    EventListeners[i]?.OnMouseMove(null, E);
-                }
+                for (var i = 0; i < EventListeners.Count; i++) EventListeners[i]?.OnMouseMove(null, E);
             }
         }
 
@@ -320,10 +314,7 @@ namespace Hedra.Engine.Events
                 HighOnKeyDownEvent?.Invoke(null, keyEvent);
                 NormalOnKeyDownEvent?.Invoke(null, keyEvent);
                 LowOnKeyDownEvent?.Invoke(null, keyEvent);
-                for (var i = 0; i < EventListeners.Count; i++)
-                {
-                    EventListeners[i].OnKeyDown(null, keyEvent);
-                }
+                for (var i = 0; i < EventListeners.Count; i++) EventListeners[i].OnKeyDown(null, keyEvent);
             }
         }
 
@@ -335,10 +326,7 @@ namespace Hedra.Engine.Events
                 HighOnKeyUpEvent?.Invoke(null, keyEvent);
                 NormalOnKeyUpEvent?.Invoke(null, keyEvent);
                 LowOnKeyUpEvent?.Invoke(null, keyEvent);
-                for (var i = 0; i < EventListeners.Count; i++)
-                {
-                    EventListeners[i].OnKeyUp(null, keyEvent);
-                }
+                for (var i = 0; i < EventListeners.Count; i++) EventListeners[i].OnKeyUp(null, keyEvent);
             }
         }
 
@@ -355,56 +343,41 @@ namespace Hedra.Engine.Events
                     .Concat(NormalKeyUpHandlers.Keys)
                     .Concat(LowKeyUpHandlers.Keys).ToArray();
 
-                for (var i = 0; i < keyDownHandlers.Length; i++)
-                {
-                    UnregisterKeyDown(keyDownHandlers[i]);
-                }
+                for (var i = 0; i < keyDownHandlers.Length; i++) UnregisterKeyDown(keyDownHandlers[i]);
 
-                for (var i = 0; i < keyUpHandlers.Length; i++)
-                {
-                    UnregisterKeyUp(keyUpHandlers[i]);
-                }
+                for (var i = 0; i < keyUpHandlers.Length; i++) UnregisterKeyUp(keyUpHandlers[i]);
 
                 var mouseMoved = MouseMoveHandlers.Keys.ToArray();
-                foreach (var key in mouseMoved)
-                {
-                    UnregisterMouseMove(key);
-                }
+                foreach (var key in mouseMoved) UnregisterMouseMove(key);
 
                 var mouseButtonDown = MouseButtonDownHandlers.Keys.ToArray();
-                foreach (var key in mouseButtonDown)
-                {
-                    UnregisterMouseDown(key);
-                }
+                foreach (var key in mouseButtonDown) UnregisterMouseDown(key);
 
                 var mouseButtonUp = MouseButtonUpHandlers.Keys.ToArray();
-                foreach (var key in mouseButtonUp)
-                {
-                    UnregisterMouseUp(key);
-                }
+                foreach (var key in mouseButtonUp) UnregisterMouseUp(key);
             }
         }
     }
 
     public class KeyEventArgs : EventArgs
     {
-        public KeyboardKeyEventArgs Event { get; private set; }
-
         public KeyEventArgs(KeyboardKeyEventArgs Event)
         {
             this.Event = Event;
         }
 
-        public void Cancel()
-        {
-            this.Event = new KeyboardKeyEventArgs();
-        }
+        public KeyboardKeyEventArgs Event { get; private set; }
 
         public Key Key => Event.Key;
         public bool Alt => Event.Alt;
         public bool Control => Event.Control;
         public bool Shift => Event.Shift;
         public KeyModifiers Modifiers => Event.Modifiers;
+
+        public void Cancel()
+        {
+            Event = new KeyboardKeyEventArgs();
+        }
     }
 
     public enum EventPriority
@@ -413,5 +386,4 @@ namespace Hedra.Engine.Events
         Normal,
         High
     }
-
 }

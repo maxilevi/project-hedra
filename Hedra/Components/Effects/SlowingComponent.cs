@@ -1,28 +1,30 @@
 using System.Collections;
+using System.Numerics;
 using Hedra.Core;
-using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
 using Hedra.EntitySystem;
-using System.Numerics;
 
 namespace Hedra.Components.Effects
 {
     public class SlowingComponent : EntityComponent
     {
-        private readonly float _totalTime;
-        private readonly float _slowPercentage;
         private readonly IEntity _damager;
+        private readonly float _slowPercentage;
+        private readonly float _totalTime;
         private float _pTime;
 
-        public SlowingComponent(IEntity Parent, IEntity Damager, float TotalTime, float SlowPercentage) : base(Parent){
-            this._totalTime = TotalTime;
-            this._slowPercentage = SlowPercentage;
-            this._damager = Damager;
-            RoutineManager.StartRoutine(this.UpdateEffect);
+        public SlowingComponent(IEntity Parent, IEntity Damager, float TotalTime, float SlowPercentage) : base(Parent)
+        {
+            _totalTime = TotalTime;
+            _slowPercentage = SlowPercentage;
+            _damager = Damager;
+            RoutineManager.StartRoutine(UpdateEffect);
         }
 
-        public override void Update() { }
+        public override void Update()
+        {
+        }
 
         private IEnumerator UpdateEffect()
         {
@@ -33,10 +35,10 @@ namespace Hedra.Components.Effects
             Parent.Model.AnimationSpeed = newSpeed;
             while (_totalTime > _pTime && !Parent.IsDead && !Disposed)
             {
-
                 _pTime += Time.DeltaTime;
                 yield return null;
             }
+
             Parent.Model.AnimationSpeed = 1f;
             Parent.Model.BaseTint = Vector4.Zero;
             Parent.RemoveComponent(this);

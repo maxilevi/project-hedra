@@ -1,15 +1,10 @@
 using System;
 using System.Linq;
+using System.Numerics;
 using Hedra.Components;
 using Hedra.Core;
-using Hedra.Engine;
-using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Game;
-using Hedra.Engine.Generation;
-using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
-using System.Numerics;
 using Hedra.Numerics;
 
 namespace Hedra.AISystem.Humanoid
@@ -17,29 +12,17 @@ namespace Hedra.AISystem.Humanoid
     public abstract class CombatAIComponent : TraverseHumanoidAIComponent
     {
         public const float StareRadius = 16;
-        private Vector3 _targetPoint;
-        private bool _hasTargetPoint;
-        private bool _staring;
-        private bool _isFriendly;
-        private IEntity _chasingTarget;
-        private CombatAIBehaviour _behaviour;
-        private readonly Vector3 _originalPosition;
-        private readonly Timer _movementTimer;
-        private readonly Timer _rollTimer;
         private readonly Timer _forgetTimer;
-        private bool _guardSpawnPoint;
+        private readonly Timer _movementTimer;
+        private readonly Vector3 _originalPosition;
+        private readonly Timer _rollTimer;
+        private CombatAIBehaviour _behaviour;
         private bool _canExplore;
-        protected abstract float SearchRadius { get; }
-        protected abstract float AttackRadius { get; }
-        protected abstract float ForgetRadius { get; }
-        public IEntity[] IgnoreEntities { get; set; } = new IEntity[0];
-        protected override bool ShouldSleep => !IsChasing;
-        public bool IsChasing => _chasingTarget != null;
-        public bool IsExploring => !IsChasing && _hasTargetPoint;
-        protected virtual bool CanExplore => _canExplore;
-        protected virtual bool GuardSpawnPoint => _guardSpawnPoint;
-        public virtual bool DontUpdateAI => false;
-        public bool CanForgetTargets { get; set; } = true;
+        private bool _guardSpawnPoint;
+        private bool _hasTargetPoint;
+        private readonly bool _isFriendly;
+        private bool _staring;
+        private Vector3 _targetPoint;
 
         protected CombatAIComponent(IHumanoid Entity, bool IsFriendly) : base(Entity)
         {
@@ -55,43 +38,64 @@ namespace Hedra.AISystem.Humanoid
             _movementTimer.MarkReady();
         }
 
+        protected abstract float SearchRadius { get; }
+        protected abstract float AttackRadius { get; }
+        protected abstract float ForgetRadius { get; }
+        public IEntity[] IgnoreEntities { get; set; } = new IEntity[0];
+        protected override bool ShouldSleep => !IsChasing;
+        public bool IsChasing => ChasingTarget != null;
+        public bool IsExploring => !IsChasing && _hasTargetPoint;
+        protected virtual bool CanExplore => _canExplore;
+        protected virtual bool GuardSpawnPoint => _guardSpawnPoint;
+        public virtual bool DontUpdateAI => false;
+        public bool CanForgetTargets { get; set; } = true;
+
         protected override bool ShouldWakeup
         {
             get
             {
-                var humanoids = World.InRadius<Engine.Player.Humanoid>(this.Parent.Position, 64f);
+                var humanoids = World.InRadius<Engine.Player.Humanoid>(Parent.Position, 64f);
                 if (humanoids == null) return false;
                 for (var i = 0; i < humanoids.Length; i++)
                 {
                     var combatAI = humanoids[i].SearchComponent<CombatAIComponent>();
                     if (combatAI != null)
-                    {
                         if (humanoids[i].IsAttacking)
-                        {
                             return true;
-                        }
-                    }
                 }
+
                 return false;
+            }
+        }
+
+        public IEntity ChasingTarget { get; private set; }
+
+        public CombatAIBehaviour Behaviour
+        {
+            get => _behaviour;
+            set
+            {
+                _behaviour = value;
+                _movementTimer.AlertTime = _behaviour.WaitTime;
             }
         }
 
         protected override void OnDamageEvent(DamageEventArgs Args)
         {
             base.OnDamageEvent(Args);
-            if(!Array.Exists(IgnoreEntities, E => E == Args.Damager))
+            if (!Array.Exists(IgnoreEntities, E => E == Args.Damager))
                 SetTarget(Args.Damager);
         }
 
         public override void Update()
         {
             base.Update();
-            if(DontUpdateAI) return;
+            if (DontUpdateAI) return;
             if (!CanUpdate) return;
             if (ShouldReset()) return;
             DoUpdate();
             if (IsChasing) OnChasing();
-            else if(!_staring && CanExplore) OnExploring();
+            else if (!_staring && CanExplore) OnExploring();
             if (IsExploring) HandleStaring();
             else _staring = false;
             FindTarget();
@@ -99,11 +103,9 @@ namespace Hedra.AISystem.Humanoid
 
         private void HandleStaring()
         {
-            var nearHumanoid = World.InRadius<IPlayer>(Parent.Position, StareRadius).FirstOrDefault(H => !H.IsInvisible);
-            if (nearHumanoid != null)
-            {
-                Stare(nearHumanoid);
-            }
+            var nearHumanoid = World.InRadius<IPlayer>(Parent.Position, StareRadius)
+                .FirstOrDefault(H => !H.IsInvisible);
+            if (nearHumanoid != null) Stare(nearHumanoid);
         }
 
         private void Stare(IEntity Entity)
@@ -115,6 +117,7 @@ namespace Hedra.AISystem.Humanoid
                 _hasTargetPoint = false;
                 Behaviour.OnStare(Entity);
             }
+
             _staring = true;
         }
 
@@ -127,26 +130,28 @@ namespace Hedra.AISystem.Humanoid
 
         private bool ShouldReset()
         {
-            var targetLost = !IsChasing && GuardSpawnPoint && (_targetPoint.Xz() - Parent.Position.Xz()).LengthSquared() > ForgetRadius * ForgetRadius;
-            var targetDead = IsChasing && (_chasingTarget.IsDead || _chasingTarget.IsInvisible);
-            var shouldWeReset = IsChasing && _forgetTimer.Tick() && CanForgetTargets || targetLost && false || targetDead;
+            var targetLost = !IsChasing && GuardSpawnPoint &&
+                             (_targetPoint.Xz() - Parent.Position.Xz()).LengthSquared() > ForgetRadius * ForgetRadius;
+            var targetDead = IsChasing && (ChasingTarget.IsDead || ChasingTarget.IsInvisible);
+            var shouldWeReset = IsChasing && _forgetTimer.Tick() && CanForgetTargets || targetLost && false ||
+                                targetDead;
             if (shouldWeReset)
             {
                 Reset();
                 return true;
             }
+
             return false;
         }
-        
+
         protected virtual void DoUpdate()
         {
-            
         }
 
         private void OnChasing()
         {
-            SetTargetPoint(_chasingTarget.Position);
-            if (InAttackRadius(_chasingTarget) && !Parent.IsKnocked)
+            SetTargetPoint(ChasingTarget.Position);
+            if (InAttackRadius(ChasingTarget) && !Parent.IsKnocked)
             {
                 Orientate(_targetPoint);
                 OnAttack();
@@ -157,9 +162,10 @@ namespace Hedra.AISystem.Humanoid
             {
                 MoveTo(_targetPoint);
             }
-            Behaviour.SetTarget(_chasingTarget);
+
+            Behaviour.SetTarget(ChasingTarget);
         }
-        
+
         private void OnExploring()
         {
             if (!_hasTargetPoint && _movementTimer.Tick())
@@ -188,36 +194,37 @@ namespace Hedra.AISystem.Humanoid
         {
             return (Target.Position - Parent.Position).LengthSquared() < AttackRadius * AttackRadius;
         }
-        
+
         private void Reset()
         {
-            if (IsChasing && _chasingTarget.IsDead)
-                Parent.Health += _chasingTarget.MaxHealth * .33f;
+            if (IsChasing && ChasingTarget.IsDead)
+                Parent.Health += ChasingTarget.MaxHealth * .33f;
 
-            _chasingTarget = null;
+            ChasingTarget = null;
             SetTargetPoint(_originalPosition);
             MoveTo(_targetPoint);
         }
 
         protected void RollAndMove2()
         {
-            if(Parent != null && Parent.WasAttacking) return;
-            if (_rollTimer.Tick() && Parent != null && (_targetPoint.Xz() - Parent.Position.Xz()).LengthSquared() > AttackRadius * AttackRadius)
+            if (Parent != null && Parent.WasAttacking) return;
+            if (_rollTimer.Tick() && Parent != null && (_targetPoint.Xz() - Parent.Position.Xz()).LengthSquared() >
+                AttackRadius * AttackRadius)
                 Parent.Roll(RollType.Normal);
         }
 
         private void FindTarget()
         {
             if (IsChasing) return;
-            SetTarget(_isFriendly 
-                ? Behaviour.FindMobTarget(48) 
+            SetTarget(_isFriendly
+                ? Behaviour.FindMobTarget(48)
                 : Behaviour.FindPlayerTarget(SearchRadius)
             );
         }
 
         public void SetTarget(IEntity Target)
         {
-            _chasingTarget = Target;
+            ChasingTarget = Target;
             _forgetTimer.Reset();
         }
 
@@ -227,20 +234,14 @@ namespace Hedra.AISystem.Humanoid
             _targetPoint = Position;
         }
 
-        public void SetCanExplore(bool Value) => _canExplore = Value;
-
-        public void SetGuardSpawnPoint(bool Value) => _guardSpawnPoint = Value;
-        
-        public IEntity ChasingTarget => _chasingTarget;
-        
-        public CombatAIBehaviour Behaviour
+        public void SetCanExplore(bool Value)
         {
-            get => _behaviour;
-            set
-            {
-                _behaviour = value;
-                _movementTimer.AlertTime = _behaviour.WaitTime;
-            }
+            _canExplore = Value;
+        }
+
+        public void SetGuardSpawnPoint(bool Value)
+        {
+            _guardSpawnPoint = Value;
         }
     }
 }

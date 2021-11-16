@@ -6,19 +6,19 @@ namespace Hedra.BiomeSystem
 {
     public abstract class BiomeMobDesign
     {
-        public SpawnerSettings Settings { get; private set; }
-
         protected BiomeMobDesign()
         {
-            this.WorldModulesReload(AssetManager.AppPath);
-            World.ModulesReload += this.WorldModulesReload;
+            WorldModulesReload(AssetManager.AppPath);
+            World.ModulesReload += WorldModulesReload;
         }
+
+        public SpawnerSettings Settings { get; private set; }
+
+        protected abstract string Name { get; }
 
         private void WorldModulesReload(string AppPath)
         {
             Settings = SpawnerLoader.Load(AppPath, Name);
         }
-        
-        protected abstract string Name { get; }
     }
 }

@@ -1,12 +1,9 @@
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
+using System.Numerics;
 using Hedra.Engine.Localization;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Windowing;
 using Hedra.Rendering.UI;
-using System.Numerics;
-
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Player.Inventory
 {
@@ -14,11 +11,10 @@ namespace Hedra.Engine.Player.Inventory
 
     public class InventoryCompanionRenamePanel : Panel
     {
-        public event OnApply Apply;
-        private readonly BackgroundTexture _backgroundTexture;
-        private readonly TextField _field;
         private readonly Button _applyButton;
         private readonly GUIText _applyText;
+        private readonly BackgroundTexture _backgroundTexture;
+        private readonly TextField _field;
 
         public InventoryCompanionRenamePanel()
         {
@@ -45,6 +41,20 @@ namespace Hedra.Engine.Player.Inventory
             AddElement(_applyText);
         }
 
+        public string Text
+        {
+            get => _field.Text;
+            set => _field.Text = value;
+        }
+
+        public override Vector2 Position
+        {
+            get => _backgroundTexture.Position;
+            set => _backgroundTexture.Position = value;
+        }
+
+        public event OnApply Apply;
+
         public void UpdateView()
         {
             _backgroundTexture.Scale = InventoryBackground.DefaultSize * .25f;
@@ -60,18 +70,6 @@ namespace Hedra.Engine.Player.Inventory
         {
             Apply?.Invoke();
             _field.Defocus();
-        }
-
-        public string Text
-        {
-            get => _field.Text;
-            set => _field.Text = value;
-        }
-
-        public override Vector2 Position
-        {
-            get => _backgroundTexture.Position;
-            set => _backgroundTexture.Position = value;
         }
     }
 }

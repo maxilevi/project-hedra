@@ -6,9 +6,10 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
 {
     public class BlacksmithPlacer : Placer<BlacksmithParameters>
     {
-        private int _currentBlacksmiths;
-        private readonly int _maxPlacements;
         private readonly BlacksmithDesignTemplate[] _blacksmithDesigns;
+        private readonly int _maxPlacements;
+        private int _currentBlacksmiths;
+
         public BlacksmithPlacer(BlacksmithDesignTemplate[] Designs, Random Rng, int MaxPlacements) : base(Designs, Rng)
         {
             _maxPlacements = MaxPlacements;
@@ -17,7 +18,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
 
         public override bool SpecialRequirements(PlacementPoint Point)
         {
-           // if (_currentBlacksmiths >= _maxPlacements) return false;
+            // if (_currentBlacksmiths >= _maxPlacements) return false;
             return true;
         }
 
@@ -26,7 +27,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
             _currentBlacksmiths++;
             return new BlacksmithParameters
             {
-                Design = this.SelectRandom(_blacksmithDesigns),
+                Design = SelectRandom(_blacksmithDesigns),
                 Position = Point.Position,
                 Rng = Rng
             };

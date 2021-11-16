@@ -11,6 +11,6 @@ uniform mat2 Rotation = mat2(1.0, 0.0, 0.0, 1.0);
 void main(void)
 {
 
-	gl_Position = vec4(Rotation * InVertex * Scale + Position, 0.0, 1.0);
-	UV = vec2((InVertex.x+1.0)/2.0, 1.0 - (InVertex.y+1.0)/2.0);
+    gl_Position = vec4(Rotation * InVertex * Scale + Position, 0.0, 1.0);
+    UV = vec2((InVertex.x+1.0)/2.0, 1.0 - (InVertex.y+1.0)/2.0);
 }

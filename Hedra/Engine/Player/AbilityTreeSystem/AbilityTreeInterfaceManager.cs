@@ -1,25 +1,19 @@
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Localization;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Windowing;
-using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Sound;
-using System.Numerics;
-using Button = Hedra.Engine.Rendering.UI.Button;
-
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
 {
     public class AbilityTreeInterfaceManager : InventoryArrayInterfaceManager
     {
-        private readonly BackgroundTexture[] _lines;
-        private readonly IPlayer _player;
         private readonly AbilityTreeInterface _interface;
         private readonly InventoryInterfaceItemInfo _itemInfo;
+        private readonly BackgroundTexture[] _lines;
+        private readonly IPlayer _player;
         private readonly InventoryArray[] _trees;
 
         public AbilityTreeInterfaceManager(IPlayer Player, InventoryInterfaceItemInfo ItemInfoInterface,
@@ -31,6 +25,33 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             _itemInfo = ItemInfoInterface;
             _trees = Trees;
         }
+
+        public int AvailablePoints => _player.Level - UsedPoints + ExtraSkillPoints;
+
+        public int UsedPoints
+        {
+            get
+            {
+                var used = 0;
+                for (var k = 0; k < _trees.Length; ++k)
+                for (var i = 0; i < _trees[k].Length; i++)
+                {
+                    var hasUsedPoint = _trees[k][i].HasAttribute("Level")
+                        ? _trees[k][i].GetAttribute<int>("Level")
+                        : 0;
+                    if (hasUsedPoint > 0)
+                    {
+                        var a = 0;
+                    }
+
+                    used += hasUsedPoint;
+                }
+
+                return used;
+            }
+        }
+
+        public int ExtraSkillPoints { get; set; }
 
         protected override void Interact(object Sender, MouseButtonEventArgs EventArgs)
         {
@@ -97,7 +118,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             var decomposedIndexX = AbilityTree.AbilityCount / AbilityTree.Columns - 1 -
                                    (Index - decomposedIndexY) / AbilityTree.Columns;
             if (decomposedIndexX == 0) return true;
-            else if (!_interface.Array[Index + AbilityTree.Columns].GetAttribute<bool>("Enabled"))
+            if (!_interface.Array[Index + AbilityTree.Columns].GetAttribute<bool>("Enabled"))
                 return PreviousUnlocked(Index + AbilityTree.Columns);
             return _interface.Array[Index + AbilityTree.Columns].GetAttribute<int>("Level") > 0;
         }
@@ -117,32 +138,5 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                     return _interface.Array[i];
             return null;
         }
-
-        public int AvailablePoints => _player.Level - UsedPoints + ExtraSkillPoints;
-
-        public int UsedPoints
-        {
-            get
-            {
-                var used = 0;
-                for (var k = 0; k < _trees.Length; ++k)
-                for (var i = 0; i < _trees[k].Length; i++)
-                {
-                    var hasUsedPoint = _trees[k][i].HasAttribute("Level")
-                        ? _trees[k][i].GetAttribute<int>("Level")
-                        : 0;
-                    if (hasUsedPoint > 0)
-                    {
-                        var a = 0;
-                    }
-
-                    used += hasUsedPoint;
-                }
-
-                return used;
-            }
-        }
-
-        public int ExtraSkillPoints { get; set; }
     }
 }

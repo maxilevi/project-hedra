@@ -8,48 +8,42 @@
  */
 
 using System;
-using System.Collections;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using Hedra.Engine.Management;
-using Hedra.Engine.Player;
-using System.Numerics;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using Hedra.Components;
 using Hedra.Core;
-using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Game;
+using Hedra.Engine.Events;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
+using Hedra.Engine.Management;
 using Hedra.Engine.Networking;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.Frustum;
+using Hedra.Engine.Scenes;
 using Hedra.Engine.Windowing;
-using Hedra.EntitySystem;
 using Hedra.Game;
-using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
-
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Rendering.UI
 {
     /// <summary>
-    /// Description of CharacterSelectorUI.
+    ///     Description of CharacterSelectorUI.
     /// </summary>
     public class CharacterSelectorUI : Panel, IUpdatable
     {
-        public bool ShouldHost { get; set; }
-        private PlayerInformation[] _information;
+        private readonly List<UIElement> _dataElements = new List<UIElement>();
         private readonly List<Humanoid> _humans;
-        private Humanoid _selectedHuman, _previousHuman;
         private readonly GUIText _level;
         private readonly GUIText _name;
-        private readonly List<UIElement> _dataElements = new List<UIElement>();
+        private PlayerInformation[] _information;
+        private Humanoid _selectedHuman, _previousHuman;
 
         public CharacterSelectorUI()
         {
@@ -99,6 +93,48 @@ namespace Hedra.Engine.Rendering.UI
             UpdateManager.Add(this);
         }
 
+        public bool ShouldHost { get; set; }
+
+        public void Update()
+        {
+            if (World.Seed != World.MenuSeed) return;
+            for (var k = 0; k < _humans.Count; k++)
+            {
+                if (_humans[k].MainWeapon != null && _humans[k].MainWeapon.Weapon.InAttackStance)
+                    _humans[k].Model.BlendAnimation(_humans[k].MainWeapon.Weapon.AttackStanceAnimation);
+
+                _humans[k].Model.Enabled =
+                    (_humans[k].Model.ModelPosition.Xz() - _humans[k].Position.Xz()).LengthFast() < 8;
+                _humans[k].Update();
+                _humans[k].UpdateCriticalComponents();
+
+                var target = FireDirection(k, 4.8f);
+                _humans[k].Model.LocalRotation = Physics.DirectionToEuler(target.NormalizedFast().Xz().ToVector3()) +
+                                                 Vector3.UnitY * 180f;
+                _humans[k].Model.TargetRotation = _humans[k].Model.LocalRotation;
+                if (_humans[k].Position.Y <= 4)
+                    _humans[k].Position = new Vector3(_humans[k].Position.X,
+                        Physics.HeightAtPosition(_humans[k].Position) + 4, _humans[k].Position.Z);
+            }
+
+            if (Enabled)
+            {
+                if (_selectedHuman != null)
+                    for (var i = 0; i < _dataElements.Count; i++)
+                        _dataElements[i].Enable();
+                else
+                    for (var i = 0; i < _dataElements.Count; i++)
+                        _dataElements[i].Disable();
+
+                MenuBackground.Campfire = true;
+                GameManager.Player.View.CameraHeight = Vector3.UnitY * 4;
+
+                HandleHovering();
+                HandleSelection();
+                HandlePreviousSelection();
+            }
+        }
+
         private void OnSelect(object Sender, MouseButtonEventArgs Args)
         {
             if (_humans.Count == 0) return;
@@ -114,7 +150,7 @@ namespace Hedra.Engine.Rendering.UI
             switch (State)
             {
                 case PanelState.Disabled:
-                    Scenes.MenuBackground.Campfire = false;
+                    MenuBackground.Campfire = false;
                     break;
                 case PanelState.Enabled:
                     ReloadSaveFile();
@@ -164,7 +200,7 @@ namespace Hedra.Engine.Rendering.UI
                 _humans[i].Customization = _information[i].Customization;
                 _humans[i].Class = _information[i].Class;
                 _humans[i].Model = new HumanoidModel(_humans[i]);
-                _humans[i].Position = Scenes.MenuBackground.FirePosition + offset;
+                _humans[i].Position = MenuBackground.FirePosition + offset;
                 _humans[i].Model.LocalRotation = Physics.DirectionToEuler(-offset.Normalized().Xz().ToVector3());
                 _humans[i].Model.TargetRotation = _humans[i].Model.LocalRotation;
                 _humans[i].Model.Enabled = true;
@@ -261,7 +297,7 @@ namespace Hedra.Engine.Rendering.UI
                     for (var k = 0; k < _humans.Count; k++)
                     {
                         if (_previousHuman != _humans[k]) continue;
-                        var fPos = Scenes.MenuBackground.FirePosition + FireDirection(k, 8);
+                        var fPos = MenuBackground.FirePosition + FireDirection(k, 8);
                         _previousHuman.Position = new Vector3(fPos.X, _previousHuman.Position.Y, fPos.Z);
                         _previousHuman.Model.LocalRotation = new Vector3(0,
                             Physics.DirectionToEuler(FireDirection(k, 8).NormalizedFast().Xz().ToVector3()).Y + 180, 0);
@@ -297,7 +333,7 @@ namespace Hedra.Engine.Rendering.UI
                     break;
             }
 
-            return Vector3.Transform(Vector3.UnitX * Mult, Matrix4x4.CreateRotationY((float)angle));
+            return Vector3.Transform(Vector3.UnitX * Mult, Matrix4x4.CreateRotationY(angle));
         }
 
         public void StopModels()
@@ -306,50 +342,10 @@ namespace Hedra.Engine.Rendering.UI
                 _humans[i]?.Model?.StopSound();
         }
 
-        public void Update()
-        {
-            if (World.Seed != World.MenuSeed) return;
-            for (var k = 0; k < _humans.Count; k++)
-            {
-                if (_humans[k].MainWeapon != null && _humans[k].MainWeapon.Weapon.InAttackStance)
-                    _humans[k].Model.BlendAnimation(_humans[k].MainWeapon.Weapon.AttackStanceAnimation);
-
-                _humans[k].Model.Enabled =
-                    (_humans[k].Model.ModelPosition.Xz() - _humans[k].Position.Xz()).LengthFast() < 8;
-                _humans[k].Update();
-                _humans[k].UpdateCriticalComponents();
-
-                var target = FireDirection(k, 4.8f);
-                _humans[k].Model.LocalRotation = Physics.DirectionToEuler(target.NormalizedFast().Xz().ToVector3()) +
-                                                 Vector3.UnitY * 180f;
-                _humans[k].Model.TargetRotation = _humans[k].Model.LocalRotation;
-                if (_humans[k].Position.Y <= 4)
-                    _humans[k].Position = new Vector3(_humans[k].Position.X,
-                        Physics.HeightAtPosition(_humans[k].Position) + 4, _humans[k].Position.Z);
-            }
-
-            if (Enabled)
-            {
-                if (_selectedHuman != null)
-                    for (var i = 0; i < _dataElements.Count; i++)
-                        _dataElements[i].Enable();
-                else
-                    for (var i = 0; i < _dataElements.Count; i++)
-                        _dataElements[i].Disable();
-
-                Scenes.MenuBackground.Campfire = true;
-                GameManager.Player.View.CameraHeight = Vector3.UnitY * 4;
-
-                HandleHovering();
-                HandleSelection();
-                HandlePreviousSelection();
-            }
-        }
-
         private void HandleHovering()
         {
             var coords =
-                (Mathf.ToNormalizedDeviceCoordinates(Events.EventDispatcher.Mouse.X, Events.EventDispatcher.Mouse.Y) +
+                (Mathf.ToNormalizedDeviceCoordinates(EventDispatcher.Mouse.X, EventDispatcher.Mouse.Y) +
                  new Vector2(1, 1)) * .5f;
             var size = GUITexture.Adjust(new Vector2(0.05f, 0.25f));
             for (var i = 0; i < _humans.Count; i++)
@@ -380,7 +376,7 @@ namespace Hedra.Engine.Rendering.UI
             if (_selectedHuman.MainWeapon != null)
                 _selectedHuman.MainWeapon.Weapon.InAttackStance = true;
 
-            if ((_selectedHuman.Position.Xz() - Scenes.MenuBackground.FirePosition.Xz()).LengthSquared() > 4 * 4)
+            if ((_selectedHuman.Position.Xz() - MenuBackground.FirePosition.Xz()).LengthSquared() > 4 * 4)
                 _selectedHuman.Physics.Translate(-target.NormalizedFast() * 6f * Time.IndependentDeltaTime);
         }
 
@@ -392,7 +388,7 @@ namespace Hedra.Engine.Rendering.UI
             if (_previousHuman.MainWeapon != null)
                 _previousHuman.MainWeapon.Weapon.InAttackStance = false;
 
-            if ((_previousHuman.Position.Xz() - Scenes.MenuBackground.FirePosition.Xz() - backTarget.Xz())
+            if ((_previousHuman.Position.Xz() - MenuBackground.FirePosition.Xz() - backTarget.Xz())
                 .LengthSquared() > 1 * 1)
             {
                 _previousHuman.Physics.Translate(backTarget.NormalizedFast() * 6f * Time.IndependentDeltaTime);

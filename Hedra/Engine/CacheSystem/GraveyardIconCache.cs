@@ -1,5 +1,5 @@
-using Hedra.Engine.Management;
 using System.Numerics;
+using Hedra.Engine.Management;
 
 namespace Hedra.Engine.CacheSystem
 {
@@ -7,9 +7,9 @@ namespace Hedra.Engine.CacheSystem
     {
         public GraveyardIconCache()
         {
-            this.AddModel(AssetManager.PLYLoader("Assets/Env/Grave4.ply", Vector3.One * 2f));
+            AddModel(AssetManager.PLYLoader("Assets/Env/Grave4.ply", Vector3.One * 2f));
         }
-        
+
         public override CacheItem Type => CacheItem.GraveyardIcon;
     }
 }

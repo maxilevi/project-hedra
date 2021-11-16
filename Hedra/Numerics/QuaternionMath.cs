@@ -1,4 +1,3 @@
-using System;
 using System.Numerics;
 
 namespace Hedra.Numerics
@@ -6,7 +5,7 @@ namespace Hedra.Numerics
     public static class QuaternionMath
     {
         /// <summary>
-        /// Transform a quaternion into an equivalent euler rotation.
+        ///     Transform a quaternion into an equivalent euler rotation.
         /// </summary>
         /// <param name="Quaternion">Quaternion to take the angles from.</param>
         /// <returns></returns>
@@ -17,7 +16,7 @@ namespace Hedra.Numerics
         }
 
         /// <summary>
-        /// Transform an euler rotation (X,Y,Z) into a Quaternion.
+        ///     Transform an euler rotation (X,Y,Z) into a Quaternion.
         /// </summary>
         /// <param name="Euler">Euler rotation. In radians.</param>
         /// <returns>A quaternion representation of the euler angles</returns>

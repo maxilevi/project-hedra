@@ -8,27 +8,25 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
+using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Engine.IO;
 using Hedra.Game;
-using System.Numerics;
 
 namespace Hedra.Engine.Generation.ChunkSystem.Builders
 {
     public abstract class AbstractBuilder : ICountable, IDisposable
     {
-        public int Count => _queue.Count;
-        private readonly Stopwatch _watch;
-        private readonly SharedWorkerPool _pool;
-        private readonly HashSet<Chunk> _hashQueue;
         private readonly ChunkComparer _closest;
-        private readonly List<Chunk> _queue;
+        private readonly HashSet<Chunk> _hashQueue;
         private readonly object _lock;
-        private bool _discard;
-        private Vector3 _lastSortedPosition;
-        private int _lastCount;
+        private readonly SharedWorkerPool _pool;
+        private readonly List<Chunk> _queue;
+        private readonly Stopwatch _watch;
         private float _accumTime;
+        private bool _discard;
+        private int _lastCount;
+        private Vector3 _lastSortedPosition;
         private int _workItems;
 
         protected AbstractBuilder(SharedWorkerPool Pool)
@@ -39,6 +37,15 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
             _hashQueue = new HashSet<Chunk>();
             _closest = new ChunkComparer();
             _watch = new Stopwatch();
+        }
+
+        protected abstract QueueType Type { get; }
+
+        public int AverageWorkTime => (int)(_accumTime / Math.Max(_workItems, 1));
+        public int Count => _queue.Count;
+
+        public void Dispose()
+        {
         }
 
         private Chunk GetFirstClosest()
@@ -56,6 +63,7 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
                     currDist = dist;
                 }
             }
+
             return bestChunk;
         }
 
@@ -69,6 +77,7 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
                     _hashQueue.Clear();
                     _discard = false;
                 }
+
                 if (_queue.Count > 0)
                 {
                     var chunk = GetFirstClosest();
@@ -78,14 +87,15 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
                         _hashQueue.Remove(chunk);
                         return;
                     }
+
                     var result = _pool.Work(this, Type, delegate
                     {
                         try
                         {
-                            if(chunk?.Disposed ?? true) return;
-                            this.StartProfile();
-                            this.Work(chunk);
-                            this.EndProfile();
+                            if (chunk?.Disposed ?? true) return;
+                            StartProfile();
+                            Work(chunk);
+                            EndProfile();
                         }
                         catch (Exception e)
                         {
@@ -96,21 +106,18 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
                                 _hashQueue.Remove(chunk);
                             }
                         }
+
                         lock (_lock)
+                        {
                             _hashQueue.Remove(chunk);
+                        }
                     });
-                    if (result)
-                    {
-                        _queue.Remove(chunk);
-                    }
+                    if (result) _queue.Remove(chunk);
                 }
             }
         }
 
-        protected abstract QueueType Type { get; }
         protected abstract void Work(Chunk Object);
-
-        public int AverageWorkTime => (int) (_accumTime / (float) Math.Max(_workItems, 1));
 
         public void Add(Chunk Chunk)
         {
@@ -143,7 +150,7 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
             _accumTime = 0;
             _workItems = 0;
         }
-        
+
         private void StartProfile()
         {
             _watch.Restart();
@@ -154,11 +161,6 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
             _watch.Stop();
             _accumTime += _watch.ElapsedMilliseconds;
             ++_workItems;
-        }
-
-        public void Dispose()
-        {
-
         }
     }
 }

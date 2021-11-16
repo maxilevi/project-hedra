@@ -9,35 +9,49 @@
 
 using System;
 using System.Globalization;
+using System.Numerics;
 using Hedra.Core;
-using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
 using Hedra.Localization;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Sound;
 using Hedra.WorldObjects;
-using System.Numerics;
-using Hedra.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Rogue
 {
     /// <summary>
-    /// Description of WeaponThrow.
+    ///     Description of WeaponThrow.
     /// </summary>
     public class Shuriken : SingleAnimationSkill<IPlayer>
     {
-        private static readonly VertexData ShurikenData = AssetManager.PLYLoader("Assets/Items/Shuriken.ply", new Vector3(1, 2, 1));
+        private static readonly VertexData ShurikenData =
+            AssetManager.PLYLoader("Assets/Items/Shuriken.ply", new Vector3(1, 2, 1));
+
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Shuriken.png");
-        protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/RogueShurikenThrow.dae");
+
+        protected override Animation SkillAnimation { get; } =
+            AnimationLoader.LoadAnimation("Assets/Chr/RogueShurikenThrow.dae");
+
         protected override bool EquipWeapons => false;
         protected override float AnimationSpeed => 1.25f;
         protected override int MaxLevel => 15;
         public override float ManaCost => 35;
-        public override float MaxCooldown => Math.Max(8, 12 - base.Level * .5f);
+        public override float MaxCooldown => Math.Max(8, 12 - Level * .5f);
+
+        private float Damage => 18 + Level * 1.5f;
+        private int StunChance => Level > 5 ? 8 : -1;
+        public override string Description => Translations.Get("shuriken_desc");
+        public override string DisplayName => Translations.Get("shuriken_skill");
+
+        public override string[] Attributes => new[]
+        {
+            Translations.Get("shuriken_damage_change", Damage.ToString("0.0", CultureInfo.InvariantCulture)),
+            Translations.Get("shuriken_stun_change", StunChance < 0 ? 0 : (int)(1.0f / StunChance * 100))
+        };
 
         protected override void OnAnimationMid()
         {
@@ -53,7 +67,7 @@ namespace Hedra.Engine.SkillSystem.Rogue
         {
             ShootShuriken(User, Direction, Damage, StunChance);
         }
-        
+
         private static void ShootShuriken(IHumanoid Human, Vector3 Direction, float Damage, int KnockChance = -1)
         {
             var weaponData = ShurikenData.Clone().RotateZ(90);
@@ -75,13 +89,13 @@ namespace Hedra.Engine.SkillSystem.Rogue
                 Hit.Damage(Damage, Human, out var exp);
                 Human.XP += exp;
                 if (KnockChance == -1) return;
-                if(Utils.Rng.Next(0, KnockChance) == 0)
+                if (Utils.Rng.Next(0, KnockChance) == 0)
                     Hit.KnockForSeconds(3);
             };
-            SoundPlayer.PlaySound(SoundType.BowSound, Human.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f);
+            SoundPlayer.PlaySound(SoundType.BowSound, Human.Position, false, 1f + Utils.Rng.NextFloat() * .2f - .1f);
             World.AddWorldObject(weaponProj);
         }
-        
+
         protected override void OnExecution()
         {
             World.Particles.Color = Vector4.One;
@@ -93,15 +107,5 @@ namespace Hedra.Engine.SkillSystem.Rogue
             World.Particles.PositionErrorMargin = Vector3.One * 0.75f;
             //World.Particles.Emit();            
         }
-
-        private float Damage => 18 + Level * 1.5f;
-        private int StunChance => Level > 5 ? 8 : -1;
-        public override string Description => Translations.Get("shuriken_desc");
-        public override string DisplayName => Translations.Get("shuriken_skill");
-        public override string[] Attributes => new[]
-        {
-            Translations.Get("shuriken_damage_change", Damage.ToString("0.0", CultureInfo.InvariantCulture)),
-            Translations.Get("shuriken_stun_change", StunChance < 0 ? 0 : (int)(1.0f / (float)StunChance * 100))
-        };
     }
 }

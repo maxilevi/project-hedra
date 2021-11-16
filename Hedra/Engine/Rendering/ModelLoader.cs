@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 
@@ -16,6 +15,7 @@ namespace Hedra.Engine.Rendering
                 var model = AssetManager.DAELoader(Path);
                 ModelCache[Path] = model;
             }
+
             return ModelCache[Path].Clone();
         }
     }

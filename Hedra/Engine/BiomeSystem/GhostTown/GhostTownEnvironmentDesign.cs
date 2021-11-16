@@ -15,8 +15,8 @@ namespace Hedra.Engine.BiomeSystem.UndeadBiome
                 new MushroomPlacementDesign(),
                 new TimberAndSticksPlacementDesign(),
                 new PebblePlacementDesign(),
-                new DeadGrassPlacementDesign(), 
-                new WoodLogAndTreeStumpPlacementDesign(),
+                new DeadGrassPlacementDesign(),
+                new WoodLogAndTreeStumpPlacementDesign()
             };
         }
 

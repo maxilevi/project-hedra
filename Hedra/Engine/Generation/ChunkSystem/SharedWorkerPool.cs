@@ -7,9 +7,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
 {
     public class SharedWorkerPool : WorkerPool
     {
-        private Dictionary<QueueType, int> _maxWorkers;
+        private readonly Dictionary<QueueType, int> _maxWorkers;
 
-        public SharedWorkerPool(int WorkerCount = WorkerPool.MaxWorkers) : base(WorkerCount)
+        public SharedWorkerPool(int WorkerCount = MaxWorkers) : base(WorkerCount)
         {
             _maxWorkers = new Dictionary<QueueType, int>();
         }
@@ -28,18 +28,17 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             var count = 0;
             for (var i = 0; i < Workers.Count; i++)
-            {
-                if(Workers[i].Owner == User) count++;
-            }
+                if (Workers[i].Owner == User)
+                    count++;
             return count;
         }
 
         public bool Work(ICountable User, QueueType Type, Action Do)
         {
             var maxWorkers = _maxWorkers[Type];
-            var currentWorkers = this.GetCurrentWorkers(User);
+            var currentWorkers = GetCurrentWorkers(User);
             if (currentWorkers >= maxWorkers) return false;
-            return base.Work(Do, User);       
+            return base.Work(Do, User);
         }
     }
 }

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System;
 using System.Collections.Concurrent;
 
@@ -20,7 +19,7 @@ namespace Hedra.Engine.Management
             {
                 if (_jobs.Count == 0) return;
                 var result = _jobs.TryDequeue(out var job);
-                if(result) 
+                if (result)
                     job.Invoke();
             }
         }

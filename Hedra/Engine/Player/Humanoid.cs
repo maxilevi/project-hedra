@@ -8,9 +8,8 @@
  */
 
 using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Linq;
+using System.Numerics;
 using Hedra.Components;
 using Hedra.Components.Effects;
 using Hedra.Core;
@@ -18,21 +17,20 @@ using Hedra.Engine.ClassSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.ItemSystem.ArmorSystem;
 using Hedra.Engine.Player.BoatSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.SkillSystem;
+using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Items;
 using Hedra.Localization;
+using Hedra.Numerics;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
 using Hedra.WeaponSystem;
-using System.Numerics;
-using Hedra.Engine.WorldBuilding;
-using Hedra.Numerics;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Player
 {
@@ -45,12 +43,61 @@ namespace Hedra.Engine.Player
         public const float DefaultDodgeCost = 25;
         public const float SprintingSpeed = 0.25f;
         public const float SprintingCost = 7.5f;
+        private readonly Timer _consecutiveHitsTimer;
+        private ClassDesign _class;
+        private readonly DamageComponent _damageHandler;
+        private bool _ignoreHitCombo;
+        private bool _isGliding;
+        private float _mana;
+        private float _speedAddon;
+        private float _stamina = 100f;
+        private bool _wasSprinting;
+        private float _xp;
+
+        public Humanoid()
+        {
+            _consecutiveHitsTimer = new Timer(3f);
+            Class = new WarriorDesign();
+            Customization = CustomizationData.FromClass(_class, HumanGender.Male);
+            MessageDispatcher = new DummyMessageDispatcher();
+            HandLamp = new HandLamp(this);
+            Movement = new MovementManager(this);
+            Equipment = new EquipmentHandler(this);
+            Inventory = new HumanoidInventory(Equipment);
+            Boat = new Boat(this);
+            RandomFactor = NewRandomFactor();
+            Physics.CollidesWithStructures = true;
+            DodgeCost = DefaultDodgeCost;
+            AttackPower = 1f;
+            Speed = BaseSpeed;
+            BaseAttackSpeed = .75f;
+            Physics.OnMove += OnMove;
+            _damageHandler = new DamageComponent(this);
+            AddComponent(_damageHandler);
+        }
+
+        public EquipmentHandler Equipment { get; }
+
+        public float ConsecutiveHitsModifier => Mathf.Clamp(ConsecutiveHits / 90f, 0f, .5f);
+
+        public float BaseDamageEquation =>
+            (Class.BaseDamage + Level * 0.08f) * AttackPower + WeaponModifier(MainWeapon);
+
+        public float ArmorDefenseBonus
+        {
+            get
+            {
+                return GetEquipmentItems().Select(E =>
+                        E.HasAttribute(CommonAttributes.Defense) ? E.GetAttribute<float>(CommonAttributes.Defense) : 0)
+                    .Sum();
+            }
+        }
+
         public event OnAttackEventHandler AfterAttack;
         public event OnAttackEventHandler BeforeAttack;
         public event OnHitLandedEventHandler HitLanded;
         public event OnInteractionEvent Interact;
         public event OnFishing Fishing;
-        public EquipmentHandler Equipment { get; }
 
         public ClassDesign Class
         {
@@ -99,89 +146,6 @@ namespace Hedra.Engine.Player
         public virtual Vector3 LookingDirection => Orientation;
         public MovementManager Movement { get; protected set; }
         public HandLamp HandLamp { get; }
-        private float _mana;
-        private float _xp;
-        private ClassDesign _class;
-        private float _stamina = 100f;
-        private bool _isGliding;
-        private float _speedAddon;
-        private readonly Timer _consecutiveHitsTimer;
-        private DamageComponent _damageHandler;
-        private bool _ignoreHitCombo;
-        private bool _wasSprinting;
-
-        #region Propierties ( MaxMana, MaxHealth, MaxXp)
-
-        public override float AttackingSpeedModifier => Class.AttackingSpeedModifier;
-
-        public float BaseSpeed => Class.BaseSpeed;
-
-        public float Armor { get; set; }
-
-        public override float MaxHealth => CalculateMaxHealth(Class, Level, RandomFactor) + BonusHealth;
-
-        public static float CalculateMaxHealth(ClassDesign Class, int Level, float RandomFactor)
-        {
-            var maxHealth = Class.BaseHealth + RandomFactor * 20f;
-            for (var i = 1; i < Level; i++) maxHealth += Class.MaxHealthFormula(RandomFactor);
-
-            return maxHealth;
-        }
-
-        public float MaxXP => MaxLevel == Level ? 0 : ClassDesign.XPFormula(Level);
-
-        public float MaxMana
-        {
-            get
-            {
-                var maxMana = 90 + RandomFactor * 60f;
-                for (var i = 1; i < Level; i++) maxMana += Class.MaxManaFormula(RandomFactor);
-
-                return maxMana;
-            }
-        }
-
-        public float ManaRegen
-        {
-            get
-            {
-                var baseRegen = 4 + ManaRegenFactor;
-                return baseRegen * (IsSleeping ? 6.0f : 1.0f);
-            }
-        }
-
-        public float HealthRegen => IsSleeping ? 6.0f * MaxHealth * .005f : 0;
-
-        public float StaminaRegen { get; set; } = 4;
-
-        #endregion
-
-        public Humanoid()
-        {
-            _consecutiveHitsTimer = new Timer(3f);
-            Class = new WarriorDesign();
-            Customization = CustomizationData.FromClass(_class, HumanGender.Male);
-            MessageDispatcher = new DummyMessageDispatcher();
-            HandLamp = new HandLamp(this);
-            Movement = new MovementManager(this);
-            Equipment = new EquipmentHandler(this);
-            Inventory = new HumanoidInventory(Equipment);
-            Boat = new Boat(this);
-            RandomFactor = NewRandomFactor();
-            Physics.CollidesWithStructures = true;
-            DodgeCost = DefaultDodgeCost;
-            AttackPower = 1f;
-            Speed = BaseSpeed;
-            BaseAttackSpeed = .75f;
-            Physics.OnMove += OnMove;
-            _damageHandler = new DamageComponent(this);
-            AddComponent(_damageHandler);
-        }
-
-        private void OnMove()
-        {
-            IsSitting = false;
-        }
 
         public override void Update()
         {
@@ -192,39 +156,9 @@ namespace Hedra.Engine.Player
             UpdateStats();
         }
 
-        public void UpdateEquipment()
-        {
-            Equipment.Update();
-        }
-
-        private void UpdateStats()
-        {
-            Stamina += Time.DeltaTime * StaminaRegen;
-            if (!IsDead)
-            {
-                if (!_damageHandler.HasBeenAttacked)
-                    Health += HealthRegen * Time.DeltaTime;
-                Mana += ManaRegen * Time.DeltaTime;
-            }
-
-            if (IsSprinting)
-            {
-                if (!_wasSprinting)
-                    AddBonusSpeedWhile(SprintingSpeed, () => IsSprinting);
-                Stamina -= Time.DeltaTime * SprintingCost;
-            }
-
-            _wasSprinting = IsSprinting;
-        }
-
         public void ResetEquipment()
         {
             Equipment.Reset();
-        }
-
-        private void UpdateHits()
-        {
-            if (!GameSettings.Paused && _consecutiveHitsTimer.Tick()) ConsecutiveHits = 0;
         }
 
         #region Dodge
@@ -345,11 +279,6 @@ namespace Hedra.Engine.Player
             }
         }
 
-        public static float NewRandomFactor()
-        {
-            return Utils.Rng.NextFloat() * 1f + .0f;
-        }
-
         public void SetWeapon(Weapon Item)
         {
             Equipment.SetWeapon(Item);
@@ -379,19 +308,6 @@ namespace Hedra.Engine.Player
             Equipment.SetBoots(Item?.Boots);
         }
 
-        private void ApplyArmorBonuses(Item Item, Func<bool> While)
-        {
-            if (Item == null) return;
-            var bonusArmor = Item.HasAttribute(CommonAttributes.Defense)
-                ? Item.GetAttribute<float>(CommonAttributes.Defense)
-                : 0;
-            var bonusSpeed = Item.HasAttribute(CommonAttributes.MovementSpeed)
-                ? Item.GetAttribute<float>(CommonAttributes.MovementSpeed)
-                : 1;
-            AddBonusSpeedWhile(BaseSpeed * (bonusSpeed - 1f), While);
-            AddBonusArmorWhile(bonusArmor, While);
-        }
-
         public void AddBonusAttackSpeedWhile(float BonusAttackSpeed, Func<bool> Condition)
         {
             ComponentManager.AddComponentWhile(new AttackSpeedBonusComponent(this, BonusAttackSpeed), Condition);
@@ -400,11 +316,6 @@ namespace Hedra.Engine.Player
         public void AddBonusHealthWhile(float BonusHealth, Func<bool> Condition)
         {
             ComponentManager.AddComponentWhile(new HealthBonusComponent(this, BonusHealth), Condition);
-        }
-
-        public void AddBonusArmorWhile(float BonusArmor, Func<bool> Condition)
-        {
-            ComponentManager.AddComponentWhile(new ArmorBonusComponent(this, BonusArmor), Condition);
         }
 
         public void Greet()
@@ -467,15 +378,10 @@ namespace Hedra.Engine.Player
 
         public override float AttackResistance { get; set; }
 
-        public float ConsecutiveHitsModifier => Mathf.Clamp(ConsecutiveHits / 90f, 0f, .5f);
-
         public float DamageEquation => UnRandomizedDamageEquation * (.75f + Utils.Rng.NextFloat() * .5f) *
                                        Balancer.HumanoidDamageMultiplier;
 
         public float UnRandomizedDamageEquation => BaseDamageEquation * (1f + ConsecutiveHitsModifier);
-
-        public float BaseDamageEquation =>
-            (Class.BaseDamage + Level * 0.08f) * AttackPower + WeaponModifier(MainWeapon);
 
         public float WeaponModifier(Item Weapon)
         {
@@ -493,54 +399,10 @@ namespace Hedra.Engine.Player
             set => BaseAttackSpeed = value;
         }
 
-        private Item[] GetEquipmentItems()
-        {
-            return new[] { Inventory.Boots, Inventory.Pants, Inventory.Chest, Inventory.Helmet }.Where(E => E != null)
-                .ToArray();
-        }
-
-        public float ArmorDefenseBonus
-        {
-            get
-            {
-                return GetEquipmentItems().Select(E =>
-                        E.HasAttribute(CommonAttributes.Defense) ? E.GetAttribute<float>(CommonAttributes.Defense) : 0)
-                    .Sum();
-            }
-        }
-
         public float XP
         {
             get => _xp;
             set => SetXP(value, false);
-        }
-
-        protected void SetXP(float Amount, bool Silent)
-        {
-            if (Level == MaxLevel) return;
-            _xp = Amount;
-            if (_xp < MaxXP) return;
-
-            _xp = Amount - MaxXP;
-            if (++Level == MaxLevel) _xp = 0;
-
-            Health = MaxHealth;
-            Mana = MaxMana;
-
-            if (!Silent)
-            {
-                var label1 = new TextBillboard(4.0f, Translations.Get("level_up"), Color.Violet,
-                    FontCache.GetBold(48),
-                    () => Position)
-                {
-                    Scalar = .7f,
-                    Vanish = true
-                };
-                SoundPlayer.PlaySound(SoundType.NotificationSound, Position, false, 1, .65f);
-            }
-
-            /* So it keeps looping */
-            if (_xp >= MaxXP) XP = _xp;
         }
 
         public virtual int Gold { get; set; }
@@ -660,5 +522,143 @@ namespace Hedra.Engine.Player
         {
             Fishing?.Invoke(FishedObject);
         }
+
+        private void OnMove()
+        {
+            IsSitting = false;
+        }
+
+        public void UpdateEquipment()
+        {
+            Equipment.Update();
+        }
+
+        private void UpdateStats()
+        {
+            Stamina += Time.DeltaTime * StaminaRegen;
+            if (!IsDead)
+            {
+                if (!_damageHandler.HasBeenAttacked)
+                    Health += HealthRegen * Time.DeltaTime;
+                Mana += ManaRegen * Time.DeltaTime;
+            }
+
+            if (IsSprinting)
+            {
+                if (!_wasSprinting)
+                    AddBonusSpeedWhile(SprintingSpeed, () => IsSprinting);
+                Stamina -= Time.DeltaTime * SprintingCost;
+            }
+
+            _wasSprinting = IsSprinting;
+        }
+
+        private void UpdateHits()
+        {
+            if (!GameSettings.Paused && _consecutiveHitsTimer.Tick()) ConsecutiveHits = 0;
+        }
+
+        public static float NewRandomFactor()
+        {
+            return Utils.Rng.NextFloat() * 1f + .0f;
+        }
+
+        private void ApplyArmorBonuses(Item Item, Func<bool> While)
+        {
+            if (Item == null) return;
+            var bonusArmor = Item.HasAttribute(CommonAttributes.Defense)
+                ? Item.GetAttribute<float>(CommonAttributes.Defense)
+                : 0;
+            var bonusSpeed = Item.HasAttribute(CommonAttributes.MovementSpeed)
+                ? Item.GetAttribute<float>(CommonAttributes.MovementSpeed)
+                : 1;
+            AddBonusSpeedWhile(BaseSpeed * (bonusSpeed - 1f), While);
+            AddBonusArmorWhile(bonusArmor, While);
+        }
+
+        public void AddBonusArmorWhile(float BonusArmor, Func<bool> Condition)
+        {
+            ComponentManager.AddComponentWhile(new ArmorBonusComponent(this, BonusArmor), Condition);
+        }
+
+        private Item[] GetEquipmentItems()
+        {
+            return new[] { Inventory.Boots, Inventory.Pants, Inventory.Chest, Inventory.Helmet }.Where(E => E != null)
+                .ToArray();
+        }
+
+        protected void SetXP(float Amount, bool Silent)
+        {
+            if (Level == MaxLevel) return;
+            _xp = Amount;
+            if (_xp < MaxXP) return;
+
+            _xp = Amount - MaxXP;
+            if (++Level == MaxLevel) _xp = 0;
+
+            Health = MaxHealth;
+            Mana = MaxMana;
+
+            if (!Silent)
+            {
+                var label1 = new TextBillboard(4.0f, Translations.Get("level_up"), Color.Violet,
+                    FontCache.GetBold(48),
+                    () => Position)
+                {
+                    Scalar = .7f,
+                    Vanish = true
+                };
+                SoundPlayer.PlaySound(SoundType.NotificationSound, Position, false, 1, .65f);
+            }
+
+            /* So it keeps looping */
+            if (_xp >= MaxXP) XP = _xp;
+        }
+
+        #region Propierties ( MaxMana, MaxHealth, MaxXp)
+
+        public override float AttackingSpeedModifier => Class.AttackingSpeedModifier;
+
+        public float BaseSpeed => Class.BaseSpeed;
+
+        public float Armor { get; set; }
+
+        public override float MaxHealth => CalculateMaxHealth(Class, Level, RandomFactor) + BonusHealth;
+
+        public static float CalculateMaxHealth(ClassDesign Class, int Level, float RandomFactor)
+        {
+            var maxHealth = Class.BaseHealth + RandomFactor * 20f;
+            for (var i = 1; i < Level; i++) maxHealth += Class.MaxHealthFormula(RandomFactor);
+
+            return maxHealth;
+        }
+
+        public float MaxXP => MaxLevel == Level ? 0 : ClassDesign.XPFormula(Level);
+
+        public float MaxMana
+        {
+            get
+            {
+                var maxMana = 90 + RandomFactor * 60f;
+                for (var i = 1; i < Level; i++) maxMana += Class.MaxManaFormula(RandomFactor);
+
+                return maxMana;
+            }
+        }
+
+        public float ManaRegen
+        {
+            get
+            {
+                var baseRegen = 4 + ManaRegenFactor;
+                return baseRegen * (IsSleeping ? 6.0f : 1.0f);
+            }
+        }
+
+        public float HealthRegen => IsSleeping ? 6.0f * MaxHealth * .005f : 0;
+
+        public float StaminaRegen { get; set; } = 4;
+
+        #endregion
     }
 }

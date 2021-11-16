@@ -1,5 +1,5 @@
 {
-  "Name" : "SkeletonKing",
+  "Name": "SkeletonKing",
   "MaxHealth": 680.0,
   "AttackDamage": 18.0,
   "AttackCooldown": 3.0,
@@ -17,7 +17,7 @@
   ],
   "Drops": [],
   "Model": {
-    "AlignWithTerrain" :  false,
+    "AlignWithTerrain": false,
     "Path": "$DataFile$/Assets/Chr/SkeletonKingIdle.dae",
     "Scale": 0.85,
     "IdleAnimations": [
@@ -36,7 +36,7 @@
       {
         "Path": "$DataFile$/Assets/Chr/NecromancerRaiseSkeleton.dae",
         "Speed": 2.5,
-        "OnAnimationMid" : "CastRaiseSkeleton",
+        "OnAnimationMid": "CastRaiseSkeleton",
         "Chance": 0.15,
         "Range": 64,
         "Cooldown": 12.0
@@ -44,7 +44,7 @@
       {
         "Path": "$DataFile$/Assets/Chr/MageStaffGroundHit.dae",
         "Speed": 2.0,
-        "OnAnimationMid" : "CastLeech",
+        "OnAnimationMid": "CastLeech",
         "Chance": 0.25,
         "Range": 24,
         "Cooldown": 12.0
@@ -52,7 +52,7 @@
       {
         "Path": "$DataFile$/Assets/Chr/Mage-FireRelease.dae",
         "Speed": 2.0,
-        "OnAnimationMid" : "CastBlaze",
+        "OnAnimationMid": "CastBlaze",
         "Chance": 0.075,
         "Range": 24,
         "Cooldown": 8.0
@@ -60,7 +60,7 @@
       {
         "Path": "$DataFile$/Assets/Chr/NecromancerSiphonBlood.dae",
         "Speed": 1.5,
-        "OnAnimationMid" : "CastSiphonBlood",
+        "OnAnimationMid": "CastSiphonBlood",
         "Chance": 0.425,
         "Range": 32,
         "Cooldown": 4.0

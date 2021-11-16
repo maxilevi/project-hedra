@@ -4,12 +4,10 @@ namespace Hedra.Engine.BiomeSystem
     {
         public override void Update()
         {
-            
         }
 
         public override void Dispose()
         {
-
         }
     }
 }

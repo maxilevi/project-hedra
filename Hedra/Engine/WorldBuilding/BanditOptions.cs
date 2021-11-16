@@ -8,16 +8,23 @@ namespace Hedra.Engine.WorldBuilding
 {
     public class BanditOptions
     {
+        private MissionBuilder _questBuilder;
         public Class PossibleClasses { get; set; } = Class.Archer | Class.Mage | Class.Warrior | Class.Rogue;
         public HumanType? ModelType { get; set; }
         public bool Friendly { get; set; }
         public bool IsFromQuest => _questBuilder != null;
-        private MissionBuilder _questBuilder;
 
         public static BanditOptions Default => new BanditOptions
         {
             Friendly = false,
-            ModelType = Utils.Rng.Next(0, 7) == 1 ? HumanType.Gnoll : Utils.Rng.Next(0, 7) == 1 ? (HumanType?) HumanType.Beasthunter : null
+            ModelType = Utils.Rng.Next(0, 7) == 1 ? HumanType.Gnoll :
+                Utils.Rng.Next(0, 7) == 1 ? (HumanType?)HumanType.Beasthunter : null
+        };
+
+        public static BanditOptions Undead => new BanditOptions
+        {
+            Friendly = false,
+            ModelType = Utils.Rng.Next(0, 7) == 1 ? HumanType.VillagerGhost : HumanType.Skeleton
         };
 
         public static BanditOptions Quest(MissionBuilder Builder)
@@ -29,7 +36,7 @@ namespace Hedra.Engine.WorldBuilding
 
         public void ApplyQuestStatus(IHumanoid Humanoid)
         {
-            if(!IsFromQuest) return;
+            if (!IsFromQuest) return;
             Humanoid.Removable = false;
             _questBuilder.MissionDispose += () =>
             {
@@ -38,11 +45,5 @@ namespace Hedra.Engine.WorldBuilding
                 _questBuilder = null;
             };
         }
-
-        public static BanditOptions Undead => new BanditOptions
-        {
-            Friendly = false,
-            ModelType = Utils.Rng.Next(0, 7) == 1 ? HumanType.VillagerGhost : HumanType.Skeleton
-        };
     }
 }

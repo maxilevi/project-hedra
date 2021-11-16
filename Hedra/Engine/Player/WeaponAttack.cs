@@ -8,42 +8,71 @@
  */
 
 using System;
+using System.Numerics;
 using Hedra.Core;
-using Hedra.Engine.Management;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.SkillSystem;
 using Hedra.Rendering;
 using Hedra.Sound;
 using Hedra.WeaponSystem;
-using System.Numerics;
 
 namespace Hedra.Engine.Player
 {
     /// <summary>
-    /// Description of WeaponAttack.
+    ///     Description of WeaponAttack.
     /// </summary>
     public class WeaponAttack : BaseSkill<IPlayer>
     {
         private const float BaseChargeTime = 2.0f;
         private const float ExtraChargeTime = 2.5f;
         private static readonly uint Default = Graphics2D.LoadFromAssets("Assets/Skills/HolderSkill.png");
-
-        public bool DisableWeapon { get; set; }
         private readonly ShiverAnimation _shiverAnimation;
-        private bool _continousAttack;
-        public float Charge { get; private set; }
         private float _chargeTime;
+        private bool _continousAttack;
         private bool _isCharging;
-        private AttackType _type;
         private uint _textureId = Default;
+        private AttackType _type;
 
         public WeaponAttack()
         {
             _shiverAnimation = new ShiverAnimation();
             Level = 1;
         }
-        
+
+        public bool DisableWeapon { get; set; }
+        public float Charge { get; private set; }
+
+        public bool IsCharging
+        {
+            get => _isCharging;
+            set
+            {
+                _isCharging = value;
+                _chargeTime = value ? _chargeTime : 0;
+                Charge = value ? Charge : 0;
+                User.LeftWeapon.Charging = value;
+                if (value) _shiverAnimation.Play(this);
+                else _shiverAnimation.Stop();
+            }
+        }
+
+        protected override bool ShouldDisable => !CanUse();
+        private bool ShouldCharge => AttackType.Secondary == _type || User.LeftWeapon.IsChargeable;
+        public override uint IconId => _textureId;
+
+        protected override bool HasCooldown => AttackType.Secondary == _type
+            ? User.LeftWeapon.SecondaryAttackHasCooldown
+            : User.LeftWeapon.PrimaryAttackHasCooldown;
+
+        public override float ManaCost => 0;
+
+        public override float MaxCooldown => AttackType.Secondary == _type
+            ? User.LeftWeapon.SecondaryAttackCooldown
+            : User.LeftWeapon.PrimaryAttackCooldown;
+
+        public override string Description => string.Empty;
+        public override string DisplayName => string.Empty;
+
         public void SetType(Weapon Weapon, AttackType Type)
         {
             _type = Type;
@@ -51,7 +80,7 @@ namespace Hedra.Engine.Player
                 ? Weapon?.PrimaryAttackIcon ?? WeaponIcons.DefaultAttack
                 : Weapon?.SecondaryAttackIcon ?? WeaponIcons.DefaultAttack;
         }
-        
+
         public override void KeyUp()
         {
             if (!ShouldCharge)
@@ -66,7 +95,7 @@ namespace Hedra.Engine.Player
                     Charge = charge,
                     DamageModifier = AttackOptions.Default.DamageModifier * charge + .15f
                 };
-                if(_type == AttackType.Primary)
+                if (_type == AttackType.Primary)
                     User.LeftWeapon.Attack1(User, options);
                 else
                     User.LeftWeapon.Attack2(User, options);
@@ -86,15 +115,12 @@ namespace Hedra.Engine.Player
                 _continousAttack = true;
             }
         }
-        
+
         public override void Update()
         {
-            if(DisableWeapon) return;
+            if (DisableWeapon) return;
             if (User.IsDead) _continousAttack = false;
-            if(_continousAttack)
-            {
-                User.LeftWeapon.Attack1(User);
-            }
+            if (_continousAttack) User.LeftWeapon.Attack1(User);
             if (IsCharging)
             {
                 User.LeftWeapon.InAttackStance = true;
@@ -105,43 +131,17 @@ namespace Hedra.Engine.Player
                 _shiverAnimation.Update();
                 User.LeftWeapon.ChargingIntensity = Charge;
             }
-            User.LeftWeapon.IsCharging = IsCharging;
-            Tint = IsCharging ? new Vector3(1,0,0) * Charge + Vector3.One * .65f : Vector3.One;
-        }
 
-        public bool IsCharging
-        {
-            get => _isCharging;
-            set
-            {
-                _isCharging = value;
-                _chargeTime = value ? _chargeTime : 0;
-                Charge = value ? Charge : 0;
-                User.LeftWeapon.Charging = value; 
-                if(value) _shiverAnimation.Play(this);
-                else _shiverAnimation.Stop();
-            }
+            User.LeftWeapon.IsCharging = IsCharging;
+            Tint = IsCharging ? new Vector3(1, 0, 0) * Charge + Vector3.One * .65f : Vector3.One;
         }
 
         private bool CanUse()
         {
-            return !DisableWeapon && (!User.IsAttacking && !User.IsEating && User.CanInteract
-                    && (User.LeftWeapon.PrimaryAttackEnabled && _type == AttackType.Primary ||
-                        User.LeftWeapon.SecondaryAttackEnabled && _type == AttackType.Secondary));
+            return !DisableWeapon && !User.IsAttacking && !User.IsEating && User.CanInteract &&
+                   (User.LeftWeapon.PrimaryAttackEnabled && _type == AttackType.Primary ||
+                    User.LeftWeapon.SecondaryAttackEnabled && _type == AttackType.Secondary);
         }
-        
-        protected override bool ShouldDisable => !CanUse();
-        private bool ShouldCharge => AttackType.Secondary == _type || User.LeftWeapon.IsChargeable;
-        public override uint IconId => _textureId;
-        protected override bool HasCooldown => AttackType.Secondary == _type 
-            ? User.LeftWeapon.SecondaryAttackHasCooldown 
-            : User.LeftWeapon.PrimaryAttackHasCooldown;
-        public override float ManaCost => 0;
-        public override float MaxCooldown => AttackType.Secondary == _type 
-            ? User.LeftWeapon.SecondaryAttackCooldown 
-            : User.LeftWeapon.PrimaryAttackCooldown;
-        public override string Description => string.Empty;
-        public override string DisplayName => string.Empty;
     }
 
     public enum AttackType

@@ -1,7 +1,6 @@
 using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using Hedra.Items;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.ItemSystem
 {

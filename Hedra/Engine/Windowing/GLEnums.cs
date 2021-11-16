@@ -36,7 +36,7 @@ namespace Hedra.Engine.Windowing
         SrcAlpha = GLEnum.SrcAlpha,
         OneMinusSrcAlpha = GLEnum.OneMinusSrcAlpha
     }
-    
+
     public enum TextureUnit
     {
         Texture0 = GLEnum.Texture0,
@@ -45,78 +45,79 @@ namespace Hedra.Engine.Windowing
         Texture3 = GLEnum.Texture3,
         Texture4 = GLEnum.Texture4,
         Texture5 = GLEnum.Texture5,
-        Texture6 = GLEnum.Texture6,
+        Texture6 = GLEnum.Texture6
     }
-    
-    public enum QueryTarget    
+
+    public enum QueryTarget
     {
         AnySamplesPassed = GLEnum.AnySamplesPassed
     }
-    
-    public enum FramebufferTarget    
+
+    public enum FramebufferTarget
     {
         Framebuffer = GLEnum.Framebuffer
     }
-    
-    public enum TextureTarget    
+
+    public enum TextureTarget
     {
         Texture2D = GLEnum.Texture2D,
         Texture3D = GLEnum.Texture3D,
         TextureCubeMap = GLEnum.TextureCubeMap,
         TextureCubeMapPositiveX = GLEnum.TextureCubeMapPositiveX,
-        Texture2DMultisample = GLEnum.Texture2DMultisample,
+        Texture2DMultisample = GLEnum.Texture2DMultisample
     }
-    
-    public enum BlendEquationMode    
+
+    public enum BlendEquationMode
     {
         FuncAdd = GLEnum.FuncAdd
     }
-    public enum BufferRangeTarget    
+
+    public enum BufferRangeTarget
     {
         UniformBuffer = GLEnum.UniformBuffer
     }
-    
-    public enum LBlendingFactor    
+
+    public enum LBlendingFactor
     {
     }
-    
-    public enum BufferUsageHint    
+
+    public enum BufferUsageHint
     {
         StaticDraw = GLEnum.StaticDraw,
-        DynamicDraw = GLEnum.DynamicDraw,
+        DynamicDraw = GLEnum.DynamicDraw
     }
-    
+
     [Flags]
-    public enum ClearBufferMask    
+    public enum ClearBufferMask
     {
         ColorBufferBit = GLEnum.ColorBufferBit,
         DepthBufferBit = GLEnum.DepthBufferBit,
         StencilBufferBit = GLEnum.StencilBufferBit
     }
-    
-    public enum BlitFramebufferFilter    
+
+    public enum BlitFramebufferFilter
     {
     }
-    
-    public enum FramebufferErrorCode    
+
+    public enum FramebufferErrorCode
     {
-        FramebufferComplete = GLEnum.FramebufferComplete,
+        FramebufferComplete = GLEnum.FramebufferComplete
     }
-    
+
     public enum ShaderType
     {
         VertexShader = GLEnum.VertexShader,
         FragmentShader = GLEnum.FragmentShader,
         GeometryShader = GLEnum.GeometryShader
     }
-    
-    public enum CullFaceMode    
+
+    public enum CullFaceMode
     {
         Front = GLEnum.Front,
         Back = GLEnum.Back
     }
 
-    public enum EnableCap    
+    public enum EnableCap
     {
         DepthTest = GLEnum.DepthTest,
         DepthClamp = GLEnum.DepthClamp,
@@ -124,8 +125,8 @@ namespace Hedra.Engine.Windowing
         CullFace = GLEnum.CullFace,
         DebugOutput = GLEnum.DebugOutput
     }
-    
-    public enum GetPName    
+
+    public enum GetPName
     {
         MaxGeometryInputComponents = GLEnum.MaxGeometryInputComponents,
         MaxGeometryOutputVertices = GLEnum.MaxGeometryOutputVertices,
@@ -134,23 +135,23 @@ namespace Hedra.Engine.Windowing
         CurrentProgram = GLEnum.CurrentProgram,
         MaxVertexUniformVectors = GLEnum.MaxVertexUniformVectors
     }
-    
-    public enum VertexAttribPointerType    
+
+    public enum VertexAttribPointerType
     {
         Float = GLEnum.Float,
         UnsignedInt = GLEnum.UnsignedInt,
         Int = GLEnum.Int,
-        UnsignedShort = GLEnum.UnsignedShort,
+        UnsignedShort = GLEnum.UnsignedShort
     }
-    
-    public enum GetProgramParameterName    
+
+    public enum GetProgramParameterName
     {
         LinkStatus = GLEnum.LinkStatus,
         InfoLogLength = GLEnum.InfoLogLength,
-        CurrentProgram = GLEnum.CurrentProgram,
+        CurrentProgram = GLEnum.CurrentProgram
     }
-    
-    public enum PixelInternalFormat    
+
+    public enum PixelInternalFormat
     {
         Rgba = GLEnum.Rgba,
         Rgba8 = GLEnum.Rgba8,
@@ -160,11 +161,9 @@ namespace Hedra.Engine.Windowing
         Depth24Stencil8 = GLEnum.Depth24Stencil8,
         Rgb32f = GLEnum.Rgb32f,
         DepthComponent16 = GLEnum.DepthComponent16
-        
-        
     }
-    
-    public enum PixelInternalFormatEXT    
+
+    public enum PixelInternalFormatEXT
     {
     }
 
@@ -172,7 +171,7 @@ namespace Hedra.Engine.Windowing
     {
         CompareRefToTexture = GLEnum.CompareRefToTexture
     }
-    
+
     public enum TextureParameterName
     {
         TextureMagFilter = GLEnum.TextureMagFilter,
@@ -182,16 +181,16 @@ namespace Hedra.Engine.Windowing
         TextureWrapR = GLEnum.TextureWrapR,
         TextureCompareMode = GLEnum.TextureCompareMode
     }
-    
-    public enum PixelType    
+
+    public enum PixelType
     {
         UnsignedByte = GLEnum.UnsignedByte,
         Float = GLEnum.Float,
         Byte = GLEnum.Byte,
         UnsignedInt248 = GLEnum.UnsignedInt248
     }
-    
-    public enum PixelFormat    
+
+    public enum PixelFormat
     {
         Bgra = GLEnum.Bgra,
         DepthComponent = GLEnum.DepthComponent,
@@ -199,50 +198,50 @@ namespace Hedra.Engine.Windowing
         DepthStencil = GLEnum.DepthStencil,
         Red = GLEnum.Red
     }
-    
-    public enum TextureTargetMultisample    
+
+    public enum TextureTargetMultisample
     {
-        Texture2DMultisample = GLEnum.Texture2DMultisample,
+        Texture2DMultisample = GLEnum.Texture2DMultisample
     }
-    
-    public enum MaterialFace    
+
+    public enum MaterialFace
     {
         FrontAndBack = GLEnum.FrontAndBack,
         Front = GLEnum.Front,
         Back = GLEnum.Back
     }
-    
-    public enum PolygonMode    
+
+    public enum PolygonMode
     {
         Line = GLEnum.Line,
         Fill = GLEnum.Fill
     }
-    
-    public enum PrimitiveType    
+
+    public enum PrimitiveType
     {
         Triangles = GLEnum.Triangles,
         Lines = GLEnum.Lines,
         TriangleStrip = GLEnum.TriangleStrip,
-        LineStrip = GLEnum.LineStrip,
+        LineStrip = GLEnum.LineStrip
     }
-    
-    public enum DrawElementsType    
+
+    public enum DrawElementsType
     {
         UnsignedInt = GLEnum.UnsignedInt,
         UnsignedShort = GLEnum.UnsignedShort,
         UnsignedByte = GLEnum.UnsignedByte
     }
-    
-    public enum DrawBuffersEnum    
+
+    public enum DrawBuffersEnum
     {
     }
-    
-    public enum DrawBufferMode    
+
+    public enum DrawBufferMode
     {
-        None = GLEnum.None,
+        None = GLEnum.None
     }
-    
-    public enum FramebufferAttachment    
+
+    public enum FramebufferAttachment
     {
         ColorAttachment0 = GLEnum.ColorAttachment0,
         ColorAttachment1 = GLEnum.ColorAttachment1,
@@ -250,42 +249,42 @@ namespace Hedra.Engine.Windowing
         DepthAttachment = GLEnum.DepthAttachment,
         StencilAttachment = GLEnum.StencilAttachment
     }
-    
-    public enum GenerateMipmapTarget    
+
+    public enum GenerateMipmapTarget
     {
         Texture2D = GLEnum.Texture2D
     }
-    
-    public enum ErrorCode    
+
+    public enum ErrorCode
     {
         NoError = GLEnum.NoError,
         InvalidOperation = GLEnum.InvalidOperation
     }
-    
-    public enum ActiveUniformBlockParameter    
+
+    public enum ActiveUniformBlockParameter
     {
     }
-    
-    public enum ReadBufferMode    
+
+    public enum ReadBufferMode
     {
-        None = GLEnum.None,
+        None = GLEnum.None
     }
-    
-    public enum StringName    
+
+    public enum StringName
     {
         Extensions = GLEnum.Extensions,
-        Vendor =  GLEnum.Vendor,
+        Vendor = GLEnum.Vendor,
         Renderer = GLEnum.Renderer,
         Version = GLEnum.Version,
         ShadingLanguageVersion = GLEnum.ShadingLanguageVersion
     }
-    
-    public enum ShaderParameter    
+
+    public enum ShaderParameter
     {
         CompileStatus = GLEnum.CompileStatus,
         InfoLogLength = GLEnum.InfoLogLength
     }
-    
+
     public enum GetQueryObjectParam
     {
         QueryResult = GLEnum.QueryResult,

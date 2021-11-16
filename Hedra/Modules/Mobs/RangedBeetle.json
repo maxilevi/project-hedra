@@ -1,6 +1,6 @@
 {
   "DisplayName": "Beetle",
-  "Name" : "RangedBeetle",
+  "Name": "RangedBeetle",
   "MaxHealth": 244.0,
   "AttackDamage": 8.0,
   "AttackCooldown": 1.0,

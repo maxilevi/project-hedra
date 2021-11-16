@@ -7,7 +7,7 @@ namespace Hedra.Engine.StructureSystem
     public sealed class InstanceDataChunkWatcher : ChunkWatcher<InstanceData>
     {
         private readonly Func<InstanceData[]> _lambda;
-        
+
         public InstanceDataChunkWatcher(Func<InstanceData[]> Lambda)
         {
             _lambda = Lambda;

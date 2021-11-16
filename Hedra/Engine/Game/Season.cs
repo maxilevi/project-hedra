@@ -11,11 +11,11 @@ namespace Hedra.Engine.Game
             IsHaloween = date.Month == 10;
             IsAprilFools = date.Day == 1 && date.Month == 4;
         }
-        
-        public static bool IsChristmas { get; private set; }
-        
-        public static bool IsHaloween  { get; private set; }
-        
-        public static bool IsAprilFools  { get; private set; }
+
+        public static bool IsChristmas { get; }
+
+        public static bool IsHaloween { get; }
+
+        public static bool IsAprilFools { get; }
     }
 }

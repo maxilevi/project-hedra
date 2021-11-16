@@ -6,21 +6,20 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
 
 namespace Hedra.Engine.EntitySystem
 {
     /// <summary>
-    /// Description of TameComponent.
+    ///     Description of TameComponent.
     /// </summary>
     public class TameComponent : EntityComponent
     {
-        public TameComponent(Entity Parent) : base(Parent){
-        
+        public TameComponent(Entity Parent) : base(Parent)
+        {
         }
-        
-        public override void Update(){
-        
+
+        public override void Update()
+        {
         }
     }
 }

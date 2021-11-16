@@ -40,11 +40,11 @@ vec3 hash(vec3 a);
 void main()
 {
     vec4 normalSample = texture2D(gNormal, TexCoords);
-    if(normalSample.w < 0.01) discard;
+    if (normalSample.w < 0.01) discard;
     Metallic = 1.0;
-    
+
     vec4 positionSample = textureLod(gPosition, TexCoords, int(2.0));
-    
+
     vec3 viewNormal = vec3(normalSample);
     vec3 viewPos = positionSample.xyz;
     vec3 albedo = texture(gFinalImage, vec2(TexCoords.x, 1.0 - TexCoords.y)).rgb;
@@ -101,7 +101,7 @@ vec3 BinarySearch(inout vec3 dir, inout vec3 hitCoord, inout float dDepth)
 
     vec4 projectedCoord;
 
-    for(int i = 0; i < numBinarySearchSteps; i++)
+    for (int i = 0; i < numBinarySearchSteps; i++)
     {
 
         projectedCoord = projection * vec4(hitCoord, 1.0);
@@ -114,7 +114,7 @@ vec3 BinarySearch(inout vec3 dir, inout vec3 hitCoord, inout float dDepth)
         dDepth = hitCoord.z - depth;
 
         dir *= 0.5;
-        if(dDepth > 0.0)
+        if (dDepth > 0.0)
         hitCoord += dir;
         else
         hitCoord -= dir;
@@ -138,7 +138,7 @@ vec4 RayMarch(vec3 dir, inout vec3 hitCoord, out float dDepth)
     vec4 projectedCoord;
 
 
-    for(int i = 0; i < maxSteps; i++)
+    for (int i = 0; i < maxSteps; i++)
     {
         hitCoord += dir;
 
@@ -147,14 +147,14 @@ vec4 RayMarch(vec3 dir, inout vec3 hitCoord, out float dDepth)
         projectedCoord.xy = projectedCoord.xy * 0.5 + 0.5;
 
         depth = textureLod(gPosition, projectedCoord.xy, int(2.0)).z;
-        if(depth > 1000.0)
+        if (depth > 1000.0)
         continue;
 
         dDepth = hitCoord.z - depth;
 
-        if((dir.z - dDepth) < 1.2)
+        if ((dir.z - dDepth) < 1.2)
         {
-            if(dDepth <= 0.0)
+            if (dDepth <= 0.0)
             {
                 vec4 Result;
                 Result = vec4(BinarySearch(dir, hitCoord, dDepth), 1.0);

@@ -1,23 +1,18 @@
-
-
-using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
 
 namespace Hedra.Engine.Rendering.Core
 {
     public class FramebufferHandler
     {
-        private uint _currentlyBound;
-        private FramebufferTarget _currentTarget;
+        public uint Id { get; private set; }
+
+        public FramebufferTarget Target { get; private set; }
 
         public void Bind(FramebufferTarget ObjectTarget, uint ObjectId)
         {
             Renderer.Provider.BindFramebuffer(ObjectTarget, ObjectId);
-            _currentlyBound = ObjectId;
-            _currentTarget = ObjectTarget;
+            Id = ObjectId;
+            Target = ObjectTarget;
         }
-
-        public uint Id => _currentlyBound;
-        public FramebufferTarget Target => _currentTarget;
     }
 }

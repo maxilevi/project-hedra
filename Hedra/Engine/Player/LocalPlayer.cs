@@ -6,45 +6,32 @@
  */
 
 using System;
-using System.Collections.Generic;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Linq;
-using System.Runtime.CompilerServices;
+using System.Numerics;
 using Hedra.Components;
 using Hedra.Core;
 using Hedra.Crafting;
 using Hedra.Engine.ClassSystem;
-using System.Numerics;
-using Hedra.Engine.Bullet;
-using Hedra.Engine.Sound;
-using Hedra.Engine.Rendering;
-using Hedra.Engine.EnvironmentSystem;
-using Hedra.Engine.Generation;
-using Hedra.Engine.WorldBuilding;
-using Hedra.Engine.Management;
-using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Events;
-using Hedra.Engine.Game;
+using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
-using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ItemSystem.FoodSystem;
-using Hedra.Engine.Localization;
+using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player.AbilityTreeSystem;
-using Hedra.Engine.Player.BoatSystem;
 using Hedra.Engine.Player.CraftingSystem;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.MapSystem;
 using Hedra.Engine.Player.QuestSystem;
-using Hedra.Engine.StructureSystem;
 using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.QuestSystem;
-using Hedra.Engine.Rendering.Animation;
-using Hedra.Engine.Rendering.Geometry;
+using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.SkillSystem;
+using Hedra.Engine.StructureSystem;
 using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Items;
@@ -52,7 +39,7 @@ using Hedra.Localization;
 using Hedra.Numerics;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
-using KeyEventArgs = Hedra.Engine.Events.KeyEventArgs;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Player
 {
@@ -60,39 +47,13 @@ namespace Hedra.Engine.Player
     {
         private const int MinimumRespawnDistance = 32;
         private const int MaximumRespawnDistance = 128;
-        public event OnRespawnEvent OnRespawn;
-        public event OnDeadEvent OnDeath;
-
-        public ICamera View { get; }
-        public ChunkLoader Loader { get; }
-        public UserInterface UI { get; set; }
-        public IVehicle Glider { get; }
-        public RealmHandler Realms { get; }
-        private PlayerInventoryInterface InventoryInterface { get; }
-        public QuestInventory Questing { get; }
-        private QuestInterface QuestInterface { get; }
-        public CraftingInventory Crafting { get; }
-        private CraftingInterface CraftingInterface { get; }
-        public MobSpawner Spawner { get; }
-        public IToolbar Toolbar { get; }
-        public IAbilityTree AbilityTree { get; }
-        public IStructureAware StructureAware { get; }
-        public CompanionHandler Companion { get; }
-        public Chat Chat { get; }
-        public Minimap Minimap { get; }
-        public Map Map { get; }
-        public TradeInventory Trade { get; }
-        public override Vector3 LookingDirection => View.LookingDirection;
-        public override float FacingDirection => -(View.TargetYaw * Mathf.Degree - 90f);
-        public CollisionGroup[] NearCollisions => StructureAware.NearCollisions;
-        private IAmbientEffectHandler AmbientEffects { get; }
         private float _acummulativeHealing;
-        private Vector3 _previousPosition;
-        private float _health;
-        private bool _wasSleeping;
-        private bool _enabled;
         private bool _canInteract;
         private DamageComponent _damageHandler;
+        private bool _enabled;
+        private float _health;
+        private Vector3 _previousPosition;
+        private bool _wasSleeping;
 
         public LocalPlayer()
         {
@@ -130,27 +91,34 @@ namespace Hedra.Engine.Player
             UpdateManager.Add(this);
         }
 
-        private void SetupHandlers()
-        {
-            EventDispatcher.RegisterKeyDown(this, delegate(object Sender, KeyEventArgs Args)
-            {
-                if (Controls.Respawn == Args.Key && !GameSettings.Paused && IsDead)
-                    Respawn();
+        public IVehicle Glider { get; }
+        private PlayerInventoryInterface InventoryInterface { get; }
+        private QuestInterface QuestInterface { get; }
+        private CraftingInterface CraftingInterface { get; }
+        public MobSpawner Spawner { get; }
+        public Map Map { get; }
+        private IAmbientEffectHandler AmbientEffects { get; }
 
-                if (Controls.Handlamp == Args.Key && !GameSettings.Paused && CanInteract)
-                {
-                    HandLamp.Enabled = !HandLamp.Enabled;
-                    SoundPlayer.PlaySound(SoundType.NotificationSound, Position);
-                }
-            }, EventPriority.Low);
+        public static IPlayer Instance => GameManager.Player;
+        public event OnRespawnEvent OnRespawn;
+        public event OnDeadEvent OnDeath;
 
-            Kill += A => { A.Victim.ShowText($"+{(int)Math.Ceiling(A.Experience)} XP", Color.Violet, 20); };
-
-            _damageHandler = SearchComponent<DamageComponent>();
-            _damageHandler.PushOnHit = false;
-            _damageHandler.Delete = false;
-            _damageHandler.OnDeadEvent += Args => OnDeath?.Invoke(Args);
-        }
+        public ICamera View { get; }
+        public ChunkLoader Loader { get; }
+        public UserInterface UI { get; set; }
+        public RealmHandler Realms { get; }
+        public QuestInventory Questing { get; }
+        public CraftingInventory Crafting { get; }
+        public IToolbar Toolbar { get; }
+        public IAbilityTree AbilityTree { get; }
+        public IStructureAware StructureAware { get; }
+        public CompanionHandler Companion { get; }
+        public Chat Chat { get; }
+        public Minimap Minimap { get; }
+        public TradeInventory Trade { get; }
+        public override Vector3 LookingDirection => View.LookingDirection;
+        public override float FacingDirection => -(View.TargetYaw * Mathf.Degree - 90f);
+        public CollisionGroup[] NearCollisions => StructureAware.NearCollisions;
 
         public override bool CanInteract
         {
@@ -254,88 +222,7 @@ namespace Hedra.Engine.Player
             set => SetGold(value, false);
         }
 
-        private void SetGold(int Amount, bool Silent)
-        {
-            if (Amount < 0) return;
-            var currentGold = Inventory.Search(I => I.IsGold);
-            if (!Silent)
-            {
-                var isLessThanCurrent = Amount < currentGold.GetAttribute<int>(CommonAttributes.Amount);
-                var sign = isLessThanCurrent ? "-" : "+";
-                this.ShowText(Model.HeadPosition, $"{sign} {Math.Abs(Amount - Gold)} {Translations.Get("quest_gold")}",
-                    isLessThanCurrent ? Color.Red : Color.Gold,
-                    18);
-            }
-
-            if (currentGold == null)
-            {
-                var gold = ItemPool.Grab(ItemType.Gold);
-                gold.SetAttribute(CommonAttributes.Amount, Amount);
-                Inventory.AddItem(gold);
-            }
-            else
-            {
-                currentGold.SetAttribute(CommonAttributes.Amount, Amount);
-            }
-        }
-
         public override Item MainWeapon => Inventory.MainWeapon;
-
-        public void EatFood()
-        {
-            if (IsDead || IsEating || IsKnocked || IsEating || IsAttacking || IsClimbing) return;
-            WasAttacking = false;
-            IsAttacking = false;
-
-            if (Inventory.Food != null)
-            {
-                var food = Inventory.Food;
-                if (CanEat(food, out var shouldSit))
-                {
-                    if (shouldSit) IsSitting = true;
-                    Model.EatFood(food, OnEatingEnd);
-                    Inventory.RemoveItem(food);
-                }
-                else
-                {
-                    MessageDispatcher.ShowNotification(Translations.Get("cant_eat_while_moving"), Color.Red, 2f);
-                }
-            }
-
-            Inventory.UpdateInventory();
-        }
-
-        private bool CanEat(Item Food, out bool ShouldSit)
-        {
-            ShouldSit = Food.HasAttribute(CommonAttributes.EatSitting)
-                        && Food.GetAttribute<bool>(CommonAttributes.EatSitting);
-            return ShouldSit && !IsMoving || !ShouldSit;
-        }
-
-        private void OnEatingEnd(Item Food)
-        {
-            FoodHandler.ApplyEffects(Food, this);
-        }
-
-        private void ManageDeath()
-        {
-            if (_health <= 0f)
-            {
-                IsDead = true;
-                RoutineManager.StartRoutine(_damageHandler.DisposeCoroutine);
-                Executer.ExecuteOnMainThread(delegate
-                {
-                    MessageDispatcher.ShowMessageWhile(Translations.Get("to_respawn", Controls.Respawn), Color.White,
-                        () => Health <= 0 && !GameManager.InStartMenu);
-                });
-            }
-            else
-            {
-                if (!IsDead) return;
-                IsDead = false;
-                Model?.Recompose();
-            }
-        }
 
         public override float Health
         {
@@ -367,8 +254,6 @@ namespace Hedra.Engine.Player
                 Model.Enabled = value;
             }
         }
-
-        public static IPlayer Instance => GameManager.Player;
 
         public override bool IsGliding => Glider.Enabled;
 
@@ -495,6 +380,116 @@ namespace Hedra.Engine.Player
             return (T)Toolbar.Skills.First(S => S is T);
         }
 
+        public void Dispose()
+        {
+            UpdateManager.Remove(this);
+            DrawManager.Remove(this);
+            EventDispatcher.UnregisterKeyDown(this);
+        }
+
+        private void SetupHandlers()
+        {
+            EventDispatcher.RegisterKeyDown(this, delegate(object Sender, KeyEventArgs Args)
+            {
+                if (Controls.Respawn == Args.Key && !GameSettings.Paused && IsDead)
+                    Respawn();
+
+                if (Controls.Handlamp == Args.Key && !GameSettings.Paused && CanInteract)
+                {
+                    HandLamp.Enabled = !HandLamp.Enabled;
+                    SoundPlayer.PlaySound(SoundType.NotificationSound, Position);
+                }
+            }, EventPriority.Low);
+
+            Kill += A => { A.Victim.ShowText($"+{(int)Math.Ceiling(A.Experience)} XP", Color.Violet, 20); };
+
+            _damageHandler = SearchComponent<DamageComponent>();
+            _damageHandler.PushOnHit = false;
+            _damageHandler.Delete = false;
+            _damageHandler.OnDeadEvent += Args => OnDeath?.Invoke(Args);
+        }
+
+        private void SetGold(int Amount, bool Silent)
+        {
+            if (Amount < 0) return;
+            var currentGold = Inventory.Search(I => I.IsGold);
+            if (!Silent)
+            {
+                var isLessThanCurrent = Amount < currentGold.GetAttribute<int>(CommonAttributes.Amount);
+                var sign = isLessThanCurrent ? "-" : "+";
+                this.ShowText(Model.HeadPosition, $"{sign} {Math.Abs(Amount - Gold)} {Translations.Get("quest_gold")}",
+                    isLessThanCurrent ? Color.Red : Color.Gold,
+                    18);
+            }
+
+            if (currentGold == null)
+            {
+                var gold = ItemPool.Grab(ItemType.Gold);
+                gold.SetAttribute(CommonAttributes.Amount, Amount);
+                Inventory.AddItem(gold);
+            }
+            else
+            {
+                currentGold.SetAttribute(CommonAttributes.Amount, Amount);
+            }
+        }
+
+        public void EatFood()
+        {
+            if (IsDead || IsEating || IsKnocked || IsEating || IsAttacking || IsClimbing) return;
+            WasAttacking = false;
+            IsAttacking = false;
+
+            if (Inventory.Food != null)
+            {
+                var food = Inventory.Food;
+                if (CanEat(food, out var shouldSit))
+                {
+                    if (shouldSit) IsSitting = true;
+                    Model.EatFood(food, OnEatingEnd);
+                    Inventory.RemoveItem(food);
+                }
+                else
+                {
+                    MessageDispatcher.ShowNotification(Translations.Get("cant_eat_while_moving"), Color.Red, 2f);
+                }
+            }
+
+            Inventory.UpdateInventory();
+        }
+
+        private bool CanEat(Item Food, out bool ShouldSit)
+        {
+            ShouldSit = Food.HasAttribute(CommonAttributes.EatSitting)
+                        && Food.GetAttribute<bool>(CommonAttributes.EatSitting);
+            return ShouldSit && !IsMoving || !ShouldSit;
+        }
+
+        private void OnEatingEnd(Item Food)
+        {
+            FoodHandler.ApplyEffects(Food, this);
+        }
+
+        private void ManageDeath()
+        {
+            if (_health <= 0f)
+            {
+                IsDead = true;
+                RoutineManager.StartRoutine(_damageHandler.DisposeCoroutine);
+                Executer.ExecuteOnMainThread(delegate
+                {
+                    MessageDispatcher.ShowMessageWhile(Translations.Get("to_respawn", Controls.Respawn), Color.White,
+                        () => Health <= 0 && !GameManager.InStartMenu);
+                });
+            }
+            else
+            {
+                if (!IsDead) return;
+                IsDead = false;
+                Model?.Recompose();
+            }
+        }
+
         public static bool CreatePlayer(string Name, ClassDesign ClassType, CustomizationData Customization)
         {
             if (Name == string.Empty)
@@ -549,13 +544,6 @@ namespace Hedra.Engine.Player
             var recipes = ClassType.StartingRecipes;
             for (var i = 0; i < recipes.Length; ++i) data.AddRecipe(recipes[i].Name);
             return data;
-        }
-
-        public void Dispose()
-        {
-            UpdateManager.Remove(this);
-            DrawManager.Remove(this);
-            EventDispatcher.UnregisterKeyDown(this);
         }
     }
 }

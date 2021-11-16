@@ -1,14 +1,11 @@
-using Hedra.Engine.Generation.ChunkSystem;
-using Hedra.Engine.Rendering;
-using Hedra.Rendering;
 using System.Numerics;
+using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.Player.MapSystem
 {
     public class MapBaseItem
     {
-        public ObjectMesh Mesh { get; set; }
-
         public MapBaseItem(int MapSize)
         {
             HasChunk = new bool[MapSize * MapSize];
@@ -18,6 +15,8 @@ namespace Hedra.Engine.Player.MapSystem
         {
             this.Mesh = Mesh;
         }
+
+        public ObjectMesh Mesh { get; set; }
 
         public Vector2 Coordinates { get; set; }
         public bool[] HasChunk { get; set; }

@@ -1,6 +1,4 @@
 ﻿using System;
-using Hedra.BiomeSystem;
-using Hedra.Rendering;
 using System.Numerics;
 
 namespace Hedra.Engine.PlantSystem

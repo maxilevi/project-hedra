@@ -17,7 +17,8 @@ namespace Hedra.Engine.Player.Networking
         {
         }
 
-        protected override HumanoidModelAnimationState BuildAnimationHandler(IHumanoid Humanoid, HumanoidModelTemplate Template)
+        protected override HumanoidModelAnimationState BuildAnimationHandler(IHumanoid Humanoid,
+            HumanoidModelTemplate Template)
         {
             return new NetworkHumanoidModelAnimationState(Humanoid, this, Template);
         }

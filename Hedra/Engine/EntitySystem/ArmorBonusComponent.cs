@@ -12,11 +12,13 @@ namespace Hedra.Engine.EntitySystem
             Parent.Armor += _armorBonus;
         }
 
-        public override void Update(){}
+        public override void Update()
+        {
+        }
 
         public override void Dispose()
         {
-            if(Disposed) return;
+            if (Disposed) return;
             Parent.Armor -= _armorBonus;
             base.Dispose();
         }

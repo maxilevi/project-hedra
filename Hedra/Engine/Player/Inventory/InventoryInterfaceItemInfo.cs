@@ -1,52 +1,39 @@
-using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using System.Globalization;
 using System.Linq;
+using System.Numerics;
 using System.Text;
-using Hedra.Core;
-using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Game;
-using Hedra.Items;
 using Hedra.Localization;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-using System.Numerics;
-using Hedra.Numerics;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Player.Inventory
 {
     public class InventoryInterfaceItemInfo
     {
-        public static uint DefaultId { get; } = Graphics2D.LoadFromAssets("Assets/UI/InventoryItemInfo.png");
-
-        public static Vector2 DefaultSize { get; } =
-            Graphics2D.SizeFromAssets("Assets/UI/InventoryItemInfo.png").As1920x1080() *
-            InventoryArrayInterface.UISizeMultiplier;
-
-        protected Item CurrentItem;
-        protected readonly BackgroundTexture BackgroundTexture;
-        protected readonly BackgroundTexture ItemTexture;
-        protected readonly RenderableText ItemText;
-        protected readonly RenderableText ItemDescription;
-        protected readonly RenderableText ItemAttributes;
-        protected readonly BackgroundTexture HintTexture;
-        protected readonly GUIText HintText;
-        private readonly Vector2 _targetResolution = new Vector2(1366, 705);
-        protected readonly Panel Panel;
-        private readonly Vector2 _weaponItemAttributesPosition;
-        private readonly Vector2 _weaponItemTexturePosition;
-        protected readonly Vector2 WeaponItemTextureScale;
         private readonly Vector2 _nonWeaponItemAttributesPosition;
         private readonly Vector2 _nonWeaponItemTexturePosition;
+        private readonly Vector2 _targetResolution = new Vector2(1366, 705);
+        private readonly Vector2 _weaponItemAttributesPosition;
+        private readonly Vector2 _weaponItemTexturePosition;
+        protected readonly BackgroundTexture BackgroundTexture;
+        protected readonly GUIText HintText;
+        protected readonly BackgroundTexture HintTexture;
+        protected readonly RenderableText ItemAttributes;
+        protected readonly RenderableText ItemDescription;
+        protected readonly RenderableText ItemText;
+        protected readonly BackgroundTexture ItemTexture;
+        protected readonly Panel Panel;
+        protected readonly Vector2 WeaponItemTextureScale;
         private ObjectMesh _currentItemMesh;
         private Vector3 _currentItemMeshSize;
         private bool _enabled;
+
+        protected Item CurrentItem;
 
         public InventoryInterfaceItemInfo(float Scale = 1f)
         {
@@ -91,6 +78,45 @@ namespace Hedra.Engine.Player.Inventory
             _weaponItemAttributesPosition = ItemAttributes.Position;
             _weaponItemTexturePosition = ItemTexture.Position;
             WeaponItemTextureScale = ItemTexture.Scale;
+        }
+
+        public static uint DefaultId { get; } = Graphics2D.LoadFromAssets("Assets/UI/InventoryItemInfo.png");
+
+        public static Vector2 DefaultSize { get; } =
+            Graphics2D.SizeFromAssets("Assets/UI/InventoryItemInfo.png").As1920x1080() *
+            InventoryArrayInterface.UISizeMultiplier;
+
+        protected virtual float DescriptionHeight => ItemAttributes.UIText.Scale.Y;
+
+        public bool Showing => CurrentItem != null;
+
+        public Vector2 Scale => BackgroundTexture.Scale;
+
+        public virtual Vector2 Position
+        {
+            get => BackgroundTexture.Position;
+            set
+            {
+                var position = BackgroundTexture.Position;
+                var elements = Panel.Elements.ToArray();
+                for (var i = 0; i < elements.Length; ++i)
+                    elements[i].Position = elements[i].Position - position + value;
+            }
+        }
+
+        public virtual bool Enabled
+        {
+            get => _enabled;
+            set
+            {
+                _enabled = value;
+                if (_enabled && CurrentItem != null)
+                    Panel.Enable();
+                else
+                    Panel.Disable();
+                HintText.Disable();
+                HintTexture.Disable();
+            }
         }
 
         protected virtual void UpdateView()
@@ -161,8 +187,6 @@ namespace Hedra.Engine.Player.Inventory
             Element.Scale *= 1 - DescriptionHeight / WeaponItemTextureScale.Y;
         }
 
-        protected virtual float DescriptionHeight => ItemAttributes.UIText.Scale.Y;
-
         protected void AddEquipmentLayout()
         {
             MakeColorOfTier();
@@ -229,37 +253,6 @@ namespace Hedra.Engine.Player.Inventory
             CurrentItem = null;
             Panel.Disable();
             Enabled = false;
-        }
-
-        public bool Showing => CurrentItem != null;
-
-        public Vector2 Scale => BackgroundTexture.Scale;
-
-        public virtual Vector2 Position
-        {
-            get => BackgroundTexture.Position;
-            set
-            {
-                var position = BackgroundTexture.Position;
-                var elements = Panel.Elements.ToArray();
-                for (var i = 0; i < elements.Length; ++i)
-                    elements[i].Position = elements[i].Position - position + value;
-            }
-        }
-
-        public virtual bool Enabled
-        {
-            get => _enabled;
-            set
-            {
-                _enabled = value;
-                if (_enabled && CurrentItem != null)
-                    Panel.Enable();
-                else
-                    Panel.Disable();
-                HintText.Disable();
-                HintTexture.Disable();
-            }
         }
     }
 }

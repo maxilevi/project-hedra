@@ -12,11 +12,11 @@ using System.Numerics;
 namespace Hedra.Engine.Rendering
 {
     /// <summary>
-    /// An object which represents the rendering information of a cube
+    ///     An object which represents the rendering information of a cube
     /// </summary>
     public class CubeData : DataContainer
     {
-        public static uint[][] IndexArray = new uint[][]
+        public static uint[][] IndexArray =
         {
             new uint[] { 4, 5, 6, 6, 7, 4 },
             new uint[] { 8, 9, 10, 10, 11, 8 }, // top
@@ -34,35 +34,6 @@ namespace Hedra.Engine.Rendering
                 0, 1, 2, 2, 3, 0
             }
         };
-
-        private void Initialize()
-        {
-            Normals = new Vector3[]
-            {
-                new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1),
-                new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0),
-                new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0),
-                new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0),
-                new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0),
-                new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1)
-            };
-
-            VerticesArrays = new Vector3[]
-            {
-                new Vector3(1, 1, 1), new Vector3(0, 1, 1), new Vector3(0, 0, 1),
-                new Vector3(1, 0, 1), // v0,v1,v2,v3 (front)
-                new Vector3(1, 1, 1), new Vector3(1, 0, 1), new Vector3(1, 0, 0),
-                new Vector3(1, 1, 0), // v0,v3,v4,v5 (right)
-                new Vector3(1, 1, 1), new Vector3(1, 1, 0), new Vector3(0, 1, 0),
-                new Vector3(0, 1, 1), // v0,v5,v6,v1 (top)
-                new Vector3(0, 1, 1), new Vector3(0, 1, 0), new Vector3(0, 0, 0),
-                new Vector3(0, 0, 1), // v1,v6,v7,v2 (left)
-                new Vector3(0, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 1),
-                new Vector3(0, 0, 1), // v7,v4,v3,v2 (bottom)
-                new Vector3(1, 0, 0), new Vector3(0, 0, 0), new Vector3(0, 1, 0), new Vector3(1, 1, 0)
-            };
-            HasNormals = true;
-        }
 
         public CubeData()
         {
@@ -96,6 +67,35 @@ namespace Hedra.Engine.Rendering
             TransformVerts(Position);
         }
 
+        private void Initialize()
+        {
+            Normals = new[]
+            {
+                new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1),
+                new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0),
+                new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0),
+                new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0),
+                new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0),
+                new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1)
+            };
+
+            VerticesArrays = new[]
+            {
+                new Vector3(1, 1, 1), new Vector3(0, 1, 1), new Vector3(0, 0, 1),
+                new Vector3(1, 0, 1), // v0,v1,v2,v3 (front)
+                new Vector3(1, 1, 1), new Vector3(1, 0, 1), new Vector3(1, 0, 0),
+                new Vector3(1, 1, 0), // v0,v3,v4,v5 (right)
+                new Vector3(1, 1, 1), new Vector3(1, 1, 0), new Vector3(0, 1, 0),
+                new Vector3(0, 1, 1), // v0,v5,v6,v1 (top)
+                new Vector3(0, 1, 1), new Vector3(0, 1, 0), new Vector3(0, 0, 0),
+                new Vector3(0, 0, 1), // v1,v6,v7,v2 (left)
+                new Vector3(0, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 1),
+                new Vector3(0, 0, 1), // v7,v4,v3,v2 (bottom)
+                new Vector3(1, 0, 0), new Vector3(0, 0, 0), new Vector3(0, 1, 0), new Vector3(1, 1, 0)
+            };
+            HasNormals = true;
+        }
+
         public static CubeData CutCubeFace(CubeData Data, Face Type)
         {
             Data.AddFace(Type);
@@ -122,7 +122,7 @@ namespace Hedra.Engine.Rendering
 
         public static Vector4[] CreateCubeColor(Vector4 Color)
         {
-            return new Vector4[]
+            return new[]
             {
                 Color, Color, Color, Color,
                 Color, Color, Color, Color,

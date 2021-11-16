@@ -1,29 +1,26 @@
 using System;
-using Hedra.Core;
-using Hedra.Engine.EnvironmentSystem;
-using Hedra.Engine.Game;
+using System.Numerics;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Game;
-using Hedra.Sound;
-using System.Numerics;
 using Hedra.Numerics;
+using Hedra.Sound;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
     public class GraveyardAmbientHandler : IDisposable
     {
+        private readonly Graveyard _parent;
         private readonly ParticleSystem _particles;
         private readonly int _passedTime = 0;
-        private bool _restoreSoundPlayed;
-        private readonly Graveyard _parent;
-        private bool _inCementery;
         private float _cementeryTime;
-        private float _targetCementeryTime;
+        private bool _inCementery;
         private float _oldCementeryTime;
         private float _oldTime;
+        private bool _restoreSoundPlayed;
         private bool _shouldUpdateTime;
-        private TimeHandler _timeHandler;
-        
+        private float _targetCementeryTime;
+        private readonly TimeHandler _timeHandler;
+
         public GraveyardAmbientHandler(Graveyard Parent)
         {
             _timeHandler = new TimeHandler(GraveyardDesign.GraveyardSkyTime, SoundType.DarkSound);
@@ -31,65 +28,57 @@ namespace Hedra.Engine.StructureSystem.Overworld
             _particles = new ParticleSystem();
         }
 
+        public void Dispose()
+        {
+            _particles.Dispose();
+            _timeHandler.Dispose();
+        }
+
         public void Update()
         {
-            this.HandleSky();
-            this.HandleParticles();
+            HandleSky();
+            HandleParticles();
         }
-             
+
         private void HandleSky()
         {
             var wasInCementery = _inCementery;
-            
+
             _inCementery = (_parent.Position.Xz() - GameManager.Player.Position.Xz()).LengthSquared() <
-                           _parent.Radius * _parent.Radius * .5f * .5f && !_parent.Completed;
-            
-            if(_inCementery && !wasInCementery)
-            {
+                _parent.Radius * _parent.Radius * .5f * .5f && !_parent.Completed;
+
+            if (_inCementery && !wasInCementery)
                 _timeHandler.Apply();
-            }
-            else if (!_inCementery && wasInCementery)
-            {
-                _timeHandler.Remove();
-            }
+            else if (!_inCementery && wasInCementery) _timeHandler.Remove();
 
             _timeHandler.Update();
         }
-        
+
         private void HandleParticles()
         {
             if (_parent.Completed && !_restoreSoundPlayed)
             {
                 _restoreSoundPlayed = true;
                 SoundPlayer.PlaySound(SoundType.DarkSound, GameManager.Player.Position);
-
             }
 
-            if (!_parent.Completed &&  (_parent.Position - GameManager.Player.Position).Xz().LengthSquared() 
+            if (!_parent.Completed && (_parent.Position - GameManager.Player.Position).Xz().LengthSquared()
                 < _parent.Radius * _parent.Radius)
-            {
-            
-                if(_passedTime % 2 == 0){
+                if (_passedTime % 2 == 0)
+                {
                     _particles.Color = Particle3D.AshColor;
                     _particles.VariateUniformly = false;
                     _particles.Position = GameManager.Player.Position + Vector3.UnitY * 1f;
                     _particles.Scale = Vector3.One * .85f;
-                    _particles.ScaleErrorMargin = new Vector3(.05f,.05f,.05f);
+                    _particles.ScaleErrorMargin = new Vector3(.05f, .05f, .05f);
                     _particles.Direction = Vector3.UnitY * 0f;
                     _particles.ParticleLifetime = 2f;
                     _particles.GravityEffect = -0.000f;
                     _particles.PositionErrorMargin = new Vector3(64f, 12f, 64f);
                     _particles.Grayscale = true;
-                    
+
                     _particles.Emit();
                 }
-            }
-        }
-
-        public void Dispose()
-        {
-            _particles.Dispose();
-            _timeHandler.Dispose();
         }
     }
 }

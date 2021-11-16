@@ -1,8 +1,8 @@
 using System.Collections.Generic;
+using System.Numerics;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Rendering;
-using System.Numerics;
 
 namespace Hedra.Engine.CacheSystem
 {
@@ -11,9 +11,11 @@ namespace Hedra.Engine.CacheSystem
         public static ICacheProvider Provider { get; set; } = new CacheProvider();
 
         public static Dictionary<object, List<float>> CachedExtradata => Provider.CachedExtradata;
-        
+
         public static Dictionary<object, List<Vector4>> CachedColors => Provider.CachedColors;
-        
+
+        public static int UsedBytes => Provider.UsedBytes;
+
         public static void Load()
         {
             Provider.Load();
@@ -23,7 +25,7 @@ namespace Hedra.Engine.CacheSystem
         {
             return Provider.GetModel(Item.ToString().ToLowerInvariant());
         }
-        
+
         public static VertexData GetPart(CacheItem Item, VertexData Model)
         {
             return Provider.GetPart(Item.ToString().ToLowerInvariant(), Model);
@@ -53,7 +55,5 @@ namespace Hedra.Engine.CacheSystem
         {
             Provider.Check(Data);
         }
-
-        public static int UsedBytes => Provider.UsedBytes;
     }
 }

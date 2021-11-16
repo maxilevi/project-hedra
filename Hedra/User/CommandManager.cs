@@ -8,15 +8,16 @@
  */
 
 using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Globalization;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
-using Hedra.AISystem;
+using BulletSharp;
 using Hedra.AISystem.Humanoid;
+using Hedra.API;
 using Hedra.Components;
 using Hedra.Components.Effects;
+using Hedra.Engine;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
@@ -26,29 +27,25 @@ using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Networking;
 using Hedra.Engine.Player;
-using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Scripting;
+using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.Overworld;
+using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.Engine.WorldBuilding;
+using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Items;
 using Hedra.Mission;
-using System.Numerics;
-using BulletSharp;
-using Hedra.Engine;
-using Hedra.Engine.StructureSystem;
-using Hedra.Engine.StructureSystem.VillageSystem;
-using Hedra.EntitySystem;
 using Hedra.Numerics;
 using Hedra.Sound;
-using Microsoft.Scripting.Utils;
 using Silk.NET.Windowing;
+using SixLabors.ImageSharp;
 using TaskScheduler = Hedra.Core.TaskScheduler;
 
 namespace Hedra.User
 {
     /// <summary>
-    /// Description of CommandManager.
+    ///     Description of CommandManager.
     /// </summary>
     public static class CommandManager
     {
@@ -163,7 +160,7 @@ namespace Hedra.User
                             BindingFlags.Public | BindingFlags.Static);
                         if (Parts.Length > 2)
                             prop.SetValue(null, Convert.ChangeType(Parts[2], prop.PropertyType), null);
-                        Result = $"{variable} = {prop.GetValue(null, null).ToString()}";
+                        Result = $"{variable} = {prop.GetValue(null, null)}";
                         return true;
                     }
                     case "spawningEffect":
@@ -448,7 +445,7 @@ namespace Hedra.User
                             {
                                 Friendly = false,
                                 ModelType = null,
-                                PossibleClasses = API.Class.Mage
+                                PossibleClasses = Class.Mage
                             });
                     return true;
                 }

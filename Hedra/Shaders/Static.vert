@@ -25,11 +25,11 @@ out vec3 worldColor;
 out vec3 unitToLight;
 
 layout(std140) uniform FogSettings {
-	vec4 U_BotColor;
-	vec4 U_TopColor;
-	float MinDist;
-	float MaxDist;	
-	float U_Height;
+    vec4 U_BotColor;
+    vec4 U_TopColor;
+    float MinDist;
+    float MaxDist;
+    float U_Height;
 };
 
 uniform vec3 PlayerPosition;
@@ -49,21 +49,21 @@ vec3 CalculateColor();
 
 float when_neq(float x, float y)
 {
-	return abs(sign(x - y));
+    return abs(sign(x - y));
 }
 
 float when_lt(float x, float y)
 {
-	return max(sign(y - x), 0.0);
+    return max(sign(y - x), 0.0);
 }
 
 float when_ge(float x, float y)
 {
-	return 1.0 - when_lt(x, y);
+    return 1.0 - when_lt(x, y);
 }
 
 float not(float x){
-	return 1.0 - x;
+    return 1.0 - x;
 }
 
 vec2 Unpack(float inp, int prec)
@@ -78,62 +78,62 @@ vec2 Unpack(float inp, int prec)
 
 void main()
 {
-    vec4 linear_color = srgb_to_linear(InColor); 
-	Config = InColor.a;
-	vec4 Vertex = vec4((InVertex + BakedOffset) * Scale + Offset, 1.0);
-	base_vertex_position = Vertex.xyz;
-	
-	float config_set = when_ge(InColor.a, 0.0) * TimeFancyShadowDistanceUseShadows.y;
-	vec2 Unpacked = Unpack(InColor.a, int(2048.0));
-	float Addon = config_set * ( cos(TimeFancyShadowDistanceUseShadows.x + Unpacked.y * 8.0) +0.8) * 0.715 * Unpacked.x;
+    vec4 linear_color = srgb_to_linear(InColor);
+    Config = InColor.a;
+    vec4 Vertex = vec4((InVertex + BakedOffset) * Scale + Offset, 1.0);
+    base_vertex_position = Vertex.xyz;
 
-	float invert_uk = when_lt(Unpacked.y, 0.5);
-	Vertex.x += invert_uk * Addon * Scale.x;
-	Vertex.z -= invert_uk * Addon * Scale.z;
-	Vertex.x -= not(invert_uk) * Addon * Scale.x;
-	Vertex.z += not(invert_uk) * Addon * Scale.z;
+    float config_set = when_ge(InColor.a, 0.0) * TimeFancyShadowDistanceUseShadows.y;
+    vec2 Unpacked = Unpack(InColor.a, int(2048.0));
+    float Addon = config_set * (cos(TimeFancyShadowDistanceUseShadows.x + Unpacked.y * 8.0) +0.8) * 0.715 * Unpacked.x;
 
-	pass_height = U_Height;
-	pass_botColor = U_BotColor;
-	pass_topColor = U_TopColor;
-	
-	float DistanceToCamera = length(vec3(PlayerPosition - Vertex.xyz).xz);
-	Visibility = clamp( (MaxDist - DistanceToCamera) / (MaxDist - MinDist), 0.0, 1.0);
-	DitherVisibility = clamp( (MaxDitherDistance - DistanceToCamera) / (MaxDitherDistance - MinDitherDistance), 0.0, 1.0);
+    float invert_uk = when_lt(Unpacked.y, 0.5);
+    Vertex.x += invert_uk * Addon * Scale.x;
+    Vertex.z -= invert_uk * Addon * Scale.z;
+    Vertex.x -= not(invert_uk) * Addon * Scale.x;
+    Vertex.z += not(invert_uk) * Addon * Scale.z;
 
-	Vertex = TransformationMatrix * Vertex;
-	gl_Position = _modelViewProjectionMatrix * Vertex;
+    pass_height = U_Height;
+    pass_botColor = U_BotColor;
+    pass_topColor = U_TopColor;
 
-	use_shadows = when_neq(TimeFancyShadowDistanceUseShadows.w, 0.0) * when_neq(InColor.a, NoShadowsFlag);
+    float DistanceToCamera = length(vec3(PlayerPosition - Vertex.xyz).xz);
+    Visibility = clamp((MaxDist - DistanceToCamera) / (MaxDist - MinDist), 0.0, 1.0);
+    DitherVisibility = clamp((MaxDitherDistance - DistanceToCamera) / (MaxDitherDistance - MinDitherDistance), 0.0, 1.0);
+
+    Vertex = TransformationMatrix * Vertex;
+    gl_Position = _modelViewProjectionMatrix * Vertex;
+
+    use_shadows = when_neq(TimeFancyShadowDistanceUseShadows.w, 0.0) * when_neq(InColor.a, NoShadowsFlag);
     shadow_quality = TimeFancyShadowDistanceUseShadows.w;
-	float ShadowDist = DistanceToCamera - (TimeFancyShadowDistanceUseShadows.z - ShadowTransition);
-	ShadowDist /= ShadowTransition;
-	Coords = use_shadows * ShadowMVP * vec4(InVertex,1.0);
-	Coords.w = use_shadows * clamp(1.0 - ShadowDist, 0.0, 1.0);
-	
-	InPos = Vertex;
-	InNorm = vec4(InNormal, 1.0);
+    float ShadowDist = DistanceToCamera - (TimeFancyShadowDistanceUseShadows.z - ShadowTransition);
+    ShadowDist /= ShadowTransition;
+    Coords = use_shadows * ShadowMVP * vec4(InVertex, 1.0);
+    Coords.w = use_shadows * clamp(1.0 - ShadowDist, 0.0, 1.0);
+
+    InPos = Vertex;
+    InNorm = vec4(InNormal, 1.0);
     raw_color = linear_color;
-	unitToLight = normalize(LightPosition);
-	worldColor = CalculateColor();
+    unitToLight = normalize(LightPosition);
+    worldColor = CalculateColor();
 }
 
 vec3 CalculateColor()
 {
-	//Lighting
-	vec3 unitNormal = normalize(InNorm.xyz);
-	vec3 unitToCamera = normalize((inverse(_modelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0) ).xyz - InPos.xyz);
-	
-	vec4 InputColor = vec4(raw_color.xyz, 1.0);
-	if(Config - NoHighlightFlag > FlagEpsilon)
-	{
-		InputColor = apply_highlights(InputColor, InPos.xyz);
-	}
+    //Lighting
+    vec3 unitNormal = normalize(InNorm.xyz);
+    vec3 unitToCamera = normalize((inverse(_modelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0)).xyz - InPos.xyz);
 
-	Ambient += Config - NoShadowsFlag < FlagEpsilon ? 0.25 : 0.0;
-	vec4 Rim = rim(InputColor.rgb, LightColor, unitToCamera, unitNormal);
-	vec4 Diffuse = diffuse(unitToLight, unitNormal, LightColor);
-	vec4 realColor = Rim + Diffuse * InputColor;
-	
-	return realColor.xyz;
+    vec4 InputColor = vec4(raw_color.xyz, 1.0);
+    if (Config - NoHighlightFlag > FlagEpsilon)
+    {
+        InputColor = apply_highlights(InputColor, InPos.xyz);
+    }
+
+    Ambient += Config - NoShadowsFlag < FlagEpsilon ? 0.25 : 0.0;
+    vec4 Rim = rim(InputColor.rgb, LightColor, unitToCamera, unitNormal);
+    vec4 Diffuse = diffuse(unitToLight, unitNormal, LightColor);
+    vec4 realColor = Rim + Diffuse * InputColor;
+
+    return realColor.xyz;
 }

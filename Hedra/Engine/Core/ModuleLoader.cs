@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Hedra.API;
-using Hedra.Engine.ClassSystem.Templates;
 using Hedra.Engine.IO;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Framework;
@@ -16,20 +15,22 @@ namespace Hedra.Engine.Core
         void DoLoadModules(string AppPath);
     }
 
-    public abstract class ModuleLoader<T, U> : ModuleLoader<string, T, U> where T : class, IModuleLoader, new() where U : INamedTemplate
+    public abstract class ModuleLoader<T, U> : ModuleLoader<string, T, U>
+        where T : class, IModuleLoader, new() where U : INamedTemplate
     {
         protected override string ParseKey(string Name)
         {
             return Name.ToLowerInvariant();
         }
     }
-    
-    public abstract class ModuleLoader<S, T, U> : Singleton<T>, IModuleLoader where T : class, IModuleLoader, new() where U : INamedTemplate
+
+    public abstract class ModuleLoader<S, T, U> : Singleton<T>, IModuleLoader
+        where T : class, IModuleLoader, new() where U : INamedTemplate
     {
         protected readonly object Lock = new object();
         protected readonly Dictionary<S, U> Templates = new Dictionary<S, U>();
         protected abstract string FolderPrefix { get; }
-        
+
         public void DoLoadModules(string AppPath)
         {
             lock (Lock)
@@ -39,10 +40,7 @@ namespace Hedra.Engine.Core
                     SearchOption.AllDirectories);
                 var mods = ModificationsLoader.Get($"/{FolderPrefix}/");
                 var templates = Load<U>(modules.Concat(mods).ToArray());
-                foreach (var template in templates)
-                {
-                    Templates[ParseKey(template.Name)] = template;
-                }
+                foreach (var template in templates) Templates[ParseKey(template.Name)] = template;
             }
         }
 
@@ -65,7 +63,8 @@ namespace Hedra.Engine.Core
                 if (!result) continue;
 
                 list.Add(obj);
-            }           
+            }
+
             return list.ToArray();
         }
 
@@ -82,7 +81,8 @@ namespace Hedra.Engine.Core
                 Success = false;
                 Log.WriteLine($"Exception while reading file '{Path}':{Environment.NewLine}{e}");
             }
-            return default(T);
+
+            return default;
         }
     }
 }

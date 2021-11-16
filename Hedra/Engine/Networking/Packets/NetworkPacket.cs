@@ -1,6 +1,5 @@
-
 namespace Hedra.Engine.Networking.Packets
-{    
+{
     public abstract class NetworkPacket<T> : IPacket, INetworkPacket<T> where T : new()
     {
         public abstract MessagePacketType Type { get; }
@@ -23,7 +22,7 @@ namespace Hedra.Engine.Networking.Packets
         protected abstract void DoParse(PacketReader Reader, T Empty);
 
         protected abstract void DoSerialize(PacketWriter Writer);
-        
+
         public byte[] Serialize()
         {
             var writer = new PacketWriter();

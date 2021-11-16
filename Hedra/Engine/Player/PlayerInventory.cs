@@ -14,7 +14,6 @@ using Hedra.Engine.Player.Inventory;
 using Hedra.Items;
 using Hedra.WeaponSystem;
 
-
 namespace Hedra.Engine.Player
 {
     public delegate void OnInventoryUpdated();
@@ -33,24 +32,19 @@ namespace Hedra.Engine.Player
         public const int WeaponHolder = 37;
         public const int FoodHolder = 29;
         public const int GoldHolder = 28;
-
-        public event OnInventoryUpdated InventoryUpdated;
-        public event OnItemSetEventHandler ItemSet;
         private readonly IPlayer _player;
-        private readonly InventoryArray _items;
-        private readonly InventoryArray _mainItems;
         private readonly RestrictionsInterface _restrictions;
         private bool _show;
 
         public PlayerInventory(IPlayer Player)
         {
             _player = Player;
-            _items = new InventoryArray(InventorySpaces);
-            _mainItems = new InventoryArray(MainSpaces);
-            _restrictions = new RestrictionsInterface(_mainItems);
-            _mainItems.OnItemSet += delegate(int Index, Item New)
+            ItemsArray = new InventoryArray(InventorySpaces);
+            MainItemsArray = new InventoryArray(MainSpaces);
+            _restrictions = new RestrictionsInterface(MainItemsArray);
+            MainItemsArray.OnItemSet += delegate(int Index, Item New)
             {
-                switch (Index+InventorySpaces)
+                switch (Index + InventorySpaces)
                 {
                     case WeaponHolder:
                         _player.SetWeapon(New == null ? Weapon.Empty : New.Weapon);
@@ -71,9 +65,15 @@ namespace Hedra.Engine.Player
                         _player.Ring = New;
                         break;
                 }
-                ItemSet?.Invoke(Index+InventorySpaces, New);
+
+                ItemSet?.Invoke(Index + InventorySpaces, New);
             };
         }
+
+        public Item Ring => this[RingHolder];
+
+        public event OnInventoryUpdated InventoryUpdated;
+        public event OnItemSetEventHandler ItemSet;
 
         public void UpdateInventory()
         {
@@ -82,29 +82,29 @@ namespace Hedra.Engine.Player
 
         public void ClearInventory()
         {
-            _items.Empty();
-            _mainItems.Empty();
+            ItemsArray.Empty();
+            MainItemsArray.Empty();
         }
 
         public Item Search(Func<Item, bool> Matches)
         {
-            var firstResult = _items.Search(Matches);
+            var firstResult = ItemsArray.Search(Matches);
             if (firstResult != null) return firstResult;
-            var secondResult = _mainItems.Search(Matches);
+            var secondResult = MainItemsArray.Search(Matches);
             return secondResult;
         }
 
         public int IndexOf(Item Item)
         {
-            var firstResult = _items.IndexOf(Item);
+            var firstResult = ItemsArray.IndexOf(Item);
             if (firstResult != -1) return firstResult;
-            var secondResult = _mainItems.IndexOf(Item);
+            var secondResult = MainItemsArray.IndexOf(Item);
             return secondResult;
         }
 
         public bool AddItem(Item New)
         {
-            var result = _items.AddItem(New);
+            var result = ItemsArray.AddItem(New);
             UpdateInventory();
             return result;
         }
@@ -114,56 +114,37 @@ namespace Hedra.Engine.Player
             if (Old.HasAttribute(CommonAttributes.Amount) && Old.GetAttribute<int>(CommonAttributes.Amount) > Amount)
                 Old.SetAttribute(CommonAttributes.Amount, Old.GetAttribute<int>(CommonAttributes.Amount) - Amount);
             else
-                _items.RemoveItem(Old);
+                ItemsArray.RemoveItem(Old);
             UpdateInventory();
         }
 
         public void SetItem(int Index, Item New)
         {
-            var array = Index >= InventorySpaces ? _mainItems : _items;
+            var array = Index >= InventorySpaces ? MainItemsArray : ItemsArray;
             var index = ToCorrectItemSpace(Index);
             array.SetItem(index, New);
         }
 
         public void SetItems(KeyValuePair<int, Item>[] Items)
         {
-            for (var i = 0; i < Items.Length; i++)
-            {
-                this.SetItem(Items[i].Key, Items[i].Value);
-            }
+            for (var i = 0; i < Items.Length; i++) SetItem(Items[i].Key, Items[i].Value);
         }
 
         public KeyValuePair<int, Item>[] ItemsToArray()
         {
             var list = new List<KeyValuePair<int, Item>>();
-            for (var i = 0; i < _items.Length; i++)
-            {
-                if (_items[i] != null) list.Add(new KeyValuePair<int, Item>(i, _items[i]));
-            }
-            return list.ToArray();
-        }
-
-        public KeyValuePair<int, Item>[] EquipmentItemsToArray()
-        {
-            var list = new List<KeyValuePair<int, Item>>();
-            for (var i = 0; i < _mainItems.Length; i++)
-            {
-                if (_mainItems[i] != null) list.Add(new KeyValuePair<int, Item>(i + InventorySpaces, _mainItems[i]));
-            }
+            for (var i = 0; i < ItemsArray.Length; i++)
+                if (ItemsArray[i] != null)
+                    list.Add(new KeyValuePair<int, Item>(i, ItemsArray[i]));
             return list.ToArray();
         }
 
         public KeyValuePair<int, Item>[] ToArray()
         {
             var list = new List<KeyValuePair<int, Item>>();
-            list.AddRange(this.ItemsToArray());
-            list.AddRange(this.EquipmentItemsToArray());
+            list.AddRange(ItemsToArray());
+            list.AddRange(EquipmentItemsToArray());
             return list.ToArray();
-        }
-        
-        public bool HasRestrictions(int Index, EquipmentType Type)
-        {
-            return _restrictions.HasRestriction(ToCorrectItemSpace(WeaponHolder), Type.ToString());
         }
 
         public void AddRestriction(int Index, EquipmentType Type)
@@ -175,7 +156,7 @@ namespace Hedra.Engine.Player
         {
             _restrictions.AddRestriction(ToCorrectItemSpace(Index), Type);
         }
-        
+
         public void RemoveRestriction(int Index, EquipmentType Type)
         {
             RemoveRestriction(Index, Type.ToString());
@@ -195,37 +176,54 @@ namespace Hedra.Engine.Player
         {
             return _restrictions.GetRestrictions(ToCorrectItemSpace(Index));
         }
-        
-        private static int ToCorrectItemSpace(int Index)
-        {
-            return Index >= InventorySpaces ? Index - InventorySpaces : Index;
-        }
 
         public Item Food
         {
             get
             {
-                return (this[FoodHolder] != null && this[FoodHolder].IsFood) 
-                    ? this[FoodHolder] 
-                    : this.Search(I => I.IsFood);
+                return this[FoodHolder] != null && this[FoodHolder].IsFood
+                    ? this[FoodHolder]
+                    : Search(I => I.IsFood);
             }
         }
-        
+
         public Item Ammo => Search(I => I.IsAmmo);
 
-        public bool HasAvailableSpace => _items.HasAvailableSpace;
-        public Item this[int Index] => (Index >= InventorySpaces ? _mainItems : _items)[ToCorrectItemSpace(Index)];
+        public bool HasAvailableSpace => ItemsArray.HasAvailableSpace;
+
+        public Item this[int Index] =>
+            (Index >= InventorySpaces ? MainItemsArray : ItemsArray)[ToCorrectItemSpace(Index)];
+
         public Item MainWeapon => this[WeaponHolder];
-        public Item Ring => this[RingHolder];
         public Item Vehicle => this[VehicleHolder];
         public Item Pet => this[PetHolder];
         public Item Helmet => this[HelmetHolder];
         public Item Chest => this[ChestplateHolder];
         public Item Pants => this[PantsHolder];
         public Item Boots => this[BootsHolder];
-        public int Length => _items.Length + _mainItems.Length;
+        public int Length => ItemsArray.Length + MainItemsArray.Length;
 
-        public InventoryArray MainItemsArray => _mainItems;
-        public InventoryArray ItemsArray => _items;
+        public InventoryArray MainItemsArray { get; }
+
+        public InventoryArray ItemsArray { get; }
+
+        public KeyValuePair<int, Item>[] EquipmentItemsToArray()
+        {
+            var list = new List<KeyValuePair<int, Item>>();
+            for (var i = 0; i < MainItemsArray.Length; i++)
+                if (MainItemsArray[i] != null)
+                    list.Add(new KeyValuePair<int, Item>(i + InventorySpaces, MainItemsArray[i]));
+            return list.ToArray();
+        }
+
+        public bool HasRestrictions(int Index, EquipmentType Type)
+        {
+            return _restrictions.HasRestriction(ToCorrectItemSpace(WeaponHolder), Type.ToString());
+        }
+
+        private static int ToCorrectItemSpace(int Index)
+        {
+            return Index >= InventorySpaces ? Index - InventorySpaces : Index;
+        }
     }
 }

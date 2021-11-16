@@ -28,31 +28,37 @@ namespace Hedra.Engine.StructureSystem.Overworld
         protected override string BaseFileName => "Dungeon2";
         protected override int Level => 13;
 
-        protected override void DoBuild(CollidableStructure Structure, Matrix4x4 Rotation, Matrix4x4 Translation, Random Rng)
+        protected override void DoBuild(CollidableStructure Structure, Matrix4x4 Rotation, Matrix4x4 Translation,
+            Random Rng)
         {
             base.DoBuild(Structure, Rotation, Translation, Rng);
-            
-            AddDoor(AssetManager.PLYLoader($"Assets/Env/Structures/Dungeon/Dungeon2-Door0.ply", Vector3.One), Dungeon2Cache.Doors[0], Rotation, Structure, false, false);
-            AddDoor(AssetManager.PLYLoader($"Assets/Env/Structures/Dungeon/Dungeon2-Door2.ply", Vector3.One), Dungeon2Cache.Doors[2], Rotation, Structure, true, false);
-            AddDoor(AssetManager.PLYLoader($"Assets/Env/Structures/Dungeon/Dungeon2-Door3.ply", Vector3.One), Dungeon2Cache.Doors[3], Rotation, Structure, true, false);
-            AddDoor(AssetManager.PLYLoader($"Assets/Env/Structures/Dungeon/Dungeon2-Door4.ply", Vector3.One), Dungeon2Cache.Doors[4], Rotation, Structure, true, false);
-            AddDoor(AssetManager.PLYLoader($"Assets/Env/Structures/Dungeon/Dungeon2-Door5.ply", Vector3.One), Dungeon2Cache.Doors[5], Rotation, Structure, false, false);
-            AddDoor(AssetManager.PLYLoader($"Assets/Env/Structures/Dungeon/Dungeon2-Door6.ply", Vector3.One), Dungeon2Cache.Doors[6], Rotation, Structure, true, false);
 
-            var bossDoor = AddDoor(AssetManager.PLYLoader($"Assets/Env/Structures/Dungeon/Dungeon2-Door1.ply", Vector3.One), Dungeon2Cache.Doors[1], Rotation, Structure, true, false);
+            AddDoor(AssetManager.PLYLoader("Assets/Env/Structures/Dungeon/Dungeon2-Door0.ply", Vector3.One),
+                Dungeon2Cache.Doors[0], Rotation, Structure, false, false);
+            AddDoor(AssetManager.PLYLoader("Assets/Env/Structures/Dungeon/Dungeon2-Door2.ply", Vector3.One),
+                Dungeon2Cache.Doors[2], Rotation, Structure, true, false);
+            AddDoor(AssetManager.PLYLoader("Assets/Env/Structures/Dungeon/Dungeon2-Door3.ply", Vector3.One),
+                Dungeon2Cache.Doors[3], Rotation, Structure, true, false);
+            AddDoor(AssetManager.PLYLoader("Assets/Env/Structures/Dungeon/Dungeon2-Door4.ply", Vector3.One),
+                Dungeon2Cache.Doors[4], Rotation, Structure, true, false);
+            AddDoor(AssetManager.PLYLoader("Assets/Env/Structures/Dungeon/Dungeon2-Door5.ply", Vector3.One),
+                Dungeon2Cache.Doors[5], Rotation, Structure, false, false);
+            AddDoor(AssetManager.PLYLoader("Assets/Env/Structures/Dungeon/Dungeon2-Door6.ply", Vector3.One),
+                Dungeon2Cache.Doors[6], Rotation, Structure, true, false);
+
+            var bossDoor =
+                AddDoor(AssetManager.PLYLoader("Assets/Env/Structures/Dungeon/Dungeon2-Door1.ply", Vector3.One),
+                    Dungeon2Cache.Doors[1], Rotation, Structure, true, false);
             bossDoor.IsLocked = true;
 
             var bossLever = AddLever(Structure, Dungeon2Cache.Lever0, Rotation);
-            bossLever.OnActivate += _ =>
-            {
-                bossDoor.InvokeInteraction(_);
-            };
+            bossLever.OnActivate += _ => { bossDoor.InvokeInteraction(_); };
         }
 
         protected override IEntity CreateDungeonBoss(Vector3 Position, CollidableStructure Structure)
         {
             const HumanType type = HumanType.BeasthunterSpirit;
-            var boss = NPCCreator.SpawnBandit(Position, ((UndeadDungeon2Design) Structure.Design).Level,
+            var boss = NPCCreator.SpawnBandit(Position, ((UndeadDungeon2Design)Structure.Design).Level,
                 new BanditOptions
                 {
                     ModelType = type,

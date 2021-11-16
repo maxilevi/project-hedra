@@ -1,25 +1,21 @@
 using System;
-using System.Collections.Generic;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Linq;
-using Hedra.Engine.BiomeSystem;
+using System.Numerics;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Rendering;
-using System.Numerics;
 
 namespace Hedra.Engine.Player.MapSystem
 {
     public class MapMeshBuilder
     {
-        private readonly IPlayer _player;
-        private readonly int _mapSize;
         private readonly int _chunkSize;
         private readonly CubeData _cubeData;
         private readonly CubeData _fullData;
+        private readonly int _mapSize;
+        private readonly IPlayer _player;
 
         public MapMeshBuilder(IPlayer Player, int MapSize, int ChunkSize)
         {

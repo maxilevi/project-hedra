@@ -5,9 +5,8 @@ namespace Hedra.BiomeSystem
 {
     public class RegionTree
     {
-        public TreeDesign PrimaryDesign { get; }
-        private readonly BiomeTreeDesign _treeDesign;
         private readonly int _seed;
+        private readonly BiomeTreeDesign _treeDesign;
 
         public RegionTree(int Seed, BiomeTreeDesign TreeDesign)
         {
@@ -16,12 +15,14 @@ namespace Hedra.BiomeSystem
             PrimaryDesign = _treeDesign.AvailableTypes[new Random(_seed).Next(0, _treeDesign.AvailableTypes.Length)];
         }
 
+        public TreeDesign PrimaryDesign { get; }
+
         public TreeDesign GetDesign(int Seed)
         {
             var rng = new Random(Seed);
-            TreeDesign design = PrimaryDesign;
+            var design = PrimaryDesign;
 
-            bool otherTree = PrimaryDesign is TallDesign
+            var otherTree = PrimaryDesign is TallDesign
                 ? rng.Next(1, 10) == 1
                 : rng.Next(1, 6) == 1;
 

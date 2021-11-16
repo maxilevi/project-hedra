@@ -1,22 +1,14 @@
 using System;
-using System.Collections.Generic;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using System.Linq;
+using System.Numerics;
 using Hedra.Core;
-using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.UI;
-using Hedra.Game;
-using Hedra.Items;
-using Hedra.Rendering;
-using System.Numerics;
-using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
+using Hedra.Game;
 using Hedra.Numerics;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.Player.Inventory
 {
@@ -24,13 +16,13 @@ namespace Hedra.Engine.Player.Inventory
     {
         public const float ZOffsetFactor = 5f;
         public static readonly FBO Framebuffer;
-        private InventoryArray _array;
-        private readonly int _length;
-        private readonly int _offset;
-        private readonly ObjectMesh[] _models;
-        private readonly VertexData[] _modelCache;
-        private readonly Vector3[] _modelsSize;
         private static float _itemRotation;
+        private readonly int _length;
+        private readonly VertexData[] _modelCache;
+        private readonly ObjectMesh[] _models;
+        private readonly Vector3[] _modelsSize;
+        private readonly int _offset;
+        private InventoryArray _array;
 
         static InventoryItemRenderer()
         {

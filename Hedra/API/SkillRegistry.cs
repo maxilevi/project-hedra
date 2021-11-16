@@ -5,6 +5,8 @@ namespace Hedra.API
 {
     public class SkillRegistry : TypeRegistry
     {
+        protected override Type RegistryType => typeof(AbstractBaseSkill);
+
         protected override void DoAdd(string Key, Type Value)
         {
             SkillFactory.Instance.Register(Key, Value);
@@ -14,7 +16,5 @@ namespace Hedra.API
         {
             SkillFactory.Instance.Unregister(Key);
         }
-
-        protected override Type RegistryType => typeof(AbstractBaseSkill);
     }
 }

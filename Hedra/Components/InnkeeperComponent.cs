@@ -1,4 +1,3 @@
-using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 
 namespace Hedra.Components

@@ -1,16 +1,11 @@
 ﻿using System;
-using Hedra.Engine.Management;
-using Hedra.Core;
-using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Generation;
+using System.Numerics;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.SkillSystem;
-using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
+using Hedra.Numerics;
 using Hedra.Rendering.Particles;
 using Hedra.Sound;
-using System.Numerics;
-using Hedra.Numerics;
 
 namespace Hedra.Engine.Player
 {
@@ -18,11 +13,11 @@ namespace Hedra.Engine.Player
     {
         private const int Distance = 32;
         private const int DistanceSquared = Distance * Distance;
+        private float _charge;
+        private float _damage;
         private IEntity[] _ignore;
         private IEntity _owner;
-        private float _damage;
         private bool _shouldStop;
-        private float _charge;
 
         private Firewave(IEntity Parent, Vector3 Origin) : base(Parent, Origin)
         {
@@ -53,7 +48,7 @@ namespace Hedra.Engine.Player
                 Entity.Physics.ApplyImpulse(direction * 96 * _charge * 1.5f);
             });
         }
-        
+
         private void DamageEntities()
         {
             var entities = World.Entities;
@@ -75,14 +70,15 @@ namespace Hedra.Engine.Player
             Particles.Position = Position;
             Particles.GravityEffect = 0f;
             Particles.Scale = Vector3.One * .5f;
-            Particles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
-            Particles.PositionErrorMargin = new Vector3(2f,2f,2f);
-            Particles.Shape = ParticleShape.Sphere;       
+            Particles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
+            Particles.PositionErrorMargin = new Vector3(2f, 2f, 2f);
+            Particles.Shape = ParticleShape.Sphere;
             Particles.ParticleLifetime = Math.Max(2.0f * _charge, .25f);
 
-            for(var i = 0; i < 750; i++)
+            for (var i = 0; i < 750; i++)
             {
-                var dir = new Vector3(Utils.Rng.NextFloat() * 2 - 1, Utils.Rng.NextFloat(), Utils.Rng.NextFloat() * 2 - 1);
+                var dir = new Vector3(Utils.Rng.NextFloat() * 2 - 1, Utils.Rng.NextFloat(),
+                    Utils.Rng.NextFloat() * 2 - 1);
                 Particles.Direction = dir * .75f;
                 Particles.Emit();
             }

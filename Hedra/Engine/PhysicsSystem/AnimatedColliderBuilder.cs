@@ -1,13 +1,15 @@
 using System;
 using System.Collections.Generic;
-using Hedra.Engine.Rendering.Animation;
 using System.Numerics;
+using Hedra.Engine.Rendering.Animation;
 
 namespace Hedra.Engine.PhysicsSystem
 {
     public static class AnimatedColliderBuilder
     {
-        private static readonly Dictionary<string, AnimatedColliderData> ColliderCache = new Dictionary<string, AnimatedColliderData>();
+        private static readonly Dictionary<string, AnimatedColliderData> ColliderCache =
+            new Dictionary<string, AnimatedColliderData>();
+
         private static readonly object Lock = new object();
 
         public static AnimatedColliderData Build(string Identifier, AnimatedModel Model)
@@ -25,6 +27,7 @@ namespace Hedra.Engine.PhysicsSystem
                     };
                     ColliderCache.Add(Identifier, colliderData);
                 }
+
                 return ColliderCache[Identifier];
             }
         }
@@ -32,20 +35,14 @@ namespace Hedra.Engine.PhysicsSystem
         private static BoneBox[] BuildBoneBoxes(BoneData[] Bones)
         {
             var boxes = new List<BoneBox>();
-            for (var i = 0; i < Bones.Length; i++)
-            {
-                boxes.Add(BoneBox.From(Bones[i]));
-            }
+            for (var i = 0; i < Bones.Length; i++) boxes.Add(BoneBox.From(Bones[i]));
             return boxes.ToArray();
         }
 
         private static CollisionPoint[] BuildBroadphase(BoneData[] Bones)
         {
             var vertexList = new List<Vector3>();
-            for (var i = 0; i < Bones.Length; i++)
-            {
-                vertexList.AddRange(Bones[i].Vertices);
-            }
+            for (var i = 0; i < Bones.Length; i++) vertexList.AddRange(Bones[i].Vertices);
             var vertices = vertexList.ToArray();
             var collisionPoints = new CollisionPoint[12];
             collisionPoints[0] = AddSupportWithId(-Vector3.UnitX, vertices, Bones);
@@ -68,13 +65,12 @@ namespace Hedra.Engine.PhysicsSystem
             var vertex = Vertices.SupportPoint(Direction);
             var index = -1;
             for (var i = 0; i < Bones.Length; i++)
-            {
                 if (Array.IndexOf(Bones[i].Vertices, vertex) != -1)
                 {
                     index = Bones[i].Id;
                     break;
                 }
-            }
+
             return new CollisionPoint
             {
                 Id = new Vector3(index, index, index),

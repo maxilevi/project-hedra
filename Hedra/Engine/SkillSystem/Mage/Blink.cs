@@ -1,31 +1,39 @@
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Globalization;
+using System.Numerics;
 using Hedra.Core;
 using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
 using Hedra.Localization;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Sound;
-using System.Numerics;
-using Hedra.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Mage
 {
     public class Blink : SingleAnimationSkill<IPlayer>
     {
+        private TeleportComponent _component;
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Teleport.png");
 
         protected override Animation SkillAnimation { get; } =
             AnimationLoader.LoadAnimation("Assets/Chr/MageTeleport.dae");
 
         protected override float AnimationSpeed => .5f;
-        private TeleportComponent _component;
+
+        protected override int MaxLevel => 20;
+        public override float MaxCooldown => 54 - 20 * (Level / (float)MaxLevel);
+        public override float ManaCost => 1;
+        private float Distance => 128 + 128 * (Level / (float)MaxLevel);
+        public override string Description => Translations.Get("teleport_desc");
+        public override string DisplayName => Translations.Get("teleport_skill");
+
+        public override string[] Attributes => new[]
+        {
+            Translations.Get("teleport_distance_change", Distance.ToString("0.0", CultureInfo.InvariantCulture))
+        };
 
         protected override void OnEnable()
         {
@@ -94,17 +102,5 @@ namespace Hedra.Engine.SkillSystem.Mage
                     () => { Parent.Model.Outline = false; });
             }
         }
-
-        protected override int MaxLevel => 20;
-        public override float MaxCooldown => 54 - 20 * (Level / (float)MaxLevel);
-        public override float ManaCost => 1;
-        private float Distance => 128 + 128 * (Level / (float)MaxLevel);
-        public override string Description => Translations.Get("teleport_desc");
-        public override string DisplayName => Translations.Get("teleport_skill");
-
-        public override string[] Attributes => new[]
-        {
-            Translations.Get("teleport_distance_change", Distance.ToString("0.0", CultureInfo.InvariantCulture))
-        };
     }
 }

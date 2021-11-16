@@ -6,12 +6,13 @@ namespace Hedra.Engine.Rendering.MeshOptimizer
     internal class Pointer
     {
         private GCHandle _handle;
-        public IntPtr Address { get; private set; }
-        
+
         private Pointer()
         {
         }
-        
+
+        public IntPtr Address { get; private set; }
+
         public void Free()
         {
             _handle.Free();

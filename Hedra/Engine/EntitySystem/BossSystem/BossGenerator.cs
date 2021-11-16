@@ -8,27 +8,15 @@
  */
 
 using System;
+using System.Numerics;
 using Hedra.AISystem;
 using Hedra.Components;
-using Hedra.Core;
-using Hedra.Engine.Game;
-using Hedra.Engine.Generation;
-using Hedra.Engine.Localization;
-using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
-using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
-using Hedra.Game;
-using Hedra.Localization;
-using Hedra.Rendering;
-using System.Numerics;
-using Hedra.Engine.ModuleSystem;
-using Hedra.Numerics;
 
 namespace Hedra.Engine.EntitySystem.BossSystem
 {
     /// <summary>
-    /// Description of BossGenerator.
+    ///     Description of BossGenerator.
     /// </summary>
     public static class BossGenerator
     {
@@ -44,7 +32,7 @@ namespace Hedra.Engine.EntitySystem.BossSystem
 
         public static void MakeBoss(IEntity Entity, Vector3 Position, float XP)
         {
-            if(Entity.SearchComponent<IGuardAIComponent>() != null)
+            if (Entity.SearchComponent<IGuardAIComponent>() != null)
                 Entity.SearchComponent<IGuardAIComponent>().GuardPosition = Position;
             Entity.SearchComponent<ITraverseAIComponent>().GridSize = new Vector2(32, 32);
             var dmgComponent = Entity.SearchComponent<DamageComponent>();
@@ -53,7 +41,7 @@ namespace Hedra.Engine.EntitySystem.BossSystem
             Entity.RemoveComponent(Entity.SearchComponent<HealthBarComponent>());
             Entity.Name = healthBarComponent.Name;
             Entity.Physics.CollidesWithStructures = true;
-            Entity.AddComponent(healthBarComponent); 
+            Entity.AddComponent(healthBarComponent);
         }
     }
 }

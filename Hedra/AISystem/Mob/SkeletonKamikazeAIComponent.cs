@@ -1,4 +1,3 @@
-using Hedra.Components;
 using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
@@ -10,13 +9,13 @@ namespace Hedra.AISystem.Mob
     public class SkeletonKamikazeAIComponent : HostileAIComponent
     {
         private readonly QuadrupedModel _model;
-        private bool _isExploding;
         private bool _exploded;
-        
+        private bool _isExploding;
+
         public SkeletonKamikazeAIComponent(Entity Parent) : base(Parent)
         {
             //Parent.SearchComponent<DamageComponent>().PlayDeleteAnimation = false;
-            _model = (QuadrupedModel) Parent.Model;
+            _model = (QuadrupedModel)Parent.Model;
             Parent.BeforeDamaging += BeforeDamaging;
         }
 

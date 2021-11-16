@@ -1,13 +1,15 @@
-import MissionCore
 from Core import translate
-from System import Array, Object, Single
-from Hedra.Mission import MissionBuilder, QuestTier, DialogObject, QuestReward, ItemCollect
-from Hedra.Mission.Blocks import FindStructureMission, CompleteStructureMission
 from Hedra.Engine.StructureSystem.Overworld import GiantTreeDesign
+from Hedra.Mission import MissionBuilder, QuestTier, DialogObject
+from Hedra.Mission.Blocks import FindStructureMission, CompleteStructureMission
+from System import Array, Object
+
+import MissionCore
 
 IS_QUEST = True
 QUEST_NAME = 'DefeatBossAtGiantTree'
 QUEST_TIER = QuestTier.Medium
+
 
 def setup_timeline(position, giver, owner, rng):
     builder = MissionBuilder()
@@ -29,11 +31,13 @@ def setup_timeline(position, giver, owner, rng):
     builder.SetReward(MissionCore.build_generic_reward(rng))
     return builder
 
+
 def create_opening_dialog():
     dialog = DialogObject()
     dialog.Keyword = 'quest_defeat_boss_dialog'
     dialog.Arguments = Array[Object]([])
     return dialog
+
 
 def can_give(position):
     return len(MissionCore.nearby_structs_designs(position, GiantTreeDesign)) > 0

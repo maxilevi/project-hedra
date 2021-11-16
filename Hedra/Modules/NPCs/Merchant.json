@@ -2,12 +2,12 @@
   "Name": "Merchant",
   "DisplayName": "Merchant",
   "Class": "Warrior",
-  "Behaviour" : "Friendly",
+  "Behaviour": "Friendly",
   "Health": 100,
   "Immune": true,
-  "AttackPower": 1.0, 
+  "AttackPower": 1.0,
   "AttackSpeed": 1.0,
-  "Components":  [
+  "Components": [
     {
       "Type": "Hedra.Components.MerchantComponent",
       "Parameters": []

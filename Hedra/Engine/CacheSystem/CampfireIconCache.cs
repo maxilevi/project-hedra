@@ -1,7 +1,5 @@
-using System;
-using Hedra.Engine.Management;
-using Hedra.Engine.Rendering;
 using System.Numerics;
+using Hedra.Engine.Management;
 
 namespace Hedra.Engine.CacheSystem
 {
@@ -9,9 +7,9 @@ namespace Hedra.Engine.CacheSystem
     {
         public CampfireIconCache()
         {
-            this.AddModel(AssetManager.PLYLoader("Assets/UI/CampfireIcon.ply", Vector3.One * .75f));
+            AddModel(AssetManager.PLYLoader("Assets/UI/CampfireIcon.ply", Vector3.One * .75f));
         }
-        
+
         public override CacheItem Type => CacheItem.CampfireIcon;
     }
 }

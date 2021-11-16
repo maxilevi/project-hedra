@@ -8,7 +8,7 @@
     {
       "Name": "MovementSpeed",
       "Value": 1.05
-    },
+    }
   ],
   "Model": {
     "Scale": 1.0,

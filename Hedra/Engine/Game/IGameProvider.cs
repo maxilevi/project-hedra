@@ -1,15 +1,12 @@
 using System;
-using Hedra.Engine.Input;
-using Hedra.Engine.Management;
-using Hedra.Engine.Player;
 using System.Numerics;
+using Hedra.Engine.Input;
+using Hedra.Engine.Player;
 
 namespace Hedra.Engine.Game
 {
     public interface IGameProvider
     {
-        event EventHandler AfterSave;
-        event EventHandler BeforeSave;
         bool Exists { get; }
         bool IsExiting { get; }
         KeyboardManager Keyboard { get; }
@@ -18,6 +15,9 @@ namespace Hedra.Engine.Game
         bool InStartMenu { get; }
         bool InMenu { get; }
         bool SpawningEffect { get; set; }
+        bool PlayerExists { get; }
+        event EventHandler AfterSave;
+        event EventHandler BeforeSave;
         void MakeCurrent(PlayerInformation Information);
         void LoadMenu();
         void Load();
@@ -26,6 +26,5 @@ namespace Hedra.Engine.Game
         void Unload();
         void Reload();
         bool NearAnyPlayer(Vector3 Position, float Radius);
-        bool PlayerExists { get; }
     }
 }

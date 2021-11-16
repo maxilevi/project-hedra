@@ -1,3 +1,4 @@
+using System;
 using System.Numerics;
 using Hedra.BiomeSystem;
 
@@ -7,42 +8,42 @@ namespace Hedra.Engine.BiomeSystem.Savanna
     {
         public override Vector4 WaterColor(int Seed)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override Vector4 StoneColor(int Seed)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override Vector4 DirtColor(int Seed)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override Vector4 SeafloorColor(int Seed)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override Vector4 SandColor(int Seed)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override Vector4[] LeavesColors(int Seed)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override Vector4[] WoodColors(int Seed)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override Vector4[] GrassColors(int Seed)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

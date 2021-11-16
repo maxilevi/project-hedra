@@ -1,45 +1,79 @@
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Numerics;
 using System.Text.RegularExpressions;
-
 using Hedra.Engine.IO;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
-using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
 
 namespace Hedra.Engine.Native
 {
-    /// <summary>    
-    /// Description of OSManager.
+    /// <summary>
+    ///     Description of OSManager.
     /// </summary>
     public static class OSManager
     {
-        public static GraphicsCardType GraphicsCard { get; set; }       
-        public static int RamCount { get; private set; }
-        public static string Specs => GraphicsCard+"|"+RamCount;
         private static readonly IConsoleManager _consoleManager;
         private static readonly IMessageManager _messageManager;
 
         static OSManager()
         {
             _consoleManager = RunningPlatform == Platform.Windows
-                ? new WindowsConsoleManager() 
-                : (IConsoleManager) new DummyConsoleManager();
+                ? new WindowsConsoleManager()
+                : (IConsoleManager)new DummyConsoleManager();
             _messageManager = RunningPlatform == Platform.Windows
                 ? new WindowsMessageManager()
-                : RunningPlatform == Platform.Linux 
+                : RunningPlatform == Platform.Linux
                     ? new LinuxMessageManager()
-                    : (IMessageManager) new DummyMessageManager();
+                    : (IMessageManager)new DummyMessageManager();
         }
-        
+
+        public static GraphicsCardType GraphicsCard { get; set; }
+        public static int RamCount { get; private set; }
+        public static string Specs => GraphicsCard + "|" + RamCount;
+
+        public static bool ShowConsole
+        {
+            get => _consoleManager.Show;
+            set => _consoleManager.Show = value;
+        }
+
+        public static bool CanHideConsole => !(_consoleManager is DummyConsoleManager);
+
+        public static Platform RunningPlatform
+        {
+            get
+            {
+                switch (Environment.OSVersion.Platform)
+                {
+                    case PlatformID.Unix:
+                        // Well, there are chances MacOSX is reported as Unix instead of MacOSX.
+                        // Instead of platform check, we'll do a feature checks (Mac specific root folders)
+                        if (Directory.Exists("/Applications")
+                            & Directory.Exists("/System")
+                            & Directory.Exists("/Users")
+                            & Directory.Exists("/Volumes"))
+                            return Platform.Mac;
+                        else
+                            return Platform.Linux;
+
+                    case PlatformID.MacOSX:
+                        return Platform.Mac;
+
+                    default:
+                        return Platform.Windows;
+                }
+            }
+        }
+
         public static void Load(string ExecName)
         {
-            if (IntPtr.Size == 4) Log.WriteLine($"Running {Program.GameWindow.GameVersion} Build {Program.GameWindow.BuildNumber} as x86");
-            if (IntPtr.Size == 8) Log.WriteLine($"Running {Program.GameWindow.GameVersion} Build {Program.GameWindow.BuildNumber} as x64");
+            if (IntPtr.Size == 4)
+                Log.WriteLine(
+                    $"Running {Program.GameWindow.GameVersion} Build {Program.GameWindow.BuildNumber} as x86");
+            if (IntPtr.Size == 8)
+                Log.WriteLine(
+                    $"Running {Program.GameWindow.GameVersion} Build {Program.GameWindow.BuildNumber} as x64");
 
             if (RunningPlatform == Platform.Windows)
             {
@@ -65,13 +99,14 @@ namespace Hedra.Engine.Native
         public static void WriteSpecs()
         {
             var graphicsCard = Renderer.GetString(StringName.Vendor) + Environment.NewLine
-                                                                     + Renderer.GetString(StringName.Renderer) + Environment.NewLine 
+                                                                     + Renderer.GetString(StringName.Renderer) +
+                                                                     Environment.NewLine
                                                                      + Renderer.GetString(StringName.Version);
             GraphicsCard = DetectCard(graphicsCard);
-            
+
             Log.WriteLine("OS = " + Environment.OSVersion + Environment.NewLine +
                           "CPU = " + Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER") + Environment.NewLine +
-                          "Graphics Card = " + OSManager.GraphicsCard + Environment.NewLine
+                          "Graphics Card = " + GraphicsCard + Environment.NewLine
             );
         }
 /*
@@ -86,9 +121,9 @@ namespace Hedra.Engine.Native
 
         private static GraphicsCardType DetectCard(string Card)
         {
-            var amdKeywords = new[] {"amd", "ati", "radeon"};
-            var nvidiaKeywords = new[] {"nvidia", "gtx", "geforce"};
-            var intelKeywords = new[] {"intel"};
+            var amdKeywords = new[] { "amd", "ati", "radeon" };
+            var nvidiaKeywords = new[] { "nvidia", "gtx", "geforce" };
+            var intelKeywords = new[] { "intel" };
 
             bool Matches(string[] Keywords, string Str)
             {
@@ -107,40 +142,6 @@ namespace Hedra.Engine.Native
         public static void Show(string Message, string Title)
         {
             _messageManager.Show(Message, Title);
-        }
-
-        public static bool ShowConsole
-        {
-            get => _consoleManager.Show;
-            set => _consoleManager.Show = value;
-        }
-
-        public static bool CanHideConsole => !(_consoleManager is DummyConsoleManager);
-        
-        public static Platform RunningPlatform
-        {
-            get
-            {
-                switch (Environment.OSVersion.Platform)
-                {
-                    case PlatformID.Unix:
-                        // Well, there are chances MacOSX is reported as Unix instead of MacOSX.
-                        // Instead of platform check, we'll do a feature checks (Mac specific root folders)
-                        if (Directory.Exists("/Applications")
-                            & Directory.Exists("/System")
-                            & Directory.Exists("/Users")
-                            & Directory.Exists("/Volumes"))
-                            return Platform.Mac;
-                        else
-                            return Platform.Linux;
-        
-                    case PlatformID.MacOSX:
-                        return Platform.Mac;
-        
-                    default:
-                        return Platform.Windows;
-                }
-            }
         }
     }
 }

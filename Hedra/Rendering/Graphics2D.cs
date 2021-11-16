@@ -8,22 +8,21 @@
  */
 
 using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Numerics;
 using System.Threading;
-using Hedra.Core;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.UI;
-using Hedra.Game;
-using System.Numerics;
-using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
+using Hedra.Game;
 using Hedra.Numerics;
+using SixLabors.Fonts;
+using SixLabors.ImageSharp;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace Hedra.Rendering
 {
@@ -51,18 +50,23 @@ namespace Hedra.Rendering
                 TextureRegistry.Unregister(id);
 
             if (Engine.Loader.Hedra.MainThreadId != Thread.CurrentThread.ManagedThreadId && !GameSettings.TestingMode)
-                Log.WriteLine($"[Error] Texture being created outside of the GL thread");
+                Log.WriteLine("[Error] Texture being created outside of the GL thread");
             return id;
         }
 
         public static Vector2 ToRelativeSize(this Vector2 Size)
         {
-            return new Vector2(Size.X / (float)GameSettings.Width, Size.Y / (float)GameSettings.Height);
+            return new Vector2(Size.X / GameSettings.Width, Size.Y / GameSettings.Height);
         }
 
         public static Vector2 ToPixelSize(this Vector2 Size)
         {
             return new Vector2(Size.X * GameSettings.Width, Size.Y * GameSettings.Height);
+        }
+
+        public static void Dispose()
+        {
+            Renderer.Provider.DeleteTextures(TextureRegistry.Count, TextureRegistry.All);
         }
 
         #region NonGL
@@ -138,7 +142,7 @@ namespace Hedra.Rendering
         public static Bitmap ReplaceColor(Bitmap Bmp, Predicate<Color> Match, Color Replacement)
         {
             var data = Bmp.LockBits(new Rectangle(0, 0, Bmp.Width, Bmp.Height), ImageLockMode.ReadWrite,
-                System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                PixelFormat.Format32bppArgb);
             unsafe
             {
                 var dataPtr = (byte*)data.Scan0;
@@ -163,7 +167,7 @@ namespace Hedra.Rendering
         public static Bitmap CreateGradient(Color Color1, Color Color2, GradientType Type, Bitmap Bmp)
         {
             BitmapData Data = Bmp.LockBits(new Rectangle(0, 0, Bmp.Width, Bmp.Height), ImageLockMode.ReadWrite,
-                System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                PixelFormat.Format32bppArgb);
             unsafe
             {
                 var DataPtr = (byte*)Data.Scan0;
@@ -174,10 +178,10 @@ namespace Hedra.Rendering
                 {
                     float LerpValue = 0;
                     if (Type == GradientType.LeftRight)
-                        LerpValue = (float)((float)x / (float)Bmp.Width);
+                        LerpValue = x / (float)Bmp.Width;
 
                     if (Type == GradientType.TopBot)
-                        LerpValue = (float)((float)y / (float)Bmp.Height);
+                        LerpValue = y / (float)Bmp.Height;
 
                     if (Type == GradientType.Diagonal)
                         LerpValue = Mathf.Clamp(
@@ -188,7 +192,7 @@ namespace Hedra.Rendering
                             (new Vector2(Bmp.Width / 2, Bmp.Height / 2) - new Vector2(x, y)).LengthFast() /
                             (Bmp.Width + Bmp.Height), 0, 1);
 
-                    var NewColor = Mathf.Lerp(Color1, Color2, LerpValue);
+                    var NewColor = Color1.Lerp(Color2, LerpValue);
                     DataPtr[x * 4 + y * Stride] = NewColor.B; // Red
                     DataPtr[x * 4 + y * Stride + 1] = NewColor.G; // Blue
                     DataPtr[x * 4 + y * Stride + 2] = NewColor.R; // Green
@@ -201,11 +205,6 @@ namespace Hedra.Rendering
         }
 
         #endregion
-
-        public static void Dispose()
-        {
-            Renderer.Provider.DeleteTextures(TextureRegistry.Count, TextureRegistry.All);
-        }
     }
 
     public enum GradientType

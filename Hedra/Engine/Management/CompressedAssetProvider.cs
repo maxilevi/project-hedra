@@ -1,46 +1,38 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using Hedra.Engine.Game;
 using Hedra.Engine.IO;
-using Hedra.Engine.Native;
 using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
-using Hedra.Engine.Rendering.UI;
+using Hedra.Framework;
 using Hedra.Game;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-using System.Numerics;
-using Hedra.Engine.Core;
-using Hedra.Numerics;
-using Hedra.Framework;
-using Silk.NET.GLFW;
-using Silk.NET.OpenGL.Legacy;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Management
 {
     public class CompressedAssetProvider : IAssetProvider
     {
-        private List<ResourceHandler> _registeredHandlers;
-        private bool _filesDecompressed;
-        private string _uniqueId;
-        private Dictionary<string, VertexData> _hitboxCache;
-        private readonly object _hitboxCacheLock = new object();
         private readonly object _handlerLock = new object();
-        private string _appPath;
+        private readonly object _hitboxCacheLock = new object();
         private string _appData;
+        private string _appPath;
+        private bool _filesDecompressed;
+        private Dictionary<string, VertexData> _hitboxCache;
+        private List<ResourceHandler> _registeredHandlers;
+        private string _uniqueId;
 
         public string ShaderCode { get; private set; }
         public string TemporalFolder { get; private set; }
@@ -73,16 +65,6 @@ namespace Hedra.Engine.Management
             ShaderCode = ZipManager.UnZip(File.ReadAllBytes(AppPath + ShaderResource));
         }
 
-        private void CopyShaders()
-        {
-            var compatibleAppPath = AppPath.Replace("/", @"\");
-
-            Log.Write($"[DEBUG] Copying shader files to executable...{Environment.NewLine}", ConsoleColor.Magenta);
-            var proc = Process.Start("cmd.exe",
-                $"/C xcopy \"{compatibleAppPath}\\..\\..\\Shaders\" \"{compatibleAppPath}\\Shaders\\\"  /s /e /y");
-            proc?.WaitForExit();
-        }
-
         public void GrabShaders()
         {
             CopyShaders();
@@ -106,41 +88,6 @@ namespace Hedra.Engine.Management
             pProcess.Dispose();
         }
 
-        private void DecompileAssets()
-        {
-            if (_filesDecompressed) return;
-
-            _uniqueId = Guid.NewGuid().ToString();
-            TryCleanupTemp(TemporalFolder = $"{AppData}/Temp/");
-
-            var soundBytes = ZipManager.UnZipBytes(File.ReadAllBytes(AppPath + SoundResource));
-            var zipBytes = ZipManager.UnZipBytes(File.ReadAllBytes(AppPath + AssetsResource));
-
-            File.WriteAllBytes(GetResourceName(AssetsResource), zipBytes);
-            File.WriteAllBytes(GetResourceName(SoundResource), soundBytes);
-
-            _registeredHandlers = new List<ResourceHandler>();
-            _filesDecompressed = true;
-        }
-
-        private string GetResourceName(string Resource)
-        {
-            return $"{TemporalFolder}{Path.GetFileNameWithoutExtension(Resource)}-{_uniqueId}";
-        }
-
-        private void TryCleanupTemp(string Temp)
-        {
-            try
-            {
-                if (Directory.Exists(TemporalFolder)) Directory.Delete(TemporalFolder, true);
-                Directory.CreateDirectory(TemporalFolder);
-            }
-            catch (IOException e)
-            {
-                Log.WriteLine("Failed to clean temp directory.");
-            }
-        }
-
         public byte[] ReadPath(string Path, bool Text = true)
         {
             var external = !Path.Contains("$DataFile$");
@@ -154,7 +101,7 @@ namespace Hedra.Engine.Management
             }
 #if DEBUG
             if (!GameSettings.TestingMode)
-                throw new ArgumentOutOfRangeException($"You shouldn't read from external paths when on debug mode.");
+                throw new ArgumentOutOfRangeException("You shouldn't read from external paths when on debug mode.");
 #endif
             var finalPath = Path.Replace("$GameFolder$", GameLoader.AppPath);
             return Text
@@ -210,46 +157,12 @@ namespace Hedra.Engine.Management
             }
         }
 
-        private static byte[] ReadBinaryFromStream(Stream Stream, string Name)
-        {
-            if (!Stream.CanRead) return null;
-            var reader = new BinaryReader(Stream);
-            var similarPath = default(string);
-            var sanitizedName = Name.Replace(@"\", "/").Replace("$DataFile$", string.Empty).Trim();
-            var length = reader.BaseStream.Length;
-            var list = new List<string>();
-            while (reader.BaseStream.Position < length)
-            {
-                var header = reader.ReadString();
-                if (header.Equals("<end_header>"))
-                    break;
-
-                var dataPosition = reader.ReadInt64();
-                if (Path.GetFileName(header).Equals(Path.GetFileName(Name))) similarPath = header;
-
-                var sanitizedHeader = header.Replace(@"\", "/");
-                if (Path.GetFileName(sanitizedHeader).Equals(Path.GetFileName(sanitizedName)) &&
-                    sanitizedHeader.Contains(sanitizedName))
-                {
-                    reader.BaseStream.Seek(dataPosition, SeekOrigin.Begin);
-                    return reader.ReadBytes(reader.ReadInt32());
-                }
-
-                list.Add(header);
-            }
-
-            if (similarPath != null)
-                Log.WriteLine(
-                    $"Failed to find path '{sanitizedName}' but found similar path '{similarPath}'. Was it a typo?");
-            return null;
-        }
-
         public string ReadShader(string Name)
         {
             var builder = new StringBuilder();
             var save = false;
             var regex = $"^<.*{BuildNameRegex(Name)}>$";
-            foreach (var line in ShaderCode.Split(new string[] { Environment.NewLine },
+            foreach (var line in ShaderCode.Split(new[] { Environment.NewLine },
                 StringSplitOptions.RemoveEmptyEntries))
             {
                 var next = false;
@@ -266,12 +179,6 @@ namespace Hedra.Engine.Management
 
             if (builder.Length == 0) throw new ArgumentNullException($"Failed to find shader '{Name}'");
             return builder.ToString();
-        }
-
-        private string BuildNameRegex(string Name)
-        {
-            const string slashRegex = "\\\\*\\/*";
-            return Name.Replace("/", slashRegex).Replace(".", "\\.");
         }
 
         public unsafe byte[] LoadIcon(string Path, out int Width, out int Height)
@@ -332,6 +239,161 @@ namespace Hedra.Engine.Management
             var shapes = new List<CollisionShape>();
             if (!LoadCollisionShapesNew(Filename, Scale, shapes)) LoadCollisionsShapesLegacy(Filename, Scale, shapes);
             return shapes;
+        }
+
+        public Box LoadHitbox(string ModelFile)
+        {
+            return Physics.BuildBroadphaseBox(LoadModelVertexData(ModelFile));
+        }
+
+        public Box LoadDimensions(string ModelFile)
+        {
+            return Physics.BuildDimensionsBox(LoadModelVertexData(ModelFile));
+        }
+
+        public VertexData LoadPLYWithLODs(string Filename, Vector3 Scale)
+        {
+            var model = PLYLoader(Filename, Scale);
+            var name = Path.GetFileNameWithoutExtension(Filename);
+            var dir = Path.GetDirectoryName(Filename);
+            for (var i = 1; i < 4; ++i)
+            {
+                var iterator = (int)Math.Pow(2, i);
+                var path = $"{dir}/{name}_Lod{iterator}.ply";
+                var data = ReadBinary(path, AssetsResource);
+                if (data == null) return model;
+                var vertexInformation = PLYLoader(path, data, Scale, Vector3.Zero, Vector3.Zero);
+                model.AddLOD(vertexInformation, iterator);
+            }
+
+            return model;
+        }
+
+        public VertexData PLYLoader(string File, Vector3 Scale, Vector3 Position, Vector3 Rotation,
+            bool HasColors = true)
+        {
+            var data = ReadPath(File);
+            if (data == null) throw new ArgumentException($"Failed to find file '{File}' in the Assets folder.");
+            return PLYLoader(File, data, Scale, Position, Rotation, HasColors);
+        }
+
+        public ModelData DAELoader(string File)
+        {
+            var data = ReadPath(File);
+            if (data == null) throw new ArgumentException($"Failed to find file '{File}' in the Assets folder.");
+            var fileContents = Encoding.ASCII.GetString(data);
+            var model = ColladaLoader.LoadModel(fileContents);
+            model.Name = File;
+            return model;
+        }
+
+        public void Dispose()
+        {
+            foreach (var handler in _registeredHandlers) handler.Stream.Dispose();
+        }
+
+        public string AppData
+        {
+            get
+            {
+                if (_appData != null) return _appData;
+                return _appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/" +
+                                  "Project Hedra/";
+            }
+        }
+
+        public string AppPath
+        {
+            get
+            {
+                if (_appPath != null) return _appPath;
+                return _appPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/";
+            }
+        }
+
+        private void CopyShaders()
+        {
+            var compatibleAppPath = AppPath.Replace("/", @"\");
+
+            Log.Write($"[DEBUG] Copying shader files to executable...{Environment.NewLine}", ConsoleColor.Magenta);
+            var proc = Process.Start("cmd.exe",
+                $"/C xcopy \"{compatibleAppPath}\\..\\..\\Shaders\" \"{compatibleAppPath}\\Shaders\\\"  /s /e /y");
+            proc?.WaitForExit();
+        }
+
+        private void DecompileAssets()
+        {
+            if (_filesDecompressed) return;
+
+            _uniqueId = Guid.NewGuid().ToString();
+            TryCleanupTemp(TemporalFolder = $"{AppData}/Temp/");
+
+            var soundBytes = ZipManager.UnZipBytes(File.ReadAllBytes(AppPath + SoundResource));
+            var zipBytes = ZipManager.UnZipBytes(File.ReadAllBytes(AppPath + AssetsResource));
+
+            File.WriteAllBytes(GetResourceName(AssetsResource), zipBytes);
+            File.WriteAllBytes(GetResourceName(SoundResource), soundBytes);
+
+            _registeredHandlers = new List<ResourceHandler>();
+            _filesDecompressed = true;
+        }
+
+        private string GetResourceName(string Resource)
+        {
+            return $"{TemporalFolder}{Path.GetFileNameWithoutExtension(Resource)}-{_uniqueId}";
+        }
+
+        private void TryCleanupTemp(string Temp)
+        {
+            try
+            {
+                if (Directory.Exists(TemporalFolder)) Directory.Delete(TemporalFolder, true);
+                Directory.CreateDirectory(TemporalFolder);
+            }
+            catch (IOException e)
+            {
+                Log.WriteLine("Failed to clean temp directory.");
+            }
+        }
+
+        private static byte[] ReadBinaryFromStream(Stream Stream, string Name)
+        {
+            if (!Stream.CanRead) return null;
+            var reader = new BinaryReader(Stream);
+            var similarPath = default(string);
+            var sanitizedName = Name.Replace(@"\", "/").Replace("$DataFile$", string.Empty).Trim();
+            var length = reader.BaseStream.Length;
+            var list = new List<string>();
+            while (reader.BaseStream.Position < length)
+            {
+                var header = reader.ReadString();
+                if (header.Equals("<end_header>"))
+                    break;
+
+                var dataPosition = reader.ReadInt64();
+                if (Path.GetFileName(header).Equals(Path.GetFileName(Name))) similarPath = header;
+
+                var sanitizedHeader = header.Replace(@"\", "/");
+                if (Path.GetFileName(sanitizedHeader).Equals(Path.GetFileName(sanitizedName)) &&
+                    sanitizedHeader.Contains(sanitizedName))
+                {
+                    reader.BaseStream.Seek(dataPosition, SeekOrigin.Begin);
+                    return reader.ReadBytes(reader.ReadInt32());
+                }
+
+                list.Add(header);
+            }
+
+            if (similarPath != null)
+                Log.WriteLine(
+                    $"Failed to find path '{sanitizedName}' but found similar path '{similarPath}'. Was it a typo?");
+            return null;
+        }
+
+        private string BuildNameRegex(string Name)
+        {
+            const string slashRegex = "\\\\*\\/*";
+            return Name.Replace("/", slashRegex).Replace(".", "\\.");
         }
 
         private bool LoadCollisionShapesNew(string Filename, Vector3 Scale, List<CollisionShape> Shapes)
@@ -397,45 +459,9 @@ namespace Hedra.Engine.Management
             }
         }
 
-        public Box LoadHitbox(string ModelFile)
-        {
-            return Physics.BuildBroadphaseBox(LoadModelVertexData(ModelFile));
-        }
-
-        public Box LoadDimensions(string ModelFile)
-        {
-            return Physics.BuildDimensionsBox(LoadModelVertexData(ModelFile));
-        }
-
-        public VertexData LoadPLYWithLODs(string Filename, Vector3 Scale)
-        {
-            var model = PLYLoader(Filename, Scale);
-            var name = Path.GetFileNameWithoutExtension(Filename);
-            var dir = Path.GetDirectoryName(Filename);
-            for (var i = 1; i < 4; ++i)
-            {
-                var iterator = (int)Math.Pow(2, i);
-                var path = $"{dir}/{name}_Lod{iterator}.ply";
-                var data = ReadBinary(path, AssetsResource);
-                if (data == null) return model;
-                var vertexInformation = PLYLoader(path, data, Scale, Vector3.Zero, Vector3.Zero);
-                model.AddLOD(vertexInformation, iterator);
-            }
-
-            return model;
-        }
-
         private VertexData PLYLoader(string File, Vector3 Scale)
         {
             return PLYLoader(File, Scale, Vector3.Zero, Vector3.Zero);
-        }
-
-        public VertexData PLYLoader(string File, Vector3 Scale, Vector3 Position, Vector3 Rotation,
-            bool HasColors = true)
-        {
-            var data = ReadPath(File);
-            if (data == null) throw new ArgumentException($"Failed to find file '{File}' in the Assets folder.");
-            return PLYLoader(File, data, Scale, Position, Rotation, HasColors);
         }
 
         private VertexData PLYLoader(string Name, byte[] Data, Vector3 Scale, Vector3 Position, Vector3 Rotation,
@@ -491,7 +517,7 @@ namespace Hedra.Engine.Management
 
             var endHeader = fileContents.IndexOf("element vertex", StringComparison.Ordinal);
             fileContents = fileContents.Substring(endHeader, fileContents.Length - endHeader);
-            var numbers = Regex.Matches(fileContents, @"-?[\d]+\.[\d]+|[\d]+\.[\d]+|[\d]+").Cast<Match>()
+            var numbers = Regex.Matches(fileContents, @"-?[\d]+\.[\d]+|[\d]+\.[\d]+|[\d]+")
                 .Select(M => M.Value).ToArray();
 
             const int vertexCountIndex = 0;
@@ -586,40 +612,6 @@ namespace Hedra.Engine.Management
         {
             var fileHeader = Encoding.ASCII.GetString(Data, 1, HeaderSize);
             return fileHeader == Header;
-        }
-
-        public ModelData DAELoader(string File)
-        {
-            var data = ReadPath(File);
-            if (data == null) throw new ArgumentException($"Failed to find file '{File}' in the Assets folder.");
-            var fileContents = Encoding.ASCII.GetString(data);
-            var model = ColladaLoader.LoadModel(fileContents);
-            model.Name = File;
-            return model;
-        }
-
-        public void Dispose()
-        {
-            foreach (var handler in _registeredHandlers) handler.Stream.Dispose();
-        }
-
-        public string AppData
-        {
-            get
-            {
-                if (_appData != null) return _appData;
-                return _appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/" +
-                                  "Project Hedra/";
-            }
-        }
-
-        public string AppPath
-        {
-            get
-            {
-                if (_appPath != null) return _appPath;
-                return _appPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/";
-            }
         }
     }
 }

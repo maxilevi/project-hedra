@@ -8,7 +8,7 @@ namespace Hedra.Engine.ItemSystem
     {
         public ItemHandler Build(string Key)
         {
-            return (ItemHandler) Activator.CreateInstance(this[Key]);
+            return (ItemHandler)Activator.CreateInstance(this[Key]);
         }
     }
 }

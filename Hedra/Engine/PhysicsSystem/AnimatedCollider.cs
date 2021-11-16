@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Hedra.Engine.Rendering.Animation;
 using System.Numerics;
+using Hedra.Engine.Rendering.Animation;
 
 namespace Hedra.Engine.PhysicsSystem
 {
     public class AnimatedCollider : IDisposable
     {
-        public AnimatedModel Model { get; }
         private readonly AnimatedColliderData _colliderData;
         private readonly CollisionShape[] _shapes;
         private CollisionShape _defaultBroadphaseShape;
@@ -17,9 +16,11 @@ namespace Hedra.Engine.PhysicsSystem
         public AnimatedCollider(string Identifier, AnimatedModel Model)
         {
             this.Model = Model;
-            this._colliderData = AnimatedColliderBuilder.Build(Identifier, Model);
-            this._shapes = new CollisionShape[_colliderData.BonesData.Length];
+            _colliderData = AnimatedColliderBuilder.Build(Identifier, Model);
+            _shapes = new CollisionShape[_colliderData.BonesData.Length];
         }
+
+        public AnimatedModel Model { get; }
 
         public CollisionShape HorizontalBroadphase
         {
@@ -27,19 +28,18 @@ namespace Hedra.Engine.PhysicsSystem
             {
                 var transforms = Model.JointTransforms;
                 if (_horizontalBroadphaseShape == null)
-                    _horizontalBroadphaseShape = new CollisionShape(new Vector3[_colliderData.DefaultBroadphase.Length]);
+                    _horizontalBroadphaseShape =
+                        new CollisionShape(new Vector3[_colliderData.DefaultBroadphase.Length]);
                 for (var i = 0; i < _horizontalBroadphaseShape.Vertices.Length; i++)
-                {
                     _horizontalBroadphaseShape.Vertices[i] = Vector3.Transform(
                         _colliderData.DefaultBroadphase[i].Vertex,
                         transforms[(int)_colliderData.DefaultBroadphase[i].Id.X]
                     );
-                }
                 _horizontalBroadphaseShape.RecalculateBroadphase(new Vector3(1, 0, 1));
                 return _horizontalBroadphaseShape;
             }
         }
-        
+
         public CollisionShape Broadphase
         {
             get
@@ -48,12 +48,10 @@ namespace Hedra.Engine.PhysicsSystem
                 if (_defaultBroadphaseShape == null)
                     _defaultBroadphaseShape = new CollisionShape(new Vector3[_colliderData.DefaultBroadphase.Length]);
                 for (var i = 0; i < _defaultBroadphaseShape.Vertices.Length; i++)
-                {
                     _defaultBroadphaseShape.Vertices[i] = Vector3.Transform(
                         _colliderData.DefaultBroadphase[i].Vertex,
                         transforms[(int)_colliderData.DefaultBroadphase[i].Id.X]
                     );
-                }
                 _defaultBroadphaseShape.RecalculateBroadphase();
                 return _defaultBroadphaseShape;
             }
@@ -65,10 +63,7 @@ namespace Hedra.Engine.PhysicsSystem
             {
                 var boneBoxes = _colliderData.DefaultBoneBoxes.Select(B => B.Clone()).ToArray();
                 var transforms = Model.JointTransforms;
-                for (var i = 0; i < boneBoxes.Length; i++)
-                {
-                    boneBoxes[i].Transform(transforms[boneBoxes[i].JointId]);
-                }
+                for (var i = 0; i < boneBoxes.Length; i++) boneBoxes[i].Transform(transforms[boneBoxes[i].JointId]);
                 return boneBoxes;
             }
         }
@@ -77,12 +72,9 @@ namespace Hedra.Engine.PhysicsSystem
         {
             get
             {
-                var colliders = this.Colliders;
+                var colliders = Colliders;
                 var vertexList = new List<Vector3>();
-                for (var i = 0; i < colliders.Length; i++)
-                {
-                    vertexList.AddRange(colliders[i].Corners);
-                }
+                for (var i = 0; i < colliders.Length; i++) vertexList.AddRange(colliders[i].Corners);
                 return vertexList.ToArray();
             }
         }
@@ -91,18 +83,14 @@ namespace Hedra.Engine.PhysicsSystem
         {
             get
             {
-                var colliders = this.Colliders;
-                for (var i = 0; i < colliders.Length; i++)
-                {
-                    _shapes[i] = colliders[i].ToShape();
-                }
+                var colliders = Colliders;
+                for (var i = 0; i < colliders.Length; i++) _shapes[i] = colliders[i].ToShape();
                 return _shapes;
             }
         }
 
         public void Dispose()
         {
-
         }
     }
 }

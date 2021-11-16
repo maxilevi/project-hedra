@@ -1,11 +1,9 @@
-using System.Collections.Generic;
 using Hedra.Engine.ModuleSystem.Templates;
 
 namespace Hedra.Engine.ClassSystem.Templates
 {
     public class ClassTemplate : INamedTemplate
     {
-        public string Name { get; set; }
         public HumanoidModelTemplate Model { get; set; }
         public HumanoidModelTemplate HeadModel { get; set; }
         public HumanoidModelTemplate ChestModel { get; set; }
@@ -28,7 +26,7 @@ namespace Hedra.Engine.ClassSystem.Templates
         public string SecondSpecializationTree { get; set; }
         public StartingItemTemplate[] StartingItems { get; set; }
         public string[] StartingRecipes { get; set; } = new string[0];
-        public float AttackResistance { get; set;}
+        public float AttackResistance { get; set; }
         public float MaxStamina { get; set; }
         public float BaseDamage { get; set; }
         public float AttackingSpeedModifier { get; set; }
@@ -36,5 +34,6 @@ namespace Hedra.Engine.ClassSystem.Templates
         public float BaseManaPerLevel { get; set; }
         public bool IsRanged { get; set; }
         public float BaseHealth { get; set; }
+        public string Name { get; set; }
     }
 }

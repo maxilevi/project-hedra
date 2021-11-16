@@ -1,28 +1,41 @@
-using System;
 using System.Globalization;
+using System.Numerics;
 using Hedra.Components.Effects;
 using Hedra.Core;
-using Hedra.Engine.Localization;
-using Hedra.Engine.Management;
 using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.EntitySystem;
 using Hedra.Localization;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Rendering.Particles;
 using Hedra.Sound;
-using System.Numerics;
-using Hedra.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Mage
 {
     public class Inferno : SingleAnimationSkill<IPlayer>
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Inferno.png");
-        protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/MageInferno.dae");
+
+        protected override Animation SkillAnimation { get; } =
+            AnimationLoader.LoadAnimation("Assets/Chr/MageInferno.dae");
+
         protected override float AnimationSpeed => 1.75f;
+
+        private float Damage => 40 + 55 * (Level / (float)MaxLevel);
+        private float Radius => 16 + 32 * (Level / (float)MaxLevel);
+        protected override int MaxLevel => 20;
+        public override float MaxCooldown => 54;
+        public override float ManaCost => 110;
+        public override string Description => Translations.Get("inferno_desc");
+        public override string DisplayName => Translations.Get("inferno_skill");
+
+        public override string[] Attributes => new[]
+        {
+            Translations.Get("inferno_damage_change", Damage.ToString("0.0", CultureInfo.InvariantCulture)),
+            Translations.Get("inferno_radius_change", Radius.ToString("0.0", CultureInfo.InvariantCulture))
+        };
 
         protected override void OnAnimationEnd()
         {
@@ -36,31 +49,18 @@ namespace Hedra.Engine.SkillSystem.Mage
             );
         }
 
-        private float Damage => 40 + 55 * (Level /(float) MaxLevel);
-        private float Radius => 16 + 32 * (Level /(float) MaxLevel);
-        protected override int MaxLevel => 20;
-        public override float MaxCooldown => 54;
-        public override float ManaCost => 110;
-        public override string Description => Translations.Get("inferno_desc");
-        public override string DisplayName => Translations.Get("inferno_skill");
-        public override string[] Attributes => new[]
-        {
-            Translations.Get("inferno_damage_change", Damage.ToString("0.0", CultureInfo.InvariantCulture)),
-            Translations.Get("inferno_radius_change", Radius.ToString("0.0", CultureInfo.InvariantCulture))
-        };
-
         private class InfernoFireball : ParticleProjectile
         {
             private readonly ParticleSystem _particles;
+            private float _damage;
             private IHumanoid _parent;
             private float _radius;
-            private float _damage;
-            
+
             private InfernoFireball(IHumanoid Parent, Vector3 Origin) : base(Parent, Origin)
             {
                 _particles = new ParticleSystem();
             }
-            
+
             protected override void DoParticles()
             {
                 _particles.Position = Position;
@@ -74,7 +74,7 @@ namespace Hedra.Engine.SkillSystem.Mage
                 _particles.VariateUniformly = false;
                 for (var i = 0; i < 50; i++) _particles.Emit();
             }
-            
+
             public static void Create(IHumanoid Owner, Vector3 Position, Vector3 Direction, float Radius, float Damage)
             {
                 var fireball = new InfernoFireball(Owner, Position)
@@ -87,27 +87,18 @@ namespace Hedra.Engine.SkillSystem.Mage
                     _radius = Radius,
                     _damage = Damage
                 };
-                fireball.HitEventHandler += (_, __) =>
-                {
-                    fireball.Explode();
-                };
-                fireball.LandEventHandler += (_, __) =>
-                {
-                    fireball.Explode();
-                };
+                fireball.HitEventHandler += (_, __) => { fireball.Explode(); };
+                fireball.LandEventHandler += (_, __) => { fireball.Explode(); };
                 World.AddWorldObject(fireball);
             }
 
             private void Explode()
             {
-                SkillUtils.DoNearby(_parent, Position, _radius, (E) =>
+                SkillUtils.DoNearby(_parent, Position, _radius, E =>
                 {
                     E.Damage(_damage, _parent, out var xp);
                     _parent.XP += xp;
-                    if (Utils.Rng.Next(0, 5) == 1)
-                    {
-                        E.AddComponent(new BurningComponent(E, _parent, 4, _damage));
-                    }
+                    if (Utils.Rng.Next(0, 5) == 1) E.AddComponent(new BurningComponent(E, _parent, 4, _damage));
                 });
 
                 StartExplodeParticles();
@@ -124,17 +115,18 @@ namespace Hedra.Engine.SkillSystem.Mage
                 _particles.Scale = Vector3.One * .75f;
                 _particles.ScaleErrorMargin = new Vector3(.5f, .5f, .5f);
                 _particles.PositionErrorMargin = new Vector3(2f, 2f, 2f);
-                _particles.Shape = ParticleShape.Sphere;       
+                _particles.Shape = ParticleShape.Sphere;
                 _particles.ParticleLifetime = 1.5f + Utils.Rng.NextFloat();
-                var dir = new Vector3(Utils.Rng.NextFloat() * 2 - 1, Utils.Rng.NextFloat(), Utils.Rng.NextFloat() * 2 - 1).NormalizedFast();
+                var dir = new Vector3(Utils.Rng.NextFloat() * 2 - 1, Utils.Rng.NextFloat(),
+                    Utils.Rng.NextFloat() * 2 - 1).NormalizedFast();
                 _particles.Direction = dir * (2f + Utils.Rng.NextFloat());
                 for (var i = 0; i < 5; ++i) _particles.Emit();
-                
+
                 _particles.GravityEffect = .25f;
                 _particles.ParticleLifetime = 2f + Utils.Rng.NextFloat();
                 _particles.PositionErrorMargin = new Vector3(_radius, 2f, _radius) * 2;
                 _particles.Direction = Vector3.UnitY * 4;
-                for(var i = 0; i < 5; ++i) _particles.Emit();
+                for (var i = 0; i < 5; ++i) _particles.Emit();
                 _particles.Collides = false;
             }
 
@@ -147,11 +139,12 @@ namespace Hedra.Engine.SkillSystem.Mage
                 _particles.Scale = Vector3.One * .75f;
                 _particles.ScaleErrorMargin = new Vector3(.5f, .5f, .5f);
                 _particles.PositionErrorMargin = new Vector3(2f, 2f, 2f);
-                _particles.Shape = ParticleShape.Sphere;       
+                _particles.Shape = ParticleShape.Sphere;
                 _particles.ParticleLifetime = 1.5f + Utils.Rng.NextFloat();
-                for(var i = 0; i < 1500; i++)
+                for (var i = 0; i < 1500; i++)
                 {
-                    var dir = new Vector3(Utils.Rng.NextFloat() * 2 - 1, Utils.Rng.NextFloat(), Utils.Rng.NextFloat() * 2 - 1).NormalizedFast();
+                    var dir = new Vector3(Utils.Rng.NextFloat() * 2 - 1, Utils.Rng.NextFloat(),
+                        Utils.Rng.NextFloat() * 2 - 1).NormalizedFast();
                     _particles.Direction = dir * (2f + Utils.Rng.NextFloat());
                     _particles.Emit();
                 }

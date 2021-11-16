@@ -1,19 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Hedra.Engine.Core;
-using Microsoft.Scripting.Utils;
 using System.Numerics;
 using Hedra.Engine.Management;
 using Hedra.Framework;
 using Hedra.Numerics;
-using Hedra.Framework;
+using Microsoft.Scripting.Utils;
 
 namespace Hedra.Engine.Rendering.Geometry
 {
     public class MeshOperations
     {
-        public static unsafe void FlatMesh(IList<uint> Indices, IList<Vector3> Vertices, IList<Vector3> Normals,
+        public static void FlatMesh(IList<uint> Indices, IList<Vector3> Vertices, IList<Vector3> Normals,
             IList<Vector4> Colors, IList<float> Extradata)
         {
             var size = Indices.Count * sizeof(uint) + Vertices.Count * HedraSize.Vector3 +
@@ -25,7 +22,7 @@ namespace Hedra.Engine.Rendering.Geometry
             }
         }
 
-        public static unsafe void FlatMesh(IAllocator Allocator, IList<uint> Indices, IList<Vector3> Vertices,
+        public static void FlatMesh(IAllocator Allocator, IList<uint> Indices, IList<Vector3> Vertices,
             IList<Vector3> Normals, IList<Vector4> Colors, IList<float> Extradata)
         {
             if (Colors.Count == 0) return;
@@ -36,9 +33,9 @@ namespace Hedra.Engine.Rendering.Geometry
             var newExtradata = new NativeList<float>(Allocator);
             for (var i = 0; i < Indices.Count; i += 3)
             {
-                var i0 = (int) Indices[i];
-                var i1 = (int) Indices[i + 1];
-                var i2 = (int) Indices[i + 2];
+                var i0 = (int)Indices[i];
+                var i1 = (int)Indices[i + 1];
+                var i2 = (int)Indices[i + 2];
 
                 var triangleColor = (Colors[i0] + Colors[i1] + Colors[i2]) * .33f;
                 newColors.Add(triangleColor);
@@ -54,9 +51,9 @@ namespace Hedra.Engine.Rendering.Geometry
                 newNormals.Add(normal);
                 newNormals.Add(normal);
 
-                newIndices.Add((uint) newIndices.Count);
-                newIndices.Add((uint) newIndices.Count);
-                newIndices.Add((uint) newIndices.Count);
+                newIndices.Add((uint)newIndices.Count);
+                newIndices.Add((uint)newIndices.Count);
+                newIndices.Add((uint)newIndices.Count);
 
                 if (Extradata.Count != 0)
                 {
@@ -77,7 +74,7 @@ namespace Hedra.Engine.Rendering.Geometry
             Normals.AddRange(newNormals);
             Colors.AddRange(newColors);
             Extradata.AddRange(newExtradata);
-            
+
             newIndices.Dispose();
             newVertices.Dispose();
             newNormals.Dispose();
@@ -85,12 +82,14 @@ namespace Hedra.Engine.Rendering.Geometry
             newExtradata.Dispose();
         }
 
-        public static void AddWindValues(IList<Vector3> Vertices, IList<Vector4> Colors, IList<float> Extradata, float Scalar = 1)
+        public static void AddWindValues(IList<Vector3> Vertices, IList<Vector4> Colors, IList<float> Extradata,
+            float Scalar = 1)
         {
             AddWindValues(Vertices, Colors, Extradata, -Vector4.One, Scalar);
         }
-        
-        public static void AddWindValues(IList<Vector3> Vertices, IList<Vector4> Colors, IList<float> Extradata, Vector4 ColorFilter, float Scalar = 1)
+
+        public static void AddWindValues(IList<Vector3> Vertices, IList<Vector4> Colors, IList<float> Extradata,
+            Vector4 ColorFilter, float Scalar = 1)
         {
             AddWindValues(
                 Vertices,
@@ -103,39 +102,35 @@ namespace Hedra.Engine.Rendering.Geometry
             );
         }
 
-        public static void AddWindValues(IList<Vector3> Vertices, IList<Vector4> Colors, IList<float> Extradata, Vector4 ColorFilter, Vector3 Lowest, Vector3 Highest, float Scalar)
+        public static void AddWindValues(IList<Vector3> Vertices, IList<Vector4> Colors, IList<float> Extradata,
+            Vector4 ColorFilter, Vector3 Lowest, Vector3 Highest, float Scalar)
         {
             var values = new float[Vertices.Count];
             var all = ColorFilter == -Vector4.One;
-            for(var i = 0; i < Extradata.Count; i++)
+            for (var i = 0; i < Extradata.Count; i++)
             {
-                if(Colors[i] != ColorFilter && !all)
+                if (Colors[i] != ColorFilter && !all)
                 {
                     values[i] = 0;
                     continue;
-                }             
-                var shade = Vector3.Dot(Vertices[i] - Lowest, Vector3.UnitY) / Vector3.Dot(Highest - Lowest, Vector3.UnitY);
-                Extradata[i] = (shade + (float) Math.Pow(shade, 1.3)) * Scalar;
+                }
+
+                var shade = Vector3.Dot(Vertices[i] - Lowest, Vector3.UnitY) /
+                            Vector3.Dot(Highest - Lowest, Vector3.UnitY);
+                Extradata[i] = (shade + (float)Math.Pow(shade, 1.3)) * Scalar;
             }
         }
 
         public static void PaintMesh(IList<Vector4> Colors, Vector4 Color)
         {
-            for(var i = 0; i < Colors.Count; i++)
-            {
-                Colors[i] = Color;
-            }
+            for (var i = 0; i < Colors.Count; i++) Colors[i] = Color;
         }
 
         public static void ColorMesh(IList<Vector4> Colors, Vector4 OriginalColor, Vector4 ReplacementColor)
         {
-            for(var i = 0; i < Colors.Count; i++)
-            {
-                if((Colors[i] - OriginalColor).Length() < .01f)
-                {
+            for (var i = 0; i < Colors.Count; i++)
+                if ((Colors[i] - OriginalColor).Length() < .01f)
                     Colors[i] = ReplacementColor;
-                }
-            }
         }
 
         public static unsafe void UniqueVertices(IList<uint> Indices, IList<Vector3> Vertices, IList<Vector3> Normals,
@@ -156,7 +151,7 @@ namespace Hedra.Engine.Rendering.Geometry
             {
                 allocator = new HeapAllocator(size);
             }
-            
+
             var newIndices = new NativeList<uint>(allocator);
             var newVertices = new NativeList<Vector3>(allocator);
             var newNormals = new NativeList<Vector3>(allocator);
@@ -165,7 +160,7 @@ namespace Hedra.Engine.Rendering.Geometry
             var vertexMap = new Dictionary<Vector3, int>();
             for (var i = 0; i < Indices.Count; i++)
             {
-                var curr = (int) Indices[i];
+                var curr = (int)Indices[i];
                 var vertex = Vertices[curr];
                 var index = 0;
                 if (vertexMap.ContainsKey(vertex))
@@ -184,7 +179,7 @@ namespace Hedra.Engine.Rendering.Geometry
                         newExtradata.Add(Extradata[curr]);
                 }
 
-                newIndices.Add((uint) index);
+                newIndices.Add((uint)index);
             }
 
             Indices.Clear();
@@ -206,18 +201,18 @@ namespace Hedra.Engine.Rendering.Geometry
             return SupportPoint(Vertices, Colors, Direction, -Vector4.One);
         }
 
-        public static Vector3 SupportPoint(IList<Vector3> Vertices, IList<Vector4> Colors, Vector3 Direction, Vector4 Color)
+        public static Vector3 SupportPoint(IList<Vector3> Vertices, IList<Vector4> Colors, Vector3 Direction,
+            Vector4 Color)
         {
             var hasColors = Colors.Count != 0;
             var highest = float.MinValue;
             var support = Vector3.Zero;
             var all = Color == -Vector4.One;
-            for (var i = Vertices.Count-1; i > -1; i--)
+            for (var i = Vertices.Count - 1; i > -1; i--)
             {
                 if (hasColors)
-                {
-                    if (Colors[i] != Color && !all) continue;
-                }
+                    if (Colors[i] != Color && !all)
+                        continue;
 
                 var v = Vertices[i];
                 var dot = Vector3.Dot(Direction, v);
@@ -226,17 +221,20 @@ namespace Hedra.Engine.Rendering.Geometry
                 highest = dot;
                 support = v;
             }
-            return support;  
+
+            return support;
         }
 
         public static void GraduateColor(IList<Vector3> Vertices, IList<Vector4> Colors, Vector3 Direction)
         {
             GraduateColor(Vertices, Colors, Direction, .3f);
         }
-        public static void GraduateColor(IList<Vector3> Vertices, IList<Vector4> Colors, Vector3 Direction, float Amount)
+
+        public static void GraduateColor(IList<Vector3> Vertices, IList<Vector4> Colors, Vector3 Direction,
+            float Amount)
         {
             var highest = SupportPoint(Vertices, Colors, Direction);
-            var lowest =  SupportPoint(Vertices, Colors, -Direction);
+            var lowest = SupportPoint(Vertices, Colors, -Direction);
 
             var dot = Vector3.Dot(highest - lowest, Direction);
             for (var i = 0; i < Vertices.Count; i++)
@@ -245,31 +243,25 @@ namespace Hedra.Engine.Rendering.Geometry
                 Colors[i] += new Vector4(Amount, Amount, Amount, 0) * shade;
             }
         }
-        
+
         public static void Transform(IList<Vector3> Vertices, IList<Vector3> Normals, Matrix4x4 Matrix)
         {
-            for (var i = 0; i < Vertices.Count; i++)
-            {
-                Vertices[i] = Vector3.Transform(Vertices[i], Matrix);
-            }
+            for (var i = 0; i < Vertices.Count; i++) Vertices[i] = Vector3.Transform(Vertices[i], Matrix);
             var normalMat = Matrix.ClearScale().ClearTranslation().Inverted().Transposed();
-            for (var i = 0; i < Normals.Count; i++)
-            {
-                Normals[i] = Vector3.TransformNormal(Normals[i], normalMat);
-            }
+            for (var i = 0; i < Normals.Count; i++) Normals[i] = Vector3.TransformNormal(Normals[i], normalMat);
         }
 
-        public static void Optimize(IAllocator Allocator, IList<uint> Indices, IList<Vector3> Vertices, IList<Vector3> Normals, IList<Vector4> Colors, IList<float> Extradata)
+        public static void Optimize(IAllocator Allocator, IList<uint> Indices, IList<Vector3> Vertices,
+            IList<Vector3> Normals, IList<Vector4> Colors, IList<float> Extradata)
         {
             var hasColors = Colors.Count != 0;
             var hasExtradata = Extradata.Count != 0;
             if (!hasColors) return;
-            
+
             var originalVertices = Vertices.Count;
             var vertices = new NativeArray<MeshOptimizerVertex>(Allocator, Vertices.Count);
             var indices = new NativeArray<uint>(Allocator, Indices.Count);
             for (var i = 0; i < vertices.Length; ++i)
-            {
                 vertices[i] = new MeshOptimizerVertex
                 {
                     Position = Vertices[i],
@@ -277,11 +269,7 @@ namespace Hedra.Engine.Rendering.Geometry
                     Color = Colors[i],
                     Extradata = hasExtradata ? Extradata[i] : default
                 };
-            }
-            for (var i = 0; i < indices.Length; ++i)
-            {
-                indices[i] = Indices[i];
-            }
+            for (var i = 0; i < indices.Length; ++i) indices[i] = Indices[i];
 
             Native.MeshOptimizer.Optimize(Allocator, vertices, indices, MeshOptimizerVertex.SizeInBytes);
             Indices.Clear();
@@ -296,15 +284,16 @@ namespace Hedra.Engine.Rendering.Geometry
                 Normals.Add(item.Normal);
                 Colors.Add(item.Color);
                 Vertices.Add(item.Position);
-                if(hasExtradata)
+                if (hasExtradata)
                     Extradata.Add(item.Extradata);
             }
+
             Indices.AddRange(indices);
             vertices.Dispose();
             indices.Dispose();
             PerformanceStatistics.RegisterMeshOptimization(Vertices.Count, originalVertices);
         }
-        
+
         private struct MeshOptimizerVertex
         {
             public static uint SizeInBytes => sizeof(float) * 11;

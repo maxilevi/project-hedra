@@ -6,29 +6,20 @@
  */
 
 using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
+using System.Diagnostics;
 using System.Numerics;
 using Hedra.Engine.IO;
-using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
-using Hedra.Game;
+using SixLabors.ImageSharp;
 using GLDrawBuffersEnum = Silk.NET.OpenGL.GLEnum;
 
 namespace Hedra.Engine.Rendering.Core
 {
     /// <summary>
-    /// Description of FBO.
+    ///     Description of FBO.
     /// </summary>
     public sealed class FBO : GLObject<FBO>
     {
-        public override uint Id => _id;
-        public uint[] TextureId { get; private set; }
-        public uint DepthId { get; private set; }
-        public Size Size { get; private set; }
-        public FramebufferAttachment[] Attachments { get; private set; }
-        public PixelInternalFormat[] Formats { get; private set; }
-        public Vector2 ViewportSize { get; set; }
         private readonly bool _multisample;
         private uint _id;
         private int _samples;
@@ -49,7 +40,7 @@ namespace Hedra.Engine.Rendering.Core
         }
 
         /// <summary>
-        /// Creates a framebuffer object and its associated resources (depth and pbuffers).
+        ///     Creates a framebuffer object and its associated resources (depth and pbuffers).
         /// </summary>
         /// <param name="Size">Specifies the size (in pixels) of the framebuffer and it's associated buffers.</param>
         /// <param name="Attachments">Specifies the attachment to use for the pbuffer.</param>
@@ -63,7 +54,7 @@ namespace Hedra.Engine.Rendering.Core
 
 
         /// <summary>
-        /// Creates a framebuffer object and its associated resources (depth and pbuffers).
+        ///     Creates a framebuffer object and its associated resources (depth and pbuffers).
         /// </summary>
         /// <param name="Size">Specifies the size (in pixels) of the framebuffer and it's associated buffers.</param>
         /// <param name="Attachments">Specifies the attachments to use for the frame buffer.</param>
@@ -88,7 +79,7 @@ namespace Hedra.Engine.Rendering.Core
             if (Attachments.Length == 1 && Attachments[0] == FramebufferAttachment.DepthAttachment)
             {
                 // if this is a depth attachment only
-                TextureId = new uint[] { (uint)Renderer.GenTexture() };
+                TextureId = new[] { Renderer.GenTexture() };
                 if (Multisample)
                     Renderer.BindTexture(TextureTarget.Texture2DMultisample, TextureId[0]);
                 else
@@ -179,7 +170,7 @@ namespace Hedra.Engine.Rendering.Core
                 // Create and attach a 24-bit depth buffer to the framebuffer
                 if (Depth)
                 {
-                    DepthId = (uint)Renderer.GenTexture();
+                    DepthId = Renderer.GenTexture();
                     if (Multisample)
                         Renderer.BindTexture(TextureTarget.Texture2DMultisample, DepthId);
                     else
@@ -228,21 +219,29 @@ namespace Hedra.Engine.Rendering.Core
             Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
         }
 
+        public override uint Id => _id;
+        public uint[] TextureId { get; private set; }
+        public uint DepthId { get; private set; }
+        public Size Size { get; }
+        public FramebufferAttachment[] Attachments { get; }
+        public PixelInternalFormat[] Formats { get; }
+        public Vector2 ViewportSize { get; set; }
+
 
         /// <summary>
-        /// Check to ensure that the FBO was disposed of properly.
+        ///     Check to ensure that the FBO was disposed of properly.
         /// </summary>
         ~FBO()
         {
             if (Program.GameWindow.IsExiting || Program.IsDummy) return;
             if (DepthId != 0 || Id != 0 || TextureId != null)
-                System.Diagnostics.Debug.Fail("FBO was not disposed of properly.");
+                Debug.Fail("FBO was not disposed of properly.");
         }
 
         /// <summary>
-        /// Binds the framebuffer and all of the renderbuffers.
-        /// Clears the buffer bits and sets viewport size.
-        /// Perform all rendering after this call.
+        ///     Binds the framebuffer and all of the renderbuffers.
+        ///     Clears the buffer bits and sets viewport size.
+        ///     Perform all rendering after this call.
         /// </summary>
         /// <param name="Clear">True to clear both the color and depth buffer bits of the FBO before enabling.</param>
         public void Bind(bool Clear = true)
@@ -308,13 +307,13 @@ namespace Hedra.Engine.Rendering.Core
 
             if (Id != 0)
             {
-                Renderer.DeleteFramebuffers(1, new uint[] { _id });
+                Renderer.DeleteFramebuffers(1, _id);
                 _id = 0;
             }
 
             if (DepthId != 0)
             {
-                Renderer.DeleteFramebuffers(1, new uint[] { DepthId });
+                Renderer.DeleteFramebuffers(1, DepthId);
                 DepthId = 0;
             }
         }

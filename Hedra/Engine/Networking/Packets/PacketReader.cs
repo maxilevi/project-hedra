@@ -1,20 +1,25 @@
 using System;
 using System.IO;
-using Hedra.Engine.ItemSystem;
-using Hedra.Items;
 using System.Numerics;
+using Hedra.Engine.ItemSystem;
 
 namespace Hedra.Engine.Networking.Packets
 {
     public class PacketReader : IDisposable
     {
-        private readonly MemoryStream _stream;
         private readonly BinaryReader _reader;
+        private readonly MemoryStream _stream;
 
         public PacketReader(byte[] Contents)
         {
             _stream = new MemoryStream(Contents);
             _reader = new BinaryReader(_stream);
+        }
+
+        public void Dispose()
+        {
+            _stream.Dispose();
+            _reader.Dispose();
         }
 
         public int ReadInt32()
@@ -31,7 +36,7 @@ namespace Hedra.Engine.Networking.Packets
         {
             return _reader.ReadBoolean();
         }
-        
+
         public string ReadString()
         {
             return _reader.ReadString();
@@ -60,17 +65,8 @@ namespace Hedra.Engine.Networking.Packets
         public T[] ReadArray<T>(Func<T> ReadEach)
         {
             var array = new T[_reader.ReadInt32()];
-            for (var i = 0; i < array.Length; ++i)
-            {
-                array[i] = ReadEach();
-            }
+            for (var i = 0; i < array.Length; ++i) array[i] = ReadEach();
             return array;
-        }
-
-        public void Dispose()
-        {
-            _stream.Dispose();
-            _reader.Dispose();
         }
     }
 }

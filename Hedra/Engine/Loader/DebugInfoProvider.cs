@@ -1,35 +1,25 @@
 using System;
-using System.Collections.Generic;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Linq;
+using System.Numerics;
+using Hedra.AISystem.Behaviours;
 using Hedra.Core;
+using Hedra.Engine.Bullet;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
-using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.Native;
-using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
-using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Rendering.UI;
-using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-using Hedra.WeaponSystem;
-using System.Numerics;
-using Hedra.AISystem.Behaviours;
-using Hedra.Engine.Bullet;
-using Hedra.Engine.Core;
 using Silk.NET.Input;
-
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Loader
 {
@@ -37,19 +27,19 @@ namespace Hedra.Engine.Loader
     {
         private readonly Panel _debugPanel;
         private readonly GUIText _debugText;
-        private readonly BackgroundTexture _staticPool;
-        private readonly BackgroundTexture _waterPool;
-        private readonly BackgroundTexture _instancePool;
         private readonly BackgroundTexture _depthTexture;
         private readonly VBO<Vector3> _frustumPoints;
         private readonly VAO<Vector3> _frustumVAO;
-        private float _passedTime;
+        private readonly BackgroundTexture _instancePool;
+        private readonly BackgroundTexture _staticPool;
+        private readonly BackgroundTexture _waterPool;
+        private int _chunkCount = 1;
         private bool _depthMode;
         private bool _extraDebugView;
         private bool _fpsOnTitle;
-        private string _originalTitle;
+        private readonly string _originalTitle;
+        private float _passedTime;
         private int _voxelCount;
-        private int _chunkCount = 1;
 
         public DebugInfoProvider()
         {
@@ -83,6 +73,11 @@ namespace Hedra.Engine.Loader
                 if (Args.Key == Key.F12 && GameSettings.DebugView) _fpsOnTitle = !_fpsOnTitle;
             });
 #endif
+        }
+
+        public void Dispose()
+        {
+            EventDispatcher.UnregisterKeyDown(this);
         }
 
         public void Update()
@@ -143,7 +138,7 @@ namespace Hedra.Engine.Loader
                         Path = "Debug:InstanceGeometryPool"
                     }, false);
                     var borderWidth = (chunkBound - 1) * Chunk.Height * 8;
-                    _voxelCount = (int)0;
+                    _voxelCount = 0;
                     _chunkCount = Math.Max(World.Chunks.Count, 1);
                 }
             }
@@ -191,11 +186,6 @@ namespace Hedra.Engine.Loader
                                         }*/
                 }
             }
-        }
-
-        public void Dispose()
-        {
-            EventDispatcher.UnregisterKeyDown(this);
         }
     }
 }

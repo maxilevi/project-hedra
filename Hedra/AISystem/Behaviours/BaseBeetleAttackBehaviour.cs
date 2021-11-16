@@ -1,22 +1,19 @@
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using SixLabors.Fonts;
+using System.Numerics;
 using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
+using Hedra.Numerics;
 using Hedra.Sound;
 using Hedra.WorldObjects;
-using System.Numerics;
-using Hedra.Numerics;
+using SixLabors.ImageSharp;
 
 namespace Hedra.AISystem.Behaviours
 {
     public abstract class BaseBeetleAttackBehaviour : AttackBehaviour
     {
         protected readonly Timer SpitTimer;
-        protected ChargeBehaviour Charge { get; }
 
         protected BaseBeetleAttackBehaviour(IEntity Parent) : base(Parent)
         {
@@ -26,6 +23,12 @@ namespace Hedra.AISystem.Behaviours
                 AutoReset = false
             };
         }
+
+        protected ChargeBehaviour Charge { get; }
+
+        protected virtual float SpitCooldown => 1;
+        protected abstract bool HasSpit { get; }
+        private bool HasBite => true;
 
         public override void Update()
         {
@@ -154,9 +157,5 @@ namespace Hedra.AISystem.Behaviours
 
         protected abstract Animation GetBiteAnimation(QuadrupedModel Model);
         protected abstract Animation GetSpitAnimation(QuadrupedModel Model);
-
-        protected virtual float SpitCooldown => 1;
-        protected abstract bool HasSpit { get; }
-        private bool HasBite => true;
     }
 }

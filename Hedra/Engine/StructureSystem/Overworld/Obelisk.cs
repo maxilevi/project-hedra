@@ -8,36 +8,32 @@
  */
 
 using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using Hedra.Core;
+using System.Numerics;
 using Hedra.Engine.Generation;
-using Hedra.Engine.Localization;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Localization;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Sound;
-using System.Numerics;
-using Hedra.Numerics;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
     /// <summary>
-    /// Description of Obelisk.
+    ///     Description of Obelisk.
     /// </summary>
     public sealed class Obelisk : InteractableStructure
     {
+        public Obelisk(Vector3 Position) : base(Position)
+        {
+        }
+
         public override string Message => Translations.Get("interact_obelisk");
         public override int InteractDistance => 32;
         public ObeliskType Type { get; set; }
         public HighlightedAreaWrapper AreaWrapper { get; set; }
         protected override bool AllowThroughCollider => true;
-
-        public Obelisk(Vector3 Position) : base(Position)
-        {
-        }
 
         protected override void Interact(IHumanoid Humanoid)
         {
@@ -64,7 +60,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                     Humanoid.MessageDispatcher.ShowMessage(Translations.Get("obelisk_stamina"), 2, Color.Bisque);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException($"Obelisk type does not exist.");
+                    throw new ArgumentOutOfRangeException("Obelisk type does not exist.");
             }
 
             SoundPlayer.PlaySound(SoundType.NotificationSound, Position, false, 1f, 0.6f);
@@ -86,7 +82,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 case ObeliskType.Stamina:
                     return Color.Coral.ToVector4() * .3f;
 
-                default: throw new ArgumentOutOfRangeException($"Obelisk color wasnt found.");
+                default: throw new ArgumentOutOfRangeException("Obelisk color wasnt found.");
             }
         }
 
@@ -104,7 +100,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 case 3:
                     return new Vector4(0.792f, 0.796f, 0.812f, 1.000f);
 
-                default: throw new ArgumentOutOfRangeException($"Obelisk color wasnt found.");
+                default: throw new ArgumentOutOfRangeException("Obelisk color wasnt found.");
             }
         }
 

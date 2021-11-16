@@ -9,42 +9,32 @@
 
 using System;
 using Hedra.Core;
-using Hedra.Engine.Generation;
-using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
-using Hedra.Engine.Rendering.Particles;
-using Hedra.EntitySystem;
-using System.Numerics;
 
 namespace Hedra.Engine.SkillSystem
 {
     public abstract class PlayerSingleAnimationSkill : SingleAnimationSkill<IPlayer>
     {
     }
-    
-    public abstract class SingleAnimationSkill<T> : CappedSkill<T> where T : class, IObjectWithAnimation, ISkillUser, IObjectWithMovement, IObjectWithWeapon, IObjectWithLifeCycle
+
+    public abstract class SingleAnimationSkill<T> : CappedSkill<T>
+        where T : class, IObjectWithAnimation, ISkillUser, IObjectWithMovement, IObjectWithWeapon, IObjectWithLifeCycle
     {
-        protected abstract Animation SkillAnimation { get; }
-        protected virtual float AnimationSpeed { get; } = 1;
-        protected virtual bool EquipWeapons => true;
-        protected virtual bool CanMoveWhileCasting => true;
-        protected virtual bool ShouldCancel => User.AnimationBlending != SkillAnimation;
-        public override float IsAffectingModifier => Casting ? 1 : 0;
+        private bool _executedEnd;
+        private bool _executedMid;
+        private bool _executedStart;
         private float _frameCounter;
         private bool _shouldEnd;
-        private bool _executedStart;
-        private bool _executedMid;
-        private bool _executedEnd;
 
-        protected SingleAnimationSkill() 
+        protected SingleAnimationSkill()
         {
-            if(SkillAnimation != SkillAnimation) throw new ArgumentOutOfRangeException($"SkillAnimation needs to be a singleton.");
+            if (SkillAnimation != SkillAnimation)
+                throw new ArgumentOutOfRangeException("SkillAnimation needs to be a singleton.");
             SkillAnimation.Loop = false;
             SkillAnimation.OnAnimationStart += Sender =>
             {
-                if(!_executedStart)
+                if (!_executedStart)
                     OnAnimationStart();
                 _executedStart = true;
             };
@@ -63,6 +53,15 @@ namespace Hedra.Engine.SkillSystem
             };
         }
 
+        protected abstract Animation SkillAnimation { get; }
+        protected virtual float AnimationSpeed { get; } = 1;
+        protected virtual bool EquipWeapons => true;
+        protected virtual bool CanMoveWhileCasting => true;
+        protected virtual bool ShouldCancel => User.AnimationBlending != SkillAnimation;
+        public override float IsAffectingModifier => Casting ? 1 : 0;
+
+        private bool ShouldEnd => User.IsDead || User.IsKnocked || _shouldEnd || ShouldCancel;
+
         protected override void DoUse()
         {
             Casting = true;
@@ -77,10 +76,7 @@ namespace Hedra.Engine.SkillSystem
                 User.InAttackStance = false;
             }
 
-            if (!CanMoveWhileCasting)
-            {
-                User.CaptureMovement = false;
-            }
+            if (!CanMoveWhileCasting) User.CaptureMovement = false;
             User.Orientate();
             _shouldEnd = false;
             _executedStart = false;
@@ -98,7 +94,7 @@ namespace Hedra.Engine.SkillSystem
             User.ResetModel();
             OnDisable();
         }
-        
+
         public override void Update()
         {
             var t = GetType();
@@ -116,46 +112,37 @@ namespace Hedra.Engine.SkillSystem
             OnExecution();
         }
 
-        private bool ShouldEnd => User.IsDead || User.IsKnocked || _shouldEnd || ShouldCancel;
-
         protected void Cancel()
         {
             _shouldEnd = true;
         }
-        
+
         protected virtual void OnDisable()
         {
-            
         }
-        
+
         protected virtual void OnEnable()
         {
-            
         }
-        
+
         protected virtual void OnAnimationMid()
         {
-            
         }
-        
+
         protected virtual void OnQuarterSecond()
         {
-            
         }
 
         protected virtual void OnAnimationStart()
         {
-            
         }
 
         protected virtual void OnAnimationEnd()
         {
-            
         }
 
         protected virtual void OnExecution()
         {
-            
         }
     }
 }

@@ -4,6 +4,7 @@
  * Time: 07:04 p.m.
  *
  */
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,34 +12,40 @@ using System.Diagnostics;
 namespace Hedra.Engine.Management
 {
     /// <summary>
-    /// A static class which manages invokes on the main thread
+    ///     A static class which manages invokes on the main thread
     /// </summary>
     public static class Executer
     {
         private static readonly List<InvokerCall> Functions = new List<InvokerCall>();
         private static readonly List<InvokerCall> StandBy = new List<InvokerCall>();
         private static readonly object Lock = new object();
-        
+
         /// <summary>
-        /// Executes the give method on the main thread after a frame has passed.
+        ///     Executes the give method on the main thread after a frame has passed.
         /// </summary>
         public static void ExecuteOnMainThread(Action Func)
         {
             lock (Lock)
+            {
                 StandBy.Add(new InvokerCall(Func));
+            }
         }
 
         public static void Flush()
         {
             lock (Lock)
+            {
                 StandBy.Clear();
+            }
         }
-        
+
         public static void Clear()
         {
             Flush();
             lock (Lock)
+            {
                 Functions.Clear();
+            }
         }
 
         public static void Update()
@@ -49,10 +56,7 @@ namespace Hedra.Engine.Management
                 StandBy.Clear();
             }
 
-            for (var i = 0; i < Functions.Count; i++)
-            {
-                Functions[i].Call();
-            }
+            for (var i = 0; i < Functions.Count; i++) Functions[i].Call();
             Functions.Clear();
         }
 
@@ -62,7 +66,7 @@ namespace Hedra.Engine.Management
 #if DEBUG
             public StackTrace Trace;
 #endif
-            public Action Call;
+            public readonly Action Call;
 
             public InvokerCall(Action Call)
             {

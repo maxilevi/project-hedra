@@ -5,58 +5,33 @@
  *
  */
 
-using System;
-using Hedra.Sound;
 using System.Numerics;
 using Silk.NET.OpenAL;
 
 namespace Hedra.Engine.Sound
 {
     /// <summary>
-    /// Description of SoundSource.
+    ///     Description of SoundSource.
     /// </summary>
     public class SoundSource
     {
         private readonly AL _al;
-        public readonly uint Id;        
+        public readonly uint Id;
+        private bool _initialized;
         private Vector3 _position;
         private float _volume;
-        private bool _initialized;
-        
+
         public unsafe SoundSource(Vector3 Position)
         {
             _al = AL.GetApi();
             var id = 0u;
             _al.GenSources(1, &id);
             _al.SetSourceProperty(Id, SourceFloat.Gain, 1);
-            _al.SetSourceProperty(Id, SourceFloat.Pitch,  1);
+            _al.SetSourceProperty(Id, SourceFloat.Pitch, 1);
             _al.SetSourceProperty(Id, SourceVector3.Position, Position);
             Id = id;
         }
 
-        public void Stop()
-        {
-            _al.SourceStop(Id);
-        }
-
-        public void Play(SoundBuffer Buffer)
-        {
-            _al.SetSourceProperty(Id, SourceInteger.Buffer, (int) Buffer.Id);
-            var position = Vector3.Zero;
-            _al.SetSourceProperty(Id, SourceVector3.Position, position);
-            _al.SourcePlay(Id);
-        }
-        
-        public void Play(SoundBuffer Buffer, Vector3 Location, float Pitch, float Gain, bool Loop)
-        {
-            _al.SetSourceProperty(Id, SourceFloat.Pitch, Pitch);
-            _al.SetSourceProperty(Id, SourceFloat.Gain, Gain);
-            _al.SetSourceProperty(Id, SourceBoolean.Looping, Loop);
-            
-            this.Stop();
-            this.Play(Buffer);
-        }
-        
         public bool IsPlaying
         {
             get
@@ -64,21 +39,22 @@ namespace Hedra.Engine.Sound
                 _al.GetSourceProperty(Id, GetSourceInteger.SourceState, out var i);
                 var state = (SourceState)i;
 
-                return (state == SourceState.Playing);
+                return state == SourceState.Playing;
             }
         }
 
         public Vector3 Position
         {
-            get => this._position;
-            set{
-                if(value == this._position) return;
+            get => _position;
+            set
+            {
+                if (value == _position) return;
                 unsafe
                 {
                     _al.SetSourceProperty(Id, SourceVector3.Position, (float*)&value);
                 }
 
-                this._position = value;
+                _position = value;
             }
         }
 
@@ -90,6 +66,29 @@ namespace Hedra.Engine.Sound
                 _al.SetSourceProperty(Id, SourceFloat.Gain, _volume = value);
                 _initialized = true;
             }
+        }
+
+        public void Stop()
+        {
+            _al.SourceStop(Id);
+        }
+
+        public void Play(SoundBuffer Buffer)
+        {
+            _al.SetSourceProperty(Id, SourceInteger.Buffer, (int)Buffer.Id);
+            var position = Vector3.Zero;
+            _al.SetSourceProperty(Id, SourceVector3.Position, position);
+            _al.SourcePlay(Id);
+        }
+
+        public void Play(SoundBuffer Buffer, Vector3 Location, float Pitch, float Gain, bool Loop)
+        {
+            _al.SetSourceProperty(Id, SourceFloat.Pitch, Pitch);
+            _al.SetSourceProperty(Id, SourceFloat.Gain, Gain);
+            _al.SetSourceProperty(Id, SourceBoolean.Looping, Loop);
+
+            Stop();
+            Play(Buffer);
         }
     }
 }

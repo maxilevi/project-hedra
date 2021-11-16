@@ -1,27 +1,22 @@
 using System;
 using System.Collections.Generic;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using System.Linq;
-using Hedra.AISystem.Humanoid;
 using Hedra.Components;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
-using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Rendering;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 {
     public class RaiseSkeleton : SingleAnimationSkill<ISkilledAnimableEntity>
     {
+        private readonly List<IEntity> _skeletons = new List<IEntity>();
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/RaiseSkeletons.png");
 
         protected override Animation SkillAnimation { get; } =
@@ -29,7 +24,19 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 
         protected override float AnimationSpeed => 1.5f;
         protected override bool CanMoveWhileCasting => false;
-        private readonly List<IEntity> _skeletons = new List<IEntity>();
+
+        private int MaxMinions => 1 + (int)(4 * (Level / (float)MaxLevel));
+        public override float IsAffectingModifier => Math.Min(_skeletons.Count, 1);
+        protected override int MaxLevel => 20;
+        public override float ManaCost => 140 - 70 * (Level / (float)MaxLevel);
+        public override float MaxCooldown => 54 - 30 * (Level / (float)MaxLevel);
+        public override string Description => Translations.Get("raise_skeleton_desc");
+        public override string DisplayName => Translations.Get("raise_skeleton_skill");
+
+        public override string[] Attributes => new[]
+        {
+            Translations.Get("raise_skeleton_max_change", MaxMinions)
+        };
 
         protected override void OnAnimationEnd()
         {
@@ -83,19 +90,6 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
                 SkillUtils.DarkContinuousParticles(Parent);
             }
         }
-
-        private int MaxMinions => 1 + (int)(4 * (Level / (float)MaxLevel));
-        public override float IsAffectingModifier => Math.Min(_skeletons.Count, 1);
-        protected override int MaxLevel => 20;
-        public override float ManaCost => 140 - 70 * (Level / (float)MaxLevel);
-        public override float MaxCooldown => 54 - 30 * (Level / (float)MaxLevel);
-        public override string Description => Translations.Get("raise_skeleton_desc");
-        public override string DisplayName => Translations.Get("raise_skeleton_skill");
-
-        public override string[] Attributes => new[]
-        {
-            Translations.Get("raise_skeleton_max_change", MaxMinions)
-        };
 
         private class DefaultMastery : IMinionMastery
         {

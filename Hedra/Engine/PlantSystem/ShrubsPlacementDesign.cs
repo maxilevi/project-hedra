@@ -1,17 +1,14 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Numerics;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
-using System.Numerics;
 
 namespace Hedra.Engine.PlantSystem
 {
     public class ShrubsPlacementDesign : PlacementDesign
     {
-        private readonly PlantDesign _fernDesign;
         private readonly PlantDesign _bushDesign;
+        private readonly PlantDesign _fernDesign;
 
         public ShrubsPlacementDesign()
         {

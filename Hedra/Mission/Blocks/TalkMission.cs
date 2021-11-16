@@ -1,25 +1,34 @@
+using System.Numerics;
 using Hedra.Components;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player.QuestSystem.Views;
 using Hedra.Engine.QuestSystem;
 using Hedra.EntitySystem;
 using Hedra.Localization;
-using System.Numerics;
 
 namespace Hedra.Mission.Blocks
 {
     public class TalkMission : MissionBlock
     {
-        public event OnTalkEventHandler OnTalk;
-        public IHumanoid Humanoid { get; set; }
         private readonly DialogObject _dialog;
-        private TalkComponent _talk;
         private bool _isCompleted;
+        private TalkComponent _talk;
 
         public TalkMission(DialogObject Dialog)
         {
             _dialog = Dialog;
         }
+
+        public IHumanoid Humanoid { get; set; }
+
+        public override DialogObject DefaultOpeningDialog => default;
+
+        public override bool IsCompleted => _isCompleted;
+        public override bool HasLocation => true;
+        public override Vector3 Location => Humanoid.Position;
+        public override string ShortDescription => Translations.Get("quest_speak_short", Humanoid.Name);
+        public override string Description => Translations.Get("quest_speak_description", Humanoid.Name);
+        public event OnTalkEventHandler OnTalk;
 
         public override void Setup()
         {
@@ -47,13 +56,11 @@ namespace Hedra.Mission.Blocks
             _talk.AddDialogLine(Translation.Default(Text));
         }
 
-        public override DialogObject DefaultOpeningDialog => default(DialogObject);
-
         public override void Cleanup()
         {
             base.Cleanup();
             Humanoid.RemoveComponent<TalkComponent>();
-            if(Humanoid.SearchComponent<ThoughtsComponent>() != null)
+            if (Humanoid.SearchComponent<ThoughtsComponent>() != null)
                 Humanoid.RemoveComponent<ThoughtsComponent>();
         }
 
@@ -61,11 +68,5 @@ namespace Hedra.Mission.Blocks
         {
             return new EntityView(Humanoid.Model);
         }
-
-        public override bool IsCompleted => _isCompleted;
-        public override bool HasLocation => true;
-        public override Vector3 Location => Humanoid.Position;
-        public override string ShortDescription => Translations.Get("quest_speak_short", Humanoid.Name);
-        public override string Description => Translations.Get("quest_speak_description", Humanoid.Name);
     }
 }

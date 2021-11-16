@@ -1,38 +1,19 @@
 using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Linq;
-using Hedra.Core;
+using System.Numerics;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
-using Hedra.Engine.Management;
 using Hedra.Engine.Player.Inventory;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
-using Hedra.Items;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-using System.Numerics;
-using Hedra.Numerics;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Player.PagedInterface
 {
     public abstract class PagedInventoryArrayInterface : InventoryArrayInterface
     {
-        public static uint SelectedId { get; } = Graphics2D.LoadFromAssets("Assets/UI/SelectedInventorySlot.png");
-        protected BackgroundTexture[] SelectedTextures { get; }
-        protected Panel Panel { get; }
-        protected IPlayer Player { get; }
-        protected int PerPage { get; }
-        protected int CurrentPage { get; private set; }
-        protected int TotalPages { get; private set; }
-        protected BackgroundTexture Title { get; }
-        protected GUIText TitleText { get; }
-        protected BackgroundTexture PageSelector { get; }
-        protected GUIText CurrentPageText { get; }
-        protected Button PreviousPageText { get; }
-        protected Button NextPageText { get; }
-
         protected PagedInventoryArrayInterface(IPlayer Player, InventoryArray Array, int Rows, int Columns,
             Vector2 Spacing)
             : base(Array, 0, Rows * Columns, Columns, Spacing)
@@ -81,67 +62,23 @@ namespace Hedra.Engine.Player.PagedInterface
             Panel.AddElement(TitleText);
         }
 
+        public static uint SelectedId { get; } = Graphics2D.LoadFromAssets("Assets/UI/SelectedInventorySlot.png");
+        protected BackgroundTexture[] SelectedTextures { get; }
+        protected Panel Panel { get; }
+        protected IPlayer Player { get; }
+        protected int PerPage { get; }
+        protected int CurrentPage { get; private set; }
+        protected int TotalPages { get; private set; }
+        protected BackgroundTexture Title { get; }
+        protected GUIText TitleText { get; }
+        protected BackgroundTexture PageSelector { get; }
+        protected GUIText CurrentPageText { get; }
+        protected Button PreviousPageText { get; }
+        protected Button NextPageText { get; }
+
         protected abstract Translation TitleTranslation { get; }
 
-        public override void UpdateView()
-        {
-            ResetSelector();
-            Array.Empty();
-            var recipes = Player.Crafting.Recipes;
-            var outputs = ArrayObjects;
-            for (var i = CurrentPage * PerPage; i < outputs.Length; i++)
-            {
-                Array.AddItem(outputs[i]);
-                SetSlot(Array.IndexOf(outputs[i]));
-            }
-
-            UpdatePages(outputs.Length);
-            Renderer.UpdateView();
-        }
-
-        protected void UpdatePages(int Length)
-        {
-            TotalPages = Math.Max((int)Math.Ceiling(Length / (float)PerPage), 1);
-            CurrentPage = Mathf.Modulo(CurrentPage, TotalPages);
-            CurrentPageText.Text = $"{CurrentPage + 1}/{Math.Max(1, TotalPages)}";
-        }
-
-        private void ResetSelector()
-        {
-            if (!Enabled) return;
-            for (var i = 0; i < SelectedTextures.Length; i++) ResetSlot(i);
-            SelectedTextures[SelectedIndex].Enable();
-        }
-
-        protected virtual void ResetSlot(int Index)
-        {
-            SelectedTextures[Index].Disable();
-            Buttons[Index].Texture.Grayscale = false;
-        }
-
-        protected virtual void SetSlot(int Index)
-        {
-        }
-
         protected virtual Item[] ArrayObjects => null;
-
-        public void Reset()
-        {
-            CurrentPage = 0;
-            SelectedIndex = 0;
-        }
-
-        private void PreviousPage()
-        {
-            CurrentPage = Mathf.Modulo(CurrentPage - 1, TotalPages);
-            UpdateView();
-        }
-
-        private void NextPage()
-        {
-            CurrentPage = Mathf.Modulo(CurrentPage + 1, TotalPages);
-            UpdateView();
-        }
 
         public int SelectedIndex { get; set; }
 
@@ -201,6 +138,64 @@ namespace Hedra.Engine.Player.PagedInterface
                     elements[i].Position = elements[i].Position - base.Position + value;
                 base.Position = value;
             }
+        }
+
+        public override void UpdateView()
+        {
+            ResetSelector();
+            Array.Empty();
+            var recipes = Player.Crafting.Recipes;
+            var outputs = ArrayObjects;
+            for (var i = CurrentPage * PerPage; i < outputs.Length; i++)
+            {
+                Array.AddItem(outputs[i]);
+                SetSlot(Array.IndexOf(outputs[i]));
+            }
+
+            UpdatePages(outputs.Length);
+            Renderer.UpdateView();
+        }
+
+        protected void UpdatePages(int Length)
+        {
+            TotalPages = Math.Max((int)Math.Ceiling(Length / (float)PerPage), 1);
+            CurrentPage = Mathf.Modulo(CurrentPage, TotalPages);
+            CurrentPageText.Text = $"{CurrentPage + 1}/{Math.Max(1, TotalPages)}";
+        }
+
+        private void ResetSelector()
+        {
+            if (!Enabled) return;
+            for (var i = 0; i < SelectedTextures.Length; i++) ResetSlot(i);
+            SelectedTextures[SelectedIndex].Enable();
+        }
+
+        protected virtual void ResetSlot(int Index)
+        {
+            SelectedTextures[Index].Disable();
+            Buttons[Index].Texture.Grayscale = false;
+        }
+
+        protected virtual void SetSlot(int Index)
+        {
+        }
+
+        public void Reset()
+        {
+            CurrentPage = 0;
+            SelectedIndex = 0;
+        }
+
+        private void PreviousPage()
+        {
+            CurrentPage = Mathf.Modulo(CurrentPage - 1, TotalPages);
+            UpdateView();
+        }
+
+        private void NextPage()
+        {
+            CurrentPage = Mathf.Modulo(CurrentPage + 1, TotalPages);
+            UpdateView();
         }
     }
 }

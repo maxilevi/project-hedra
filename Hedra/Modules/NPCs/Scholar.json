@@ -12,6 +12,6 @@
     }
   ],
   "Class": "Mage",
-  "Behaviour" : "Friendly",
+  "Behaviour": "Friendly",
   "Weapons": []
 }

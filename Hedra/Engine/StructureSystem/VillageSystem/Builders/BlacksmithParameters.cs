@@ -1,6 +1,6 @@
 using System;
-using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using System.Numerics;
+using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders

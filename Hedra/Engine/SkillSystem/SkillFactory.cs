@@ -9,7 +9,7 @@ namespace Hedra.Engine.SkillSystem
         {
             return this[Name];
         }
-        
+
         public Type[] GetAll()
         {
             return base.GetAll();

@@ -1,5 +1,5 @@
-using Hedra.Engine.Management;
 using System.Numerics;
+using Hedra.Engine.Management;
 
 namespace Hedra.Engine.CacheSystem
 {
@@ -10,7 +10,7 @@ namespace Hedra.Engine.CacheSystem
             AddModel(AssetManager.PLYLoader("Assets/Env/Structures/Obelisk/Obelisk0.ply", Vector3.One));
             AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Structures/Obelisk/Obelisk0.ply", Vector3.One));
         }
-        
+
         public override CacheItem Type => CacheItem.Obelisk;
     }
 }

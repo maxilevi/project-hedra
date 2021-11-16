@@ -1,12 +1,9 @@
-using System;
 using System.Linq;
-using Hedra.Core;
-using Hedra.Engine.Player.QuestSystem.Views;
-using Hedra.Engine.QuestSystem;
-using Hedra.Items;
-using Hedra.Rendering;
 using System.Numerics;
+using Hedra.Engine.Player.QuestSystem.Views;
+using Hedra.Items;
 using Hedra.Numerics;
+using Hedra.Rendering;
 
 namespace Hedra.Mission.Blocks
 {
@@ -26,14 +23,13 @@ namespace Hedra.Mission.Blocks
                 transform *= Matrix4x4.CreateRotationY(i * (360 / items.Length) * Mathf.Radian);
                 model += items[i].Model.Clone().Transform(transform);
             }
+
             return new ModelView(model);
         }
+
         public void ConsumeItems()
         {
-            for (var i = 0; i < Items.Length; ++i)
-            {
-                Items[i].Consume(Owner);
-            }
+            for (var i = 0; i < Items.Length; ++i) Items[i].Consume(Owner);
         }
     }
 }

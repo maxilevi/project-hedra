@@ -1,20 +1,19 @@
-using Hedra.BiomeSystem;
-using Hedra.Engine.Generation;
 using System.Numerics;
+using Hedra.BiomeSystem;
 
 namespace Hedra.Engine.BiomeSystem
 {
     public class RegionCache
     {
-        private readonly Region _predominantRegion;
-        private readonly RegionColor _predominantInterpolatedRegionColor;
-        private readonly Vector3 _min;
         private readonly Vector3 _max;
+        private readonly Vector3 _min;
+        private readonly RegionColor _predominantInterpolatedRegionColor;
+        private readonly Region _predominantRegion;
 
         public RegionCache(Vector3 Min, Vector3 Max)
         {
-            this._min = Min;
-            this._max = Max;
+            _min = Min;
+            _max = Max;
             var middle = (Min + Max) * .5f;
             var middleRegion = World.BiomePool.GetRegion(middle);
             if (middleRegion != World.BiomePool.GetRegion(_min)) return;
@@ -27,14 +26,14 @@ namespace Hedra.Engine.BiomeSystem
 
         public Region GetRegion(Vector3 Position)
         {
-            if (_predominantRegion == null || !this.InsideSamplers(Position))
+            if (_predominantRegion == null || !InsideSamplers(Position))
                 return World.BiomePool.GetRegion(Position);
             return _predominantRegion;
         }
 
         public RegionColor GetAverageRegionColor(Vector3 Position)
         {
-            if (_predominantInterpolatedRegionColor == null || !this.InsideSamplers(Position))
+            if (_predominantInterpolatedRegionColor == null || !InsideSamplers(Position))
                 return World.BiomePool.GetAverageRegionColor(Position);
             return _predominantInterpolatedRegionColor;
         }

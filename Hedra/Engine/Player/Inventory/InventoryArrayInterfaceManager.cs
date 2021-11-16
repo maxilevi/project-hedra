@@ -1,64 +1,89 @@
 using System;
-using System.Linq;
-
+using System.Drawing;
+using System.Numerics;
 using Hedra.Core;
 using Hedra.Engine.Events;
-using Hedra.Engine.Game;
-using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Rendering.UI;
-using Hedra.Engine.Sound;
 using Hedra.Engine.Windowing;
 using Hedra.Game;
-using Hedra.Items;
 using Hedra.Localization;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Sound;
-using System.Numerics;
-using Hedra.Numerics;
-using MouseButton = Silk.NET.Input.MouseButton;
+using Silk.NET.Input;
 using Button = Hedra.Engine.Rendering.UI.Button;
-
 
 namespace Hedra.Engine.Player.Inventory
 {
-    public delegate void OnItemMoveEventHandler(InventoryArray PreviousArray, InventoryArray NewArray, int Index, Item Item);
+    public delegate void OnItemMoveEventHandler(InventoryArray PreviousArray, InventoryArray NewArray, int Index,
+        Item Item);
 
     public class InventoryArrayInterfaceManager : IDisposable
     {
-        public OnItemMoveEventHandler OnItemMove;
-        private readonly InventoryInterfaceItemInfo _itemInfoInterface;
-        private readonly InventoryArrayInterface[] _interfaces;
         private readonly Button _cancelButton;
-        private Vector3 _selectedMeshSize;
-        private ObjectMesh _selectedMesh;
-        private Button _selectedButton;
-        private Item _selectedItem;
+        private readonly InventoryArrayInterface[] _interfaces;
+        private readonly InventoryInterfaceItemInfo _itemInfoInterface;
         private bool _enabled;
-        private bool _willReset;
-        private int _selectedButtonIndex;
+        private Button _selectedButton;
         private InventoryArray _selectedButtonArray;
+        private int _selectedButtonIndex;
+        private Item _selectedItem;
+        private ObjectMesh _selectedMesh;
+        private Vector3 _selectedMeshSize;
+        private bool _willReset;
+        public OnItemMoveEventHandler OnItemMove;
 
-        public InventoryArrayInterfaceManager(InventoryInterfaceItemInfo ItemInfoInterface, params InventoryArrayInterface[] Interfaces)
+        public InventoryArrayInterfaceManager(InventoryInterfaceItemInfo ItemInfoInterface,
+            params InventoryArrayInterface[] Interfaces)
         {
             _interfaces = Interfaces;
             _cancelButton = new Button(Vector2.Zero, Vector2.One, GUIRenderer.TransparentTexture);
-            _cancelButton.Click += (S, E) => this.Cancel();
+            _cancelButton.Click += (S, E) => Cancel();
             for (var i = 0; i < _interfaces.Length; i++)
             {
                 var buttons = _interfaces[i].Buttons;
                 for (var j = 0; j < buttons.Length; j++)
                 {
                     var k = j;
-                    buttons[j].Click += (Sender, EventArgs) => this.Interact(buttons[k], EventArgs);
-                    buttons[j].Click += (Sender, EventArgs) => this.Use(buttons[k], EventArgs);
-                    buttons[j].HoverEnter += () => this.HoverEnter(buttons[k]);
-                    buttons[j].HoverExit += () => this.HoverExit(buttons[k]);
+                    buttons[j].Click += (Sender, EventArgs) => Interact(buttons[k], EventArgs);
+                    buttons[j].Click += (Sender, EventArgs) => Use(buttons[k], EventArgs);
+                    buttons[j].HoverEnter += () => HoverEnter(buttons[k]);
+                    buttons[j].HoverExit += () => HoverExit(buttons[k]);
                 }
             }
+
             _itemInfoInterface = ItemInfoInterface;
-            EventDispatcher.RegisterMouseMove(this, this.MouseMove);
-            EventDispatcher.RegisterMouseDown(this, this.MouseClick);
+            EventDispatcher.RegisterMouseMove(this, MouseMove);
+            EventDispatcher.RegisterMouseDown(this, MouseClick);
+        }
+
+        public bool HasCancelButton { get; set; } = true;
+
+        public virtual bool Enabled
+        {
+            get => _enabled;
+            set
+            {
+                _enabled = value;
+                for (var i = 0; i < _interfaces.Length; i++) _interfaces[i].Enabled = value;
+                if (_itemInfoInterface != null) _itemInfoInterface.Enabled = value;
+                if (HasCancelButton)
+                {
+                    if (_enabled)
+                        _cancelButton.Enable();
+                    else
+                        _cancelButton.Disable();
+                }
+
+                Cancel();
+            }
+        }
+
+        public virtual void Dispose()
+        {
+            EventDispatcher.UnregisterMouseMove(this);
+            EventDispatcher.UnregisterMouseDown(this);
         }
 
         private void MouseClick(object Sender, MouseButtonEventArgs EventArgs)
@@ -68,8 +93,8 @@ namespace Hedra.Engine.Player.Inventory
                 _willReset = true;
                 TaskScheduler.After(.01f, delegate
                 {
-                    if(_willReset)
-                        this.DropItem(_selectedItem);
+                    if (_willReset)
+                        DropItem(_selectedItem);
                     OnItemMove?.Invoke(_selectedButtonArray, null, _selectedButtonIndex, _selectedItem);
                 });
             }
@@ -80,43 +105,41 @@ namespace Hedra.Engine.Player.Inventory
             var newCoords = Mathf.ToNormalizedDeviceCoordinates(
                 new Vector2(EventArgs.X, GameSettings.SurfaceHeight - EventArgs.Y),
                 new Vector2(GameSettings.SurfaceWidth, GameSettings.SurfaceHeight)
-                );
-            if (_selectedButton != null)
-            {
-                _selectedButton.Position = newCoords;
-            }
+            );
+            if (_selectedButton != null) _selectedButton.Position = newCoords;
         }
 
         protected virtual void Interact(object Sender, MouseButtonEventArgs EventArgs)
         {
-            if(EventArgs.Button != MouseButton.Left) return;
+            if (EventArgs.Button != MouseButton.Left) return;
             var button = (Button)Sender;
-            var itemIndex = this.IndexByButton(button);
-            var array = this.ArrayByButton(button);
+            var itemIndex = IndexByButton(button);
+            var array = ArrayByButton(button);
             var item = array[itemIndex];
             if (item == null && _selectedButton == null || button == _selectedButton) return;
             _willReset = false;
             if (item != null && _selectedButton == null)
             {
-                this.SetSelectedItem(array, itemIndex, button, item);
+                SetSelectedItem(array, itemIndex, button, item);
                 array[itemIndex] = null;
-                this.SetCancelButton(button);
-                this.UpdateView();
+                SetCancelButton(button);
+                UpdateView();
                 SoundPlayer.PlayUISound(SoundType.ButtonClick);
             }
             else if (_selectedButton != null)
             {
-                var newIndex = this.IndexByButton(_selectedButton);
-                var newArray = this.ArrayByButton(_selectedButton);
+                var newIndex = IndexByButton(_selectedButton);
+                var newArray = ArrayByButton(_selectedButton);
                 if (!array.CanSetItem(itemIndex, _selectedItem))
                 {
-                    this.ShowCannotYieldEquipment(_selectedItem);
+                    ShowCannotYieldEquipment(_selectedItem);
                     return;
                 }
+
                 array[itemIndex] = _selectedItem;
-                newArray[newIndex] = item;                
-                this.ResetSelected();
-                this.UpdateView();
+                newArray[newIndex] = item;
+                ResetSelected();
+                UpdateView();
                 OnItemMove?.Invoke(newArray, array, itemIndex, item);
                 SoundPlayer.PlayUISound(SoundType.ButtonClick);
             }
@@ -126,8 +149,8 @@ namespace Hedra.Engine.Player.Inventory
         {
             if (EventArgs.Button != MouseButton.Right) return;
             var button = (Button)Sender;
-            var itemIndex = this.IndexByButton(button);
-            var array = this.ArrayByButton(button);
+            var itemIndex = IndexByButton(button);
+            var array = ArrayByButton(button);
             var item = array[itemIndex];
             array[itemIndex] = null;
             if (item != null && item.IsConsumable)
@@ -138,6 +161,7 @@ namespace Hedra.Engine.Player.Inventory
                     item.SetAttribute(CommonAttributes.Amount, item.GetAttribute<int>(CommonAttributes.Amount) - 1);
                     array[itemIndex] = item;
                 }
+
                 if (!success) array[itemIndex] = item;
             }
             else if (item != null && item.IsFood && array.Length > PlayerInventory.FoodHolder)
@@ -147,14 +171,14 @@ namespace Hedra.Engine.Player.Inventory
             }
             else if (array.HasRestrictions(itemIndex) && item != null)
             {
-                this.PlaceItemInFirstEmptyPosition(item);
+                PlaceItemInFirstEmptyPosition(item);
             }
             else
             {
-                this.PlaceInRestrictionsOrFirstEmpty(itemIndex, array, item);
+                PlaceInRestrictionsOrFirstEmpty(itemIndex, array, item);
             }
 
-            this.UpdateView();
+            UpdateView();
             SoundPlayer.PlayUISound(SoundType.ItemEquip);
         }
 
@@ -164,9 +188,10 @@ namespace Hedra.Engine.Player.Inventory
             _selectedButtonArray = Array;
             _selectedButtonIndex = Index;
             _selectedItem = SelectedItem;
-            var renderer = this.RendererByButton(_selectedButton);
+            var renderer = RendererByButton(_selectedButton);
             _selectedMesh = InventoryItemRenderer.BuildModel(_selectedItem.Model, out _selectedMeshSize);
-            _selectedButton.Texture.IdPointer = () => InventoryItemRenderer.Draw(_selectedMesh, SelectedItem, true, _selectedMeshSize);
+            _selectedButton.Texture.IdPointer = () =>
+                InventoryItemRenderer.Draw(_selectedMesh, SelectedItem, true, _selectedMeshSize);
         }
 
         private void SetCancelButton(Button SelectedButton)
@@ -182,36 +207,35 @@ namespace Hedra.Engine.Player.Inventory
             for (var i = 0; i < _interfaces.Length; i++)
             {
                 var newArray = _interfaces[i].Array;
-                if(newArray.AddItem(Item)) return;
+                if (newArray.AddItem(Item)) return;
             }
         }
 
         private void PlaceInRestrictionsOrFirstEmpty(int ItemIndex, InventoryArray Array, Item Item)
         {
-            if(Item == null) return;
+            if (Item == null) return;
             for (var i = 0; i < _interfaces.Length; i++)
             {
                 var newArray = _interfaces[i].Array;
                 for (var j = 0; j < newArray.Length; j++)
-                {
                     if (newArray.HasRestrictions(j))
                     {
                         var restrictions = newArray.GetRestrictions(j);
                         for (var k = 0; k < restrictions.Length; k++)
                         {
                             if (restrictions[k] != Item.EquipmentType) continue;
-                            this.SwitchItems(ItemIndex, j, Array, newArray);
+                            SwitchItems(ItemIndex, j, Array, newArray);
                             newArray[j] = Item;
                             return;
                         }
                     }
-                }
             }
-            this.ShowCannotYieldEquipment(Item);
-            this.PlaceItemInFirstEmptyPosition(Item);
+
+            ShowCannotYieldEquipment(Item);
+            PlaceItemInFirstEmptyPosition(Item);
         }
-        
-        
+
+
         private static bool Consume(Item Item)
         {
             return ItemHandlerFactory.Instance.Build(
@@ -222,10 +246,8 @@ namespace Hedra.Engine.Player.Inventory
         private void ShowCannotYieldEquipment(Item Item)
         {
             if (Item.IsEquipment)
-            {
                 GameManager.Player.MessageDispatcher.ShowNotification(Translations.Get("cannot_use_equipment"),
-                    System.Drawing.Color.Red, 2f, true);
-            }
+                    Color.Red, 2f, true);
         }
 
         private void SwitchItems(int Index, int IndexToSwitch, InventoryArray Array, InventoryArray ArrayToSwitch)
@@ -237,14 +259,14 @@ namespace Hedra.Engine.Player.Inventory
 
         private void DropItem(Item SelectedItem)
         {
-            if(SelectedItem == null) return;
-            World.DropItem(SelectedItem, LocalPlayer.Instance.Position);//FIXME
-            this.ResetSelected();
+            if (SelectedItem == null) return;
+            World.DropItem(SelectedItem, LocalPlayer.Instance.Position); //FIXME
+            ResetSelected();
         }
 
         protected InventoryArray ArrayByButton(Button Sender)
         {
-            return this.InterfaceByButton(Sender).Array;
+            return InterfaceByButton(Sender).Array;
         }
 
         protected InventoryArrayInterface InterfaceByButton(Button Sender)
@@ -254,6 +276,7 @@ namespace Hedra.Engine.Player.Inventory
                 var result = Array.IndexOf(_interfaces[i].Buttons, Sender);
                 if (result != -1) return _interfaces[i];
             }
+
             return null;
         }
 
@@ -264,39 +287,40 @@ namespace Hedra.Engine.Player.Inventory
                 var result = Array.IndexOf(_interfaces[i].Buttons, Sender);
                 if (result != -1) return result + _interfaces[i].Offset;
             }
+
             return -1;
         }
 
         protected int OffsetByButton(Button Sender)
         {
-            return this.InterfaceByButton(Sender).Offset;
+            return InterfaceByButton(Sender).Offset;
         }
 
         protected Item ItemByButton(Button Sender)
         {
-            return this.ArrayByButton(Sender)[this.IndexByButton(Sender)];
+            return ArrayByButton(Sender)[IndexByButton(Sender)];
         }
 
         protected InventoryItemRenderer RendererByButton(Button Sender)
         {
-            return this.InterfaceByButton(Sender).Renderer;
+            return InterfaceByButton(Sender).Renderer;
         }
 
         private void Cancel()
         {
-            if(_selectedButton == null) return;
+            if (_selectedButton == null) return;
 
             var index = IndexByButton(_selectedButton);
             var array = ArrayByButton(_selectedButton);
             array[index] = _selectedItem;
-            this.ResetSelected();
+            ResetSelected();
         }
 
         private void ResetSelected()
         {
             _selectedButton.Position = _cancelButton.Position;
-            var renderer = this.RendererByButton(_selectedButton);
-            var k = this.IndexByButton(_selectedButton) - this.OffsetByButton(_selectedButton);
+            var renderer = RendererByButton(_selectedButton);
+            var k = IndexByButton(_selectedButton) - OffsetByButton(_selectedButton);
             renderer.UpdateView();
             _selectedButton.Texture.IdPointer = () => renderer.Draw(k);
             _selectedButton = null;
@@ -309,8 +333,8 @@ namespace Hedra.Engine.Player.Inventory
         protected virtual void HoverEnter(object Sender)
         {
             var button = (Button)Sender;
-            var itemIndex = this.IndexByButton(button);
-            var array = this.ArrayByButton(button);
+            var itemIndex = IndexByButton(button);
+            var array = ArrayByButton(button);
             var item = array[itemIndex];
 
             _itemInfoInterface?.Show(item);
@@ -321,42 +345,9 @@ namespace Hedra.Engine.Player.Inventory
             _itemInfoInterface?.Hide();
         }
 
-        public bool HasCancelButton { get; set; } = true;
-
-        public virtual bool Enabled
-        {
-            get => _enabled;
-            set
-            {
-                _enabled = value;
-                for (var i = 0; i < _interfaces.Length; i++)
-                {
-                    _interfaces[i].Enabled = value;
-                }
-                if(_itemInfoInterface != null) _itemInfoInterface.Enabled = value;
-                if (HasCancelButton)
-                {
-                    if (_enabled)
-                        _cancelButton.Enable();
-                    else
-                        _cancelButton.Disable();
-                }
-                this.Cancel();
-            }
-        }
-
         public virtual void UpdateView()
         {
-            for (var i = 0; i < _interfaces.Length; i++)
-            {
-                _interfaces[i].UpdateView();
-            }
-        }
-
-        public virtual void Dispose()
-        {
-            EventDispatcher.UnregisterMouseMove(this);
-            EventDispatcher.UnregisterMouseDown(this);
+            for (var i = 0; i < _interfaces.Length; i++) _interfaces[i].UpdateView();
         }
     }
 }

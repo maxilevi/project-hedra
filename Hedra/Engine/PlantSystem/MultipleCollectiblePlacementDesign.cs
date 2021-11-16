@@ -1,13 +1,13 @@
 using System;
-using Hedra.Engine.Generation.ChunkSystem;
 using System.Numerics;
+using Hedra.Engine.Generation.ChunkSystem;
 
 namespace Hedra.Engine.PlantSystem
 {
     public abstract class MultipleCollectiblePlacementDesign : CollectiblePlacementDesign
     {
         protected override PlantDesign Design => throw new NotImplementedException();
-        
+
         protected abstract PlantDesign[] Designs { get; }
 
         protected abstract PlantDesign SelectDesign(Random Rng);

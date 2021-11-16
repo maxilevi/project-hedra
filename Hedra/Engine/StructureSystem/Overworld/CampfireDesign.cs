@@ -1,20 +1,14 @@
 using System;
+using System.Numerics;
 using Hedra.BiomeSystem;
-using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Generation;
-using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
-using Hedra.Rendering;
-using Hedra.Sound;
-using System.Numerics;
-using Hedra.Engine.PhysicsSystem;
 using Hedra.EntitySystem;
-using Hedra.Mission;
 using Hedra.Numerics;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
@@ -33,20 +27,17 @@ namespace Hedra.Engine.StructureSystem.Overworld
             BuildBaseCampfire(Structure.Position, rotation, Structure, rng, out var transformationMatrix);
 
             var npcPosition = new Vector3(Structure.Position.X, 0, Structure.Position.Z)
-                           + Vector3.Transform(Vector3.UnitZ * -12f, Matrix4x4.CreateRotationY(rotation.Y * Mathf.Radian));
-            DoWhenChunkReady(npcPosition, P =>
-            {
-                ((Campfire) Structure.WorldObject).Bandit = CreateCampfireNPC(Structure, P, rng);
-            }, Structure);
+                              + Vector3.Transform(Vector3.UnitZ * -12f,
+                                  Matrix4x4.CreateRotationY(rotation.Y * Mathf.Radian));
+            DoWhenChunkReady(npcPosition,
+                P => { ((Campfire)Structure.WorldObject).Bandit = CreateCampfireNPC(Structure, P, rng); }, Structure);
             if (rng.Next(0, 5) != 1)
-            {
                 SpawnCampfireMat(
                     Vector3.Transform(Vector3.UnitX * -12f, Matrix4x4.CreateRotationY(rotation.Y * Mathf.Radian)),
                     rotation,
                     transformationMatrix,
                     Structure
-                    );
-            }
+                );
         }
 
         protected virtual IHumanoid CreateCampfireNPC(CollidableStructure Structure, Vector3 Position, Random Rng)
@@ -59,8 +50,9 @@ namespace Hedra.Engine.StructureSystem.Overworld
             npc.IsSitting = true;
             return npc;
         }
-        
-        public static void BuildBaseCampfire(Vector3 Position, Vector3 Rotation, CollidableStructure Structure, Random Rng, out Matrix4x4 TransformationMatrix)
+
+        public static void BuildBaseCampfire(Vector3 Position, Vector3 Rotation, CollidableStructure Structure,
+            Random Rng, out Matrix4x4 TransformationMatrix)
         {
             var originalCampfire = CacheManager.GetModel(CacheItem.Campfire);
             var model = originalCampfire.ShallowClone();
@@ -73,10 +65,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             model.Color(AssetManager.ColorCode1, Utils.VariateColor(TentColor(Rng), 15, Rng));
 
             var shapes = CacheManager.GetShape(originalCampfire).DeepClone();
-            for (var i = 0; i < shapes.Count; i++)
-            {
-                shapes[i].Transform(TransformationMatrix);
-            }
+            for (var i = 0; i < shapes.Count; i++) shapes[i].Transform(TransformationMatrix);
 
             Structure.AddStaticElement(model);
             Structure.AddCollisionShape(shapes.ToArray());
@@ -90,11 +79,12 @@ namespace Hedra.Engine.StructureSystem.Overworld
             SpawnMat(
                 Position + Structure.Position,
                 CampfireRotation,
-                Matrix4x4.CreateScale(Vector3.One * .75f) * TransformationMatrix * Matrix4x4.CreateTranslation(padOffset),
+                Matrix4x4.CreateScale(Vector3.One * .75f) * TransformationMatrix *
+                Matrix4x4.CreateTranslation(padOffset),
                 Structure
             );
         }
-        
+
         public static void SpawnMat(Vector3 Position, Vector3 Rotation, Matrix4x4 TransformationMatrix,
             CollidableStructure Structure)
         {
@@ -116,7 +106,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             };
             Structure.WorldObject.AddChildren(pad);
         }
-        
+
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
         {
             var structure = base.Setup(TargetPosition, Rng, new Campfire(TargetPosition));
@@ -125,11 +115,13 @@ namespace Hedra.Engine.StructureSystem.Overworld
             return structure;
         }
 
-        protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
+        protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome,
+            IRandom Rng)
         {
             if (Rng.Next(0, StructureGrid.CampfireChance) != 1) return false;
             var height = Biome.Generation.GetMaxHeight(TargetPosition.X, TargetPosition.Z);
-            return  height > BiomePool.SeaLevel && Math.Abs(Biome.Generation.RiverAtPoint(TargetPosition.X, TargetPosition.Z)) < 0.005f;
+            return height > BiomePool.SeaLevel &&
+                   Math.Abs(Biome.Generation.RiverAtPoint(TargetPosition.X, TargetPosition.Z)) < 0.005f;
         }
 
         public static Vector4 TentColor(Random Rng)

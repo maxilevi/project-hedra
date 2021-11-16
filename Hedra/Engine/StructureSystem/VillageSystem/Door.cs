@@ -1,43 +1,29 @@
 using System;
+using System.Numerics;
 using BulletSharp;
-using Hedra.Core;
 using Hedra.Engine.Bullet;
-using Hedra.Engine.Generation;
-using Hedra.Engine.Localization;
 using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.Animation;
-using Hedra.Engine.Sound;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Localization;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Sound;
-using System.Numerics;
-using Hedra.Numerics;
-
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {
     public class Door : InteractableStructure
     {
-        protected override bool SingleUse => false;
-        protected override bool AllowThroughCollider => true;
-        public override string Message => Translations.Get(!_opened ? "open_door" : "close_door");
-        protected override bool CanInteract => !IsLocked && base.CanInteract;
-        public bool IsLocked { get; set; }
-        public override int InteractDistance => 12;
-        private bool _isMoving;
-        private bool _opened;
-        private Vector3 _targetRotation;
+        private readonly RigidBody _body;
+        private readonly float _invertedRotation;
         private readonly ObjectMesh _mesh;
         private readonly Vector3 _rotationPoint;
-        private Vector3 _lastRotation;
+        private bool _isMoving;
         private Vector3 _lastPosition;
-        private readonly float _invertedRotation;
-        private readonly RigidBody _body;
+        private Vector3 _lastRotation;
+        private bool _opened;
         private Vector3 _position;
+        private Vector3 _targetRotation;
 
         public Door(VertexData Mesh, Vector3 RotationPoint, Vector3 Position, bool InvertedRotation) : base(Position)
         {
@@ -54,18 +40,35 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                     Group = CollisionFilterGroups.StaticFilter,
                     Mask = CollisionFilterGroups.AllFilter,
                     Name = $"Door at {Position}",
-                    StaticOffsets = new []{World.ToChunkSpace(Position)}
+                    StaticOffsets = new[] { World.ToChunkSpace(Position) }
                 });
                 _body.Gravity = BulletSharp.Math.Vector3.Zero;
             }
         }
 
+        protected override bool SingleUse => false;
+        protected override bool AllowThroughCollider => true;
+        public override string Message => Translations.Get(!_opened ? "open_door" : "close_door");
+        protected override bool CanInteract => !IsLocked && base.CanInteract;
+        public bool IsLocked { get; set; }
+        public override int InteractDistance => 12;
+
+        public override Vector3 Position
+        {
+            get => _position;
+            set
+            {
+                _body?.Translate((-_position + value).Compatible());
+                _position = value;
+            }
+        }
+
         public override void Update(float DeltaTime)
         {
-            if(_mesh != null) _mesh.Position = Position;       
+            if (_mesh != null) _mesh.Position = Position;
             base.Update(DeltaTime);
         }
-        
+
         private BoxShape BuildShape(VertexData Mesh)
         {
             var collider = BoneBox.From(new BoneData
@@ -87,21 +90,11 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             }
         }
 
-        public override Vector3 Position
-        {
-            get => _position;
-            set
-            {
-                _body?.Translate((-_position + value).Compatible());
-                _position = value;
-            }
-        }
-
         private void EnableBox()
         {
             _body.CollisionFlags ^= CollisionFlags.NoContactResponse;
         }
-        
+
         private void DisableBox()
         {
             _body.CollisionFlags |= CollisionFlags.NoContactResponse;

@@ -2,7 +2,6 @@ using System;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
-using Hedra.Sound;
 
 namespace Hedra.Engine.Player
 {
@@ -10,26 +9,25 @@ namespace Hedra.Engine.Player
     {
         private readonly IHumanoid _humanoid;
         private readonly HumanoidModel _model;
-        public Animation DefaultBlending { get; set; }
-        private Animation _walkAnimation;
-        private Animation _idleAnimation;
-        private Animation _rollAnimation;
-        private Animation _eatAnimation;
-        private Animation _swimAnimation;
-        private Animation _idleSwimAnimation;
-        private Animation _rideAnimation;
-        private Animation _idleRideAnimation;
-        private Animation _climbAnimation;
-        private Animation _sitAnimation;
-        private Animation _glideAnimation;
-        private Animation _knockedAnimation;
-        private Animation _tiedAnimation;
-        private Animation _sleepAnimation;
-        private Animation _jumpAnimation;
-        private Animation _sailingAnimation;
-        private Animation _helloAnimation;
-        private Animation _fishingAnimation;
-        
+        private readonly Animation _climbAnimation;
+        private readonly Animation _eatAnimation;
+        private readonly Animation _fishingAnimation;
+        private readonly Animation _glideAnimation;
+        private readonly Animation _helloAnimation;
+        private readonly Animation _idleAnimation;
+        private readonly Animation _idleRideAnimation;
+        private readonly Animation _idleSwimAnimation;
+        private readonly Animation _jumpAnimation;
+        private readonly Animation _knockedAnimation;
+        private readonly Animation _rideAnimation;
+        private readonly Animation _rollAnimation;
+        private readonly Animation _sailingAnimation;
+        private readonly Animation _sitAnimation;
+        private readonly Animation _sleepAnimation;
+        private readonly Animation _swimAnimation;
+        private readonly Animation _tiedAnimation;
+        private readonly Animation _walkAnimation;
+
         public HumanoidModelAnimationState(IHumanoid Humanoid, HumanoidModel Model, HumanoidModelTemplate Template)
         {
             _humanoid = Humanoid;
@@ -53,114 +51,21 @@ namespace Hedra.Engine.Player
             _fishingAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorFishing.dae");
             _helloAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorHello.dae");
             _helloAnimation.Loop = false;
-            _helloAnimation.OnAnimationEnd += delegate
-            {
-                
-            };
+            _helloAnimation.OnAnimationEnd += delegate { };
             _rollAnimation.OnAnimationEnd += delegate
-            { 
+            {
                 Humanoid.Physics.ResetFall();
                 Humanoid.IsRolling = false;
             };
         }
 
-        public void SelectAnimation(out Animation Current, out Animation Blend)
-        {
-            Current = null;
-            Blend = DefaultBlending;
-
-            if (IsMoving)
-            {
-                Current = _walkAnimation;
-                if (IsRiding)
-                {
-                    Current = _rideAnimation;
-                }
-                if (IsUnderwater)
-                {
-                    Current = _swimAnimation;
-                }
-            }
-            else
-            {
-                Current = _idleAnimation;
-                if (IsRiding)
-                {
-                    Current = _idleRideAnimation;
-                }
-                if (IsUnderwater)
-                {
-                    Current = _idleSwimAnimation;
-                }
-            }
-            if (IsTied)
-            {
-                Current = _tiedAnimation;
-            }
-            if (IsSitting)
-            {
-                Current = _sitAnimation;
-            }
-            if (IsSleeping)
-            {
-                Current = _sleepAnimation;
-            }
-            if (IsRolling)
-            {
-                Current = _rollAnimation;
-            }
-            if (IsJumping)
-            {
-                Current = _jumpAnimation;
-            }
-            if (IsEating)
-            {
-                Blend = _eatAnimation;
-            }
-            if (IsGliding)
-            {
-                Current = _glideAnimation;
-            }
-            if (IsSailing)
-            {
-                Current = _sailingAnimation;
-            }
-            if (IsClimbing)
-            {
-                Current = _climbAnimation;
-            }
-            if (IsKnocked)
-            {
-                Current = _knockedAnimation;
-            }
-            if (IsFishing)
-            {
-                Current = _fishingAnimation;
-                Blend = _fishingAnimation;
-            }
-        }
-
-        public void Greet(Action Callback)
-        {
-            void OnEndLambda(Animation Sender)
-            {
-                Callback();
-                _helloAnimation.OnAnimationEnd -= OnEndLambda;
-            };
-            _helloAnimation.OnAnimationEnd += OnEndLambda;
-            _model.PlayAnimation(_helloAnimation);
-        }
-
-        public void Update()
-        {
-            _walkAnimation.Speed = _humanoid.Speed * 1.25f;
-        }
+        public Animation DefaultBlending { get; set; }
 
         public bool IsWalking => _walkAnimation == _model.AnimationPlaying;
 
         public virtual bool[] ModifiableStates
         {
-            get => new []
+            get => new[]
             {
                 IsRiding,
                 IsTied,
@@ -192,5 +97,58 @@ namespace Hedra.Engine.Player
         protected virtual bool IsClimbing => _humanoid.IsClimbing;
         protected virtual bool IsKnocked => _humanoid.IsKnocked;
         protected virtual bool IsFishing => _humanoid.IsFishing;
+
+        public void SelectAnimation(out Animation Current, out Animation Blend)
+        {
+            Current = null;
+            Blend = DefaultBlending;
+
+            if (IsMoving)
+            {
+                Current = _walkAnimation;
+                if (IsRiding) Current = _rideAnimation;
+                if (IsUnderwater) Current = _swimAnimation;
+            }
+            else
+            {
+                Current = _idleAnimation;
+                if (IsRiding) Current = _idleRideAnimation;
+                if (IsUnderwater) Current = _idleSwimAnimation;
+            }
+
+            if (IsTied) Current = _tiedAnimation;
+            if (IsSitting) Current = _sitAnimation;
+            if (IsSleeping) Current = _sleepAnimation;
+            if (IsRolling) Current = _rollAnimation;
+            if (IsJumping) Current = _jumpAnimation;
+            if (IsEating) Blend = _eatAnimation;
+            if (IsGliding) Current = _glideAnimation;
+            if (IsSailing) Current = _sailingAnimation;
+            if (IsClimbing) Current = _climbAnimation;
+            if (IsKnocked) Current = _knockedAnimation;
+            if (IsFishing)
+            {
+                Current = _fishingAnimation;
+                Blend = _fishingAnimation;
+            }
+        }
+
+        public void Greet(Action Callback)
+        {
+            void OnEndLambda(Animation Sender)
+            {
+                Callback();
+                _helloAnimation.OnAnimationEnd -= OnEndLambda;
+            }
+
+            ;
+            _helloAnimation.OnAnimationEnd += OnEndLambda;
+            _model.PlayAnimation(_helloAnimation);
+        }
+
+        public void Update()
+        {
+            _walkAnimation.Speed = _humanoid.Speed * 1.25f;
+        }
     }
 }

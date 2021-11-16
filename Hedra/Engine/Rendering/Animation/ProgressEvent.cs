@@ -4,14 +4,18 @@ namespace Hedra.Engine.Rendering.Animation
 {
     public class ProgressEvent : IDisposable
     {
-        private readonly float _progress;
         private readonly OnAnimationHandler _callback;
+        private readonly float _progress;
         private bool _executed;
-        
+
         public ProgressEvent(float Progress, OnAnimationHandler Callback)
         {
             _progress = Progress;
             _callback = Callback;
+        }
+
+        public void Dispose()
+        {
         }
 
         public void Update(Animation Animation, float Progress)
@@ -22,14 +26,10 @@ namespace Hedra.Engine.Rendering.Animation
                 _executed = true;
             }
         }
-        
+
         public void Reset()
         {
             _executed = false;
-        }
-
-        public void Dispose()
-        {
         }
     }
 }

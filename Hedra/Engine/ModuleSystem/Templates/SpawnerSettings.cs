@@ -3,7 +3,7 @@ namespace Hedra.Engine.ModuleSystem.Templates
     public class SpawnerSettings
     {
         public MiniBossTemplate[] MiniBosses { get; set; }
-        public SpawnTemplate[] Shore { get; set; }     
+        public SpawnTemplate[] Shore { get; set; }
         public SpawnTemplate[] Plains { get; set; }
         public SpawnTemplate[] Mountain { get; set; }
         public SpawnTemplate[] Forest { get; set; }
@@ -12,8 +12,8 @@ namespace Hedra.Engine.ModuleSystem.Templates
 
     public class MiniBossTemplate : ISpawnTemplate
     {
+        public bool IsCustom { get; set; }
         public string Type { get; set; }
         public float Chance { get; set; }
-        public bool IsCustom { get; set; }
     }
 }

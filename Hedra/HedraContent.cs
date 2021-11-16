@@ -1,4 +1,3 @@
-using System;
 using Hedra.AISystem;
 using Hedra.AISystem.Mob;
 using Hedra.AnimationEvents;
@@ -7,8 +6,6 @@ using Hedra.API;
 using Hedra.Components.Effects;
 using Hedra.Core;
 using Hedra.Engine.IO;
-using Hedra.Engine.Management;
-using Hedra.Engine.Scripting;
 using Hedra.Engine.SkillSystem.Archer;
 using Hedra.Engine.SkillSystem.Archer.Hunter;
 using Hedra.Engine.SkillSystem.Archer.Scout;
@@ -21,13 +18,10 @@ using Hedra.Engine.SkillSystem.Rogue.Ninja;
 using Hedra.Engine.SkillSystem.Warrior;
 using Hedra.Engine.SkillSystem.Warrior.Berserker;
 using Hedra.Engine.SkillSystem.Warrior.Paladin;
-using Hedra.Engine.Sound;
 using Hedra.Items;
 using Hedra.ModelHandlers;
-using Hedra.Rendering;
 using Hedra.Sound;
 using Hedra.WeaponSystem;
-using IronPython.Runtime.Types;
 
 namespace Hedra
 {
@@ -35,7 +29,7 @@ namespace Hedra
     {
         private static HedraContent _instance;
         public override string Name => "Project Hedra";
-        
+
         protected override void RegisterContent()
         {
             RegisterSounds();
@@ -55,8 +49,8 @@ namespace Hedra
             AddWeaponType("HoldableObject", typeof(HoldableObject));
 
             AddClassRestriction(Class.Warrior, "FarmingRake");
-            var classes = new []{Class.Warrior, Class.Mage, Class.Archer, Class.Rogue};
-            for(var i = 0; i < classes.Length; ++i)
+            var classes = new[] { Class.Warrior, Class.Mage, Class.Archer, Class.Rogue };
+            for (var i = 0; i < classes.Length; ++i)
                 AddClassRestriction(classes[i], "FishingRod");
 
             AddAIType("GiantBeetle", typeof(GiantBeetleAIComponent));
@@ -89,11 +83,11 @@ namespace Hedra
             AddAnimationEvent("CastSiphonBlood", typeof(CastSiphonBlood));
             AddAnimationEvent("CastLeech", typeof(CastLeech));
             AddAnimationEvent("CastBlaze", typeof(CastBlaze));
-            
+
             AddModelHandler("Ent", typeof(EntHandler));
             AddModelHandler("Ghost", typeof(GhostHandler));
             AddModelHandler("Beetle", typeof(BeetleHandler));
-            
+
             AddItemHandler("Recipe", typeof(RecipeHandler));
             AddItemHandler("Potion", typeof(PotionHandler));
             AddItemHandler("HoldingBag", typeof(HoldingBagHandler));
@@ -117,7 +111,7 @@ namespace Hedra
             AddSkill("PoisonArrow", typeof(PoisonArrow));
             AddSkill("Puncture", typeof(Puncture));
             AddSkill("Jab", typeof(Jab));
-            
+
             AddSkill("LearnKnife", typeof(LearnKnife));
             AddSkill("Concealment", typeof(Concealment));
             AddSkill("Focus", typeof(Focus));
@@ -126,13 +120,13 @@ namespace Hedra
             AddSkill("SpikeTrap", typeof(SpikeTrap));
             AddSkill("SteadyAim", typeof(SteadyAim));
             AddSkill("SteelArrows", typeof(SteelArrows));
-            
+
             AddSkill("HotPursuit", typeof(HotPursuit));
             AddSkill("Nimbleness", typeof(Nimbleness));
             AddSkill("Retreat", typeof(Retreat));
             AddSkill("Rush", typeof(Rush));
             AddSkill("Swiftness", typeof(Swiftness));
-            
+
             AddSkill("BurstOfSpeed", typeof(BurstOfSpeed));
             AddSkill("LearnClaw", typeof(LearnClaw));
             AddSkill("LearnKatar", typeof(LearnKatar));
@@ -140,7 +134,7 @@ namespace Hedra
             AddSkill("Shuriken", typeof(Shuriken));
             AddSkill("Venom", typeof(Venom));
             AddSkill("ShadowWarrior", typeof(ShadowWarrior));
-            
+
             AddSkill("FanOfKnives", typeof(FanOfKnives));
             AddSkill("SnakeSpirit", typeof(SnakeSpirit));
             AddSkill("MartialArtsTraining", typeof(MartialArtsTraining));
@@ -148,7 +142,7 @@ namespace Hedra
             AddSkill("TigerStrike", typeof(TigerStrike));
             AddSkill("TripleShuriken", typeof(TripleShuriken));
             AddSkill("FinishingBlow", typeof(FinishingBlow));
-            
+
             AddSkill("Fade", typeof(Fade));
             AddSkill("Treason", typeof(Treason));
             AddSkill("Stealth", typeof(Stealth));
@@ -157,7 +151,7 @@ namespace Hedra
             AddSkill("Cutthroat", typeof(Cutthroat));
             AddSkill("NightStalker", typeof(NightStalker));
             AddSkill("QuietSteps", typeof(QuietSteps));
-            
+
             AddSkill("Bash", typeof(Bash));
             AddSkill("Intercept", typeof(Intercept));
             AddSkill("Resistance", typeof(Resistance));
@@ -165,7 +159,7 @@ namespace Hedra
             AddSkill("NoEscape", typeof(NoEscape));
             AddSkill("Leap", typeof(Leap));
             AddSkill("Thorns", typeof(Thorns));
-            
+
             AddSkill("Faith", typeof(Faith));
             AddSkill("FireEnchant", typeof(FireEnchant));
             AddSkill("HolyAttack", typeof(HolyAttack));
@@ -173,15 +167,15 @@ namespace Hedra
             AddSkill("Conversion", typeof(Conversion));
             AddSkill("Prayer", typeof(Prayer));
             AddSkill("Smite", typeof(Smite));
-            
+
             AddSkill("Berserk", typeof(Berserk));
             AddSkill("Frenzy", typeof(Frenzy));
             AddSkill("GroundStomp", typeof(GroundStomp));
             AddSkill("IronSkin", typeof(IronSkin));
             AddSkill("LearnAxe", typeof(LearnAxe));
             AddSkill("Sacrifice", typeof(Sacrifice));
-            AddSkill("BattleCry", typeof(BattleCry));     
-            
+            AddSkill("BattleCry", typeof(BattleCry));
+
             AddSkill("FireRelease", typeof(FireRelease));
             AddSkill("Blaze", typeof(Blaze));
             AddSkill("EnergyShield", typeof(EnergyShield));
@@ -189,7 +183,7 @@ namespace Hedra
             AddSkill("FireMastery", typeof(FireMastery));
             AddSkill("Meditation", typeof(Meditation));
             AddSkill("Inferno", typeof(Inferno));
-            
+
             AddSkill("BloodExchange", typeof(BloodExchange));
             AddSkill("Leech", typeof(Leech));
             AddSkill("DarkReaping", typeof(DarkReaping));
@@ -197,8 +191,8 @@ namespace Hedra
             AddSkill("SiphonBlood", typeof(SiphonBlood));
             AddSkill("SkeletonMastery", typeof(SkeletonMastery));
             AddSkill("Terror", typeof(Terror));
-            
-            
+
+
             AddSkill("ArcticBlast", typeof(ArcticBlast));
             AddSkill("BearCompanion", typeof(BearCompanion));
             AddSkill("CompanionMastery", typeof(CompanionMastery));

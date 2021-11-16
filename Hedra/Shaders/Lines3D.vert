@@ -27,6 +27,6 @@ void main()
     float DistanceToCamera = length(vec3(PlayerPosition - InVertex.xyz).xz);
     Visibility = clamp((MaxDist - DistanceToCamera) / (MaxDist - MinDist), 0.0, 1.0);
     PassColor = InColor;
-    
+
     gl_Position = _modelViewProjectionMatrix * vec4(InVertex, 1.0);
 }

@@ -1,33 +1,24 @@
 using System;
 using System.Collections.Generic;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.ExceptionServices;
-using Hedra.Engine.BiomeSystem.NormalBiome;
-using Hedra.Engine.Steamworks;
+using Hedra.Core;
 using Hedra.Engine.Game;
-using Hedra.Engine.Generation;
 using Hedra.Engine.IO;
 using Hedra.Engine.Loader;
 using Hedra.Engine.Management;
 using Hedra.Engine.Native;
 using Hedra.Engine.Networking;
 using Hedra.Engine.Rendering.Core;
-using Hedra.Game;
-using System.Numerics;
-using System.Runtime;
-using System.Runtime.InteropServices;
-using BulletSharp;
 using Hedra.Engine.Scripting;
+using Hedra.Engine.Steamworks;
+using Hedra.Game;
 using Silk.NET.Core;
 using Silk.NET.GLFW;
 using Silk.NET.Windowing;
 using Monitor = Silk.NET.Windowing.Monitor;
-using TaskScheduler = Hedra.Core.TaskScheduler;
-using Vector3 = BulletSharp.Math.Vector3;
 
 namespace Hedra.Engine
 {
@@ -46,7 +37,7 @@ namespace Hedra.Engine
             void ProcessException(object S, UnhandledExceptionEventArgs E)
             {
                 var baseText =
-                    $":{Environment.NewLine}{Environment.NewLine}----STACK TRACE----{Environment.NewLine}{Environment.NewLine}{E.ExceptionObject.ToString()}{Environment.NewLine}{Environment.NewLine}----SCRIPT TRACE---{Environment.NewLine}{Environment.NewLine}{Interpreter.FormatException((Exception)E.ExceptionObject)}";
+                    $":{Environment.NewLine}{Environment.NewLine}----STACK TRACE----{Environment.NewLine}{Environment.NewLine}{E.ExceptionObject}{Environment.NewLine}{Environment.NewLine}----SCRIPT TRACE---{Environment.NewLine}{Environment.NewLine}{Interpreter.FormatException((Exception)E.ExceptionObject)}";
                 if (E.IsTerminating)
                 {
                     Log.WriteLine($"UNEXPECTED FATAL EXCEPTION {baseText}");
@@ -135,7 +126,7 @@ namespace Hedra.Engine
             GameSettings.AvailableResolutions = resolutions.ToArray();
         }
 
-        private static unsafe void RunNormalAndDummyMode(bool DummyMode)
+        private static void RunNormalAndDummyMode(bool DummyMode)
         {
             if (DummyMode) EnableDummyMode();
             LoadLibraries();

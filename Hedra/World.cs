@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Numerics;
 using Hedra.BiomeSystem;
 using Hedra.Engine;
 using Hedra.Engine.BiomeSystem;
@@ -16,20 +17,13 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
-using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Rendering.Particles;
+using Hedra.Engine.SkillSystem;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
-using Hedra.Items;
-using System.Numerics;
-using Hedra.Engine.SkillSystem;
-using Hedra.Framework;
 
 namespace Hedra
 {
@@ -37,9 +31,6 @@ namespace Hedra
 
     public static class World
     {
-        public static event ModulesReloadEvent ModulesReload;
-        public static event OnChunkEvent OnChunkReady;
-        public static event OnChunkEvent OnChunkDisposed;
         public static Dictionary<Vector2, Chunk> SearcheableChunksReference;
         public static Dictionary<Vector2, Chunk> SearcheableChunks => Provider.SearcheableChunks;
         public static AreaHighlighter Highlighter => Provider.Highlighter;
@@ -64,7 +55,10 @@ namespace Hedra
         public static int RandomSeed => Provider.RandomSeed;
         public static WorldBuilder Builder => Provider.Builder;
 
-        public static IWorldProvider Provider { get; set; }        
+        public static IWorldProvider Provider { get; set; }
+        public static event ModulesReloadEvent ModulesReload;
+        public static event OnChunkEvent OnChunkReady;
+        public static event OnChunkEvent OnChunkDisposed;
 
         public static void Load()
         {
@@ -78,17 +72,17 @@ namespace Hedra
         {
             //Provider.Serialize(string)
         }
-        
+
         public static float GetNoise(float X, float Y)
         {
             return Provider.GetNoise(X, Y);
         }
-        
+
         public static float GetNoise(float X, float Y, float Z)
         {
             return Provider.GetNoise(X, Y, Z);
         }
-        
+
         public static void ReloadModules()
         {
             Provider.ReloadModules();
@@ -98,7 +92,7 @@ namespace Hedra
         {
             Provider.OccludeTest();
         }
-        
+
         public static void CullTest()
         {
             Provider.CullTest();
@@ -136,7 +130,7 @@ namespace Hedra
 
         public static Chunk GetChunkByOffset(Vector2 vec2)
         {
-            return GetChunkByOffset((int) vec2.X, (int) vec2.Y);
+            return GetChunkByOffset((int)vec2.X, (int)vec2.Y);
         }
 
         public static void AddEntity(IEntity Entity)
@@ -184,6 +178,7 @@ namespace Hedra
         {
             return Provider.ToChunkSpace(Vec3);
         }
+
         public static Vector2 ToChunkSpace(Vector2 Vec2)
         {
             return Provider.ToChunkSpace(Vec2.ToVector3());
@@ -201,9 +196,9 @@ namespace Hedra
 
         public static Block GetHighestBlockAt(float X, float Z)
         {
-            return GetHighestBlockAt((int) X, (int) Z);
+            return GetHighestBlockAt((int)X, (int)Z);
         }
-        
+
         public static float GetHighest(int X, int Z)
         {
             return Provider.GetHighest(X, Z);
@@ -283,6 +278,7 @@ namespace Hedra
         {
             return Provider.NearestWaterBlockOnChunk(Chunk, Position, out WaterPosition);
         }
+
         public static float NearestWaterBlockOnChunk(Vector3 Position, out Vector3 WaterPosition)
         {
             return Provider.NearestWaterBlockOnChunk(Position, out WaterPosition);

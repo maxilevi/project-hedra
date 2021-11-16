@@ -1,10 +1,8 @@
 using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Globalization;
-using Hedra.Core;
 using System.Numerics;
 using Hedra.Numerics;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Rendering
 {
@@ -60,9 +58,9 @@ namespace Hedra.Rendering
         }
 
         /// <summary>
-        /// Converts HSL to RGB, with a specified output Alpha.
-        /// Arguments are limited to the defined range:
-        /// does not raise exceptions.
+        ///     Converts HSL to RGB, with a specified output Alpha.
+        ///     Arguments are limited to the defined range:
+        ///     does not raise exceptions.
         /// </summary>
         /// <param name="h">Hue, must be in [0, 360].</param>
         /// <param name="s">Saturation, must be in [0, 1].</param>

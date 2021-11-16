@@ -1,5 +1,5 @@
 {
-  "Name" : "SkeletonKamikaze",
+  "Name": "SkeletonKamikaze",
   "MaxHealth": 84.0,
   "AttackDamage": 24.0,
   "AttackCooldown": 1.5,
@@ -15,7 +15,7 @@
     }
   ],
   "Model": {
-    "AlignWithTerrain" :  false,
+    "AlignWithTerrain": false,
     "Path": "$DataFile$/Assets/Chr/SkeletonKamikazeIdle.dae",
     "Scale": 0.8,
     "IdleAnimations": [

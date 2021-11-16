@@ -1,7 +1,7 @@
 using System;
 using Hedra.Core;
-using Hedra.Engine.Management;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Management;
 
 namespace Hedra.EntitySystem
 {
@@ -9,12 +9,12 @@ namespace Hedra.EntitySystem
     {
         private readonly Func<bool> _condition;
         private bool _disposed;
-        
+
         public SelfDestructComponent(IEntity Entity, Func<bool> When) : base(Entity)
         {
             _condition = When;
         }
-        
+
         public SelfDestructComponent(IEntity Entity, float Time) : base(Entity)
         {
             var timer = new Timer(Time);
@@ -23,13 +23,13 @@ namespace Hedra.EntitySystem
 
         public override void Update()
         {
-             if(_condition())
-                 Kill();
+            if (_condition())
+                Kill();
         }
-        
+
         private void Kill()
         {
-            if(_disposed) return;
+            if (_disposed) return;
             _disposed = true;
             Executer.ExecuteOnMainThread(() => Parent.Dispose());
         }

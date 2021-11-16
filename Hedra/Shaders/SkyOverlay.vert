@@ -7,6 +7,6 @@ uniform mat4 trans_matrix;
 
 void main()
 {
-	pass_uv = in_vertex;
-	gl_Position = mvp * trans_matrix * vec4(in_vertex, 1.0); 
+    pass_uv = in_vertex;
+    gl_Position = mvp * trans_matrix * vec4(in_vertex, 1.0);
 } 

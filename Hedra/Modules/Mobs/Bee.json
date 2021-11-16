@@ -1,5 +1,5 @@
 ﻿{
-  "Name" : "Bee", 
+  "Name": "Bee",
   "MaxHealth": 128.0,
   "AttackDamage": 2.5,
   "Speed": 1.35,
@@ -15,9 +15,7 @@
       "Duration": 4.0
     }
   ],
-  
-  "Drops": [ ],
-  
+  "Drops": [],
   "Model": {
     "Path": "$DataFile$/Assets/Chr/BeeIdle.dae",
     "Scale": 1.25,

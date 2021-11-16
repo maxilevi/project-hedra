@@ -1,18 +1,16 @@
-using System.Net.NetworkInformation;
-using Hedra.Core;
+using System.Numerics;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
-using Hedra.Rendering.Particles;
-using System.Numerics;
 using Hedra.Numerics;
+using Hedra.Rendering.Particles;
 
 namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 {
     public class BloodProjectile : ParticleProjectile
     {
-        private readonly IEntity _to;
         private readonly bool _initialized;
-        
+        private readonly IEntity _to;
+
         public BloodProjectile(IEntity From, IEntity To, Vector3 Origin) : base(From, Origin)
         {
             _to = To;
@@ -21,7 +19,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 
         public override void Update()
         {
-            if(!_initialized) return;
+            if (!_initialized) return;
             Direction = (_to.Position + Vector3.UnitY * _to.Model.Height * .5f - Position).NormalizedFast();
             base.Update();
         }
@@ -37,7 +35,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
             Particles.Scale = Vector3.One * .35f;
             Particles.ScaleErrorMargin = new Vector3(.4f, .4f, .4f);
             Particles.VariateUniformly = true;
-            for(var i = 0; i < 10; ++i) Particles.Emit();
+            for (var i = 0; i < 10; ++i) Particles.Emit();
         }
     }
 }

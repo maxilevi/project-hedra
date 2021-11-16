@@ -1,5 +1,5 @@
 ﻿{
-  "Name" : "Goat", 
+  "Name": "Goat",
   "MaxHealth": 170.0,
   "AttackDamage": 3.0,
   "Speed": 1.25,
@@ -41,5 +41,5 @@
         "Speed": 1.35
       }
     ]
-  } 
+  }
 }

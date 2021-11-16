@@ -4,6 +4,7 @@
  * Time: 05:11 p.m.
  *
  */
+
 namespace Hedra.Engine.Generation.ChunkSystem.Builders
 {
     public class MeshBuilder : AbstractBuilder
@@ -12,11 +13,11 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
         {
         }
 
+        protected override QueueType Type => QueueType.Meshing;
+
         protected override void Work(Chunk Object)
         {
             Object.BuildMesh();
         }
-
-        protected override QueueType Type => QueueType.Meshing;
     }
 }

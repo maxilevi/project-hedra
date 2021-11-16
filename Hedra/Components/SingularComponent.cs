@@ -15,7 +15,7 @@ namespace Hedra.Components
 
         private void AssertSingularity()
         {
-            if(Parent.SearchComponent<T>() != null)
+            if (Parent.SearchComponent<T>() != null)
                 throw new ArgumentException($"An {typeof(U).Name} cannot have more than 1 {typeof(T).Name}.");
         }
     }

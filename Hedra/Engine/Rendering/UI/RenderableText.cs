@@ -7,20 +7,17 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using System;
 using System.Numerics;
-using Hedra.Engine.Core;
 using Hedra.Engine.Management;
-using Hedra.Rendering;
-using Hedra.Rendering.UI;
 using Hedra.Game;
+using Hedra.Rendering.UI;
+using SixLabors.Fonts;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Rendering.UI
 {
     /// <summary>
-    /// Wrapper around GUIText.
+    ///     Wrapper around GUIText.
     /// </summary>
     public class RenderableText : IRenderable, IAdjustable, UIElement
     {
@@ -32,20 +29,6 @@ namespace Hedra.Engine.Rendering.UI
             DrawManager.UIRenderer.Remove(UIText.UIText);
         }
 
-        public void Draw()
-        {
-            if (!UIText.UIText.Enabled ||
-                UIText.UIText.IdPointer == null && UIText.UIText.Id == GUIRenderer.TransparentTexture) return;
-            if ((UIText.UIText.Scale * new Vector2(GameSettings.Width, GameSettings.Height)).LengthSquared() <
-                2) return;
-            DrawManager.UIRenderer.Draw(UIText.UIText);
-        }
-
-        public void Adjust()
-        {
-            UIText.UIText.Adjust();
-        }
-
         public string Text
         {
             get => UIText.Text;
@@ -54,18 +37,6 @@ namespace Hedra.Engine.Rendering.UI
                 UIText.Text = value;
                 DrawManager.UIRenderer.Remove(UIText.UIText);
             }
-        }
-
-        public Vector2 Scale
-        {
-            get => UIText.Scale;
-            set => UIText.Scale = value;
-        }
-
-        public Vector2 Position
-        {
-            get => UIText.Position;
-            set => UIText.Position = value;
         }
 
         public Color Color
@@ -106,6 +77,34 @@ namespace Hedra.Engine.Rendering.UI
             set => UIText.StrokeColor = value;
         }
 
+        public bool Enabled => UIText.Enabled;
+
+        public void Adjust()
+        {
+            UIText.UIText.Adjust();
+        }
+
+        public void Draw()
+        {
+            if (!UIText.UIText.Enabled ||
+                UIText.UIText.IdPointer == null && UIText.UIText.Id == GUIRenderer.TransparentTexture) return;
+            if ((UIText.UIText.Scale * new Vector2(GameSettings.Width, GameSettings.Height)).LengthSquared() <
+                2) return;
+            DrawManager.UIRenderer.Draw(UIText.UIText);
+        }
+
+        public Vector2 Scale
+        {
+            get => UIText.Scale;
+            set => UIText.Scale = value;
+        }
+
+        public Vector2 Position
+        {
+            get => UIText.Position;
+            set => UIText.Position = value;
+        }
+
         public void Enable()
         {
             UIText.Enable();
@@ -115,8 +114,6 @@ namespace Hedra.Engine.Rendering.UI
         {
             UIText.Disable();
         }
-
-        public bool Enabled => UIText.Enabled;
 
         public void Dispose()
         {

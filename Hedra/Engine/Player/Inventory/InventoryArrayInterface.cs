@@ -1,16 +1,12 @@
 using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Linq;
-using Hedra.Engine.Events;
+using System.Numerics;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-using System.Numerics;
-
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Player.Inventory
 {
@@ -18,34 +14,24 @@ namespace Hedra.Engine.Player.Inventory
     {
         public const string DefaultIcon = "Assets/UI/InventorySlot.png";
         public const float UISizeMultiplier = 1.15f;
-        public static uint DefaultId { get; } = Graphics2D.LoadFromAssets(DefaultIcon);
-
-        public static Vector2 DefaultSize { get; } =
-            Graphics2D.SizeFromAssets(DefaultIcon).As1920x1080() * UISizeMultiplier;
-
-        private InventoryArray _array;
-        private readonly InventoryItemRenderer _renderer;
-        private readonly BackgroundTexture[] _inventoryTextures;
-        private readonly RenderableButton[] _inventoryButtons;
-        private readonly RenderableText[] _inventoryButtonsText;
-        protected readonly Panel _panel;
         private readonly int _length;
-        private readonly int _offset;
-        private Vector2 _position = Vector2.Zero;
-        private Vector2 _individualScale = Vector2.One;
-        private Vector2 _scale = Vector2.One;
+        protected readonly Panel _panel;
+
         private bool _enabled;
+        private Vector2 _individualScale = Vector2.One;
+        private Vector2 _position = Vector2.Zero;
+        private Vector2 _scale = Vector2.One;
 
         public InventoryArrayInterface(InventoryArray Array, int Offset, int Length, int SlotsPerLine,
             Vector2 Spacing, string[] CustomIcons = null)
         {
-            _array = Array;
+            this.Array = Array;
             _length = Length;
-            _offset = Offset;
-            _renderer = new InventoryItemRenderer(_array, _offset, _length);
-            _inventoryTextures = new BackgroundTexture[_length];
-            _inventoryButtons = new RenderableButton[_length];
-            _inventoryButtonsText = new RenderableText[_length];
+            this.Offset = Offset;
+            Renderer = new InventoryItemRenderer(this.Array, this.Offset, _length);
+            Textures = new BackgroundTexture[_length];
+            Buttons = new RenderableButton[_length];
+            ButtonsText = new RenderableText[_length];
             _panel = new Panel { DisableKeys = true };
             var size = DefaultSize;
             var offset = new Vector2(size.X, size.Y);
@@ -67,54 +53,39 @@ namespace Hedra.Engine.Player.Inventory
                     : GUIRenderer.TransparentTexture;
                 var customScale = /*CustomIcons != null ? Graphics2D.SizeFromAssets(CustomIcons[i]) : */DefaultSize;
 
-                _inventoryTextures[i] = new BackgroundTexture(CustomIcons != null ? customId : DefaultId, position,
+                Textures[i] = new BackgroundTexture(CustomIcons != null ? customId : DefaultId, position,
                     customScale * scale);
-                _inventoryButtonsText[i] = new RenderableText(string.Empty,
+                ButtonsText[i] = new RenderableText(string.Empty,
                     position + new Vector2(size.X, -size.Y) * .25f, Color.White, FontCache.GetBold(10));
-                _inventoryButtons[i] =
+                Buttons[i] =
                     new RenderableButton(position, size * scale * .8f, GUIRenderer.TransparentTexture);
-                _inventoryButtons[i].Texture.IdPointer = () => _renderer.Draw(k);
-                _inventoryButtons[i].PlaySound = false;
-                _panel.AddElement(_inventoryTextures[i]);
-                _panel.AddElement(_inventoryButtonsText[i]);
-                _panel.AddElement(_inventoryButtons[i]);
+                Buttons[i].Texture.IdPointer = () => Renderer.Draw(k);
+                Buttons[i].PlaySound = false;
+                _panel.AddElement(Textures[i]);
+                _panel.AddElement(ButtonsText[i]);
+                _panel.AddElement(Buttons[i]);
 
-                DrawManager.UIRenderer.Add(_inventoryButtons[i], DrawOrder.After);
-                DrawManager.UIRenderer.Add(_inventoryButtonsText[i], DrawOrder.After);
+                DrawManager.UIRenderer.Add(Buttons[i], DrawOrder.After);
+                DrawManager.UIRenderer.Add(ButtonsText[i], DrawOrder.After);
             }
         }
 
-        public virtual void UpdateView()
-        {
-            for (var i = 0; i < _length; i++)
-                if (_array[i] == null || !_array[i].HasAttribute(CommonAttributes.Amount))
-                {
-                    _inventoryButtonsText[i].Text = string.Empty;
-                }
-                else
-                {
-                    var amount = _array[i].GetAttribute<int>(CommonAttributes.Amount);
-                    _inventoryButtonsText[i].Text = amount == int.MaxValue ? "∞" : amount.ToString();
-                }
+        public static uint DefaultId { get; } = Graphics2D.LoadFromAssets(DefaultIcon);
 
-            _renderer.UpdateView();
-        }
+        public static Vector2 DefaultSize { get; } =
+            Graphics2D.SizeFromAssets(DefaultIcon).As1920x1080() * UISizeMultiplier;
 
-        public void SetArray(InventoryArray New)
-        {
-            if (Array.Length != New.Length)
-                throw new ArgumentOutOfRangeException(
-                    $"New InventoryArray ({New.Length}) needs to be of the same size as the original.");
-            _array = New;
-            _renderer.SetArray(New);
-        }
+        public int Offset { get; }
 
-        public int Offset => _offset;
-        public InventoryItemRenderer Renderer => _renderer;
-        public InventoryArray Array => _array;
-        public RenderableButton[] Buttons => _inventoryButtons;
-        public RenderableText[] ButtonsText => _inventoryButtonsText;
-        public BackgroundTexture[] Textures => _inventoryTextures;
+        public InventoryItemRenderer Renderer { get; }
+
+        public InventoryArray Array { get; private set; }
+
+        public RenderableButton[] Buttons { get; }
+
+        public RenderableText[] ButtonsText { get; }
+
+        public BackgroundTexture[] Textures { get; }
 
         public virtual bool Enabled
         {
@@ -170,6 +141,31 @@ namespace Hedra.Engine.Player.Inventory
                     elements[i].Position = elements[i].Position - _position + value;
                 _position = value;
             }
+        }
+
+        public virtual void UpdateView()
+        {
+            for (var i = 0; i < _length; i++)
+                if (Array[i] == null || !Array[i].HasAttribute(CommonAttributes.Amount))
+                {
+                    ButtonsText[i].Text = string.Empty;
+                }
+                else
+                {
+                    var amount = Array[i].GetAttribute<int>(CommonAttributes.Amount);
+                    ButtonsText[i].Text = amount == int.MaxValue ? "∞" : amount.ToString();
+                }
+
+            Renderer.UpdateView();
+        }
+
+        public void SetArray(InventoryArray New)
+        {
+            if (Array.Length != New.Length)
+                throw new ArgumentOutOfRangeException(
+                    $"New InventoryArray ({New.Length}) needs to be of the same size as the original.");
+            Array = New;
+            Renderer.SetArray(New);
         }
     }
 }

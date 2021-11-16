@@ -1,30 +1,24 @@
 using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using Hedra.Core;
+using System.Numerics;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
-using Hedra.Engine.Management;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Windowing;
-using Hedra.Items;
 using Hedra.Localization;
-using Hedra.Rendering.UI;
-using Hedra.Sound;
-using System.Numerics;
 using Hedra.Numerics;
 using Hedra.Rendering;
-
+using Hedra.Rendering.UI;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
 {
     public class SpecializationInfo : AbilityTreeInterfaceItemInfo
     {
-        private readonly GUIText _learnSpecializationText;
         private readonly Button _learnSpecializationButton;
-        private AbilityTreeBlueprint _blueprint;
+        private readonly GUIText _learnSpecializationText;
         private readonly IPlayer _player;
+        private AbilityTreeBlueprint _blueprint;
 
         public SpecializationInfo(IPlayer Player)
         {

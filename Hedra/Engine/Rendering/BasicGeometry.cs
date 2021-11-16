@@ -1,12 +1,11 @@
-
 using System;
 using System.Linq;
-using Hedra.Engine.Bullet;
 using System.Numerics;
+using Hedra.Engine.Bullet;
+using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Windowing;
 using Hedra.Rendering;
-using CollisionShape = Hedra.Engine.PhysicsSystem.CollisionShape;
 #if DEBUG
 using Legacy = Silk.NET.OpenGL.Legacy;
 #endif
@@ -14,7 +13,7 @@ using Legacy = Silk.NET.OpenGL.Legacy;
 namespace Hedra.Engine.Rendering
 {
     /// <summary>
-    /// Description of BasicGeometry.
+    ///     Description of BasicGeometry.
     /// </summary>
     public static class BasicGeometry
     {
@@ -22,20 +21,16 @@ namespace Hedra.Engine.Rendering
         private static readonly VBO<Vector3> _drawVerts;
         private static readonly VBO<uint> _drawIndices;
         private static readonly VAO<Vector3> _drawVao;
-
-        private static VBO<Vector3> CubeVerticesVBO { get; }
-        public static VBO<ushort> CubeIndicesVBO { get; }
-        public static VAO<Vector3> CubeVAO { get; }
         private static BulletDraw _debugDraw;
 #if DEBUG
         private static readonly Legacy.GL _gl;
 #endif
-        
+
         static BasicGeometry()
         {
             var data = new CubeData();
             data.AddFace(Face.ALL);
-            var asVertexData = new VertexData()
+            var asVertexData = new VertexData
             {
                 Vertices = data.VerticesArrays.ToList(),
                 Indices = data.Indices,
@@ -43,13 +38,16 @@ namespace Hedra.Engine.Rendering
                 Colors = Enumerable.Repeat(Vector4.One, data.VerticesArrays.Length).ToList()
             };
             asVertexData.UniqueVertices();
-            var indices = asVertexData.Indices.Select(I => (ushort) I).ToArray();
-            CubeVerticesVBO = new VBO<Vector3>(asVertexData.Vertices.ToArray(), asVertexData.Vertices.Count * HedraSize.Vector3, VertexAttribPointerType.Float);
-            CubeIndicesVBO = new VBO<ushort>(indices, indices.Length * sizeof(ushort), VertexAttribPointerType.UnsignedShort, BufferTarget.ElementArrayBuffer);
+            var indices = asVertexData.Indices.Select(I => (ushort)I).ToArray();
+            CubeVerticesVBO = new VBO<Vector3>(asVertexData.Vertices.ToArray(),
+                asVertexData.Vertices.Count * HedraSize.Vector3, VertexAttribPointerType.Float);
+            CubeIndicesVBO = new VBO<ushort>(indices, indices.Length * sizeof(ushort),
+                VertexAttribPointerType.UnsignedShort, BufferTarget.ElementArrayBuffer);
             CubeVAO = new VAO<Vector3>(CubeVerticesVBO);
-            
+
             _drawVerts = new VBO<Vector3>(new Vector3[5], 5 * HedraSize.Vector3, VertexAttribPointerType.Float);
-            _drawIndices = new VBO<uint>(new uint[5], 5 * sizeof(uint), VertexAttribPointerType.UnsignedInt, BufferTarget.ElementArrayBuffer);
+            _drawIndices = new VBO<uint>(new uint[5], 5 * sizeof(uint), VertexAttribPointerType.UnsignedInt,
+                BufferTarget.ElementArrayBuffer);
             _drawVao = new VAO<Vector3>(_drawVerts);
             _line = new Line3D();
             _debugDraw = new BulletDraw();
@@ -57,7 +55,11 @@ namespace Hedra.Engine.Rendering
             _gl = Legacy.GL.GetApi(Program.GameWindow.Window);
 #endif
         }
-        
+
+        private static VBO<Vector3> CubeVerticesVBO { get; }
+        public static VBO<ushort> CubeIndicesVBO { get; }
+        public static VAO<Vector3> CubeVAO { get; }
+
         public static void DrawPlane(Vector3 Normal, float PlaneConst, Vector3 Position, Vector4 Color)
         {
             /*var mat = Transform.Compatible();
@@ -94,7 +96,7 @@ namespace Hedra.Engine.Rendering
         public static void DrawPoint(Vector3 Point, Vector4 Color, float Width = 4)
         {
 #if DEBUG
-            
+
             Shader.Passthrough.Bind();
             _gl.PointSize(Width);
             _gl.Begin(Legacy.GLEnum.Points);
@@ -108,7 +110,7 @@ namespace Hedra.Engine.Rendering
         public static void DrawLine(Vector3 Start, Vector3 End, Vector4 Color, float Width = 1)
         {
 #if DEBUG
-            
+
             Shader.Passthrough.Bind();
             _gl.LineWidth(Width);
             _gl.Begin(Legacy.GLEnum.Lines);
@@ -123,10 +125,7 @@ namespace Hedra.Engine.Rendering
 
         public static void DrawShapes(CollisionShape[] Shapes, Vector4 DrawColor)
         {
-            for (var i = 0; i < Shapes.Length; i++)
-            {
-                DrawShape(Shapes[i], DrawColor);
-            }
+            for (var i = 0; i < Shapes.Length; i++) DrawShape(Shapes[i], DrawColor);
         }
 
         public static void DrawShape(CollisionShape Shape, Vector4 DrawColor)
@@ -142,11 +141,12 @@ namespace Hedra.Engine.Rendering
             _drawIndices.Bind();
 
             //Renderer.DrawArrays(PrimitiveType.Triangles, 0, _drawVerts.Count);
-            Renderer.DrawElements(PrimitiveType.Triangles, _drawIndices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
-            
+            Renderer.DrawElements(PrimitiveType.Triangles, _drawIndices.Count, DrawElementsType.UnsignedInt,
+                IntPtr.Zero);
+
             _drawIndices.Unbind();
             _drawVao.Unbind();
-            
+
             Renderer.Enable(EnableCap.CullFace);
             Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
             Shader.Passthrough.Unbind();

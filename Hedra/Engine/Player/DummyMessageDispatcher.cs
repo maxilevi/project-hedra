@@ -1,16 +1,11 @@
 using System;
 using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 
 namespace Hedra.Engine.Player
 {
     public class DummyMessageDispatcher : IMessageDispatcher
     {
         public void ShowTitleMessage(string Message, float Seconds)
-        {
-        }
-
-        public void ShowTitleMessage(string Message, float Seconds, Color TextColor)
         {
         }
 
@@ -43,5 +38,9 @@ namespace Hedra.Engine.Player
         }
 
         public bool HasTitleMessages => false;
+
+        public void ShowTitleMessage(string Message, float Seconds, Color TextColor)
+        {
+        }
     }
 }

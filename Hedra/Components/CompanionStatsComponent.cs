@@ -11,13 +11,21 @@ namespace Hedra.Components
     public class CompanionStatsComponent : EntityComponent
     {
         private const string LibraryName = "Companion.py";
-        private static readonly string NameAttributeName = Interpreter.GetMember<string>(LibraryName, "NAME_ATTRIB_NAME");
+
+        private static readonly string NameAttributeName =
+            Interpreter.GetMember<string>(LibraryName, "NAME_ATTRIB_NAME");
+
         private static readonly string XPAttributeName = Interpreter.GetMember<string>(LibraryName, "XP_ATTRIB_NAME");
-        private static readonly string HealthAttributeName = Interpreter.GetMember<string>(LibraryName, "HEALTH_ATTRIB_NAME");
-        private static readonly string LevelAttributeName = Interpreter.GetMember<string>(LibraryName, "LEVEL_ATTRIB_NAME");
-        private readonly Item _storage;
-        private readonly Timer _saveTimer;
+
+        private static readonly string HealthAttributeName =
+            Interpreter.GetMember<string>(LibraryName, "HEALTH_ATTRIB_NAME");
+
+        private static readonly string LevelAttributeName =
+            Interpreter.GetMember<string>(LibraryName, "LEVEL_ATTRIB_NAME");
+
         private readonly float _baseAttackDamage;
+        private readonly Timer _saveTimer;
+        private readonly Item _storage;
 
         public CompanionStatsComponent(IEntity Entity, Item Storage) : base(Entity)
         {
@@ -28,14 +36,6 @@ namespace Hedra.Components
             XP = XP;
             Parent.Health = _storage.GetAttribute<float>(HealthAttributeName);
             Level = Level;
-        }
-
-        public override void Update()
-        {
-            if(_saveTimer.Tick())
-                _storage.SetAttribute(HealthAttributeName, Parent.Health);
-            if(!Parent.SearchComponent<DamageComponent>().HasBeenAttacked && !Parent.IsAttacking)
-                Parent.Health += HealthRegen * Time.DeltaTime;
         }
 
         public string Name
@@ -54,6 +54,7 @@ namespace Hedra.Components
                     value -= MaxXP;
                     Level++;
                 }
+
                 _storage.SetAttribute(XPAttributeName, value);
             }
         }
@@ -70,5 +71,13 @@ namespace Hedra.Components
 
         public float MaxXP => Humanoid.MaxLevel == Level ? 0 : ClassDesign.XPFormula(Level);
         private float HealthRegen => 2;
+
+        public override void Update()
+        {
+            if (_saveTimer.Tick())
+                _storage.SetAttribute(HealthAttributeName, Parent.Health);
+            if (!Parent.SearchComponent<DamageComponent>().HasBeenAttacked && !Parent.IsAttacking)
+                Parent.Health += HealthRegen * Time.DeltaTime;
+        }
     }
 }

@@ -6,9 +6,9 @@
     "Scale": 1.0
   },
   "Class": "Warrior",
-  "Behaviour" : "Hostile",  
+  "Behaviour": "Hostile",
   "Immune": false,
-  "Components":  [],
+  "Components": [],
   "Weapons": [
     {
       "Tier": "Uncommon",

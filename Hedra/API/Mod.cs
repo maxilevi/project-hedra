@@ -4,17 +4,15 @@ namespace Hedra.API
 {
     public abstract class Mod
     {
-        private readonly WeaponRegistry _weaponRegistry;
-        private readonly AnimationEventRegistry _animationEventRegistry;
         private readonly AIRegistry _aiRegistry;
+        private readonly AnimationEventRegistry _animationEventRegistry;
         private readonly ClassRestrictionRegistry _classRegistry;
-        private readonly ModelHandlerRegistry _modelHandlerRegistry;
-        private readonly ItemHandlerRegistry _itemHandlerRegistry;
         private readonly EffectRegistry _effectRegistry;
+        private readonly ItemHandlerRegistry _itemHandlerRegistry;
+        private readonly ModelHandlerRegistry _modelHandlerRegistry;
         private readonly SkillRegistry _skillRegistry;
-        
-        public abstract string Name { get; }
-        
+        private readonly WeaponRegistry _weaponRegistry;
+
         protected Mod()
         {
             _weaponRegistry = new WeaponRegistry();
@@ -26,7 +24,9 @@ namespace Hedra.API
             _effectRegistry = new EffectRegistry();
             _skillRegistry = new SkillRegistry();
         }
-        
+
+        public abstract string Name { get; }
+
         protected abstract void RegisterContent();
 
         public void Load()
@@ -44,12 +44,12 @@ namespace Hedra.API
         {
             _skillRegistry.Add(Name, ClassType);
         }
-        
+
         protected void AddAIType(string Name, Type ClassType)
         {
             _aiRegistry.Add(Name, ClassType);
         }
-        
+
         protected void AddWeaponType(string Name, Type ClassType)
         {
             _weaponRegistry.Add(Name, ClassType);
@@ -59,12 +59,12 @@ namespace Hedra.API
         {
             _animationEventRegistry.Add(Name, ClassType);
         }
-        
+
         protected void AddModelHandler(string Name, Type ClassType)
         {
             _modelHandlerRegistry.Add(Name, ClassType);
         }
-        
+
         protected void AddItemHandler(string Name, Type ClassType)
         {
             _itemHandlerRegistry.Add(Name, ClassType);

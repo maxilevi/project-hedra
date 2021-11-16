@@ -14,7 +14,7 @@ namespace Hedra.Engine.ModuleSystem
         public static IEnemyFactory[] LoadModules(string AppPath)
         {
             var factories = new Dictionary<string, IEnemyFactory>();
-            var mods = ModificationsLoader.Get($"/Mobs/");
+            var mods = ModificationsLoader.Get("/Mobs/");
             var modules = Directory.GetFiles($"{AppPath}/Modules/Mobs").Concat(mods).ToArray();
             foreach (var module in modules)
             {
@@ -22,11 +22,12 @@ namespace Hedra.Engine.ModuleSystem
                 if (ext != ".json") continue;
 
                 var factory = FromJSON(File.ReadAllText(module), out var result);
-                if(!result) continue;
+                if (!result) continue;
                 factory.Load();
 
                 factories[factory.Name] = factory;
             }
+
             return factories.Values.ToArray();
         }
 
@@ -43,6 +44,7 @@ namespace Hedra.Engine.ModuleSystem
                 Success = false;
                 Log.WriteLine(e.ToString());
             }
+
             return null;
         }
     }

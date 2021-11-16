@@ -6,13 +6,12 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using System;
-using Hedra.Engine.PhysicsSystem;
 using System.Numerics;
 
 namespace Hedra.Engine.Rendering.Frustum
 {
-
     public static class FrustumGJK
     {
         private static readonly Func<Simplex, bool>[] SimplexUpdateFuncs;
@@ -20,15 +19,15 @@ namespace Hedra.Engine.Rendering.Frustum
 
         static FrustumGJK()
         {
-            SimplexUpdateFuncs = new Func<Simplex, bool>[(int) SimplexType.MaxCount];
+            SimplexUpdateFuncs = new Func<Simplex, bool>[(int)SimplexType.MaxCount];
             SimplexUpdateFuncs[(int)SimplexType.Point] = Simplex => false;
             SimplexUpdateFuncs[(int)SimplexType.Edge] = SimplexEdgeUpdate;
             SimplexUpdateFuncs[(int)SimplexType.Face] = SimplexFaceUpdate;
             SimplexUpdateFuncs[(int)SimplexType.Tetrahedron] = SimplexTetrahedronUpdate;
         }
-        
+
         private static Vector3 SupportPoint(Vector3[] Points, Vector3 Direction)
-        {           
+        {
             var highest = float.MinValue;
             var support = Vector3.Zero;
 
@@ -41,10 +40,10 @@ namespace Hedra.Engine.Rendering.Frustum
                 highest = dot;
                 support = v;
             }
-        
+
             return support;
         }
-       
+
         private static SimplexVertex SupportPoint(Vector3 Direction, Vector3[] Points1, Vector3[] Points2)
         {
             var a = SupportPoint(Points1, Direction);
@@ -61,12 +60,12 @@ namespace Hedra.Engine.Rendering.Frustum
         {
             var simplex = Simplex.Cache;
             simplex.Lock();
-            
+
             _direction = Vector3.One;
             simplex.A = SupportPoint(_direction, Points1, Points2);
             simplex.Type = SimplexType.Point;
             _direction = -_direction;
-         
+
             for (var i = 0; i < 10; ++i)
             {
                 var newSimplexVertex = SupportPoint(_direction, Points1, Points2);
@@ -76,13 +75,14 @@ namespace Hedra.Engine.Rendering.Frustum
                     simplex.Unlock();
                     return false;
                 }
+
                 if (simplex.Type == SimplexType.Point)
                 {
                     simplex.B = simplex.A;
                     simplex.A = newSimplexVertex;
                     simplex.Type = SimplexType.Edge;
                 }
-                
+
                 else if (simplex.Type == SimplexType.Edge)
                 {
                     simplex.C = simplex.B;
@@ -90,7 +90,7 @@ namespace Hedra.Engine.Rendering.Frustum
                     simplex.A = newSimplexVertex;
                     simplex.Type = SimplexType.Face;
                 }
-                
+
                 else if (simplex.Type == SimplexType.Face)
                 {
                     simplex.D = simplex.C;
@@ -99,21 +99,23 @@ namespace Hedra.Engine.Rendering.Frustum
                     simplex.A = newSimplexVertex;
                     simplex.Type = SimplexType.Tetrahedron;
                 }
+
                 if (UpdateSimplex(simplex))
                 {
                     simplex.Unlock();
                     return true;
                 }
             }
+
             simplex.Unlock();
             return false;
         }
-         
+
         private static bool UpdateSimplex(Simplex Simplex)
         {
             return SimplexUpdateFuncs[(int)Simplex.Type](Simplex);
         }
-         
+
         private static bool SimplexEdgeUpdate(Simplex Simplex)
         {
             var AO = -Simplex.A.SupportPoint;
@@ -121,98 +123,104 @@ namespace Hedra.Engine.Rendering.Frustum
             _direction = AB.Cross(AO).Cross(AB);
             return false;
         }
-         
+
         private static bool SimplexFaceUpdate(Simplex Simplex)
         {
             var AO = -Simplex.A.SupportPoint;
             var AB = Simplex.B.SupportPoint - Simplex.A.SupportPoint;
             var AC = Simplex.C.SupportPoint - Simplex.A.SupportPoint;
             var FaceNormal = AB.Cross(AC);
-         
-            if ( AB.Cross(FaceNormal).Dot(AO) > 0 ) {
+
+            if (AB.Cross(FaceNormal).Dot(AO) > 0)
+            {
                 Simplex.Type = SimplexType.Edge;
                 //A and B makes the edge.
                 _direction = AB.Cross(AO).Cross(AB); //Ab to Ao.
                 return false;
             }
-           
-            if ( FaceNormal.Cross(AC).Dot(AO) > 0 ) {
+
+            if (FaceNormal.Cross(AC).Dot(AO) > 0)
+            {
                 //A and B makes the edge.
                 Simplex.B = Simplex.C;
                 Simplex.Type = SimplexType.Edge;
                 _direction = AC.Cross(AO).Cross(AC); //Ac to Ao.
                 return false;
             }
-         
-            if ( FaceNormal.Dot(AO) > 0 ) {
+
+            if (FaceNormal.Dot(AO) > 0)
+            {
                 //Above face.
                 _direction = FaceNormal;
                 return false;
             }
-           
+
             //Below face.
             //Do a swap
-            SimplexVertex B0 = Simplex.B;
+            var B0 = Simplex.B;
             Simplex.B = Simplex.C;
             Simplex.C = B0;
-            
+
             _direction = -FaceNormal;
             return false;
         }
-         
-        private static bool SimplexTetrahedronUpdate(Simplex Simplex) {
-            Vector3 AO = -Simplex.A.SupportPoint;
-         
-            Vector3 AB = Simplex.B.SupportPoint - Simplex.A.SupportPoint;
-            Vector3 AC = Simplex.C.SupportPoint - Simplex.A.SupportPoint;
-            if ( AB.Cross(AC).Dot(AO) > 0 ) {
-                return UpdateSimplexTetrahedronFace(AO, Simplex);
-            }
-         
-            Vector3 AD = Simplex.D.SupportPoint - Simplex.A.SupportPoint;
-            if ( AC.Cross(AD).Dot(AO) > 0 ) {
+
+        private static bool SimplexTetrahedronUpdate(Simplex Simplex)
+        {
+            var AO = -Simplex.A.SupportPoint;
+
+            var AB = Simplex.B.SupportPoint - Simplex.A.SupportPoint;
+            var AC = Simplex.C.SupportPoint - Simplex.A.SupportPoint;
+            if (AB.Cross(AC).Dot(AO) > 0) return UpdateSimplexTetrahedronFace(AO, Simplex);
+
+            var AD = Simplex.D.SupportPoint - Simplex.A.SupportPoint;
+            if (AC.Cross(AD).Dot(AO) > 0)
+            {
                 Simplex.B = Simplex.C;
                 Simplex.C = Simplex.D;
                 return UpdateSimplexTetrahedronFace(AO, Simplex);
             }
-           
-            if ( AD.Cross(AB).Dot(AO) > 0 ) {
-                SimplexVertex OldB = Simplex.B;
+
+            if (AD.Cross(AB).Dot(AO) > 0)
+            {
+                var OldB = Simplex.B;
                 Simplex.B = Simplex.D;
                 Simplex.C = OldB;
                 return UpdateSimplexTetrahedronFace(AO, Simplex);
             }
-         
+
             return true;
         }
-         
+
         private static bool UpdateSimplexTetrahedronFace(Vector3 AO, Simplex Simplex)
         {
-            Vector3 AB = Simplex.B.SupportPoint - Simplex.A.SupportPoint;
-            Vector3 AC = Simplex.C.SupportPoint - Simplex.A.SupportPoint;
-            Vector3 FaceNormal = AB.Cross(AC);
-         
-            if (AB.Cross(FaceNormal).Dot(AO) > 0) {
+            var AB = Simplex.B.SupportPoint - Simplex.A.SupportPoint;
+            var AC = Simplex.C.SupportPoint - Simplex.A.SupportPoint;
+            var FaceNormal = AB.Cross(AC);
+
+            if (AB.Cross(FaceNormal).Dot(AO) > 0)
+            {
                 //Test if origin it is in the voronoi region of the AB edge.
                 Simplex.Type = SimplexType.Edge;
                 //Get the perpendicular direction of the edge towards the origin.
                 _direction = AB.Cross(AO).Cross(AB);
                 return false;
             }
-           
-            if ( FaceNormal.Cross(AC).Dot(AO) > 0 ) {
+
+            if (FaceNormal.Cross(AC).Dot(AO) > 0)
+            {
                 //Test if origin it is in the voronoi region of the AC edge.
                 //Change to edge.
                 Simplex.B = Simplex.C;
                 Simplex.Type = SimplexType.Edge;
                 //Get the perpendicular direction of the edge towards the origin.
-                   _direction = AC.Cross(AO).Cross(AC);
+                _direction = AC.Cross(AO).Cross(AC);
                 return false;
             }
-         
+
             Simplex.Type = SimplexType.Face;
             _direction = FaceNormal;
-           
+
             return false;
         }
     }

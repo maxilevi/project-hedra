@@ -6,29 +6,26 @@
  */
 
 using System.Diagnostics;
+using System.Numerics;
 using System.Threading;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Game;
-using System.Numerics;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 
 namespace Hedra.Rendering.UI
 {
     /// <summary>
-    /// Description of GUIText.
+    ///     Description of GUIText.
     /// </summary>
     public class GUIText : UIElement, ISimpleTexture, ITransparent
     {
-        public static ITextProvider Provider { get; set; } = new TextProvider();
-        public GUITexture UIText { get; private set; }
-        private AlignMode _align = AlignMode.Center;
         private static readonly Vector2 DefaultSize = new Vector2(GameSettings.Width, GameSettings.Height);
         private readonly TextConfiguration _configuration;
+        private readonly AlignMode _align = AlignMode.Center;
         private Vector2 _temporalPosition;
         private string _text;
         private Translation _translation;
@@ -43,6 +40,95 @@ namespace Hedra.Rendering.UI
         public GUIText(string Text, Vector2 Position, Color TextColor, Font TextFont)
             : this(Translation.Default(Text), Position, TextColor, TextFont)
         {
+        }
+
+        public static ITextProvider Provider { get; set; } = new TextProvider();
+        public GUITexture UIText { get; private set; }
+
+        public Color TextColor
+        {
+            get => _configuration.Color;
+            set
+            {
+                if (_configuration.Color == value) return;
+                _configuration.Color = value;
+                UpdateText();
+            }
+        }
+
+        public Font TextFont
+        {
+            get => _configuration.Font;
+            set => _configuration.Font = value;
+        }
+
+        public string Text
+        {
+            get => _text;
+            set
+            {
+                if (value == _text || _configuration == null || value == null) return;
+                _text = value;
+                UpdateText();
+            }
+        }
+
+        public bool Grayscale
+        {
+            get => UIText.Grayscale;
+            set => UIText.Grayscale = value;
+        }
+
+        public bool Stroke { get; set; }
+
+        public float StrokeWidth { get; set; }
+
+        public Color StrokeColor { get; set; }
+
+        public bool Enabled => UIText.Enabled;
+
+        public float Opacity
+        {
+            get => UIText.Opacity;
+            set => UIText.Opacity = value;
+        }
+
+        public Vector2 Scale
+        {
+            get => UIText.Scale;
+            set
+            {
+                if (UIText != null)
+                    UIText.Scale = value;
+            }
+        }
+
+        public Vector2 Position
+        {
+            get => UIText.Position;
+            set
+            {
+                UIText.Position = value;
+                _temporalPosition = value;
+            }
+        }
+
+        public void Enable()
+        {
+            UIText.Enabled = true;
+        }
+
+        public void Disable()
+        {
+            UIText.Enabled = false;
+        }
+
+        public void Dispose()
+        {
+            if (UIText == null) return;
+            TextCache.Remove(UIText.TextureId);
+            UIText.Dispose();
+            DrawManager.UIRenderer.Remove(UIText);
         }
 
         private static BitmapObject BuildBitmap(string Text, Color Color, Font Font, TextOptions Options,
@@ -125,92 +211,6 @@ namespace Hedra.Rendering.UI
             _translation = Translation;
             Translation.LanguageChanged += delegate { Text = Translation.Get(); };
             Text = Translation.Get();
-        }
-
-        public Color TextColor
-        {
-            get => _configuration.Color;
-            set
-            {
-                if (_configuration.Color == value) return;
-                _configuration.Color = value;
-                UpdateText();
-            }
-        }
-
-        public Font TextFont
-        {
-            get => _configuration.Font;
-            set => _configuration.Font = value;
-        }
-
-        public string Text
-        {
-            get => _text;
-            set
-            {
-                if (value == _text || _configuration == null || value == null) return;
-                _text = value;
-                UpdateText();
-            }
-        }
-
-        public Vector2 Scale
-        {
-            get => UIText.Scale;
-            set
-            {
-                if (UIText != null)
-                    UIText.Scale = value;
-            }
-        }
-
-        public Vector2 Position
-        {
-            get => UIText.Position;
-            set
-            {
-                UIText.Position = value;
-                _temporalPosition = value;
-            }
-        }
-
-        public float Opacity
-        {
-            get => UIText.Opacity;
-            set => UIText.Opacity = value;
-        }
-
-        public bool Grayscale
-        {
-            get => UIText.Grayscale;
-            set => UIText.Grayscale = value;
-        }
-
-        public bool Stroke { get; set; }
-
-        public float StrokeWidth { get; set; }
-
-        public Color StrokeColor { get; set; }
-
-        public void Enable()
-        {
-            UIText.Enabled = true;
-        }
-
-        public void Disable()
-        {
-            UIText.Enabled = false;
-        }
-
-        public bool Enabled => UIText.Enabled;
-
-        public void Dispose()
-        {
-            if (UIText == null) return;
-            TextCache.Remove(UIText.TextureId);
-            UIText.Dispose();
-            DrawManager.UIRenderer.Remove(UIText);
         }
     }
 

@@ -4,7 +4,6 @@ namespace Hedra.Engine.ClassSystem.Templates
 {
     public class AbilityTreeTemplate : INamedTemplate
     {
-        public string Name { get; set; }
         public string Description { get; set; }
         public string Icon { get; set; } = "$DataFile$/Assets/Skills/HolderSkill.png";
         public string M11 { get; set; }
@@ -20,34 +19,36 @@ namespace Hedra.Engine.ClassSystem.Templates
         public string M33 { get; set; }
         public string M34 { get; set; }
 
-        public string Get(int I, int J)
-        {
-            return Array[I][J];
-        }
-
         private string[][] Array => new[]
         {
-            new []
+            new[]
             {
                 M11,
                 M12,
                 M13,
                 M14
             },
-            new []
+            new[]
             {
                 M21,
                 M22,
                 M23,
                 M24
             },
-            new []
+            new[]
             {
                 M31,
                 M32,
                 M33,
                 M34
-            },
+            }
         };
+
+        public string Name { get; set; }
+
+        public string Get(int I, int J)
+        {
+            return Array[I][J];
+        }
     }
 }

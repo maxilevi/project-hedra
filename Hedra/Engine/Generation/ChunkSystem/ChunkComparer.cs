@@ -9,12 +9,11 @@
 
 using System;
 using System.Collections.Generic;
-using Hedra.Engine.Core;
 using System.Numerics;
+using Hedra.Engine.Core;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
-    
     public class ChunkComparer : ClosestComparer, IComparer<IPositionable>
     {
         public int Compare(IPositionable ChunkA, IPositionable ChunkB)
@@ -25,7 +24,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return base.Compare(ChunkA.Position, ChunkB.Position);
         }
     }
-    
+
     public class ClosestComparer : IComparer<Vector3>
     {
         public Vector3 Position { get; set; }

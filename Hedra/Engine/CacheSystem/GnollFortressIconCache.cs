@@ -5,11 +5,12 @@ namespace Hedra.Engine.CacheSystem
 {
     public class GnollFortressIconCache : CacheType
     {
-        public override CacheItem Type => CacheItem.GnollFortressIcon;
-
         public GnollFortressIconCache()
         {
-            AddModel(AssetManager.PLYLoader("Assets/Env/Structures/GnollFortress/GnollFortress0-Icon.ply", Vector3.One));
+            AddModel(AssetManager.PLYLoader("Assets/Env/Structures/GnollFortress/GnollFortress0-Icon.ply",
+                Vector3.One));
         }
+
+        public override CacheItem Type => CacheItem.GnollFortressIcon;
     }
 }

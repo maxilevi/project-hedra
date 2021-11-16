@@ -12,8 +12,8 @@ out vec4 pass_topColor;
 
 void main()
 {
-	pass_height = height;
-	pass_botColor = botColor;
-	pass_topColor = topColor;
-	gl_Position = vec4(InVertex, 0.0, 1.0); 
+    pass_height = height;
+    pass_botColor = botColor;
+    pass_topColor = topColor;
+    gl_Position = vec4(InVertex, 0.0, 1.0);
 } 

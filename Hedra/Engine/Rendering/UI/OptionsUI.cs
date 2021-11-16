@@ -9,17 +9,13 @@
 
 #define DONATE_BTC
 
-using Hedra.Engine.Management;
-using System.Numerics;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Globalization;
 using System.Linq;
-using Hedra.Engine.Game;
+using System.Numerics;
 using Hedra.Engine.Localization;
+using Hedra.Engine.Management;
 using Hedra.Engine.Native;
 using Hedra.Engine.Player;
 using Hedra.Engine.Windowing;
@@ -29,30 +25,31 @@ using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
-
+using SixLabors.Fonts;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Rendering.UI
 {
     /// <summary>
-    /// Description of OptionsUI.
+    ///     Description of OptionsUI.
     /// </summary>
     public class OptionsUI : Panel
     {
         private static readonly Translation OnTranslation;
         private static readonly Translation OffTranslation;
-        private List<UIElement> _graphicsButtons = new List<UIElement>();
-        private List<UIElement> _audioButtons = new List<UIElement>();
-        private List<UIElement> _inputButtons = new List<UIElement>();
-        private List<UIElement> _displayButtons = new List<UIElement>();
         private readonly Button _audio;
-        private readonly Button _graphics;
-        private readonly Button _display;
-        private readonly Button _input;
-        private readonly Button _controls;
-        private ControlsUI _controlsPanel;
-        private Vector2 _previousOffset;
-        private readonly Font _normalFont;
         private readonly Font _boldFont;
+        private readonly Button _controls;
+        private readonly Button _display;
+        private readonly Button _graphics;
+        private readonly Button _input;
+        private readonly Font _normalFont;
+        private readonly List<UIElement> _audioButtons = new List<UIElement>();
+        private readonly ControlsUI _controlsPanel;
+        private readonly List<UIElement> _displayButtons = new List<UIElement>();
+        private readonly List<UIElement> _graphicsButtons = new List<UIElement>();
+        private readonly List<UIElement> _inputButtons = new List<UIElement>();
+        private Vector2 _previousOffset;
 
         static OptionsUI()
         {
@@ -143,7 +140,7 @@ namespace Hedra.Engine.Rendering.UI
             var viewDistance = new OptionChooser(new Vector2(dist, vDist * 2f), new Vector2(0.15f, 0.075f),
                 Translation.Create("view_distance", "{0} : "),
                 fontColor, _normalFont,
-                viewValues.Select(Translation.Default).ToArray(), false)
+                viewValues.Select(Translation.Default).ToArray())
             {
                 Index = (GeneralSettings.MaxLoadingRadius - GeneralSettings.MinLoadingRadius) / 2,
                 CurrentValue =
@@ -241,7 +238,7 @@ namespace Hedra.Engine.Rendering.UI
             var shadows = new OptionChooser(new Vector2(dist, vDist), new Vector2(0.15f, 0.075f),
                 Translation.Create("shadow_quality", "{0}: "),
                 fontColor, _normalFont,
-                shadowsValues, false);
+                shadowsValues);
             shadows.Index = 1;
             shadows.CurrentValue.Text = Translations.Get("medium");
 
@@ -312,7 +309,7 @@ namespace Hedra.Engine.Rendering.UI
 
             var language = new OptionChooser(new Vector2(0, -.2f), Vector2.Zero,
                 Translation.Create("language", "{0}: "),
-                fontColor, _normalFont, languageOptions, false)
+                fontColor, _normalFont, languageOptions)
             {
                 Index = Array.IndexOf(languageOptions.Select(T => T.Get()).ToArray(), GameSettings.Language)
             };
@@ -457,10 +454,10 @@ namespace Hedra.Engine.Rendering.UI
 
             var sfxVolume = new OptionChooser(new Vector2(0, .4f), new Vector2(0.15f, 0.075f),
                 Translation.Create("sfx_volume", "{0}: "), fontColor, _normalFont,
-                volumeOptions, false);
+                volumeOptions);
 
             for (var i = 0; i < volumeOptions.Length; i++)
-                if (Math.Abs((float)(int.Parse(volumeOptions[i].Get().Replace("%", string.Empty)) / 100f) -
+                if (Math.Abs(int.Parse(volumeOptions[i].Get().Replace("%", string.Empty)) / 100f -
                              SoundPlayer.Volume) < 0.005f)
                 {
                     sfxVolume.Index = i;

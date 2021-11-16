@@ -1,10 +1,8 @@
 using System.Globalization;
-using Hedra.Engine.Localization;
-using Hedra.Engine.Rendering;
+using System.Numerics;
 using Hedra.Engine.SkillSystem.Archer.Scout;
 using Hedra.Localization;
 using Hedra.Rendering;
-using System.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Warrior
 {
@@ -14,6 +12,7 @@ namespace Hedra.Engine.SkillSystem.Warrior
         protected override Vector3 JumpDirection => -base.JumpDirection;
         public override string Description => Translations.Get("leap_desc");
         public override string DisplayName => Translations.Get("leap_skill");
+
         public override string[] Attributes => new[]
         {
             Translations.Get("leap_distance_change", Distance.ToString("0.0", CultureInfo.InvariantCulture))

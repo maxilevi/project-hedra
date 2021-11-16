@@ -7,15 +7,20 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 {
     public class VillageGraph
     {
-        private Vector2 _size;
-        private readonly List<Vector2> _vertices;
         private readonly List<GraphEdge> _edges;
+        private readonly List<Vector2> _vertices;
 
         public VillageGraph()
         {
             _vertices = new List<Vector2>();
             _edges = new List<GraphEdge>();
         }
+
+        public Vector2 Size { get; private set; }
+
+        public GraphEdge[] Edges => _edges.ToArray();
+
+        public Vector2[] Vertices => _vertices.ToArray();
 
         public void AddSymmetricEdge(Vector2 Start, Vector2 End)
         {
@@ -40,9 +45,9 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 
         public int Degree(int Index)
         {
-            return _edges.Count( E => E.StartIndex == Index || E.EndIndex == Index);
+            return _edges.Count(E => E.StartIndex == Index || E.EndIndex == Index);
         }
-        
+
         public Vector2 FromIndex(int Index)
         {
             return _vertices[Index];
@@ -52,28 +57,29 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         {
             return _vertices.IndexOf(Vertex);
         }
-        
+
         public GraphEdge[] GetEdgesWithVertex(Vector2 Vertex)
         {
             var index = _vertices.IndexOf(Vertex);
-            if(index == -1) throw new ArgumentOutOfRangeException($"Vertex {Vertex} does not exist in graph");
+            if (index == -1) throw new ArgumentOutOfRangeException($"Vertex {Vertex} does not exist in graph");
             return _edges.Where(E => E.StartIndex == index || E.EndIndex == index).ToArray();
         }
-        
+
         private void AddVertex(Vector2 Position)
         {
-            if(!_vertices.Contains(Position))
+            if (!_vertices.Contains(Position))
                 _vertices.Add(Position);
         }
 
         public Vector2 GetNearestVertex(Vector2 Position)
         {
-            return _vertices.Aggregate((V1, V2) => (V1 - Position).LengthSquared() < (V2 - Position).LengthSquared() ? V1 : V2);
+            return _vertices.Aggregate((V1, V2) =>
+                (V1 - Position).LengthSquared() < (V2 - Position).LengthSquared() ? V1 : V2);
         }
 
         private void CalculateSize()
         {
-            _size = new Vector2(
+            Size = new Vector2(
                 SupportPoint(Vector2.UnitX).X - SupportPoint(-Vector2.UnitX).X,
                 SupportPoint(Vector2.UnitY).Y - SupportPoint(-Vector2.UnitY).Y
             );
@@ -93,14 +99,9 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                     support = _vertices[i];
                 }
             }
+
             return support;
         }
-        
-        public Vector2 Size => _size;
-        
-        public GraphEdge[] Edges => _edges.ToArray();
-        
-        public Vector2[] Vertices => _vertices.ToArray();
     }
 
     public class GraphEdge

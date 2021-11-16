@@ -1,9 +1,6 @@
-using System.Collections.Generic;
 using System.Numerics;
 using Hedra.Core;
 using Hedra.Engine.Generation;
-using Hedra.Engine.WorldBuilding;
-using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Sound;
 
@@ -12,6 +9,10 @@ namespace Hedra.Engine.StructureSystem.Overworld
     public class CottageWithFarm : Cottage
     {
         private HighlightedAreaWrapper _area;
+
+        public CottageWithFarm(Vector3 Position, float Radius) : base(Position, Radius)
+        {
+        }
 
         public void MakePossessed()
         {
@@ -24,9 +25,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
             SoundPlayer.PlaySound(SoundType.DarkSound, GameManager.Player.Position);
             _area.Dispose();
             _area = null;
-        }
-        public CottageWithFarm(Vector3 Position, float Radius) : base(Position, Radius)
-        {
         }
     }
 }

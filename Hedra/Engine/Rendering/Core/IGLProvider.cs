@@ -1,11 +1,11 @@
+#region Typedefs
+
 using System;
 using System.Numerics;
-using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
-
-#region Typedefs
 using GLDebugProc = Silk.NET.OpenGL.DebugProc;
 using GLDrawBuffersEnum = Silk.NET.OpenGL.GLEnum;
+
 #endregion
 
 namespace Hedra.Engine.Rendering.Core
@@ -23,8 +23,10 @@ namespace Hedra.Engine.Rendering.Core
         void BindVertexArray(uint Id);
         void BlendEquation(BlendEquationMode Mode);
         void BlendFunc(BlendingFactor Src, BlendingFactor Dst);
+
         void BlitFramebuffer(int SrcX0, int SrcY0, int SrcX1, int SrcY1, int DstX0, int DstY0, int DstX1, int DstY1,
             ClearBufferMask Mask, BlitFramebufferFilter Filter);
+
         void BufferData(BufferTarget Target, IntPtr Size, IntPtr Ptr, BufferUsageHint Hint);
         void BufferData<T>(BufferTarget Target, IntPtr Size, T[] Data, BufferUsageHint Hint) where T : unmanaged;
         void BufferSubData(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, IntPtr Ptr1);
@@ -55,12 +57,18 @@ namespace Hedra.Engine.Rendering.Core
         void DrawBuffer(DrawBufferMode Mode);
         void DrawBuffers(int N, GLDrawBuffersEnum[] Enums);
         void DrawElements(PrimitiveType Primitive, int Count, DrawElementsType Type, IntPtr Indices);
-        void DrawElementsInstanced(PrimitiveType Primitive, int Count, DrawElementsType Type, IntPtr Indices, int Instancecount);
+
+        void DrawElementsInstanced(PrimitiveType Primitive, int Count, DrawElementsType Type, IntPtr Indices,
+            int Instancecount);
+
         void Enable(EnableCap Cap);
         void EnableVertexAttribArray(uint Id);
         void EndQuery(QueryTarget Target);
         void FramebufferTexture(FramebufferTarget Framebuffer, FramebufferAttachment DepthAttachment, uint Id, int V0);
-        void FramebufferTexture2D(FramebufferTarget Target, FramebufferAttachment Attachment, TextureTarget Textarget, uint Texture, int Level);
+
+        void FramebufferTexture2D(FramebufferTarget Target, FramebufferAttachment Attachment, TextureTarget Textarget,
+            uint Texture, int Level);
+
         void GenBuffers(int N, out uint V1);
         int GenFramebuffer();
         int GenQuery();
@@ -78,19 +86,26 @@ namespace Hedra.Engine.Rendering.Core
         int GetUniformBlockIndex(uint V0, string Name);
         int GetUniformLocation(uint Program, string Name);
         void LinkProgram(uint Program);
-        void MultiDrawElements(PrimitiveType Primitive, uint[] Counts, DrawElementsType Type, IntPtr[] Offsets, int Count);
+
+        void MultiDrawElements(PrimitiveType Primitive, uint[] Counts, DrawElementsType Type, IntPtr[] Offsets,
+            int Count);
+
         void PointSize(float Size);
         void LineWidth(float Width);
         void PolygonMode(MaterialFace Face, PolygonMode Mode);
         void ReadBuffer(ReadBufferMode Mode);
         void ReadPixels(int V0, int V1, int V2, int V3, PixelFormat Format, PixelType Type, int[] Pixels);
         void ShaderSource(int V0, string Source);
+
         void TexImage2D(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2, int V3,
             PixelFormat Format, PixelType Type, IntPtr Ptr);
+
         void TexImage2DMultisample(TextureTargetMultisample Target, int Samples, PixelInternalFormat InternalFormat,
             int Width, int Height, bool FixedLocations);
+
         void TexImage3D<T>(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2, int V3,
             int V4, PixelFormat Format, PixelType Type, T[] Pixels) where T : unmanaged;
+
         void TexParameter(TextureTarget Target, TextureParameterName Name, int Value);
         void Uniform1(int Location, int Uniform);
         void Uniform1(int Location, float Uniform);

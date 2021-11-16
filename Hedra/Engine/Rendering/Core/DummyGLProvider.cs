@@ -1,5 +1,4 @@
 using System;
-using System.Drawing.Text;
 using System.Numerics;
 using Hedra.Engine.Windowing;
 using GLDebugProc = Silk.NET.OpenGL.DebugProc;
@@ -9,9 +8,14 @@ namespace Hedra.Engine.Rendering.Core
 {
     public class DummyGLProvider : IGLProvider
     {
-        public ErrorSeverity Severity { get; set; }
+        private uint _bufferIds = 1;
+
+        private int _framebufferIds = 1;
+
+        private int _queryIds = 1;
 
         public int MultiDrawTimesCalled { get; private set; }
+        public ErrorSeverity Severity { get; set; }
 
         public virtual void ActiveTexture(TextureUnit Unit)
         {
@@ -53,7 +57,8 @@ namespace Hedra.Engine.Rendering.Core
         {
         }
 
-        public virtual void BlitFramebuffer(int SrcX0, int SrcY0, int SrcX1, int SrcY1, int DstX0, int DstY0, int DstX1, int DstY1,
+        public virtual void BlitFramebuffer(int SrcX0, int SrcY0, int SrcX1, int SrcY1, int DstX0, int DstY0, int DstX1,
+            int DstY1,
             ClearBufferMask Mask, BlitFramebufferFilter Filter)
         {
         }
@@ -62,7 +67,8 @@ namespace Hedra.Engine.Rendering.Core
         {
         }
 
-        public virtual void BufferData<T>(BufferTarget Target, IntPtr Size, T[] Data, BufferUsageHint Hint) where T : unmanaged
+        public virtual void BufferData<T>(BufferTarget Target, IntPtr Size, T[] Data, BufferUsageHint Hint)
+            where T : unmanaged
         {
         }
 
@@ -70,11 +76,13 @@ namespace Hedra.Engine.Rendering.Core
         {
         }
 
-        public virtual void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, ref T Data) where T : unmanaged
+        public virtual void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, ref T Data)
+            where T : unmanaged
         {
         }
 
-        public virtual void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, T[] Data) where T : unmanaged
+        public virtual void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, T[] Data)
+            where T : unmanaged
         {
         }
 
@@ -144,7 +152,7 @@ namespace Hedra.Engine.Rendering.Core
         public virtual void DeleteTextures(int N, params uint[] Ids)
         {
         }
-        
+
         public virtual void DeleteVertexArrays(int N, ref uint Id)
         {
         }
@@ -181,7 +189,8 @@ namespace Hedra.Engine.Rendering.Core
         {
         }
 
-        public virtual void DrawElementsInstanced(PrimitiveType Primitive, int Count, DrawElementsType Type, IntPtr Indices,
+        public virtual void DrawElementsInstanced(PrimitiveType Primitive, int Count, DrawElementsType Type,
+            IntPtr Indices,
             int Instancecount)
         {
         }
@@ -198,29 +207,27 @@ namespace Hedra.Engine.Rendering.Core
         {
         }
 
-        public virtual void FramebufferTexture(FramebufferTarget Framebuffer, FramebufferAttachment DepthAttachment, uint Id, int V0)
+        public virtual void FramebufferTexture(FramebufferTarget Framebuffer, FramebufferAttachment DepthAttachment,
+            uint Id, int V0)
         {
         }
 
-        public virtual void FramebufferTexture2D(FramebufferTarget Target, FramebufferAttachment Attachment, TextureTarget Textarget,
+        public virtual void FramebufferTexture2D(FramebufferTarget Target, FramebufferAttachment Attachment,
+            TextureTarget Textarget,
             uint Texture, int Level)
         {
         }
 
-        private uint _bufferIds = 1;
-
         public virtual void GenBuffers(int N, out uint V1)
         {
             V1 = _bufferIds++;
-    }
+        }
 
-        private int _framebufferIds = 1;
         public virtual int GenFramebuffer()
         {
             return _framebufferIds++;
         }
 
-        private int _queryIds = 1;
         public virtual int GenQuery()
         {
             return _queryIds++;
@@ -247,7 +254,7 @@ namespace Hedra.Engine.Rendering.Core
 
         public virtual ErrorCode GetError()
         {
-            return default(ErrorCode);
+            return default;
         }
 
         public virtual int GetInteger(GetPName PName)
@@ -272,13 +279,13 @@ namespace Hedra.Engine.Rendering.Core
 
         public virtual string GetShaderInfoLog(int Id)
         {
-            return default(string);
+            return default;
         }
 
         public virtual string GetString(StringName Name)
         {
             if (StringName.Version == Name) return "DUMMY v3.3";
-            return default(string);
+            return default;
         }
 
         public virtual int GetUniformBlockIndex(uint V0, string Name)
@@ -295,7 +302,8 @@ namespace Hedra.Engine.Rendering.Core
         {
         }
 
-        public virtual void MultiDrawElements(PrimitiveType Primitive, uint[] Counts, DrawElementsType Type, IntPtr[] Offsets, int Count)
+        public virtual void MultiDrawElements(PrimitiveType Primitive, uint[] Counts, DrawElementsType Type,
+            IntPtr[] Offsets, int Count)
         {
             MultiDrawTimesCalled++;
         }
@@ -325,17 +333,20 @@ namespace Hedra.Engine.Rendering.Core
         {
         }
 
-        public virtual void TexImage2D(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2, int V3,
+        public virtual void TexImage2D(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2,
+            int V3,
             PixelFormat Format, PixelType Type, IntPtr Ptr)
         {
         }
 
-        public virtual void TexImage2DMultisample(TextureTargetMultisample Target, int Samples, PixelInternalFormat InternalFormat, int Width,
+        public virtual void TexImage2DMultisample(TextureTargetMultisample Target, int Samples,
+            PixelInternalFormat InternalFormat, int Width,
             int Height, bool FixedLocations)
         {
         }
 
-        public virtual void TexImage3D<T>(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2, int V3, int V4,
+        public virtual void TexImage3D<T>(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1,
+            int V2, int V3, int V4,
             PixelFormat Format, PixelType Type, T[] Pixels) where T : unmanaged
         {
         }
@@ -388,7 +399,8 @@ namespace Hedra.Engine.Rendering.Core
         {
         }
 
-        public virtual void VertexAttribPointer(int V0, int V1, VertexAttribPointerType Type, bool Flag, int Bytes, IntPtr Ptr)
+        public virtual void VertexAttribPointer(int V0, int V1, VertexAttribPointerType Type, bool Flag, int Bytes,
+            IntPtr Ptr)
         {
         }
 

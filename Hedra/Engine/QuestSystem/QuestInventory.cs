@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
@@ -9,17 +8,11 @@ using Hedra.Mission;
 namespace Hedra.Engine.QuestSystem
 {
     public delegate void OnQuestChanged(MissionObject Object);
-    
+
     public class QuestInventory
     {
-        public event OnQuestChanged QuestFailed;
-        public event OnQuestChanged QuestAccepted;
-        public event OnQuestChanged QuestCompleted;
-        public event OnQuestChanged QuestAbandoned;
-        public event OnQuestChanged QuestLoaded;
-        public StorySettings Story { get; private set; }
-        private readonly IPlayer _player;
         private readonly List<MissionObject> _activeQuests;
+        private readonly IPlayer _player;
 
         public QuestInventory(IPlayer Player)
         {
@@ -36,11 +29,22 @@ namespace Hedra.Engine.QuestSystem
             SkyManager.TimeChange += CheckForCompleteness;
             QuestCompleted += OnQuestCompleted;
         }
-        
+
+        public StorySettings Story { get; private set; }
+
+        public MissionObject[] ActiveQuests => _activeQuests.ToArray();
+
+        public bool HasStoryQuest => _activeQuests.Any(Q => Q.IsStoryline);
+        public event OnQuestChanged QuestFailed;
+        public event OnQuestChanged QuestAccepted;
+        public event OnQuestChanged QuestCompleted;
+        public event OnQuestChanged QuestAbandoned;
+        public event OnQuestChanged QuestLoaded;
+
         public void Start(IHumanoid Giver, MissionObject Quest)
         {
             /* Don't give storyline quest if player already has it */
-            if(Quest.IsStoryline && _activeQuests.Any(Q => Q.IsStoryline)) return;
+            if (Quest.IsStoryline && _activeQuests.Any(Q => Q.IsStoryline)) return;
             Quest.Start(Giver, _player);
             _activeQuests.Insert(0, Quest);
             QuestAccepted?.Invoke(Quest);
@@ -54,10 +58,7 @@ namespace Hedra.Engine.QuestSystem
 
         public void Update()
         {
-            for (var i = 0; i < _activeQuests.Count; ++i)
-            {
-                _activeQuests[i].Update();
-            }
+            for (var i = 0; i < _activeQuests.Count; ++i) _activeQuests[i].Update();
         }
 
         public void Trigger()
@@ -70,11 +71,10 @@ namespace Hedra.Engine.QuestSystem
             if (Quest.IsStoryline && !Quest.HasNext)
                 Story.CompletedSteps++;
         }
-        
+
         private void CheckForCompleteness()
         {
-            for (var i = _activeQuests.Count-1; i > -1; --i)
-            {
+            for (var i = _activeQuests.Count - 1; i > -1; --i)
                 if (_activeQuests[i].IsCompleted)
                 {
                     var quest = _activeQuests[i];
@@ -82,7 +82,6 @@ namespace Hedra.Engine.QuestSystem
                     QuestCompleted?.Invoke(quest);
                     quest.CleanupAndAdvance();
                 }
-            }
         }
 
         public void SetSerializedQuests(SerializedQuest[] Quests)
@@ -98,14 +97,14 @@ namespace Hedra.Engine.QuestSystem
                     Position = Quests[i].GivenPosition
                 };
                 var quest = design.Build(entity, _player);
-                this.Start(entity, quest);
+                Start(entity, quest);
                 entity.Dispose();
             }
 
             var metadata = Quests.FirstOrDefault(Q => Q.IsMetadata);
             Story = metadata != null ? StorySettings.FromQuest(metadata) : new StorySettings();
         }
-        
+
         public SerializedQuest[] GetSerializedQuests()
         {
             var list = new List<SerializedQuest>();
@@ -113,7 +112,7 @@ namespace Hedra.Engine.QuestSystem
             list.Add(SerializedQuest.FromStoryline(Story));
             return list.ToArray();
         }
-        
+
         public void Abandon(MissionObject Object)
         {
             Object.Abandon();
@@ -127,14 +126,10 @@ namespace Hedra.Engine.QuestSystem
             _activeQuests.Remove(Object);
             QuestFailed?.Invoke(Object);
         }
-        
+
         public void Empty()
         {
             _activeQuests.Clear();
         }
-
-        public MissionObject[] ActiveQuests => _activeQuests.ToArray();
-
-        public bool HasStoryQuest => _activeQuests.Any(Q => Q.IsStoryline);
     }
 }

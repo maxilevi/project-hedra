@@ -1,7 +1,5 @@
 using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using System.Text;
+using System.Numerics;
 using Hedra.Engine.Events;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
@@ -12,25 +10,20 @@ using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-using System.Numerics;
+using Hedra.Sound;
 using Silk.NET.Input;
+using SixLabors.ImageSharp;
 using Button = Hedra.Engine.Rendering.UI.Button;
-
 
 namespace Hedra.Engine.Player.Inventory
 {
     public sealed class InventoryCompanionInfo : InventoryInterfaceItemInfo, IDisposable
     {
         private static readonly Script Script = Interpreter.GetScript("Companion.py");
-        private GUIText Level { get; }
-        private GUIText TopLeftText { get; }
-        private GUIText BottomLeftText { get; }
-        private GUIText TopRightText { get; }
-        private GUIText BottomRightText { get; }
         private readonly Button _renameButton;
         private readonly InventoryCompanionRenamePanel _renamePanel;
-        private bool _isRenaming;
         private IEntity _companion;
+        private bool _isRenaming;
 
         public InventoryCompanionInfo() : base(1f / (1366f / GameSettings.Width) * .9f)
         {
@@ -57,6 +50,32 @@ namespace Hedra.Engine.Player.Inventory
             Panel.AddElement(BottomRightText);
 
             EventDispatcher.RegisterKeyDown(this, OnKeyDown);
+        }
+
+        private GUIText Level { get; }
+        private GUIText TopLeftText { get; }
+        private GUIText BottomLeftText { get; }
+        private GUIText TopRightText { get; }
+        private GUIText BottomRightText { get; }
+
+        protected override float DescriptionHeight => BackgroundTexture.Scale.Y * .1f;
+
+        public override bool Enabled
+        {
+            get => base.Enabled;
+            set
+            {
+                if (!value)
+                    _isRenaming = false;
+                base.Enabled = value;
+            }
+        }
+
+        public Item ShowingCompanion => CurrentItem;
+
+        public void Dispose()
+        {
+            EventDispatcher.UnregisterKeyDown(this);
         }
 
         public void Show(Item Item, IEntity Companion)
@@ -132,8 +151,6 @@ namespace Hedra.Engine.Player.Inventory
             UpdateItemMesh(CurrentItem.GetAttribute<VertexData>("CompanionModel"));
         }
 
-        protected override float DescriptionHeight => BackgroundTexture.Scale.Y * .1f;
-
         protected override void AddAttributes()
         {
             ItemAttributes.Text = string.Empty;
@@ -170,31 +187,13 @@ namespace Hedra.Engine.Player.Inventory
             }
             else
             {
-                Hedra.Sound.SoundPlayer.PlayUISound(Hedra.Sound.SoundType.ButtonClick);
+                SoundPlayer.PlayUISound(SoundType.ButtonClick);
             }
         }
 
         private bool CanUseThisName(string Name)
         {
             return Name != string.Empty;
-        }
-
-        public override bool Enabled
-        {
-            get => base.Enabled;
-            set
-            {
-                if (!value)
-                    _isRenaming = false;
-                base.Enabled = value;
-            }
-        }
-
-        public Item ShowingCompanion => CurrentItem;
-
-        public void Dispose()
-        {
-            EventDispatcher.UnregisterKeyDown(this);
         }
     }
 }

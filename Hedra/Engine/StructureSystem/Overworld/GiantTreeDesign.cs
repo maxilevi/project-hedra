@@ -1,20 +1,17 @@
 using System;
+using System.Numerics;
 using Hedra.BiomeSystem;
-using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EntitySystem.BossSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
-using Hedra.EntitySystem;
 using Hedra.Items;
 using Hedra.Localization;
-using Hedra.Rendering;
-using System.Numerics;
 using Hedra.Numerics;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
@@ -23,6 +20,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public override int PlateauRadius { get; } = 700;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.BossIcon);
         public override bool CanSpawnInside => false;
+
+        public override string DisplayName => Translations.Get("structure_giant_tree");
 
         public override void Build(CollidableStructure Structure)
         {
@@ -39,38 +38,34 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
             model.Color(AssetManager.ColorCode0, region.Colors.WoodColor);
             model.Color(AssetManager.ColorCode1, region.Colors.LeavesColor);
-            model.Color(AssetManager.ColorCode2, region.Colors.LeavesColor  * .8f);
+            model.Color(AssetManager.ColorCode2, region.Colors.LeavesColor * .8f);
 
             model.AddWindValues();
-            float treeRng = Utils.Rng.NextFloat();
+            var treeRng = Utils.Rng.NextFloat();
             for (var i = 0; i < model.Extradata.Count; i++)
-            {
                 model.Extradata[i] = Mathf.Pack(new Vector2(model.Extradata[i] * 2.5f, treeRng), 2048);
-            }
             model.GraduateColor(Vector3.UnitY);
 
             var shapes = CacheManager.GetShape(originalModel).DeepClone();
-            for (var i = 0; i < shapes.Count; i++)
-            {
-                shapes[i].Transform(scaleMatrix * transMatrix);
-            }
+            for (var i = 0; i < shapes.Count; i++) shapes[i].Transform(scaleMatrix * transMatrix);
             Structure.AddCollisionShape(shapes.ToArray());
             Structure.AddStaticElement(model);
             DoWhenChunkReady(position, P => PlaceBoss(P, region, Structure, transMatrix, rng), Structure);
         }
 
-        private void PlaceBoss(Vector3 Position, Region Region, CollidableStructure Structure, Matrix4x4 TransMatrix, Random Rng)
+        private void PlaceBoss(Vector3 Position, Region Region, CollidableStructure Structure, Matrix4x4 TransMatrix,
+            Random Rng)
         {
             var chestOffset = Vector3.UnitZ * 10f + Vector3.UnitX * -80f;
             var chestPosition = Vector3.Transform(chestOffset, TransMatrix);
             var treeBoss = BossGenerator.Generate(
-                new [] { MobType.GiantBeetle, MobType.GorillaWarrior, MobType.Troll },
+                new[] { MobType.GiantBeetle, MobType.GorillaWarrior, MobType.Troll },
                 Vector3.Transform(chestOffset - Vector3.UnitZ * 50, TransMatrix),
                 Rng);
             ((GiantTree)Structure.WorldObject).Boss = treeBoss;
 
             var chest = World.SpawnChest(
-                new Vector3(chestPosition.X, Structure.Position.Y, chestPosition.Z), 
+                new Vector3(chestPosition.X, Structure.Position.Y, chestPosition.Z),
                 ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon)
                 {
                     RandomizeTier = false
@@ -78,32 +73,33 @@ namespace Hedra.Engine.StructureSystem.Overworld
             );
             chest.Condition += () => treeBoss == null || treeBoss.IsDead;
             chest.Rotation = Vector3.UnitY * 90f;
-            ((GiantTree) Structure.WorldObject).Chest = chest;
+            ((GiantTree)Structure.WorldObject).Chest = chest;
             Structure.WorldObject.AddChildren(chest);
         }
-        
+
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
         {
             return base.Setup(TargetPosition, Rng, new GiantTree(TargetPosition));
         }
 
-        protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
+        protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome,
+            IRandom Rng)
         {
             if (Rng.Next(0, StructureGrid.GiantTreeChance) != 1) return false;
-            var height = Biome.Generation.GetMaxHeight( TargetPosition.X, TargetPosition.Z);
+            var height = Biome.Generation.GetMaxHeight(TargetPosition.X, TargetPosition.Z);
             return height > BiomePool.SeaLevel;
         }
-        
-        public override string DisplayName => Translations.Get("structure_giant_tree");
 
         protected override string GetShortDescription(GiantTree Structure)
         {
-            return Translations.Get("quest_complete_structure_short_giant_tree", Structure.Boss?.Name ?? Translations.Get("the_boss"));
+            return Translations.Get("quest_complete_structure_short_giant_tree",
+                Structure.Boss?.Name ?? Translations.Get("the_boss"));
         }
 
         protected override string GetDescription(GiantTree Structure)
         {
-            return Translations.Get("quest_complete_structure_description_giant_tree", Structure.Boss?.Name ?? Translations.Get("the_boss"), DisplayName);
+            return Translations.Get("quest_complete_structure_description_giant_tree",
+                Structure.Boss?.Name ?? Translations.Get("the_boss"), DisplayName);
         }
     }
 }

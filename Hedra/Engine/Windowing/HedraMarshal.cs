@@ -1,5 +1,3 @@
-using BulletSharp.Math;
-
 namespace Hedra.Engine
 {
     public static class HedraSize

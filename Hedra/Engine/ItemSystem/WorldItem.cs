@@ -8,26 +8,16 @@
  */
 
 using System;
-using System.Diagnostics;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
+using System.Numerics;
 using Hedra.Core;
-using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Events;
-using Hedra.Engine.Game;
-using Hedra.Engine.Generation;
-using Hedra.Engine.Localization;
-using Hedra.Engine.Management;
-using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Game;
-using Hedra.Items;
 using Hedra.Localization;
-using Hedra.Rendering;
-using System.Numerics;
 using Hedra.Numerics;
+using Hedra.Rendering;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.ItemSystem
 {
@@ -36,17 +26,13 @@ namespace Hedra.Engine.ItemSystem
     public class WorldItem : WorldObject
     {
         private static ushort _itemCounter;
-        public bool PickedUp { get; private set; }
-        public ushort ItemId { get; }
-        public Item ItemSpecification { get; }
-        public event OnItemCollect OnPickup;
-        private readonly bool _initialized;
         private readonly float _height;
-        private bool _isColliding;
-        private bool _shouldPickup;
+        private readonly bool _initialized;
         private bool _canPickup;
         private bool _disposed;
-        private Vector3 _originalPosition;
+        private bool _isColliding;
+        private readonly Vector3 _originalPosition;
+        private bool _shouldPickup;
 
         public WorldItem(Item ItemSpecification, Vector3 Position) : base(null)
         {
@@ -69,6 +55,18 @@ namespace Hedra.Engine.ItemSystem
             _initialized = true;
         }
 
+        public bool PickedUp { get; private set; }
+        public ushort ItemId { get; }
+        public Item ItemSpecification { get; }
+
+        public bool Outline
+        {
+            get => Model.Outline;
+            set => Model.Outline = value;
+        }
+
+        public event OnItemCollect OnPickup;
+
         public override void Update()
         {
             if (!_initialized) return;
@@ -80,7 +78,7 @@ namespace Hedra.Engine.ItemSystem
                 Math.Max(_originalPosition.Y + _height,
                     _originalPosition.Y + _height + (float)Math.Cos(Time.AccumulatedFrameTime)),
                 _originalPosition.Z);
-            Model.LocalRotation += Vector3.UnitY * 35f * (float)Time.DeltaTime;
+            Model.LocalRotation += Vector3.UnitY * 35f * Time.DeltaTime;
 
             float DotFunc()
             {
@@ -123,12 +121,6 @@ namespace Hedra.Engine.ItemSystem
                 && GameManager.Player.Inventory.Search(I => I.Name == ItemSpecification.Name) != null)
                 if (!PickedUp && !Disposed)
                     OnPickup?.Invoke(GameManager.Player);
-        }
-
-        public bool Outline
-        {
-            get => Model.Outline;
-            set => Model.Outline = value;
         }
 
         public new void Dispose()

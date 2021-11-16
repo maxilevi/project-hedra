@@ -1,14 +1,12 @@
 using System;
+using System.Numerics;
 using Hedra.BiomeSystem;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Generation;
-using Hedra.Engine.Localization;
-using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
-using Hedra.Rendering;
-using System.Numerics;
 using Hedra.Numerics;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
@@ -21,13 +19,13 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public override void Build(CollidableStructure Structure)
         {
             var position = Structure.Position;
-            var obelisk = (Obelisk) Structure.WorldObject;
+            var obelisk = (Obelisk)Structure.WorldObject;
             var scale = Vector3.One * 6;
-            var rng = new Random( (int)(position.X / 11 * (position.Z / 13)) );
+            var rng = new Random((int)(position.X / 11 * (position.Z / 13)));
             var originalModel = CacheManager.GetModel(CacheItem.Obelisk);
             var model = originalModel.ShallowClone();
             var shapes = CacheManager.GetShape(originalModel).DeepClone().ToArray();
-            
+
             var typeColor = Utils.VariateColor(Obelisk.GetObeliskColor(obelisk.Type), 15, rng);
             var darkColor = Obelisk.GetObeliskStoneColor(rng);
 
@@ -43,8 +41,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 shapes[i].Transform(Matrix4x4.CreateScale(scale));
                 shapes[i].Transform(Matrix4x4.CreateTranslation(position));
             }
-            
-            obelisk.Type = (ObeliskType) Utils.Rng.Next(0, (int)ObeliskType.MaxItems);
+
+            obelisk.Type = (ObeliskType)Utils.Rng.Next(0, (int)ObeliskType.MaxItems);
 
             Structure.AddCollisionShape(shapes);
             Structure.AddStaticElement(model);
@@ -57,11 +55,13 @@ namespace Hedra.Engine.StructureSystem.Overworld
             return structure;
         }
 
-        protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
+        protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome,
+            IRandom Rng)
         {
             if (Rng.Next(0, StructureGrid.ObeliskChance) != 1) return false;
             var height = Biome.Generation.GetMaxHeight(TargetPosition.X, TargetPosition.Z);
-            return height > BiomePool.SeaLevel && Math.Abs(Biome.Generation.RiverAtPoint(TargetPosition.X, TargetPosition.Z)) < 0.005f;
+            return height > BiomePool.SeaLevel &&
+                   Math.Abs(Biome.Generation.RiverAtPoint(TargetPosition.X, TargetPosition.Z)) < 0.005f;
         }
     }
 }

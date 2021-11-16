@@ -1,6 +1,4 @@
 using Silk.NET.Windowing;
-using Image = Silk.NET.GLFW.Image;
-
 
 namespace Hedra.Engine.Loader
 {
@@ -12,11 +10,11 @@ namespace Hedra.Engine.Loader
         WindowState WindowState { get; set; }
         bool Exists { get; }
         string Title { get; set; }
-        void Run();
         bool CursorVisible { get; set; }
         bool Fullscreen { get; set; }
-        void Close();
         int Width { get; set; }
         int Height { get; set; }
+        void Run();
+        void Close();
     }
 }

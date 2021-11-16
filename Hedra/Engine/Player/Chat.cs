@@ -6,6 +6,7 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using System;
 using System.Collections.Generic;
 using Hedra.Engine.Events;
@@ -15,7 +16,7 @@ using Hedra.Game;
 namespace Hedra.Engine.Player
 {
     /// <summary>
-    /// Description of Chat.
+    ///     Description of Chat.
     /// </summary>
     public class Chat : IDisposable
     {
@@ -27,9 +28,14 @@ namespace Hedra.Engine.Player
             _state = new Dictionary<string, object>();
             _script = Interpreter.GetScript("Chat.py");
             _script.Get("init").Invoke(User, _state);
-            EventDispatcher.RegisterKeyDown(this, (S,A) => _script.Get("on_key_down").Invoke(A, _state));
+            EventDispatcher.RegisterKeyDown(this, (S, A) => _script.Get("on_key_down").Invoke(A, _state));
         }
-        
+
+        public void Dispose()
+        {
+            EventDispatcher.UnregisterKeyDown(this);
+        }
+
         public void Update()
         {
             _script.Get("update").Invoke(_state);
@@ -43,11 +49,6 @@ namespace Hedra.Engine.Player
         public void Write(string Message)
         {
             _script.Get("add_line").Invoke(_state, Message);
-        }
-
-        public void Dispose()
-        {
-            EventDispatcher.UnregisterKeyDown(this);
         }
 
         public static void Log(string Message)

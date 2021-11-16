@@ -1,5 +1,5 @@
-using Hedra.Engine.Management;
 using System.Numerics;
+using Hedra.Engine.Management;
 
 namespace Hedra.Engine.CacheSystem
 {
@@ -7,9 +7,9 @@ namespace Hedra.Engine.CacheSystem
     {
         public FearIconCache()
         {
-            this.AddModel(AssetManager.PLYLoader("Assets/Env/FearIcon.ply", Vector3.One));
+            AddModel(AssetManager.PLYLoader("Assets/Env/FearIcon.ply", Vector3.One));
         }
-        
+
         public override CacheItem Type => CacheItem.FearIcon;
     }
 }

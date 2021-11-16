@@ -1,7 +1,7 @@
+using System.Numerics;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
-using System.Numerics;
 
 namespace Hedra.Engine.Player.MapSystem
 {
@@ -9,26 +9,27 @@ namespace Hedra.Engine.Player.MapSystem
     {
         public MapStateManager(LocalPlayer Player)
         {
-            this.RegisterStateItem(() => Player.View.MinPitch, O => Player.View.MinPitch = (float)O);
-            this.RegisterStateItem(() => Player.View.MaxPitch, O => Player.View.MaxPitch = (float)O);
-            this.RegisterStateItem(() => Player.View.MaxDistance, O => Player.View.MaxDistance = (float)O);
-            this.RegisterStateItem(() => Player.View.MinDistance, O => Player.View.MinDistance = (float)O);
-            this.RegisterStateItem(() => Player.View.WheelSpeed, O => Player.View.WheelSpeed = (float)O);
-            this.RegisterStateItem(() => Player.View.TargetDistance, O => Player.View.TargetDistance = (float)O);
-            this.RegisterStateItem(() => Player.View.Distance, O => Player.View.Distance = (float)O);
-            this.RegisterStateItem(() => Player.Movement.CaptureMovement, O => Player.Movement.CaptureMovement = (bool)O);
-            this.RegisterStateItem(() => Player.View.CaptureMovement, O => Player.View.CaptureMovement = (bool)O);
-            this.RegisterStateItem(() => Player.View.LockMouse, O => Player.View.LockMouse = (bool)O);
-            this.RegisterStateItem(() => Player.CanInteract, O => Player.CanInteract = (bool)O);
-            this.RegisterStateItem(() => Player.Toolbar.Listen, O => Player.Toolbar.Listen = (bool)O);
-            this.RegisterStateItem(() => WorldRenderer.Offset, O => WorldRenderer.Offset = (Vector3)O);
-            this.RegisterStateItem(() => WorldRenderer.BakedOffset, O => WorldRenderer.BakedOffset = (Vector3)O);
-            this.RegisterStateItem(() => WorldRenderer.Scale, O => WorldRenderer.Scale = (Vector3)O);
-            this.RegisterStateItem(() => WorldRenderer.EnableCulling, O => WorldRenderer.EnableCulling = (bool)O);
-            this.RegisterStateItem(() => WorldRenderer.TransformationMatrix, O => WorldRenderer.TransformationMatrix = (Matrix4x4)O);
-            this.RegisterStateItem(() => WorldRenderer.WaterSmoothness, O => WorldRenderer.WaterSmoothness = (float)O);
-            this.RegisterStateItem(() => SkyManager.UpdateDayColors, O => SkyManager.UpdateDayColors = (bool)O);
-            this.RegisterStateItem(() => Player.Loader.ShouldUpdateFog, O => Player.Loader.ShouldUpdateFog = (bool)O);
+            RegisterStateItem(() => Player.View.MinPitch, O => Player.View.MinPitch = (float)O);
+            RegisterStateItem(() => Player.View.MaxPitch, O => Player.View.MaxPitch = (float)O);
+            RegisterStateItem(() => Player.View.MaxDistance, O => Player.View.MaxDistance = (float)O);
+            RegisterStateItem(() => Player.View.MinDistance, O => Player.View.MinDistance = (float)O);
+            RegisterStateItem(() => Player.View.WheelSpeed, O => Player.View.WheelSpeed = (float)O);
+            RegisterStateItem(() => Player.View.TargetDistance, O => Player.View.TargetDistance = (float)O);
+            RegisterStateItem(() => Player.View.Distance, O => Player.View.Distance = (float)O);
+            RegisterStateItem(() => Player.Movement.CaptureMovement, O => Player.Movement.CaptureMovement = (bool)O);
+            RegisterStateItem(() => Player.View.CaptureMovement, O => Player.View.CaptureMovement = (bool)O);
+            RegisterStateItem(() => Player.View.LockMouse, O => Player.View.LockMouse = (bool)O);
+            RegisterStateItem(() => Player.CanInteract, O => Player.CanInteract = (bool)O);
+            RegisterStateItem(() => Player.Toolbar.Listen, O => Player.Toolbar.Listen = (bool)O);
+            RegisterStateItem(() => WorldRenderer.Offset, O => WorldRenderer.Offset = (Vector3)O);
+            RegisterStateItem(() => WorldRenderer.BakedOffset, O => WorldRenderer.BakedOffset = (Vector3)O);
+            RegisterStateItem(() => WorldRenderer.Scale, O => WorldRenderer.Scale = (Vector3)O);
+            RegisterStateItem(() => WorldRenderer.EnableCulling, O => WorldRenderer.EnableCulling = (bool)O);
+            RegisterStateItem(() => WorldRenderer.TransformationMatrix,
+                O => WorldRenderer.TransformationMatrix = (Matrix4x4)O);
+            RegisterStateItem(() => WorldRenderer.WaterSmoothness, O => WorldRenderer.WaterSmoothness = (float)O);
+            RegisterStateItem(() => SkyManager.UpdateDayColors, O => SkyManager.UpdateDayColors = (bool)O);
+            RegisterStateItem(() => Player.Loader.ShouldUpdateFog, O => Player.Loader.ShouldUpdateFog = (bool)O);
         }
     }
 }

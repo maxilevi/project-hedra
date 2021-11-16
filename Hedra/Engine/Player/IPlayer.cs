@@ -1,8 +1,8 @@
-using System;
+using System.Numerics;
+using Hedra.Components;
 using Hedra.Crafting;
-using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation.ChunkSystem;
-using Hedra.Engine.Management;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Engine.Player.Inventory;
@@ -12,21 +12,15 @@ using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
-using System.Numerics;
-using Hedra.Components;
-using Hedra.Engine.Bullet;
-using Hedra.Engine.ItemSystem;
 
 namespace Hedra.Engine.Player
 {
     public delegate void OnInteractionEvent(InteractableStructure Structure);
-    
+
     public delegate void OnRespawnEvent();
-    
+
     public interface IPlayer : IHumanoid, ISkillUser
     {
-        event OnDeadEvent OnDeath;
-        event OnRespawnEvent OnRespawn;
         IMessageDispatcher MessageDispatcher { get; }
         ICamera View { get; }
         ChunkLoader Loader { get; }
@@ -45,9 +39,11 @@ namespace Hedra.Engine.Player
         CraftingInventory Crafting { get; }
         QuestInventory Questing { get; }
         IStructureAware StructureAware { get; }
-        void ShowInventoryFor(Item Bag);
         bool InterfaceOpened { get; }
         bool Enabled { get; set; }
+        event OnDeadEvent OnDeath;
+        event OnRespawnEvent OnRespawn;
+        void ShowInventoryFor(Item Bag);
         void Respawn();
         void Reset();
         void HideInterfaces();

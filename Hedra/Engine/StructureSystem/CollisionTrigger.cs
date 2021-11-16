@@ -1,4 +1,5 @@
 //#define DEBUG_MESH
+
 using System.Numerics;
 using BulletSharp;
 using Hedra.Engine.Bullet;
@@ -9,19 +10,21 @@ using Hedra.Rendering;
 namespace Hedra.Engine.StructureSystem
 {
     public delegate void OnCollisionEvent(IEntity Entity);
+
     public delegate void OnSeparationEvent(IEntity Entity);
+
     public class CollisionTrigger : BaseStructure
     {
         public const CollisionFilterGroups Group = CollisionFilterGroups.KinematicFilter;
         public event OnCollisionEvent OnCollision;
         public event OnSeparationEvent OnSeparation;
-        
+
         private readonly RigidBody _sensor;
 #if DEBUG_MESH
         private ObjectMesh _mesh;
 #endif
         private Vector3 _position;
-        
+
         public CollisionTrigger(Vector3 Position, VertexData Mesh) : base(Position)
         {
             Mesh = Mesh.AverageCenter();
@@ -39,20 +42,20 @@ namespace Hedra.Engine.StructureSystem
                 {
                     Group = Group,
                     /* If we add a sensor filter then we are colliding two times with the entities (one for body and another one for the sensor)*/
-                    Mask = (CollisionFilterGroups.CharacterFilter),
+                    Mask = CollisionFilterGroups.CharacterFilter,
                     Name = $"Trigger at {Position}",
-                    StaticOffsets = new []
+                    StaticOffsets = new[]
                     {
                         World.ToChunkSpace(Position)
                     }
                 });
                 _sensor.Gravity = BulletSharp.Math.Vector3.Zero;
             }
-            
+
             BulletPhysics.OnCollision += OnWorldCollision;
             BulletPhysics.OnSeparation += OnWorldSeparation;
         }
-        
+
         public override Vector3 Position
         {
             get => _position;
@@ -69,13 +72,13 @@ namespace Hedra.Engine.StructureSystem
 
         private void OnWorldCollision(CollisionObject Object0, CollisionObject Object1)
         {
-            if(!ProcessTrigger(Object0, Object1, out var entity)) return;
+            if (!ProcessTrigger(Object0, Object1, out var entity)) return;
             OnCollision?.Invoke(entity);
         }
-        
+
         private void OnWorldSeparation(CollisionObject Object0, CollisionObject Object1)
         {
-            if(!ProcessTrigger(Object0, Object1, out var entity)) return;
+            if (!ProcessTrigger(Object0, Object1, out var entity)) return;
             OnSeparation?.Invoke(entity);
         }
 
@@ -88,12 +91,12 @@ namespace Hedra.Engine.StructureSystem
             Against = null;
             if (!ReferenceEquals(Object0, _sensor) && !ReferenceEquals(Object1, _sensor)) return false;
             var other = ReferenceEquals(Object0, _sensor) ? Object1 : Object0;
-            var information = (PhysicsObjectInformation) other.UserObject;
+            var information = (PhysicsObjectInformation)other.UserObject;
             if (!information.IsEntity) return false;
             Against = information.Entity;
             return true;
         }
-        
+
         public override void Dispose()
         {
             BulletPhysics.RemoveAndDispose(_sensor);

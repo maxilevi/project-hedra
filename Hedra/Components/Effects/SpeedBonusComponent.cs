@@ -1,25 +1,25 @@
+using System.Numerics;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
-using System.Numerics;
 
 namespace Hedra.Components.Effects
 {
     public class SpeedBonusComponent : EntityComponent
     {
-        private readonly float _speedBonus;
         private readonly bool _showParticles;
+        private readonly float _speedBonus;
 
         public SpeedBonusComponent(IEntity Parent, float Speed, bool ShowParticles = true) : base(Parent)
         {
             _speedBonus = Speed;
             _showParticles = ShowParticles;
-             Parent.Speed += _speedBonus;
+            Parent.Speed += _speedBonus;
         }
 
         public override void Update()
         {
-            if(Parent is Humanoid human && human.IsRiding || !Parent.IsMoving || !_showParticles) return;
+            if (Parent is Humanoid human && human.IsRiding || !Parent.IsMoving || !_showParticles) return;
             if (_speedBonus > 0)
             {
                 World.Particles.Color = Vector4.One;
@@ -34,9 +34,9 @@ namespace Hedra.Components.Effects
                 World.Particles.PositionErrorMargin = new Vector3(1.5f, 1.5f, 1.5f);
                 World.Particles.Emit();
             }
-            else if(_speedBonus < 0)
+            else if (_speedBonus < 0)
             {
-                World.Particles.Color = new Vector4(.2f,.2f,.2f,.6f);
+                World.Particles.Color = new Vector4(.2f, .2f, .2f, .6f);
                 World.Particles.VariateUniformly = true;
                 World.Particles.Position = Parent.Position + Vector3.UnitY * Parent.Model.Height * .15f;
                 World.Particles.Scale = Vector3.One * .25f;
@@ -51,7 +51,7 @@ namespace Hedra.Components.Effects
 
         public override void Dispose()
         {
-            if(Disposed) return;     
+            if (Disposed) return;
             Parent.Speed -= _speedBonus;
         }
     }

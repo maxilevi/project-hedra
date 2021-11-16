@@ -1,13 +1,16 @@
-using System;
-using Hedra.BiomeSystem;
-using Hedra.Engine.Rendering;
-using Hedra.Rendering;
 using System.Numerics;
+using Hedra.BiomeSystem;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.BiomeSystem.NormalBiome
 {
     public class NormalBiomeSkyDesign : BiomeSkyDesign
     {
+        private Vector4 CloudyTop { get; } = Colors.FromArgb(255, 51, 60, 57);
+        private Vector4 CloudyBot { get; } = Colors.FromArgb(255, 253, 251, 240);
+        private Vector4 ClearTop { get; } = Colors.DeepSkyBlue;
+        private Vector4 ClearBot { get; } = Colors.FromArgb(255, 253, 251, 187);
+
         public override Vector4 AfternoonTop(int Seed)
         {
             return Colors.FromHtml("#fa8b5f");
@@ -48,14 +51,9 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             return CanRain(Seed) ? CloudyBot : ClearBot;
         }
 
-        private Vector4 CloudyTop { get; } = Colors.FromArgb(255, 51, 60, 57);
-        private Vector4 CloudyBot { get; } = Colors.FromArgb(255, 253, 251, 240);
-        private Vector4 ClearTop { get; } = Colors.DeepSkyBlue;
-        private Vector4 ClearBot { get; } = Colors.FromArgb(255, 253, 251, 187);
-
         public override bool CanRain(int Seed)
         {
-            return false;//new Random(Seed + 2343).Next(0, 4) == 1;
+            return false; //new Random(Seed + 2343).Next(0, 4) == 1;
         }
 
         public override float MinLight(int Seed)

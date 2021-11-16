@@ -1,17 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Hedra.Engine.Generation;
-using Hedra.Engine.Generation.ChunkSystem;
 using System.Numerics;
+using Hedra.Engine.Generation.ChunkSystem;
 
 namespace Hedra.Engine.PlantSystem
 {
     public class CloudPlacementDesign : PlacementDesign
     {
         private readonly PlantDesign _cloudDesign;
-        
+
         public CloudPlacementDesign()
         {
             _cloudDesign = new CloudDesign();

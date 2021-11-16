@@ -6,42 +6,41 @@
  */
 
 using System;
-using System.Numerics;
 using System.Collections.Generic;
+using System.Numerics;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Windowing;
 using Hedra.Game;
 using Hedra.Numerics;
 using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using SixLabors.ImageSharp.PixelFormats;
-using PixelFormat = Hedra.Engine.Windowing.PixelFormat;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace Hedra.Engine.Rendering.Effects
 {
     /// <summary>
-    /// ONLY WORKS WITH SSAO
+    ///     ONLY WORKS WITH SSAO
     /// </summary>
     public class DeferedRenderer
     {
         public const int SampleCount = 64;
+        public int AOSampler;
+        public int ColorSampler;
         public FBO FirstPass;
-        public FBO SecondPass;
-        public FBO ThirdPass;
-        public FBO WaterPass;
         public Shader FirstPassShader;
-        public Shader SecondPassShader;
-        public Shader ThirdPassShader;
-        public int SamplesUniform;
+        public int Intensity;
+        public int NormalSampler;
+        public int PositionSampler;
+        public int ProjectionUniform;
+        public int RandomSampler;
         public uint RandomTex;
         public float[] Samples;
-        public int ColorSampler;
-        public int PositionSampler;
-        public int NormalSampler;
-        public int RandomSampler;
-        public int AOSampler;
-        public int ProjectionUniform;
-        public int Intensity;
+        public int SamplesUniform;
+        public FBO SecondPass;
+        public Shader SecondPassShader;
+        public FBO ThirdPass;
+        public Shader ThirdPassShader;
+        public FBO WaterPass;
 
         public DeferedRenderer()
         {
@@ -92,10 +91,10 @@ namespace Hedra.Engine.Rendering.Effects
 
             bmp.
                 var bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly,
-                    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    PixelFormat.Format32bppArgb);
 
             Renderer.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmpData.Width, bmpData.Height, 0,
-                PixelFormat.Bgra, PixelType.UnsignedByte, bmpData.Scan0);
+                Windowing.PixelFormat.Bgra, PixelType.UnsignedByte, bmpData.Scan0);
 
             bmp.UnlockBits(bmpData);
             //Bmp.Dispose();

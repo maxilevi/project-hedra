@@ -6,11 +6,10 @@
  */
 
 using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using Hedra.Game;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Numerics
 {
@@ -237,17 +236,17 @@ namespace Hedra.Numerics
                 (byte)Lerp(Origin.B, Target.B, T));
         }
 
+        public static int Modulo(int Index, int Bounds)
+        {
+            return (Index % Bounds + Bounds) % Bounds;
+        }
+
         [StructLayout(LayoutKind.Explicit)]
         private struct FloatIntUnion
         {
             [FieldOffset(0)] public float f;
 
             [FieldOffset(0)] public int tmp;
-        }
-
-        public static int Modulo(int Index, int Bounds)
-        {
-            return (Index % Bounds + Bounds) % Bounds;
         }
     }
 }

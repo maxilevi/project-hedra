@@ -1,4 +1,3 @@
-using Hedra.Engine.ItemSystem;
 using Hedra.Items;
 
 namespace Hedra.Engine.SkillSystem

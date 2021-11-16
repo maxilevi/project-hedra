@@ -1,29 +1,24 @@
-using Hedra.Engine.Localization;
-using Hedra.Engine.Player;
-using Hedra.Engine.Sound;
+using System.Numerics;
 using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Sound;
-using System.Numerics;
-
 using Silk.NET.Input;
-
 
 namespace Hedra.Engine.WorldBuilding
 {
     public class Tombstone : InteractableStructure
     {
+        public Tombstone(Vector3 Position) : base(Position)
+        {
+        }
+
         public override Key Key => Controls.Respect;
         public override string Message => Translations.Get("interact_tombstone");
         public override int InteractDistance => 8;
 
         protected override void Interact(IHumanoid Humanoid)
         {
-            SoundPlayer.PlaySound(SoundType.NotificationSound, this.Position, false, 1f, 0.6f);            
-        }
-
-        public Tombstone(Vector3 Position) : base(Position)
-        {
+            SoundPlayer.PlaySound(SoundType.NotificationSound, Position, false, 1f, 0.6f);
         }
     }
 }

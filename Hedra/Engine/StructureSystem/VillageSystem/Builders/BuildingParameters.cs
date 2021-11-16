@@ -1,6 +1,6 @@
 using System;
-using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using System.Numerics;
+using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
@@ -10,7 +10,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         public DesignTemplate Design { get; set; }
         public Vector3 Position { get; set; }
         public Vector3 Rotation { get; set; }
-        
+
         public Random Rng { get; set; }
 
         public virtual float GetSize(VillageCache Cache)

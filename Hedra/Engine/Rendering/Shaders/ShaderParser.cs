@@ -1,38 +1,38 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
-using System.Numerics;
 using Microsoft.Scripting;
 
 namespace Hedra.Engine.Rendering.Shaders
 {
     /// <summary>
-    /// Partial shader parser for detecting certain uniforms
+    ///     Partial shader parser for detecting certain uniforms
     /// </summary>
     public class ShaderParser
-    {        
-        public string Source { get; set; }
-
+    {
         public ShaderParser(string Source)
         {
             this.Source = Source;
         }
 
+        public string Source { get; set; }
+
         public static string ProcessSource(string Source)
         {
             if (Source == null) return null;
-            var matches = Regex.Matches(Source, @"(!\s*include\s*<\s*""([a-zA-Z\/\.]+)""\s*>)").Cast<Match>().ToArray();
+            var matches = Regex.Matches(Source, @"(!\s*include\s*<\s*""([a-zA-Z\/\.]+)""\s*>)").ToArray();
             for (var i = 0; i < matches.Length; i++)
             {
                 var statement = matches[i].Groups[1].Value;
                 var includeFile = matches[i].Groups[2].Value;
                 Source = Source.Replace(statement, AssetManager.ReadShader(includeFile));
             }
+
             return AddBuiltinUniforms(Source);
         }
 
@@ -51,29 +51,34 @@ namespace Hedra.Engine.Rendering.Shaders
         public UniformArray[] ParseUniformArrays(int ShaderId)
         {
             var mappings = new List<UniformArray>();
-            var matches = Regex.Matches(Source, @"\buniform\s+([a-zA-Z0-9]+)\s+([a-zA-Z0-9]+)\s*\[\s*(\d+|[a-zA-Z_]+)\s*\]").Cast<Match>().ToArray();
-            for (var i = 0; i < matches.Length; i ++)
+            var matches = Regex
+                .Matches(Source, @"\buniform\s+([a-zA-Z0-9]+)\s+([a-zA-Z0-9]+)\s*\[\s*(\d+|[a-zA-Z_]+)\s*\]").ToArray();
+            for (var i = 0; i < matches.Length; i++)
             {
-                if ((matches[i].Groups.Count - 1) % 3 != 0) throw new ArgumentException($"Expected remainder 0 got {(matches[i].Groups.Count - 1) % 3}");
+                if ((matches[i].Groups.Count - 1) % 3 != 0)
+                    throw new ArgumentException($"Expected remainder 0 got {(matches[i].Groups.Count - 1) % 3}");
                 var type = ParseType(matches[i].Groups[1].Value);
                 var mapping = ParseMappingType(matches[i].Groups[1].Value);
                 var key = matches[i].Groups[2].Value;
-                var size = this.ParseArraySize(matches[i].Groups[3].Value);
+                var size = ParseArraySize(matches[i].Groups[3].Value);
                 mappings.Add(new UniformArray(type, ShaderId, key, size, mapping));
             }
+
             return mappings.ToArray();
         }
-        
+
         public void AddUniformTypes(Dictionary<string, MappingType> Map)
         {
-            var matches = Regex.Matches(Source, @"\buniform\s+([a-zA-Z0-9]+)\s+([a-zA-Z0-9_]+)").Cast<Match>().ToArray();
-            for (var i = 0; i < matches.Length; i ++)
+            var matches = Regex.Matches(Source, @"\buniform\s+([a-zA-Z0-9]+)\s+([a-zA-Z0-9_]+)").ToArray();
+            for (var i = 0; i < matches.Length; i++)
             {
-                if ((matches[i].Groups.Count - 1) % 2 != 0) throw new ArgumentException($"Expected remainder 0 got {(matches[i].Groups.Count - 1) % 3}");
+                if ((matches[i].Groups.Count - 1) % 2 != 0)
+                    throw new ArgumentException($"Expected remainder 0 got {(matches[i].Groups.Count - 1) % 3}");
                 var type = ParseMappingType(matches[i].Groups[1].Value);
                 var key = matches[i].Groups[2].Value;
-                if(Map.ContainsKey(key) && Map[key] != type)
-                    throw new ArgumentTypeException($"Different types '{Map[key]}' and '{type}' for the same key '{key}'");
+                if (Map.ContainsKey(key) && Map[key] != type)
+                    throw new ArgumentTypeException(
+                        $"Different types '{Map[key]}' and '{type}' for the same key '{key}'");
                 Map[key] = type;
             }
         }
@@ -82,40 +87,38 @@ namespace Hedra.Engine.Rendering.Shaders
         {
             return ParseShaderIO<ShaderInput>(@"layout\s*\(\s*location\s*=\s*(\d)\)\s*in\s+(.*?)\s+(.*?);");
         }
-        
+
         public ShaderOutput[] ParseShaderOutputs()
         {
             return ParseShaderIO<ShaderOutput>(@"layout\s*\(\s*location\s*=\s*(\d)\)\s*out\s+(.*?)\s+(.*?);");
         }
-        
+
         private T[] ParseShaderIO<T>(string RegexString) where T : ShaderIO
         {
             var mappings = new List<T>();
-            var matches = Regex.Matches(Source, RegexString).Cast<Match>().ToArray();
-            for (var i = 0; i < matches.Length; i ++)
+            var matches = Regex.Matches(Source, RegexString).ToArray();
+            for (var i = 0; i < matches.Length; i++)
             {
                 var location = uint.Parse(matches[i].Groups[1].Value);
                 var type = ParseType(matches[i].Groups[2].Value);
                 var name = matches[i].Groups[3].Value;
-                mappings.Add((T) Activator.CreateInstance(typeof(T), location, name, type));
+                mappings.Add((T)Activator.CreateInstance(typeof(T), location, name, type));
             }
+
             return mappings.ToArray();
         }
-        
+
         private int ParseArraySize(string Value)
         {
             var tryInt = int.TryParse(Value, out var newValue);
-            if (!tryInt)
-            {
-                newValue = int.Parse(this.GetValueFromConstant(Value));
-            }
+            if (!tryInt) newValue = int.Parse(GetValueFromConstant(Value));
             return newValue;
         }
 
         private string GetValueFromConstant(string VariableName)
         {
-           var match = Regex.Match(Source, @"const\s+[a-zA-Z0-9]+\s+"+VariableName+@"\s*=\s*([a-zA-Z0-9]+)\s*;");
-           return match.Groups[1].Value;
+            var match = Regex.Match(Source, @"const\s+[a-zA-Z0-9]+\s+" + VariableName + @"\s*=\s*([a-zA-Z0-9]+)\s*;");
+            return match.Groups[1].Value;
         }
 
         private static Type ParseType(string Type)
@@ -147,8 +150,8 @@ namespace Hedra.Engine.Rendering.Shaders
                     throw new ArgumentException($"Type '{Type}' could not be mapped to a valid type");
             }
         }
-        
-        
+
+
         private MappingType ParseMappingType(string Type)
         {
             return Type == "mat4" ? MappingType.Matrix4

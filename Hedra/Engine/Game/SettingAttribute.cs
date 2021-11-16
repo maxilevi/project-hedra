@@ -12,10 +12,9 @@ using System;
 namespace Hedra.Engine.Game
 {
     /// <summary>
-    /// Description of SettingAttribute.
+    ///     Description of SettingAttribute.
     /// </summary>
     public class SettingAttribute : Attribute
     {
-        
     }
 }

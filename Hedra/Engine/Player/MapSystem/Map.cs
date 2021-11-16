@@ -9,39 +9,33 @@
 
 using System;
 using System.Collections.Generic;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Linq;
+using System.Numerics;
 using Hedra.Core;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Events;
-using Hedra.Engine.Game;
-using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
-using Hedra.Engine.Sound;
+using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.Windowing;
 using Hedra.Game;
 using Hedra.Localization;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
 using Hedra.Structures;
-using System.Numerics;
-using Hedra.Engine.StructureSystem.Overworld;
-using Hedra.Numerics;
 using Silk.NET.Input;
-using MouseButton = Silk.NET.Input.MouseButton;
-
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Player.MapSystem
 {
     /// <summary>
-    /// Description of Map.
+    ///     Description of Map.
     /// </summary>
     public class Map : PlayerInterface, IDisposable
     {
@@ -49,29 +43,29 @@ namespace Hedra.Engine.Player.MapSystem
         private const int MapSize = 8;
         private const int ChunkSize = 4;
         private const float FogDistance = 140f;
-        private readonly object _iconsLock;
-        private readonly LocalPlayer _player;
-        private readonly MapStateManager _stateManager;
-        private readonly List<MapItem> _icons;
-        private readonly MapBuilder _builder;
-        private readonly MapMeshBuilder _meshBuilder;
         private readonly List<MapBaseItem> _baseItems;
-        private readonly ObjectMesh _cursor;
-        private readonly List<ObjectMesh> _markers;
-        private readonly ObjectMesh _marker;
-        private readonly ObjectMesh _questMarker;
         private readonly ObjectMesh _baseMesh;
+        private readonly MapBuilder _builder;
+        private readonly ObjectMesh _cursor;
+        private readonly List<MapItem> _icons;
+        private readonly object _iconsLock;
+        private readonly ObjectMesh _marker;
+        private readonly List<ObjectMesh> _markers;
+        private readonly MapMeshBuilder _meshBuilder;
         private readonly Panel _panel;
+        private readonly LocalPlayer _player;
+        private readonly ObjectMesh _questMarker;
+        private readonly MapStateManager _stateManager;
+        private float _height;
+        private float _mapDitherRadius;
+        private int _previousSeed;
         private bool _show;
         private float _size;
-        private float _targetSize;
-        private int _previousSeed;
-        private float _height;
         private float _targetHeight;
-        private int lastChunkAmount = -1;
-        private float _mapDitherRadius;
+        private float _targetSize;
+        private readonly TimeHandler _timeHandler;
         private Chunk _underChunk;
-        private TimeHandler _timeHandler;
+        private int lastChunkAmount = -1;
 
         public Map(LocalPlayer Player)
         {
@@ -126,6 +120,69 @@ namespace Hedra.Engine.Player.MapSystem
             });
         }
 
+        public override Key OpeningKey => Controls.Map;
+
+        public override bool Show
+        {
+            get => _show;
+            set
+            {
+                if (GameManager.IsLoading || _player.Trade.Show) return;
+
+                if (value)
+                {
+                    _stateManager.CaptureState();
+                    UpdateChunks();
+                    ClearIcons();
+                    _timeHandler.Apply();
+                    TaskScheduler.Parallel(UpdateIcons);
+                    SkyManager.UpdateDayColors = false;
+                    WorldRenderer.EnableCulling = false;
+                    _targetSize = 1.0f;
+                    _player.Loader.ShouldUpdateFog = false;
+                    _player.View.MaxDistance = 100f;
+                    _player.View.MinDistance = 0f;
+                    _player.View.TargetDistance = 100f;
+                    _player.View.MaxPitch = -0.2f;
+                    _player.View.MinPitch = -1.4f;
+                    _player.View.WheelSpeed = 5f;
+                    _player.View.AllowClipping = true;
+                    _targetHeight = 4096;
+                    _height = _targetHeight;
+                    _player.Toolbar.Listen = false;
+                    _cursor.Enabled = true;
+                    _panel.Enable();
+                }
+                else
+                {
+                    _stateManager.ReleaseState();
+                    _panel.Disable();
+                    _player.Minimap.Show = true;
+                    _targetSize = 0f;
+                    _targetHeight = 0;
+                    _player.View.AllowClipping = false;
+                    _cursor.Enabled = false;
+                    _timeHandler.Remove();
+                    TaskScheduler.When(() => _height < Camera.DefaultDelegate().Y, delegate
+                    {
+                        _player.View.PositionDelegate = Camera.DefaultDelegate;
+                        if (!_show) _height = 0f;
+                    });
+                    _player.Loader.UpdateFog(true);
+                }
+
+                SoundPlayer.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
+                _show = value;
+            }
+        }
+
+        protected override bool HasExitAnimation => false;
+
+        public void Dispose()
+        {
+            EventDispatcher.UnregisterMouseDown(this);
+        }
+
         public void Update()
         {
             if (World.Seed == World.MenuSeed && Show) Show = false;
@@ -140,7 +197,7 @@ namespace Hedra.Engine.Player.MapSystem
                 for (var i = 0; i < _icons.Count; i++)
                 {
                     _icons[i].Mesh.LocalRotation = new Vector3(_icons[i].Mesh.LocalRotation.X,
-                        _icons[i].Mesh.LocalRotation.Y + (float)Time.DeltaTime * 0f, _icons[i].Mesh.LocalRotation.Z);
+                        _icons[i].Mesh.LocalRotation.Y + Time.DeltaTime * 0f, _icons[i].Mesh.LocalRotation.Z);
                     _icons[i].Mesh.Position = new Vector3(mapPosition.X, _targetHeight - 7, mapPosition.Z);
                 }
             }
@@ -367,68 +424,5 @@ namespace Hedra.Engine.Player.MapSystem
                     return _baseItems[i];
             return null;
         }
-
-        public override Key OpeningKey => Controls.Map;
-
-        public override bool Show
-        {
-            get => _show;
-            set
-            {
-                if (GameManager.IsLoading || _player.Trade.Show) return;
-
-                if (value)
-                {
-                    _stateManager.CaptureState();
-                    UpdateChunks();
-                    ClearIcons();
-                    _timeHandler.Apply();
-                    TaskScheduler.Parallel(UpdateIcons);
-                    SkyManager.UpdateDayColors = false;
-                    WorldRenderer.EnableCulling = false;
-                    _targetSize = 1.0f;
-                    _player.Loader.ShouldUpdateFog = false;
-                    _player.View.MaxDistance = 100f;
-                    _player.View.MinDistance = 0f;
-                    _player.View.TargetDistance = 100f;
-                    _player.View.MaxPitch = -0.2f;
-                    _player.View.MinPitch = -1.4f;
-                    _player.View.WheelSpeed = 5f;
-                    _player.View.AllowClipping = true;
-                    _targetHeight = 4096;
-                    _height = _targetHeight;
-                    _player.Toolbar.Listen = false;
-                    _cursor.Enabled = true;
-                    _panel.Enable();
-                }
-                else
-                {
-                    _stateManager.ReleaseState();
-                    _panel.Disable();
-                    _player.Minimap.Show = true;
-                    _targetSize = 0f;
-                    _targetHeight = 0;
-                    _player.View.AllowClipping = false;
-                    _cursor.Enabled = false;
-                    _timeHandler.Remove();
-                    TaskScheduler.When(() => _height < Camera.DefaultDelegate().Y, delegate
-                    {
-                        _player.View.PositionDelegate = Camera.DefaultDelegate;
-                        if (!_show) _height = 0f;
-                    });
-                    _player.Loader.UpdateFog(true);
-                }
-
-                SoundPlayer.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
-                _show = value;
-            }
-        }
-
-        public void Dispose()
-        {
-            EventDispatcher.UnregisterMouseDown(this);
-        }
-
-        protected override bool HasExitAnimation => false;
     }
 }

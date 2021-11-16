@@ -3,12 +3,8 @@
 #endif
 
 using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Globalization;
-using System.Numerics;
 using System.Reflection;
-using System.Runtime;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Hedra.API;
@@ -16,28 +12,24 @@ using Hedra.Core;
 using Hedra.Engine.Bullet;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Game;
-using Hedra.Engine.Generation;
 using Hedra.Engine.IO;
-using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Native;
 using Hedra.Engine.Networking;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.Inventory;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Scripting;
-using Hedra.Engine.Sound;
 using Hedra.Engine.Steamworks;
+using Hedra.Engine.Windowing;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Game;
 using Hedra.Localization;
 using Hedra.Mission;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Sound;
-using Hedra.Engine.Windowing;
-using Hedra.Numerics;
 using Silk.NET.Maths;
 using Silk.NET.Windowing;
 
@@ -47,16 +39,12 @@ namespace Hedra.Engine.Loader
 
     public class Hedra : HedraWindow, IHedra
     {
-        public int BuildNumber => 17;
-        public string GameVersion => /*"\u03B1 */"1.0";
-        public event OnFrameChanged FrameChanged;
         private DebugInfoProvider _debugProvider;
-        private SplashScreen _splashScreen;
-        public static int MainThreadId { get; private set; }
-        private float _lastValue = float.MinValue;
         private bool _forcingResize;
+        private float _lastValue = float.MinValue;
         private int _passedFrames;
         private double _passedMillis;
+        private SplashScreen _splashScreen;
 
         public Hedra(int Width, int Height, IMonitor Monitor, int Major, int Minor, ContextProfile Profile,
             ContextFlags Flags) :
@@ -64,9 +52,9 @@ namespace Hedra.Engine.Loader
         {
         }
 
-        protected override void Load()
-        {
-        }
+        public static int MainThreadId { get; private set; }
+        public int BuildNumber => 17;
+        public string GameVersion => /*"\u03B1 */"1.0";
 
         public void Setup()
         {
@@ -80,6 +68,13 @@ namespace Hedra.Engine.Loader
                 _debugProvider = new DebugInfoProvider();
                 _splashScreen = new SplashScreen();
             }
+        }
+
+        public bool FinishedLoadingSplashScreen => _splashScreen?.FinishedLoading ?? true;
+        public event OnFrameChanged FrameChanged;
+
+        protected override void Load()
+        {
         }
 
         public static bool LoadBoilerplate()
@@ -124,7 +119,7 @@ namespace Hedra.Engine.Loader
             Log.WriteLine("Assets loading was successful.");
 
             GameSettings.LoadNormalSettings(GameSettings.SettingsPath);
-            Log.WriteLine($"Setting loaded successfully.");
+            Log.WriteLine("Setting loaded successfully.");
 
             Renderer.Load();
             Log.WriteLine("Supported GLSL version is : " + Renderer.GetString(StringName.ShadingLanguageVersion));
@@ -245,7 +240,5 @@ namespace Hedra.Engine.Loader
             var shadingOpenGlVersion = float.Parse(shadingStringVersion.Value, CultureInfo.InvariantCulture);
             return shadingOpenGlVersion >= 310 ? shadingOpenGlVersion / 100f : shadingOpenGlVersion;
         }
-
-        public bool FinishedLoadingSplashScreen => _splashScreen?.FinishedLoading ?? true;
     }
 }

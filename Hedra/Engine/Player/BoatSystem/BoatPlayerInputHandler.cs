@@ -1,14 +1,9 @@
 using System;
-using Hedra.Core;
-using Hedra.Engine.Events;
-using Hedra.Engine.Game;
-using Hedra.Engine.Localization;
 using System.Numerics;
-using Hedra.Engine.PhysicsSystem;
+using Hedra.Core;
 using Hedra.Game;
 using Hedra.Localization;
 using Hedra.Numerics;
-
 
 namespace Hedra.Engine.Player.BoatSystem
 {
@@ -18,13 +13,18 @@ namespace Hedra.Engine.Player.BoatSystem
         private const float Speed = 1.5f;
         private readonly IPlayer _player;
         private float _characterRotation;
-        private BoatStateHandler _stateHandler;
+        private readonly BoatStateHandler _stateHandler;
 
         public BoatPlayerInputHandler(IPlayer Player, BoatStateHandler StateHandler) : base(Player)
         {
             _player = Player;
             _stateHandler = StateHandler;
         }
+
+        protected override float Yaw => _player.View.StackedYaw;
+        public override bool ShouldDrift { get; }
+
+        public override Vector3 Velocity => _accumulatedDirection;
 
         public override void Update()
         {
@@ -54,19 +54,14 @@ namespace Hedra.Engine.Player.BoatSystem
             }
 
             if (_accumulatedDirection.LengthFast() > .005f)
-            {
                 /* Manually translate the boat, avoid using the physics engine*/
                 _player.Movement.ProcessTranslation(_characterRotation, _accumulatedDirection * Speed,
                     _accumulatedDirection.LengthFast() > 5f);
-            }
 
-            if (any)
-            {
-                this.HandleCharacterRotation();
-            }
+            if (any) HandleCharacterRotation();
 
-            this.HandleBoatRotation(propulsionFactor);
-            _accumulatedDirection *= (float) Math.Pow(.35f, (float) Time.DeltaTime);
+            HandleBoatRotation(propulsionFactor);
+            _accumulatedDirection *= (float)Math.Pow(.35f, Time.DeltaTime);
         }
 
         private void HandleCharacterRotation()
@@ -80,10 +75,5 @@ namespace Hedra.Engine.Player.BoatSystem
             if (GameManager.Keyboard[Controls.Forward] && GameManager.Keyboard[Controls.Leftward])
                 _characterRotation += -45f;
         }
-
-        protected override float Yaw => _player.View.StackedYaw;
-        public override bool ShouldDrift { get; }
-
-        public override Vector3 Velocity => _accumulatedDirection;
     }
 }

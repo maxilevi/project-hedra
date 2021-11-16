@@ -2,15 +2,17 @@ namespace Hedra.Engine.Networking
 {
     public abstract class GameHandler
     {
-        protected BaseConnection Connection { get; }
-        protected abstract ConnectionType Type { get; }
-
         protected GameHandler()
         {
             Connection = ConnectionFactory.Build(Type);
             Connection.MessageReceived += OnMessageReceived;
         }
-        
+
+        protected BaseConnection Connection { get; }
+        protected abstract ConnectionType Type { get; }
+
+        public abstract bool IsActive { get; protected set; }
+
         private void OnMessageReceived(ulong Sender, byte[] Message)
         {
             if (CommonMessages.IsCommonMessage(Message))
@@ -21,16 +23,14 @@ namespace Hedra.Engine.Networking
 
         public void Update()
         {
-            if(!IsActive) return;
+            if (!IsActive) return;
             DoUpdate();
         }
 
         protected abstract void DoUpdate();
 
         protected abstract void HandleCommonMessage(ulong Sender, CommonMessageType Message);
-        
+
         protected abstract void HandleNormalMessage(ulong Sender, byte[] Message);
-        
-        public abstract bool IsActive { get; protected set; }
     }
 }

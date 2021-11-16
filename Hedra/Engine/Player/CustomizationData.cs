@@ -1,7 +1,6 @@
 using System.IO;
 using System.Numerics;
 using Hedra.Engine.ClassSystem;
-using Hedra.Rendering;
 
 namespace Hedra.Engine.Player
 {
@@ -17,12 +16,16 @@ namespace Hedra.Engine.Player
             return new CustomizationData
             {
                 Gender = Gender,
-                FirstHairColor = Gender == HumanGender.Male ? Design.DefaultFirstHairColor : Design.FemaleDefaultFirstHairColor,
-                SecondHairColor = Gender == HumanGender.Male ? Design.DefaultSecondHairColor : Design.FemaleDefaultSecondHairColor,
-                SkinColor = Gender == HumanGender.Male ? Design.DefaultSkinColor : Design.FemaleDefaultSkinColor,
+                FirstHairColor = Gender == HumanGender.Male
+                    ? Design.DefaultFirstHairColor
+                    : Design.FemaleDefaultFirstHairColor,
+                SecondHairColor = Gender == HumanGender.Male
+                    ? Design.DefaultSecondHairColor
+                    : Design.FemaleDefaultSecondHairColor,
+                SkinColor = Gender == HumanGender.Male ? Design.DefaultSkinColor : Design.FemaleDefaultSkinColor
             };
         }
-        
+
         public void Write(BinaryWriter Writer)
         {
             Writer.Write((int)Gender);
@@ -35,10 +38,10 @@ namespace Hedra.Engine.Player
         {
             return new CustomizationData
             {
-                Gender = (HumanGender) Reader.ReadInt32(),
+                Gender = (HumanGender)Reader.ReadInt32(),
                 FirstHairColor = Reader.ReadVector4(),
                 SecondHairColor = Reader.ReadVector4(),
-                SkinColor = Reader.ReadVector4(),
+                SkinColor = Reader.ReadVector4()
             };
         }
     }

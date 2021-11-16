@@ -1,17 +1,14 @@
 using System.Collections;
+using System.Numerics;
 using Hedra.Core;
-using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Game;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Sound;
-using System.Numerics;
-using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem
 {
@@ -19,33 +16,34 @@ namespace Hedra.Engine.StructureSystem
     {
         private const int PortalRadius = 12;
         private static readonly VertexData PortalMesh;
-        private readonly ObjectMesh _portalObject;
         private static readonly float _portalHeight;
-        private readonly Vector3 _scale;
         private readonly WorldLight _ambientLight;
-        private readonly WorldLight _portalLight;
-        private readonly int _realm;
         private readonly Vector3 _defaultSpawn;
+        private readonly WorldLight _portalLight;
+        private readonly ObjectMesh _portalObject;
+        private readonly int _realm;
+        private readonly Vector3 _scale;
+        private readonly Timer _teleportedRecentlyTimer;
         private readonly bool _useLastPositionForSpawnPoint;
         private bool _isTeleporting;
-        private readonly Timer _teleportedRecentlyTimer;
-        protected bool TeleportedRecently { get; private set; }
-        
+
         static Portal()
         {
             PortalMesh = AssetManager.PLYLoader("Assets/Env/Objects/Portal.ply", Vector3.One * .35f);
             _portalHeight = PortalMesh.SupportPoint(Vector3.UnitY).Y - PortalMesh.SupportPoint(-Vector3.UnitY).Y;
         }
 
-        protected Portal(Vector3 Position, Vector3 Scale, int Realm) : this(Position, Scale, Realm, default(Vector3), true)
-        { 
+        protected Portal(Vector3 Position, Vector3 Scale, int Realm) : this(Position, Scale, Realm, default, true)
+        {
         }
-        
-        protected Portal(Vector3 Position, Vector3 Scale, int Realm, Vector3 DefaultSpawn) : this(Position, Scale, Realm, DefaultSpawn, false)
-        {  
+
+        protected Portal(Vector3 Position, Vector3 Scale, int Realm, Vector3 DefaultSpawn) : this(Position, Scale,
+            Realm, DefaultSpawn, false)
+        {
         }
-        
-        private Portal(Vector3 Position, Vector3 Scale, int Realm, Vector3 DefaultSpawn, bool UseLastPositionForSpawnPoint) : base(Position)
+
+        private Portal(Vector3 Position, Vector3 Scale, int Realm, Vector3 DefaultSpawn,
+            bool UseLastPositionForSpawnPoint) : base(Position)
         {
             _defaultSpawn = DefaultSpawn;
             _useLastPositionForSpawnPoint = UseLastPositionForSpawnPoint;
@@ -74,9 +72,12 @@ namespace Hedra.Engine.StructureSystem
             };
         }
 
+        protected bool TeleportedRecently { get; private set; }
+
         public void Update()
         {
-            _portalObject.Position = _ambientLight.Position = _portalLight.Position = new Vector3(Position.X, Physics.HeightAtPosition(Position) + _portalHeight * .5f * _scale.Y, Position.Z);
+            _portalObject.Position = _ambientLight.Position = _portalLight.Position = new Vector3(Position.X,
+                Physics.HeightAtPosition(Position) + _portalHeight * .5f * _scale.Y, Position.Z);
             _portalObject.Rotation += Vector3.One * Time.DeltaTime * 2000f;
             _ambientLight.Update();
             _portalLight.Update();
@@ -93,7 +94,7 @@ namespace Hedra.Engine.StructureSystem
                 RoutineManager.StartRoutine(TeleportEffect);
             }
         }
-        
+
         private void Teleport()
         {
             SoundPlayer.PlaySound(SoundType.TeleportSound, Position);

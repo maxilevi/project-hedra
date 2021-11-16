@@ -1,5 +1,5 @@
-using Hedra.EntitySystem;
 using System.Numerics;
+using Hedra.EntitySystem;
 
 namespace Hedra.AISystem.Behaviours
 {

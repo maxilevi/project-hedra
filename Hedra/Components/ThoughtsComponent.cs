@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Localization;
 using Hedra.EntitySystem;
 using Hedra.Localization;
@@ -8,15 +7,18 @@ namespace Hedra.Components
 {
     public abstract class ThoughtsComponent : SingularComponent<ThoughtsComponent, IEntity>
     {
-        protected abstract string ThoughtKeyword { get; }
-        public Translation[] Thoughts { get; private set; }
-        private object[] Parameters { get; }
-        
         protected ThoughtsComponent(IEntity Entity, params object[] Parameters) : base(Entity)
         {
             this.Parameters = Parameters;
             UpdateThoughts();
         }
+
+        protected abstract string ThoughtKeyword { get; }
+        public Translation[] Thoughts { get; private set; }
+        private object[] Parameters { get; }
+
+        public virtual Translation[] BeforeDialog { get; } = new Translation[0];
+        public virtual Translation[] AfterDialog { get; } = new Translation[0];
 
         protected void UpdateThoughts()
         {
@@ -27,14 +29,12 @@ namespace Hedra.Components
                 thoughtList.Add(Translation.Create($"{ThoughtKeyword}_{iterator}", Parameters));
                 iterator++;
             }
+
             Thoughts = thoughtList.ToArray();
         }
-        
+
         public override void Update()
         {
         }
-        
-        public virtual Translation[] BeforeDialog { get; } = new Translation[0];
-        public virtual Translation[] AfterDialog { get; }= new Translation[0];
     }
 }

@@ -2,25 +2,16 @@ using System;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.ItemSystem.ArmorSystem;
 using Hedra.Engine.Player;
-using Hedra.Engine.Player.BoatSystem;
 using Hedra.Engine.SkillSystem;
+using Hedra.Engine.WorldBuilding;
 using Hedra.Items;
 using Hedra.WeaponSystem;
-using System.Numerics;
-using Hedra.Engine.Bullet;
-using Hedra.Engine.WorldBuilding;
 
 namespace Hedra.EntitySystem
 {
     public interface IHumanoid : ISkilledAnimableEntity
     {
-        event OnAttackEventHandler BeforeAttack;
-        event OnAttackEventHandler AfterAttack;
-        event OnHitLandedEventHandler HitLanded;
-        event OnInteractionEvent Interact;
-        event OnFishing Fishing;
         IVehicle Boat { get; }
         IMessageDispatcher MessageDispatcher { get; set; }
         IPlayerInventory Inventory { get; }
@@ -63,12 +54,25 @@ namespace Hedra.EntitySystem
         float AttackPower { get; set; }
         float MaxStamina { get; }
         float BonusHealth { get; set; }
-        float DodgeCost { get; set; }    
+        float DodgeCost { get; set; }
         float RandomFactor { get; set; }
         float AttackResistance { get; set; }
         int Gold { get; set; }
         float DamageEquation { get; }
         float UnRandomizedDamageEquation { get; }
+        Item Ring { get; set; }
+        float BaseSpeed { get; }
+        float MaxHealth { get; }
+        float ManaRegen { get; }
+        float Armor { get; set; }
+        float HealthRegen { get; }
+        Weapon LeftWeapon { get; }
+        Item MainWeapon { get; }
+        event OnAttackEventHandler BeforeAttack;
+        event OnAttackEventHandler AfterAttack;
+        event OnHitLandedEventHandler HitLanded;
+        event OnInteractionEvent Interact;
+        event OnFishing Fishing;
         void AttackSurroundings(float Damage, IEntity[] ToIgnore, Action<IEntity> Callback);
         void AttackSurroundings(float Damage, IEntity[] ToIgnore);
         void AttackSurroundings(float Damage, Action<IEntity> Callback);
@@ -79,14 +83,7 @@ namespace Hedra.EntitySystem
         void ProcessHit(bool HittedSomething);
         void ResetEquipment();
         void Greet();
-        Item Ring { get; set; }
-        float BaseSpeed { get; }
-        float MaxHealth { get; }
-        float ManaRegen { get; }
-        float Armor { get; set; }
-        float HealthRegen { get; }
         float WeaponModifier(Item Weapon);
-        Weapon LeftWeapon { get; }
         void Roll(RollType Type);
         void SetWeapon(Weapon Item);
         void SetHelmet(Item Item);
@@ -95,7 +92,6 @@ namespace Hedra.EntitySystem
         void SetBoots(Item Item);
         void InvokeBeforeAttackEvent(AttackOptions Options);
         void InvokeAfterAttackEvent(AttackOptions Options);
-        Item MainWeapon { get; }
         Item[] GetMainEquipment();
         void SetMainEquipment(Item[] Equipment);
         void DoIgnoringHitCombo(Action Lambda);

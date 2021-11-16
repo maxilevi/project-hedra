@@ -6,14 +6,15 @@ namespace Hedra.Engine.CacheSystem
 {
     public class GnollFortressCache : CacheType
     {
-        public override CacheItem Type => CacheItem.GnollFortress;
-
         public GnollFortressCache()
         {
             AddModel(AssetManager.PLYLoader("Assets/Env/Structures/GnollFortress/GnollFortress0.ply", Scale));
-            AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Structures/GnollFortress/GnollFortress0.ply", Scale));
+            AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Structures/GnollFortress/GnollFortress0.ply",
+                Scale));
         }
-        
+
+        public override CacheItem Type => CacheItem.GnollFortress;
+
         public static Vector3 Scale => Vector3.One * 8f;
 
         public static DoorSettings[] DoorSettings { get; } = new DoorSettings[11]
@@ -31,7 +32,7 @@ namespace Hedra.Engine.CacheSystem
             new DoorSettings(new Vector3(5.24249f, 0.67368f, -10.24741f), Scale, false, true)
         };
 
-        public static string PathfindingFile => $"Assets/Env/Structures/GnollFortress/GnollFortress0-Pathfinding.ply";
-        public static string SceneFile => $"Assets/Env/Structures/GnollFortress/GnollFortress0.ply";
+        public static string PathfindingFile => "Assets/Env/Structures/GnollFortress/GnollFortress0-Pathfinding.ply";
+        public static string SceneFile => "Assets/Env/Structures/GnollFortress/GnollFortress0.ply";
     }
 }

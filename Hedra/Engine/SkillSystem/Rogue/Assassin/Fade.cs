@@ -8,35 +8,44 @@
  */
 
 using System.Globalization;
+using System.Numerics;
 using Hedra.Core;
-using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
-using System.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Rogue.Assassin
 {
     /// <summary>
-    /// Description of WeaponThrow.
+    ///     Description of WeaponThrow.
     /// </summary>
     public class Fade : SingleAnimationSkill<IPlayer>
     {
-        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Fade.png");
-        protected override int MaxLevel => 20;
-        private float FadeTime => 14 + Level / (float) MaxLevel * 15f;
-        public override float MaxCooldown => 28 - 8 * (Level / (float)MaxLevel) + FadeTime;
-        public override float ManaCost => 110f - 30f * (Level / (float) MaxLevel);
         private bool _isFaded;
         private float _timeRemaining;
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Fade.png");
+        protected override int MaxLevel => 20;
+        private float FadeTime => 14 + Level / (float)MaxLevel * 15f;
+        public override float MaxCooldown => 28 - 8 * (Level / (float)MaxLevel) + FadeTime;
+        public override float ManaCost => 110f - 30f * (Level / (float)MaxLevel);
 
-        protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/RogueFade.dae");
+        protected override Animation SkillAnimation { get; } =
+            AnimationLoader.LoadAnimation("Assets/Chr/RogueFade.dae");
+
         protected override float AnimationSpeed => 5f;
-        
+
+        public override string Description => Translations.Get("fade_desc");
+        public override string DisplayName => Translations.Get("fade_skill");
+        public override float IsAffectingModifier => _isFaded ? 1 : 0;
+
+        public override string[] Attributes => new[]
+        {
+            Translations.Get("fade_time_change", FadeTime.ToString("0.0", CultureInfo.InvariantCulture))
+        };
+
         public override void Update()
         {
             base.Update();
@@ -60,7 +69,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
             _isFaded = false;
             User.AfterDamaging -= AfterDamaging;
         }
-        
+
         private void Start()
         {
             _isFaded = true;
@@ -77,7 +86,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
         {
             End();
         }
-        
+
         protected override void OnAnimationEnd()
         {
             Start();
@@ -97,13 +106,5 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
             World.Particles.PositionErrorMargin = new Vector3(1.25f, User.Model.Height * .3f, 1.25f);
             World.Particles.Emit();
         }
-
-        public override string Description => Translations.Get("fade_desc");
-        public override string DisplayName => Translations.Get("fade_skill");
-        public override float IsAffectingModifier => _isFaded ? 1 : 0;
-        public override string[] Attributes => new[]
-        {
-            Translations.Get("fade_time_change", FadeTime.ToString("0.0", CultureInfo.InvariantCulture))
-        };
     }
 }

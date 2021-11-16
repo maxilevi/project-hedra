@@ -1,16 +1,8 @@
-using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using System.Linq;
-using Hedra.Crafting;
-using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Localization;
-using Hedra.Engine.Sound;
-using Hedra.EntitySystem;
 using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Sound;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Player.Inventory
 {
@@ -20,13 +12,13 @@ namespace Hedra.Engine.Player.Inventory
     {
         private static readonly StaticTradeManager _staticTrader;
 
+        private readonly InventoryArrayInterface _buyerInterface;
+        private readonly InventoryArrayInterface _sellerInterface;
+
         static TradeManager()
         {
             _staticTrader = new StaticTradeManager();
         }
-
-        private readonly InventoryArrayInterface _buyerInterface;
-        private readonly InventoryArrayInterface _sellerInterface;
 
         public TradeManager(InventoryArrayInterface BuyerInterface, InventoryArrayInterface SellerInterface)
         {

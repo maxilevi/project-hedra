@@ -10,7 +10,7 @@
 namespace Hedra.Engine.Rendering.Frustum
 {
     /// <summary>
-    /// Description of OcclusionState.
+    ///     Description of OcclusionState.
     /// </summary>
     public enum OcclusionState
     {

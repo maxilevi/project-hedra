@@ -1,10 +1,10 @@
+using System.Numerics;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
-using System.Numerics;
 
 namespace Hedra.Engine.CacheSystem
 {
-    class CloudCache : CacheType
+    internal class CloudCache : CacheType
     {
         public CloudCache()
         {
@@ -12,9 +12,9 @@ namespace Hedra.Engine.CacheSystem
             model.Paint(Vector4.One);
             model.FillExtraData(WorldRenderer.NoShadowsFlag);
 
-            this.AddModel(model);
+            AddModel(model);
         }
-        
+
         public override CacheItem Type => CacheItem.Cloud;
     }
 }

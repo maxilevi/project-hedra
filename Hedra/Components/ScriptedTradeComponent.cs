@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Hedra.Core;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Player;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Scripting;
 using Hedra.EntitySystem;
@@ -17,6 +16,9 @@ namespace Hedra.Components
         protected ScriptedTradeComponent(IHumanoid Parent) : base(Parent)
         {
         }
+
+        protected abstract string BuildInventoryFunctionName { get; }
+
         public override Dictionary<int, Item> BuildInventory()
         {
             var rng = new Random(World.Seed + Unique.GenerateSeed(Parent.Position.Xz()));
@@ -24,7 +26,5 @@ namespace Hedra.Components
             Script.Get(BuildInventoryFunctionName).Invoke(dict, TradeInventory.MerchantSpaces, rng);
             return dict;
         }
-        
-        protected abstract string BuildInventoryFunctionName { get; }
     }
 }

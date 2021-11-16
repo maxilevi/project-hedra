@@ -1,5 +1,5 @@
-using Hedra.Engine.Generation;
 using System.Numerics;
+using Hedra.Engine.Generation;
 
 namespace Hedra.Engine.WorldBuilding
 {

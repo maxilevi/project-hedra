@@ -1,37 +1,40 @@
 using System;
 using System.Collections.Generic;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using Hedra.Core;
+using System.Numerics;
+using Hedra.BiomeSystem;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
-using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Items;
 using Hedra.Localization;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Sound;
-using System.Numerics;
-using Hedra.Numerics;
-using Region = Hedra.BiomeSystem.Region;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
     public class GraveyardDesign : CompletableStructureDesign<Graveyard>
     {
         private const int Level = 9;
-        public override int PlateauRadius { get; } = 420;
         public const int GraveyardSkyTime = 24000;
+        public override int PlateauRadius { get; } = 420;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.GraveyardIcon);
         public override bool CanSpawnInside => false;
+
+        public override int[] AmbientSongs { get; } =
+        {
+            SoundtrackManager.GraveyardChampion
+        };
+
+        public override string DisplayName => Translations.Get("structure_graveyard");
 
         public override void Build(CollidableStructure Structure)
         {
@@ -185,13 +188,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var height = Biome.Generation.GetMaxHeight(TargetPosition.X, TargetPosition.Z);
             return height > BiomePool.SeaLevel;
         }
-
-        public override int[] AmbientSongs { get; } = new[]
-        {
-            SoundtrackManager.GraveyardChampion
-        };
-
-        public override string DisplayName => Translations.Get("structure_graveyard");
 
         protected override string GetShortDescription(Graveyard Structure)
         {

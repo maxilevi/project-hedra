@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
@@ -12,11 +10,17 @@ namespace Hedra.AISystem.Behaviours
         {
         }
 
-        protected override Animation GetBiteAnimation(QuadrupedModel Model) => Model.AttackAnimations[0];
-
-        protected override Animation GetSpitAnimation(QuadrupedModel Model) => Model.AttackAnimations[1];
-
         protected override float SpitCooldown => 3.5f;
         protected override bool HasSpit => true;
+
+        protected override Animation GetBiteAnimation(QuadrupedModel Model)
+        {
+            return Model.AttackAnimations[0];
+        }
+
+        protected override Animation GetSpitAnimation(QuadrupedModel Model)
+        {
+            return Model.AttackAnimations[1];
+        }
     }
 }

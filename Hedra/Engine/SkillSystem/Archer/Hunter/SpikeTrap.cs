@@ -1,13 +1,8 @@
 using System.Globalization;
-using System.Numerics;
 using BulletSharp;
 using Hedra.Components;
-using Hedra.Core;
 using Hedra.Engine.Bullet;
-using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Localization;
@@ -21,7 +16,26 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/SpikeTrap.png");
         protected override int MaxLevel => 15;
         protected override bool CanMoveWhileCasting => false;
-        protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/ArcherLayTrap.dae");
+
+        protected override Animation SkillAnimation { get; } =
+            AnimationLoader.LoadAnimation("Assets/Chr/ArcherLayTrap.dae");
+
+        private float Duration => 80 + Level * 5;
+        private float Damage => 50 + Level * 4;
+        private float StunChance => .10f + Level / 100f;
+        private bool Stun => Utils.Rng.NextFloat() < StunChance;
+        public override float ManaCost => 40;
+        public override float MaxCooldown => 18;
+        public override string Description => Translations.Get("spike_trap_desc");
+        public override string DisplayName => Translations.Get("spike_trap");
+
+        public override string[] Attributes => new[]
+        {
+            Translations.Get("spike_trap_damage_change", Damage.ToString("0.0", CultureInfo.InvariantCulture)),
+            Translations.Get("spike_trap_duration_change",
+                ((int)Duration).ToString("0.0", CultureInfo.InvariantCulture)),
+            Translations.Get("spike_trap_stun_change", (int)(StunChance * 100f))
+        };
 
         protected override void OnAnimationEnd()
         {
@@ -40,7 +54,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
 
         private void OnCasterDamaged(DamageEventArgs Args)
         {
-            if(Args.Victim.IsDead) return;
+            if (Args.Victim.IsDead) return;
             User.KnockForSeconds(3);
             Cancel();
         }
@@ -49,24 +63,10 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
         {
             var position = (User.Model.RightWeaponPosition + User.Model.LeftWeaponPosition) * .5f;
             var callback =
-                BulletPhysics.Raycast(position.Compatible(), position.Xz().ToVector3().Compatible(), BulletPhysics.TerrainFilter | CollisionFilterGroups.StaticFilter);
+                BulletPhysics.Raycast(position.Compatible(), position.Xz().ToVector3().Compatible(),
+                    BulletPhysics.TerrainFilter | CollisionFilterGroups.StaticFilter);
             var trap = new BearTrap(User, callback.HitPointWorld.Compatible(), Duration, Damage, Stun);
             trap.Ignore(X => X == User.Companion.Entity);
         }
-        
-        private float Duration => 80 + Level * 5;
-        private float Damage => 50 + Level * 4;
-        private float StunChance => .10f + Level / 100f;
-        private bool Stun => Utils.Rng.NextFloat() < StunChance;
-        public override float ManaCost => 40;
-        public override float MaxCooldown => 18;
-        public override string Description => Translations.Get("spike_trap_desc");
-        public override string DisplayName => Translations.Get("spike_trap");
-        public override string[] Attributes => new[]
-        {
-            Translations.Get("spike_trap_damage_change", Damage.ToString("0.0", CultureInfo.InvariantCulture)),
-            Translations.Get("spike_trap_duration_change", ((int)Duration).ToString("0.0", CultureInfo.InvariantCulture)),
-            Translations.Get("spike_trap_stun_change", (int) (StunChance * 100f))
-        };
     }
 }

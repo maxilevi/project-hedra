@@ -1,12 +1,37 @@
+//using Silk.NET.OpenGL;
 using System;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
-using Hedra.Engine.IO;
 using System.Numerics;
-using Hedra.Engine.Core;
+using System.Runtime.InteropServices;
+using System.Threading;
+using Hedra.Engine.IO;
 using Hedra.Engine.Windowing;
-using Hedra.Game;
-//using Silk.NET.OpenGL;
+using Silk.NET.OpenGL;
+using BlendingFactor = Hedra.Engine.Windowing.BlendingFactor;
+using BlitFramebufferFilter = Hedra.Engine.Windowing.BlitFramebufferFilter;
+using ClearBufferMask = Hedra.Engine.Windowing.ClearBufferMask;
+using CullFaceMode = Hedra.Engine.Windowing.CullFaceMode;
+using DrawBufferMode = Hedra.Engine.Windowing.DrawBufferMode;
+using DrawElementsType = Hedra.Engine.Windowing.DrawElementsType;
+using EnableCap = Hedra.Engine.Windowing.EnableCap;
+using ErrorCode = Hedra.Engine.Windowing.ErrorCode;
+using FramebufferAttachment = Hedra.Engine.Windowing.FramebufferAttachment;
+using FramebufferTarget = Hedra.Engine.Windowing.FramebufferTarget;
+using GetPName = Hedra.Engine.Windowing.GetPName;
+using MaterialFace = Hedra.Engine.Windowing.MaterialFace;
+using PixelFormat = Hedra.Engine.Windowing.PixelFormat;
+using PixelType = Hedra.Engine.Windowing.PixelType;
+using PolygonMode = Hedra.Engine.Windowing.PolygonMode;
+using PrimitiveType = Hedra.Engine.Windowing.PrimitiveType;
+using QueryTarget = Hedra.Engine.Windowing.QueryTarget;
+using ReadBufferMode = Hedra.Engine.Windowing.ReadBufferMode;
+using ShaderType = Hedra.Engine.Windowing.ShaderType;
+using StringName = Hedra.Engine.Windowing.StringName;
+using TextureParameterName = Hedra.Engine.Windowing.TextureParameterName;
+using TextureTarget = Hedra.Engine.Windowing.TextureTarget;
+using TextureUnit = Hedra.Engine.Windowing.TextureUnit;
+using VertexAttribPointerType = Hedra.Engine.Windowing.VertexAttribPointerType;
+
 #region Typedefs
 
 using GLBufferTarget = Silk.NET.OpenGL.GLEnum;
@@ -59,12 +84,13 @@ namespace Hedra.Engine.Rendering.Core
 {
     public class GLProvider : IGLProvider
     {
-        private readonly Silk.NET.OpenGL.GL _gl;
+        private readonly GL _gl;
+
         public GLProvider()
         {
-            _gl = Silk.NET.OpenGL.GL.GetApi(Program.GameWindow.Window);
+            _gl = GL.GetApi(Program.GameWindow.Window);
         }
-        
+
         public ErrorSeverity Severity { get; set; }
 
         public void ActiveTexture(TextureUnit Unit)
@@ -127,23 +153,30 @@ namespace Hedra.Engine.Rendering.Core
             EnsureNoErrors();
         }
 
-        public void BlitFramebuffer(int SrcX0, int SrcY0, int SrcX1, int SrcY1, int DstX0, int DstY0, int DstX1, int DstY1,
+        public void BlitFramebuffer(int SrcX0, int SrcY0, int SrcX1, int SrcY1, int DstX0, int DstY0, int DstX1,
+            int DstY1,
             ClearBufferMask Mask, BlitFramebufferFilter Filter)
         {
-            _gl.BlitFramebuffer(SrcX0, SrcY0, SrcX1, SrcY1, DstX0, DstY0, DstX1, DstY1, (uint)Mask, (GLBlitFramebufferFilter)Filter);
+            _gl.BlitFramebuffer(SrcX0, SrcY0, SrcX1, SrcY1, DstX0, DstY0, DstX1, DstY1, (uint)Mask,
+                (GLBlitFramebufferFilter)Filter);
             EnsureNoErrors();
         }
 
         public unsafe void BufferData(BufferTarget Target, IntPtr Size, IntPtr Offset, BufferUsageHint Hint)
         {
-            _gl.BufferData((GLBufferTarget)Target, (UIntPtr)Size.ToPointer(), Offset.ToPointer(), (GLBufferUsageHint)Hint);
+            _gl.BufferData((GLBufferTarget)Target, (UIntPtr)Size.ToPointer(), Offset.ToPointer(),
+                (GLBufferUsageHint)Hint);
             EnsureNoErrors();
         }
 
-        public unsafe void BufferData<T>(BufferTarget Target, IntPtr Size, T[] Data, BufferUsageHint Hint) where T : unmanaged
+        public unsafe void BufferData<T>(BufferTarget Target, IntPtr Size, T[] Data, BufferUsageHint Hint)
+            where T : unmanaged
         {
-            fixed(void* ptr = Data)
+            fixed (void* ptr = Data)
+            {
                 _gl.BufferData((GLBufferTarget)Target, (UIntPtr)Size.ToPointer(), ptr, (GLBufferUsageHint)Hint);
+            }
+
             EnsureNoErrors();
         }
 
@@ -153,17 +186,25 @@ namespace Hedra.Engine.Rendering.Core
             EnsureNoErrors();
         }
 
-        public unsafe void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, ref T Data) where T : unmanaged
+        public unsafe void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, ref T Data)
+            where T : unmanaged
         {
-            fixed(void* ptr = &Data)
+            fixed (void* ptr = &Data)
+            {
                 _gl.BufferSubData((GLBufferTarget)Target, Ptr0, (UIntPtr)Offset.ToPointer(), ptr);
+            }
+
             EnsureNoErrors();
         }
 
-        public unsafe void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, T[] Data) where T : unmanaged
+        public unsafe void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, T[] Data)
+            where T : unmanaged
         {
-            fixed(void* ptr = Data)
+            fixed (void* ptr = Data)
+            {
                 _gl.BufferSubData((GLBufferTarget)Target, Ptr0, (UIntPtr)Offset.ToPointer(), ptr);
+            }
+
             EnsureNoErrors();
         }
 
@@ -241,8 +282,11 @@ namespace Hedra.Engine.Rendering.Core
 
         public unsafe void DeleteBuffers(int N, ref uint Id)
         {
-            fixed(uint* ptr = &Id) 
+            fixed (uint* ptr = &Id)
+            {
                 _gl.DeleteBuffers((uint)N, ptr);
+            }
+
             EnsureNoErrors();
         }
 
@@ -279,18 +323,6 @@ namespace Hedra.Engine.Rendering.Core
         public void DeleteTextures(int N, params uint[] Ids)
         {
             _gl.DeleteTextures(new ReadOnlySpan<uint>(Ids, 0, N));
-            EnsureNoErrors();
-        }
-
-        public void DeleteVertexArrays(int N, params uint[] Ids)
-        {
-            _gl.DeleteVertexArrays(new ReadOnlySpan<uint>(Ids, 0, N));
-            EnsureNoErrors();
-        }
-
-        public void DeleteTextures(int N, ref uint Id)
-        {
-            _gl.DeleteTextures((uint)N, Id);
             EnsureNoErrors();
         }
 
@@ -338,8 +370,11 @@ namespace Hedra.Engine.Rendering.Core
 
         public unsafe void DrawBuffers(int N, GLDrawBuffersEnum[] Enums)
         {
-            fixed(GLDrawBuffersEnum* ptr = Enums)
+            fixed (GLDrawBuffersEnum* ptr = Enums)
+            {
                 _gl.DrawBuffers((uint)N, ptr);
+            }
+
             EnsureNoErrors();
         }
 
@@ -349,9 +384,11 @@ namespace Hedra.Engine.Rendering.Core
             EnsureNoErrors();
         }
 
-        public unsafe void DrawElementsInstanced(PrimitiveType Primitive, int Count, DrawElementsType Type, IntPtr Indices, int Instancecount)
+        public unsafe void DrawElementsInstanced(PrimitiveType Primitive, int Count, DrawElementsType Type,
+            IntPtr Indices, int Instancecount)
         {
-            _gl.DrawElementsInstanced((GLPrimitiveType)Primitive, (uint)Count, (GLDrawElementsType)Type, Indices.ToPointer(), (uint)Instancecount);
+            _gl.DrawElementsInstanced((GLPrimitiveType)Primitive, (uint)Count, (GLDrawElementsType)Type,
+                Indices.ToPointer(), (uint)Instancecount);
             EnsureNoErrors();
         }
 
@@ -373,15 +410,18 @@ namespace Hedra.Engine.Rendering.Core
             EnsureNoErrors();
         }
 
-        public void FramebufferTexture(FramebufferTarget Framebuffer, FramebufferAttachment DepthAttachment, uint Id, int V0)
+        public void FramebufferTexture(FramebufferTarget Framebuffer, FramebufferAttachment DepthAttachment, uint Id,
+            int V0)
         {
             _gl.FramebufferTexture((GLFramebufferTarget)Framebuffer, (GLFramebufferAttachment)DepthAttachment, Id, V0);
             EnsureNoErrors();
         }
 
-        public void FramebufferTexture2D(FramebufferTarget Target, FramebufferAttachment Attachment, TextureTarget TextureTarget, uint Texture, int Level)
+        public void FramebufferTexture2D(FramebufferTarget Target, FramebufferAttachment Attachment,
+            TextureTarget TextureTarget, uint Texture, int Level)
         {
-            _gl.FramebufferTexture2D((GLFramebufferTargetEXT)Target, (GLFramebufferAttachmentEXT)Attachment, (GLTextureTargetEXT)TextureTarget, Texture, Level);
+            _gl.FramebufferTexture2D((GLFramebufferTargetEXT)Target, (GLFramebufferAttachmentEXT)Attachment,
+                (GLTextureTargetEXT)TextureTarget, Texture, Level);
             EnsureNoErrors();
         }
 
@@ -445,7 +485,7 @@ namespace Hedra.Engine.Rendering.Core
             EnsureNoErrors();
         }
 
-        public unsafe void GetActiveUniformBlock(uint V0, uint V1, ActiveUniformBlockParameter Parameter, out int V3)
+        public void GetActiveUniformBlock(uint V0, uint V1, ActiveUniformBlockParameter Parameter, out int V3)
         {
             _gl.GetActiveUniformBlock(V0, V1, (GLActiveUniformBlockParameter)Parameter, out V3);
             EnsureNoErrors();
@@ -476,7 +516,7 @@ namespace Hedra.Engine.Rendering.Core
                 EnsureNoErrors();
             }
         }
-        
+
         public void GetInteger(GetPName PName, out int Value)
         {
             _gl.GetInteger((GLGetPName)PName, out Value);
@@ -498,7 +538,7 @@ namespace Hedra.Engine.Rendering.Core
         public string GetShaderInfoLog(int Id)
         {
             var log = string.Empty;
-            _gl.GetShaderInfoLog((uint) Id, out log);
+            _gl.GetShaderInfoLog((uint)Id, out log);
             EnsureNoErrors();
             return log;
         }
@@ -515,11 +555,11 @@ namespace Hedra.Engine.Rendering.Core
             }
         }
 
-        public unsafe int GetUniformBlockIndex(uint V0, string Name)
+        public int GetUniformBlockIndex(uint V0, string Name)
         {
             try
             {
-                return (int)_gl.GetUniformBlockIndex((uint)V0, Name);
+                return (int)_gl.GetUniformBlockIndex(V0, Name);
             }
             finally
             {
@@ -527,7 +567,7 @@ namespace Hedra.Engine.Rendering.Core
             }
         }
 
-        public unsafe int GetUniformLocation(uint Program, string Name)
+        public int GetUniformLocation(uint Program, string Name)
         {
             try
             {
@@ -545,15 +585,19 @@ namespace Hedra.Engine.Rendering.Core
             EnsureNoErrors();
         }
 
-        public unsafe void MultiDrawElements(PrimitiveType Primitive, uint[] Counts, DrawElementsType Type, IntPtr[] Offsets, int Count)
+        public unsafe void MultiDrawElements(PrimitiveType Primitive, uint[] Counts, DrawElementsType Type,
+            IntPtr[] Offsets, int Count)
         {
             var stackPtr = stackalloc byte[IntPtr.Size * Offsets.Length];
-            var arr = (void**) stackPtr;
+            var arr = (void**)stackPtr;
             for (var i = 0; i < Offsets.Length; ++i)
                 arr[i] = Offsets[i].ToPointer();
-            
-            fixed(uint* ptr1 = Counts)
+
+            fixed (uint* ptr1 = Counts)
+            {
                 _gl.MultiDrawElements((GLPrimitiveType)Primitive, ptr1, (GLDrawElementsType)Type, arr, (uint)Count);
+            }
+
             EnsureNoErrors();
         }
 
@@ -562,7 +606,7 @@ namespace Hedra.Engine.Rendering.Core
             _gl.PointSize(Size);
             EnsureNoErrors();
         }
-        
+
         public void LineWidth(float Width)
         {
             _gl.LineWidth(Width);
@@ -583,36 +627,48 @@ namespace Hedra.Engine.Rendering.Core
 
         public unsafe void ReadPixels(int V0, int V1, int V2, int V3, PixelFormat Format, PixelType Type, int[] Ptr)
         {
-            fixed(void* ptr = Ptr)
+            fixed (void* ptr = Ptr)
+            {
                 _gl.ReadPixels(V0, V1, (uint)V2, (uint)V3, (GLPixelFormat)Format, (GLPixelType)Type, ptr);
+            }
+
             EnsureNoErrors();
         }
 
-        public unsafe void ShaderSource(int V0, string Source)
+        public void ShaderSource(int V0, string Source)
         {
             _gl.ShaderSource((uint)V0, Source);
             EnsureNoErrors();
         }
 
-        public unsafe void TexImage2D(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2, int V3,
+        public unsafe void TexImage2D(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2,
+            int V3,
             PixelFormat Format, PixelType Type, IntPtr Ptr)
         {
-            _gl.TexImage2D((GLTextureTarget)Target, V0, (int)InternalFormat, (uint)V1, (uint)V2, V3, (GLPixelFormat)Format, (GLPixelType)Type, Ptr.ToPointer());
+            _gl.TexImage2D((GLTextureTarget)Target, V0, (int)InternalFormat, (uint)V1, (uint)V2, V3,
+                (GLPixelFormat)Format, (GLPixelType)Type, Ptr.ToPointer());
             EnsureNoErrors();
         }
 
-        public void TexImage2DMultisample(TextureTargetMultisample Target, int Samples, PixelInternalFormat InternalFormat,
+        public void TexImage2DMultisample(TextureTargetMultisample Target, int Samples,
+            PixelInternalFormat InternalFormat,
             int Width, int Height, bool FixedLocations)
         {
-            _gl.TexImage2DMultisample((GLTextureTargetMultisample)Target, (uint)Samples, (GLPixelInternalFormatEXT)InternalFormat, (uint)Width, (uint)Height, FixedLocations);
+            _gl.TexImage2DMultisample((GLTextureTargetMultisample)Target, (uint)Samples,
+                (GLPixelInternalFormatEXT)InternalFormat, (uint)Width, (uint)Height, FixedLocations);
             EnsureNoErrors();
         }
 
-        public unsafe void TexImage3D<T>(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2, int V3, int V4,
+        public unsafe void TexImage3D<T>(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1,
+            int V2, int V3, int V4,
             PixelFormat Format, PixelType Type, T[] Pixels) where T : unmanaged
         {
-            fixed(void* ptr = Pixels)
-                _gl.TexImage3D((GLTextureTarget) Target, V0, (int) InternalFormat, (uint) V1, (uint) V2, (uint) V3, V4, (GLPixelFormat) Format, (GLPixelType) Type, ptr);
+            fixed (void* ptr = Pixels)
+            {
+                _gl.TexImage3D((GLTextureTarget)Target, V0, (int)InternalFormat, (uint)V1, (uint)V2, (uint)V3, V4,
+                    (GLPixelFormat)Format, (GLPixelType)Type, ptr);
+            }
+
             EnsureNoErrors();
         }
 
@@ -627,18 +683,18 @@ namespace Hedra.Engine.Rendering.Core
             _gl.Uniform1(Location, Uniform);
             EnsureNoErrors();
         }
-        
+
         public void Uniform1(int Location, float Uniform)
         {
             _gl.Uniform1(Location, Uniform);
             EnsureNoErrors();
         }
-        
+
         public void Uniform1(int Location, double Uniform)
         {
             _gl.Uniform1(Location, Uniform);
             EnsureNoErrors();
-        }       
+        }
 
         public unsafe void Uniform2(int Location, Vector2 Uniform)
         {
@@ -683,8 +739,11 @@ namespace Hedra.Engine.Rendering.Core
 
         public unsafe void UniformMatrix4x4(int Location, bool Transpose, ref Matrix4x4 Uniform)
         {
-            fixed(float* ptr = &Uniform.M11)
+            fixed (float* ptr = &Uniform.M11)
+            {
                 _gl.UniformMatrix4(Location, 1, false, ptr);
+            }
+
             EnsureNoErrors();
         }
 
@@ -700,15 +759,17 @@ namespace Hedra.Engine.Rendering.Core
             EnsureNoErrors();
         }
 
-        public unsafe void VertexAttribPointer(int V0, int V1, VertexAttribPointerType Type, bool Flag, int Bytes, IntPtr Ptr)
+        public unsafe void VertexAttribPointer(int V0, int V1, VertexAttribPointerType Type, bool Flag, int Bytes,
+            IntPtr Ptr)
         {
             _gl.VertexAttribPointer((uint)V0, V1, (GLVertexAttribPointerType)Type, Flag, (uint)Bytes, Ptr.ToPointer());
             EnsureNoErrors();
         }
-        
+
         public unsafe void VertexAttribPointer(int V0, int V1, VertexAttribPointerType Type, bool Flag, int Bytes)
         {
-            _gl.VertexAttribPointer((uint)V0, V1, (GLVertexAttribPointerType)Type, Flag, (uint)Bytes, IntPtr.Zero.ToPointer());
+            _gl.VertexAttribPointer((uint)V0, V1, (GLVertexAttribPointerType)Type, Flag, (uint)Bytes,
+                IntPtr.Zero.ToPointer());
             EnsureNoErrors();
         }
 
@@ -737,15 +798,28 @@ namespace Hedra.Engine.Rendering.Core
             EnsureNoErrors();
         }
 
+        public void DeleteVertexArrays(int N, params uint[] Ids)
+        {
+            _gl.DeleteVertexArrays(new ReadOnlySpan<uint>(Ids, 0, N));
+            EnsureNoErrors();
+        }
+
+        public void DeleteTextures(int N, ref uint Id)
+        {
+            _gl.DeleteTextures((uint)N, Id);
+            EnsureNoErrors();
+        }
+
         private void EnsureNoErrors()
         {
 #if DEBUG
-            if(System.Threading.Thread.CurrentThread.ManagedThreadId != Loader.Hedra.MainThreadId)
-                throw new ArgumentException($"Invalid GL calls outside of the main thread.");
+            if (Thread.CurrentThread.ManagedThreadId != Loader.Hedra.MainThreadId)
+                throw new ArgumentException("Invalid GL calls outside of the main thread.");
             var error = _gl.GetError();
-            if (error != Silk.NET.OpenGL.GLEnum.NoError /*&& ErrorSeverity.Ignore != Severity*/)
+            if (error != GLEnum.NoError /*&& ErrorSeverity.Ignore != Severity*/)
             {
-                var errorMsg = $"Unexpected OpenGL error: {error} {Environment.NewLine} Stack:{Environment.NewLine}{new StackTrace()}";
+                var errorMsg =
+                    $"Unexpected OpenGL error: {error} {Environment.NewLine} Stack:{Environment.NewLine}{new StackTrace()}";
                 Log.WriteResult(false, errorMsg);
                 if (ErrorSeverity.High == Severity) throw new RenderException(errorMsg);
             }

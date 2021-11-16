@@ -14,24 +14,48 @@ namespace Hedra.Localization
         private static readonly List<Translation> _liveTranslations;
         private static DateTime _lastWrite;
 
+        private static string _language = GameLanguage.English.ToString();
+
         static Translations()
         {
             _translations = new Dictionary<string, Dictionary<string, string>>();
             _liveTranslations = new List<Translation>();
         }
-        
+
+        public static string[] Languages => _translations.Keys.ToArray();
+
+        public static bool IsEnglish => Language == GameLanguage.English.ToString();
+
+        public static string Language
+        {
+            get => _language;
+            set
+            {
+                _language = value;
+                for (var i = 0; i < _liveTranslations.Count; i++) _liveTranslations[i].UpdateTranslation();
+            }
+        }
+
+        private static string TranslationsFolder { get; set; }
+
+        private static string EditorTranslationsFolder => GameSettings.DebugMode && !GameSettings.TestingMode
+            ? "../../Translations/"
+            : DefaultTranslationsFolder;
+
+        private static string DefaultTranslationsFolder => $"{GameLoader.AppPath}/Translations/";
+
         public static void Load()
         {
             _translations.Clear();
-            TranslationsFolder = Directory.Exists(EditorTranslationsFolder) ? EditorTranslationsFolder : DefaultTranslationsFolder;
+            TranslationsFolder = Directory.Exists(EditorTranslationsFolder)
+                ? EditorTranslationsFolder
+                : DefaultTranslationsFolder;
             var files = Directory.GetFiles(TranslationsFolder);
             for (var i = 0; i < files.Length; i++)
-            {
                 _translations.Add(
                     Path.GetFileNameWithoutExtension(files[i]),
                     IniParser.Parse(File.ReadAllText(files[i]))
                 );
-            }
             _lastWrite = Directory.GetLastWriteTime(TranslationsFolder);
         }
 
@@ -39,17 +63,17 @@ namespace Hedra.Localization
         {
             _liveTranslations.Add(Key);
         }
-        
+
         public static void Remove(Translation Key)
         {
             _liveTranslations.Remove(Key);
         }
- 
+
         public static string Get(string Key)
         {
             return Get(Key, new object[0], Language);
         }
-        
+
         public static string Get(string Key, params object[] Params)
         {
             return Get(Key, Params, Language);
@@ -60,33 +84,34 @@ namespace Hedra.Localization
             return Get(Key, Params, AppLanguage.ToString());
         }
 
-        private static string Get(string Key,  object[] Params, string AppLanguage)
+        private static string Get(string Key, object[] Params, string AppLanguage)
         {
-            if(GameSettings.WatchScriptChanges)
+            if (GameSettings.WatchScriptChanges)
                 ReloadIfNecessary();
+
             string Fail()
             {
                 if (AppLanguage == GameLanguage.English.ToString())
                     throw new ArgumentException($"Failed to get key '{Key}' in the default language (english)");
-                return Get(Key, Params, GameLanguage.English); 
+                return Get(Key, Params, GameLanguage.English);
             }
-            
+
             if (!_translations.ContainsKey(AppLanguage)) return Fail();
             if (!_translations[AppLanguage].ContainsKey(Key)) return Fail();
 
             return AddParameters(_translations[AppLanguage][Key], Params);
         }
-        
+
         public static bool Has(string Key)
         {
             return Has(Key, Language);
         }
-        
+
         private static bool Has(string Key, GameLanguage AppLanguage)
         {
             return Has(Key, AppLanguage.ToString());
         }
-        
+
         private static bool Has(string Key, string AppLanguage)
         {
             if (_translations.ContainsKey(AppLanguage) && _translations[AppLanguage].ContainsKey(Key)) return true;
@@ -96,42 +121,16 @@ namespace Hedra.Localization
 
         private static string AddParameters(string Value, object[] Params)
         {
-            for (var i = 0; i < Params.Length; i++)
-            {
-                Value = Value.Replace($"{{{i}}}", Params[i].ToString());
-            }
+            for (var i = 0; i < Params.Length; i++) Value = Value.Replace($"{{{i}}}", Params[i].ToString());
             return Value.Replace(@"\n", Environment.NewLine);
-        }
-        
-        public static string[] Languages => _translations.Keys.ToArray();
-        
-        private static string _language = GameLanguage.English.ToString();
-        
-        public static bool IsEnglish => Language == GameLanguage.English.ToString();
-
-        public static string Language
-        {
-            get => _language;
-            set
-            {
-                _language = value;
-                for (var i = 0; i < _liveTranslations.Count; i++)
-                {
-                    _liveTranslations[i].UpdateTranslation();
-                }
-            }
         }
 
         private static void ReloadIfNecessary()
         {
 #if DEBUG
-            if(Directory.GetLastWriteTime(TranslationsFolder) != _lastWrite)
+            if (Directory.GetLastWriteTime(TranslationsFolder) != _lastWrite)
                 Load();
 #endif
         }
-
-        private static string TranslationsFolder { get; set; }
-        private static string EditorTranslationsFolder => GameSettings.DebugMode && !GameSettings.TestingMode ? $"../../Translations/" : DefaultTranslationsFolder;
-        private static string DefaultTranslationsFolder => $"{GameLoader.AppPath}/Translations/";
     }
 }

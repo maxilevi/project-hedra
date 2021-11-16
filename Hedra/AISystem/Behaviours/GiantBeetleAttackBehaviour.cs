@@ -1,18 +1,6 @@
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using SixLabors.Fonts;
-using Hedra.Core;
-using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Management;
-using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.Animation;
-using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
-using Hedra.Sound;
-using Hedra.WorldObjects;
-using System.Numerics;
 
 namespace Hedra.AISystem.Behaviours
 {
@@ -25,6 +13,9 @@ namespace Hedra.AISystem.Behaviours
         {
         }
 
+        protected override float SpitCooldown => 5;
+        protected override bool HasSpit => true;
+
         protected override Animation GetBiteAnimation(QuadrupedModel Model)
         {
             return Model.AttackAnimations[BiteAnimationIndex];
@@ -34,8 +25,5 @@ namespace Hedra.AISystem.Behaviours
         {
             return Model.AttackAnimations[SpitAnimationIndex];
         }
-
-        protected override float SpitCooldown => 5;
-        protected override bool HasSpit => true;
     }
 }

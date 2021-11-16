@@ -1,19 +1,15 @@
 using System.Linq;
-using Hedra.Core;
-using Hedra.Engine.Management;
-using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
-using Hedra.EntitySystem;
 using System.Numerics;
+using Hedra.Core;
 using Hedra.Engine.Core;
+using Hedra.Engine.Player;
+using Hedra.EntitySystem;
 using Hedra.Numerics;
 
 namespace Hedra.AISystem.Behaviours
 {
     public class HostileBehaviour : Behaviour
     {
-        protected virtual float Radius { get; } = 64;
-        protected AttackBehaviour Attack { get; }
         private readonly Timer _timer;
 
         public HostileBehaviour(IEntity Parent) : base(Parent)
@@ -21,6 +17,11 @@ namespace Hedra.AISystem.Behaviours
             Attack = new AttackBehaviour(Parent);
             _timer = new Timer(.5f);
         }
+
+        protected virtual float Radius { get; } = 64;
+        protected AttackBehaviour Attack { get; }
+
+        public bool Enabled => Attack.Enabled;
 
         protected virtual IEntity GetTarget()
         {
@@ -32,7 +33,8 @@ namespace Hedra.AISystem.Behaviours
 
         protected T[] GetTargets<T>() where T : ISearchable, IEntity
         {
-            return World.InRadius<T>(Parent.Position, Radius).Where(P => (Parent.Position - P.Position).LengthFast() < Radius * P.Attributes.MobAggroModifier).ToArray();
+            return World.InRadius<T>(Parent.Position, Radius).Where(P =>
+                (Parent.Position - P.Position).LengthFast() < Radius * P.Attributes.MobAggroModifier).ToArray();
         }
 
         protected virtual void HandleTarget()
@@ -40,10 +42,7 @@ namespace Hedra.AISystem.Behaviours
             if (Attack.Target == null && _timer.Tick())
             {
                 var target = GetTarget();
-                if (target != null)
-                {
-                    SetTarget(target);
-                }
+                if (target != null) SetTarget(target);
             }
         }
 
@@ -56,14 +55,12 @@ namespace Hedra.AISystem.Behaviours
         {
             Attack.Draw();
         }
-        
+
         public override void Update()
         {
             HandleTarget();
-            Attack.Update();   
+            Attack.Update();
         }
-
-        public bool Enabled => Attack.Enabled;
 
         public override void Dispose()
         {

@@ -1,13 +1,17 @@
 using BulletSharp;
 using BulletSharp.Math;
+using Vector3 = System.Numerics.Vector3;
 
 namespace Hedra.Engine.Bullet
 {
     public delegate void OnMotionStateUpdated();
+
     public class PhysicsComponentMotionState : MotionState
     {
-        public event OnMotionStateUpdated OnUpdated;
         private Matrix _worldTransform;
+
+        public Vector3 Position { get; set; }
+        public event OnMotionStateUpdated OnUpdated;
 
         public override void GetWorldTransform(out Matrix worldTrans)
         {
@@ -20,7 +24,5 @@ namespace Hedra.Engine.Bullet
             Position = _worldTransform.Origin.Compatible();
             OnUpdated?.Invoke();
         }
-
-        public System.Numerics.Vector3 Position { get; set; }
     }
 }

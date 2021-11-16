@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using System.Text;
 using Hedra.Crafting.Templates;
-using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ItemSystem.Templates;
 using Hedra.Engine.ModuleSystem.Templates;
@@ -24,18 +21,18 @@ namespace Hedra.Engine.Player.Inventory
             Script = Interpreter.GetScript("TextDisplay.py");
             Codecs = new Dictionary<string, Type>
             {
-                {CommonAttributes.Ingredients.ToString(), typeof(IngredientsTemplate)},
-                {CommonAttributes.EatEffects.ToString(), typeof(EffectTemplate)}
+                { CommonAttributes.Ingredients.ToString(), typeof(IngredientsTemplate) },
+                { CommonAttributes.EatEffects.ToString(), typeof(EffectTemplate) }
             };
         }
 
         public static string Format(AttributeTemplate Template)
         {
             if (AttributeDisplay.Bullets.ToString() == Template.Display)
-            {
-                return $"{Template.Name.AddSpacesToSentence()}:{Get(Template.Display, Template.Value, Template.Name, 4)}";
-            }
-            return $"{Template.Name.AddSpacesToSentence()}   ➝   {Get(Template.Display, Template.Value, Template.Name, 0)}";
+                return
+                    $"{Template.Name.AddSpacesToSentence()}:{Get(Template.Display, Template.Value, Template.Name, 4)}";
+            return
+                $"{Template.Name.AddSpacesToSentence()}   ➝   {Get(Template.Display, Template.Value, Template.Name, 0)}";
         }
 
         private static string GetString(object Value, string Name, int Padding)
@@ -44,29 +41,22 @@ namespace Hedra.Engine.Player.Inventory
             {
                 var stringBuilder = new StringBuilder();
                 foreach (var obj in asJArray)
-                {
-                    stringBuilder.Append($"{Environment.NewLine}{BuildPadding(Padding)}{GetString(obj, Name, Padding)}");
-                }
+                    stringBuilder.Append(
+                        $"{Environment.NewLine}{BuildPadding(Padding)}{GetString(obj, Name, Padding)}");
                 return stringBuilder.ToString();
-            } 
-            if (Value is JObject asJObject)
-            {
-                return JsonConvert.DeserializeObject(asJObject.ToString(), Codecs[Name]).ToString();          
             }
-            return Value.ToString();         
+
+            if (Value is JObject asJObject)
+                return JsonConvert.DeserializeObject(asJObject.ToString(), Codecs[Name]).ToString();
+            return Value.ToString();
         }
-        
+
         private static string Get(string Display, object Value, string Name, int Padding)
         {
             if (Value is double || Value is float)
-            {
                 return Script.Get("format").Invoke<string>(Value, Display ?? AttributeDisplay.Flat.ToString());
-            }
 
-            if (!(Value is int) && !(Value is long))
-            {
-                return GetString(Value, Name, Padding);
-            }
+            if (!(Value is int) && !(Value is long)) return GetString(Value, Name, Padding);
             return (int)Convert.ChangeType(Value, typeof(int)) == int.MaxValue ? "∞" : Value.ToString();
         }
 

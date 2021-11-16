@@ -22,7 +22,7 @@ namespace Hedra.Engine.Player
         private static AutoResetEvent _resetEvent;
         private static ConcurrentQueue<ITickable> _toAddTickables, _toRemoveTickables;
         private static ConcurrentQueue<IUpdatable> _toAddUpdatables, _toRemoveUpdatables;
-        
+
         public static void Load()
         {
             _tickSystem = new TickSystem();
@@ -35,10 +35,10 @@ namespace Hedra.Engine.Player
             _toAddUpdatables = new ConcurrentQueue<IUpdatable>();
             _toRemoveUpdatables = new ConcurrentQueue<IUpdatable>();
         }
-        
+
         public static void Dispatch()
         {
-            if(_updateThread.ThreadState == ThreadState.Unstarted)
+            if (_updateThread.ThreadState == ThreadState.Unstarted)
                 _updateThread.Start();
             _resetEvent.Set();
         }
@@ -65,6 +65,7 @@ namespace Hedra.Engine.Player
                     UpdateCommands();
                     frameTime -= physicsDelta;
                 }
+
                 Time.Set(delta);
                 Time.IncrementFrame(delta);
             }
@@ -79,13 +80,8 @@ namespace Hedra.Engine.Player
                 if (GameManager.Player.Companion.Entity == entities[i]) continue;
                 var canUpdate = entities[i].InUpdateRange || entities[i].UpdateWhenOutOfRange;
                 if (canUpdate && !GameSettings.Paused && !GameManager.IsLoading)
-                {
                     entities[i].Update();
-                }
-                else if (canUpdate && GameSettings.Paused)
-                {
-                    (entities[i].Model as IAudible)?.StopSound();
-                }
+                else if (canUpdate && GameSettings.Paused) (entities[i].Model as IAudible)?.StopSound();
                 entities[i].UpdateCriticalComponents();
             }
         }
@@ -96,10 +92,7 @@ namespace Hedra.Engine.Player
             AddUpdatables();
             RemoveTickables();
             RemoveUpdatables();
-            for (var i = 0; i < _updateList.Count; ++i)
-            {
-                _updateList[i].Update();
-            }
+            for (var i = 0; i < _updateList.Count; ++i) _updateList[i].Update();
             _tickSystem.Tick();
         }
 
@@ -108,7 +101,7 @@ namespace Hedra.Engine.Player
             while (!_toAddTickables.IsEmpty)
             {
                 var result = _toAddTickables.TryDequeue(out var tickable);
-                if(result) _tickSystem.Add(tickable);
+                if (result) _tickSystem.Add(tickable);
             }
         }
 
@@ -117,7 +110,7 @@ namespace Hedra.Engine.Player
             while (!_toAddUpdatables.IsEmpty)
             {
                 var result = _toAddUpdatables.TryDequeue(out var updatable);
-                if(result) _updateList.Add(updatable);
+                if (result) _updateList.Add(updatable);
             }
         }
 
@@ -126,7 +119,7 @@ namespace Hedra.Engine.Player
             while (!_toRemoveTickables.IsEmpty)
             {
                 var result = _toRemoveTickables.TryDequeue(out var tickable);
-                if(result) _tickSystem.Remove(tickable);
+                if (result) _tickSystem.Remove(tickable);
             }
         }
 
@@ -135,7 +128,7 @@ namespace Hedra.Engine.Player
             while (!_toRemoveUpdatables.IsEmpty)
             {
                 var result = _toRemoveUpdatables.TryDequeue(out var updatable);
-                if(result) _updateList.Remove(updatable);
+                if (result) _updateList.Remove(updatable);
             }
         }
 
@@ -148,7 +141,7 @@ namespace Hedra.Engine.Player
         {
             _toRemoveUpdatables.Enqueue(Update);
         }
-        
+
         public static void Add(ITickable Tickable)
         {
             _toAddTickables.Enqueue(Tickable);

@@ -1,5 +1,5 @@
 {
-  "Name" : "Crab",
+  "Name": "Crab",
   "MaxHealth": 196.0,
   "AttackDamage": 9.0,
   "Speed": 1.35,
@@ -15,7 +15,6 @@
       "Max": 2
     }
   ],
-
   "Model": {
     "Path": "$DataFile$/Assets/Chr/Mob/Crab/CrabIdle.dae",
     "Scale": 1.0,

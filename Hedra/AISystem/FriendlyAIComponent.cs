@@ -5,8 +5,6 @@ namespace Hedra.AISystem
 {
     public class FriendlyAIComponent : BasicAIComponent
     {
-        protected RoamBehaviour Roam { get; }
-
         public FriendlyAIComponent(Entity Parent) : base(Parent)
         {
             Roam = new RoamBehaviour(Parent)
@@ -15,13 +13,15 @@ namespace Hedra.AISystem
             };
         }
 
+        protected RoamBehaviour Roam { get; }
+
+        public override AIType Type => AIType.Friendly;
+
         public override void Update()
         {
             Roam.Update();
         }
-        
-        public override AIType Type => AIType.Friendly;
-        
+
         public override void Dispose()
         {
             base.Dispose();

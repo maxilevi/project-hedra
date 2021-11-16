@@ -9,15 +9,14 @@
 
 using System;
 using System.Linq;
+using System.Numerics;
 using Hedra.Core;
 using Hedra.Engine.Generation.ChunkSystem;
-using Hedra.Engine.ModuleSystem;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem.AnimationEvents;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.PhysicsSystem;
-using System.Numerics;
+using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.SkillSystem;
 using Hedra.Engine.Sound;
@@ -29,40 +28,23 @@ namespace Hedra.Engine.EntitySystem
 {
     /// <inheritdoc />
     /// <summary>
-    /// Description of SheepModel.
+    ///     Description of SheepModel.
     /// </summary>
     public sealed class QuadrupedModel : AnimatedUpdatableModel, IMountable, IAudible, IDisposeAnimation
-    {    
-        public override bool IsWalking => Array.IndexOf(WalkAnimations, this.Model.AnimationPlaying) != -1;
-        public override bool IsIdling => Array.IndexOf(IdleAnimations, this.Model.AnimationPlaying) != -1;
-        public bool AlignWithTerrain { get; set; }
-        public bool IsMountable { get; set; }
-        public bool IsFlyingModel { get; }
-        public Vector3 TemplateScale { get; }
-        public IHumanoid Rider { get; set; }
-        public bool HasRider => Rider != null;
-        public AttackAnimationTemplate[] AttackTemplates { get; }
-        public Animation[] AttackAnimations { get; }
-        private Animation[] IdleAnimations { get; }
-        private Animation[] WalkAnimations { get; }
-        private AttackEvent[] AttackAnimationsEvents { get; }
-        private AnimatedCollider Collider { get; }
-        private readonly float[] _walkAnimationSpeed;
+    {
+        private readonly bool _hasAnimationEvent;
         private readonly float _originalMobSpeed;
-        private float _lastMobSpeed;
-
-        public override CollisionShape HorizontalBroadphaseCollider => Collider.HorizontalBroadphase;
-        protected override string ModelPath { get; set; }
+        private readonly AreaSound _sound;
+        private readonly float[] _walkAnimationSpeed;
         private float _attackCooldown;
-        private Quaternion _targetTerrainOrientation = Quaternion.Identity;
-        private Quaternion _terrainOrientation = Quaternion.Identity;
+        private Vector3 _eulerTargetRotation;
+        private float _lastMobSpeed;
+        private Vector3 _position;
         private Quaternion _quaternionModelRotation = Quaternion.Identity;
         private Quaternion _quaternionTargetRotation;
-        private Vector3 _eulerTargetRotation;
         private Vector3 _rotation;
-        private Vector3 _position;
-        private readonly bool _hasAnimationEvent;
-        private readonly AreaSound _sound;
+        private Quaternion _targetTerrainOrientation = Quaternion.Identity;
+        private Quaternion _terrainOrientation = Quaternion.Identity;
 
 
         public QuadrupedModel(ISkilledAnimableEntity Parent, ModelTemplate Template) : base(Parent)
@@ -82,10 +64,11 @@ namespace Hedra.Engine.EntitySystem
             _walkAnimationSpeed = new float[WalkAnimations.Length];
             _originalMobSpeed = Parent.Speed;
 
-            this.AlignWithTerrain = Template.AlignWithTerrain;
-            this.Model.Scale = Vector3.One * (Template.Scale + Template.Scale * rng.NextFloat() * .3f - Template.Scale * rng.NextFloat() * .15f);
-            this.BaseBroadphaseBox = AssetManager.LoadHitbox(Template.Path) * this.Model.Scale;
-            this.Dimensions = AssetManager.LoadDimensions(Template.Path) * this.Model.Scale;
+            AlignWithTerrain = Template.AlignWithTerrain;
+            Model.Scale = Vector3.One * (Template.Scale + Template.Scale * rng.NextFloat() * .3f -
+                                         Template.Scale * rng.NextFloat() * .15f);
+            BaseBroadphaseBox = AssetManager.LoadHitbox(Template.Path) * Model.Scale;
+            Dimensions = AssetManager.LoadDimensions(Template.Path) * Model.Scale;
 
             for (var i = 0; i < IdleAnimations.Length; i++)
             {
@@ -106,192 +89,117 @@ namespace Hedra.Engine.EntitySystem
                 AttackAnimations[i].Speed = Template.AttackAnimations[i].Speed;
                 AttackAnimations[i].Loop = false;
 
-                int k = i;
+                var k = i;
                 if (Template.AttackAnimations[i].OnAnimationStart != null)
                 {
                     _hasAnimationEvent = true;
                     AttackAnimations[i].OnAnimationStart += delegate
                     {
-                        AnimationEventBuilder.Instance.Build(Parent, Template.AttackAnimations[k].OnAnimationStart).Build();
+                        AnimationEventBuilder.Instance.Build(Parent, Template.AttackAnimations[k].OnAnimationStart)
+                            .Build();
                     };
                 }
+
                 if (Template.AttackAnimations[i].OnAnimationMid != null)
                 {
                     _hasAnimationEvent = true;
                     AttackAnimations[i].OnAnimationMid += delegate
                     {
-                        AnimationEventBuilder.Instance.Build(Parent, Template.AttackAnimations[k].OnAnimationMid).Build();
+                        AnimationEventBuilder.Instance.Build(Parent, Template.AttackAnimations[k].OnAnimationMid)
+                            .Build();
                     };
                 }
+
                 if (Template.AttackAnimations[i].OnAnimationEnd != null)
                 {
                     _hasAnimationEvent = true;
                     AttackAnimations[i].OnAnimationEnd += delegate
                     {
-                        AnimationEventBuilder.Instance.Build(Parent, Template.AttackAnimations[k].OnAnimationEnd).Build();
+                        AnimationEventBuilder.Instance.Build(Parent, Template.AttackAnimations[k].OnAnimationEnd)
+                            .Build();
                     };
                 }
+
                 if (Template.AttackAnimations[i].OnAnimationProgress != null)
                 {
                     _hasAnimationEvent = true;
-                    AttackAnimations[i].RegisterOnProgressEvent(Template.AttackAnimations[k].OnAnimationProgress.Progress, delegate(Animation Sender)
-                    {
-                        AnimationEventBuilder.Instance.Build(Parent, Template.AttackAnimations[k].OnAnimationProgress.Event).Build();
-                    });
+                    AttackAnimations[i].RegisterOnProgressEvent(
+                        Template.AttackAnimations[k].OnAnimationProgress.Progress,
+                        delegate
+                        {
+                            AnimationEventBuilder.Instance
+                                .Build(Parent, Template.AttackAnimations[k].OnAnimationProgress.Event).Build();
+                        });
                 }
-                AttackAnimations[i].OnAnimationEnd += delegate {
-                    this.IsAttacking = false;
-                    this.Idle();
+
+                AttackAnimations[i].OnAnimationEnd += delegate
+                {
+                    IsAttacking = false;
+                    Idle();
                 };
-                AttackAnimationsEvents[i] = (AttackEvent) Enum.Parse(typeof(AttackEvent), Template.AttackAnimations[i].AttackEvent);
+                AttackAnimationsEvents[i] =
+                    (AttackEvent)Enum.Parse(typeof(AttackEvent), Template.AttackAnimations[i].AttackEvent);
             }
-            this.Collider = new AnimatedCollider(Template.Path, Model);
-            this.Idle();
+
+            Collider = new AnimatedCollider(Template.Path, Model);
+            Idle();
             var soundType = Parent.MobType == MobType.Horse ? SoundType.HorseRun : SoundType.HumanRun;
-            this._sound = new AreaSound(soundType, this.Position, 48f);
+            _sound = new AreaSound(soundType, Position, 48f);
         }
-        
-        public bool CanAttack()
+
+        public override bool IsWalking => Array.IndexOf(WalkAnimations, Model.AnimationPlaying) != -1;
+        public override bool IsIdling => Array.IndexOf(IdleAnimations, Model.AnimationPlaying) != -1;
+        public bool AlignWithTerrain { get; set; }
+        public bool IsFlyingModel { get; }
+        public Vector3 TemplateScale { get; }
+        public bool HasRider => Rider != null;
+        public AttackAnimationTemplate[] AttackTemplates { get; }
+        public Animation[] AttackAnimations { get; }
+        private Animation[] IdleAnimations { get; }
+        private Animation[] WalkAnimations { get; }
+        private AttackEvent[] AttackAnimationsEvents { get; }
+        private AnimatedCollider Collider { get; }
+
+        public override CollisionShape HorizontalBroadphaseCollider => Collider.HorizontalBroadphase;
+        protected override string ModelPath { get; set; }
+
+        public override Vector3 Position
         {
-            if (Array.IndexOf(AttackAnimations, Model.AnimationPlaying) != -1 || Parent.IsKnocked || Parent.IsStuck)
-                return false;
-            return _attackCooldown < 0;
+            get => _position;
+            set
+            {
+                /* If it has a rider, ignore other values */
+                if (!HasRider)
+                    _position = value;
+            }
         }
 
-        public void Attack(IEntity Victim, Animation Animation, OnAnimationHandler Callback, float RangeModifier = 1.0f)
-        {    
-            if(!this.CanAttack())return;
-            var selectedAnimation = Animation;
-
-            if (!_hasAnimationEvent || Callback != null)
+        public override Vector3 TargetRotation
+        {
+            get => _eulerTargetRotation;
+            set
             {
-                void AttackHandler(Animation Sender)
+                /* If it has a rider, ignore other values */
+                if (HasRider) value = Rider.Model.TargetRotation;
+                _eulerTargetRotation = value;
+                _quaternionTargetRotation = QuaternionMath.FromEuler(_eulerTargetRotation * Mathf.Radian);
+                if (value.IsInvalid())
                 {
-                    this.SetAttackHandler(selectedAnimation, AttackHandler, false);
-                    if (!Parent.InAttackRange(Victim, RangeModifier))
-                    {
-                        SoundPlayer.PlaySoundWithVariation(SoundType.SlashSound, Parent.Position, 1f, .5f);
-                        return;
-                    }
-
-                    Victim.Damage(Parent.AttackDamage, this.Parent, out _);
+                    var a = 0;
                 }
-                this.SetAttackHandler(selectedAnimation, Callback ?? AttackHandler, true);
-            }
-            Model.PlayAnimation(selectedAnimation);
-            IsAttacking = true;
-            _attackCooldown = Parent.AttackCooldown;
-        }
-
-
-        public void Attack(Animation Animation, float RangeModifier)
-        {
-            this.Attack(null, Animation, null, RangeModifier);
-        }
-
-        public override bool CanAttack(IEntity Victim, float RangeModifier)
-        {
-            return CanAttack();
-        }
-
-        public override void Attack(IEntity Victim, float RangeModifier)
-        {
-            this.Attack(Victim, SelectAttackAnimation(), null, RangeModifier);
-        }
-
-        private void SetAttackHandler(Animation AttackAnimation, OnAnimationHandler Handler, bool Add)
-        {
-            switch(AttackAnimationsEvents[Array.IndexOf(AttackAnimations, AttackAnimation)]){
-                case AttackEvent.Start:
-                    if(Add)
-                        AttackAnimation.OnAnimationStart += Handler;
-                    else
-                        AttackAnimation.OnAnimationStart -= Handler;
-                    break;
-                case AttackEvent.Mid:
-                    if(Add)
-                        AttackAnimation.OnAnimationMid += Handler;
-                    else
-                        AttackAnimation.OnAnimationMid -= Handler;
-                    break;
-                case AttackEvent.End:
-                    if(Add)
-                        AttackAnimation.OnAnimationEnd += Handler;
-                    else
-                        AttackAnimation.OnAnimationEnd -= Handler;
-                    break;
             }
         }
 
-        public override void BaseUpdate()
+        public override Vector3 LocalRotation
         {
-            base.BaseUpdate();
-            Model.Position = Position;
-            Model.Update();
-        }
-  
-        public override void Update()
-        {
-            this.UpdateWalkAnimationsSpeed();
-            if (!IsAttacking)
+            get => _rotation;
+            set
             {
-                var isMoving = !HasRider 
-                    ? Parent.IsMoving 
-                    : Rider.IsMoving;
-                if (isMoving) this.Run();
-                else this.Idle();
-            }
-            base.Update();
+                _rotation = value;
 
-            if (Model != null)
-            {
-                if (HasRider)
-                {
-                    TargetRotation = Rider.Model.TargetRotation;
-                    _position = Rider.Model.ModelPosition - Rider.Model.RidingOffset;
-                }
-                _targetTerrainOrientation = AlignWithTerrain
-                    ? Mathf.RotationAlign(
-                            Vector3.UnitY,
-                            (
-                                Physics.NormalAtPosition(this.Position) + 
-                                Physics.NormalAtPosition(this.Position + new Vector3(Chunk.BlockSize, 0, 0)) +
-                                Physics.NormalAtPosition(this.Position + new Vector3(0, 0, Chunk.BlockSize)) +
-                                Physics.NormalAtPosition(this.Position + new Vector3(Chunk.BlockSize, 0, Chunk.BlockSize))
-                            ) * .25f
-                    ).ExtractRotation() 
-                    : Quaternion.Identity;
-                _terrainOrientation = Quaternion.Slerp(_terrainOrientation, _targetTerrainOrientation, Time.IndependentDeltaTime * 8f);
-                Model.TransformationMatrix = Matrix4x4.CreateFromQuaternion(_terrainOrientation);
-                _quaternionModelRotation = Quaternion.Slerp(_quaternionModelRotation, _quaternionTargetRotation, Time.IndependentDeltaTime * 14f);
-                Model.LocalRotation = _quaternionModelRotation.ToEuler();
-                if (HasRider)
-                {
-                    Model.LocalRotation = Rider.Model.LocalRotation;
-                    Model.TransformationMatrix = Matrix4x4.CreateRotationY(-Model.LocalRotation.Y * Mathf.Radian)
-                                                 * Rider.Model.TiltMatrix 
-                                                 * Matrix4x4.CreateRotationY(Model.LocalRotation.Y * Mathf.Radian);
-                }
-                this.LocalRotation = Model.LocalRotation;
+                if (float.IsNaN(_rotation.X) || float.IsNaN(_rotation.Y) || float.IsNaN(_rotation.Z))
+                    _rotation = Vector3.Zero;
             }
-
-            if (!base.Disposed)
-            {
-                _sound.Position = this.Position;
-                _sound.Pitch = Parent.Speed / PitchSpeed;
-                _sound.Update(this.IsWalking && (Rider != null && Rider.IsGrounded || Parent.IsGrounded) && !IsFlyingModel);
-            }
-            _attackCooldown -= Time.IndependentDeltaTime;
-        }
-
-        private void UpdateWalkAnimationsSpeed()
-        {
-            if(Math.Abs(_lastMobSpeed - Parent.Speed) < 0.005f) return;
-            for (var i = 0; i < WalkAnimations.Length; i++)
-            {
-                WalkAnimations[i].Speed = (_walkAnimationSpeed[i] / _originalMobSpeed) * Parent.Speed;
-            }
-            _lastMobSpeed = Parent.Speed;
         }
 
         public void StopSound()
@@ -317,11 +225,164 @@ namespace Hedra.Engine.EntitySystem
             DisposeTime = 0;
         }
 
+        public bool IsMountable { get; set; }
+        public IHumanoid Rider { get; set; }
+
+        public bool CanAttack()
+        {
+            if (Array.IndexOf(AttackAnimations, Model.AnimationPlaying) != -1 || Parent.IsKnocked || Parent.IsStuck)
+                return false;
+            return _attackCooldown < 0;
+        }
+
+        public void Attack(IEntity Victim, Animation Animation, OnAnimationHandler Callback, float RangeModifier = 1.0f)
+        {
+            if (!CanAttack()) return;
+            var selectedAnimation = Animation;
+
+            if (!_hasAnimationEvent || Callback != null)
+            {
+                void AttackHandler(Animation Sender)
+                {
+                    SetAttackHandler(selectedAnimation, AttackHandler, false);
+                    if (!Parent.InAttackRange(Victim, RangeModifier))
+                    {
+                        SoundPlayer.PlaySoundWithVariation(SoundType.SlashSound, Parent.Position, 1f, .5f);
+                        return;
+                    }
+
+                    Victim.Damage(Parent.AttackDamage, Parent, out _);
+                }
+
+                SetAttackHandler(selectedAnimation, Callback ?? AttackHandler, true);
+            }
+
+            Model.PlayAnimation(selectedAnimation);
+            IsAttacking = true;
+            _attackCooldown = Parent.AttackCooldown;
+        }
+
+
+        public void Attack(Animation Animation, float RangeModifier)
+        {
+            Attack(null, Animation, null, RangeModifier);
+        }
+
+        public override bool CanAttack(IEntity Victim, float RangeModifier)
+        {
+            return CanAttack();
+        }
+
+        public override void Attack(IEntity Victim, float RangeModifier)
+        {
+            Attack(Victim, SelectAttackAnimation(), null, RangeModifier);
+        }
+
+        private void SetAttackHandler(Animation AttackAnimation, OnAnimationHandler Handler, bool Add)
+        {
+            switch (AttackAnimationsEvents[Array.IndexOf(AttackAnimations, AttackAnimation)])
+            {
+                case AttackEvent.Start:
+                    if (Add)
+                        AttackAnimation.OnAnimationStart += Handler;
+                    else
+                        AttackAnimation.OnAnimationStart -= Handler;
+                    break;
+                case AttackEvent.Mid:
+                    if (Add)
+                        AttackAnimation.OnAnimationMid += Handler;
+                    else
+                        AttackAnimation.OnAnimationMid -= Handler;
+                    break;
+                case AttackEvent.End:
+                    if (Add)
+                        AttackAnimation.OnAnimationEnd += Handler;
+                    else
+                        AttackAnimation.OnAnimationEnd -= Handler;
+                    break;
+            }
+        }
+
+        public override void BaseUpdate()
+        {
+            base.BaseUpdate();
+            Model.Position = Position;
+            Model.Update();
+        }
+
+        public override void Update()
+        {
+            UpdateWalkAnimationsSpeed();
+            if (!IsAttacking)
+            {
+                var isMoving = !HasRider
+                    ? Parent.IsMoving
+                    : Rider.IsMoving;
+                if (isMoving) Run();
+                else Idle();
+            }
+
+            base.Update();
+
+            if (Model != null)
+            {
+                if (HasRider)
+                {
+                    TargetRotation = Rider.Model.TargetRotation;
+                    _position = Rider.Model.ModelPosition - Rider.Model.RidingOffset;
+                }
+
+                _targetTerrainOrientation = AlignWithTerrain
+                    ? Mathf.RotationAlign(
+                        Vector3.UnitY,
+                        (
+                            Physics.NormalAtPosition(Position) +
+                            Physics.NormalAtPosition(Position + new Vector3(Chunk.BlockSize, 0, 0)) +
+                            Physics.NormalAtPosition(Position + new Vector3(0, 0, Chunk.BlockSize)) +
+                            Physics.NormalAtPosition(Position + new Vector3(Chunk.BlockSize, 0, Chunk.BlockSize))
+                        ) * .25f
+                    ).ExtractRotation()
+                    : Quaternion.Identity;
+                _terrainOrientation = Quaternion.Slerp(_terrainOrientation, _targetTerrainOrientation,
+                    Time.IndependentDeltaTime * 8f);
+                Model.TransformationMatrix = Matrix4x4.CreateFromQuaternion(_terrainOrientation);
+                _quaternionModelRotation = Quaternion.Slerp(_quaternionModelRotation, _quaternionTargetRotation,
+                    Time.IndependentDeltaTime * 14f);
+                Model.LocalRotation = _quaternionModelRotation.ToEuler();
+                if (HasRider)
+                {
+                    Model.LocalRotation = Rider.Model.LocalRotation;
+                    Model.TransformationMatrix = Matrix4x4.CreateRotationY(-Model.LocalRotation.Y * Mathf.Radian)
+                                                 * Rider.Model.TiltMatrix
+                                                 * Matrix4x4.CreateRotationY(Model.LocalRotation.Y * Mathf.Radian);
+                }
+
+                LocalRotation = Model.LocalRotation;
+            }
+
+            if (!Disposed)
+            {
+                _sound.Position = Position;
+                _sound.Pitch = Parent.Speed / PitchSpeed;
+                _sound.Update(IsWalking && (Rider != null && Rider.IsGrounded || Parent.IsGrounded) && !IsFlyingModel);
+            }
+
+            _attackCooldown -= Time.IndependentDeltaTime;
+        }
+
+        private void UpdateWalkAnimationsSpeed()
+        {
+            if (Math.Abs(_lastMobSpeed - Parent.Speed) < 0.005f) return;
+            for (var i = 0; i < WalkAnimations.Length; i++)
+                WalkAnimations[i].Speed = _walkAnimationSpeed[i] / _originalMobSpeed * Parent.Speed;
+            _lastMobSpeed = Parent.Speed;
+        }
+
         private Animation SelectWalkingAnimation()
         {
             return WalkAnimations[Utils.Rng.Next(0, WalkAnimations.Length)];
         }
-        
+
         private Animation SelectIdleAnimation()
         {
             return IdleAnimations[Utils.Rng.Next(0, WalkAnimations.Length)];
@@ -339,71 +400,33 @@ namespace Hedra.Engine.EntitySystem
                     return AttackAnimations[index];
                 rng -= AttackTemplates[index].Chance;
             }
-            throw new ArgumentOutOfRangeException($"Failed to find suitable animation");
+
+            throw new ArgumentOutOfRangeException("Failed to find suitable animation");
         }
-        
+
         private void Run()
         {
-        
-            if(this.IsAttacking) return;
-            
-            if(Model != null && !this.IsWalking)
+            if (IsAttacking) return;
+
+            if (Model != null && !IsWalking)
                 Model.PlayAnimation(SelectWalkingAnimation());
         }
 
         private void Idle()
         {
-            if(this.IsAttacking) return;
-            
-            if(Model != null && !this.IsIdling)
+            if (IsAttacking) return;
+
+            if (Model != null && !IsIdling)
                 Model.PlayAnimation(SelectIdleAnimation());
-        }
-
-        public override Vector3 Position
-        {
-            get => _position;
-            set
-            {
-                /* If it has a rider, ignore other values */
-                if (!HasRider)
-                    _position = value;
-            }
-        }
-
-        public override Vector3 TargetRotation
-        {
-            get => _eulerTargetRotation;
-            set
-            {
-                /* If it has a rider, ignore other values */
-                if (HasRider) value = Rider.Model.TargetRotation;
-                _eulerTargetRotation = value;
-                _quaternionTargetRotation = QuaternionMath.FromEuler(_eulerTargetRotation * Mathf.Radian);
-                if (value.IsInvalid())
-                {
-                    int a = 0;
-                }
-            }
-        }
-        public override Vector3 LocalRotation
-        {
-            get => _rotation;
-            set
-            {
-                this._rotation = value;
-                
-                if( float.IsNaN(this._rotation.X) || float.IsNaN(this._rotation.Y) || float.IsNaN(this._rotation.Z))
-                    this._rotation = Vector3.Zero;
-            }
         }
 
         public override void Dispose()
         {
-            this.IdleAnimations.ToList().ForEach(A => A.Dispose());
-            this.WalkAnimations.ToList().ForEach(A => A.Dispose());
-            this.AttackAnimations.ToList().ForEach(A => A.Dispose());
-            this.Collider.Dispose();
-            this.Model.Dispose();
+            IdleAnimations.ToList().ForEach(A => A.Dispose());
+            WalkAnimations.ToList().ForEach(A => A.Dispose());
+            AttackAnimations.ToList().ForEach(A => A.Dispose());
+            Collider.Dispose();
+            Model.Dispose();
             base.Dispose();
         }
     }

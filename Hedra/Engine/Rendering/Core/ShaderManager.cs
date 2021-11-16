@@ -10,14 +10,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Threading;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Management;
 using Hedra.Rendering;
-using System.Numerics;
 
 namespace Hedra.Engine.Rendering.Core
-{    
+{
     public static class ShaderManager
     {
         private const string FogUniform = "FogSettings";
@@ -28,14 +28,11 @@ namespace Hedra.Engine.Rendering.Core
         public const string ModelViewProjectionName = "_modelViewProjectionMatrix";
         public const int LightDistance = 384;
         public const int MaxLights = 32;
-        public static UBO<FogData> FogUBO { get; private set; }
-        public static UBO<LightSettings> LightsUBO { get; private set; }
-        private static Vector3 _lightPosition;
+        private static readonly Vector3 _lightPosition;
         private static Vector3 _lightColor;
         private static float _clipPlaneY;
         private static readonly List<Shader> _shaders;
         private static readonly List<PointLight> PointLights;
-        public static PointLight[] Lights => PointLights.ToArray();
 
         static ShaderManager()
         {
@@ -46,16 +43,31 @@ namespace Hedra.Engine.Rendering.Core
             LightsUBO = new UBO<LightSettings>(LightsUniform);
         }
 
+        public static UBO<FogData> FogUBO { get; }
+        public static UBO<LightSettings> LightsUBO { get; }
+        public static PointLight[] Lights => PointLights.ToArray();
+
+        public static Vector3 LightColor
+        {
+            get => _lightColor;
+            set
+            {
+                if (_lightColor == value) return;
+                _lightColor = value;
+                UpdateLights();
+            }
+        }
+
+        public static int UsedLights => PointLights.Count;
+
         public static Shader GetById(uint Id)
         {
             for (var i = 0; i < _shaders.Count; ++i)
-            {
                 if (_shaders[i].ShaderId == Id)
                     return _shaders[i];
-            }
             throw new ArgumentOutOfRangeException();
         }
-        
+
         public static void ReloadShaders()
         {
 #if DEBUG
@@ -63,9 +75,9 @@ namespace Hedra.Engine.Rendering.Core
 #endif
             AssetManager.ReloadShaderSources();
             var currentShaders = _shaders.ToArray();
-            currentShaders.ToList().ForEach( S => S.Reload() );
+            currentShaders.ToList().ForEach(S => S.Reload());
         }
-        
+
         public static void RegisterShader(Shader Entry)
         {
             _shaders.Add(Entry);
@@ -84,13 +96,11 @@ namespace Hedra.Engine.Rendering.Core
             {
                 var lights = new AlignedPointLight[MaxLights];
                 var actualLights = Lights;
-                for (var i = 0; i < actualLights.Length; ++i)
-                {
-                    lights[i] = new AlignedPointLight(actualLights[i]);
-                }
+                for (var i = 0; i < actualLights.Length; ++i) lights[i] = new AlignedPointLight(actualLights[i]);
                 LightsUBO.Update(new LightSettings(lights, _lightColor, _lightPosition, UsedLights));
             }
-            if(Thread.CurrentThread.ManagedThreadId == Loader.Hedra.MainThreadId)
+
+            if (Thread.CurrentThread.ManagedThreadId == Loader.Hedra.MainThreadId)
                 DoUpdate();
             else
                 Executer.ExecuteOnMainThread(DoUpdate);
@@ -112,31 +122,15 @@ namespace Hedra.Engine.Rendering.Core
 
         public static void UpdateLight(PointLight Light)
         {
-            if (!Light.Locked)
-            {
-                PointLights.Remove(Light);
-            }
+            if (!Light.Locked) PointLights.Remove(Light);
             UpdateLights();
-        }
-        
-        public static Vector3 LightColor
-        {
-            get => _lightColor;
-            set
-            {
-                if(_lightColor == value) return;
-                _lightColor = value;
-                UpdateLights();
-            }
         }
 
         public static void SetLightColorInTheSameThread(Vector3 Color)
         {
-            if(_lightColor == Color) return;
+            if (_lightColor == Color) return;
             _lightColor = Color;
             UpdateLights();
         }
-
-        public static int UsedLights => PointLights.Count;
     }
 }

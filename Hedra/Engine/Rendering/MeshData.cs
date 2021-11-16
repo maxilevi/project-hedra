@@ -4,24 +4,25 @@
  * Time: 11:42 p.m.
  *
  */
-using System;
+
 using System.Numerics;
 
 namespace Hedra.Engine.Rendering
 {
     /// <summary>
-    /// Description of MeshData.
+    ///     Description of MeshData.
     /// </summary>
     public class MeshData : DataContainer
     {
         public Vector4 TemplateColor;
+
         public MeshData(Vector4 Color)
         {
-            this.TemplateColor = Color;
-            this.Color = new Vector4[]{};
-            this.VerticesArrays = new Vector3[]{ };
-            this.Normals = new Vector3[]{ };
-            this.HasNormals = true;
+            TemplateColor = Color;
+            this.Color = new Vector4[] { };
+            VerticesArrays = new Vector3[] { };
+            Normals = new Vector3[] { };
+            HasNormals = true;
         }
     }
 }

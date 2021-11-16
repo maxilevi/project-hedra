@@ -1,38 +1,34 @@
 using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Linq;
+using System.Numerics;
 using Hedra.Core;
 using Hedra.Crafting;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Localization;
-using Hedra.Engine.Management;
 using Hedra.Engine.Player.Inventory;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Items;
 using Hedra.Localization;
+using Hedra.Numerics;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
-using System.Numerics;
-using Hedra.Numerics;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Player.CraftingSystem
 {
     public class CraftingInventoryItemInfo : InventoryInterfaceItemInfo
     {
         private const int MaxIngredients = 4;
-        private readonly Button _craftButton;
-        private Item _currentRecipe;
-        private readonly IPlayer _player;
-        private string _lastRecipeChecked;
-        private bool _canCraft;
         private readonly Timer _cooldownTimer;
-        private readonly Vector4 _normalTint;
         private readonly Vector4 _cooldownTint;
+        private readonly Button _craftButton;
         private readonly GUIText[] _ingredientsText;
+        private readonly Vector4 _normalTint;
         private readonly Panel _panel;
+        private readonly IPlayer _player;
+        private bool _canCraft;
+        private Item _currentRecipe;
         private float _descriptionHeight;
+        private string _lastRecipeChecked;
 
         public CraftingInventoryItemInfo(IPlayer Player)
         {
@@ -68,6 +64,33 @@ namespace Hedra.Engine.Player.CraftingSystem
                 if (_currentRecipe != null)
                     UpdateCanCraft();
             };
+        }
+
+        private GUIText StationRequirementText => _ingredientsText[MaxIngredients - 1];
+
+        protected override float DescriptionHeight => _descriptionHeight;
+
+        public override bool Enabled
+        {
+            get => base.Enabled;
+            set
+            {
+                if (value) _panel.Enable();
+                else _panel.Disable();
+                base.Enabled = value;
+            }
+        }
+
+        public override Vector2 Position
+        {
+            get => base.Position;
+            set
+            {
+                var elements = _panel.Elements.ToArray();
+                for (var i = 0; i < elements.Length; i++)
+                    elements[i].Position = elements[i].Position - base.Position + value;
+                base.Position = value;
+            }
         }
 
 
@@ -159,10 +182,6 @@ namespace Hedra.Engine.Player.CraftingSystem
                                                Vector2.UnitX * ItemAttributes.Scale.X;
         }
 
-        private GUIText StationRequirementText => _ingredientsText[MaxIngredients - 1];
-
-        protected override float DescriptionHeight => _descriptionHeight;
-
         private void DisableIngredientsText()
         {
             for (var i = 0; i < _ingredientsText.Length; i++) _ingredientsText[i].Disable();
@@ -179,29 +198,6 @@ namespace Hedra.Engine.Player.CraftingSystem
         {
             _canCraft = _player.Crafting.CanCraft(_currentRecipe, _player.Position);
             _lastRecipeChecked = _currentRecipe.Name;
-        }
-
-        public override bool Enabled
-        {
-            get => base.Enabled;
-            set
-            {
-                if (value) _panel.Enable();
-                else _panel.Disable();
-                base.Enabled = value;
-            }
-        }
-
-        public override Vector2 Position
-        {
-            get => base.Position;
-            set
-            {
-                var elements = _panel.Elements.ToArray();
-                for (var i = 0; i < elements.Length; i++)
-                    elements[i].Position = elements[i].Position - base.Position + value;
-                base.Position = value;
-            }
         }
     }
 }

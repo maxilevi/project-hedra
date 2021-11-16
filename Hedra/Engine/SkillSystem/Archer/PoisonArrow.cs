@@ -9,23 +9,18 @@
 
 using System;
 using System.Globalization;
+using System.Numerics;
 using Hedra.Components.Effects;
-using Hedra.Core;
-using Hedra.Engine.Localization;
-using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Localization;
-using Hedra.Rendering;
-using Hedra.WeaponSystem;
-using Hedra.WorldObjects;
-using System.Numerics;
 using Hedra.Numerics;
+using Hedra.Rendering;
+using Hedra.WorldObjects;
 
 namespace Hedra.Engine.SkillSystem.Archer
 {
     /// <summary>
-    /// Description of ArcherPoisonArrow.
+    ///     Description of ArcherPoisonArrow.
     /// </summary>
     public class PoisonArrow : SpecialRangedAttackSkill
     {
@@ -36,10 +31,15 @@ namespace Hedra.Engine.SkillSystem.Archer
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/PoisonArrow.png");
         public override string Description => Translations.Get("poison_arrow_desc");
         public override string DisplayName => Translations.Get("poison_arrow");
-        private float Damage => BaseDamage * (base.Level * 0.35f) + BaseDamage;
-        public override float MaxCooldown => Math.Max(BaseCooldown - 0.80f * base.Level, CooldownCap);
+        private float Damage => BaseDamage * (Level * 0.35f) + BaseDamage;
+        public override float MaxCooldown => Math.Max(BaseCooldown - 0.80f * Level, CooldownCap);
         public override float ManaCost => BaseManaCost;
         protected override int MaxLevel => 99;
+
+        public override string[] Attributes => new[]
+        {
+            Translations.Get("poison_arrow_damage_change", Damage.ToString("0.0", CultureInfo.InvariantCulture))
+        };
 
         protected override void OnHit(Projectile Proj, IEntity Victim)
         {
@@ -50,10 +50,5 @@ namespace Hedra.Engine.SkillSystem.Archer
         {
             Proj.Mesh.Tint = Colors.PoisonGreen * new Vector4(1, 3, 1, 1);
         }
-
-        public override string[] Attributes => new[]
-        {
-            Translations.Get("poison_arrow_damage_change", Damage.ToString("0.0", CultureInfo.InvariantCulture))
-        };
     }
 }

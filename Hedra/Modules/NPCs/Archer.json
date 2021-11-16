@@ -6,10 +6,10 @@
     "Scale": 1.0
   },
   "Class": "Archer",
-  "Behaviour" : "Hostile", 
+  "Behaviour": "Hostile",
   "Immune": false,
   "XP": 2.5,
-  "AttackPower": 1.0, 
+  "AttackPower": 1.0,
   "AttackSpeed": 1.5,
   "Components": [],
   "Weapons": [

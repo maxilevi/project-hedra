@@ -8,7 +8,7 @@ namespace Hedra.Engine.ModuleSystem.ModelHandlers
     {
         public ModelHandler Build(string Key)
         {
-            return (ModelHandler) Activator.CreateInstance(this[Key]);
+            return (ModelHandler)Activator.CreateInstance(this[Key]);
         }
     }
 }

@@ -12,29 +12,20 @@ using System.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.Scripting;
 using Hedra.Engine.Sound;
-using Hedra.Game;
 using NVorbis;
 using Silk.NET.OpenAL;
 
 namespace Hedra.Sound
 {
     public delegate void OnSongEnd();
+
     public static class SoundtrackManager
     {
         private const int MillisecondsPerBuffer = 250;
         private const int SampleRate = 44100;
         private const int Channels = 2;
         private const string LibraryName = "Soundtrack.py";
-        public static int MainTheme { get; private set; }
-        public static int HostageSituation { get; private set; }
-        public static int GraveyardChampion { get; private set; }
-        public static int Rain { get; private set; }
-        public static int VillageAmbient { get; private set; }
-        public static int OnTheLam { get; private set; }
-        public static int SkeletonSkirmish { get; private set; }
-        public static int FacingTheBeast { get; private set; }
         private static Script _script;
-        private static event OnSongEnd SongEnded;
         private static readonly object Lock = new object();
         private static readonly float[] Buffer = new float[Channels * SampleRate / (1000 / MillisecondsPerBuffer)];
         private static SoundSource _source;
@@ -46,12 +37,33 @@ namespace Hedra.Sound
         private static int _channels;
         private static bool _buildBuffers;
         private static int _receivedBytes;
+
         private static bool _loaded;
+
         /* State */
         private static int _currentActionSong;
         private static int _currentAmbientSong;
         private static bool _isPlayingAmbient;
         private static AL _al;
+        public static int MainTheme { get; private set; }
+        public static int HostageSituation { get; private set; }
+        public static int GraveyardChampion { get; private set; }
+        public static int Rain { get; private set; }
+        public static int VillageAmbient { get; private set; }
+        public static int OnTheLam { get; private set; }
+        public static int SkeletonSkirmish { get; private set; }
+        public static int FacingTheBeast { get; private set; }
+
+        private static float FinalVolume => Volume * PauseVolume * SongTransitionVolume;
+
+        /* Used from scripts (SoundtrackPlayer.py) */
+        public static float PauseVolume { get; set; }
+
+        /* Used from scripts (SoundtrackPlayer.py) */
+        public static float SongTransitionVolume { get; set; } = 1;
+
+        public static float Volume { get; set; } = 0.2f;
+        private static event OnSongEnd SongEnded;
 
         public static void Load()
         {
@@ -69,13 +81,14 @@ namespace Hedra.Sound
 
         private static void OnSongEnd()
         {
-            var value = _script.Get("on_song_end").Invoke<int>(_isPlayingAmbient, _currentActionSong, _currentAmbientSong);
+            var value = _script.Get("on_song_end")
+                .Invoke<int>(_isPlayingAmbient, _currentActionSong, _currentAmbientSong);
             if (_isPlayingAmbient)
                 _currentAmbientSong = value;
             else
                 _currentActionSong = value;
         }
-        
+
         public static void PlayAmbient()
         {
             if (!_loaded) return;
@@ -92,29 +105,31 @@ namespace Hedra.Sound
 
         public static string GetCurrentTrackName()
         {
-            return _script.Get("get_current_track_name").Invoke<string>(_isPlayingAmbient, _currentActionSong, _currentAmbientSong);
+            return _script.Get("get_current_track_name")
+                .Invoke<string>(_isPlayingAmbient, _currentActionSong, _currentAmbientSong);
         }
-        
+
         public static void Update()
         {
             if (!_loaded) return;
-            
+
             _source.Position = SoundPlayer.ListenerPosition;
             _source.Volume = FinalVolume;
 
             if (FinalVolume < 0.01f) return;
 
-            if(_usedBuffer != null && !_source.IsPlaying && _receivedBytes > 0)
+            if (_usedBuffer != null && !_source.IsPlaying && _receivedBytes > 0)
             {
                 _source.Play(_usedBuffer);
                 _buildBuffers = true;
             }
-            
-            if(_buildBuffers && _receivedBytes > -1 && _reader != null)
+
+            if (_buildBuffers && _receivedBytes > -1 && _reader != null)
             {
                 lock (Lock)
                 {
-                    _receivedBytes = _reader.ReadSamples(Buffer, 0, _channels * _sampleRate / (1000 / MillisecondsPerBuffer));
+                    _receivedBytes = _reader.ReadSamples(Buffer, 0,
+                        _channels * _sampleRate / (1000 / MillisecondsPerBuffer));
                 }
 
                 if (_receivedBytes <= 0)
@@ -123,40 +138,43 @@ namespace Hedra.Sound
                     _buildBuffers = false;
                     return;
                 }
+
                 var data = CastBuffer(Buffer, _receivedBytes);
-                if(_usedBuffer == null || (_frontBuffer != null && _usedBuffer.Id == _frontBuffer.Id))
+                if (_usedBuffer == null || _frontBuffer != null && _usedBuffer.Id == _frontBuffer.Id)
                 {
                     _backBuffer?.Dispose();
                     _backBuffer = new SoundBuffer(data, SoundPlayer.GetSoundFormat(_channels, 16), _sampleRate);
                     _usedBuffer = _backBuffer;
                 }
-                else if(_usedBuffer.Id == _backBuffer.Id)
+                else if (_usedBuffer.Id == _backBuffer.Id)
                 {
                     _frontBuffer?.Dispose();
                     _frontBuffer = new SoundBuffer(data, SoundPlayer.GetSoundFormat(_channels, 16), _sampleRate);
                     _usedBuffer = _frontBuffer;
                 }
+
                 _buildBuffers = false;
             }
         }
-        
+
         private static short[] CastBuffer(float[] Buffer, int Length)
         {
-            short[] data = new short[Length];
-            for (int i = 0; i < Length; i++)
+            var data = new short[Length];
+            for (var i = 0; i < Length; i++)
             {
-                var temp = (int)( (short.MaxValue-1) * Buffer[i]);
+                var temp = (int)((short.MaxValue - 1) * Buffer[i]);
                 if (temp > short.MaxValue) temp = short.MaxValue;
                 else if (temp < short.MinValue) temp = short.MinValue;
-                data[i] = (short) temp;
+                data[i] = (short)temp;
             }
+
             return data;
         }
-        
+
         /* Used from scripts (SoundtrackPlayer.py) */
         public static void PlayTrack(string Name)
         {
-            if(!_loaded) return;
+            if (!_loaded) return;
             _usedBuffer = null;
             _buildBuffers = true;
 
@@ -169,22 +187,15 @@ namespace Hedra.Sound
                 _reader = new VorbisReader(stream, true);
                 _sampleRate = _reader.SampleRate;
                 _channels = _reader.Channels;
-                if(_sampleRate != SampleRate)
-                    throw new ArgumentOutOfRangeException($"'{Name}' needs to have a sample rate of '{SampleRate}' but has '{_sampleRate}'");
-                if(_channels != Channels)
-                    throw new ArgumentOutOfRangeException($"'{Name}' needs to have '{SampleRate}' channels but has '{_channels}'");
+                if (_sampleRate != SampleRate)
+                    throw new ArgumentOutOfRangeException(
+                        $"'{Name}' needs to have a sample rate of '{SampleRate}' but has '{_sampleRate}'");
+                if (_channels != Channels)
+                    throw new ArgumentOutOfRangeException(
+                        $"'{Name}' needs to have '{SampleRate}' channels but has '{_channels}'");
                 _source.Stop();
             }
         }
-        
-        private static float FinalVolume => Volume * PauseVolume * SongTransitionVolume;
-
-        /* Used from scripts (SoundtrackPlayer.py) */
-        public static float PauseVolume { get; set; }
-        /* Used from scripts (SoundtrackPlayer.py) */
-        public static float SongTransitionVolume { get; set; } = 1;
-
-        public static float Volume { get; set; } = 0.2f;
 
         private static void LoadLibrary()
         {
@@ -201,4 +212,3 @@ namespace Hedra.Sound
         }
     }
 }
-

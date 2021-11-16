@@ -7,5 +7,5 @@ in vec2 UVs;
 layout(location = 0) out vec4 Color;
 
 void main(){
-	Color = texture(Cursor, UVs);
+    Color = texture(Cursor, UVs);
 }

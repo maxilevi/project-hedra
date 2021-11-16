@@ -1,18 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Hedra.BiomeSystem;
-using Hedra.Engine.BiomeSystem;
-using Hedra.Engine.CacheSystem;
-using Hedra.Engine.Generation;
-using Hedra.Engine.Generation.ChunkSystem;
-using Hedra.Engine.Management;
-using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.Rendering;
-using Hedra.Rendering;
 using System.Numerics;
+using Hedra.BiomeSystem;
+using Hedra.Engine.CacheSystem;
+using Hedra.Engine.Management;
+using Hedra.Engine.Rendering;
 using Hedra.Numerics;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.PlantSystem
 {
@@ -40,6 +33,7 @@ namespace Hedra.Engine.PlantSystem
                 case 5: return Colors.FromHtml("#FFAD5A");
                 case 6: return Colors.FromHtml("#f4deb3");
             }
+
             return Vector4.One;
         }
     }

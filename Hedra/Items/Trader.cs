@@ -9,6 +9,7 @@ namespace Hedra.Items
     {
         public const float SellMultiplier = 0.5f;
         public const float BuyMultiplier = 1.25f;
+
         public static float SingleItemPrice(Item Item)
         {
             if (Item == null) return 0;
@@ -52,32 +53,35 @@ namespace Hedra.Items
                 if (Item.IsRecipe)
                 {
                     var output = CraftingInventory.GetOutputFromRecipe(Item, 1);
-                    return SingleItemPrice(output) * (output.HasAttribute(CommonAttributes.Amount) ? output.GetAttribute<int>(CommonAttributes.Amount) : 1);
+                    return SingleItemPrice(output) * (output.HasAttribute(CommonAttributes.Amount)
+                        ? output.GetAttribute<int>(CommonAttributes.Amount)
+                        : 1);
                 }
 
-                price *= (int) (Item.Tier + 1);
+                price *= (int)(Item.Tier + 1);
             }
             else
             {
                 price = Item.GetAttribute<int>(CommonAttributes.Price);
             }
+
             return price;
         }
-        
+
         private static float GetNormalizedAttributeValue(Item Item, CommonAttributes Attribute)
         {
             var attr = Item.GetAttributes().FirstOrDefault(T => T.Name == Attribute.ToString());
             if (attr == null) return 0;
-            return attr.Display == AttributeDisplay.Percentage.ToString() 
-                ? ConvertObj<float>(attr.Value) * 100f 
+            return attr.Display == AttributeDisplay.Percentage.ToString()
+                ? ConvertObj<float>(attr.Value) * 100f
                 : ConvertObj<float>(attr.Value);
         }
-        
+
         private static T ConvertObj<T>(object Value)
         {
             return typeof(T).IsAssignableFrom(typeof(IConvertible)) || typeof(T).IsValueType
-                ? (T) Convert.ChangeType(Value, typeof(T)) 
-                : (T) Value;
+                ? (T)Convert.ChangeType(Value, typeof(T))
+                : (T)Value;
         }
     }
 }

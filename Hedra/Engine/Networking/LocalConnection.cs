@@ -7,30 +7,31 @@ using System.Threading;
 using Hedra.Engine.IO;
 
 namespace Hedra.Engine.Networking
-{   
+{
     public class LocalConnection : BaseConnection, IConnection
     {
-        public override ulong Myself { get; }
-        public override event OnMessageReceived MessageReceived;
-        private ulong _serverId;
-        private bool _created;
-        private bool _isListening;
-        private Thread _thread;
         private readonly Dictionary<ulong, TcpClient> _peers;
         private TcpClient _client;
+        private bool _created;
+        private bool _isListening;
         private TcpListener _listener;
-        
+        private ulong _serverId;
+        private Thread _thread;
+
         public LocalConnection(ConnectionType Type) : base(Type)
         {
-            Myself = (ulong) Environment.TickCount;
+            Myself = (ulong)Environment.TickCount;
             _peers = new Dictionary<ulong, TcpClient>();
         }
 
+        public override ulong Myself { get; }
+        public override event OnMessageReceived MessageReceived;
+
         public override void Setup()
         {
-            if(Type == ConnectionType.Client)
+            if (Type == ConnectionType.Client)
                 SetupClient();
-            else if(Type == ConnectionType.Host)
+            else if (Type == ConnectionType.Host)
                 SetupHost();
         }
 
@@ -51,6 +52,7 @@ namespace Hedra.Engine.Networking
                     BuildClientLoop(client);
                 }
             }
+
             CreateLoop(ServerLoop);
         }
 
@@ -80,7 +82,7 @@ namespace Hedra.Engine.Networking
                 while (Program.GameWindow.Exists)
                 {
                     var count = Client.Client.Receive(buffer, 0, buffer.Length, SocketFlags.None, out var error);
-                    if(error != SocketError.Success) break;
+                    if (error != SocketError.Success) break;
                     if (registered)
                     {
                         ReceiveMessage(id, buffer.Take(count).ToArray());
@@ -94,12 +96,14 @@ namespace Hedra.Engine.Networking
                             _serverId = id;
                     }
                 }
+
                 _peers.Remove(id);
                 Log.WriteLine($"A client '{id}' has disconnected from the server");
             }
+
             CreateLoop(ClientLoop);
         }
-        
+
 
         private void ReceiveMessage(ulong Sender, byte[] Message)
         {
@@ -116,6 +120,7 @@ namespace Hedra.Engine.Networking
                 Buffer = CommonMessages.Relay.Concat(BitConverter.GetBytes(target)).Concat(Buffer).ToArray();
                 Count = Buffer.Length;
             }
+
             SendMessage(_peers[Peer], Buffer, Count);
         }
 
@@ -125,10 +130,9 @@ namespace Hedra.Engine.Networking
             stream.Write(Buffer, 0, Count);
             stream.Flush();
         }
-        
+
         public override void Dispose()
         {
-
         }
     }
 

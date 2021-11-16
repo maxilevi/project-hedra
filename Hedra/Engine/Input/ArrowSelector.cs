@@ -1,5 +1,4 @@
 using Hedra.Engine.Events;
-
 using Silk.NET.Input;
 
 namespace Hedra.Engine.Input
@@ -11,22 +10,22 @@ namespace Hedra.Engine.Input
             switch (EventArgs.Key)
             {
                 case Key.Up:
-                    if(!State.UpPressed)
+                    if (!State.UpPressed)
                         State.OnUp?.Invoke();
                     State.UpPressed = true;
                     break;
                 case Key.Down:
-                    if(!State.DownPressed)
+                    if (!State.DownPressed)
                         State.OnDown?.Invoke();
                     State.DownPressed = true;
                     break;
                 case Key.Right:
-                    if(!State.RightPressed)
+                    if (!State.RightPressed)
                         State.OnRight?.Invoke();
                     State.RightPressed = true;
                     break;
                 case Key.Left:
-                    if(!State.LeftPressed)
+                    if (!State.LeftPressed)
                         State.OnLeft?.Invoke();
                     State.LeftPressed = true;
                     break;

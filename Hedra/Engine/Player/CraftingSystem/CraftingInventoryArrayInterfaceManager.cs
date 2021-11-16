@@ -6,8 +6,9 @@ namespace Hedra.Engine.Player.CraftingSystem
     {
         private readonly CraftingInventoryArrayInterface _craftingInterface;
         private readonly CraftingInventoryItemInfo _itemInfo;
-        
-        public CraftingInventoryArrayInterfaceManager(int Columns, int Rows, CraftingInventoryItemInfo ItemInfoInterface,
+
+        public CraftingInventoryArrayInterfaceManager(int Columns, int Rows,
+            CraftingInventoryItemInfo ItemInfoInterface,
             CraftingInventoryArrayInterface Interface) : base(Columns, Rows, ItemInfoInterface, Interface)
         {
             _craftingInterface = Interface;
@@ -23,12 +24,10 @@ namespace Hedra.Engine.Player.CraftingSystem
         {
             base.UpdateView();
             if (Enabled)
-            {
                 _itemInfo?.Show(
                     _craftingInterface.CurrentOutput,
                     _craftingInterface.CurrentRecipe
                 );
-            }
         }
     }
 }

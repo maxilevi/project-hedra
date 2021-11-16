@@ -1,47 +1,43 @@
 using System;
+using System.Numerics;
 using Hedra.Core;
 using Hedra.Engine.Events;
-using Hedra.Engine.Generation;
-using Hedra.Engine.Localization;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Particles;
-using Hedra.Engine.Sound;
 using Hedra.Localization;
-using Hedra.Sound;
-using System.Numerics;
 using Hedra.Numerics;
-
+using Hedra.Sound;
 
 namespace Hedra.Engine.Player
 {
     public class HangGlider : IVehicle, IDisposable
     {
-        private readonly IPlayer _player;
-        private readonly GliderModel _model;
-        private Vector3 _accumulatedVelocity;
-        private Vector3 _angles;
-        private Vector3 _targetAngles;
-        private float _yaw;
-        private float ClampedPitch => Mathf.Clamp(_player.View.Pitch, -1.25f, 1.0f);
-        private readonly TrailRenderer _rightTrail;
         private readonly TrailRenderer _leftTrail;
         private readonly TrailRenderer _mainTrail;
-        private float _decaySpeed = 20f;
-        private float _upPush;
+        private readonly GliderModel _model;
+        private readonly IPlayer _player;
+        private readonly TrailRenderer _rightTrail;
+        private Vector3 _accumulatedVelocity;
+        private Vector3 _angles;
+        private readonly float _decaySpeed = 20f;
         private int _remainingParticles;
+        private Vector3 _targetAngles;
+        private float _upPush;
+        private float _yaw;
 
         public HangGlider(IPlayer Player)
         {
             _player = Player;
             _model = new GliderModel();
-            _leftTrail = new TrailRenderer(() => _model.TransformPoint(Vector3.UnitZ * 4f - Vector3.UnitX * 3f - Vector3.UnitY * .25f),
+            _leftTrail = new TrailRenderer(
+                () => _model.TransformPoint(Vector3.UnitZ * 4f - Vector3.UnitX * 3f - Vector3.UnitY * .25f),
                 new Vector4(Vector3.One, .5f))
             {
                 UpdateRate = 1,
                 Orientation = Vector3.UnitZ,
                 MaxLifetime = .5f
             };
-            _rightTrail = new TrailRenderer(() => _model.TransformPoint(Vector3.UnitZ * 4f + Vector3.UnitX * 3f - Vector3.UnitY * .25f),
+            _rightTrail = new TrailRenderer(
+                () => _model.TransformPoint(Vector3.UnitZ * 4f + Vector3.UnitX * 3f - Vector3.UnitY * .25f),
                 new Vector4(Vector3.One, .5f))
             {
                 UpdateRate = 1,
@@ -50,36 +46,31 @@ namespace Hedra.Engine.Player
             };
             EventDispatcher.RegisterKeyDown(this, delegate(object Sender, KeyEventArgs EventArgs)
             {
-                if (!this.Enabled || !this._player.CanInteract || EventArgs.Key != Controls.Jump || _player.Stamina < _player.MaxStamina * .25f) return;
-                this.Push(220f);
-                this._player.Stamina -= _player.MaxStamina * .25f;
+                if (!Enabled || !_player.CanInteract || EventArgs.Key != Controls.Jump ||
+                    _player.Stamina < _player.MaxStamina * .25f) return;
+                Push(220f);
+                _player.Stamina -= _player.MaxStamina * .25f;
                 SoundPlayer.PlaySoundWithVariation(SoundType.Jump, _player.Position);
                 _remainingParticles = 20;
             });
         }
 
-        private void HandleInput()
-        {
-            _targetAngles.X = -45f * ClampedPitch + 45f * (1.0f - Math.Min(1f, (_accumulatedVelocity.Average() - _decaySpeed) / _decaySpeed));
-            _targetAngles.Z = 45f * (_player.View.StackedYaw - _yaw) / (float) (Math.PI * .2f);
-            _targetAngles = Mathf.Clamp(_targetAngles, -90, 90);
-            _angles = Mathf.Lerp(_angles, _targetAngles, (float) Time.DeltaTime * 4f);
-            _yaw = Mathf.Lerp(_yaw, _player.View.StackedYaw, (float) Time.DeltaTime * 2f);
-        }
+        private float ClampedPitch => Mathf.Clamp(_player.View.Pitch, -1.25f, 1.0f);
 
         public void Update()
         {
             HandleLanding();
-            if (!this.Enabled)
+            if (!Enabled)
             {
                 _accumulatedVelocity = Vector3.One * 10f;
                 _yaw = _player.View.StackedYaw;
             }
-            this._model.Enabled = _player.Model.Enabled && this.Enabled;
-            if (this.Enabled)
+
+            _model.Enabled = _player.Model.Enabled && Enabled;
+            if (Enabled)
             {
-                this.ManageParticles();
-                this.HandleInput();
+                ManageParticles();
+                HandleInput();
                 _player.View.MaxPitch = 1.25f;
                 _player.View.MinPitch = -1.25f;
 
@@ -103,11 +94,12 @@ namespace Hedra.Engine.Player
                 var propulsion = Vector3.One * 20f;
                 propulsion *= 1f + _angles.X / 45f;
                 propulsion *= _angles.X < 15f ? 1.4f : 4.0f;
-                _accumulatedVelocity += propulsion * (float) Time.DeltaTime;
-                _accumulatedVelocity *= (float) Math.Pow(.8f, (float) Time.DeltaTime);
-                _upPush *= (float) Math.Pow(.25f, (float) Time.DeltaTime);
+                _accumulatedVelocity += propulsion * Time.DeltaTime;
+                _accumulatedVelocity *= (float)Math.Pow(.8f, Time.DeltaTime);
+                _upPush *= (float)Math.Pow(.25f, Time.DeltaTime);
                 _player.View.MaxDistance = 10f;
-                _player.Physics.DeltaTranslate((_player.View.LookingDirection * _accumulatedVelocity + Vector3.UnitY * _upPush) * .55f);
+                _player.Physics.DeltaTranslate(
+                    (_player.View.LookingDirection * _accumulatedVelocity + Vector3.UnitY * _upPush) * .55f);
                 _player.Physics.ResetFall();
 
                 _leftTrail.Thickness = 1f * (Math.Abs(_angles.Z) - 15f) / 90f *
@@ -123,8 +115,44 @@ namespace Hedra.Engine.Player
             _leftTrail.Update();
         }
 
+        public void Disable()
+        {
+            _player.View.MaxPitch = Camera.DefaultMaxPitch;
+            _player.View.MinPitch = Camera.DefaultMinPitch;
+            _player.View.MaxDistance = Camera.DefaultMaxDistance;
+            _player.Model.TransformationMatrix = Matrix4x4.Identity;
+            _player.Model.Pause = false;
+            _player.Physics.GravityDirection = -Vector3.UnitY;
+            _leftTrail.Emit = false;
+            Enabled = false;
+        }
+
+        public void Enable()
+        {
+            Enabled = true;
+        }
+
+        public bool CanEnable => !_player.IsGrounded;
+
+        public bool Enabled { get; private set; }
+
+        public void Dispose()
+        {
+            EventDispatcher.UnregisterKeyDown(this);
+        }
+
+        private void HandleInput()
+        {
+            _targetAngles.X = -45f * ClampedPitch +
+                              45f * (1.0f - Math.Min(1f, (_accumulatedVelocity.Average() - _decaySpeed) / _decaySpeed));
+            _targetAngles.Z = 45f * (_player.View.StackedYaw - _yaw) / (float)(Math.PI * .2f);
+            _targetAngles = Mathf.Clamp(_targetAngles, -90, 90);
+            _angles = Mathf.Lerp(_angles, _targetAngles, Time.DeltaTime * 4f);
+            _yaw = Mathf.Lerp(_yaw, _player.View.StackedYaw, Time.DeltaTime * 2f);
+        }
+
         private void HandleLanding()
-        {        
+        {
             if (Enabled)
             {
                 if (_player.IsGrounded)
@@ -132,7 +160,7 @@ namespace Hedra.Engine.Player
                     Disable();
                     _player.AddBonusSpeedForSeconds(-_player.Speed + _player.Speed * .5f, 2f);
                 }
-                else if(_player.IsUnderwater)
+                else if (_player.IsUnderwater)
                 {
                     Disable();
                 }
@@ -157,32 +185,6 @@ namespace Hedra.Engine.Player
 
                 _remainingParticles--;
             }
-        }
-
-        public void Disable()
-        {
-            _player.View.MaxPitch = Camera.DefaultMaxPitch;
-            _player.View.MinPitch = Camera.DefaultMinPitch;
-            _player.View.MaxDistance = Camera.DefaultMaxDistance;
-            _player.Model.TransformationMatrix = Matrix4x4.Identity;
-            _player.Model.Pause = false;
-            _player.Physics.GravityDirection = -Vector3.UnitY;
-            _leftTrail.Emit = false;
-            this.Enabled = false;
-        }
-
-        public void Enable()
-        {
-            this.Enabled = true;
-        }
-
-        public bool CanEnable => !_player.IsGrounded;
-        
-        public bool Enabled { get; private set; }
-
-        public void Dispose()
-        {
-            EventDispatcher.UnregisterKeyDown(this);
         }
     }
 }

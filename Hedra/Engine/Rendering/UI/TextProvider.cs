@@ -1,15 +1,16 @@
 using System;
 using System.Collections.Generic;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Drawing.Drawing2D;
+using System.Drawing.Text;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
 using Hedra.Engine.Native;
-using Hedra.Rendering.UI;
-using System.Numerics;
 using Hedra.Game;
+using Hedra.Rendering.UI;
+using SixLabors.Fonts;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -254,7 +255,7 @@ namespace Hedra.Engine.Rendering.UI
                 (int)Math.Ceiling(Math.Max(size.Height, 1)));
             using (var graphics = Graphics.FromImage(textBitmap))
             {
-                graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
+                graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
                 graphics.SmoothingMode = SmoothingMode.HighQuality;
                 if (OSManager.RunningPlatform == Platform.Windows)
                 {
@@ -424,12 +425,6 @@ namespace Hedra.Engine.Rendering.UI
 
     public class TextParams
     {
-        public string[] Texts { get; }
-        public int[] Offsets { get; }
-        public Font[] TextFonts { get; }
-        public Color[] TextColors { get; }
-        public TextOptions[] TextOptions { get; }
-
         public TextParams(string[] Texts, int[] Offsets, Font[] TextFonts, Color[] TextColors,
             TextOptions[] TextOptions)
         {
@@ -439,5 +434,11 @@ namespace Hedra.Engine.Rendering.UI
             this.TextColors = TextColors;
             this.TextOptions = TextOptions;
         }
+
+        public string[] Texts { get; }
+        public int[] Offsets { get; }
+        public Font[] TextFonts { get; }
+        public Color[] TextColors { get; }
+        public TextOptions[] TextOptions { get; }
     }
 }

@@ -1,4 +1,4 @@
-using Facepunch.Steamworks;
+using System.Numerics;
 using Hedra.Components;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
@@ -7,17 +7,14 @@ using Hedra.Engine.Player;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Localization;
-using Hedra.Rendering;
-using System.Numerics;
-using Color = System.Drawing.Color;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
     public class PunchingBag : BaseStructure, IUpdatable
     {
         private readonly IEntity _bag;
-        private Vector3 _positi;
-        
+        private readonly Vector3 _positi;
+
         public PunchingBag(Vector3 Position, Box Dimensions) : base(Position)
         {
             var bag = new Entity();
@@ -44,24 +41,24 @@ namespace Hedra.Engine.StructureSystem.Overworld
                     Height = bag.Model.Dimensions.Size.Y * 1.5f
                 };
             bag.AddComponent(healthBarComponent);
-            
+
             World.AddEntity(_bag = bag);
             BackgroundUpdater.Add(this);
+        }
+
+        public void Update()
+        {
+            if (_bag.Disposed) return;
+            if (_bag.Position.Y < _positi.Y)
+            {
+                var physx = _bag.Physics;
+                var z = 0;
+            }
         }
 
         private void OnDamage(DamageEventArgs Args)
         {
             _bag.Health = _bag.MaxHealth;
-        }
-
-        public void Update()
-        {
-            if(_bag.Disposed) return;
-            if (_bag.Position.Y < _positi.Y)
-            {
-                var physx = _bag.Physics;
-                int z = 0;
-            }
         }
 
         public override void Dispose()

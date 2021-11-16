@@ -14,7 +14,7 @@ namespace Hedra.Engine.PlantSystem
     {
         public override CacheItem Type => CacheItem.BerryBush;
         protected override Item ItemCollect => ItemPool.Grab(ItemType.Berry);
-        
+
         public override NativeVertexData Paint(NativeVertexData Data, Region Region, Random Rng)
         {
             Data = base.Paint(Data, Region, Rng);

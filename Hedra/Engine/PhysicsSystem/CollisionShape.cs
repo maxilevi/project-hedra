@@ -6,12 +6,11 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
-using Hedra.Engine.Rendering;
 using Hedra.Numerics;
 using Hedra.Rendering;
 
@@ -19,61 +18,76 @@ namespace Hedra.Engine.PhysicsSystem
 {
     /// <inheritdoc cref="ICollidable" />
     /// <summary>
-    /// Description of CollisionShape.
+    ///     Description of CollisionShape.
     /// </summary>
     public class CollisionShape : ICloneable
     {
-        public Vector3[] Vertices { get; }
-        public uint[] Indices { get; }
-        public float BroadphaseRadius { get; set; }
-        public Vector3 BroadphaseCenter { get; set; }
-        public float Height { get; private set; }
         private CollisionShape _cache;
 
         private CollisionShape(Vector3[] Vertices, uint[] Indices)
         {
             this.Vertices = Vertices ?? new Vector3[0];
             this.Indices = Indices ?? new uint[0];
-            this.RecalculateBroadphase();
-            this.Height = (SupportPoint(Vector3.UnitY) - SupportPoint(-Vector3.UnitY)).Y;
+            RecalculateBroadphase();
+            Height = (SupportPoint(Vector3.UnitY) - SupportPoint(-Vector3.UnitY)).Y;
+        }
+
+        public CollisionShape(List<Vector3> Vertices, List<uint> Indices) : this(Vertices.ToArray(), Indices.ToArray())
+        {
+        }
+
+        public CollisionShape(Vector3[] Vertices) : this(Vertices, null)
+        {
+        }
+
+        public CollisionShape(VertexData Data) : this(Data.Vertices.ToArray(), Data.Indices.ToArray())
+        {
+        }
+
+        public Vector3[] Vertices { get; }
+        public uint[] Indices { get; }
+        public float BroadphaseRadius { get; set; }
+        public Vector3 BroadphaseCenter { get; set; }
+        public float Height { get; private set; }
+
+        public int SizeInBytes => Indices.Length * sizeof(uint) + Vertices.Length * HedraSize.Vector3;
+
+        public object Clone()
+        {
+            return new CollisionShape(Vertices.ToArray(), Indices.ToArray());
         }
 
         public CollisionShape Transform(Matrix4x4 TransMatrix)
         {
-            for(var i = 0; i < Vertices.Length; i++)
-            {
-                Vertices[i] = Vector3.Transform(Vertices[i], TransMatrix);
-            }
-            this.RecalculateBroadphase();
-            this.Height = (SupportPoint(Vector3.UnitY) - SupportPoint(-Vector3.UnitY)).Y;
+            for (var i = 0; i < Vertices.Length; i++) Vertices[i] = Vector3.Transform(Vertices[i], TransMatrix);
+            RecalculateBroadphase();
+            Height = (SupportPoint(Vector3.UnitY) - SupportPoint(-Vector3.UnitY)).Y;
             return this;
         }
 
         public CollisionShape Transform(Vector3 Position)
         {
-            for(var i = 0; i < Vertices.Length; i++)
-            {
+            for (var i = 0; i < Vertices.Length; i++)
                 Vertices[i] = Vector3.Transform(Vertices[i], Matrix4x4.CreateTranslation(Position));
-            }
-            this.RecalculateBroadphase();
+            RecalculateBroadphase();
             return this;
         }
 
         public Vector3 SupportPoint(Vector3 Direction)
-        {           
+        {
             var highest = float.MinValue;
             var support = Vector3.Zero;
 
             for (var i = 0; i < Vertices.Length; ++i)
             {
-                Vector3 v = Vertices[i];
-                float dot = Vector3.Dot(Direction, v);
+                var v = Vertices[i];
+                var dot = Vector3.Dot(Direction, v);
 
                 if (!(dot > highest)) continue;
                 highest = dot;
                 support = v;
             }
-        
+
             return support;
         }
 
@@ -86,38 +100,17 @@ namespace Hedra.Engine.PhysicsSystem
         {
             float dist = 0;
             var verticesSum = Vector3.Zero;
+            for (var i = 0; i < Vertices.Length; i++) verticesSum += Vertices[i] * Mask;
+            BroadphaseCenter = verticesSum / Vertices.Length;
             for (var i = 0; i < Vertices.Length; i++)
             {
-                verticesSum += Vertices[i] * Mask;
-            }
-            this.BroadphaseCenter = verticesSum / Vertices.Length;
-            for (var i = 0; i < Vertices.Length; i++)
-            {
-                float length = (Vertices[i] * Mask - this.BroadphaseCenter).LengthFast();
+                var length = (Vertices[i] * Mask - BroadphaseCenter).LengthFast();
 
                 if (length > dist)
                     dist = length;
             }
-            this.BroadphaseRadius = dist;
-        }
 
-        public object Clone()
-        {
-            return new CollisionShape(Vertices.ToArray(), this.Indices.ToArray());
+            BroadphaseRadius = dist;
         }
-
-        public CollisionShape(List<Vector3> Vertices, List<uint> Indices) : this(Vertices.ToArray(), Indices.ToArray())
-        {
-        }
-
-        public CollisionShape(Vector3[] Vertices) : this(Vertices, null)
-        {
-        }
-
-        public CollisionShape(VertexData Data) : this(Data.Vertices.ToArray(), Data.Indices.ToArray())
-        {       
-        }
-
-        public int SizeInBytes => Indices.Length * sizeof(uint) + Vertices.Length * HedraSize.Vector3;
     }
 }

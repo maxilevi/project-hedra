@@ -11,11 +11,11 @@ namespace Hedra.AISystem.Behaviours
         {
         }
 
+        protected abstract MobType[] HuntTypes { get; }
+
         protected override IEntity GetTarget()
         {
             return GetTargets<IEntity>().FirstOrDefault(E => Array.IndexOf(HuntTypes, E.MobType) != -1);
         }
-        
-        protected abstract MobType[] HuntTypes { get; }
     }
 }

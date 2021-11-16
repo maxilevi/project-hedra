@@ -1,34 +1,20 @@
 using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Globalization;
+using System.Numerics;
 using Hedra.Components;
-using Hedra.Engine.Management;
 using Hedra.Core;
 using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Localization;
-using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
 using Hedra.Localization;
-using Hedra.Rendering;
-using Hedra.Rendering.Particles;
-using Hedra.Sound;
-using System.Numerics;
 using Hedra.Numerics;
+using Hedra.Rendering;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 {
     public class Leech : RadiusEffectSkill<ISkilledAnimableEntity>
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Leech.png");
-
-        protected override void Apply(IEntity Entity)
-        {
-            if (Entity.SearchComponent<DamageComponent>().HasIgnoreFor(User)) return;
-            Entity.AddComponentForSeconds(new LeechComponent(Entity, User, Damage, Health), Duration);
-        }
 
         protected override Vector4 HighlightColor => Colors.Red * .5f;
 
@@ -50,12 +36,18 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
             Translations.Get("leech_radius_change", Radius.ToString("0.0", CultureInfo.InvariantCulture))
         };
 
+        protected override void Apply(IEntity Entity)
+        {
+            if (Entity.SearchComponent<DamageComponent>().HasIgnoreFor(User)) return;
+            Entity.AddComponentForSeconds(new LeechComponent(Entity, User, Damage, Health), Duration);
+        }
+
         private class LeechComponent : EntityComponent
         {
             private readonly ISkilledAnimableEntity _caster;
-            private readonly Timer _timer;
             private readonly float _damagePerSecond;
             private readonly float _healPerSecond;
+            private readonly Timer _timer;
 
             public LeechComponent(IEntity Entity, ISkilledAnimableEntity Caster, float DamagePerSecond,
                 float HealthPerSecond) : base(Entity)

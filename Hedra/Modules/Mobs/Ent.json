@@ -1,5 +1,5 @@
 {
-  "Name" : "Ent",
+  "Name": "Ent",
   "MaxHealth": 516.0,
   "AttackDamage": 11.0,
   "AttackCooldown": 1.5,
@@ -8,7 +8,9 @@
   "Level": 17,
   "AIType": "Hostile",
   "Effects": [
-    {"Name": "FireWeakness"}
+    {
+      "Name": "FireWeakness"
+    }
   ],
   "Drops": [
     {
@@ -18,7 +20,7 @@
   ],
   "Model": {
     "Handler": "Ent",
-    "AlignWithTerrain" :  false,
+    "AlignWithTerrain": false,
     "Path": "$DataFile$/Assets/Chr/EntIdle.dae",
     "Scale": 1.75,
     "IdleAnimations": [

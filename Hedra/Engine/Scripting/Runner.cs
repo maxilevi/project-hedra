@@ -1,5 +1,4 @@
 using System;
-using Hedra.Core;
 using Hedra.Engine.IO;
 using Microsoft.Scripting.Hosting;
 
@@ -13,6 +12,7 @@ namespace Hedra.Engine.Scripting
         {
             this.Engine = Engine;
         }
+
         public object GetFunction(string Library, string Function)
         {
             try
@@ -37,7 +37,7 @@ namespace Hedra.Engine.Scripting
         public abstract void Reload();
 
         public abstract void Prepare(string Library);
-        
+
         protected static void ReportFailure(string Name, Exception Exception)
         {
             Log.WriteLine($"INTERPRETER PANIC at '{Name}':{Environment.NewLine}{Environment.NewLine}{Exception}");

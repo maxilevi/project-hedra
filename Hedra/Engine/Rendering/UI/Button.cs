@@ -5,20 +5,18 @@
  *
  */
 
-using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using Hedra.Core;
+using System.Numerics;
 using Hedra.Engine.Events;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Windowing;
 using Hedra.Game;
+using Hedra.Numerics;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
-using System.Numerics;
-using Hedra.Numerics;
-using MouseButton = Silk.NET.Input.MouseButton;
+using Silk.NET.Input;
+using SixLabors.Fonts;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -32,27 +30,11 @@ namespace Hedra.Engine.Rendering.UI
     public class Button : EventListener, UIElement
     {
         private bool _hasEntered;
+        private Translation _liveTranslation;
         private Vector2 _position;
         private Color _previousFontColor;
         private Vector2 _previousScale;
         private GUIText _privateText;
-        private Translation _liveTranslation;
-
-        public bool CanClick { get; set; } = true;
-        public bool PlaySound { get; set; } = true;
-        public GUITexture Texture { get; set; }
-
-        public bool Enabled { get; private set; }
-
-        public GUIText Text
-        {
-            get => _privateText;
-            private set
-            {
-                _privateText?.Dispose();
-                _privateText = value;
-            }
-        }
 
         public Button(Vector2 Position, Vector2 Scale, Translation Translation, Color FontColor, Font TextFont)
         {
@@ -77,6 +59,74 @@ namespace Hedra.Engine.Rendering.UI
         public Button(Vector2 Position, Vector2 Scale, uint Texture)
         {
             Initialize(Position, Scale, null, null, Texture, Color.Black, SystemFonts.DefaultFont);
+        }
+
+        public bool CanClick { get; set; } = true;
+        public bool PlaySound { get; set; } = true;
+        public GUITexture Texture { get; set; }
+
+        public bool Enabled { get; private set; }
+
+        public GUIText Text
+        {
+            get => _privateText;
+            private set
+            {
+                _privateText?.Dispose();
+                _privateText = value;
+            }
+        }
+
+        public void Disable()
+        {
+            Enabled = false;
+            Text?.Disable();
+            if (Texture != null)
+                Texture.Enabled = false;
+        }
+
+        public void Enable()
+        {
+            Enabled = true;
+            Text?.Enable();
+            if (Texture != null)
+                Texture.Enabled = true;
+        }
+
+        public Vector2 Position
+        {
+            get => _position;
+            set
+            {
+                _position = value;
+                if (Text != null)
+                    Text.Position = value;
+                if (Texture != null)
+                    Texture.Position = value;
+            }
+        }
+
+        public Vector2 Scale
+        {
+            get => Text?.Scale ?? Texture.Scale;
+            set
+            {
+                if (Text != null)
+                    Text.Scale = value;
+                if (Texture != null)
+                    Texture.Scale = value;
+            }
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            Text?.Dispose();
+            if (Texture != null)
+            {
+                Texture.Dispose();
+                DrawManager.UIRenderer.Remove(Texture);
+            }
         }
 
         public event OnButtonClickEventHandler Click;
@@ -188,58 +238,6 @@ namespace Hedra.Engine.Rendering.UI
         private void UpdateTranslation()
         {
             _liveTranslation?.UpdateTranslation();
-        }
-
-        public void Disable()
-        {
-            Enabled = false;
-            Text?.Disable();
-            if (Texture != null)
-                Texture.Enabled = false;
-        }
-
-        public void Enable()
-        {
-            Enabled = true;
-            Text?.Enable();
-            if (Texture != null)
-                Texture.Enabled = true;
-        }
-
-        public Vector2 Position
-        {
-            get => _position;
-            set
-            {
-                _position = value;
-                if (Text != null)
-                    Text.Position = value;
-                if (Texture != null)
-                    Texture.Position = value;
-            }
-        }
-
-        public Vector2 Scale
-        {
-            get => Text?.Scale ?? Texture.Scale;
-            set
-            {
-                if (Text != null)
-                    Text.Scale = value;
-                if (Texture != null)
-                    Texture.Scale = value;
-            }
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-            Text?.Dispose();
-            if (Texture != null)
-            {
-                Texture.Dispose();
-                DrawManager.UIRenderer.Remove(Texture);
-            }
         }
     }
 }

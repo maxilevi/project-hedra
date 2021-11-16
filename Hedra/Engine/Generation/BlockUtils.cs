@@ -6,15 +6,14 @@
  */
 
 using System;
-using Hedra.BiomeSystem;
-using Hedra.Engine.Rendering;
-using Hedra.Rendering;
 using System.Numerics;
+using Hedra.BiomeSystem;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.Generation
 {
     /// <summary>
-    /// Description of BlockUtils.
+    ///     Description of BlockUtils.
     /// </summary>
     public static class BlockUtils
     {
@@ -24,7 +23,7 @@ namespace Hedra.Engine.Generation
             switch (Type)
             {
                 case BlockType.Grass:
-                    return Colors.Blue;//Give back the default color
+                    return Colors.Blue; //Give back the default color
 
                 case BlockType.Stone:
                     return RegionColor.StoneColor;
@@ -37,13 +36,13 @@ namespace Hedra.Engine.Generation
 
                 case BlockType.Water:
                     return RegionColor.WaterColor;
-                
+
                 case BlockType.Seafloor:
                     return RegionColor.SeafloorColor;
 
                 case BlockType.StonePath:
                     return RegionColor.StonePathColor;
-                
+
                 case BlockType.FarmDirt:
                     return RegionColor.DirtColor;
 

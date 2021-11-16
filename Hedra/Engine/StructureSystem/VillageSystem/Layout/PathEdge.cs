@@ -1,6 +1,3 @@
-using Hedra.Engine.Rendering.Animation.ColladaParser;
-using System.Numerics;
-
 namespace Hedra.Engine.StructureSystem.VillageSystem.Layout
 {
     public class PathEdge

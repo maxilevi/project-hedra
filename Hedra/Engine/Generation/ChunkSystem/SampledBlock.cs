@@ -15,7 +15,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public readonly int Width;
         public readonly int Height;
         public readonly int Depth;
-        
+
         public SampledBlockWrapper(SampledBlock* Ptr, int Width, int Height, int Depth)
         {
             _ptr = Ptr;
@@ -23,7 +23,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             this.Height = Height;
             this.Depth = Depth;
         }
-        
+
         public SampledBlock* this[int X, int Y, int Z]
         {
             [MethodImpl(256)]
@@ -38,7 +38,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private void BoundsCheck(int X, int Y, int Z)
         {
-            if(X < 0 || Y < 0 || Z < 0 || X >= Width || Y >= Height || Z >= Depth)
+            if (X < 0 || Y < 0 || Z < 0 || X >= Width || Y >= Height || Z >= Depth)
                 throw new ArgumentOutOfRangeException();
         }
     }

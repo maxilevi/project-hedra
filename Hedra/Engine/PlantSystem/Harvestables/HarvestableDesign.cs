@@ -1,6 +1,6 @@
 using System;
+using System.Numerics;
 using Hedra.BiomeSystem;
-using Hedra.Core;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
@@ -8,9 +8,6 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.StructureSystem.VillageSystem;
-using Hedra.Items;
-using Hedra.Rendering;
-using System.Numerics;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.PlantSystem.Harvestables
@@ -19,8 +16,13 @@ namespace Hedra.Engine.PlantSystem.Harvestables
     {
         public override bool HasCustomPlacement => true;
 
-        public virtual float Scale(Random Rng) => 1.75f + Rng.NextFloat() * .75f;
-        
+        protected abstract Item ItemCollect { get; }
+
+        public virtual float Scale(Random Rng)
+        {
+            return 1.75f + Rng.NextFloat() * .75f;
+        }
+
         public override Matrix4x4 TransMatrix(Vector3 Position, Random Rng)
         {
             var underChunk = World.GetChunkAt(Position);
@@ -29,17 +31,17 @@ namespace Hedra.Engine.PlantSystem.Harvestables
             if (blockPosition.X + addon.X / Chunk.BlockSize > Chunk.Width / Chunk.BlockSize) addon.X = 0;
             if (blockPosition.Z + addon.Z / Chunk.BlockSize > Chunk.Width / Chunk.BlockSize) addon.Z = 0;
 
-            float height = Physics.HeightAtPosition(Position + addon);
+            var height = Physics.HeightAtPosition(Position + addon);
             if (Block.Noise3D) return new Matrix4x4();
 
-            for (int x = -3; x < 3; x++)
+            for (var x = -3; x < 3; x++)
+            for (var z = -3; z < 3; z++)
             {
-                for (int z = -3; z < 3; z++)
-                {
-                    float bDens = Physics.HeightAtPosition(new Vector3((blockPosition.X + x) * Chunk.BlockSize + underChunk.OffsetX, 0, (blockPosition.Z + z) * Chunk.BlockSize + underChunk.OffsetZ));
-                    float difference = Math.Abs(bDens - height);
-                    if (difference > 5f) return new Matrix4x4();
-                }
+                var bDens = Physics.HeightAtPosition(new Vector3(
+                    (blockPosition.X + x) * Chunk.BlockSize + underChunk.OffsetX, 0,
+                    (blockPosition.Z + z) * Chunk.BlockSize + underChunk.OffsetZ));
+                var difference = Math.Abs(bDens - height);
+                if (difference > 5f) return new Matrix4x4();
             }
 
             var rotationMat4 = Matrix4x4.CreateRotationY(360 * Utils.Rng.NextFloat() * Mathf.Radian);
@@ -83,7 +85,5 @@ namespace Hedra.Engine.PlantSystem.Harvestables
                 Data.Dispose();
             }
         }
-        
-        protected abstract Item ItemCollect { get; }
     }
 }

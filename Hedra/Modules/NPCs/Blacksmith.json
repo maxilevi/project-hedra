@@ -15,11 +15,11 @@
       "Scale": 1.0
     }
   ],
-  "Class": "Warrior", 
-  "Behaviour" : "Friendly",  
+  "Class": "Warrior",
+  "Behaviour": "Friendly",
   "Immune": true,
-  "AttackPower": 1.0, 
-  "AttackSpeed": 1.0,  
+  "AttackPower": 1.0,
+  "AttackSpeed": 1.0,
   "Components": [
     {
       "Type": "Hedra.Components.BlacksmithComponent",

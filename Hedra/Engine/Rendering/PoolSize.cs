@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 namespace Hedra.Engine.Rendering
 {
-    public enum PoolSize : int
+    public enum PoolSize
     {
         VeryTiny = 10,
         Tiny = 25,
@@ -13,6 +8,6 @@ namespace Hedra.Engine.Rendering
         Small = 50,
         Normal = 75,
         Big = 100,
-        SuperBig = 150,
+        SuperBig = 150
     }
 }

@@ -23,18 +23,18 @@ namespace Hedra.Mission
             var amount = Amount;
             var name = Name;
             var item = Player.Inventory.Search(T => T.Name == name);
-            return item != null && (CurrentAmount = item.HasAttribute(CommonAttributes.Amount) 
+            return item != null && (CurrentAmount = item.HasAttribute(CommonAttributes.Amount)
                 ? item.GetAttribute<int>(CommonAttributes.Amount)
                 : 1) >= amount;
         }
-            
+
         public string ToString(IPlayer Player)
         {
             var completed = IsCompleted(Player, out var currentAmount);
-            var text = $"• {currentAmount}/{Amount} {ItemPool.Grab(Name).DisplayName}";               
+            var text = $"• {currentAmount}/{Amount} {ItemPool.Grab(Name).DisplayName}";
             return $"{new string(' ', 8)}${(completed ? TextFormatting.Green : TextFormatting.Red)}{{{text}}}";
         }
-            
+
         public override string ToString()
         {
             return $"{Amount} {ItemPool.Grab(Name).DisplayName}";

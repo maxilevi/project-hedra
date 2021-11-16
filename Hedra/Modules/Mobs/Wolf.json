@@ -1,5 +1,5 @@
 ﻿{
-  "Name" : "Wolf", 
+  "Name": "Wolf",
   "MaxHealth": 280.0,
   "AttackDamage": 9.0,
   "Speed": 1.5,
@@ -40,5 +40,5 @@
         "Speed": 1.25
       }
     ]
-  } 
+  }
 }

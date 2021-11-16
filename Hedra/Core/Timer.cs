@@ -13,36 +13,40 @@ using System.Threading;
 namespace Hedra.Core
 {
     /// <summary>
-    /// Description of Timer.
+    ///     Description of Timer.
     /// </summary>
     public class Timer
     {
-        private float _timerCount;
         private Time.TimeProvider _provider;
-        public bool AutoReset { get; set; } = true;
-        public float AlertTime { get; set; }
-        public bool UseTimeScale { get; set; } = true;
-        
+        private float _timerCount;
+
         public Timer(float AlertTime)
         {
             this.AlertTime = AlertTime;
-            if((int)Math.Ceiling(AlertTime) == 0) throw new ArgumentOutOfRangeException($"AlertTime cannot be zero.");
+            if ((int)Math.Ceiling(AlertTime) == 0) throw new ArgumentOutOfRangeException("AlertTime cannot be zero.");
         }
-        
+
+        public bool AutoReset { get; set; } = true;
+        public float AlertTime { get; set; }
+        public bool UseTimeScale { get; set; } = true;
+
+        public bool Ready => _timerCount >= AlertTime;
+        public float Progress => _timerCount / AlertTime;
+
         public void Reset()
         {
             _timerCount = 0;
         }
-        
+
         public bool Tick()
         {
             if (_provider == null)
                 _provider = Time.GetProvider(Thread.CurrentThread.ManagedThreadId);
-            
+
             _timerCount += UseTimeScale ? _provider.DeltaTime : _provider.IndependentDeltaTime;
 
             if (!Ready) return false;
-            if (AutoReset)_timerCount = 0;
+            if (AutoReset) _timerCount = 0;
 
             return true;
         }
@@ -51,8 +55,5 @@ namespace Hedra.Core
         {
             _timerCount = AlertTime;
         }
-
-        public bool Ready => _timerCount >= AlertTime;
-        public float Progress => _timerCount / AlertTime;
     }
 }

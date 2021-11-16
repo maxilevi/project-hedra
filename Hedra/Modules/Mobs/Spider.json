@@ -1,5 +1,5 @@
 ﻿{
-  "Name" : "Spider", 
+  "Name": "Spider",
   "MaxHealth": 178.0,
   "AttackDamage": 3.0,
   "Speed": 1.4,
@@ -14,14 +14,12 @@
       "Duration": 5.0
     }
   ],
-  
   "Drops": [
     {
       "Type": "String",
       "Chance": 15
     }
   ],
-  
   "Model": {
     "Path": "$DataFile$/Assets/Chr/SpiderIdle.dae",
     "Scale": 1.75,
@@ -43,5 +41,5 @@
         "Speed": 1.25
       }
     ]
-  } 
+  }
 }

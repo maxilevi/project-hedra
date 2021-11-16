@@ -1,7 +1,5 @@
 using System;
-using System.Linq;
 using System.Numerics;
-using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
 using Hedra.Engine.StructureSystem.VillageSystem;
@@ -9,10 +7,7 @@ using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.StructureSystem.VillageSystem.Placers;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
-using Hedra.Localization;
 using Hedra.Mission;
-using Hedra.Numerics;
-using Hedra.Rendering;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
@@ -24,7 +19,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var farmBuilder = new FarmBuilder(structure);
             var region = World.BiomePool.GetRegion(structure.Position);
             var root = VillageLoader.Designer[region.Structures.VillageType];
-            var farmPlacer = new FarmPlacer(root.Template.Farm, root.Template.Farm.Designs, root.Template.Windmill.Designs, Rng);
+            var farmPlacer = new FarmPlacer(root.Template.Farm, root.Template.Farm.Designs,
+                root.Template.Windmill.Designs, Rng);
 
             var farmPosition = structure.Position - Vector3.UnitZ * 16;
             var farmParameters = farmPlacer.Place(new PlacementPoint
@@ -37,18 +33,19 @@ namespace Hedra.Engine.StructureSystem.Overworld
             structure.Parameters.Set("FarmPosition", farmPosition);
             structure.Parameters.Set("FarmParameters", farmParameters);
             structure.Parameters.Set("FarmBuilder", farmBuilder);
-            
+
             return structure;
         }
 
-        protected override void DoBuild(CollidableStructure Structure, Matrix4x4 Rotation, Matrix4x4 Translation, Random Rng)
+        protected override void DoBuild(CollidableStructure Structure, Matrix4x4 Rotation, Matrix4x4 Translation,
+            Random Rng)
         {
             base.DoBuild(Structure, Rotation, Translation, Rng);
             var root = Structure.Parameters.Get<VillageRoot>("Root");
             var farmPosition = Structure.Parameters.Get<Vector3>("FarmPosition");
             var farmParameters = Structure.Parameters.Get<FarmParameters>("FarmParameters");
             var farmBuilder = Structure.Parameters.Get<FarmBuilder>("FarmBuilder");
-            
+
             /* The builder expects the position to be set at 0,0 */
             farmParameters.Position = new Vector3(farmParameters.Position.X, 1f, farmParameters.Position.Z);
 
@@ -67,7 +64,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
             return MissionPool.Random(Position, QuestTier.Any, QuestHint.Farm);
         }
-        
+
         protected override CottageWithFarm Create(Vector3 Position, float Size)
         {
             return new CottageWithFarm(Position, Size);

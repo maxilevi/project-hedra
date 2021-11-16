@@ -6,30 +6,32 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
+
 using System.Collections.Generic;
 using System.Numerics;
 
 namespace Hedra.Engine.Rendering.Animation.ColladaParser
 {
     /// <summary>
-    /// Description of JointData.
+    ///     Description of JointData.
     /// </summary>
     public class JointData
     {
+        public readonly Matrix4x4 BindLocalTransform;
+
+        public readonly List<JointData> Children = new List<JointData>();
         public readonly int Index;
         public readonly string NameId;
-        public readonly Matrix4x4 BindLocalTransform;
-        
-        public readonly List<JointData> Children = new List<JointData>();
-        
-        public JointData(int Index, string NameId, Matrix4x4 BindLocalTransform){
+
+        public JointData(int Index, string NameId, Matrix4x4 BindLocalTransform)
+        {
             this.Index = Index;
             this.NameId = NameId;
             this.BindLocalTransform = BindLocalTransform;
         }
-        
-        public void AddChild(JointData Child){
+
+        public void AddChild(JointData Child)
+        {
             Children.Add(Child);
         }
     }

@@ -11,10 +11,16 @@ namespace Hedra.Engine.StructureSystem.Overworld
     public class DungeonDoorTrigger : BuildingDoorTrigger, IUpdatable
     {
         private readonly TimeHandler _handler;
+
         public DungeonDoorTrigger(Vector3 Position, VertexData Mesh) : base(Position, Mesh)
         {
             _handler = new TimeHandler(1000, SoundType.DarkSound);
             UpdateManager.Add(this);
+        }
+
+        public void Update()
+        {
+            _handler.Update();
         }
 
         protected override void OnEnter(IEntity Entity)
@@ -28,24 +34,19 @@ namespace Hedra.Engine.StructureSystem.Overworld
             if (Entity is LocalPlayer)
                 Reset();
         }
-        
+
         public void Apply()
         {
             _handler.Apply();
             GameSettings.DepthEffect = true;
         }
-        
+
         public void Reset()
         {
             _handler.Remove();
             GameSettings.DepthEffect = false;
         }
-        
-        public void Update()
-        {
-            _handler.Update();
-        }
-        
+
         public override void Dispose()
         {
             base.Dispose();

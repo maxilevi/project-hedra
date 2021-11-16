@@ -5,6 +5,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
     public class Torch : Campfire
     {
         public const int DefaultRadius = 8;
+
         public Torch(Vector3 Position) : base(Position)
         {
         }

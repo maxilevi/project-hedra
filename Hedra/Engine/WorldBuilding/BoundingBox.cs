@@ -1,5 +1,3 @@
-using System;
-using Hedra.Core;
 using System.Numerics;
 
 namespace Hedra.Engine.WorldBuilding
@@ -8,7 +6,7 @@ namespace Hedra.Engine.WorldBuilding
     {
         private readonly Vector2 _position;
         public float Width { get; }
-        
+
         public BoundingBox(Vector2 Position, float Width)
         {
             _position = Position;

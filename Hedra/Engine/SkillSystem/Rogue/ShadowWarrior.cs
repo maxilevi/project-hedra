@@ -1,28 +1,33 @@
-using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Globalization;
-using Hedra.AISystem.Behaviours;
-using Hedra.AISystem.Humanoid;
+using System.Numerics;
 using Hedra.Components;
-using Hedra.Engine.EntitySystem;
-using Hedra.Engine.ItemSystem.ArmorSystem;
-using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
+using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.WeaponSystem;
-using System.Numerics;
-using Hedra.Engine.WorldBuilding;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.SkillSystem.Rogue
 {
     public class ShadowWarrior : ActivateDurationSkill<IPlayer>
     {
-        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/ShadowWarrior.png");
         private IHumanoid _warrior;
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/ShadowWarrior.png");
+
+        protected override bool ShouldDisable => !User.HasWeapon || !(User.LeftWeapon is MeleeWeapon);
+        protected override float Duration => 28 + Level * 2f;
+        protected override int MaxLevel => 15;
+        public override float ManaCost => 80;
+        protected override float CooldownDuration => 82 - Level;
+        public override string Description => Translations.Get("shadow_warrior_desc");
+        public override string DisplayName => Translations.Get("shadow_warrior_skill");
+
+        public override string[] Attributes => new[]
+        {
+            Translations.Get("shadow_warrior_time_change", Duration.ToString("0.0", CultureInfo.InvariantCulture))
+        };
 
         protected override void DoEnable()
         {
@@ -76,18 +81,5 @@ namespace Hedra.Engine.SkillSystem.Rogue
                 SkillUtils.DarkContinuousParticles(Parent);
             }
         }
-
-        protected override bool ShouldDisable => !User.HasWeapon || !(User.LeftWeapon is MeleeWeapon);
-        protected override float Duration => 28 + Level * 2f;
-        protected override int MaxLevel => 15;
-        public override float ManaCost => 80;
-        protected override float CooldownDuration => 82 - Level;
-        public override string Description => Translations.Get("shadow_warrior_desc");
-        public override string DisplayName => Translations.Get("shadow_warrior_skill");
-
-        public override string[] Attributes => new[]
-        {
-            Translations.Get("shadow_warrior_time_change", Duration.ToString("0.0", CultureInfo.InvariantCulture))
-        };
     }
 }

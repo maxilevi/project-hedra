@@ -1,15 +1,15 @@
 using System;
-using Hedra.Core;
 using System.Numerics;
+using Hedra.Core;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.Rendering.UI
 {
     public class SlingShotAnimation : TextureAnimation<ISimpleTexture>
     {
-        public float Duration { get; set; } = 1;
-        private float _targetForce;
         private float _force;
+        private float _targetForce;
+        public float Duration { get; set; } = 1;
 
         protected override void Start(ISimpleTexture Texture, TextureState State)
         {
@@ -24,8 +24,8 @@ namespace Hedra.Engine.Rendering.UI
             Texture.Position = State.Position + Vector2.UnitY * _force;
             if (Math.Abs(_force - target) < 0.005f)
             {
-                if(_targetForce < 0.005f) this.Stop();
-                if(_targetForce >= 1f) _targetForce = 0;
+                if (_targetForce < 0.005f) Stop();
+                if (_targetForce >= 1f) _targetForce = 0;
             }
         }
     }

@@ -1,7 +1,7 @@
 using System;
+using System.Numerics;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
-using System.Numerics;
 
 namespace Hedra.Engine.PlantSystem
 {
@@ -22,8 +22,9 @@ namespace Hedra.Engine.PlantSystem
         public override bool ShouldPlace(Vector3 Position, Chunk UnderChunk)
         {
             var block = World.GetHighestBlockAt(Position.X, Position.Z);
-            return block.Type != BlockType.Water && block.Type != BlockType.Seafloor && (World.Seed != World.MenuSeed ?
-                UnderChunk.Landscape.RandomGen.Next(0, 20000) == 1 : UnderChunk.Landscape.RandomGen.Next(0, 950) == 1);
+            return block.Type != BlockType.Water && block.Type != BlockType.Seafloor && (World.Seed != World.MenuSeed
+                ? UnderChunk.Landscape.RandomGen.Next(0, 20000) == 1
+                : UnderChunk.Landscape.RandomGen.Next(0, 950) == 1);
         }
     }
 }

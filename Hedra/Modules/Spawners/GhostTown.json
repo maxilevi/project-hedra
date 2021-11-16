@@ -19,7 +19,6 @@
       "MaxGroup": 3
     }
   ],
-  
   "Shore": [
     {
       "Type": "Ghost",
@@ -40,7 +39,6 @@
       "MaxGroup": 3
     }
   ],
-  
   "Mountain": [
     {
       "Type": "Ghost",
@@ -61,7 +59,6 @@
       "MaxGroup": 3
     }
   ],
-
   "Forest": [
     {
       "Type": "Ghost",

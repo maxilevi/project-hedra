@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using Hedra.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
@@ -10,13 +9,14 @@ namespace Hedra.ModelHandlers
 {
     public abstract class ModelFactory
     {
-        protected abstract PartGroup[] Parts { get; }
         private readonly ProcessedPartGroup[] _processedGroups;
 
         protected ModelFactory()
         {
             _processedGroups = Process(Parts);
         }
+
+        protected abstract PartGroup[] Parts { get; }
 
         private static ProcessedPartGroup[] Process(params PartGroup[] Parts)
         {
@@ -27,7 +27,7 @@ namespace Hedra.ModelHandlers
                 Max = P.Max
             }).ToArray();
         }
-        
+
         public void Build(AnimatedUpdatableModel Model)
         {
             var rng = Utils.Rng;
@@ -53,7 +53,7 @@ namespace Hedra.ModelHandlers
             public ModelData Get(float Chance)
             {
                 var weight = 1f / (Parts.Length + (Optional ? 1 : 0));
-                var index = (int) Math.Floor(Chance / weight);
+                var index = (int)Math.Floor(Chance / weight);
                 if (index >= Parts.Length) return null;
                 return Parts[index];
             }

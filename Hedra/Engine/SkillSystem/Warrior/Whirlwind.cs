@@ -9,44 +9,33 @@
 
 using System;
 using System.Globalization;
+using System.Numerics;
 using Hedra.Core;
 using Hedra.Engine.Generation;
-using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Rendering;
-using System.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Warrior
 {
     /// <summary>
-    /// Description of WeaponThrow.
+    ///     Description of WeaponThrow.
     /// </summary>
     public class Whirlwind : CappedSkill<IPlayer>
     {
-        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Spin.png");
-        protected override bool ShouldDisable => User.Toolbar.DisableAttack || !User.HasWeapon;
-        protected override int MaxLevel => 24;
-        public override string Description => Translations.Get("whirlwind_desc");        
-        public override string DisplayName => Translations.Get("whirlwind");
-        public override float ManaCost => Math.Max(120 - 4f * base.Level, 40);
-        public override float MaxCooldown => (float) Math.Max(12.0 - .25f * base.Level, 6) + WhirlwindTime;
-        private float Damage => User.DamageEquation * .25f;
-        private float WhirlwindTime => 3 + Math.Min(.1f * base.Level, 1.5f);
+        private readonly TrailRenderer _trail;
 
         private readonly Animation _whirlwindAnimation;
-        private readonly TrailRenderer _trail;
         private float _frameCounter;
         private float _passedTime;
         private float _rotationY;
 
-        public Whirlwind() 
+        public Whirlwind()
         {
-            _trail = new TrailRenderer( () => User.LeftWeapon.WeaponTip, Vector4.One);
+            _trail = new TrailRenderer(() => User.LeftWeapon.WeaponTip, Vector4.One);
             _whirlwindAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorWhirlwind.dae");
             _whirlwindAnimation.OnAnimationEnd += delegate
             {
@@ -55,6 +44,24 @@ namespace Hedra.Engine.SkillSystem.Warrior
             };
             _whirlwindAnimation.Loop = false;
         }
+
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Spin.png");
+        protected override bool ShouldDisable => User.Toolbar.DisableAttack || !User.HasWeapon;
+        protected override int MaxLevel => 24;
+        public override string Description => Translations.Get("whirlwind_desc");
+        public override string DisplayName => Translations.Get("whirlwind");
+        public override float ManaCost => Math.Max(120 - 4f * Level, 40);
+        public override float MaxCooldown => (float)Math.Max(12.0 - .25f * Level, 6) + WhirlwindTime;
+        private float Damage => User.DamageEquation * .25f;
+        private float WhirlwindTime => 3 + Math.Min(.1f * Level, 1.5f);
+
+        private bool ShouldEnd => User.IsDead || User.IsKnocked || _passedTime > WhirlwindTime;
+
+        public override string[] Attributes => new[]
+        {
+            Translations.Get("whirlwind_duration_change", WhirlwindTime.ToString("0.0", CultureInfo.InvariantCulture)),
+            Translations.Get("whirlwind_damage_change", Damage.ToString("0.0", CultureInfo.InvariantCulture))
+        };
 
         protected override void DoUse()
         {
@@ -74,7 +81,7 @@ namespace Hedra.Engine.SkillSystem.Warrior
             User.LeftWeapon.LockWeapon = false;
             User.Model.Reset();
         }
-        
+
         public override void Update()
         {
             _trail.Update();
@@ -82,24 +89,23 @@ namespace Hedra.Engine.SkillSystem.Warrior
             if (ShouldEnd) Disable();
 
             Rotate();
-            ManageParticles();            
-            if(_frameCounter >= .25f)
+            ManageParticles();
+            if (_frameCounter >= .25f)
             {
                 DamageNear();
                 _frameCounter = 0;
             }
+
             _passedTime += Time.DeltaTime;
             _frameCounter += Time.DeltaTime;
             _rotationY += Time.DeltaTime * 1000f;
         }
 
-        private bool ShouldEnd => User.IsDead || User.IsKnocked || _passedTime > WhirlwindTime;
-
         private void Rotate()
         {
             User.Model.TargetRotation = Vector3.UnitY * _rotationY;
         }
-        
+
         private void DamageNear()
         {
             for (var i = World.Entities.Count - 1; i > 0; i--)
@@ -110,17 +116,18 @@ namespace Hedra.Engine.SkillSystem.Warrior
                 User.XP += exp;
             }
         }
-        
+
         private void ManageParticles()
         {
             var underChunk = World.GetChunkAt(User.Position);
-            if(underChunk == null) return;
+            if (underChunk == null) return;
             World.Particles.VariateUniformly = true;
-            World.Particles.Color = World.GetHighestBlockAt((int)this.User.Position.X, (int)this.User.Position.Z).GetColor(underChunk.Biome.Colors);
-            World.Particles.Position = this.User.Position - Vector3.UnitY;
+            World.Particles.Color = World.GetHighestBlockAt((int)User.Position.X, (int)User.Position.Z)
+                .GetColor(underChunk.Biome.Colors);
+            World.Particles.Position = User.Position - Vector3.UnitY;
             World.Particles.Scale = Vector3.One * .15f;
             World.Particles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
-            World.Particles.Direction = (-this.User.Orientation + Vector3.UnitY * 2.75f) * .15f;
+            World.Particles.Direction = (-User.Orientation + Vector3.UnitY * 2.75f) * .15f;
             World.Particles.ParticleLifetime = 1;
             World.Particles.GravityEffect = .1f;
             World.Particles.PositionErrorMargin = new Vector3(.75f, .75f, .75f);
@@ -128,11 +135,5 @@ namespace Hedra.Engine.SkillSystem.Warrior
                 World.Particles.Color = underChunk.Biome.Colors.GrassColor;
             World.Particles.Emit();
         }
-
-        public override string[] Attributes => new[]
-        {
-            Translations.Get("whirlwind_duration_change", WhirlwindTime.ToString("0.0", CultureInfo.InvariantCulture)),
-            Translations.Get("whirlwind_damage_change", Damage.ToString("0.0", CultureInfo.InvariantCulture))
-        };
     }
 }

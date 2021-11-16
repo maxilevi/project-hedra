@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using Hedra.Engine.ItemSystem;
-using IronPython.Runtime;
 using System.Numerics;
+using Hedra.Engine.ItemSystem;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.Generation
@@ -14,7 +13,9 @@ namespace Hedra.Engine.Generation
         {
             _zones = new List<FishingZone>();
         }
-        
+
+        public FishingZone[] Zones => _zones.ToArray();
+
         public void AddZone(FishingZone Zone)
         {
             _zones.Add(Zone);
@@ -29,22 +30,15 @@ namespace Hedra.Engine.Generation
         public void Discard()
         {
             var zones = Zones;
-            for (var i = 0; i < zones.Length; ++i)
-            {
-                RemoveZone(zones[i]);
-            }
+            for (var i = 0; i < zones.Length; ++i) RemoveZone(zones[i]);
         }
-
-        public FishingZone[] Zones => _zones.ToArray();
     }
 
     public class FishingZone
     {
         private readonly HighlightedAreaWrapper _area;
-        private readonly Vector3 _zone;
         private readonly float _radius;
-        public float Chance { get; }
-        public Item FishingReward { get; }
+        private readonly Vector3 _zone;
 
         public FishingZone(Vector3 Zone, Vector4 Color, float Radius, float Chance, Item FishingReward)
         {
@@ -55,6 +49,9 @@ namespace Hedra.Engine.Generation
             _area = World.Highlighter.HighlightAreaPermanently(_zone, Color, _radius * 2f);
             _area.OnlyWater = true;
         }
+
+        public float Chance { get; }
+        public Item FishingReward { get; }
 
         public bool Affects(Vector3 Position)
         {

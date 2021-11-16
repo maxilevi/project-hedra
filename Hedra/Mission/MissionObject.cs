@@ -1,28 +1,21 @@
 using System;
+using System.Numerics;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.QuestSystem.Views;
+using Hedra.Engine.QuestSystem;
 using Hedra.EntitySystem;
 using Hedra.Mission.Blocks;
-using System.Numerics;
-using Hedra.Engine.QuestSystem;
 
 namespace Hedra.Mission
 {
     public class MissionObject
     {
-        public event OnMissionStart MissionStart;
-        public event OnMissionDispose MissionDispose;
-        public event OnMissionEnd MissionEnd;
-        public bool Disposed { get; set; }
-        public string QuestType { get; set; }
-        public Func<bool> FailWhen;
         private readonly MissionBlock[] _blocks;
-        private int _index;
-        private IPlayer _owner;
-        private IHumanoid _giver;
-        private QuestView _view;
         private readonly MissionSettings _settings;
         private bool _abandoned;
+        private IHumanoid _giver;
+        private int _index;
+        public Func<bool> FailWhen;
 
         public MissionObject(MissionBlock[] Blocks, DialogObject Dialog, MissionSettings Settings)
         {
@@ -31,6 +24,30 @@ namespace Hedra.Mission
             _blocks = Blocks;
             _index = -1;
         }
+
+        public bool Disposed { get; set; }
+        public string QuestType { get; set; }
+
+        public bool CanSave => _settings.CanSave;
+        public bool IsStoryline => _settings.IsStoryline;
+        public DialogObject OpeningDialog { get; }
+        public bool HasLocation => Current.HasLocation;
+        public Vector3 Location => Current.Location;
+        public string Description => Current.Description;
+        public string ShortDescription => Current.ShortDescription;
+        public QuestView View { get; private set; }
+
+        public bool IsCompleted => Current.IsCompleted;
+        public bool ShowPlaque => true;
+
+        public bool HasNext => _index < _blocks.Length - 1;
+
+        public MissionBlock Current => _index < _blocks.Length && _index >= 0 ? _blocks[_index] : null;
+        public IPlayer Owner { get; private set; }
+
+        public event OnMissionStart MissionStart;
+        public event OnMissionDispose MissionDispose;
+        public event OnMissionEnd MissionEnd;
 
         public SerializedQuest Serialize()
         {
@@ -42,17 +59,6 @@ namespace Hedra.Mission
             };
         }
 
-        public bool CanSave => _settings.CanSave;
-        public bool IsStoryline => _settings.IsStoryline;
-        public DialogObject OpeningDialog { get; }
-        public bool HasLocation => Current.HasLocation;
-        public Vector3 Location => Current.Location;
-        public string Description => Current.Description;
-        public string ShortDescription => Current.ShortDescription;
-        public QuestView View => _view;
-        public bool IsCompleted => Current.IsCompleted;
-        public bool ShowPlaque => true;
-
         public void Abandon()
         {
             _abandoned = true;
@@ -62,8 +68,10 @@ namespace Hedra.Mission
         public void CleanupAndAdvance()
         {
             Current.Cleanup();
-            if(HasNext && !_abandoned)
-                _owner.Questing.Start(_giver, this);
+            if (HasNext && !_abandoned)
+            {
+                Owner.Questing.Start(_giver, this);
+            }
             else
             {
                 MissionEnd?.Invoke();
@@ -73,48 +81,40 @@ namespace Hedra.Mission
 
         public void Start(IHumanoid Giver, IPlayer Player)
         {
-            _owner = Player;
+            Owner = Player;
             _giver = Giver;
             Next();
         }
 
         public void Update()
         {
-            if(FailWhen != null && FailWhen() || Current.IsFailed)
-                _owner.Questing.Fail(this);
+            if (FailWhen != null && FailWhen() || Current.IsFailed)
+                Owner.Questing.Fail(this);
             Current?.Update();
         }
 
         private void Next()
         {
-            if(_index == -1)
+            if (_index == -1)
                 MissionStart?.Invoke();
             var previous = Current;
             _index++;
             if (Current != null)
             {
-                Current.Owner = _owner;
+                Current.Owner = Owner;
                 Current.Giver = _giver;
                 Current.Setup();
                 previous?.Dispose();
-                _view?.Dispose();
-                _view = Current.BuildView();
+                View?.Dispose();
+                View = Current.BuildView();
                 Current.Start();
             }
         }
 
-        public bool HasNext => _index < _blocks.Length - 1;
-
-        public MissionBlock Current => _index < _blocks.Length && _index >= 0 ? _blocks[_index] : null;
-        public IPlayer Owner => _owner;
-
         public void Dispose()
         {
             Disposed = true;
-            for (var i = 0; i < _blocks.Length; ++i)
-            {
-                _blocks[i].Dispose();
-            }
+            for (var i = 0; i < _blocks.Length; ++i) _blocks[i].Dispose();
             MissionDispose?.Invoke();
         }
     }

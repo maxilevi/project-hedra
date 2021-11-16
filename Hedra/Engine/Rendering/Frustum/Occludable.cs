@@ -8,26 +8,35 @@
  */
 
 using System;
-using Hedra.Engine.Game;
+using System.Numerics;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
-using Hedra.Game;
-using System.Numerics;
-using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
+using Hedra.Game;
 
 namespace Hedra.Engine.Rendering.Frustum
 {
     /// <summary>
-    /// Description of Occludable.
+    ///     Description of Occludable.
     /// </summary>
     public abstract class Occludable : IDisposable
     {
         private static readonly Vector3 BoxMargin = Vector3.One * 32;
-        private static Shader Passthrough { get; }
-        private OcclusionState _state;
-        private int _occlusionQueryId;
         private bool _occluded;
+        private int _occlusionQueryId;
+        private OcclusionState _state;
+
+        static Occludable()
+        {
+            Passthrough = Shader.Build("Shaders/OccludePassthrough.vert", "Shaders/Passthrough.frag");
+        }
+
+        protected Occludable()
+        {
+            Executer.ExecuteOnMainThread(() => _occlusionQueryId = Renderer.GenQuery());
+        }
+
+        private static Shader Passthrough { get; }
 
         public bool Occluded
         {
@@ -35,16 +44,17 @@ namespace Hedra.Engine.Rendering.Frustum
             set => _occluded = value;
         }
 
-        static Occludable()
+        private Vector3 Min => OcclusionMin - BoxMargin;
+        private Vector3 Max => OcclusionMax + BoxMargin;
+
+        protected abstract Vector3 OcclusionMin { get; }
+        protected abstract Vector3 OcclusionMax { get; }
+
+        public virtual void Dispose()
         {
-            Passthrough = Shader.Build("Shaders/OccludePassthrough.vert", "Shaders/Passthrough.frag");
+            Executer.ExecuteOnMainThread(() => Renderer.DeleteQuery(_occlusionQueryId));
         }
-        
-        protected Occludable()
-        {
-            Executer.ExecuteOnMainThread( () => _occlusionQueryId = Renderer.GenQuery() );
-        }
-        
+
         public void DrawQuery()
         {
             if (IsFrustumInsideBox())
@@ -52,27 +62,28 @@ namespace Hedra.Engine.Rendering.Frustum
                 Occluded = false;
                 return;
             }
-            if(_occlusionQueryId == 0) return;
-            
+
+            if (_occlusionQueryId == 0) return;
+
             var isAvailable = 0;
-    
-            if(_state == OcclusionState.Waiting) 
+
+            if (_state == OcclusionState.Waiting)
                 Renderer.GetQueryObject(_occlusionQueryId, GetQueryObjectParam.QueryResultAvailable, out isAvailable);
-    
-            if(isAvailable != 0)
+
+            if (isAvailable != 0)
             {
                 Renderer.GetQueryObject(_occlusionQueryId, GetQueryObjectParam.QueryResult, out var passed);
                 _state = passed != 0 ? OcclusionState.Visible : OcclusionState.Hidden;
                 Occluded = _state == OcclusionState.Hidden;
             }
-            
+
             if (_state != OcclusionState.Waiting && !GameSettings.LockFrustum)
             {
                 _state = OcclusionState.Waiting;
                 Renderer.BeginQuery(QueryTarget.AnySamplesPassed, _occlusionQueryId);
 
                 Draw();
-                
+
                 Renderer.EndQuery(QueryTarget.AnySamplesPassed);
             }
         }
@@ -80,14 +91,15 @@ namespace Hedra.Engine.Rendering.Frustum
         private void Draw()
         {
             Renderer.Disable(EnableCap.CullFace);
-            
+
             Passthrough["Scale"] = Max - Min;
             Passthrough["Position"] = Min;
-            Renderer.DrawElements(PrimitiveType.Triangles, BasicGeometry.CubeIndicesVBO.Count, DrawElementsType.UnsignedShort, IntPtr.Zero);
-            
+            Renderer.DrawElements(PrimitiveType.Triangles, BasicGeometry.CubeIndicesVBO.Count,
+                DrawElementsType.UnsignedShort, IntPtr.Zero);
+
             Renderer.Enable(EnableCap.CullFace);
         }
-        
+
         public static void Bind()
         {
             Renderer.ColorMask(false, false, false, false);
@@ -96,7 +108,6 @@ namespace Hedra.Engine.Rendering.Frustum
             Passthrough.Bind();
             BasicGeometry.CubeVAO.Bind();
             BasicGeometry.CubeIndicesVBO.Bind();
-
         }
 
         public static void Unbind()
@@ -112,19 +123,8 @@ namespace Hedra.Engine.Rendering.Frustum
         {
             var frustumPosition = GameManager.Player.View.CameraEyePosition;
             return frustumPosition.X > Min.X && frustumPosition.X < Max.X
-                && frustumPosition.Y > Min.Y && frustumPosition.Y < Max.Y
-                && frustumPosition.Z > Min.Z && frustumPosition.Z < Max.Z;
+                                             && frustumPosition.Y > Min.Y && frustumPosition.Y < Max.Y
+                                             && frustumPosition.Z > Min.Z && frustumPosition.Z < Max.Z;
         }
-        
-        public virtual void Dispose()
-        {
-            Executer.ExecuteOnMainThread( () => Renderer.DeleteQuery( _occlusionQueryId ) );
-        }
-
-        private Vector3 Min => OcclusionMin - BoxMargin;
-        private Vector3 Max => OcclusionMax + BoxMargin;
-
-        protected abstract Vector3 OcclusionMin { get; }
-        protected abstract Vector3 OcclusionMax { get; }
     }
 }

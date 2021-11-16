@@ -1,6 +1,4 @@
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
-using System.Numerics;
 
 namespace Hedra.Engine.ItemSystem.ArmorSystem
 {
@@ -9,6 +7,5 @@ namespace Hedra.Engine.ItemSystem.ArmorSystem
         public BootsPiece(ModelData Model) : base(Model)
         {
         }
-
     }
 }

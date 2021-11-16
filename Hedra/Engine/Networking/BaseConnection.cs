@@ -3,20 +3,24 @@ using System;
 namespace Hedra.Engine.Networking
 {
     public delegate void OnMessageReceived(ulong Sender, byte[] Message);
-    
+
     public abstract class BaseConnection : IDisposable
     {
-        public ConnectionType Type { get; }
-        
-        public abstract ulong Myself { get; }
-
         protected BaseConnection(ConnectionType Type)
         {
             this.Type = Type;
         }
-        
+
+        public ConnectionType Type { get; }
+
+        public abstract ulong Myself { get; }
+
+        public virtual void Dispose()
+        {
+        }
+
         public abstract event OnMessageReceived MessageReceived;
-        
+
         public abstract void SendMessage(ulong Peer, byte[] Buffer, int Count);
 
         public void SendMessage(ulong Peer, byte[] Message)
@@ -25,9 +29,5 @@ namespace Hedra.Engine.Networking
         }
 
         public abstract void Setup();
-
-        public virtual void Dispose()
-        { 
-        }
     }
 }

@@ -1,6 +1,5 @@
-
 namespace Hedra.Engine.CacheSystem
-{   
+{
     public enum CacheItem
     {
         AppleTrees,

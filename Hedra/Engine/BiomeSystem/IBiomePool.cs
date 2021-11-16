@@ -1,10 +1,10 @@
+using System.Numerics;
 using Hedra.BiomeSystem;
 using Hedra.Engine.Generation.ChunkSystem;
-using System.Numerics;
 
 namespace Hedra.Engine.BiomeSystem
 {
-    public interface IBiomePool 
+    public interface IBiomePool
     {
         WorldType Type { get; }
         Region GetRegion(Vector3 Position);

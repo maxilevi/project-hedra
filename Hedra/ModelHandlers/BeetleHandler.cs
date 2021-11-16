@@ -3,7 +3,6 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
-using System.Numerics;
 
 namespace Hedra.ModelHandlers
 {
@@ -11,11 +10,14 @@ namespace Hedra.ModelHandlers
     {
         public override void Process(IEntity Entity, AnimatedUpdatableModel Model)
         {
-            if(string.Equals(Entity.Type, MobType.RangedBeetle.ToString(), StringComparison.InvariantCultureIgnoreCase))
+            if (string.Equals(Entity.Type, MobType.RangedBeetle.ToString(),
+                StringComparison.InvariantCultureIgnoreCase))
                 Model.Paint(Colors.FromHtml("#45659E")); /* Blue */
-            else if (string.Equals(Entity.Type, MobType.MeleeBeetle.ToString(), StringComparison.InvariantCultureIgnoreCase))
+            else if (string.Equals(Entity.Type, MobType.MeleeBeetle.ToString(),
+                StringComparison.InvariantCultureIgnoreCase))
                 Model.Paint(Colors.FromHtml("#4C9639")); /* Green */
-            else if(string.Equals(Entity.Type, MobType.GiantBeetle.ToString(), StringComparison.InvariantCultureIgnoreCase))
+            else if (string.Equals(Entity.Type, MobType.GiantBeetle.ToString(),
+                StringComparison.InvariantCultureIgnoreCase))
                 Model.Paint(Colors.FromHtml("#F24353")); /* Red */
         }
     }

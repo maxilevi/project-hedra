@@ -6,35 +6,27 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System.Numerics;
-using System;
+
 using System.Buffers;
 using System.Collections.Generic;
+using System.Numerics;
 using Hedra.Core;
-using Hedra.Engine.Core;
-using Hedra.Engine.Game;
-using Hedra.Game;
 using Hedra.Framework;
+using Hedra.Game;
 
 namespace Hedra.Engine.Rendering.Animation
 {
-    
     public class Animator
     {
-        private ObjectPool<KeyFrame[]> _framePool;
-        private ObjectPool<Dictionary<string, int>> _blendMapPool;
-        private ObjectPool<List<string>> _stringListPool;
-        public float AnimationTime { get; private set; }
-        public float AnimationSpeed { get; set; } = 1f;
-        public bool Stop { get; set; }
-        private float _blendingAnimationTime;
         private readonly Joint _rootJoint;
-        private Animation _currentAnimation;
-        private Animation _blendingAnimation;
+        private float _blendingAnimationTime;
         private string[] _blendJoints;
-        private Dictionary<string, JointTransform> _pose;
-        private Dictionary<string, JointTransform> _currentPose;
+        private readonly ObjectPool<Dictionary<string, int>> _blendMapPool;
         private Dictionary<string, JointTransform> _currentBlendPose;
+        private readonly Dictionary<string, JointTransform> _currentPose;
+        private readonly ObjectPool<KeyFrame[]> _framePool;
+        private Dictionary<string, JointTransform> _pose;
+        private readonly ObjectPool<List<string>> _stringListPool;
 
         public Animator(Joint RootJoint)
         {
@@ -48,84 +40,86 @@ namespace Hedra.Engine.Rendering.Animation
             SetupDictionaries(_rootJoint);
         }
 
+        public float AnimationTime { get; private set; }
+        public float AnimationSpeed { get; set; } = 1f;
+        public bool Stop { get; set; }
+
+        public Animation AnimationPlaying { get; private set; }
+
+        public Animation BlendingAnimation { get; private set; }
+
         private void SetupDictionaries(Joint Joint)
         {
             _currentBlendPose.Add(Joint.Name, JointTransform.Default);
             _currentPose.Add(Joint.Name, JointTransform.Default);
             _pose.Add(Joint.Name, JointTransform.Default);
-            for (var i = 0; i < Joint.Children.Count; i++)
-            {
-                SetupDictionaries(Joint.Children[i]);
-            }
+            for (var i = 0; i < Joint.Children.Count; i++) SetupDictionaries(Joint.Children[i]);
         }
 
-        public void Reset() 
+        public void Reset()
         {
-            _currentAnimation = null;
-            _blendingAnimation = null;
+            AnimationPlaying = null;
+            BlendingAnimation = null;
         }
 
         public void ResetBlending()
         {
-            _blendingAnimation?.Reset();
-            _blendingAnimation = null;
+            BlendingAnimation?.Reset();
+            BlendingAnimation = null;
         }
-        
+
         public void PlayAnimation(Animation Animation)
         {
-            _currentAnimation = Animation;
-            _currentAnimation.Reset();
+            AnimationPlaying = Animation;
+            AnimationPlaying.Reset();
             AnimationTime = 0;
         }
-        
+
         public void BlendAnimation(Animation Animation)
         {
             _blendJoints = CalculateJointsToBlend(Animation);
-            _blendingAnimation = Animation;
-            _blendingAnimation.Reset();
+            BlendingAnimation = Animation;
+            BlendingAnimation.Reset();
             _blendingAnimationTime = 0;
         }
 
         public bool Update()
         {
-            if (_currentAnimation == null || Stop) return false;
+            if (AnimationPlaying == null || Stop) return false;
 
             var animationPose = CalculateCurrentAnimationPose(_currentPose);
             _pose = InterpolatePoses(_pose, animationPose, Time.IndependentDeltaTime * 16f, out var interpolated);
-            if (interpolated)
-            {
-                ApplyPoseToJoints(_pose, _rootJoint, Matrix4x4.Identity);
-            }
+            if (interpolated) ApplyPoseToJoints(_pose, _rootJoint, Matrix4x4.Identity);
             IncreaseAnimationTime();
             return interpolated;
         }
 
-        private void IncreaseAnimationTime() 
+        private void IncreaseAnimationTime()
         {
             if (Stop || GameSettings.Paused && !GameManager.InStartMenu) return;
 
-            if (_currentAnimation != null)
+            if (AnimationPlaying != null)
             {
-                AnimationTime += Time.IndependentDeltaTime * _currentAnimation.Speed * AnimationSpeed;
-                _currentAnimation.DispatchEvents(AnimationTime / _currentAnimation.Length);
-                if (AnimationTime > _currentAnimation.Length)
+                AnimationTime += Time.IndependentDeltaTime * AnimationPlaying.Speed * AnimationSpeed;
+                AnimationPlaying.DispatchEvents(AnimationTime / AnimationPlaying.Length);
+                if (AnimationTime > AnimationPlaying.Length)
                 {
-                    _currentAnimation.Reset();
-                    if (_currentAnimation.Loop) AnimationTime %= _currentAnimation.Length;
-                    else _currentAnimation = null;
+                    AnimationPlaying.Reset();
+                    if (AnimationPlaying.Loop) AnimationTime %= AnimationPlaying.Length;
+                    else AnimationPlaying = null;
                 }
             }
 
-            if(_blendingAnimation == null) return;
-            _blendingAnimationTime += Time.IndependentDeltaTime * _blendingAnimation.Speed * AnimationSpeed;
-            _blendingAnimation.DispatchEvents(_blendingAnimationTime / _blendingAnimation.Length);
-            if (_blendingAnimationTime > _blendingAnimation.Length)
+            if (BlendingAnimation == null) return;
+            _blendingAnimationTime += Time.IndependentDeltaTime * BlendingAnimation.Speed * AnimationSpeed;
+            BlendingAnimation.DispatchEvents(_blendingAnimationTime / BlendingAnimation.Length);
+            if (_blendingAnimationTime > BlendingAnimation.Length)
             {
-                _blendingAnimation.Reset();
-                _blendingAnimation = null;
+                BlendingAnimation.Reset();
+                BlendingAnimation = null;
             }
         }
-    
+
         /**
          * This method returns the current animation pose of the entity. It returns
          * the desired local-space transforms for all the joints in a map, indexed
@@ -142,32 +136,34 @@ namespace Hedra.Engine.Rendering.Animation
          * those keyframes.
          * 
          * @return The current pose as a map of the desired local-space transforms
-         *         for all the joints. The transforms are indexed by the name ID of
-         *         the joint that they should be applied to.
+         * for all the joints. The transforms are indexed by the name ID of
+         * the joint that they should be applied to.
          */
-        private Dictionary<string, JointTransform> CalculateCurrentAnimationPose(Dictionary<string, JointTransform> Pose)
+        private Dictionary<string, JointTransform> CalculateCurrentAnimationPose(
+            Dictionary<string, JointTransform> Pose)
         {
             var currentFrames = _framePool.GetObject();
-            GetPreviousAndNextFrames(_currentAnimation, AnimationTime, currentFrames);
+            GetPreviousAndNextFrames(AnimationPlaying, AnimationTime, currentFrames);
             var currentProgression = CalculateProgression(currentFrames[0], currentFrames[1], AnimationTime);
-            var pose = InterpolateJointPosesFromKeyframes(currentFrames[0], currentFrames[1], currentProgression, ref Pose);
+            var pose = InterpolateJointPosesFromKeyframes(currentFrames[0], currentFrames[1], currentProgression,
+                ref Pose);
             _framePool.PutObject(currentFrames);
 
-            if (_blendingAnimation != null)
+            if (BlendingAnimation != null)
             {
                 var blendingFrames = _framePool.GetObject();
-                GetPreviousAndNextFrames(_blendingAnimation, _blendingAnimationTime, blendingFrames);
-                var blendingProgression = CalculateProgression(blendingFrames[0], blendingFrames[1], _blendingAnimationTime);
-                var blendingPose = InterpolateJointPosesFromKeyframes(blendingFrames[0], blendingFrames[1], blendingProgression, ref _currentBlendPose);
+                GetPreviousAndNextFrames(BlendingAnimation, _blendingAnimationTime, blendingFrames);
+                var blendingProgression =
+                    CalculateProgression(blendingFrames[0], blendingFrames[1], _blendingAnimationTime);
+                var blendingPose = InterpolateJointPosesFromKeyframes(blendingFrames[0], blendingFrames[1],
+                    blendingProgression, ref _currentBlendPose);
                 _framePool.PutObject(blendingFrames);
-                for (var i = 0; i < _blendJoints.Length; i++)
-                {
-                    pose[_blendJoints[i]] = blendingPose[_blendJoints[i]];
-                }
+                for (var i = 0; i < _blendJoints.Length; i++) pose[_blendJoints[i]] = blendingPose[_blendJoints[i]];
             }
+
             return pose;
         }
-    
+
         /**
          * This is the method where the animator calculates and sets those all-
          * important "joint transforms" that I talked about so much in the tutorial.
@@ -192,27 +188,26 @@ namespace Hedra.Engine.Rendering.Animation
          * the current pose.
          * 
          * @param currentPose
-         *            - a map of the local-space transforms for all the joints for
-         *            the desired pose. The map is indexed by the name of the joint
-         *            which the transform corresponds to.
+         * - a map of the local-space transforms for all the joints for
+         * the desired pose. The map is indexed by the name of the joint
+         * which the transform corresponds to.
          * @param joint
-         *            - the current joint which the pose should be applied to.
+         * - the current joint which the pose should be applied to.
          * @param parentTransform
-         *            - the desired model-space transform of the parent joint for
-         *            the pose.
+         * - the desired model-space transform of the parent joint for
+         * the pose.
          */
-        private void ApplyPoseToJoints(Dictionary<String, JointTransform> CurrentPose, Joint Joint, Matrix4x4 ParentTransform)
+        private void ApplyPoseToJoints(Dictionary<string, JointTransform> CurrentPose, Joint Joint,
+            Matrix4x4 ParentTransform)
         {
             var currentLocalTransform = CurrentPose[Joint.Name];
             var currentTransform = currentLocalTransform.LocalTransform * ParentTransform;
             for (var i = 0; i < Joint.Children.Count; i++)
-            {
                 ApplyPoseToJoints(CurrentPose, Joint.Children[i], currentTransform);
-            }
             currentTransform = Joint.InverseBindTransform * currentTransform;
             Joint.AnimatedTransform = currentTransform;
         }
-    
+
         /**
          * Finds the previous keyframe in the animation and the next keyframe in the
          * animation, and returns them in an array of length 2. If there is no
@@ -222,7 +217,7 @@ namespace Hedra.Engine.Rendering.Animation
          * previous if there is no next keyframe.
          * 
          * @return The previous and next keyframes, in an array which therefore will
-         *         always have a length of 2.
+         * always have a length of 2.
          */
         private static void GetPreviousAndNextFrames(Animation Animation, float Time, KeyFrame[] CurrentFrames)
         {
@@ -232,11 +227,10 @@ namespace Hedra.Engine.Rendering.Animation
             for (var i = 1; i < allFrames.Length; i++)
             {
                 nextFrame = allFrames[i];
-                if (nextFrame.TimeStamp > Time) {
-                    break;
-                }
+                if (nextFrame.TimeStamp > Time) break;
                 previousFrame = allFrames[i];
             }
+
             ;
             CurrentFrames[0] = previousFrame;
             CurrentFrames[1] = nextFrame;
@@ -244,21 +238,22 @@ namespace Hedra.Engine.Rendering.Animation
 
         private static float CalculateProgression(KeyFrame PreviousFrame, KeyFrame NextFrame, float Time)
         {
-            if(PreviousFrame == NextFrame) return 0.5f;
-            
+            if (PreviousFrame == NextFrame) return 0.5f;
+
             var totalTime = NextFrame.TimeStamp - PreviousFrame.TimeStamp;
             var currentTime = Time - PreviousFrame.TimeStamp;
             return currentTime / totalTime;
         }
-        
+
         private Dictionary<string, JointTransform> InterpolatePoses
-            (Dictionary<string, JointTransform> Pose, IDictionary<string, JointTransform> TargetPose, float Progression, out bool Interpolated)
+        (Dictionary<string, JointTransform> Pose, IDictionary<string, JointTransform> TargetPose, float Progression,
+            out bool Interpolated)
         {
             var interpolated = false;
             var pool = ArrayPool<KeyValuePair<string, JointTransform>>.Shared;
             var buffer = pool.Rent(Pose.Count);
             CopyToArray(Pose, buffer);
-            for(var i = 0; i < Pose.Count; ++i)
+            for (var i = 0; i < Pose.Count; ++i)
             {
                 var pair = buffer[i];
                 var previousTransform = pair.Value;
@@ -270,6 +265,7 @@ namespace Hedra.Engine.Rendering.Animation
                         : JointTransform.Interpolate(previousTransform, nextTransform, Progression);
                 interpolated |= !areEqual;
             }
+
             pool.Return(buffer);
             Interpolated = interpolated;
             return Pose;
@@ -281,62 +277,52 @@ namespace Hedra.Engine.Rendering.Animation
             foreach (var pair in Pose)
                 Buffer[i++] = pair;
         }
-        
-        private Dictionary<string, JointTransform> InterpolateJointPosesFromKeyframes(KeyFrame PreviousFrame, KeyFrame NextFrame, float Progression, ref Dictionary<string, JointTransform> Pose)
+
+        private Dictionary<string, JointTransform> InterpolateJointPosesFromKeyframes(KeyFrame PreviousFrame,
+            KeyFrame NextFrame, float Progression, ref Dictionary<string, JointTransform> Pose)
         {
-            foreach(var pair in PreviousFrame.Pose)
+            foreach (var pair in PreviousFrame.Pose)
             {
                 var previousTransform = PreviousFrame.Pose[pair.Key];
                 var nextTransform = NextFrame.Pose[pair.Key];
                 var currentTransform = JointTransform.Interpolate(previousTransform, nextTransform, Progression);
                 Pose[pair.Key] = currentTransform;
             }
+
             return Pose;
         }
-        
+
         private string[] CalculateJointsToBlend(Animation Animation)
         {
             var blendedJointsCandidates = _blendMapPool.GetObject();
-            for(var i = 0; i < Animation.KeyFrames.Length; i++)
-            {
-                foreach(var pair in Animation.KeyFrames[i].Pose)
-                {
-                    if(blendedJointsCandidates.ContainsKey(pair.Key))
+            for (var i = 0; i < Animation.KeyFrames.Length; i++)
+                foreach (var pair in Animation.KeyFrames[i].Pose)
+                    if (blendedJointsCandidates.ContainsKey(pair.Key))
                     {
-                        if(Animation.KeyFrames[i-1].Pose[pair.Key].Position == Animation.KeyFrames[i].Pose[pair.Key].Position 
-                           && Animation.KeyFrames[i-1].Pose[pair.Key].Rotation == Animation.KeyFrames[i].Pose[pair.Key].Rotation)
-                        {                        
-                            blendedJointsCandidates[pair.Key] += 1; 
-                        }
+                        if (Animation.KeyFrames[i - 1].Pose[pair.Key].Position ==
+                            Animation.KeyFrames[i].Pose[pair.Key].Position
+                            && Animation.KeyFrames[i - 1].Pose[pair.Key].Rotation ==
+                            Animation.KeyFrames[i].Pose[pair.Key].Rotation)
+                            blendedJointsCandidates[pair.Key] += 1;
                     }
                     else
                     {
                         blendedJointsCandidates.Add(pair.Key, 1);
                     }
-                }
-            }
 
             var blendedJoints = _stringListPool.GetObject();
-            foreach(var pair in blendedJointsCandidates)
-            {
-                if(pair.Value != Animation.KeyFrames.Length)
-                {
+            foreach (var pair in blendedJointsCandidates)
+                if (pair.Value != Animation.KeyFrames.Length)
                     blendedJoints.Add(pair.Key);
-                }
-            }
 
             var toReturn = blendedJoints.ToArray();
-            
+
             blendedJointsCandidates.Clear();
             _blendMapPool.PutObject(blendedJointsCandidates);
             blendedJoints.Clear();
             _stringListPool.PutObject(blendedJoints);
-            
+
             return toReturn;
         }
-        
-        public Animation AnimationPlaying => _currentAnimation;
-        
-        public Animation BlendingAnimation => _blendingAnimation;
     }
 }

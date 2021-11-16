@@ -1,5 +1,5 @@
 ﻿{
-  "Name" : "Horse", 
+  "Name": "Horse",
   "MaxHealth": 210.0,
   "AttackDamage": 4.0,
   "Speed": 1.4,
@@ -8,7 +8,6 @@
   "AIType": "Neutral",
   "Effects": [],
   "Drops": [],
-  
   "Model": {
     "Path": "$DataFile$/Assets/Chr/HorseIdle.dae",
     "Scale": 1.0,
@@ -30,5 +29,5 @@
         "Speed": 1.25
       }
     ]
-  } 
+  }
 }

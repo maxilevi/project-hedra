@@ -4,13 +4,13 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Templates
     {
         public PropTemplate[] PropDesigns { get; set; }
     }
-            
+
     public class PropTemplate : DesignTemplate, IProbabilityTemplate
     {
-        public int Chance { get; set; }
         public bool HasLivestock { get; set; }
         public bool HasWindmill { get; set; }
         public bool OnlyOnOutskirts { get; set; }
         public int WindmillChance { get; set; }
+        public int Chance { get; set; }
     }
 }

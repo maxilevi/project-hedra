@@ -1,18 +1,19 @@
-import MissionCore
-import FarmCore
-import clr
 import Core
-from System import Array, Object, Single
-from System.Numerics import Vector3
-from Hedra.Mission import MissionBuilder, QuestTier, QuestHint, DialogObject, QuestReward, ItemCollect, QuestPriority
-from Hedra.Mission.Blocks import DefendMission, DefeatEntityMission, CollectMission
-from Hedra.AISystem.Humanoid import EscapeAIComponent, CombatAIComponent
+import clr
 from Hedra.AISystem import IBasicAIComponent
-from Hedra.Engine.WorldBuilding import NPCCreator, BanditOptions, NameGenerator
-from Hedra.Engine.EntitySystem import DropComponent
-from Hedra.EntitySystem import IEntity
+from Hedra.AISystem.Humanoid import CombatAIComponent
 from Hedra.Components import DamageComponent
+from Hedra.Engine.EntitySystem import DropComponent
+from Hedra.Engine.WorldBuilding import NPCCreator, BanditOptions
+from Hedra.EntitySystem import IEntity
+from Hedra.Mission import MissionBuilder, QuestTier, QuestHint
+from Hedra.Mission.Blocks import DefendMission
 from Hedra.Numerics import VectorExtensions
+from System import Array, Single
+from System.Numerics import Vector3
+
+import FarmCore
+import MissionCore
 
 clr.ImportExtensions(VectorExtensions)
 
@@ -23,12 +24,13 @@ QUEST_HINT = QuestHint.Farm
 MAX_SPAWN_DISTANCE = 384
 MIN_SPAWN_DISTANCE = 96
 
+
 def setup_timeline(position, giver, owner, rng):
     builder = MissionBuilder()
     builder.OpeningDialog = MissionCore.create_dialog('quest_defend_farm_from_attack_dialog')
 
     criminals, ais = create_criminals(builder, owner, giver, rng)
-    
+
     defend = DefendMission(giver, criminals)
     defend.MissionBlockStart += lambda: setup_giver_and_bandits(giver, criminals, ais)
     builder.Next(defend)
@@ -37,16 +39,19 @@ def setup_timeline(position, giver, owner, rng):
     builder.SetReward(reward)
     return builder
 
+
 def setup_giver_and_bandits(giver, criminals, ais):
     MissionCore.remove_component_if_exists(giver, IBasicAIComponent)
     giver.SearchComponent[DamageComponent]().Immune = False
     giver.BonusHealth = giver.MaxHealth * 4
     giver.Health = giver.MaxHealth
-    indexes = sorted(list(range(len(criminals))), key=lambda x: -(criminals[x].Position - giver.Position).LengthSquared())
+    indexes = sorted(list(range(len(criminals))),
+                     key=lambda x: -(criminals[x].Position - giver.Position).LengthSquared())
     for i in indexes:
         ai = ais[i]
         criminal = criminals[i]
         Core.after_seconds(5 * i + 1, lambda cmp=ai, cri=criminal: cri.AddComponent(cmp))
+
 
 def create_criminals(builder, owner, giver, rng):
     criminals = []
@@ -73,7 +78,6 @@ def create_criminals(builder, owner, giver, rng):
         ais.append(ai)
     return Array[IEntity](criminals), ais
 
-    
 
 def can_give(position):
     return FarmCore.can_give(position)

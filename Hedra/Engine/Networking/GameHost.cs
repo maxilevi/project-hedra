@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Hedra.Core;
 using Hedra.Engine.IO;
-using Hedra.Engine.Management;
 using Hedra.Engine.Networking.Packets;
-using Hedra.Engine.Steamworks;
 
 namespace Hedra.Engine.Networking
 {
@@ -21,7 +19,11 @@ namespace Hedra.Engine.Networking
             _clients = new Dictionary<ulong, PeerInformation>();
             _disconnectTimer = new Timer(15);
         }
-        
+
+        private bool IsFull => _clients.Count == MaxClients;
+        public override bool IsActive { get; protected set; }
+        protected override ConnectionType Type => ConnectionType.Host;
+
         public void Host()
         {
             if (IsActive) throw new ArgumentOutOfRangeException();
@@ -39,22 +41,17 @@ namespace Hedra.Engine.Networking
         private void ForEach(Action<ulong> Action)
         {
             var asList = _clients.Keys.ToList();
-            for (var i = 0; i < asList.Count; ++i)
-            {
-                Action(asList[i]);
-            }
+            for (var i = 0; i < asList.Count; ++i) Action(asList[i]);
         }
-        
+
         private void ForEachIf(Predicate<ulong> Condition, Action<ulong> Foreach)
         {
             var asList = _clients.Keys.ToList();
             for (var i = 0; i < asList.Count; ++i)
-            {
-                if(Condition(asList[i]))
+                if (Condition(asList[i]))
                     Foreach(asList[i]);
-            }
         }
-        
+
         protected override void HandleCommonMessage(ulong Sender, CommonMessageType Message)
         {
             switch (Message)
@@ -70,11 +67,11 @@ namespace Hedra.Engine.Networking
                     break;
             }
         }
-        
+
         protected override void HandleNormalMessage(ulong Sender, byte[] Message)
         {
-            if(Message.Length == 0) return;
-            var header = (CommonMessageType) Message[0];
+            if (Message.Length == 0) return;
+            var header = (CommonMessageType)Message[0];
             if (header == CommonMessageType.Relay)
             {
                 var id = BitConverter.ToUInt64(Message.Skip(1).Take(sizeof(ulong)).ToArray(), 0);
@@ -94,7 +91,7 @@ namespace Hedra.Engine.Networking
             {
                 Connection.SendMessage(Id, new AcceptJoinPacket
                 {
-                   Seed = World.Seed
+                    Seed = World.Seed
                 }.Serialize());
                 AddPeer(Id);
             }
@@ -105,7 +102,7 @@ namespace Hedra.Engine.Networking
             _clients.Add(Id, new PeerInformation());
             UpdatePeers();
         }
-        
+
         private void DisconnectClient(ulong Id)
         {
             _clients.Remove(Id);
@@ -122,33 +119,27 @@ namespace Hedra.Engine.Networking
                 }.Serialize());
             });
         }
-        
+
         protected override void DoUpdate()
         {
             if (_disconnectTimer.Tick())
-            {
                 ForEach(U =>
                 {
-                    if(_clients[U].SecondsSinceLastPing > MaxSecondsBeforeDisconnect)
+                    if (_clients[U].SecondsSinceLastPing > MaxSecondsBeforeDisconnect)
                         DisconnectClient(U);
                 });
-            }
         }
-
-        private bool IsFull => _clients.Count == MaxClients;
-        public override bool IsActive { get; protected set; }
-        protected override ConnectionType Type => ConnectionType.Host;
     }
 
     public class PeerInformation
     {
         private DateTime _lastPing;
-        
+
+        public float SecondsSinceLastPing => (float)(DateTime.Now - _lastPing).TotalSeconds;
+
         public void ProcessPing()
         {
             _lastPing = DateTime.Now;
         }
-        
-        public float SecondsSinceLastPing => (float) (DateTime.Now - _lastPing).TotalSeconds;
     }
 }

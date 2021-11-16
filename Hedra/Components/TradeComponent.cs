@@ -1,20 +1,15 @@
 using System.Collections.Generic;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Localization;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.Inventory;
 using Hedra.EntitySystem;
 using Hedra.Game;
-using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Numerics;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Components
 {
@@ -22,16 +17,17 @@ namespace Hedra.Components
 
     public abstract class TradeComponent : Component<IHumanoid>
     {
-        protected int MerchantSpaces => TradeInventory.MerchantSpaces;
         private const int TradeRadius = 12;
-        public event OnItemBought ItemBought;
-        public Dictionary<int, Item> Items { get; private set; }
         private Dictionary<int, Item> _originalItems;
 
         protected TradeComponent(IHumanoid Parent) : base(Parent)
         {
             this.Parent.Gold = int.MaxValue;
         }
+
+        protected int MerchantSpaces => TradeInventory.MerchantSpaces;
+        public Dictionary<int, Item> Items { get; private set; }
+        public event OnItemBought ItemBought;
 
         public abstract Dictionary<int, Item> BuildInventory();
 

@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Hedra.Engine.Management;
-using Hedra.Engine.Rendering.Animation.ColladaParser;
-using Hedra.Items;
 
 namespace Hedra.Engine.ItemSystem.ArmorSystem
 {
@@ -12,12 +10,12 @@ namespace Hedra.Engine.ItemSystem.ArmorSystem
 
         static ArmorFactory()
         {
-            Armors = new Dictionary<string, Type>()
+            Armors = new Dictionary<string, Type>
             {
-                {"Chestplate", typeof(ChestPiece)},
-                {"Helmet", typeof(HelmetPiece)},
-                {"Pants", typeof(PantsPiece)},
-                {"Boots", typeof(BootsPiece)},
+                { "Chestplate", typeof(ChestPiece) },
+                { "Helmet", typeof(HelmetPiece) },
+                { "Pants", typeof(PantsPiece) },
+                { "Boots", typeof(BootsPiece) }
             };
         }
 
@@ -33,7 +31,7 @@ namespace Hedra.Engine.ItemSystem.ArmorSystem
 
         public static ArmorPiece Get(Item Item)
         {
-            var armor = 
+            var armor =
                 (ArmorPiece)Activator.CreateInstance(
                     Armors[Item.EquipmentType],
                     AssetManager.DAELoader(Item.ModelTemplate.Path)

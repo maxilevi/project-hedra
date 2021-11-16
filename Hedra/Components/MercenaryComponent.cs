@@ -1,3 +1,4 @@
+using System;
 using Hedra.Engine.EntitySystem;
 using Hedra.EntitySystem;
 
@@ -11,7 +12,7 @@ namespace Hedra.Components
 
         public override void Update()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

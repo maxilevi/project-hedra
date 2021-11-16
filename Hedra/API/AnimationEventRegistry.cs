@@ -6,6 +6,8 @@ namespace Hedra.API
 {
     public class AnimationEventRegistry : TypeRegistry
     {
+        protected override Type RegistryType { get; } = typeof(AnimationEvent);
+
         protected override void DoAdd(string Name, Type ClassType)
         {
             AnimationEventBuilder.Instance.Register(Name, ClassType);
@@ -15,7 +17,5 @@ namespace Hedra.API
         {
             AnimationEventBuilder.Instance.Unregister(Name);
         }
-
-        protected override Type RegistryType { get; } = typeof(AnimationEvent);
     }
 }

@@ -1,5 +1,5 @@
 {
-  "Name" : "Lich",
+  "Name": "Lich",
   "MaxHealth": 1080.0,
   "AttackDamage": 16.0,
   "AttackCooldown": 3.0,
@@ -10,7 +10,7 @@
   "Effects": [],
   "Drops": [],
   "Model": {
-    "AlignWithTerrain" :  false,
+    "AlignWithTerrain": false,
     "Path": "$DataFile$/Assets/Chr/Mob/Ghost/LichIdle.dae",
     "Scale": 2.0,
     "IdleAnimations": [
@@ -29,7 +29,7 @@
       {
         "Path": "$DataFile$/Assets/Chr/NecromancerRaiseSkeleton.dae",
         "Speed": 2.5,
-        "OnAnimationMid" : "CastRaiseSkeleton",
+        "OnAnimationMid": "CastRaiseSkeleton",
         "Chance": 0.15,
         "Range": 64,
         "Cooldown": 24.0
@@ -37,7 +37,7 @@
       {
         "Path": "$DataFile$/Assets/Chr/MageStaffGroundHit.dae",
         "Speed": 2.0,
-        "OnAnimationMid" : "CastLeech",
+        "OnAnimationMid": "CastLeech",
         "Chance": 0.075,
         "Range": 24,
         "Cooldown": 32.0
@@ -45,7 +45,7 @@
       {
         "Path": "$DataFile$/Assets/Chr/MageStaffGroundHit.dae",
         "Speed": 2.0,
-        "OnAnimationMid" : "CastTerror",
+        "OnAnimationMid": "CastTerror",
         "Chance": 0.25,
         "Range": 24,
         "Cooldown": 8.0
@@ -53,7 +53,7 @@
       {
         "Path": "$DataFile$/Assets/Chr/NecromancerSiphonBlood.dae",
         "Speed": 1.5,
-        "OnAnimationMid" : "CastSiphonBlood",
+        "OnAnimationMid": "CastSiphonBlood",
         "Chance": 0.425,
         "Range": 32,
         "Cooldown": 4.0

@@ -5,20 +5,21 @@ namespace Hedra.Engine.Player.Networking
 {
     public class NetworkHumanoidModelAnimationState : HumanoidModelAnimationState
     {
+        private bool _isClimbing;
+        private bool _isEating;
+        private bool _isFishing;
+        private bool _isGliding;
+        private bool _isJumping;
+        private bool _isKnocked;
         private bool _isRiding;
-        private bool _isTied;
+        private bool _isRolling;
+        private bool _isSailing;
         private bool _isSitting;
         private bool _isSleeping;
-        private bool _isRolling;
-        private bool _isJumping;
-        private bool _isEating;
-        private bool _isGliding;
-        private bool _isSailing;
-        private bool _isClimbing;
-        private bool _isKnocked;
-        private bool _isFishing;
-        
-        public NetworkHumanoidModelAnimationState(IHumanoid Humanoid, HumanoidModel Model, HumanoidModelTemplate Template) : base(Humanoid, Model, Template)
+        private bool _isTied;
+
+        public NetworkHumanoidModelAnimationState(IHumanoid Humanoid, HumanoidModel Model,
+            HumanoidModelTemplate Template) : base(Humanoid, Model, Template)
         {
         }
 
@@ -41,7 +42,7 @@ namespace Hedra.Engine.Player.Networking
                 _isFishing = value[11];
             }
         }
-        
+
         protected override bool IsRiding => _isRiding;
         protected override bool IsTied => _isTied;
         protected override bool IsSitting => _isSitting;

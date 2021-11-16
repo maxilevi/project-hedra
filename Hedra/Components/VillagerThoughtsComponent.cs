@@ -1,4 +1,3 @@
-using Hedra.Engine.Localization;
 using Hedra.EntitySystem;
 
 namespace Hedra.Components

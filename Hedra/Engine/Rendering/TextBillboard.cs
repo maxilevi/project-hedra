@@ -1,20 +1,18 @@
 using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using Hedra.Engine.Game;
+using System.Numerics;
 using Hedra.Engine.Management;
-using Hedra.Engine.Rendering.UI;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-using System.Numerics;
+using SixLabors.Fonts;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Rendering
 {
     public class TextBillboard : BaseBillboard
     {
-        private Vector2 _scale;
         private readonly Color _color;
         private readonly Font _font;
+        private Vector2 _scale;
 
         public TextBillboard(float Lifetime, string Text, Color TextColor, Font TextFont, Vector3 Position)
             : this(Lifetime, Text, TextColor, TextFont, () => Position)
@@ -29,6 +27,8 @@ namespace Hedra.Engine.Rendering
             UpdateText(Text);
         }
 
+        protected override Vector2 Measurements => _scale;
+
         public void UpdateText(string Text)
         {
             Executer.ExecuteOnMainThread(() =>
@@ -37,8 +37,6 @@ namespace Hedra.Engine.Rendering
                 _scale = measurements.ToRelativeSize();
             });
         }
-
-        protected override Vector2 Measurements => _scale;
 
         /* We don't dispose fonts since they are from FontCache.cs */
         public override void Dispose()

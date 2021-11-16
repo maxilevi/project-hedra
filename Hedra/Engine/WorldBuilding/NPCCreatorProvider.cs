@@ -31,34 +31,15 @@ namespace Hedra.Engine.WorldBuilding
             return SpawnHumanoid(Type, 1, DesiredPosition, null);
         }
 
-        private Humanoid SpawnHumanoid(HumanType Type, Vector3 DesiredPosition, HumanoidConfiguration Configuration)
-        {
-            return SpawnHumanoid(Type.ToString(), 1, DesiredPosition, Configuration);
-        }
-
-        private Humanoid SpawnHumanoid(string Type, int Level, Vector3 DesiredPosition, HumanoidConfiguration Configuration)
-        {
-            return SpawnHumanoid(Type, HumanoidLoader.HumanoidTemplater[Type], Level, DesiredPosition, Configuration);
-        }
-        
-        private Humanoid SpawnHumanoid(string Type, HumanoidTemplate Template, int Level, Vector3 DesiredPosition, HumanoidConfiguration Configuration)
-        {
-            var human = HumanoidFactory.BuildHumanoid(Type, Template, Level, Configuration);
-            human.Position = World.FindPlaceablePosition(human, new Vector3(DesiredPosition.X, Physics.HeightAtPosition(DesiredPosition.X, DesiredPosition.Z), DesiredPosition.Z));
-            human.Rotation = new Vector3(0, Utils.Rng.NextFloat(), 0) * 360f * Mathf.Radian;
-            ApplySeasonHats(human, Type);
-            return human;
-        }
-
         public Humanoid SpawnVillager(Vector3 DesiredPosition, Random Rng)
         {
             return SpawnVillager(DesiredPosition, Rng.Next(int.MinValue, int.MaxValue));
         }
-        
+
         public Humanoid SpawnVillager(Vector3 DesiredPosition, int Seed)
         {
             var rng = new Random(Seed);
-            var types = new []
+            var types = new[]
             {
                 HumanType.Innkeeper,
                 HumanType.Blacksmith,
@@ -104,51 +85,83 @@ namespace Hedra.Engine.WorldBuilding
             return npc;
         }
 
-        private void ApplyQuestGiverStatus(IHumanoid Npc, Vector3 Position, IMissionDesign Quest)
-        {
-            Npc.Position = Position;
-            Npc.AddComponent(new QuestGiverComponent(Npc, Quest));
-        }
-
         public Humanoid SpawnBandit(Vector3 Position, int Level, BanditOptions Options)
         {
             var availableClasses = new List<Class>();
             for (var i = 0; i < 4; i++)
             {
                 var @class = (Class)(1 << i);
-                if((@class & Options.PossibleClasses) == @class)
+                if ((@class & Options.PossibleClasses) == @class)
                     availableClasses.Add(@class);
             }
-            int classN = Utils.Rng.Next(0, availableClasses.Count);
+
+            var classN = Utils.Rng.Next(0, availableClasses.Count);
             var classType = ClassDesign.FromString(availableClasses[classN]);
 
-            var behaviour = new HumanoidConfiguration(Options.Friendly ? HealthBarType.Friendly : HealthBarType.Hostile);
-            var modelTemplate = Options.ModelType != null ? HumanoidLoader.HumanoidTemplater[Options.ModelType.Value.ToString()] : null;
+            var behaviour =
+                new HumanoidConfiguration(Options.Friendly ? HealthBarType.Friendly : HealthBarType.Hostile);
+            var modelTemplate = Options.ModelType != null
+                ? HumanoidLoader.HumanoidTemplater[Options.ModelType.Value.ToString()]
+                : null;
             var template = HumanoidLoader.HumanoidTemplater[classType.ToString()].Clone();
             if (modelTemplate != null)
             {
                 template.Models = modelTemplate.Models;
                 template.Model = modelTemplate.Model;
             }
-            var templateName = modelTemplate != null 
-                ? Translations.Has(modelTemplate.DisplayName.ToLowerInvariant()) ? Translations.Get(modelTemplate.DisplayName.ToLowerInvariant()) : modelTemplate.DisplayName 
+
+            var templateName = modelTemplate != null
+                ? Translations.Has(modelTemplate.DisplayName.ToLowerInvariant())
+                    ?
+                    Translations.Get(modelTemplate.DisplayName.ToLowerInvariant())
+                    : modelTemplate.DisplayName
                 : Translations.Get("bandit");
             var human = SpawnHumanoid(classType.ToString(), template, Level, Position, behaviour);
 
             HumanoidFactory.AddAI(human, Options.Friendly);
-            if(Options.Friendly)
-                human.SearchComponent<DamageComponent>().Ignore(E => E is IPlayer || E == GameManager.Player.Companion.Entity);
-            human.Name = (!Options.Friendly) ? templateName : NameGenerator.PickMaleName(Utils.Rng);
+            if (Options.Friendly)
+                human.SearchComponent<DamageComponent>()
+                    .Ignore(E => E is IPlayer || E == GameManager.Player.Companion.Entity);
+            human.Name = !Options.Friendly ? templateName : NameGenerator.PickMaleName(Utils.Rng);
             human.IsFriendly = Options.Friendly;
             Options.ApplyQuestStatus(human);
             human.UpdateWhenOutOfRange = Options.IsFromQuest;
             return human;
         }
-        
-        
+
+        private Humanoid SpawnHumanoid(HumanType Type, Vector3 DesiredPosition, HumanoidConfiguration Configuration)
+        {
+            return SpawnHumanoid(Type.ToString(), 1, DesiredPosition, Configuration);
+        }
+
+        private Humanoid SpawnHumanoid(string Type, int Level, Vector3 DesiredPosition,
+            HumanoidConfiguration Configuration)
+        {
+            return SpawnHumanoid(Type, HumanoidLoader.HumanoidTemplater[Type], Level, DesiredPosition, Configuration);
+        }
+
+        private Humanoid SpawnHumanoid(string Type, HumanoidTemplate Template, int Level, Vector3 DesiredPosition,
+            HumanoidConfiguration Configuration)
+        {
+            var human = HumanoidFactory.BuildHumanoid(Type, Template, Level, Configuration);
+            human.Position = World.FindPlaceablePosition(human,
+                new Vector3(DesiredPosition.X, Physics.HeightAtPosition(DesiredPosition.X, DesiredPosition.Z),
+                    DesiredPosition.Z));
+            human.Rotation = new Vector3(0, Utils.Rng.NextFloat(), 0) * 360f * Mathf.Radian;
+            ApplySeasonHats(human, Type);
+            return human;
+        }
+
+        private void ApplyQuestGiverStatus(IHumanoid Npc, Vector3 Position, IMissionDesign Quest)
+        {
+            Npc.Position = Position;
+            Npc.AddComponent(new QuestGiverComponent(Npc, Quest));
+        }
+
+
         private void ApplySeasonHats(Humanoid Human, string Type)
         {
-            if(Season.IsChristmas) 
+            if (Season.IsChristmas)
                 Human.SetHelmet(ItemPool.Grab(ItemType.ChristmasHat));
         }
     }

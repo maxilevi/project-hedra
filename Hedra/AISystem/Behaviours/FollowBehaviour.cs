@@ -6,8 +6,6 @@ namespace Hedra.AISystem.Behaviours
     public class FollowBehaviour : Behaviour
     {
         public const int DefaultErrorMargin = 6;
-        public IEntity Target { get; set; }
-        protected TraverseBehaviour Traverse { get; }
         private readonly Timer _followTimer;
 
         public FollowBehaviour(IEntity Parent) : base(Parent)
@@ -15,6 +13,17 @@ namespace Hedra.AISystem.Behaviours
             _followTimer = new Timer(.5f);
             Traverse = new TraverseBehaviour(Parent);
             ErrorMargin = DefaultErrorMargin;
+        }
+
+        public IEntity Target { get; set; }
+        protected TraverseBehaviour Traverse { get; }
+
+        public bool Enabled => Target != null && !Target.IsDead && !Target.IsInvisible && !Target.Disposed;
+
+        public float ErrorMargin
+        {
+            get => Traverse.ErrorMargin;
+            set => Traverse.ErrorMargin = value;
         }
 
         public override void Update()
@@ -36,18 +45,10 @@ namespace Hedra.AISystem.Behaviours
 
         protected virtual void SetPosition()
         {
-            if(_followTimer.Tick())
+            if (_followTimer.Tick())
                 Traverse.SetTarget(Target.Position);
         }
-        
-        public bool Enabled => Target != null && !Target.IsDead && !Target.IsInvisible && !Target.Disposed;
 
-        public float ErrorMargin
-        {
-            get => Traverse.ErrorMargin;
-            set => Traverse.ErrorMargin = value;
-        }
-        
         public override void Dispose()
         {
             Traverse.Dispose();

@@ -4,18 +4,14 @@
  * Time: 02:27 a.m.
  *
  */
-using System;
-using Hedra.Engine.Scenes;
 
 namespace Hedra.Engine.Management
 {
     /// <summary>
-    /// Description of IUpdatable.
+    ///     Description of IUpdatable.
     /// </summary>
     public interface IUpdatable
     {
-        
-
         void Update();
     }
 }

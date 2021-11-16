@@ -13,7 +13,7 @@ namespace Hedra.WeaponSystem
 
         protected override void OnAttackStance()
         {
-            base.SetToMainHand(MainMesh);
+            SetToMainHand(MainMesh);
             MainMesh.LocalRotation = new Vector3(135, 00, 0);
         }
     }

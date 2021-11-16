@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Hedra.Engine.EntitySystem;
 using Hedra.Engine.IO;
 using Hedra.Engine.ModuleSystem.Templates;
 using Newtonsoft.Json;
@@ -10,13 +9,12 @@ namespace Hedra.Engine.ModuleSystem
 {
     public static class SpawnerLoader
     {
-
         public static SpawnerSettings Load(string AppPath, string Type)
         {
-            string data = File.ReadAllText(AppPath + $"/Modules/Spawners/{Type}.json");
+            var data = File.ReadAllText(AppPath + $"/Modules/Spawners/{Type}.json");
             bool result;
-            SpawnerSettings settings = FromJSON( data, out result);
-            if(!result) throw new ArgumentException($"Could not load {Type}Spawner.json");
+            var settings = FromJSON(data, out result);
+            if (!result) throw new ArgumentException($"Could not load {Type}Spawner.json");
             AssertSettings(settings, Type);
             return settings;
         }
@@ -25,21 +23,24 @@ namespace Hedra.Engine.ModuleSystem
         {
             void Assert(ISpawnTemplate[] Templates, string TypeName)
             {
-                if(Templates == null) return;
+                if (Templates == null) return;
                 var sum = 0f;
                 var set = new HashSet<string>();
                 for (var i = 0; i < Templates.Length; ++i)
                 {
                     sum += Templates[i].Chance;
-                    if(!set.Contains(Templates[i].Type))
+                    if (!set.Contains(Templates[i].Type))
                         set.Add(Templates[i].Type);
                     else
-                        Log.WriteWarning($"'/Modules/Spawners/{Name}.json' has duplicate entry for '{Templates[i].Type}'");
+                        Log.WriteWarning(
+                            $"'/Modules/Spawners/{Name}.json' has duplicate entry for '{Templates[i].Type}'");
                 }
-                if(Math.Abs(sum - 100f) > 0.005f)
-                    Log.WriteWarning($"Entries in '/Modules/Spawners/{Name}.json' for type '{TypeName}' sum up to '{sum}' but should be 100");
+
+                if (Math.Abs(sum - 100f) > 0.005f)
+                    Log.WriteWarning(
+                        $"Entries in '/Modules/Spawners/{Name}.json' for type '{TypeName}' sum up to '{sum}' but should be 100");
             }
-            
+
             Assert(Settings.Forest, "Forest");
             Assert(Settings.Plains, "Plains");
             Assert(Settings.Shore, "Shore");
@@ -60,6 +61,7 @@ namespace Hedra.Engine.ModuleSystem
                 Success = false;
                 Log.WriteLine(e.ToString());
             }
+
             return null;
         }
     }

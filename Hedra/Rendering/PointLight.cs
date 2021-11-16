@@ -1,5 +1,5 @@
-using System.Runtime.InteropServices;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using Hedra.Numerics;
 
 namespace Hedra.Rendering
@@ -21,13 +21,10 @@ namespace Hedra.Rendering
     [StructLayout(LayoutKind.Explicit)]
     public struct AlignedPointLight
     {
-        [FieldOffset(0)] 
-        public Vector3 _position;
-        [FieldOffset(16)]
-        public Vector3 _color;
-        [FieldOffset(28)]
-        public float _radius;
-        
+        [FieldOffset(0)] public Vector3 _position;
+        [FieldOffset(16)] public Vector3 _color;
+        [FieldOffset(28)] public float _radius;
+
         public AlignedPointLight(PointLight Light)
         {
             _position = Light.Position;

@@ -1,12 +1,11 @@
+using System.Numerics;
 using Hedra.Components.Effects;
-using Hedra.Engine.EntitySystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
 using Hedra.Rendering.Particles;
 using Hedra.WorldObjects;
-using System.Numerics;
 
 namespace Hedra.Engine.Player
 {
@@ -18,7 +17,7 @@ namespace Hedra.Engine.Player
 
         protected override void DoParticles()
         {
-            Particles.Position = this.Position;
+            Particles.Position = Position;
             Particles.Color = new Vector4(1, .3f, 0, 1);
             Particles.Shape = ParticleShape.Sphere;
             Particles.ParticleLifetime = .25f;
@@ -29,13 +28,14 @@ namespace Hedra.Engine.Player
             Particles.VariateUniformly = false;
             for (var i = 0; i < 25; i++) Particles.Emit();
         }
-        
+
         protected override Box GetCollisionBox(VertexData MeshData)
         {
             return new Box(-Size * 1.5f, Size * 1.5f);
         }
 
-        public static Projectile Create(IHumanoid Owner, Vector3 Position, Vector3 Direction, float Damage, params IEntity[] IgnoreEntities)
+        public static Projectile Create(IHumanoid Owner, Vector3 Position, Vector3 Direction, float Damage,
+            params IEntity[] IgnoreEntities)
         {
             var fireball = new Fireball(Owner, Position)
             {
@@ -49,10 +49,7 @@ namespace Hedra.Engine.Player
             fireball.HitEventHandler += delegate(Projectile Projectile, IEntity Hit)
             {
                 Hit.Damage(Damage, Owner, out var exp);
-                if (Utils.Rng.Next(0, 5) == 1)
-                {
-                    Hit.AddComponent(new BurningComponent(Hit, Owner, 5f, Damage));
-                }
+                if (Utils.Rng.Next(0, 5) == 1) Hit.AddComponent(new BurningComponent(Hit, Owner, 5f, Damage));
                 Owner.XP += exp;
             };
             World.AddWorldObject(fireball);

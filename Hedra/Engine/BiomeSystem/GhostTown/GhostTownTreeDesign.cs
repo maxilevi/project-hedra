@@ -5,9 +5,9 @@ namespace Hedra.Engine.BiomeSystem.GhostTown
 {
     public class GhostTownTreeDesign : BiomeTreeDesign
     {
-        public override TreeDesign[] AvailableTypes { get; } = new TreeDesign[]
+        public override TreeDesign[] AvailableTypes { get; } =
         {
-            new DeadTreeDesign(),
+            new DeadTreeDesign()
         };
     }
 }

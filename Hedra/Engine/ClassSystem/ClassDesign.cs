@@ -1,29 +1,20 @@
 using System;
 using System.Collections.Generic;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
 using Hedra.API;
 using Hedra.Engine.ClassSystem.Templates;
-using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Localization;
 using Hedra.Engine.ModuleSystem.Templates;
-using Hedra.Engine.Player;
 using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Items;
-using Newtonsoft.Json.Linq;
-using System.Numerics;
 using Hedra.Rendering;
 
 namespace Hedra.Engine.ClassSystem
 {
     public abstract class ClassDesign
     {
-        public static Type[] AvailableClasses { get; }
-        public static string[] ClassNames { get; }
-        public static string[] AvailableClassNames { get; }
         private static readonly Dictionary<string, Type> ClassMap;
 
         static ClassDesign()
@@ -35,6 +26,10 @@ namespace Hedra.Engine.ClassSystem
             ClassNames = ClassMap.Keys.ToArray();
             AvailableClassNames = AvailableClasses.Select(T => FromType(T).ToString()).ToArray();
         }
+
+        public static Type[] AvailableClasses { get; }
+        public static string[] ClassNames { get; }
+        public static string[] AvailableClassNames { get; }
 
         public string Name => ToString();
         public virtual HumanoidModelTemplate HeadModelTemplate => ClassLoader.Instance[Type].HeadModel;
@@ -95,6 +90,8 @@ namespace Hedra.Engine.ClassSystem
         public virtual float AttackingSpeedModifier => ClassLoader.Instance[Type].AttackingSpeedModifier;
         public abstract Class Type { get; }
 
+        public static ClassDesign None { get; } = new NoneDesign();
+
         private static KeyValuePair<int, Item> ParseStartingItems(StartingItemTemplate Template)
         {
             var item = ItemPool.Grab(Template.Name);
@@ -145,7 +142,5 @@ namespace Hedra.Engine.ClassSystem
         {
             return ClassDesign.Type.ToString();
         }
-
-        public static ClassDesign None { get; } = new NoneDesign();
     }
 }

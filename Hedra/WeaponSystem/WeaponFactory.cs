@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Scripting;
-using Hedra.Items;
 
 namespace Hedra.WeaponSystem
 {
@@ -15,12 +13,12 @@ namespace Hedra.WeaponSystem
         {
             Weapons.Add(Name, Weapon);
         }
-        
+
         public static void Unregister(string Name)
         {
             Weapons.Remove(Name);
         }
-        
+
         public static bool Contains(Item Item)
         {
             return Contains(Item.EquipmentType);
@@ -34,7 +32,7 @@ namespace Hedra.WeaponSystem
         public static Weapon Get(Item Item)
         {
             var type = Weapons[Item.EquipmentType];
-            var weapon = (Weapon) Activator.CreateInstance(type, Item.Model);
+            var weapon = (Weapon)Activator.CreateInstance(type, Item.Model);
             weapon.Describer = EffectDescriber.FromItem(Item);
             return weapon;
         }

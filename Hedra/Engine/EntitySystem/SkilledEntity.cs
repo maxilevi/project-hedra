@@ -1,5 +1,4 @@
 using System;
-using Hedra.Engine.Player;
 using Hedra.Engine.SkillSystem;
 
 namespace Hedra.Engine.EntitySystem
@@ -9,18 +8,18 @@ namespace Hedra.Engine.EntitySystem
         public float Mana
         {
             get => float.PositiveInfinity;
-            set {}
+            set { }
         }
-        
+
         public bool CanCastSkill => true;
-        
+
         public void SetSkillPoints(Type Skill, int Points)
         {
         }
 
         public T SearchSkill<T>() where T : AbstractBaseSkill
         {
-            return default(T);
+            return default;
         }
     }
 }

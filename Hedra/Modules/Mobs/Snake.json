@@ -1,5 +1,5 @@
 ﻿{
-  "Name" : "Snake", 
+  "Name": "Snake",
   "MaxHealth": 120.0,
   "AttackDamage": 3.0,
   "Speed": 1.15,
@@ -37,5 +37,5 @@
         "AttackEvent": "End"
       }
     ]
-  } 
+  }
 }

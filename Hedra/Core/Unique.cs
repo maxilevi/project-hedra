@@ -7,7 +7,7 @@ namespace Hedra.Core
     {
         public static int GenerateSeed(Vector2 Offset)
         {
-            return seed2(seed2((int) Offset.X * 1947) ^ seed2((int) Offset.Y * 2904));
+            return seed2(seed2((int)Offset.X * 1947) ^ seed2((int)Offset.Y * 2904));
         }
 
         private static int seed2(int _s)
@@ -21,13 +21,19 @@ namespace Hedra.Core
 
         private static int GetSeedXY(int x, int y)
         {
-            int sx = seed2(x * 1947);
-            int sy = seed2(y * 2904);
+            var sx = seed2(x * 1947);
+            var sy = seed2(y * 2904);
             return seed2(sx ^ sy);
         }
 
-        public static int RandomSeed() => RandomSeed(Utils.Rng);
-        
-        public static int RandomSeed(Random Rng) => Utils.Rng.Next(int.MinValue, int.MaxValue);
+        public static int RandomSeed()
+        {
+            return RandomSeed(Utils.Rng);
+        }
+
+        public static int RandomSeed(Random Rng)
+        {
+            return Utils.Rng.Next(int.MinValue, int.MaxValue);
+        }
     }
 }

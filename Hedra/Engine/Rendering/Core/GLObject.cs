@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Hedra.Core;
-using Hedra.Engine.Management;
 
 namespace Hedra.Engine.Rendering.Core
 {
@@ -20,35 +18,26 @@ namespace Hedra.Engine.Rendering.Core
             SyncRoot = new object();
         }
 
-        public abstract uint Id { get; }
+        protected GLObject()
+        {
+            lock (SyncRoot)
+            {
+                Elements.Add(this as T);
+            }
+        }
+
         public static int Alive
         {
             get
             {
                 lock (SyncRoot)
+                {
                     return Elements.Count;
+                }
             }
         }
 
-        protected GLObject()
-        {
-            lock(SyncRoot)
-                Elements.Add(this as T);
-        }
-        
-        public static T GetById(uint Id)
-        {
-            if (Id == 0) return null;
-            lock (SyncRoot)
-            {
-                if (!Indexed.ContainsKey(Id))
-                {
-                    Indexed.Add(Id, Elements.First(O => O.Id == Id));
-                    //Elements.Remove(Indexed[Id]);
-                }
-                return Indexed[Id];
-            }
-        }
+        public abstract uint Id { get; }
 
         public virtual void Dispose()
         {
@@ -60,13 +49,23 @@ namespace Hedra.Engine.Rendering.Core
             }
         }
 
+        public static T GetById(uint Id)
+        {
+            if (Id == 0) return null;
+            lock (SyncRoot)
+            {
+                if (!Indexed.ContainsKey(Id))
+                    Indexed.Add(Id, Elements.First(O => O.Id == Id));
+                //Elements.Remove(Indexed[Id]);
+                return Indexed[Id];
+            }
+        }
+
         ~GLObject()
         {
             if (!_disposed)
-            {
-                if(!Program.GameWindow.IsExiting)
-                   Dispose();
-            }
+                if (!Program.GameWindow.IsExiting)
+                    Dispose();
         }
     }
 }

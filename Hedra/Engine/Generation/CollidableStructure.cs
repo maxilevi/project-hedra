@@ -6,39 +6,55 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Numerics;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
-using System.Numerics;
 using Hedra.Engine.Scenes;
-using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.StructureSystem;
+using Hedra.Engine.WorldBuilding;
 using Hedra.Game;
 using Hedra.Numerics;
 using Hedra.Rendering;
-using InstanceData = Hedra.Engine.Rendering.InstanceData;
 
 namespace Hedra.Engine.Generation
 {
-
     public delegate void OnModelAdded(CachedVertexData Models);
+
     public delegate void OnInstanceAdded(InstanceData Instance);
 
     public class CollidableStructure : IDisposable
     {
         private readonly HashSet<CollisionGroup> _colliders;
-        private readonly HashSet<CachedVertexData> _models;
-        private readonly HashSet<InstanceData> _instances;
         private readonly HashSet<IGroundwork> _groundworks;
-        private readonly HashSet<BasePlateau> _plateaus;
+        private readonly HashSet<InstanceData> _instances;
         private readonly object _lock = new object();
-        public event OnModelAdded ModelAdded;
-        public event OnInstanceAdded InstanceAdded;
+        private readonly HashSet<CachedVertexData> _models;
+        private readonly HashSet<BasePlateau> _plateaus;
+        private bool _structureSetup;
+
+        public CollidableStructure(StructureDesign Design, Vector3 Position, RoundedPlateau Mountain,
+            BaseStructure WorldObject)
+        {
+            this.Position = Position;
+            this.Mountain = Mountain;
+            this.Design = Design;
+            this.WorldObject = WorldObject;
+            Parameters = new AttributeArray();
+            _colliders = new HashSet<CollisionGroup>();
+            _models = new HashSet<CachedVertexData>();
+            _groundworks = new HashSet<IGroundwork>();
+            _plateaus = new HashSet<BasePlateau>();
+            _instances = new HashSet<InstanceData>();
+            Reposition();
+        }
+
         public Vector3 Position { get; private set; }
         public Vector2 MapPosition { get; set; }
         public RoundedPlateau Mountain { get; }
@@ -50,29 +66,83 @@ namespace Hedra.Engine.Generation
         public bool Built { get; set; }
         public bool Disposed { get; private set; }
         public int ActiveQuests { get; set; }
-        private bool _structureSetup;
 
-        public CollidableStructure(StructureDesign Design, Vector3 Position, RoundedPlateau Mountain, BaseStructure WorldObject)
+        public CollisionGroup[] Colliders
         {
-            this.Position = Position;
-            this.Mountain = Mountain;
-            this.Design = Design;
-            this.WorldObject = WorldObject;
-            this.Parameters = new AttributeArray();
-            this._colliders = new HashSet<CollisionGroup>();
-            this._models = new HashSet<CachedVertexData>();
-            this._groundworks = new HashSet<IGroundwork>();
-            this._plateaus = new HashSet<BasePlateau>();
-            this._instances = new HashSet<InstanceData>();
-            Reposition();
+            get
+            {
+                lock (_lock)
+                {
+                    return _colliders.ToArray();
+                }
+            }
         }
+
+        public CachedVertexData[] Models
+        {
+            get
+            {
+                lock (_lock)
+                {
+                    return _models.ToArray();
+                }
+            }
+        }
+
+        public InstanceData[] Instances
+        {
+            get
+            {
+                lock (_lock)
+                {
+                    return _instances.ToArray();
+                }
+            }
+        }
+
+        public BasePlateau[] Plateaux
+        {
+            get
+            {
+                lock (_lock)
+                {
+                    return _plateaus.ToArray();
+                }
+            }
+        }
+
+        public IGroundwork[] Groundworks
+        {
+            get
+            {
+                lock (_lock)
+                {
+                    return _groundworks.ToArray();
+                }
+            }
+        }
+
+        public void Dispose()
+        {
+            lock (_lock)
+            {
+                foreach (var model in _models) model.Dispose();
+            }
+
+            Disposed = true;
+            World.WorldBuilding.DisposeStructure(this);
+            WorldObject?.Dispose();
+        }
+
+        public event OnModelAdded ModelAdded;
+        public event OnInstanceAdded InstanceAdded;
 
         public void Draw()
         {
             if (!GameSettings.DebugNavMesh) return;
             Waypoints?.Draw();
         }
-        
+
         public void Setup()
         {
             World.WorldBuilding.SetupStructure(this);
@@ -81,52 +151,7 @@ namespace Hedra.Engine.Generation
 
         public void Reposition()
         {
-            this.Position = new Vector3(Position.X, (Mountain?.MaxHeight + 1) * Chunk.BlockSize ?? Position.Y, Position.Z);
-        }
-
-        public CollisionGroup[] Colliders
-        {
-            get
-            {
-                lock(_lock)
-                    return _colliders.ToArray();
-            }
-        }
-        
-        public CachedVertexData[] Models
-        {
-            get
-            {
-                lock(_lock)
-                    return _models.ToArray();
-            }
-        }
-        
-        public InstanceData[] Instances
-        {
-            get
-            {
-                lock(_lock)
-                    return _instances.ToArray();
-            }
-        }
-        
-        public BasePlateau[] Plateaux
-        {
-            get
-            {
-                lock(_lock)
-                    return _plateaus.ToArray();
-            }
-        }
-        
-        public IGroundwork[] Groundworks
-        {
-            get
-            {
-                lock(_lock)
-                    return _groundworks.ToArray();
-            }
+            Position = new Vector3(Position.X, (Mountain?.MaxHeight + 1) * Chunk.BlockSize ?? Position.Y, Position.Z);
         }
 
         public void AddCollisionShape(params CollisionShape[] IColliders)
@@ -137,6 +162,7 @@ namespace Hedra.Engine.Generation
                 _colliders.Add(new CollisionGroup(IColliders));
             }
         }
+
         public void AddCollisionGroup(CollisionGroup Group)
         {
             lock (_lock)
@@ -149,10 +175,10 @@ namespace Hedra.Engine.Generation
         {
             AddStaticElement(Ungroup ? Models.SelectMany(M => M.Ungroup()).ToArray() : Models.ToArray());
         }
-        
+
         public void AddStaticElement(VertexData Model, bool Ungroup = true)
         {
-            AddStaticElement(Ungroup ? Model.Ungroup() : new []{Model});
+            AddStaticElement(Ungroup ? Model.Ungroup() : new[] { Model });
         }
 
         private void AddStaticElement(VertexData[] Models)
@@ -165,10 +191,11 @@ namespace Hedra.Engine.Generation
                     _models.Add(model);
                     ModelAdded?.Invoke(model);
                 }
-                this.CalculateRadius();
+
+                CalculateRadius();
             }
         }
-        
+
         public void AddInstance(params InstanceData[] Instances)
         {
             lock (_lock)
@@ -178,31 +205,28 @@ namespace Hedra.Engine.Generation
                     _instances.Add(Instances[i]);
                     InstanceAdded?.Invoke(Instances[i]);
                 }
-                this.CalculateRadius();
+
+                CalculateRadius();
             }
         }
-        
+
         public void AddGroundwork(params IGroundwork[] Groundworks)
         {
-            if(_structureSetup) throw new ArgumentOutOfRangeException("Cannot add groundworks after the structure has been setup.");
+            if (_structureSetup)
+                throw new ArgumentOutOfRangeException("Cannot add groundworks after the structure has been setup.");
             lock (_lock)
             {
-                for (var i = 0; i < Groundworks.Length; i++)
-                {
-                    _groundworks.Add(Groundworks[i]);
-                }
+                for (var i = 0; i < Groundworks.Length; i++) _groundworks.Add(Groundworks[i]);
             }
         }
-        
+
         public void AddPlateau(params BasePlateau[] RoundedPlateaux)
         {
-            if(_structureSetup) throw new ArgumentOutOfRangeException("Cannot add plateaus after the structure has been setup.");
+            if (_structureSetup)
+                throw new ArgumentOutOfRangeException("Cannot add plateaus after the structure has been setup.");
             lock (_lock)
             {
-                for (var i = 0; i < RoundedPlateaux.Length; i++)
-                {
-                    _plateaus.Add(RoundedPlateaux[i]);
-                }
+                for (var i = 0; i < RoundedPlateaux.Length; i++) _plateaus.Add(RoundedPlateaux[i]);
             }
         }
 
@@ -211,32 +235,21 @@ namespace Hedra.Engine.Generation
             var radius = 0f;
             foreach (var model in _models)
             {
-                var newRadius = (model.Position - this.Position).LengthFast() + model.Bounds.Xz().LengthFast() * .5f;
+                var newRadius = (model.Position - Position).LengthFast() + model.Bounds.Xz().LengthFast() * .5f;
                 if (newRadius > radius)
                     radius = newRadius;
             }
+
             foreach (var instance in _instances)
             {
-                var newRadius = (instance.Position - this.Position).LengthFast() + instance.ApproximateBounds.Xz().LengthFast() * .5f;
+                var newRadius = (instance.Position - Position).LengthFast() +
+                                instance.ApproximateBounds.Xz().LengthFast() * .5f;
                 if (newRadius > radius)
                     radius = newRadius;
             }
-            this.Radius = radius;
-            if (Radius > 2000) Debugger.Break();
-        }
 
-        public void Dispose()
-        {
-            lock (_lock)
-            {
-                foreach (var model in _models)
-                {
-                    model.Dispose();
-                }
-            }
-            Disposed = true;
-            World.WorldBuilding.DisposeStructure(this);
-            WorldObject?.Dispose();
+            Radius = radius;
+            if (Radius > 2000) Debugger.Break();
         }
     }
 }

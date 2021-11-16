@@ -11,7 +11,7 @@ namespace Hedra.ModelHandlers
         {
             Factory = new GhostFactory();
         }
-        
+
         public override void Process(IEntity Entity, AnimatedUpdatableModel Model)
         {
             Factory.Build(Model);

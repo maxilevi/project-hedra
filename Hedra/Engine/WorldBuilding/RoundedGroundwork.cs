@@ -1,16 +1,12 @@
 using System;
-using System.ComponentModel;
-using Hedra.Engine.Generation;
 using System.Numerics;
+using Hedra.Engine.Generation;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.WorldBuilding
 {
     public class RoundedGroundwork : BaseGroundwork
     {
-        private Vector3 Position { get; set; }
-        private float Radius { get; set; }
-
         public RoundedGroundwork(Vector3 Position, float Radius, BlockType Type)
         {
             this.Position = Position;
@@ -18,14 +14,17 @@ namespace Hedra.Engine.WorldBuilding
             this.Type = Type;
         }
 
+        private Vector3 Position { get; }
+        private float Radius { get; }
+
         public override bool Affects(Vector2 Sample)
         {
-            return (Sample - this.Position.Xz()).LengthSquared() < this.Radius * this.Radius;
+            return (Sample - Position.Xz()).LengthSquared() < Radius * Radius;
         }
-        
+
         public override float Density(Vector2 Sample)
         {
-            return 1 - Math.Min((Sample - this.Position.Xz()).LengthSquared() / (this.Radius * this.Radius), 1);
+            return 1 - Math.Min((Sample - Position.Xz()).LengthSquared() / (Radius * Radius), 1);
         }
 
         public override BoundingBox ToBoundingBox()

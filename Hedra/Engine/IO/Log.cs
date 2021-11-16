@@ -15,19 +15,19 @@ using System.Reflection;
 namespace Hedra.Engine.IO
 {
     /// <summary>
-    /// Description of Log.
+    ///     Description of Log.
     /// </summary>
     public static class Log
     {
         private static LogType _currentType;
-        private static Dictionary<LogType, StreamWriter> _logs;
+        private static readonly Dictionary<LogType, StreamWriter> _logs;
         private static readonly string LogsPath;
         private static readonly object _lock;
 
         static Log()
         {
             var log = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/log.txt";
-            if(File.Exists(log)) File.Delete(log);
+            if (File.Exists(log)) File.Delete(log);
             _lock = new object();
             _logs = new Dictionary<LogType, StreamWriter>();
             /*LogsPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/Logs/";
@@ -46,19 +46,20 @@ namespace Hedra.Engine.IO
                 AutoFlush = true
             });
         }
-        
+
         public static string Output
         {
             get
             {
                 lock (_lock)
                 {
-                    long position = _logs[_currentType].BaseStream.Position;
+                    var position = _logs[_currentType].BaseStream.Position;
                     _logs[_currentType].Close();
                     _logs[_currentType].Dispose();
 
-                    var path = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/log.txt";//$"{LogsPath}/{_currentType}.log";
-                    string text = File.ReadAllText(path);
+                    var path =
+                        $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/log.txt"; //$"{LogsPath}/{_currentType}.log";
+                    var text = File.ReadAllText(path);
                     /*_logs[_currentType] = new StreamWriter(new FileStream(path, FileMode.OpenOrCreate))
                     {
                         AutoFlush = true
@@ -72,7 +73,7 @@ namespace Hedra.Engine.IO
                 }
             }
         }
-        
+
         public static void WriteToFile(object Text)
         {
             lock (_lock)
@@ -83,11 +84,11 @@ namespace Hedra.Engine.IO
 
         public static void Write(object Text)
         {
-            var newText = $"[{DateTime.Now:HH:mm:ss}] {(_currentType != LogType.Normal ? $"[{_currentType.ToString()}]" : string.Empty)} {Text}";
+            var newText =
+                $"[{DateTime.Now:HH:mm:ss}] {(_currentType != LogType.Normal ? $"[{_currentType.ToString()}]" : string.Empty)} {Text}";
             WriteToFile(newText);
-            if(_currentType != LogType.System)
+            if (_currentType != LogType.System)
                 Console.Write(newText);
-            
         }
 
         public static void Write(object Text, ConsoleColor Color)
@@ -97,8 +98,9 @@ namespace Hedra.Engine.IO
             Console.ForegroundColor = ConsoleColor.Gray;
         }
 
-        public static void WriteLine(object Line){
-            Write( Line + Environment.NewLine);
+        public static void WriteLine(object Line)
+        {
+            Write(Line + Environment.NewLine);
         }
 
         public static void WriteLine(string Text, LogType Type)
@@ -111,32 +113,30 @@ namespace Hedra.Engine.IO
 
         public static void WriteLine(string Format, params object[] Args)
         {
-            for(var i = 0; i < Args.Length; i++)
-            {
-                Format = Format.Replace("{"+i+"}", Args[i].ToString());
-            }
-            Write( Format + Environment.NewLine);
+            for (var i = 0; i < Args.Length; i++) Format = Format.Replace("{" + i + "}", Args[i].ToString());
+            Write(Format + Environment.NewLine);
         }
 
         public static void WriteResult(bool Condition, string Text)
         {
-            if(Condition)
+            if (Condition)
             {
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
-                Log.WriteLine("[SUCCESS] "+Text);
+                WriteLine("[SUCCESS] " + Text);
             }
             else
             {
                 Console.ForegroundColor = ConsoleColor.DarkRed;
-                Log.WriteLine("[FAILURE] "+Text);
+                WriteLine("[FAILURE] " + Text);
             }
+
             Console.ForegroundColor = ConsoleColor.Gray;
         }
 
         public static void WriteWarning(string Text)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Log.WriteLine($"[WARNING] {Text}");
+            WriteLine($"[WARNING] {Text}");
             Console.ForegroundColor = ConsoleColor.Gray;
         }
 

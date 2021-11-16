@@ -8,26 +8,21 @@
  */
 
 using System;
-using System.Runtime.InteropServices;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
+using System.Drawing.Imaging;
 using System.IO;
-using System.Threading;
+using System.Runtime.InteropServices;
 using Hedra.Core;
-using Hedra.Engine.Game;
-using System.Numerics;
-using Hedra.Engine.Core;
-using Hedra.Engine.Management;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Steamworks;
 using Hedra.Engine.Windowing;
 using Hedra.Game;
+using SixLabors.ImageSharp;
+using PixelFormat = Hedra.Engine.Windowing.PixelFormat;
 
 namespace Hedra.Engine
 {
     /// <summary>
-    /// Description of Recorder.
+    ///     Description of Recorder.
     /// </summary>
     public static class Recorder
     {
@@ -60,7 +55,7 @@ namespace Hedra.Engine
                 }
 
                 Bitmap Bmp = new Bitmap(w, h);
-                var data = Bmp.LockBits(new Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.WriteOnly,
+                var data = Bmp.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.WriteOnly,
                     System.Drawing.Imaging.PixelFormat.Format32bppRgb);
                 Marshal.Copy(pixels, 0, data.Scan0, pixels.Length);
                 Bmp.UnlockBits(data);
@@ -68,7 +63,7 @@ namespace Hedra.Engine
 
                 Bmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
 
-                Bmp.Save(Output + FrameID++ + ".png", System.Drawing.Imaging.ImageFormat.Png);
+                Bmp.Save(Output + FrameID++ + ".png", ImageFormat.Png);
             });
         }
 
@@ -92,13 +87,13 @@ namespace Hedra.Engine
 
             using (var Bmp = new Bitmap(w, h))
             {
-                var data = Bmp.LockBits(new Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.WriteOnly,
+                var data = Bmp.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.WriteOnly,
                     System.Drawing.Imaging.PixelFormat.Format32bppRgb);
                 Marshal.Copy(pixels, 0, data.Scan0, pixels.Length);
                 Bmp.UnlockBits(data);
                 Bmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
                 Bmp.Save(Path + DateTime.Now.ToString("dd-MM-yyyy_hh-mm-ss") + ".png",
-                    System.Drawing.Imaging.ImageFormat.Png);
+                    ImageFormat.Png);
                 return DateTime.Now.ToString("dd-MM-yyyy_hh-mm-ss") + ".png";
             }
         }

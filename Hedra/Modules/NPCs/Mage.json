@@ -6,12 +6,12 @@
     "Scale": 1.0
   },
   "Class": "Mage",
-  "Behaviour" : "Hostile",  
+  "Behaviour": "Hostile",
   "Immune": false,
-  "XP": 2.5, 
-  "AttackPower": 1.0, 
+  "XP": 2.5,
+  "AttackPower": 1.0,
   "AttackSpeed": 1.0,
-  "Components":  [],
+  "Components": [],
   "Weapons": [
     {
       "Tier": "Uncommon",

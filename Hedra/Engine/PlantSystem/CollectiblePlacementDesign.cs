@@ -1,16 +1,16 @@
 using System;
+using System.Numerics;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
-using System.Numerics;
 
 namespace Hedra.Engine.PlantSystem
 {
     public abstract class CollectiblePlacementDesign : PlacementDesign
     {
         protected abstract PlantDesign Design { get; }
-        
+
         protected abstract BlockType[] Types { get; }
-        
+
         protected abstract bool ShouldPlace(Random Rng);
 
         public override PlantDesign GetDesign(Vector3 Position, Chunk UnderChunk, Random Rng)

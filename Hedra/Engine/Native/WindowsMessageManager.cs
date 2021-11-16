@@ -7,13 +7,13 @@ namespace Hedra.Engine.Native
     {
         private const int OkType = 0;
         private const int ErrorIcon = 10;
-        
-        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-        private static extern int MessageBox(IntPtr h, string m, string c, int type);
-        
+
         public void Show(string Message, string Title)
         {
-            MessageBox(IntPtr.Zero, Message, Title, OkType | ErrorIcon);      
+            MessageBox(IntPtr.Zero, Message, Title, OkType | ErrorIcon);
         }
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+        private static extern int MessageBox(IntPtr h, string m, string c, int type);
     }
 }

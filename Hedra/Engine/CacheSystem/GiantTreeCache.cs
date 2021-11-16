@@ -7,10 +7,10 @@ namespace Hedra.Engine.CacheSystem
     {
         public GiantTreeCache()
         {
-            this.AddModel(AssetManager.PLYLoader("Assets/Env/Structures/GiantTree0.ply", Vector3.One));
-            this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/GiantTree0.ply", Vector3.One));
+            AddModel(AssetManager.PLYLoader("Assets/Env/Structures/GiantTree0.ply", Vector3.One));
+            AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/GiantTree0.ply", Vector3.One));
         }
-        
+
         public override CacheItem Type => CacheItem.GiantTree;
     }
 }

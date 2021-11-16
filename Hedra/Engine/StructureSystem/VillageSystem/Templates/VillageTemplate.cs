@@ -1,5 +1,3 @@
-using Hedra.Engine.StructureSystem.VillageSystem.Builders;
-
 namespace Hedra.Engine.StructureSystem.VillageSystem.Templates
 {
     public class VillageTemplate
@@ -18,7 +16,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Templates
         public GenericTemplate Clothier { get; set; }
         public GenericTemplate Shop { get; set; }
 
-        public DesignTemplate[][] CacheableDesigns => new []
+        public DesignTemplate[][] CacheableDesigns => new[]
         {
             House.Designs,
             Well.Designs,

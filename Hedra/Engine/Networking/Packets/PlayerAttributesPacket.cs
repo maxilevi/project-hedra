@@ -35,7 +35,7 @@ namespace Hedra.Engine.Networking.Packets
                 HandLampEnabled = Humanoid.HandLamp.Enabled
             };
         }
-        
+
         protected override void DoParse(PacketReader Reader, PlayerAttributesPacket Empty)
         {
             BonusHealth = Reader.ReadSingle();

@@ -9,23 +9,18 @@
 
 using System;
 using System.Globalization;
+using System.Numerics;
 using Hedra.Components.Effects;
-using Hedra.Core;
-using Hedra.Engine.Localization;
-using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Localization;
-using Hedra.Rendering;
-using Hedra.WeaponSystem;
-using Hedra.WorldObjects;
-using System.Numerics;
 using Hedra.Numerics;
+using Hedra.Rendering;
+using Hedra.WorldObjects;
 
 namespace Hedra.Engine.SkillSystem.Archer
 {
     /// <summary>
-    /// Description of ArcherPoisonArrow.
+    ///     Description of ArcherPoisonArrow.
     /// </summary>
     public class IceArrow : SpecialRangedAttackSkill
     {
@@ -36,28 +31,29 @@ namespace Hedra.Engine.SkillSystem.Archer
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/IceArrow.png");
         public override string Description => Translations.Get("ice_arrow_desc");
         public override string DisplayName => Translations.Get("ice_arrow");
-        private float Damage => (base.Level * 4.5f) + BaseDamage;
-        public override float MaxCooldown => Math.Max(BaseCooldown - 0.80f * base.Level, CooldownCap);
+        private float Damage => Level * 4.5f + BaseDamage;
+        public override float MaxCooldown => Math.Max(BaseCooldown - 0.80f * Level, CooldownCap);
         public override float ManaCost => BaseManaCost;
         protected override int MaxLevel => 99;
         private float FreezeDuration => 2.0f;
-
-        protected override void OnHit(Projectile Proj, IEntity Victim)
-        {
-            base.OnHit(Proj, Victim);
-            Victim.AddComponent( new FreezingComponent(Victim, User, FreezeDuration + Utils.Rng.NextFloat() * 2f, Damage) );
-        }
-
-        protected override void OnMove(Projectile Proj)
-        {
-            base.OnMove(Proj);
-            Proj.Mesh.Tint = Colors.Blue * new Vector4(1,1,3,1) * .7f;
-        }
 
         public override string[] Attributes => new[]
         {
             Translations.Get("ice_arrow_damage_change", Damage.ToString("0.0", CultureInfo.InvariantCulture)),
             Translations.Get("ice_arrow_duration_change", FreezeDuration.ToString("0.0", CultureInfo.InvariantCulture))
         };
+
+        protected override void OnHit(Projectile Proj, IEntity Victim)
+        {
+            base.OnHit(Proj, Victim);
+            Victim.AddComponent(
+                new FreezingComponent(Victim, User, FreezeDuration + Utils.Rng.NextFloat() * 2f, Damage));
+        }
+
+        protected override void OnMove(Projectile Proj)
+        {
+            base.OnMove(Proj);
+            Proj.Mesh.Tint = Colors.Blue * new Vector4(1, 1, 3, 1) * .7f;
+        }
     }
 }

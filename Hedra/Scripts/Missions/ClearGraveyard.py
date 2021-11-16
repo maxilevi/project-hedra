@@ -1,12 +1,14 @@
-import MissionCore
+from Hedra.Engine.StructureSystem.Overworld import GraveyardDesign
 from Hedra.Mission import MissionBuilder, QuestTier, DialogObject
 from Hedra.Mission.Blocks import FindStructureMission, CompleteStructureMission
-from Hedra.Engine.StructureSystem.Overworld import GraveyardDesign
 from System import Array, Object
+
+import MissionCore
 
 IS_QUEST = True
 QUEST_NAME = 'ClearGraveyard'
 QUEST_TIER = QuestTier.Medium
+
 
 def setup_timeline(position, giver, owner, rng):
     builder = MissionBuilder()
@@ -27,11 +29,13 @@ def setup_timeline(position, giver, owner, rng):
     builder.SetReward(MissionCore.build_generic_reward(rng))
     return builder
 
+
 def create_dialog(name):
     dialog = DialogObject()
     dialog.Keyword = 'quest_clear_graveyard_dialog'
     dialog.Arguments = Array[Object]([])
     return dialog
+
 
 def can_give(position):
     return len(MissionCore.nearby_structs_designs(position, GraveyardDesign)) > 0

@@ -6,35 +6,29 @@
  */
 
 using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using Hedra.Core;
-using Hedra.Engine;
-using Hedra.Engine.Generation;
-using Hedra.Engine.Rendering;
-using Hedra.Rendering;
 using System.Numerics;
 using Hedra.Numerics;
+using SixLabors.ImageSharp;
 
 namespace Hedra.BiomeSystem
 {
     /// <summary>
-    /// Description of Region.
+    ///     Description of Region.
     /// </summary>
     public class RegionColor
     {
         public static Vector4 PathColor = Color.Sienna.ToVector4();
         public static Vector4 StonePathColor = Color.Gray.ToVector4();
         public static Vector4 DarkStonePathColor = Color.DimGray.ToVector4();
-        public Vector4 WaterColor;
-        public Vector4 StoneColor;
-        public Vector4 DirtColor;
-        public Vector4 SeafloorColor;
-        public Vector4 SandColor;
-        public Vector4[] LeavesColors;
-        public Vector4[] WoodColors;
-        public Vector4[] GrassColors;
         private readonly int _seed;
+        public Vector4 DirtColor;
+        public Vector4[] GrassColors;
+        public Vector4[] LeavesColors;
+        public Vector4 SandColor;
+        public Vector4 SeafloorColor;
+        public Vector4 StoneColor;
+        public Vector4 WaterColor;
+        public Vector4[] WoodColors;
 
         public RegionColor(int Seed)
         {
@@ -47,6 +41,12 @@ namespace Hedra.BiomeSystem
             BuildColors(Design);
             IntegrityCheck();
         }
+
+        public Vector4 LeavesColor => LeavesColors[new Random(_seed + 42).Next(0, LeavesColors.Length)];
+
+        public Vector4 WoodColor => WoodColors[new Random(_seed + 12).Next(0, WoodColors.Length)];
+
+        public Vector4 GrassColor => GrassColors[new Random(_seed + 54).Next(0, GrassColors.Length)];
 
         public static RegionColor Interpolate(params RegionColor[] RegionsColor)
         {
@@ -119,11 +119,5 @@ namespace Hedra.BiomeSystem
 
             for (var i = 0; i < GrassColors.Length; i++) GrassColors[i] = GrassColors[i] * 1.25f;
         }
-
-        public Vector4 LeavesColor => LeavesColors[new Random(_seed + 42).Next(0, LeavesColors.Length)];
-
-        public Vector4 WoodColor => WoodColors[new Random(_seed + 12).Next(0, WoodColors.Length)];
-
-        public Vector4 GrassColor => GrassColors[new Random(_seed + 54).Next(0, GrassColors.Length)];
     }
 }

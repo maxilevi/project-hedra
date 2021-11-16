@@ -17,11 +17,12 @@ namespace Hedra.Engine.ModuleSystem
             try
             {
                 return JsonConvert.DeserializeObject<T>(Data);
-            } catch(Exception e)
+            }
+            catch (Exception e)
             {
                 Log.WriteLine(e);
                 Log.WriteLine($"Failed to parse {Data}");
-                return default(T);
+                return default;
             }
         }
     }

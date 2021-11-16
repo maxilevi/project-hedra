@@ -1,13 +1,10 @@
+using System.Numerics;
 using Hedra.Core;
 using Hedra.Engine.Player.Inventory;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
-using Hedra.Engine.Game;
 using Hedra.Engine.Rendering.Core;
-using Hedra.Game;
-using System.Numerics;
-using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
+using Hedra.Game;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.Player.QuestSystem
@@ -15,7 +12,9 @@ namespace Hedra.Engine.Player.QuestSystem
     public static class EntityRenderer
     {
         private static float _rotation;
-        
+
+        private static FBO Framebuffer => InventoryItemRenderer.Framebuffer;
+
         public static uint Draw(AnimatedModel Model, float ModelHeight)
         {
             var previousBound = Renderer.ShaderBound;
@@ -32,7 +31,7 @@ namespace Hedra.Engine.Player.QuestSystem
 
             var previousShadows = GameSettings.GlobalShadows;
             GameSettings.GlobalShadows = false;
-            
+
             const float aspect = 1.33f;
             var projectionMatrix = Matrix4x4.CreatePerspectiveFieldOfView(40 * Mathf.Radian, aspect, 1, 1024f);
             Renderer.LoadProjection(projectionMatrix);
@@ -68,7 +67,5 @@ namespace Hedra.Engine.Player.QuestSystem
         {
             _rotation += Time.DeltaTime * 25f;
         }
-
-        private static FBO Framebuffer => InventoryItemRenderer.Framebuffer;
     }
 }

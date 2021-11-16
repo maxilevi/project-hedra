@@ -1,17 +1,16 @@
-using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.ModuleSystem.Templates;
 
 namespace Hedra.BiomeSystem
 {
     public class RegionMob
     {
-        private readonly int _seed;
         private readonly BiomeMobDesign _design;
+        private readonly int _seed;
 
         public RegionMob(int Seed, BiomeMobDesign Design)
         {
-            this._seed = Seed;
-            this._design = Design;
+            _seed = Seed;
+            _design = Design;
         }
 
         public SpawnerSettings SpawnerSettings => _design.Settings;

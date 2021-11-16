@@ -10,7 +10,7 @@ layout(location = 2)out vec4 OutNormal;
 
 void main()
 {
-    if(Visibility < 0.005)
+    if (Visibility < 0.005)
     {
         discard;
     }

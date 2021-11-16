@@ -1,5 +1,4 @@
 using System;
-using Hedra.Sound;
 using System.Numerics;
 using Silk.NET.OpenAL;
 

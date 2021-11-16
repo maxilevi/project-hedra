@@ -6,7 +6,7 @@ namespace Hedra.BiomeSystem
     public class RegionStructure
     {
         private readonly int _seed;
-     
+
         public RegionStructure(int Seed, BiomeStructureDesign StructureDesign)
         {
             _seed = Seed;

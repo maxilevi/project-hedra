@@ -1,14 +1,11 @@
-using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Events;
 using Hedra.Engine.Localization;
-using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Sound;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Components
 {

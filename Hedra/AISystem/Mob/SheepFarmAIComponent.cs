@@ -7,7 +7,8 @@ namespace Hedra.AISystem.Mob
 {
     public class SheepFarmAIComponent : FarmAnimalAIComponent
     {
-        public SheepFarmAIComponent(IEntity Parent, Vector3 FarmPosition, float Width) : base(Parent, FarmPosition, Width)
+        public SheepFarmAIComponent(IEntity Parent, Vector3 FarmPosition, float Width) : base(Parent, FarmPosition,
+            Width)
         {
         }
 

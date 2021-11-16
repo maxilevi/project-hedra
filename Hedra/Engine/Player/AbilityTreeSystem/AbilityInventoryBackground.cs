@@ -1,11 +1,10 @@
 using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Globalization;
+using System.Numerics;
 using Hedra.Engine.Player.Inventory;
 using Hedra.EntitySystem;
 using Hedra.Localization;
-using System.Numerics;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
 {

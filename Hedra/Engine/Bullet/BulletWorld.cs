@@ -6,12 +6,9 @@ namespace Hedra.Engine.Bullet
 {
     public class BulletWorld : IDisposable
     {
-        public CollisionDispatcher Dispatcher { get; }
-        public DbvtBroadphase Broadphase { get; }
-        public DiscreteDynamicsWorld DynamicsWorld { get; }
         private readonly DefaultCollisionConfiguration _configuration;
         private readonly SequentialImpulseConstraintSolver _solver;
-        
+
         public BulletWorld(float Gravity, bool ForceUpdateAllAabbs = true)
         {
             _configuration = new DefaultCollisionConfiguration();
@@ -28,7 +25,11 @@ namespace Hedra.Engine.Bullet
                 ForceUpdateAllAabbs = ForceUpdateAllAabbs
             };
         }
-        
+
+        public CollisionDispatcher Dispatcher { get; }
+        public DbvtBroadphase Broadphase { get; }
+        public DiscreteDynamicsWorld DynamicsWorld { get; }
+
         public void Dispose()
         {
             _solver.Dispose();

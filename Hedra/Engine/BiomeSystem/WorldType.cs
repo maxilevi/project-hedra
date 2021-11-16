@@ -1,6 +1,6 @@
 namespace Hedra.Engine.BiomeSystem
 {
-    public enum WorldType : int
+    public enum WorldType
     {
         Overworld = 0,
         GhostTown = 1

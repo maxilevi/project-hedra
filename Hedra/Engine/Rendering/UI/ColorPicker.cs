@@ -7,33 +7,24 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
-using System;
 using System.Collections.Generic;
-using Hedra.Engine.Management;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using System.IO;
-using Hedra.Core;
 using System.Numerics;
 using Hedra.Engine.Localization;
-using Hedra.Engine.Rendering;
-using Hedra.Numerics;
-using Hedra.Rendering;
 using Hedra.Rendering.UI;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Rendering.UI
 {
     /// <summary>
-    /// Description of ColorPicker.
+    ///     Description of ColorPicker.
     /// </summary>
     public delegate void ColorPickedEventHandler(Vector4 Color);
 
     public class ColorPicker : UIElement
     {
-        public event ColorPickedEventHandler ColorPickedEvent;
         private readonly List<UIElement> _elements;
-        private Vector2 _mScale;
         private Vector2 _mPosition;
+        private Vector2 _mScale;
 
         public ColorPicker(Vector4[] Colors, Translation NameTranslation, Vector2 Position, Vector2 Scale,
             Panel InPanel, int ColorsPerRow = 3, float TextSize = 14)
@@ -118,5 +109,7 @@ namespace Hedra.Engine.Rendering.UI
         {
             _elements.ForEach(D => D.Dispose());
         }
+
+        public event ColorPickedEventHandler ColorPickedEvent;
     }
 }

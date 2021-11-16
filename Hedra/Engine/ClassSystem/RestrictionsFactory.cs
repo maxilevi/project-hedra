@@ -7,7 +7,7 @@ namespace Hedra.Engine.ClassSystem
     {
         public string[] Build(Type Class)
         {
-            return Contains(Class) 
+            return Contains(Class)
                 ? this[Class]
                 : new string[0];
         }

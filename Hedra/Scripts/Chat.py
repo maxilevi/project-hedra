@@ -1,17 +1,18 @@
-import Core
-import TextDisplay
 import clr
-from System.Numerics import Vector2
-from Silk.NET.Input import Key
 from Hedra.Core import Time
-from Hedra.User import WordFilter, CommandManager
 from Hedra.Game import GameSettings
 from Hedra.Input import Cursor
-from Hedra.Sound import SoundPlayer, SoundType
-from Hedra.Rendering import Colors
-from Hedra.Rendering.UI import Panel, GUIText, TextField, FontCache
 from Hedra.Localization import Controls
 from Hedra.Numerics import VectorExtensions
+from Hedra.Rendering import Colors
+from Hedra.Rendering.UI import Panel, GUIText, TextField, FontCache
+from Hedra.Sound import SoundPlayer, SoundType
+from Hedra.User import WordFilter, CommandManager
+from Silk.NET.Input import Key
+from System.Numerics import Vector2
+
+import Core
+import TextDisplay
 
 clr.ImportExtensions(VectorExtensions)
 TEXT_BOX_POSITION = Vector2(-0.95, -.65)
@@ -22,15 +23,16 @@ MAX_LINES = 10
 MAX_FADE_TIME = 4.0
 FADE_SPEED = 1.0
 
+
 def init(user, state):
     panel = Panel()
-    
+
     command_line = TextField(Vector2.Zero, COMMAND_LINE_SIZE, CurvedBorders=False)
     text_box = GUIText(str(), Vector2.Zero, Colors.ToColorStruct(Colors.White), FontCache.GetNormal(10))
-    
+
     panel.AddElement(command_line)
     panel.AddElement(text_box)
-    
+
     state['user'] = user
     state['ui_panel'] = panel
     state['ui_command_line'] = command_line
@@ -40,6 +42,7 @@ def init(user, state):
     state['text'] = []
     state['open'] = False
     state['fading'] = False
+
 
 def update(state):
     command_line = state['ui_command_line']
@@ -52,22 +55,24 @@ def update(state):
         text_box.Opacity = 1.0
     elif not state['open'] and not state['fading'] and text_box.Enabled:
         fade(state)
-        
+
     if state['fading']:
         update_fade(state)
-        
+
     if not should_show(state['user']):
         disable(state)
-    
+
+
 def fade(state):
     state['fading'] = True
     state['fade_time'] = MAX_FADE_TIME
-    
+
+
 def update_fade(state):
     if state['open']:
         state['fading'] = False
 
-    text_box = state['ui_text_box']        
+    text_box = state['ui_text_box']
     if state['fade_time'] <= 0.0:
         state['fading'] = False
         text_box.Disable()
@@ -75,7 +80,7 @@ def update_fade(state):
     if state['fading']:
         text_box.Opacity = (state['fade_time'] / MAX_FADE_TIME) ** 0.5
         state['fade_time'] = state['fade_time'] - FADE_SPEED * Time.DeltaTime
-    
+
 
 def on_key_down(event_args, state):
     success = False
@@ -86,22 +91,24 @@ def on_key_down(event_args, state):
         elif state['open']:
             push_text(state)
             success = True
-  
+
     elif event_args.Key == Key.Escape and state['open']:
         close(state)
         success = True
-    
+
     elif event_args.Key == Key.Up and state['open'] and state['command_history']:
         cycle_history(state)
         success = True
-        
+
     if success:
         SoundPlayer.PlaySound(SoundType.NotificationSound, state['user'].Position)
+
 
 def cycle_history(state):
     command_line = state['ui_command_line']
     command_line.Text = state['command_history'][state['command_history_index']]
     state['command_history_index'] = (state['command_history_index'] + 1) % len(state['command_history'])
+
 
 def push_text(state):
     command_line = state['ui_command_line']
@@ -117,6 +124,7 @@ def push_text(state):
         add_history(state, command_text)
     close(state)
 
+
 def add_line(state, line):
     text = state['text']
     text.append(line)
@@ -126,35 +134,39 @@ def add_line(state, line):
     text_box.Text = TextDisplay.NEW_LINE.join(text)
     state['text'] = text
 
+
 def add_history(state, line):
     history = state['command_history']
     if history and history[0] == line: return
     history.insert(0, line)
     state['command_history'] = history[:MAX_HISTORY]
 
+
 def clear(state):
     state['text'] = []
 
+
 def open(state):
     Cursor.Show = True
-    
+
     user = state['user']
     user.View.CaptureMovement = False
     user.View.LockMouse = False
     user.UI.GamePanel.Cross.Disable()
-    
+
     command_line = state['ui_command_line']
     command_line.Enable()
     command_line.Text = str()
     command_line.Focus()
-    
+
     state['open'] = True
     state['command_history_index'] = 0
+
 
 def close(state):
     Cursor.Show = False
     Cursor.Center()
-    
+
     user = state['user']
     user.CanInteract = True
     user.View.CaptureMovement = True
@@ -166,16 +178,19 @@ def close(state):
     command_line.Defocus()
     state['open'] = False
 
+
 def can_open(user):
     return should_show(user) and not user.InterfaceOpened and user.CanInteract
 
+
 def should_show(user):
     return not Core.is_paused() and not Core.is_loading() and not Core.is_start_menu() and not user.IsDead and GameSettings.ShowChat
-           
+
 
 def enable(state):
     state['ui_panel'].Enable()
-    
+
+
 def disable(state):
     state['ui_panel'].Disable()
     if state['open']:

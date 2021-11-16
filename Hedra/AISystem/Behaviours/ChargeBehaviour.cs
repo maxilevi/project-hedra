@@ -1,10 +1,6 @@
 using Hedra.Core;
-using Hedra.Engine;
-using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem.AnimationEvents;
 using Hedra.EntitySystem;
-using System.Numerics;
 using Hedra.Numerics;
 
 namespace Hedra.AISystem.Behaviours
@@ -13,15 +9,18 @@ namespace Hedra.AISystem.Behaviours
     {
         private const int ChargeDistance = 48;
         private readonly Timer _chargeTimer;
-        private IEntity _target { get; set; }
-        protected WalkBehaviour Walk { get; }
         private bool _previousCollidesWithEntities;
-        
+
         public ChargeBehaviour(IEntity Parent) : base(Parent)
         {
             Walk = new WalkBehaviour(Parent);
             _chargeTimer = new Timer(6 + Utils.Rng.Next(0, 4));
         }
+
+        private IEntity _target { get; set; }
+        protected WalkBehaviour Walk { get; }
+
+        public bool IsCharging { get; private set; }
 
         public override void Update()
         {
@@ -48,7 +47,7 @@ namespace Hedra.AISystem.Behaviours
                 DisableCollision();
             }
         }
-        
+
         private void UpdateCharge()
         {
             _chargeTimer.Reset();
@@ -86,7 +85,7 @@ namespace Hedra.AISystem.Behaviours
         {
             Parent.Physics.CollidesWithStructures = _previousCollidesWithEntities;
         }
-        
+
         private bool IsInChargeRadius()
         {
             return (_target.Position.Xz() - Parent.Position.Xz()).LengthSquared() > ChargeDistance * ChargeDistance;
@@ -94,11 +93,9 @@ namespace Hedra.AISystem.Behaviours
 
         public void SetTarget(IEntity Target)
         {
-            if(Target.IsDead) return;
+            if (Target.IsDead) return;
             _target = Target;
         }
-        
-        public bool IsCharging { get; private set; }
 
         public override void Dispose()
         {

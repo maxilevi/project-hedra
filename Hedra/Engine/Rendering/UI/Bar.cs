@@ -8,19 +8,17 @@
  */
 
 using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
+using System.Numerics;
 using Hedra.Core;
-using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
+using Hedra.Engine.Windowing;
 using Hedra.Game;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-using System.Numerics;
-using Hedra.Engine.Core;
-using Hedra.Engine.Windowing;
-using Hedra.Numerics;
+using SixLabors.Fonts;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -30,24 +28,22 @@ namespace Hedra.Engine.Rendering.UI
         private static uint _rectangleBlueprint;
 
         private static readonly Shader Shader = Shader.Build("Shaders/Bar.vert", "Shaders/Bar.frag");
+        private readonly Vector2 _targetResolution = new Vector2(1024, 578);
+        private readonly Vector4 _uniformColor;
         private float _barSize;
+        private RenderableText _barText;
+        private bool _builded;
         private Panel _inPanel;
         private Func<float> _max;
+        private string _optionalText;
+        private DrawOrder _order;
 
         private Vector2 _position;
         private bool _showText = true;
-        private bool _builded;
-        private string _optionalText;
         private Func<float> _value;
         public Vector4 BackgroundColor = new Vector4(0.1529f, 0.1529f, 0.1529f, 1);
         public bool CurvedBorders;
-        private DrawOrder _order;
         public bool ShowBar = true;
-        private readonly Vector2 _targetResolution = new Vector2(1024, 578);
-        private RenderableText _barText;
-        private readonly Vector4 _uniformColor;
-        public bool AlignLeft { get; set; }
-        public Vector2 AdjustedPosition { get; set; }
 
         public bool UpdateTextRatio = true;
 
@@ -78,10 +74,32 @@ namespace Hedra.Engine.Rendering.UI
             Initialize(Position, Scale, Value, Max, InPanel, Text, Order);
         }
 
-        public void Dispose()
+        public bool AlignLeft { get; set; }
+        public Vector2 AdjustedPosition { get; set; }
+
+        public string Text
         {
-            _barText.Dispose();
-            DrawManager.UIRenderer.Remove(this);
+            get => _barText.Text;
+            set => _barText.Text = value;
+        }
+
+        public Color TextColor
+        {
+            get => _barText.Color;
+            set => _barText.Color = value;
+        }
+
+        public Font TextFont
+        {
+            get => _barText.TextFont;
+            set => _barText.TextFont = value;
+        }
+
+        public bool Enabled { get; private set; }
+
+        public void Adjust()
+        {
+            AdjustedPosition = GUITexture.Adjust(Position);
         }
 
         public void Draw()
@@ -135,6 +153,12 @@ namespace Hedra.Engine.Rendering.UI
             _barText.Draw();
         }
 
+        public void Dispose()
+        {
+            _barText.Dispose();
+            DrawManager.UIRenderer.Remove(this);
+        }
+
         public Vector2 Scale { get; set; }
 
         public Vector2 Position
@@ -149,24 +173,6 @@ namespace Hedra.Engine.Rendering.UI
             }
         }
 
-        public string Text
-        {
-            get => _barText.Text;
-            set => _barText.Text = value;
-        }
-
-        public Color TextColor
-        {
-            get => _barText.Color;
-            set => _barText.Color = value;
-        }
-
-        public Font TextFont
-        {
-            get => _barText.TextFont;
-            set => _barText.TextFont = value;
-        }
-
         public void Enable()
         {
             Enabled = true;
@@ -177,13 +183,6 @@ namespace Hedra.Engine.Rendering.UI
         {
             Enabled = false;
             _barText.Disable();
-        }
-
-        public bool Enabled { get; private set; }
-
-        public void Adjust()
-        {
-            AdjustedPosition = GUITexture.Adjust(Position);
         }
 
         private void Initialize(Vector2 Position, Vector2 Scale, Func<float> Value, Func<float> Max, Panel InPanel,

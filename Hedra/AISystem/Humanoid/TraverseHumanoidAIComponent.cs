@@ -1,8 +1,8 @@
 using System;
-using Hedra.AISystem.Behaviours;
-using Hedra.EntitySystem;
 using System.Numerics;
+using Hedra.AISystem.Behaviours;
 using Hedra.Engine.Rendering;
+using Hedra.EntitySystem;
 using Hedra.Game;
 
 namespace Hedra.AISystem.Humanoid
@@ -10,11 +10,19 @@ namespace Hedra.AISystem.Humanoid
     public abstract class TraverseHumanoidAIComponent : BaseHumanoidAIComponent
     {
         private readonly TraverseBehaviour _traverse;
-        
+
         protected TraverseHumanoidAIComponent(IHumanoid Entity) : base(Entity)
         {
             _traverse = new TraverseBehaviour(Entity, UseCollision);
         }
+
+        public float ErrorMargin
+        {
+            get => _traverse.ErrorMargin;
+            set => _traverse.ErrorMargin = value;
+        }
+
+        protected virtual bool UseCollision => false;
 
         public override void Update()
         {
@@ -24,7 +32,7 @@ namespace Hedra.AISystem.Humanoid
         }
 
         /// <summary>
-        /// Move to target position. Needs to be called every frame.
+        ///     Move to target position. Needs to be called every frame.
         /// </summary>
         /// <param name="TargetPoint">Target point to move</param>
         protected void MoveTo(Vector3 TargetPoint, float ErrorMargin = DefaultErrorMargin)
@@ -39,9 +47,9 @@ namespace Hedra.AISystem.Humanoid
         public override void Draw()
         {
             base.Draw();
-            if(!GameSettings.DebugAI) return;
+            if (!GameSettings.DebugAI) return;
             BasicAIComponent.DrawDebugCollision(Parent);
-            if(!_traverse.HasTarget) return;
+            if (!_traverse.HasTarget) return;
             BasicGeometry.DrawLine(Parent.Position + Vector3.UnitY, _traverse.Target + Vector3.UnitY, Vector4.One, 2);
             BasicGeometry.DrawPoint(_traverse.Target, Vector4.One);
         }
@@ -53,24 +61,13 @@ namespace Hedra.AISystem.Humanoid
 
         private void UpdateMovement()
         {
-            if(!_traverse.HasTarget) return;
+            if (!_traverse.HasTarget) return;
             Parent.IsSitting = false;
-            IsMoving = true;         
+            IsMoving = true;
             if (Parent.IsUnderwater)
-            {
                 if (Math.Abs(_traverse.Target.Y - Parent.Position.Y) > 1)
                     Parent.Movement.MoveInWater(_traverse.Target.Y > Parent.Position.Y);
-            }
-            if(Parent.IsStuck)
-            {
-                OnMovementStuck();
-            }
-        }
-        
-        public float ErrorMargin
-        {
-            get => _traverse.ErrorMargin;
-            set => _traverse.ErrorMargin = value;
+            if (Parent.IsStuck) OnMovementStuck();
         }
 
         public override void Dispose()
@@ -78,7 +75,5 @@ namespace Hedra.AISystem.Humanoid
             base.Dispose();
             _traverse.Dispose();
         }
-
-        protected virtual bool UseCollision => false;
     }
 }

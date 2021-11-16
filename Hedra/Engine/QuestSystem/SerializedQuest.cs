@@ -1,8 +1,7 @@
 using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
 using Hedra.Engine.ModuleSystem;
-using System.Numerics;
-using Hedra.Engine.CacheSystem;
 
 namespace Hedra.Engine.QuestSystem
 {
@@ -20,7 +19,7 @@ namespace Hedra.Engine.QuestSystem
                 ToJson(this)
             );
         }
-        
+
         public static SerializedQuest FromArray(byte[] Array)
         {
             var str = Encoding.ASCII.GetString(Array);
@@ -33,10 +32,10 @@ namespace Hedra.Engine.QuestSystem
             {
                 Content = new Dictionary<string, object>
                 {
-                    {"CompletedSteps", Settings.CompletedSteps}
+                    { "CompletedSteps", Settings.CompletedSteps }
                 },
                 Name = "Story",
-                IsMetadata = true,
+                IsMetadata = true
             };
             return quest;
         }

@@ -1,7 +1,7 @@
+using System.Numerics;
 using Hedra.Engine.EntitySystem;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
-using System.Numerics;
 
 namespace Hedra.Engine.Rendering
 {
@@ -10,13 +10,13 @@ namespace Hedra.Engine.Rendering
         protected UpdatableObjectMeshModel(IEntity Parent) : base(Parent)
         {
         }
-        
+
         public bool Enabled
         {
             get => Model.Enabled;
             set => Model.Enabled = value;
         }
-        
+
         public bool Outline
         {
             get => Model.Outline;
@@ -40,13 +40,13 @@ namespace Hedra.Engine.Rendering
             get => Model.Rotation;
             set => Model.Rotation = value;
         }
-        
+
         public Vector3 LocalPosition
         {
             get => Model.LocalPosition;
             set => Model.LocalPosition = value;
         }
-        
+
         public Vector3 BeforeRotation
         {
             get => Model.BeforeRotation;
@@ -58,7 +58,7 @@ namespace Hedra.Engine.Rendering
             get => Model.Position;
             set => Model.Position = value;
         }
-        
+
         public bool ApplyNoiseTexture
         {
             get => Model.ApplyNoiseTexture;

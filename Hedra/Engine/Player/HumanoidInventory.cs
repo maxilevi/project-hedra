@@ -2,20 +2,19 @@ using System;
 using System.Collections.Generic;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player.Inventory;
-using Hedra.Engine.Rendering.UI;
 using Hedra.Items;
-
 
 namespace Hedra.Engine.Player
 {
     public class HumanoidInventory : IPlayerInventory
     {
         private readonly EquipmentHandler _equipment;
+
         public HumanoidInventory(EquipmentHandler Equipment)
         {
             _equipment = Equipment;
         }
-        
+
         public bool AddItem(Item New)
         {
             return false;
@@ -36,7 +35,10 @@ namespace Hedra.Engine.Player
         {
         }
 
-        public Item Search(Func<Item, bool> Matches) => null;
+        public Item Search(Func<Item, bool> Matches)
+        {
+            return null;
+        }
 
         public int IndexOf(Item Item)
         {
@@ -93,17 +95,17 @@ namespace Hedra.Engine.Player
         public bool HasAvailableSpace => false;
 
         public Item MainWeapon => _equipment.MainWeapon;
-        
+
         public Item Vehicle => null;
-        
+
         public Item Pet => null;
-        
+
         public Item Helmet => null;
-        
+
         public Item Chest => null;
-        
+
         public Item Pants => null;
-        
+
         public Item Boots => null;
 
         public int Length => 0;

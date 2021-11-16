@@ -1,5 +1,5 @@
 ﻿{
-  "Name" : "Woodland",
+  "Name": "Woodland",
   "Masonry": {
     "Designs": [
       {
@@ -21,21 +21,21 @@
         ],
         "Lights": [
           {
-            "Position" : {
+            "Position": {
               "X": 0.47741,
               "Y": 2.71446,
               "Z": -7.18543
             }
           },
           {
-            "Position" : {
+            "Position": {
               "X": -2.5472,
               "Y": 2.17319,
               "Z": 2.78007
             }
           },
           {
-            "Position" : {
+            "Position": {
               "X": -4.82232,
               "Y": 2.75207,
               "Z": -7.19455
@@ -89,14 +89,14 @@
         ],
         "Lights": [
           {
-            "Position" : {
+            "Position": {
               "X": -6.68871,
               "Y": 1.9811,
               "Z": -1.02759
             }
           },
           {
-            "Position" : {
+            "Position": {
               "X": 2.10971,
               "Y": 1.92365,
               "Z": -8.8048
@@ -167,7 +167,7 @@
         ],
         "Lights": [
           {
-            "Position" : {
+            "Position": {
               "X": 6.67718,
               "Y": 2.27306,
               "Z": -4.10396
@@ -175,7 +175,7 @@
             "Indoors": true
           },
           {
-            "Position" : {
+            "Position": {
               "X": 6.69893,
               "Y": 2.25976,
               "Z": 3.44807
@@ -183,7 +183,7 @@
             "Indoors": true
           },
           {
-            "Position" : {
+            "Position": {
               "X": 3.45986,
               "Y": 2.25841,
               "Z": 3.44813
@@ -217,7 +217,7 @@
         ],
         "Lights": [
           {
-            "Position" : {
+            "Position": {
               "X": -0.12193,
               "Y": 2.38438,
               "Z": -4.35951
@@ -225,7 +225,7 @@
             "Indoors": true
           },
           {
-            "Position" : {
+            "Position": {
               "X": -0.13016,
               "Y": 2.39479,
               "Z": -1.32935
@@ -233,7 +233,7 @@
             "Indoors": true
           },
           {
-            "Position" : {
+            "Position": {
               "X": -0.2289,
               "Y": 2.1047,
               "Z": 3.03554
@@ -241,7 +241,7 @@
             "Indoors": true
           },
           {
-            "Position" : {
+            "Position": {
               "X": 2.59324,
               "Y": 5.39092,
               "Z": 4.33418
@@ -249,7 +249,7 @@
             "Indoors": true
           },
           {
-            "Position" : {
+            "Position": {
               "X": 2.59786,
               "Y": 5.37868,
               "Z": 2.56658
@@ -292,9 +292,9 @@
   "Inn": {
     "Designs": [
       {
-        "Path" : "Assets/Env/Village/Inn0.ply",
-        "LodPath" : "Assets/Env/Village/Inn0-Lod.ply",
-        "Scale" : 5.5,
+        "Path": "Assets/Env/Village/Inn0.ply",
+        "LodPath": "Assets/Env/Village/Inn0-Lod.ply",
+        "Scale": 5.5,
         "Offset": {
           "X": 0.0,
           "Y": -0.05,
@@ -313,68 +313,68 @@
         ],
         "Lights": [
           {
-            "Position" : {
-              "X" : 5.77004,
-              "Y" : 2.78229,
-              "Z" : -3.75976
+            "Position": {
+              "X": 5.77004,
+              "Y": 2.78229,
+              "Z": -3.75976
             }
           },
           {
-            "Position" : {
-              "X" : 0.03511,
-              "Y" : 2.29215,
-              "Z" : -6.80598
+            "Position": {
+              "X": 0.03511,
+              "Y": 2.29215,
+              "Z": -6.80598
             }
           },
           {
-            "Position" : {
-              "X" : -7.14456,
-              "Y" : 2.80861,
-              "Z" : -5.2528
+            "Position": {
+              "X": -7.14456,
+              "Y": 2.80861,
+              "Z": -5.2528
             }
           },
           {
-            "Position" : {
-              "X" : -7.13228,
-              "Y" : 2.75808,
-              "Z" : 5.92288
+            "Position": {
+              "X": -7.13228,
+              "Y": 2.75808,
+              "Z": 5.92288
             }
           }
         ],
-        "Beds" : [
+        "Beds": [
           {
-            "Position" : {
-              "X" : -3.77374,
-              "Y" : 3.60593,
-              "Z" : 2.2475
+            "Position": {
+              "X": -3.77374,
+              "Y": 3.60593,
+              "Z": 2.2475
             }
           },
           {
-            "Position" : {
-              "X" : -3.87494,
-              "Y" : 3.49751,
-              "Z" : 5.81958
+            "Position": {
+              "X": -3.87494,
+              "Y": 3.49751,
+              "Z": 5.81958
             }
           },
           {
-            "Position" : {
-              "X" : -3.80649,
-              "Y" : 3.60593,
-              "Z" : -0.7336
+            "Position": {
+              "X": -3.80649,
+              "Y": 3.60593,
+              "Z": -0.7336
             }
           },
           {
-            "Position" : {
-              "X" : -3.78551,
-              "Y" : 3.60593,
-              "Z" : -3.81299
+            "Position": {
+              "X": -3.78551,
+              "Y": 3.60593,
+              "Z": -3.81299
             }
           }
         ],
-        "Doors" : [
+        "Doors": [
           {
-            "Path":  "Assets/Env/Village/Inn0_Door0.ply",
-            "Position" : {
+            "Path": "Assets/Env/Village/Inn0_Door0.ply",
+            "Position": {
               "X": 3.66673,
               "Y": 3.99527,
               "Z": -2.09315
@@ -383,8 +383,8 @@
             "InvertedRotation": false
           },
           {
-            "Path":  "Assets/Env/Village/Inn0_Door1.ply",
-            "Position" : {
+            "Path": "Assets/Env/Village/Inn0_Door1.ply",
+            "Position": {
               "X": 0.06437,
               "Y": 4,
               "Z": 2.27097
@@ -393,8 +393,8 @@
             "InvertedRotation": false
           },
           {
-            "Path":  "Assets/Env/Village/Inn0_Door2.ply",
-            "Position" : {
+            "Path": "Assets/Env/Village/Inn0_Door2.ply",
+            "Position": {
               "X": 0.06437,
               "Y": 4,
               "Z": -0.7
@@ -403,8 +403,8 @@
             "InvertedRotation": false
           },
           {
-            "Path":  "Assets/Env/Village/Inn0_Door3.ply",
-            "Position" : {
+            "Path": "Assets/Env/Village/Inn0_Door3.ply",
+            "Position": {
               "X": 0.06437,
               "Y": 4,
               "Z": -3.8
@@ -413,8 +413,8 @@
             "InvertedRotation": false
           },
           {
-            "Path":  "Assets/Env/Village/Inn0_Door4.ply",
-            "Position" : {
+            "Path": "Assets/Env/Village/Inn0_Door4.ply",
+            "Position": {
               "X": 0.06437,
               "Y": 4,
               "Z": 5.88899
@@ -423,8 +423,8 @@
             "InvertedRotation": false
           },
           {
-            "Path":  "Assets/Env/Village/Inn0_Door5.ply",
-            "Position" : {
+            "Path": "Assets/Env/Village/Inn0_Door5.ply",
+            "Position": {
               "X": -3.43062,
               "Y": 1.22791,
               "Z": 4.89633
@@ -432,8 +432,8 @@
             "InvertedPivot": true
           },
           {
-            "Path":  "Assets/Env/Village/Inn0_Door6.ply",
-            "Position" : {
+            "Path": "Assets/Env/Village/Inn0_Door6.ply",
+            "Position": {
               "X": -3.4377,
               "Y": 1.21763,
               "Z": -5.74635
@@ -478,18 +478,17 @@
       }
     ]
   },
-  "Well" : {
-    "Designs":[
+  "Well": {
+    "Designs": [
       {
-        "Path" : "Assets/Env/Village/Well0.ply",
-        "Scale" : 3.0
+        "Path": "Assets/Env/Village/Well0.ply",
+        "Scale": 3.0
       }
     ]
   },
-  "Farm" : {
-    "Designs" : [],
-    "PropDesigns" :
-    [
+  "Farm": {
+    "Designs": [],
+    "PropDesigns": [
       {
         "Scale": 8.0,
         "Path": "Assets/Env/Village/Farm0_Prop0.ply",
@@ -506,36 +505,36 @@
       }
     ]
   },
-  "Stable" : {
-    "Designs" : [
+  "Stable": {
+    "Designs": [
       {
-        "Path" : "Assets/Env/Village/Stable0.ply",
-        "Scale" : 4.0
+        "Path": "Assets/Env/Village/Stable0.ply",
+        "Scale": 4.0
       }
     ]
   },
-  "Blacksmith" : {
-    "Designs" : [
+  "Blacksmith": {
+    "Designs": [
       {
-        "Path" : "Assets/Env/Village/Blacksmith0.ply",
+        "Path": "Assets/Env/Village/Blacksmith0.ply",
         "LodPath": "Assets/Env/Village/Blacksmith0-Lod.ply",
-        "Scale" : 2.0,
-        "Doors" : [
+        "Scale": 2.0,
+        "Doors": [
           {
-           "Path":  "Assets/Env/Village/Blacksmith0_Door0.ply",
-            "Position" : {
+            "Path": "Assets/Env/Village/Blacksmith0_Door0.ply",
+            "Position": {
               "X": 9.23307,
               "Y": 5.91168,
               "Z": -7.05042
             }
           }
         ],
-        "Blacksmith" : {
+        "Blacksmith": {
           "X": -11.20,
           "Y": 0.5,
           "Z": -12.0
         },
-        "LampPosition" : {
+        "LampPosition": {
           "X": -16.0,
           "Y": 0.0,
           "Z": -16.0
@@ -548,13 +547,13 @@
         }
       },
       {
-        "Path" : "Assets/Env/Village/Carpenter0.ply",
+        "Path": "Assets/Env/Village/Carpenter0.ply",
         "LodPath": "Assets/Env/Village/Carpenter0-Lod.ply",
-        "Scale" : 2.0,
-        "Doors" : [
+        "Scale": 2.0,
+        "Doors": [
           {
-            "Path":  "Assets/Env/Village/Carpenter0_Door0.ply",
-            "Position" : {
+            "Path": "Assets/Env/Village/Carpenter0_Door0.ply",
+            "Position": {
               "X": -9.12806,
               "Y": 5.93834,
               "Z": -7.02207
@@ -563,12 +562,12 @@
             "InvertedRotation": false
           }
         ],
-        "Blacksmith" : {
+        "Blacksmith": {
           "X": -11.20,
           "Y": 0.5,
           "Z": -12.0
         },
-        "LampPosition" : {
+        "LampPosition": {
           "X": -16.0,
           "Y": 0.0,
           "Z": -16.0
@@ -581,13 +580,13 @@
         }
       },
       {
-        "Path" : "Assets/Env/Village/Brewery0.ply",
+        "Path": "Assets/Env/Village/Brewery0.ply",
         "LodPath": "Assets/Env/Village/Brewery0-Lod.ply",
-        "Scale" : 2.0,
-        "Doors" : [
+        "Scale": 2.0,
+        "Doors": [
           {
-            "Path":  "Assets/Env/Village/Brewery0_Door0.ply",
-            "Position" : {
+            "Path": "Assets/Env/Village/Brewery0_Door0.ply",
+            "Position": {
               "X": 9.76358,
               "Y": 5.57899,
               "Z": -7.31104
@@ -595,7 +594,7 @@
           }
         ],
         "HasBlacksmith": false,
-        "LampPosition" : {
+        "LampPosition": {
           "X": -16.0,
           "Y": 0.0,
           "Z": -16.0
@@ -612,53 +611,53 @@
       }
     ]
   },
-  "Windmill" : {
-    "Designs" : [
+  "Windmill": {
+    "Designs": [
       {
-        "Path" : "Assets/Env/Village/Windmill0.ply",
+        "Path": "Assets/Env/Village/Windmill0.ply",
         "BladesPath": "Assets/Env/Village/Windmill0_Blades.ply",
-        "BladesPosition" : {
-          "X" :  0.0,
-          "Y" :  4.54216,
-          "Z" : -0.50052
+        "BladesPosition": {
+          "X": 0.0,
+          "Y": 4.54216,
+          "Z": -0.50052
         },
-        "Scale" : 8.0,
+        "Scale": 8.0,
         "Chance": 80
       },
       {
-        "Path" : "Assets/Env/Village/Windmill1.ply",
-        "Scale" : 3.0,
+        "Path": "Assets/Env/Village/Windmill1.ply",
+        "Scale": 3.0,
         "Chance": 20
       }
     ]
   },
-  "House" : {
-    "Designs" : [
+  "House": {
+    "Designs": [
       {
-        "Path" : "Assets/Env/Village/House0.ply",
+        "Path": "Assets/Env/Village/House0.ply",
         "LodPath": "Assets/Env/Village/House0-Lod.ply",
-        "Scale" : 3.0,
-        "Beds" : [
+        "Scale": 3.0,
+        "Beds": [
           {
-            "Position" : {
-              "X" : -3.20435,
-              "Y" : 1.09831,
-              "Z" : -1.16152
+            "Position": {
+              "X": -3.20435,
+              "Y": 1.09831,
+              "Z": -1.16152
             }
           }
         ],
-        "Doors" : [
+        "Doors": [
           {
-            "Path":  "Assets/Env/Village/House0_Door0.ply",
-            "Position" : {
+            "Path": "Assets/Env/Village/House0_Door0.ply",
+            "Position": {
               "X": 4.56401,
               "Y": 2.87233,
               "Z": -6.06534
             }
           },
           {
-            "Path":  "Assets/Env/Village/House0_Door1.ply",
-            "Position" : {
+            "Path": "Assets/Env/Village/House0_Door1.ply",
+            "Position": {
               "X": -1.1613,
               "Y": 2.20772,
               "Z": 3.7195
@@ -667,46 +666,46 @@
         ]
       },
       {
-        "Path" : "Assets/Env/Village/House1.ply",
+        "Path": "Assets/Env/Village/House1.ply",
         "LodPath": "Assets/Env/Village/House1-Lod.ply",
-        "Scale" : 3.5,
-        "Beds" : [
+        "Scale": 3.5,
+        "Beds": [
           {
-            "Position" : {
-              "X" : -1.43419,
-              "Y" : 5.51153,
-              "Z" : -6.28642
+            "Position": {
+              "X": -1.43419,
+              "Y": 5.51153,
+              "Z": -6.28642
             }
           }
         ],
-        "Doors" : [
+        "Doors": [
           {
-            "Path":  "Assets/Env/Village/House1_Door0.ply",
-            "Position" : {
+            "Path": "Assets/Env/Village/House1_Door0.ply",
+            "Position": {
               "X": 4.25405,
               "Y": 2.12194,
               "Z": -7.93568
             }
           },
           {
-            "Path":  "Assets/Env/Village/House1_Door1.ply",
-            "Position" : {
+            "Path": "Assets/Env/Village/House1_Door1.ply",
+            "Position": {
               "X": 4.28769,
               "Y": 1.67716,
               "Z": 0.52434
             }
           },
           {
-            "Path":  "Assets/Env/Village/House1_Door2.ply",
-            "Position" : {
+            "Path": "Assets/Env/Village/House1_Door2.ply",
+            "Position": {
               "X": 4.14934,
               "Y": 6.33101,
               "Z": 0.39632
             }
           },
           {
-            "Path":  "Assets/Env/Village/House1_Door3.ply",
-            "Position" : {
+            "Path": "Assets/Env/Village/House1_Door3.ply",
+            "Position": {
               "X": 4.14934,
               "Y": 6.33101,
               "Z": -4.18791
@@ -715,45 +714,45 @@
         ]
       },
       {
-        "Path" : "Assets/Env/Village/House2.ply",
+        "Path": "Assets/Env/Village/House2.ply",
         "LodPath": "Assets/Env/Village/House2-Lod.ply",
-        "Scale" : 3.5,
-        "Beds" : [
+        "Scale": 3.5,
+        "Beds": [
           {
-            "Position" : {
-              "X" : -9.9806,
-              "Y" : 1.15,
-              "Z" : 3.32437
+            "Position": {
+              "X": -9.9806,
+              "Y": 1.15,
+              "Z": 3.32437
             }
           },
           {
-            "Position" : {
-              "X" : 9.10594,
-              "Y" : 1.15,
-              "Z" : 3.32436
+            "Position": {
+              "X": 9.10594,
+              "Y": 1.15,
+              "Z": 3.32436
             }
           }
         ],
-        "Doors" : [
+        "Doors": [
           {
-            "Path":  "Assets/Env/Village/House2_Door0.ply",
-            "Position" : {
+            "Path": "Assets/Env/Village/House2_Door0.ply",
+            "Position": {
               "X": 2.22709,
               "Y": 2.28284,
               "Z": -9.61886
             }
           },
           {
-            "Path":  "Assets/Env/Village/House2_Door1.ply",
-            "Position" : {
+            "Path": "Assets/Env/Village/House2_Door1.ply",
+            "Position": {
               "X": -4.88185,
               "Y": 1.82325,
               "Z": 2.94575
             }
           },
           {
-            "Path":  "Assets/Env/Village/House2_Door2.ply",
-            "Position" : {
+            "Path": "Assets/Env/Village/House2_Door2.ply",
+            "Position": {
               "X": 4.24883,
               "Y": 1.84454,
               "Z": 6.68699

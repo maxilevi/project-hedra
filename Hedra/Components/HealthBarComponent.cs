@@ -1,19 +1,16 @@
 using System;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
+using System.Numerics;
 using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Rendering.UI;
 using Hedra.EntitySystem;
 using Hedra.Game;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-using System.Numerics;
-using Hedra.Engine.Rendering.Core;
-using Hedra.Numerics;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Components
 {
@@ -23,6 +20,7 @@ namespace Hedra.Components
     /// </summary>
     public class HealthBarComponent : BaseHealthBarComponent, IRenderable, INamedHealthBar
     {
+        private const int ShowDistance = 48;
         private static uint _neutralTexture;
         private static uint _hostileTexture;
         private static uint _friendlyTexture;
@@ -31,20 +29,18 @@ namespace Hedra.Components
         private static uint _backgroundTextureId;
         private static Vector2 _backgroundTextureSize;
         private static Vector2 _textureSize;
-
-        private const int ShowDistance = 48;
-        private readonly Panel _panel;
-        private readonly Vector2 _barDefaultPosition;
         private readonly RenderableTexture _backgroundTexture;
+        private readonly Vector2 _barDefaultPosition;
         private readonly TexturedBar _healthBar;
+        private readonly Panel _panel;
         private readonly RenderableText _text;
-        private Vector2 _originalTextScale;
         private float _barSize;
+        private float _lastProduct;
         private string _name;
+        private Vector2 _originalTextScale;
         private bool _show;
         private float _targetBarSize = 1;
         private float _textEnabled;
-        private float _lastProduct;
 
         static HealthBarComponent()
         {
@@ -137,6 +133,43 @@ namespace Hedra.Components
             GameManager.Player.UI.GamePanel.AddElement(_panel);
         }
 
+        public bool Hide { get; set; }
+
+        public float? Height { get; set; }
+
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                _text.Text = _name;
+                _originalTextScale = _text.Scale;
+            }
+        }
+
+        public override void Draw()
+        {
+            if (Parent.Model == null || _barSize < 0.05f) return;
+
+            var height = Height ?? Math.Max(Parent.Model.Height * 1.5f, 6);
+            var eyeSpace = Vector4.Transform(
+                new Vector4(Parent.Position + height * Vector3.UnitY, 1),
+                Culling.ModelViewMatrix
+            );
+            var homogeneousSpace = Vector4.Transform(eyeSpace, Culling.ProjectionMatrix);
+            var ndc = homogeneousSpace.Xyz() / homogeneousSpace.W;
+            _healthBar.Position = Mathf.Clamp(ndc.Xy(), -.98f, .98f);
+            _healthBar.Scale = _textureSize * _barSize;
+            _backgroundTexture.Position = _healthBar.Position;
+            _backgroundTexture.Scale = _backgroundTextureSize;
+            _text.Position = _healthBar.Position + _healthBar.Scale.Y * Vector2.UnitY * 3;
+
+            _healthBar.Draw();
+            _backgroundTexture.Draw();
+            _text.Draw();
+        }
+
         public override void Dispose()
         {
             DrawManager.UIRenderer.Remove(this);
@@ -192,28 +225,6 @@ namespace Hedra.Components
             if (!_show) _text.Disable();
         }
 
-        public override void Draw()
-        {
-            if (Parent.Model == null || _barSize < 0.05f) return;
-
-            var height = Height ?? Math.Max(Parent.Model.Height * 1.5f, 6);
-            var eyeSpace = Vector4.Transform(
-                new Vector4(Parent.Position + height * Vector3.UnitY, 1),
-                Culling.ModelViewMatrix
-            );
-            var homogeneousSpace = Vector4.Transform(eyeSpace, Culling.ProjectionMatrix);
-            var ndc = homogeneousSpace.Xyz() / homogeneousSpace.W;
-            _healthBar.Position = Mathf.Clamp(ndc.Xy(), -.98f, .98f);
-            _healthBar.Scale = _textureSize * _barSize;
-            _backgroundTexture.Position = _healthBar.Position;
-            _backgroundTexture.Scale = _backgroundTextureSize;
-            _text.Position = _healthBar.Position + _healthBar.Scale.Y * Vector2.UnitY * 3;
-
-            _healthBar.Draw();
-            _backgroundTexture.Draw();
-            _text.Draw();
-        }
-
         private static Color ColorFromType(HealthBarType Type)
         {
             return Type == HealthBarType.Neutral
@@ -236,21 +247,6 @@ namespace Hedra.Components
                     : Type == HealthBarType.Friendly
                         ? _friendlyTexture
                         : throw new ArgumentOutOfRangeException($"Texture for type '{Type}' doesn't exists.");
-        }
-
-        public bool Hide { get; set; }
-
-        public float? Height { get; set; }
-
-        public string Name
-        {
-            get => _name;
-            set
-            {
-                _name = value;
-                _text.Text = _name;
-                _originalTextScale = _text.Scale;
-            }
         }
     }
 

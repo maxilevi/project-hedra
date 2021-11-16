@@ -1,19 +1,13 @@
 using System.Collections.Generic;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.Linq;
 using BulletSharp;
 using Hedra.Core;
 using Hedra.Engine.Bullet;
 using Hedra.Engine.Generation;
-using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.StructureSystem;
-using Hedra.Sound;
-using System.Numerics;
 using Hedra.Framework;
 using Hedra.Numerics;
-using CollisionShape = BulletSharp.CollisionShape;
+using Hedra.Sound;
 using TaskScheduler = Hedra.Core.TaskScheduler;
 
 namespace Hedra.Engine.Player
@@ -26,19 +20,16 @@ namespace Hedra.Engine.Player
 
     public class StructureAware : IStructureAware
     {
-        public event OnStructureEnter StructureEnter;
-        public event OnStructureLeave StructureLeave;
-        public event OnStructureCompleted StructureCompleted;
-        private bool _wasPlayingCustom;
+        private readonly List<Pair<RigidBody, CollisionGroup>> _bodies;
+        private readonly Timer _insideTimer;
+        private readonly HashSet<CollidableStructure> _notInsideSet;
         private readonly IPlayer _player;
+        private readonly Timer _soundTimer;
+        private readonly Timer _updateTimer;
+        private CollidableStructure[] _currentNearStructures;
         private HashSet<CollidableStructure> _insideStructures;
         private HashSet<CollidableStructure> _previousInsideStructures;
-        private CollidableStructure[] _currentNearStructures;
-        private readonly Timer _insideTimer;
-        private readonly Timer _updateTimer;
-        private readonly Timer _soundTimer;
-        private readonly List<Pair<RigidBody, CollisionGroup>> _bodies;
-        private readonly HashSet<CollidableStructure> _notInsideSet;
+        private bool _wasPlayingCustom;
 
         public StructureAware(IPlayer Player)
         {
@@ -52,6 +43,10 @@ namespace Hedra.Engine.Player
             _insideStructures = new HashSet<CollidableStructure>();
             NearCollisions = new CollisionGroup[0];
         }
+
+        public event OnStructureEnter StructureEnter;
+        public event OnStructureLeave StructureLeave;
+        public event OnStructureCompleted StructureCompleted;
 
         public void Update()
         {
@@ -67,6 +62,13 @@ namespace Hedra.Engine.Player
             HandleSounds();
             HandleEvents();
         }
+
+        public void Discard()
+        {
+            Remove(NearCollisions);
+        }
+
+        public CollisionGroup[] NearCollisions { get; private set; }
 
         private void HandleSounds()
         {
@@ -184,12 +186,5 @@ namespace Hedra.Engine.Player
             for (var i = 0; i < Adds.Length; ++i)
                 _bodies.Add(new Pair<RigidBody, CollisionGroup>(BulletPhysics.AddGroup(Adds[i]), Adds[i]));
         }
-
-        public void Discard()
-        {
-            Remove(NearCollisions);
-        }
-
-        public CollisionGroup[] NearCollisions { get; private set; }
     }
 }

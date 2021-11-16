@@ -9,25 +9,21 @@
 
 using System;
 using System.Collections.Generic;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using Hedra.Core;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Localization;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.SkillSystem;
-using Hedra.Items;
+using Hedra.Input;
 using Hedra.Localization;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Sound;
-using System.Numerics;
-using Hedra.Numerics;
 using Silk.NET.Input;
-using Cursor = Hedra.Input.Cursor;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
 {
@@ -41,33 +37,26 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         public const int Columns = 3;
         public const int AbilityCount = Columns * Rows;
         public const int SpecializationLevelRequirement = 5;
-        public event OnSkillUpdated SkillUpdated;
-        public event OnSpecializationLearned SpecializationLearned;
-        public int SpecializationTreeIndex { get; set; }
         private const char SaveMarker = '!';
         private const char NumberMarker = '|';
         private const string HeaderMarker = "<>";
-        private readonly Vector2 _targetResolution;
-        private readonly IPlayer _player;
-        private readonly InventoryArray _mainTree;
-        private readonly InventoryArray _firstTree;
-        private readonly InventoryArray _secondTree;
+        private readonly AbilityInventoryBackground _background;
         private readonly AbilityTreeInterface _interface;
         private readonly AbilityTreeInterfaceManager _manager;
+        private readonly IPlayer _player;
         private readonly InventoryStateManager _stateManager;
-        private readonly AbilityInventoryBackground _background;
-        private AbilityTreeBlueprint _blueprint;
+        private readonly Vector2 _targetResolution;
         private InventoryArray _abilities;
-        private Dictionary<int, int> _skillChanges;
         private bool _show;
+        private readonly Dictionary<int, int> _skillChanges;
 
         public AbilityTree(IPlayer Player)
         {
             _player = Player;
             _targetResolution = new Vector2(1366, 705);
-            _firstTree = BuildArray();
-            _secondTree = BuildArray();
-            _abilities = _mainTree = BuildArray();
+            FirstTree = BuildArray();
+            SecondTree = BuildArray();
+            _abilities = MainTree = BuildArray();
             _skillChanges = new Dictionary<int, int>();
             _interface = new AbilityTreeInterface(_player, _abilities, 0, _abilities.Length, Columns)
             {
@@ -81,48 +70,35 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             {
                 Position = _interface.SpecializationInfo.Position
             };
-            _manager = new AbilityTreeInterfaceManager(_player, itemInfo, _interface, _mainTree, _firstTree,
-                _secondTree);
+            _manager = new AbilityTreeInterfaceManager(_player, itemInfo, _interface, MainTree, FirstTree,
+                SecondTree);
             _stateManager = new InventoryStateManager(_player);
             _background = new AbilityInventoryBackground(Vector2.UnitY * .65f);
             _stateManager.OnStateChange += State => { Invoke(State); };
         }
 
-        private static InventoryArray BuildArray()
-        {
-            var array = new InventoryArray(AbilityCount);
-            ResetArray(array);
-            return array;
-        }
+        public int SpecializationTreeIndex { get; set; }
 
-        private void UpdateView()
-        {
-            _manager.UpdateView();
-        }
+        public override Key OpeningKey => Controls.Skilltree;
 
-        private void SetInventoryState(bool State)
-        {
-            if (State)
-            {
-                _stateManager.CaptureState();
-                _player.View.LockMouse = false;
-                _player.Movement.CaptureMovement = false;
-                _player.View.CaptureMovement = false;
-                Cursor.Show = true;
-            }
-            else
-            {
-                _stateManager.ReleaseState();
-            }
-        }
+
+        private byte[] MainTreeSave => BuildSaveData(MainTree);
+
+        private byte[] FirstTreeSave => BuildSaveData(FirstTree);
+
+        private byte[] SecondTreeSave => BuildSaveData(SecondTree);
+
+        protected override bool HasExitAnimation => true;
+        public event OnSkillUpdated SkillUpdated;
+        public event OnSpecializationLearned SpecializationLearned;
 
         public void Update()
         {
             if (_show)
             {
-                _player.View.TargetPitch = Mathf.Lerp(_player.View.TargetPitch, 0f, (float)Time.DeltaTime * 16f);
+                _player.View.TargetPitch = Mathf.Lerp(_player.View.TargetPitch, 0f, Time.DeltaTime * 16f);
                 _player.View.TargetDistance =
-                    Mathf.Lerp(_player.View.TargetDistance, 10f, (float)Time.DeltaTime * 16f);
+                    Mathf.Lerp(_player.View.TargetDistance, 10f, Time.DeltaTime * 16f);
                 _player.View.TargetYaw = Mathf.Lerp(_player.View.TargetYaw,
                     (float)Math.Atan2(-_player.Orientation.Z, -_player.Orientation.X),
                     Time.DeltaTime * 16f);
@@ -165,36 +141,15 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             return !_skillChanges.ContainsKey(Index);
         }
 
-        private void ResetChanges()
-        {
-            foreach (var change in _skillChanges) SetPoints(change.Key, change.Value);
-            ConfirmPoints();
-        }
-
         public void Reset()
         {
-            SetBlueprint(_player.Class.FirstSpecializationTree, _firstTree);
+            SetBlueprint(_player.Class.FirstSpecializationTree, FirstTree);
             for (var i = 0; i < AbilityCount; i++) SetPoints(i, 0);
-            SetBlueprint(_player.Class.SecondSpecializationTree, _secondTree);
+            SetBlueprint(_player.Class.SecondSpecializationTree, SecondTree);
             for (var i = 0; i < AbilityCount; i++) SetPoints(i, 0);
-            SetBlueprint(_player.Class.MainTree, _mainTree);
+            SetBlueprint(_player.Class.MainTree, MainTree);
             for (var i = 0; i < AbilityCount; i++) SetPoints(i, 0);
             SpecializationTreeIndex = 0;
-        }
-
-        private static byte[] BuildSaveData(InventoryArray Abilities)
-        {
-            var saveData = HeaderMarker;
-            for (var i = 0; i < Abilities.Length; i++)
-            {
-                var skill = Abilities[i];
-                saveData += skill == null
-                    ? string.Empty + SaveMarker
-                    : (skill.GetAttribute<Type>("AbilityType")?.Name ?? string.Empty) + NumberMarker +
-                      skill.GetAttribute<int>("Level") + SaveMarker;
-            }
-
-            return Encoding.ASCII.GetBytes(saveData);
         }
 
         public void ShowBlueprint(AbilityTreeBlueprint Blueprint, InventoryArray Array, byte[] AbilityTreeArray)
@@ -229,7 +184,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             ConfirmPoints();
         }
 
-        public AbilityTreeBlueprint Specialization => _blueprint;
+        public AbilityTreeBlueprint Specialization { get; private set; }
 
         public void LearnSpecialization(AbilityTreeBlueprint Blueprint)
         {
@@ -253,13 +208,135 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             return true;
         }
 
-        public bool IsCurrentTreeEnabled => IsTreeEnabled(_blueprint);
+        public bool IsCurrentTreeEnabled => IsTreeEnabled(Specialization);
 
         public bool HasSpecialization => SpecializationTreeIndex != 0;
 
         public bool HasFirstSpecialization => SpecializationTreeIndex == 1;
 
         public bool HasSecondSpecialization => SpecializationTreeIndex == 2;
+
+        public int AvailablePoints => _manager.AvailablePoints;
+        public int UsedPoints => _manager.UsedPoints;
+        public Item[] TreeItems => MainTree.Items.Concat(FirstTree.Items).Concat(SecondTree.Items).ToArray();
+        public InventoryArray MainTree { get; }
+
+        public InventoryArray FirstTree { get; }
+
+        public InventoryArray SecondTree { get; }
+
+        public override bool Show
+        {
+            get => _show;
+            set
+            {
+                if (_show == value || _stateManager.GetState() != _show) return;
+                _show = value;
+                if (!_show)
+                    ResetChanges();
+                _player.Toolbar.BagEnabled = _show;
+                _player.Toolbar.PassiveEffectsEnabled = !_show;
+                _interface.Enabled = _show;
+                _background.Enabled = _show;
+                _manager.Enabled = _show;
+                if (_show)
+                {
+                    ShowBlueprint(_player.Class.MainTree, MainTree, null);
+                    _skillChanges.Clear();
+                }
+
+                SetInventoryState(_show);
+                SoundPlayer.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
+            }
+        }
+
+        public int ExtraSkillPoints
+        {
+            get => _manager.ExtraSkillPoints;
+            set => _manager.ExtraSkillPoints = value;
+        }
+
+        public void Dump(BinaryWriter Writer)
+        {
+            var main = MainTreeSave;
+            var first = FirstTreeSave;
+            var second = SecondTreeSave;
+
+            Writer.Write(main.Length);
+            Writer.Write(main);
+            Writer.Write(first.Length);
+            Writer.Write(first);
+            Writer.Write(second.Length);
+            Writer.Write(second);
+            Writer.Write(SpecializationTreeIndex);
+            Writer.Write(ExtraSkillPoints);
+        }
+
+        public void Load(BinaryReader Reader)
+        {
+            var mainArray = Reader.ReadBytes(Reader.ReadInt32());
+            var firstArray = Reader.ReadBytes(Reader.ReadInt32());
+            var secondArray = Reader.ReadBytes(Reader.ReadInt32());
+            SpecializationTreeIndex = Reader.ReadInt32();
+            ExtraSkillPoints = Reader.ReadInt32();
+
+            ResetArray(FirstTree);
+            ResetArray(SecondTree);
+            ResetArray(MainTree);
+
+            ShowBlueprint(_player.Class.FirstSpecializationTree, FirstTree, firstArray);
+            ShowBlueprint(_player.Class.SecondSpecializationTree, SecondTree, secondArray);
+            ShowBlueprint(_player.Class.MainTree, MainTree, mainArray);
+        }
+
+        private static InventoryArray BuildArray()
+        {
+            var array = new InventoryArray(AbilityCount);
+            ResetArray(array);
+            return array;
+        }
+
+        private void UpdateView()
+        {
+            _manager.UpdateView();
+        }
+
+        private void SetInventoryState(bool State)
+        {
+            if (State)
+            {
+                _stateManager.CaptureState();
+                _player.View.LockMouse = false;
+                _player.Movement.CaptureMovement = false;
+                _player.View.CaptureMovement = false;
+                Cursor.Show = true;
+            }
+            else
+            {
+                _stateManager.ReleaseState();
+            }
+        }
+
+        private void ResetChanges()
+        {
+            foreach (var change in _skillChanges) SetPoints(change.Key, change.Value);
+            ConfirmPoints();
+        }
+
+        private static byte[] BuildSaveData(InventoryArray Abilities)
+        {
+            var saveData = HeaderMarker;
+            for (var i = 0; i < Abilities.Length; i++)
+            {
+                var skill = Abilities[i];
+                saveData += skill == null
+                    ? string.Empty + SaveMarker
+                    : (skill.GetAttribute<Type>("AbilityType")?.Name ?? string.Empty) + NumberMarker +
+                      skill.GetAttribute<int>("Level") + SaveMarker;
+            }
+
+            return Encoding.ASCII.GetBytes(saveData);
+        }
 
         private void SetBlueprint(AbilityTreeBlueprint Blueprint, InventoryArray Array)
         {
@@ -287,87 +364,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             }
 
             _interface.SetArray(Array);
-            _interface.SetBlueprint(_blueprint = Blueprint);
-        }
-
-        public int AvailablePoints => _manager.AvailablePoints;
-        public int UsedPoints => _manager.UsedPoints;
-        public Item[] TreeItems => MainTree.Items.Concat(FirstTree.Items).Concat(SecondTree.Items).ToArray();
-        public InventoryArray MainTree => _mainTree;
-        public InventoryArray FirstTree => _firstTree;
-        public InventoryArray SecondTree => _secondTree;
-
-        public override Key OpeningKey => Controls.Skilltree;
-
-        public override bool Show
-        {
-            get => _show;
-            set
-            {
-                if (_show == value || _stateManager.GetState() != _show) return;
-                _show = value;
-                if (!_show)
-                    ResetChanges();
-                _player.Toolbar.BagEnabled = _show;
-                _player.Toolbar.PassiveEffectsEnabled = !_show;
-                _interface.Enabled = _show;
-                _background.Enabled = _show;
-                _manager.Enabled = _show;
-                if (_show)
-                {
-                    ShowBlueprint(_player.Class.MainTree, _mainTree, null);
-                    _skillChanges.Clear();
-                }
-
-                SetInventoryState(_show);
-                SoundPlayer.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
-            }
-        }
-
-        public int ExtraSkillPoints
-        {
-            get => _manager.ExtraSkillPoints;
-            set => _manager.ExtraSkillPoints = value;
-        }
-
-
-        private byte[] MainTreeSave => BuildSaveData(_mainTree);
-
-        private byte[] FirstTreeSave => BuildSaveData(_firstTree);
-
-        private byte[] SecondTreeSave => BuildSaveData(_secondTree);
-
-        public void Dump(BinaryWriter Writer)
-        {
-            var main = MainTreeSave;
-            var first = FirstTreeSave;
-            var second = SecondTreeSave;
-
-            Writer.Write(main.Length);
-            Writer.Write(main);
-            Writer.Write(first.Length);
-            Writer.Write(first);
-            Writer.Write(second.Length);
-            Writer.Write(second);
-            Writer.Write(SpecializationTreeIndex);
-            Writer.Write(ExtraSkillPoints);
-        }
-
-        public void Load(BinaryReader Reader)
-        {
-            var mainArray = Reader.ReadBytes(Reader.ReadInt32());
-            var firstArray = Reader.ReadBytes(Reader.ReadInt32());
-            var secondArray = Reader.ReadBytes(Reader.ReadInt32());
-            SpecializationTreeIndex = Reader.ReadInt32();
-            ExtraSkillPoints = Reader.ReadInt32();
-
-            ResetArray(_firstTree);
-            ResetArray(_secondTree);
-            ResetArray(_mainTree);
-
-            ShowBlueprint(_player.Class.FirstSpecializationTree, _firstTree, firstArray);
-            ShowBlueprint(_player.Class.SecondSpecializationTree, _secondTree, secondArray);
-            ShowBlueprint(_player.Class.MainTree, _mainTree, mainArray);
+            _interface.SetBlueprint(Specialization = Blueprint);
         }
 
         private static void ResetArray(InventoryArray Array)
@@ -382,7 +379,5 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 Array[i].SetAttribute("Level", 0);
             }
         }
-
-        protected override bool HasExitAnimation => true;
     }
 }

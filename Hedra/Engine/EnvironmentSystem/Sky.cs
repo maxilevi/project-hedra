@@ -5,35 +5,25 @@
  *
  */
 
-using System;
 using System.Numerics;
-using Hedra.Engine.Core;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
-using SixLabors.ImageSharp;
-using SixLabors.Fonts;
-using Hedra.Core;
-using Hedra.Engine.Game;
 using Hedra.Engine.Rendering.Core;
-using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Windowing;
 using Hedra.Game;
 using Hedra.Numerics;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.EnvironmentSystem
 {
     /// <summary>
-    /// Description of Skydome.
+    ///     Description of Skydome.
     /// </summary>
     public sealed class Sky
     {
         private static readonly Shader SkyGradientShader;
-        public bool Enabled { get; set; } = true;
-        public Vector4 TopColor { get; set; } = Color.CornflowerBlue.ToVector4();
-        public Vector4 BotColor { get; set; } = Color.LightYellow.ToVector4();
+        private readonly VBO<Vector3> _gradientDome;
         private readonly SkyOverlay _starsDome;
         private readonly SkyOverlay _sunDome;
-        private readonly VBO<Vector3> _gradientDome;
 
         static Sky()
         {
@@ -62,6 +52,10 @@ namespace Hedra.Engine.EnvironmentSystem
             });
         }
 
+        public bool Enabled { get; set; } = true;
+        public Vector4 TopColor { get; set; } = Color.CornflowerBlue.ToVector4();
+        public Vector4 BotColor { get; set; } = Color.LightYellow.ToVector4();
+
         public void Draw()
         {
             if (!Enabled) return;
@@ -72,7 +66,7 @@ namespace Hedra.Engine.EnvironmentSystem
             SkyGradientShader.Bind();
             SkyGradientShader["topColor"] = TopColor;
             SkyGradientShader["botColor"] = BotColor;
-            SkyGradientShader["height"] = (float)GameSettings.Height * (1 - GameManager.Player.View.Pitch * .25f);
+            SkyGradientShader["height"] = GameSettings.Height * (1 - GameManager.Player.View.Pitch * .25f);
 
             DrawManager.UIRenderer.DrawQuad();
 

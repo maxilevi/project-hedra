@@ -11,23 +11,22 @@ namespace Hedra.API
     public static class ModificationsLoader
     {
         private static readonly List<Mod> LoadedMods;
-        public static string Path { get; }
 
         static ModificationsLoader()
         {
             Path = $"{GameLoader.AppPath}/Mods/";
             LoadedMods = new List<Mod>();
         }
-        
+
+        public static string Path { get; }
+
         public static string[] Get(string Pattern)
         {
             if (!Directory.Exists(Path)) return new string[0];
-            var modules = Directory.GetFiles(Path, "*", SearchOption.AllDirectories).Where(M => M.Replace("\\", "/").Contains(Pattern)).ToArray();
+            var modules = Directory.GetFiles(Path, "*", SearchOption.AllDirectories)
+                .Where(M => M.Replace("\\", "/").Contains(Pattern)).ToArray();
             var list = new List<string>();
-            for (var i = 0; i < modules.Length; i++)
-            {               
-                list.Add(modules[i].Replace("\\", "/"));
-            }
+            for (var i = 0; i < modules.Length; i++) list.Add(modules[i].Replace("\\", "/"));
             return list.ToArray();
         }
 
@@ -40,7 +39,7 @@ namespace Hedra.API
                 foreach (var type in dll.GetExportedTypes())
                 {
                     if (!type.IsSubclassOf(typeof(Mod)) || type.IsAbstract) continue;
-                    var mod = (Mod) Activator.CreateInstance(type, new object[0]);
+                    var mod = (Mod)Activator.CreateInstance(type, new object[0]);
                     mod.Load();
                     Log.WriteLine($"Loaded mod '{mod.Name}'");
                     LoadedMods.Add(mod);
@@ -56,7 +55,7 @@ namespace Hedra.API
                 LoadedMods.RemoveAt(i);
             }
         }
-        
+
         public static void Reload()
         {
             Unload();

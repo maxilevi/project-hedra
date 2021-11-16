@@ -20,8 +20,8 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
                 new TimberAndSticksPlacementDesign(),
                 new PebblePlacementDesign(),
                 /* Harvestables */
-                new CarrotPlacementDesign(), 
-                new OnionPlacementDesign(), 
+                new CarrotPlacementDesign(),
+                new OnionPlacementDesign(),
                 new WoodLogAndTreeStumpPlacementDesign(),
                 new LilyPadPlacementDesign(),
                 new RosemaryAndThymePlacementDesign()
