@@ -14087,6 +14087,9 @@
       <Version>5.0.0</Version>
     </PackageReference>
   </ItemGroup>
+  <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
+    <DefineConstants>_WINDOWS</DefineConstants>
+  </PropertyGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="&quot;$(MSBuildProjectDirectory)/../utilities/make_atlas.sh&quot;" />
     <Exec Command="&quot;$(MSBuildProjectDirectory)/../utilities/AssetBuilder.exe&quot; &quot;$(TargetDir)/Shaders/&quot; &quot;$(TargetDir)/data1.db&quot; normal text" />

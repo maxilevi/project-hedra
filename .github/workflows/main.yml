@@ -27,7 +27,7 @@ jobs:
     - name: Build Dependencies ubuntu
       if: matrix.os == 'ubuntu-latest'
       shell: bash
-      run: sudo cat build-deps-linux.sh | bash
+      run: sudo ./build-deps-linux.sh
 
     - name: Build and Test solution
       run: dotnet test -c Release "Project Hedra.sln"
