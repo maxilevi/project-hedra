@@ -21,9 +21,9 @@ jobs:
 
     - name: Build Dependencies
       shell: bash
-      run: chmod +x build-deps.sh && ./build-deps.sh
+      run: sudo ./build-deps.sh
       
-    - name: Build Solution
+    - name: Build and Test solution
       run: dotnet test -c Release "Project Hedra.sln"
 
     - uses: actions/upload-artifact@v1
