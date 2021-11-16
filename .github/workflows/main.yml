@@ -22,13 +22,13 @@ jobs:
     #  uses: Nuget/setup-nuget@v1.0.5
       
     - name: Restore Hedra packages
-      run: dotnet restore Hedra/Hedra.csproj -PackagesDirectory packages
+      run: dotnet restore Hedra/Hedra.csproj
       
     - name: Restore HedraTests packages
-      run: dotnet restore HedraTests/HedraTests.csproj -PackagesDirectory packages
+      run: dotnet restore HedraTests/HedraTests.csproj
       
     - name: Restore AssetBuilder packages 
-      run: dotnet restore AssetBuilder/AssetBuilder.csproj -PackagesDirectory packages
+      run: dotnet restore AssetBuilder/AssetBuilder.csproj
       
     - name: Build Dependencies
       shell: bash
