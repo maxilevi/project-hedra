@@ -22,12 +22,12 @@ jobs:
     - name: Build Dependencies windows
       if: matrix.os == 'windows-latest'
       shell: bash
-      run: ./build-deps.sh
+      run: ./build-deps-windows.sh
       
     - name: Build Dependencies ubuntu
       if: matrix.os == 'ubuntu-latest'
       shell: bash
-      run: sudo cat build-deps.sh | bash
+      run: sudo cat build-deps-linux.sh | bash
 
     - name: Build and Test solution
       run: dotnet test -c Release "Project Hedra.sln"
