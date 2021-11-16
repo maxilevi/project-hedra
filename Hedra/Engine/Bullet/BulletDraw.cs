@@ -1,4 +1,5 @@
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using Hedra.Core;
 using Hedra.Engine.IO;
 using Hedra.Engine.Rendering;
@@ -14,6 +15,7 @@ namespace Hedra.Engine.Bullet
         {
             throw new System.NotImplementedException();
         }
+
         public override void DrawLine(ref Vector3 @from, ref Vector3 to, ref Vector3 color)
         {
             BasicGeometry.DrawLine(from.Compatible(), to.Compatible(), new Vector4(color.Compatible(), 1));

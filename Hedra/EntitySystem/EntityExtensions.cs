@@ -1,5 +1,6 @@
 using System;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.Game;
@@ -19,11 +20,11 @@ namespace Hedra.EntitySystem
         public static bool IsLookingAt(this IHumanoid Parent, IHumanoid Target, float Angle)
         {
             var comparer = Target.LookingDirection;
-            if(comparer == Vector3.Zero) comparer = Vector3.UnitZ;
+            if (comparer == Vector3.Zero) comparer = Vector3.UnitZ;
             var dot = Vector3.Dot(Parent.LookingDirection, -comparer);
             return Math.Abs(dot) > Angle;
         }
-        
+
         public static void LookAt(this IEntity Parent, IEntity Target)
         {
             var dir = (Target.Position - Parent.Position).Xz().NormalizedFast().ToVector3();
@@ -35,7 +36,7 @@ namespace Hedra.EntitySystem
         {
             return (Parent.Position - Target.Position).LengthSquared() < Radius * Radius;
         }
-               
+
         public static bool InAttackRange(this IEntity Parent, IEntity Target, float RadiusModifier = 1f)
         {
             var collider0 = Parent.Model.HorizontalBroadphaseCollider;
@@ -49,8 +50,9 @@ namespace Hedra.EntitySystem
         {
             ShowText(Parent, Parent.Position, Text, FontColor, FontSize, Lifetime);
         }
-        
-        public static void ShowText(this IEntity Parent, Vector3 Position, string Text, Color FontColor, float FontSize, float Lifetime = 4.0f)
+
+        public static void ShowText(this IEntity Parent, Vector3 Position, string Text, Color FontColor, float FontSize,
+            float Lifetime = 4.0f)
         {
             if (Parent.Model.Enabled)
             {
@@ -62,7 +64,7 @@ namespace Hedra.EntitySystem
                 };
             }
         }
-        
+
         public static float Distance(this IEntity Parent, Vector3 Position)
         {
             return (Parent.Position - Position).LengthFast();

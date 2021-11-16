@@ -6,9 +6,11 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using System;
 using System.Diagnostics;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using Hedra.Core;
 using Hedra.Engine.Game;
 using System.Numerics;
@@ -29,7 +31,7 @@ namespace Hedra.Engine.Rendering
         public bool Vanish { get; set; }
         public float Scalar { get; set; } = 1;
         private Func<Vector3> _follow;
-        
+
         private Vector3 _position;
         private Vector3 _addedPosition;
         private readonly float _maxLifetime;
@@ -39,9 +41,9 @@ namespace Hedra.Engine.Rendering
 
         protected BaseBillboard(float Lifetime, Func<Vector3> Follow)
         {
-            this._maxLifetime = Lifetime;
-            this._follow = Follow;
-            this._position = _follow();
+            _maxLifetime = Lifetime;
+            _follow = Follow;
+            _position = _follow();
             DrawManager.UIRenderer.Add(this);
             UpdateManager.Add(this);
         }
@@ -50,22 +52,22 @@ namespace Hedra.Engine.Rendering
         {
             HandleVanish();
             _position = Mathf.Lerp(_position, _follow(), Time.DeltaTime * 8f);
-            if(_life >= _maxLifetime) this.Dispose();
+            if (_life >= _maxLifetime) Dispose();
             _life += Time.DeltaTime;
         }
 
         public void Draw()
         {
-            if(Shader == null)
+            if (Shader == null)
                 Shader = Shader.Build("Shaders/Billboard.vert", "Shaders/Billboard.frag");
-            
+
             var viewMat = GameManager.Player.View.ModelViewMatrix;
             var cameraRight = new Vector3(viewMat.M11, viewMat.M21, viewMat.M31).NormalizedFast();
             var cameraUp = new Vector3(viewMat.M12, viewMat.M22, viewMat.M32).NormalizedFast();
 
             GUIRenderer.SetDraw(Shader);
             GUIRenderer.SetTexture(0, TextureId);
-            Shader["texture_sampler"] = 0;       
+            Shader["texture_sampler"] = 0;
             Shader["scale"] = Measurements * Scalar;
             Shader["position"] = _position + _addedPosition;
             //Shader["camera_right"] = cameraRight;
@@ -73,7 +75,6 @@ namespace Hedra.Engine.Rendering
             Shader["opacity"] = _opacity;
             DrawManager.UIRenderer.DrawQuad();
             GUIRenderer.UnsetDrawing(Shader);
-            
         }
 
         private void HandleVanish()
@@ -82,7 +83,7 @@ namespace Hedra.Engine.Rendering
             _addedPosition += Vector3.UnitY * Time.DeltaTime * VanishSpeed;
             _opacity = 1f - _life / _maxLifetime;
         }
-        
+
         public virtual void Dispose()
         {
             DrawManager.UIRenderer.Remove(this);

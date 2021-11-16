@@ -1,4 +1,5 @@
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Linq;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
@@ -29,13 +30,15 @@ namespace Hedra.Engine.EnvironmentSystem
 
         public SkyOverlay(string[] Textures) : this()
         {
-            _map = new Cubemap(Textures.Select( T => Graphics2D.LoadBitmapFromAssets(T ?? "Assets/Sky/empty.png")).ToArray());
+            _map = new Cubemap(Textures.Select(T => Graphics2D.LoadBitmapFromAssets(T ?? "Assets/Sky/empty.png"))
+                .ToArray());
         }
 
         private SkyOverlay()
         {
             var geometry = Geometry.Cube();
-            _vertices = new VBO<Vector3>(geometry.Vertices, geometry.Vertices.Length * HedraSize.Vector3, VertexAttribPointerType.Float);
+            _vertices = new VBO<Vector3>(geometry.Vertices, geometry.Vertices.Length * HedraSize.Vector3,
+                VertexAttribPointerType.Float);
             _buffer = new VAO<Vector3>(_vertices);
         }
 
@@ -46,7 +49,7 @@ namespace Hedra.Engine.EnvironmentSystem
             Shader.Bind();
             _buffer.Bind();
             _map.Bind();
-            
+
             Shader["map"] = 0;
             Shader["mvp"] = Culling.ModelViewMatrix.ClearTranslation() * Culling.ProjectionMatrix;
             Shader["trans_matrix"] = Matrix4x4.CreateScale(4) * TransformationMatrix;
@@ -56,7 +59,7 @@ namespace Hedra.Engine.EnvironmentSystem
 
             _map.Unbind();
             _buffer.Unbind();
-            Shader.Unbind(); 
+            Shader.Unbind();
             Renderer.Disable(EnableCap.Blend);
             Renderer.Enable(EnableCap.DepthTest);
             Renderer.Enable(EnableCap.CullFace);

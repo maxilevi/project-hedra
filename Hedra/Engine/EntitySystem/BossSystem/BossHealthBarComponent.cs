@@ -8,7 +8,8 @@
  */
 
 using System;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Management;
@@ -64,14 +65,15 @@ namespace Hedra.Engine.EntitySystem.BossSystem
                 _backgroundTextureId = Graphics2D.LoadFromAssets("Assets/UI/BossHealthBarBackground.png");
             });
             _bossBarTextureSize = Graphics2D.SizeFromAssets("Assets/UI/BossHealthBar.png").As1920x1080() * .65f;
-            _backgroundTextureSize = Graphics2D.SizeFromAssets("Assets/UI/BossHealthBarBackground.png").As1920x1080() * .65f;
+            _backgroundTextureSize =
+                Graphics2D.SizeFromAssets("Assets/UI/BossHealthBarBackground.png").As1920x1080() * .65f;
         }
-        
+
         public BossHealthBarComponent(IEntity Parent, string Name) : base(Parent)
         {
             this.Name = Name;
             _panel = new Panel();
-             _backgroundTexture = new BackgroundTexture(
+            _backgroundTexture = new BackgroundTexture(
                 0,
                 _barDefaultPosition = new Vector2(0f, .75f),
                 _backgroundTextureSize
@@ -99,8 +101,9 @@ namespace Hedra.Engine.EntitySystem.BossSystem
                 _originalScales[i] = elements[i].Scale;
                 elements[i].Scale = Vector2.Zero;
             }
+
             _panel.Disable();
-            
+
             GameManager.Player.UI.GamePanel.AddElement(_panel);
             Executer.ExecuteOnMainThread(
                 () =>
@@ -144,9 +147,11 @@ namespace Hedra.Engine.EntitySystem.BossSystem
                         Time.IndependentDeltaTime * 8f);
                     DisableIfSmall(elements[i]);
                 }
-                if(!GameManager.Player.UI.GamePanel.Enabled)
+
+                if (!GameManager.Player.UI.GamePanel.Enabled)
                     elements[i].Disable();
             }
+
             _percentageText.Text = $"{(int)Parent.Health}/{(int)Parent.MaxHealth}";
         }
 
@@ -157,8 +162,9 @@ namespace Hedra.Engine.EntitySystem.BossSystem
             else
                 Element.Enable();
         }
-        
-        private bool CanShow => Enabled && GameManager.Player.UI.GamePanel.Enabled && (Parent.Position - GameManager.Player.Position).LengthSquared() < ViewRange * ViewRange;
+
+        private bool CanShow => Enabled && GameManager.Player.UI.GamePanel.Enabled &&
+                                (Parent.Position - GameManager.Player.Position).LengthSquared() < ViewRange * ViewRange;
 
         public override void Dispose()
         {

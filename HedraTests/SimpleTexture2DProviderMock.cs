@@ -1,4 +1,5 @@
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Core;
 using System;
@@ -8,9 +9,10 @@ namespace HedraTests
 {
     public class SimpleTexture2DProviderMock : ITexture2DProvider
     {
-        public uint LoadTexture(BitmapObject BitmapObject, TextureMinFilter Min, TextureMagFilter Mag, TextureWrapMode Wrap)
+        public uint LoadTexture(BitmapObject BitmapObject, TextureMinFilter Min, TextureMagFilter Mag,
+            TextureWrapMode Wrap)
         {
-            return (uint) Math.Abs(BitmapObject.GetHashCode());
+            return (uint)Math.Abs(BitmapObject.GetHashCode());
         }
     }
 }

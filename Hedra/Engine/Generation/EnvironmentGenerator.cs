@@ -6,8 +6,10 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using System;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Collections.Generic;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Core;
@@ -34,24 +36,27 @@ namespace Hedra.Engine.Generation
             GeneratePlant(Allocator, Position, BiomeRegion, Design, new Matrix4x4());
         }
 
-        public void GeneratePlant(IAllocator Allocator, Vector3 Position, Region BiomeRegion, PlantDesign Design, Matrix4x4 CustomTransformationMatrix)
+        public void GeneratePlant(IAllocator Allocator, Vector3 Position, Region BiomeRegion, PlantDesign Design,
+            Matrix4x4 CustomTransformationMatrix)
         {
             var underChunk = World.GetChunkAt(Position);
             if (underChunk == null) return;
 
             var rng = underChunk.Landscape.RandomGen;
-            var transMatrix = CustomTransformationMatrix == new Matrix4x4() ? Design.TransMatrix(Position, rng) : CustomTransformationMatrix;
+            var transMatrix = CustomTransformationMatrix == new Matrix4x4()
+                ? Design.TransMatrix(Position, rng)
+                : CustomTransformationMatrix;
 
             if (transMatrix == new Matrix4x4()) return;
             if (World.StructureHandler.StructureExistsAtPosition(Vector3.Transform(Vector3.Zero, transMatrix))) return;
-            
+
             var modelData = Design.Model;
             var modelDataClone = modelData.NativeClone(Allocator);
             /* Only simplify objects that are affected by LOD */
             var canSimplify = Design.AffectedByLod;
 
             Design.Paint(modelDataClone, BiomeRegion, rng);
-            Design.AddShapes(underChunk, transMatrix);         
+            Design.AddShapes(underChunk, transMatrix);
             if (!Design.HasCustomPlacement)
             {
                 var data = new InstanceData
@@ -69,6 +74,7 @@ namespace Hedra.Engine.Generation
             {
                 Design.CustomPlacement(modelDataClone, transMatrix, underChunk);
             }
+
             modelDataClone.Dispose();
         }
     }

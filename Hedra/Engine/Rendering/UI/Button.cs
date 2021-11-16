@@ -6,8 +6,8 @@
  */
 
 using System;
-using System.Drawing;
-
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using Hedra.Core;
 using Hedra.Engine.Events;
 using Hedra.Engine.Localization;
@@ -23,7 +23,7 @@ using MouseButton = Silk.NET.Input.MouseButton;
 namespace Hedra.Engine.Rendering.UI
 {
     public delegate void OnButtonClickEventHandler(object Sender, MouseButtonEventArgs E);
-    
+
 
     public delegate void OnButtonHoverEnterEventHandler();
 
@@ -46,113 +46,115 @@ namespace Hedra.Engine.Rendering.UI
 
         public GUIText Text
         {
-            get => this._privateText;
+            get => _privateText;
             private set
             {
-                this._privateText?.Dispose();
-                this._privateText = value;
+                _privateText?.Dispose();
+                _privateText = value;
             }
         }
 
         public Button(Vector2 Position, Vector2 Scale, Translation Translation, Color FontColor, Font TextFont)
         {
-            this.Initialize(Position, Scale, Translation.Get(), Translation, 0, FontColor, TextFont);
+            Initialize(Position, Scale, Translation.Get(), Translation, 0, FontColor, TextFont);
         }
-        
+
         public Button(Vector2 Position, Vector2 Scale, string Text, Color FontColor, Font TextFont)
         {
-            this.Initialize(Position, Scale, Text, null, 0, FontColor, TextFont);
+            Initialize(Position, Scale, Text, null, 0, FontColor, TextFont);
         }
 
         public Button(Vector2 Position, Vector2 Scale, string Text, uint Texture, Color FontColor)
         {
-            this.Initialize(Position, Scale, Text, null, Texture, FontColor, SystemFonts.DefaultFont);
+            Initialize(Position, Scale, Text, null, Texture, FontColor, SystemFonts.DefaultFont);
         }
 
         public Button(Vector2 Position, Vector2 Scale, string Text, uint Texture)
         {
-            this.Initialize(Position, Scale, Text, null, Texture, Color.Black, SystemFonts.DefaultFont);
+            Initialize(Position, Scale, Text, null, Texture, Color.Black, SystemFonts.DefaultFont);
         }
 
         public Button(Vector2 Position, Vector2 Scale, uint Texture)
         {
-            this.Initialize(Position, Scale, null, null, Texture, Color.Black, SystemFonts.DefaultFont);
+            Initialize(Position, Scale, null, null, Texture, Color.Black, SystemFonts.DefaultFont);
         }
 
         public event OnButtonClickEventHandler Click;
         public event OnButtonHoverEnterEventHandler HoverEnter;
         public event OnButtonHoverExitEventHandler HoverExit;
 
-        private void Initialize(Vector2 Position, Vector2 Scale, string Text, Translation Translation, uint TextureId, Color FontColor, Font F)
+        private void Initialize(Vector2 Position, Vector2 Scale, string Text, Translation Translation, uint TextureId,
+            Color FontColor, Font F)
         {
             if (TextureId != 0)
-                this.Texture = new GUITexture(TextureId, Scale, Position);
-            if (this.Texture != null)
-                DrawManager.UIRenderer.Add(this.Texture);
+                Texture = new GUITexture(TextureId, Scale, Position);
+            if (Texture != null)
+                DrawManager.UIRenderer.Add(Texture);
 
             if (!string.IsNullOrEmpty(Text) || Translation != null)
             {
                 _liveTranslation = Translation ?? Translation.Default(Text);
                 this.Text = new GUIText(_liveTranslation, Position, FontColor, F);
             }
+
             this.Position = new Vector2(Position.X, Position.Y);
 
-            this.HoverEnter += this.OnHoverEnter;
-            this.HoverExit += this.OnHoverExit;
+            HoverEnter += OnHoverEnter;
+            HoverExit += OnHoverExit;
         }
 
         public void ForceClick()
         {
-            this.Click?.Invoke(null, default);
+            Click?.Invoke(null, default);
         }
 
         public override void OnMouseButtonDown(object Sender, MouseButtonEventArgs E)
         {
-            if (this.Enabled && this.Click != null && (E.Button == MouseButton.Left || E.Button == MouseButton.Right))
+            if (Enabled && Click != null && (E.Button == MouseButton.Left || E.Button == MouseButton.Right))
             {
                 var coords = Mathf.ToNormalizedDeviceCoordinates(
                     new Vector2(E.Position.X, E.Position.Y),
                     new Vector2(GameSettings.SurfaceWidth, GameSettings.SurfaceHeight)
                 );
-                if (this.Position.Y + this.Scale.Y > -coords.Y && this.Position.Y - this.Scale.Y < -coords.Y
-                    && this.Position.X + this.Scale.X > coords.X && this.Position.X - this.Scale.X < coords.X)
-                {
-                    if (this.CanClick)
+                if (Position.Y + Scale.Y > -coords.Y && Position.Y - Scale.Y < -coords.Y
+                                                     && Position.X + Scale.X > coords.X &&
+                                                     Position.X - Scale.X < coords.X)
+                    if (CanClick)
                     {
                         SoundPlayer.PlayUISound(SoundType.ButtonClick, 1, .5f);
-                        this.Click.Invoke(this, E);
+                        Click.Invoke(this, E);
                         UpdateTranslation();
                     }
-                }
             }
         }
 
         public override void OnMouseMove(object Sender, MouseMoveEventArgs E)
         {
-            if (this.Enabled && this.CanClick)
+            if (Enabled && CanClick)
             {
                 var coords = Mathf.ToNormalizedDeviceCoordinates(
                     new Vector2(E.Position.X, E.Position.Y),
                     new Vector2(GameSettings.SurfaceWidth, GameSettings.SurfaceHeight)
                 );
-                if (this.Position.Y + this.Scale.Y > -coords.Y && this.Position.Y - this.Scale.Y < -coords.Y
-                    && this.Position.X + this.Scale.X > coords.X && this.Position.X - this.Scale.X < coords.X)
+                if (Position.Y + Scale.Y > -coords.Y && Position.Y - Scale.Y < -coords.Y
+                                                     && Position.X + Scale.X > coords.X &&
+                                                     Position.X - Scale.X < coords.X)
                 {
                     //Hover?.Invoke(Sender, E);
-                    if (!this._hasEntered)
+                    if (!_hasEntered)
                     {
                         HoverEnter?.Invoke();
                         UpdateTranslation();
-                        this._hasEntered = true;
+                        _hasEntered = true;
                     }
                 }
                 else
                 {
-                    if (this._hasEntered)
+                    if (_hasEntered)
                     {
                         HoverExit?.Invoke();
                         UpdateTranslation();
-                        this._hasEntered = false;
+                        _hasEntered = false;
                     }
                 }
             }
@@ -160,25 +162,26 @@ namespace Hedra.Engine.Rendering.UI
 
         public void OnHoverEnter()
         {
-            if (this.Text != null)
+            if (Text != null)
             {
-                this._previousFontColor = this.Text.TextColor;
-                this.Text.TextColor = new Vector4(0.937f, 0.624f, 0.047f, 1.000f).ToColor();
-                this.Text.UpdateText();
-                if (this.PlaySound)
+                _previousFontColor = Text.TextColor;
+                Text.TextColor = new Vector4(0.937f, 0.624f, 0.047f, 1.000f).ToColor();
+                Text.UpdateText();
+                if (PlaySound)
                     SoundPlayer.PlayUISound(SoundType.ButtonHover, 1f, .2f);
             }
-            if (this.Texture != null)
-                if (this.PlaySound)
+
+            if (Texture != null)
+                if (PlaySound)
                     SoundPlayer.PlayUISound(SoundType.ButtonHover, 1f, .3f);
         }
 
         public void OnHoverExit()
         {
-            if (this.Text != null)
+            if (Text != null)
             {
-                this.Text.TextColor = this._previousFontColor;
-                this.Text.UpdateText();
+                Text.TextColor = _previousFontColor;
+                Text.UpdateText();
             }
         }
 
@@ -189,30 +192,30 @@ namespace Hedra.Engine.Rendering.UI
 
         public void Disable()
         {
-            this.Enabled = false;
+            Enabled = false;
             Text?.Disable();
-            if (this.Texture != null)
-                this.Texture.Enabled = false;
+            if (Texture != null)
+                Texture.Enabled = false;
         }
 
         public void Enable()
         {
-            this.Enabled = true;
+            Enabled = true;
             Text?.Enable();
-            if (this.Texture != null)
-                this.Texture.Enabled = true;
+            if (Texture != null)
+                Texture.Enabled = true;
         }
 
         public Vector2 Position
         {
-            get => this._position;
+            get => _position;
             set
             {
-                this._position = value;
-                if (this.Text != null)
-                    this.Text.Position = value;
-                if (this.Texture != null)
-                    this.Texture.Position = value;
+                _position = value;
+                if (Text != null)
+                    Text.Position = value;
+                if (Texture != null)
+                    Texture.Position = value;
             }
         }
 
@@ -232,10 +235,10 @@ namespace Hedra.Engine.Rendering.UI
         {
             base.Dispose();
             Text?.Dispose();
-            if (this.Texture != null)
+            if (Texture != null)
             {
-                this.Texture.Dispose();
-                DrawManager.UIRenderer.Remove(this.Texture);
+                Texture.Dispose();
+                DrawManager.UIRenderer.Remove(Texture);
             }
         }
     }

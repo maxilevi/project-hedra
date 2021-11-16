@@ -4,12 +4,13 @@
  * Time: 01:29 a.m.
  *
  */
+
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Linq;
 using System.Runtime.CompilerServices;
-
 using Hedra.Components;
 using Hedra.Core;
 using Hedra.Crafting;
@@ -22,7 +23,7 @@ using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Management;
-using Hedra.Engine.Rendering.UI; 
+using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
@@ -51,7 +52,6 @@ using Hedra.Localization;
 using Hedra.Numerics;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
-
 using KeyEventArgs = Hedra.Engine.Events.KeyEventArgs;
 
 namespace Hedra.Engine.Player
@@ -96,35 +96,35 @@ namespace Hedra.Engine.Player
 
         public LocalPlayer()
         {
-            this.UI = new UserInterface(this);
-            this.View = new Camera(this);
-            this.Loader = new ChunkLoader(this);
-            this.Spawner = new MobSpawner(this);
-            this.Model = new HumanoidModel(this);
-            this.StructureAware = new StructureAware(this);
-            this.Inventory = new PlayerInventory(this);
-            this.Companion = new CompanionHandler(this);
-            this.InventoryInterface = new PlayerInventoryInterface(this);
-            this.Crafting = new CraftingInventory(this.Inventory);
-            this.CraftingInterface = new CraftingInterface(this);
-            this.Toolbar = new Toolbar(this);
-            this.Glider = new HangGlider(this);
-            this.AbilityTree = new AbilityTree(this);
-            this.Questing = new QuestInventory(this);
-            this.QuestInterface = new QuestInterface(this);
-            this.Chat = new Chat(this);
-            this.Minimap = new Minimap(this);
-            this.Map = new Map(this);
-            this.Trade = new TradeInventory(this);
-            this.Movement = new PlayerMovement(this);
-            this.MessageDispatcher = new VisualMessageDispatcher(this);
-            this.AmbientEffects = new AmbientEffectHandler(this);
-            this.Realms = new RealmHandler();
-            this.Physics.CollidesWithStructures = true;
-            this.AttackPower = 1.0f;
+            UI = new UserInterface(this);
+            View = new Camera(this);
+            Loader = new ChunkLoader(this);
+            Spawner = new MobSpawner(this);
+            Model = new HumanoidModel(this);
+            StructureAware = new StructureAware(this);
+            Inventory = new PlayerInventory(this);
+            Companion = new CompanionHandler(this);
+            InventoryInterface = new PlayerInventoryInterface(this);
+            Crafting = new CraftingInventory(Inventory);
+            CraftingInterface = new CraftingInterface(this);
+            Toolbar = new Toolbar(this);
+            Glider = new HangGlider(this);
+            AbilityTree = new AbilityTree(this);
+            Questing = new QuestInventory(this);
+            QuestInterface = new QuestInterface(this);
+            Chat = new Chat(this);
+            Minimap = new Minimap(this);
+            Map = new Map(this);
+            Trade = new TradeInventory(this);
+            Movement = new PlayerMovement(this);
+            MessageDispatcher = new VisualMessageDispatcher(this);
+            AmbientEffects = new AmbientEffectHandler(this);
+            Realms = new RealmHandler();
+            Physics.CollidesWithStructures = true;
+            AttackPower = 1.0f;
 
-            this.SetupHandlers();
-            
+            SetupHandlers();
+
             World.AddEntity(this);
             DrawManager.Add(this);
             UpdateManager.Add(this);
@@ -136,7 +136,7 @@ namespace Hedra.Engine.Player
             {
                 if (Controls.Respawn == Args.Key && !GameSettings.Paused && IsDead)
                     Respawn();
-                
+
                 if (Controls.Handlamp == Args.Key && !GameSettings.Paused && CanInteract)
                 {
                     HandLamp.Enabled = !HandLamp.Enabled;
@@ -144,15 +144,12 @@ namespace Hedra.Engine.Player
                 }
             }, EventPriority.Low);
 
-            Kill += A =>
-            {
-                A.Victim.ShowText($"+{(int)Math.Ceiling(A.Experience)} XP", Color.Violet, 20);
-            };
-            
+            Kill += A => { A.Victim.ShowText($"+{(int)Math.Ceiling(A.Experience)} XP", Color.Violet, 20); };
+
             _damageHandler = SearchComponent<DamageComponent>();
             _damageHandler.PushOnHit = false;
             _damageHandler.Delete = false;
-            _damageHandler.OnDeadEvent += Args => OnDeath?.Invoke(Args); 
+            _damageHandler.OnDeadEvent += Args => OnDeath?.Invoke(Args);
         }
 
         public override bool CanInteract
@@ -171,54 +168,49 @@ namespace Hedra.Engine.Player
             Map.Draw();
             var entities = World.Entities.ToArray();
             for (var i = entities.Length - 1; i > -1; i--)
-            {
-                if (!(entities[i] is LocalPlayer) && (entities[i].Position.Xz() - this.Position.Xz()).LengthSquared() < 64 * 64 || Companion.Entity == entities[i])
-                {
+                if (!(entities[i] is LocalPlayer) &&
+                    (entities[i].Position.Xz() - Position.Xz()).LengthSquared() < 64 * 64 ||
+                    Companion.Entity == entities[i])
                     entities[i].Draw();
-                }
-            }
 
             if (GameSettings.DebugNavMesh)
             {
                 var structs = StructureHandler.GetNearStructures(Position);
-                for (var i = 0; i < structs.Length; ++i)
-                {
-                    structs[i].Draw();
-                }
+                for (var i = 0; i < structs.Length; ++i) structs[i].Draw();
             }
         }
 
         public override void Update()
         {
-            base.UpdateCriticalComponents();
+            UpdateCriticalComponents();
             base.Update();
 
-            if (this.IsUnderwater && this.IsRiding)
-                this.IsRiding = false;
+            if (IsUnderwater && IsRiding)
+                IsRiding = false;
 
-            if (this.IsSleeping != _wasSleeping)
-            {
-                SkyManager.DaytimeSpeed = _wasSleeping ? 1.0f : 40.0f;
-            }
-            _wasSleeping = this.IsSleeping;
-            var underChunk = World.GetChunkAt(this.Position);
+            if (IsSleeping != _wasSleeping) SkyManager.DaytimeSpeed = _wasSleeping ? 1.0f : 40.0f;
+            _wasSleeping = IsSleeping;
+            var underChunk = World.GetChunkAt(Position);
 
-            if( this.Model.Enabled && (_previousPosition - Model.Human.Position).LengthFast() > 0.25f && Model.Human.IsGrounded && underChunk != null)
+            if (Model.Enabled && (_previousPosition - Model.Human.Position).LengthFast() > 0.25f &&
+                Model.Human.IsGrounded && underChunk != null)
             {
                 World.Particles.VariateUniformly = true;
-                World.Particles.Color = World.GetHighestBlockAt( (int) Model.Human.Position.X, (int) Model.Human.Position.Z).GetColor(underChunk.Biome.Colors);
+                World.Particles.Color =
+                    World.GetHighestBlockAt((int)Model.Human.Position.X, (int)Model.Human.Position.Z)
+                        .GetColor(underChunk.Biome.Colors);
                 World.Particles.Position = Model.Human.Position - Vector3.UnitY;
                 World.Particles.Scale = Vector3.One * .25f;
-                World.Particles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
+                World.Particles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
                 World.Particles.Direction = (-Model.Human.Orientation + Vector3.UnitY * 1.5f) * .15f;
                 World.Particles.ParticleLifetime = 1;
                 World.Particles.GravityEffect = .1f;
                 World.Particles.PositionErrorMargin = new Vector3(1f, 1f, 1f);
-                if(World.Particles.Color == Block.GetColor(BlockType.Grass, underChunk.Biome.Colors))
+                if (World.Particles.Color == Block.GetColor(BlockType.Grass, underChunk.Biome.Colors))
                     World.Particles.Color = Vector4.Zero;
-                
-                if( (int) Time.AccumulatedFrameTime % 2 == 0) World.Particles.Emit();
-                
+
+                if ((int)Time.AccumulatedFrameTime % 2 == 0) World.Particles.Emit();
+
                 _previousPosition = Model.Human.Position;
             }
 
@@ -228,7 +220,7 @@ namespace Hedra.Engine.Player
                 Companion.Entity?.UpdateCriticalComponents();
             }
 
-            Rotation = new Vector3(0, this.Rotation.Y, 0);
+            Rotation = new Vector3(0, Rotation.Y, 0);
             View.AddedDistance = IsMoving || IsSwimming || IsTravelling ? 3.0f : 0.0f;
             AmbientEffects.Update();
             StructureAware.Update();
@@ -270,10 +262,11 @@ namespace Hedra.Engine.Player
             {
                 var isLessThanCurrent = Amount < currentGold.GetAttribute<int>(CommonAttributes.Amount);
                 var sign = isLessThanCurrent ? "-" : "+";
-                this.ShowText(Model.HeadPosition, $"{sign} {Math.Abs(Amount - Gold)} {Translations.Get("quest_gold")}", isLessThanCurrent ? Color.Red : Color.Gold,
+                this.ShowText(Model.HeadPosition, $"{sign} {Math.Abs(Amount - Gold)} {Translations.Get("quest_gold")}",
+                    isLessThanCurrent ? Color.Red : Color.Gold,
                     18);
             }
-            
+
             if (currentGold == null)
             {
                 var gold = ItemPool.Grab(ItemType.Gold);
@@ -290,11 +283,11 @@ namespace Hedra.Engine.Player
 
         public void EatFood()
         {
-            if(this.IsDead || this.IsEating || this.IsKnocked || this.IsEating || this.IsAttacking || this.IsClimbing) return;
-            this.WasAttacking = false;
-            this.IsAttacking = false;
-            
-            if(Inventory.Food != null)
+            if (IsDead || IsEating || IsKnocked || IsEating || IsAttacking || IsClimbing) return;
+            WasAttacking = false;
+            IsAttacking = false;
+
+            if (Inventory.Food != null)
             {
                 var food = Inventory.Food;
                 if (CanEat(food, out var shouldSit))
@@ -308,14 +301,15 @@ namespace Hedra.Engine.Player
                     MessageDispatcher.ShowNotification(Translations.Get("cant_eat_while_moving"), Color.Red, 2f);
                 }
             }
-            this.Inventory.UpdateInventory();
+
+            Inventory.UpdateInventory();
         }
 
         private bool CanEat(Item Food, out bool ShouldSit)
         {
-            ShouldSit = Food.HasAttribute(CommonAttributes.EatSitting) 
-                             && Food.GetAttribute<bool>(CommonAttributes.EatSitting);
-            return (ShouldSit && !IsMoving || !ShouldSit);
+            ShouldSit = Food.HasAttribute(CommonAttributes.EatSitting)
+                        && Food.GetAttribute<bool>(CommonAttributes.EatSitting);
+            return ShouldSit && !IsMoving || !ShouldSit;
         }
 
         private void OnEatingEnd(Item Food)
@@ -329,9 +323,10 @@ namespace Hedra.Engine.Player
             {
                 IsDead = true;
                 RoutineManager.StartRoutine(_damageHandler.DisposeCoroutine);
-                Executer.ExecuteOnMainThread(delegate {
-                    this.MessageDispatcher.ShowMessageWhile(Translations.Get("to_respawn", Controls.Respawn), Color.White,
-                        () => this.Health <= 0 && !GameManager.InStartMenu);
+                Executer.ExecuteOnMainThread(delegate
+                {
+                    MessageDispatcher.ShowMessageWhile(Translations.Get("to_respawn", Controls.Respawn), Color.White,
+                        () => Health <= 0 && !GameManager.InStartMenu);
                 });
             }
             else
@@ -341,42 +336,46 @@ namespace Hedra.Engine.Player
                 Model?.Recompose();
             }
         }
- 
+
         public override float Health
         {
             get => _health;
             set
             {
-                value = Mathf.Clamp(value, 0, this.MaxHealth);
+                value = Mathf.Clamp(value, 0, MaxHealth);
                 var diff = value - _health;
                 _acummulativeHealing += diff < 0 ? 0 : diff;
                 if (_acummulativeHealing > MaxHealth * .05f)
                 {
-                    this.ShowText(Model.HeadPosition, $"+ {(int)_acummulativeHealing} HP", Color.GreenYellow, 18 + 12 * ((_acummulativeHealing - MaxHealth * .05f) / this.MaxHealth), 2.0f);
+                    this.ShowText(Model.HeadPosition, $"+ {(int)_acummulativeHealing} HP", Color.GreenYellow,
+                        18 + 12 * ((_acummulativeHealing - MaxHealth * .05f) / MaxHealth), 2.0f);
                     _acummulativeHealing = 0;
                 }
-                if (_health <= 0 && value > 0) this.PlaySpawningAnimation = true;
+
+                if (_health <= 0 && value > 0) PlaySpawningAnimation = true;
                 _health = value;
-                this.ManageDeath();
+                ManageDeath();
             }
         }
 
         public bool Enabled
         {
             get => _enabled;
-            set{
+            set
+            {
                 _enabled = value;
                 Model.Enabled = value;
             }
         }
-        
+
         public static IPlayer Instance => GameManager.Player;
 
         public override bool IsGliding => Glider.Enabled;
-        
+
         public override bool IsSailing => Boat.Enabled;
 
         public bool InterfaceOpened => PlayerInterface.Showing;
+
         public void HideInterfaces()
         {
             InventoryInterface.Show = false;
@@ -396,30 +395,30 @@ namespace Hedra.Engine.Player
                 if (IsSailing) Boat.Disable();
             }
         }
-        
+
         public void Respawn()
         {
             Health = MaxHealth;
             Mana = MaxMana;
             Stamina = MaxStamina;
             GameManager.SpawningEffect = true;
-            this.PlaySpawningAnimation = true;
-            this.IsRiding = false;
+            PlaySpawningAnimation = true;
+            IsRiding = false;
             var newOffset = Position;
             while ((Position - newOffset).LengthSquared() < MinimumRespawnDistance * MinimumRespawnDistance)
-            {
                 newOffset = Position + new Vector3(
-                    (MaximumRespawnDistance * Utils.Rng.NextFloat() * 2 - MaximumRespawnDistance),
+                    MaximumRespawnDistance * Utils.Rng.NextFloat() * 2 - MaximumRespawnDistance,
                     0,
-                    (MaximumRespawnDistance * Utils.Rng.NextFloat() * 2 - MaximumRespawnDistance)
+                    MaximumRespawnDistance * Utils.Rng.NextFloat() * 2 - MaximumRespawnDistance
                 );
-            }
 
             var newPosition = World.FindSpawningPoint(newOffset);
-            newPosition = World.FindPlaceablePosition(this, new Vector3(newPosition.X, PhysicsSystem.Physics.HeightAtPosition(newPosition.X, newPosition.Z), newPosition.Z));
-            this.Model.Position = newPosition;
-            this.Position = newPosition;
-            this.IsKnocked = false;
+            newPosition = World.FindPlaceablePosition(this,
+                new Vector3(newPosition.X, PhysicsSystem.Physics.HeightAtPosition(newPosition.X, newPosition.Z),
+                    newPosition.Z));
+            Model.Position = newPosition;
+            Position = newPosition;
+            IsKnocked = false;
             IsRolling = false;
             ComponentManager.Clear();
 
@@ -430,21 +429,23 @@ namespace Hedra.Engine.Player
             if (xpDiff > 0)
             {
                 var xp = new TextBillboard(6f, $"- {xpDiff} XP", Color.Purple,
-                    FontCache.GetBold(18f), () => this.Model.HeadPosition + Vector3.UnitY * 1f)
+                    FontCache.GetBold(18f), () => Model.HeadPosition + Vector3.UnitY * 1f)
                 {
                     Vanish = true,
                     VanishSpeed = 2
                 };
             }
+
             if (goldDiff > 0)
             {
                 var gold = new TextBillboard(6f, $"- {goldDiff} G", Color.Gold,
-                    FontCache.GetBold(18f), () => this.Model.HeadPosition + Vector3.UnitY * 2f)
+                    FontCache.GetBold(18f), () => Model.HeadPosition + Vector3.UnitY * 2f)
                 {
                     Vanish = true,
                     VanishSpeed = 2
                 };
             }
+
             OnRespawn?.Invoke();
         }
 
@@ -475,9 +476,9 @@ namespace Hedra.Engine.Player
             HandLamp.Enabled = false;
             DodgeCost = DefaultDodgeCost;
             Toolbar.ResetSkills();
-            
+
             View.Reset();
-            
+
             IsRiding = false;
             if (Health <= 0) Respawn();
         }
@@ -491,9 +492,9 @@ namespace Hedra.Engine.Player
 
         public T SearchSkill<T>() where T : AbstractBaseSkill
         {
-            return (T) Toolbar.Skills.First(S => S is T);
+            return (T)Toolbar.Skills.First(S => S is T);
         }
-        
+
         public static bool CreatePlayer(string Name, ClassDesign ClassType, CustomizationData Customization)
         {
             if (Name == string.Empty)
@@ -501,11 +502,15 @@ namespace Hedra.Engine.Player
                 Instance.MessageDispatcher.ShowNotification(Translations.Get("name_empty"), Color.Red, 3f);
                 return false;
             }
+
             if (DataManager.CharacterCount >= GameSettings.MaxCharacters)
             {
-                Instance.MessageDispatcher.ShowNotification(Translations.Get("max_characters", GameSettings.MaxCharacters), Color.Red, GameSettings.MaxCharacters);
+                Instance.MessageDispatcher.ShowNotification(
+                    Translations.Get("max_characters", GameSettings.MaxCharacters), Color.Red,
+                    GameSettings.MaxCharacters);
                 return false;
             }
+
             const int maxName = 12;
             if (Name.Length > maxName)
             {
@@ -518,7 +523,8 @@ namespace Hedra.Engine.Player
             return true;
         }
 
-        public static PlayerInformation BuildNewPlayer(string Name, ClassDesign ClassType, CustomizationData Customization)
+        public static PlayerInformation BuildNewPlayer(string Name, ClassDesign ClassType,
+            CustomizationData Customization)
         {
             var data = new PlayerInformation
             {
@@ -538,16 +544,10 @@ namespace Hedra.Engine.Player
 
             data.AddRecipe(ItemPool.Grab(ItemType.HealthPotionRecipe).Name);
             var items = ClassType.StartingItems;
-            for (var i = 0; i < items.Length; ++i)
-            {
-                data.AddItem(items[i].Key, items[i].Value);
-            }
-            
+            for (var i = 0; i < items.Length; ++i) data.AddItem(items[i].Key, items[i].Value);
+
             var recipes = ClassType.StartingRecipes;
-            for (var i = 0; i < recipes.Length; ++i)
-            {
-                data.AddRecipe(recipes[i].Name);
-            }
+            for (var i = 0; i < recipes.Length; ++i) data.AddRecipe(recipes[i].Name);
             return data;
         }
 

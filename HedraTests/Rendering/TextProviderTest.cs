@@ -1,5 +1,6 @@
 using System;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Hedra.Engine.Management;
@@ -13,7 +14,6 @@ namespace HedraTests.Rendering
     [TestFixture]
     public class TextProviderTest
     {
-
         [Test]
         public void TestWrapping()
         {
@@ -58,7 +58,7 @@ namespace HedraTests.Rendering
                 str
             );
         }
-        
+
         [Test]
         public void TestMultipleProperties()
         {
@@ -68,23 +68,23 @@ namespace HedraTests.Rendering
             output.Texts.ToList().ForEach(TestContext.WriteLine);
             output.TextColors.ToList().ForEach(C => TestContext.WriteLine(C.ToString()));
             output.TextFonts.ToList().ForEach(F => TestContext.WriteLine($"Font: {F.Size} {F.Style} {F.FontFamily}"));
-            Assert.AreEqual(new []
+            Assert.AreEqual(new[]
             {
-                "Hi, how ", 
+                "Hi, how ",
                 "are you?"
             }, output.Texts);
-            Assert.AreEqual(new []
+            Assert.AreEqual(new[]
             {
                 Color.White,
                 Color.Gold
             }, output.TextColors);
-            Assert.AreEqual(new []
+            Assert.AreEqual(new[]
             {
                 defaultFont,
-                FontCache.GetBold(1.5f),
+                FontCache.GetBold(1.5f)
             }, output.TextFonts);
         }
-        
+
         [Test]
         public void TestSplittingWithNewlines()
         {
@@ -92,17 +92,17 @@ namespace HedraTests.Rendering
             var defaultFont = FontCache.GetBold(1);
             var output = TextProvider.BuildParams(str, defaultFont, Color.White);
             output.Texts.ToList().ForEach(TestContext.WriteLine);
-            Assert.AreEqual(new []
+            Assert.AreEqual(new[]
             {
                 "Hi, how ",
                 Environment.NewLine,
-                " I am ", 
+                " I am ",
                 "very",
                 Environment.NewLine,
                 " good!"
             }, output.Texts);
         }
-        
+
         [Test]
         public void TestSplitting()
         {
@@ -111,15 +111,15 @@ namespace HedraTests.Rendering
             var output = TextProvider.BuildParams(str, defaultFont, Color.White);
             output.Texts.ToList().ForEach(TestContext.WriteLine);
             output.TextColors.ToList().ForEach(C => TestContext.WriteLine(C.ToString()));
-            Assert.AreEqual(new []
+            Assert.AreEqual(new[]
             {
-                "Hi, how ", 
+                "Hi, how ",
                 "are you?",
-                " I am ", 
+                " I am ",
                 "very",
                 " good!"
             }, output.Texts);
-            Assert.AreEqual(new []
+            Assert.AreEqual(new[]
             {
                 Color.White,
                 Color.Red,
@@ -127,7 +127,7 @@ namespace HedraTests.Rendering
                 Color.LawnGreen,
                 Color.White
             }, output.TextColors);
-            Assert.AreEqual(new []
+            Assert.AreEqual(new[]
             {
                 defaultFont,
                 defaultFont,

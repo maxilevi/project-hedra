@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
@@ -25,40 +26,40 @@ namespace Hedra.Engine.Rendering.UI
         {
             ColorMap = new Dictionary<string, Color>
             {
-                {TextFormatting.Red, Color.Red},
-                {TextFormatting.Violet, Color.MediumVioletRed},
-                {TextFormatting.Blue, Color.CornflowerBlue},
-                {TextFormatting.White, Color.White},
-                {TextFormatting.Green, Color.LawnGreen},
-                {TextFormatting.Orange, Color.OrangeRed},
-                {TextFormatting.Gold, Color.Gold},
-                {TextFormatting.Gray, Color.LightGray},
-                {TextFormatting.Black, Color.Black},
-                {TextFormatting.Yellow, Color.Yellow},
-                {TextFormatting.Cyan, Color.Cyan},
-                {TextFormatting.Pastel, Color.Wheat}
+                { TextFormatting.Red, Color.Red },
+                { TextFormatting.Violet, Color.MediumVioletRed },
+                { TextFormatting.Blue, Color.CornflowerBlue },
+                { TextFormatting.White, Color.White },
+                { TextFormatting.Green, Color.LawnGreen },
+                { TextFormatting.Orange, Color.OrangeRed },
+                { TextFormatting.Gold, Color.Gold },
+                { TextFormatting.Gray, Color.LightGray },
+                { TextFormatting.Black, Color.Black },
+                { TextFormatting.Yellow, Color.Yellow },
+                { TextFormatting.Cyan, Color.Cyan },
+                { TextFormatting.Pastel, Color.Wheat }
             };
             FontMap = new Dictionary<string, Font>
             {
-                {TextFormatting.Bold, FontCache.GetBold(1)},
-                {TextFormatting.Normal, FontCache.GetNormal(1)}
+                { TextFormatting.Bold, FontCache.GetBold(1) },
+                { TextFormatting.Normal, FontCache.GetNormal(1) }
             };
             SizeMap = new Dictionary<string, float>
             {
-                {TextFormatting.Smaller, .8f},
-                {TextFormatting.Bigger, 1.25f},
+                { TextFormatting.Smaller, .8f },
+                { TextFormatting.Bigger, 1.25f }
             };
             TransformationMap = new Dictionary<string, Func<string, string>>
             {
-                {TextFormatting.Caps, S => S.ToUpperInvariant()},
+                { TextFormatting.Caps, S => S.ToUpperInvariant() }
             };
         }
-        
+
         public Bitmap BuildText(string Text, Font TextFont, Color TextColor, TextOptions Options)
         {
             return DoBuildText(BuildParams(Text, TextFont, TextColor, Options));
         }
-        
+
         public Bitmap BuildText(string Text, Font TextFont, Color TextColor)
         {
             return BuildText(Text, TextFont, TextColor, new TextOptions());
@@ -95,7 +96,7 @@ namespace Hedra.Engine.Rendering.UI
                     }
                     else
                     {
-                       /* String has format */
+                        /* String has format */
                         var newStr = Utils.FitString(texts[i], measure, measure < Characters);
                         newStr = newStr.Substring(0, newStr.Length - Environment.NewLine.Length);
                         previousLen = texts[i].Length;
@@ -109,15 +110,18 @@ namespace Hedra.Engine.Rendering.UI
                             var upperString = splits[i].Contains("(BOLD)") ? splits[i].ToUpperInvariant() : splits[i];
                             newSplit += $"{upperString.Replace(texts[i], subParts[k])}{Environment.NewLine}";
                         }
+
                         newSplit = newSplit.Substring(0, newSplit.Length - Environment.NewLine.Length);
                         splits[i] = newSplit;
                     }
+
                     accumulated -= Characters * ((currentLen - previousLen) / Environment.NewLine.Length);
                 }
             }
+
             return string.Join(string.Empty, splits);
         }
-        
+
         public static string Substr(string Text, int End)
         {
             var splits = GetSplits(Text);
@@ -128,10 +132,11 @@ namespace Hedra.Engine.Rendering.UI
             for (var i = 0; i < texts.Length; ++i)
             {
                 index = i;
-                if(accumulated + texts[i].Length >= End) break;
+                if (accumulated + texts[i].Length >= End) break;
                 accumulated += texts[i].Length;
                 builder.Append(splits[i]);
             }
+
             builder.Append(splits[index].Replace(texts[index], texts[index].Substring(0, End - accumulated)));
             return builder.ToString();
         }
@@ -145,10 +150,10 @@ namespace Hedra.Engine.Rendering.UI
         {
             return BuildParams(Text, TextFont, TextColor, new TextOptions());
         }
-        
+
         public static TextParams BuildParams(string Text, Font TextFont, Color TextColor, TextOptions Options)
         {
-            var splits = GetSplits(Text);          
+            var splits = GetSplits(Text);
             var texts = splits.Select(StringMatch).ToArray();
             var fullText = string.Join(string.Empty, texts);
             return new TextParams(
@@ -160,7 +165,8 @@ namespace Hedra.Engine.Rendering.UI
             );
         }
 
-        private static void Match(string Text, Color Default, Font DefaultFont, out Color Color, out string CleanVersion, out Font Font)
+        private static void Match(string Text, Color Default, Font DefaultFont, out Color Color,
+            out string CleanVersion, out Font Font)
         {
             CleanVersion = Text;
             Font = DefaultFont;
@@ -206,6 +212,7 @@ namespace Hedra.Engine.Rendering.UI
                 Text = Regex.Replace(Text, regex, string.Empty);
                 return Do(pair.Value);
             }
+
             return Default;
         }
 
@@ -214,27 +221,28 @@ namespace Hedra.Engine.Rendering.UI
             Match(Text, Color.Empty, TextFont, out _, out _, out var font);
             return font;
         }
-        
+
         private static Color ColorMatch(string Text, Color Default)
         {
             Match(Text, Default, FontCache.Default, out var color, out _, out _);
             return color;
         }
-        
+
         private static string StringMatch(string Text)
         {
             Match(Text, Color.Empty, FontCache.Default, out _, out var cleaned, out _);
             return cleaned;
         }
-        
+
         private static Bitmap DoBuildText(TextParams Params)
         {
-            if(Params.TextFonts.Any(F => F.Size > 128) || Params.Texts.Length == 0) return new Bitmap(1,1);
+            if (Params.TextFonts.Any(F => F.Size > 128) || Params.Texts.Length == 0) return new Bitmap(1, 1);
             Bitmap textBitmap;
             lock (MeasureLock)
             {
                 textBitmap = DoBuildTextSync(Params);
             }
+
             return textBitmap;
         }
 
@@ -242,7 +250,8 @@ namespace Hedra.Engine.Rendering.UI
         {
             var fullString = string.Join(string.Empty, Params.Texts);
             var size = CalculateNeededSize(Params);
-            var textBitmap = new Bitmap((int)Math.Ceiling(Math.Max(size.Width, 1)), (int)Math.Ceiling(Math.Max(size.Height,1)));
+            var textBitmap = new Bitmap((int)Math.Ceiling(Math.Max(size.Width, 1)),
+                (int)Math.Ceiling(Math.Max(size.Height, 1)));
             using (var graphics = Graphics.FromImage(textBitmap))
             {
                 graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
@@ -254,6 +263,7 @@ namespace Hedra.Engine.Rendering.UI
                     var factor = 1f / 1080f * GameSettings.Height;
                     graphics.ScaleTransform(factor * GameSettings.UIScaling, factor * GameSettings.UIScaling);
                 }
+
                 graphics.Clear(Color.FromArgb(0, 0, 0, 0));
                 var offset = PointF.Empty;
                 var bounds = RectangleF.Empty;
@@ -264,13 +274,13 @@ namespace Hedra.Engine.Rendering.UI
                         offset = new PointF(0, offset.Y + bounds.Height * .75f * (DefaultDPI / graphics.DpiY));
                         continue;
                     }
-                        
+
                     /* Draw shadows & strokes */
                     if (Params.TextOptions[i].HasStroke)
                         AddStroke(graphics, Params.Texts[i], Params.TextFonts[i], offset, Params.TextOptions[i]);
                     else
                         AddShadows(graphics, Params.Texts[i], Params.TextFonts[i], offset);
-                    
+
                     using (var brush = new SolidBrush(Params.TextColors[i]))
                     {
                         using (var gp = new GraphicsPath())
@@ -278,7 +288,7 @@ namespace Hedra.Engine.Rendering.UI
                             gp.AddString(
                                 Params.Texts[i],
                                 Params.TextFonts[i].FontFamily,
-                                (int) Params.TextFonts[i].Style,
+                                (int)Params.TextFonts[i].Style,
                                 Params.TextFonts[i].Size,
                                 Point.Empty,
                                 StringFormat.GenericTypographic
@@ -287,7 +297,7 @@ namespace Hedra.Engine.Rendering.UI
                             offsetMat.Translate(offset.X, offset.Y);
                             gp.Transform(offsetMat);
                             graphics.FillPath(brush, gp);
-                            var format = (StringFormat) StringFormat.GenericTypographic.Clone();
+                            var format = (StringFormat)StringFormat.GenericTypographic.Clone();
                             format.SetMeasurableCharacterRanges(new[]
                             {
                                 new CharacterRange(Params.Offsets[i], Params.Texts[i].Length)
@@ -313,18 +323,28 @@ namespace Hedra.Engine.Rendering.UI
 
         private static void AddStroke(Graphics Graphics, string Text, Font TextFont, PointF Offset, TextOptions Options)
         {
-            AddBackground(Graphics, Text, TextFont, Color.FromArgb(80, Options.StrokeColor.R, Options.StrokeColor.G, Options.StrokeColor.B), new Vector2(Offset.X, Offset.Y + 1.75f));
-            AddBackground(Graphics, Text, TextFont, Color.FromArgb(80, Options.StrokeColor.R, Options.StrokeColor.G, Options.StrokeColor.B), new Vector2(Offset.X + 1.75f, Offset.Y));
-            AddBackground(Graphics, Text, TextFont, Color.FromArgb(80, Options.StrokeColor.R, Options.StrokeColor.G, Options.StrokeColor.B), new Vector2(Offset.X, Offset.Y - 1.75f));
-            AddBackground(Graphics, Text, TextFont, Color.FromArgb(80, Options.StrokeColor.R, Options.StrokeColor.G, Options.StrokeColor.B), new Vector2(Offset.X - 1.75f, Offset.Y));
+            AddBackground(Graphics, Text, TextFont,
+                Color.FromArgb(80, Options.StrokeColor.R, Options.StrokeColor.G, Options.StrokeColor.B),
+                new Vector2(Offset.X, Offset.Y + 1.75f));
+            AddBackground(Graphics, Text, TextFont,
+                Color.FromArgb(80, Options.StrokeColor.R, Options.StrokeColor.G, Options.StrokeColor.B),
+                new Vector2(Offset.X + 1.75f, Offset.Y));
+            AddBackground(Graphics, Text, TextFont,
+                Color.FromArgb(80, Options.StrokeColor.R, Options.StrokeColor.G, Options.StrokeColor.B),
+                new Vector2(Offset.X, Offset.Y - 1.75f));
+            AddBackground(Graphics, Text, TextFont,
+                Color.FromArgb(80, Options.StrokeColor.R, Options.StrokeColor.G, Options.StrokeColor.B),
+                new Vector2(Offset.X - 1.75f, Offset.Y));
         }
 
         private static void AddShadows(Graphics Graphics, string Text, Font TextFont, PointF Offset)
         {
-            AddBackground(Graphics, Text, TextFont, Color.FromArgb(80, 0, 0, 0), new Vector2(Offset.X + 1.5f, Offset.Y + 1.5f));
+            AddBackground(Graphics, Text, TextFont, Color.FromArgb(80, 0, 0, 0),
+                new Vector2(Offset.X + 1.5f, Offset.Y + 1.5f));
         }
 
-        private static void AddBackground(Graphics Graphics, string Text, Font TextFont, Color TextColor, Vector2 Offset)
+        private static void AddBackground(Graphics Graphics, string Text, Font TextFont, Color TextColor,
+            Vector2 Offset)
         {
             using (var gp = new GraphicsPath())
             {
@@ -333,7 +353,7 @@ namespace Hedra.Engine.Rendering.UI
                     gp.AddString(
                         Text,
                         TextFont.FontFamily,
-                        (int) TextFont.Style,
+                        (int)TextFont.Style,
                         TextFont.Size,
                         Point.Empty, StringFormat.GenericTypographic
                     );
@@ -345,7 +365,7 @@ namespace Hedra.Engine.Rendering.UI
                 }
             }
         }
-        
+
         public static SizeF CalculateNeededSize(TextParams Params)
         {
             var max = SizeF.Empty;
@@ -372,11 +392,11 @@ namespace Hedra.Engine.Rendering.UI
                     sizes[i] = new SizeF(rectangle.Width, rectangle.Height);
                 }
             }
+
             var bounds = SizeF.Empty;
             var offset = SizeF.Empty;
             for (var i = 0; i < sizes.Length; ++i)
-            {
-                if (Params.Texts[i] == Environment.NewLine && i != sizes.Length-1)
+                if (Params.Texts[i] == Environment.NewLine && i != sizes.Length - 1)
                 {
                     max = new SizeF(max.Width, max.Height + bounds.Height);
                     offset = SizeF.Empty;
@@ -386,12 +406,13 @@ namespace Hedra.Engine.Rendering.UI
                     bounds = sizes[i];
                     offset += bounds;
                     max = new SizeF(Math.Max(offset.Width, max.Width), Math.Max(max.Height, bounds.Height));
-                }   
-            }
+                }
+
             var factor = 1f / 1080f * GameSettings.Height;
-            return new SizeF(max.Width * factor * (DefaultDPI / dpi.X) * GameSettings.UIScaling, max.Height * factor * (DefaultDPI / dpi.Y) * GameSettings.UIScaling);
+            return new SizeF(max.Width * factor * (DefaultDPI / dpi.X) * GameSettings.UIScaling,
+                max.Height * factor * (DefaultDPI / dpi.Y) * GameSettings.UIScaling);
         }
-        
+
         private static SizeF CalculateTextSize(string Text, Font TextFont)
         {
             using (var graphics = Graphics.FromHwnd(IntPtr.Zero))
@@ -409,7 +430,8 @@ namespace Hedra.Engine.Rendering.UI
         public Color[] TextColors { get; }
         public TextOptions[] TextOptions { get; }
 
-        public TextParams(string[] Texts, int[] Offsets, Font[] TextFonts, Color[] TextColors, TextOptions[] TextOptions)
+        public TextParams(string[] Texts, int[] Offsets, Font[] TextFonts, Color[] TextColors,
+            TextOptions[] TextOptions)
         {
             this.TextFonts = TextFonts;
             this.Offsets = Offsets;

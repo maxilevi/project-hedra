@@ -8,7 +8,8 @@
  */
 
 using System;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Management;
@@ -60,13 +61,15 @@ namespace Hedra.Engine.SkillSystem
         public abstract string Description { get; }
         public abstract string DisplayName { get; }
         public abstract bool PlaySound { get; }
-        
+
         protected void InvokeStateUpdated()
         {
             StateUpdated?.Invoke();
         }
     }
-    public abstract class BaseSkill<T> : AbstractBaseSkill, IRenderable, IUpdatable, ISimpleTexture, IAdjustable where T : ISkillUser
+
+    public abstract class BaseSkill<T> : AbstractBaseSkill, IRenderable, IUpdatable, ISimpleTexture, IAdjustable
+        where T : ISkillUser
     {
         private static readonly Shader Shader = Shader.Build("Shaders/Skills.vert", "Shaders/Skills.frag");
         private static readonly Vector3 NormalTint = Vector3.One;
@@ -89,12 +92,13 @@ namespace Hedra.Engine.SkillSystem
 
         public override void Initialize(ISkillUser User)
         {
-            if(!(User is T))
-                throw new ArgumentException($"Provided user must be of type '{typeof(T)}' but is of type '{User.GetType()}'");
+            if (!(User is T))
+                throw new ArgumentException(
+                    $"Provided user must be of type '{typeof(T)}' but is of type '{User.GetType()}'");
             this.User = (T)User;
             UpdateManager.Add(this);
         }
-        
+
         public override void InitializeUI(Vector2 Position, Vector2 Scale, Panel InPanel)
         {
             this.Position = Position;
@@ -103,63 +107,63 @@ namespace Hedra.Engine.SkillSystem
             Tint = NormalTint;
             _panel = InPanel;
             _panel.AddElement(this);
-            
+
             _cooldownSecondsText = new RenderableText(string.Empty, Position, Color.White, FontCache.GetBold(12));
             _panel.AddElement(_cooldownSecondsText);
-            if(_panel.Enabled) _cooldownSecondsText.Enable();
-            
+            if (_panel.Enabled) _cooldownSecondsText.Enable();
+
             DrawManager.UIRenderer.Add(this, DrawOrder.After);
             _initializedUI = true;
         }
-        
+
         public override bool MeetsRequirements()
         {
             if (Cooldown > 0 || User.Mana - ManaCost <= 0 || Level <= 0 || !Active) return false;
 
             return !ShouldDisable && User.CanCastSkill;
         }
-        
+
         public virtual void Draw()
         {
-            if(!Enabled || !Active)
+            if (!Enabled || !Active)
                 return;
-            
-            if(!_initializedUI) throw new ArgumentException("This skill hasn't been initialized yet.");
-            
+
+            if (!_initializedUI) throw new ArgumentException("This skill hasn't been initialized yet.");
+
             Cooldown -= Time.DeltaTime;
             if (_cooldownSecondsText.Position != Position) _cooldownSecondsText.Position = Position;
             _cooldownSecondsText.Text = Cooldown > 0 && HasCooldown ? ((int)Cooldown + 1).ToString() : string.Empty;
             Renderer.Enable(EnableCap.Blend);
             Renderer.Disable(EnableCap.DepthTest);
             Renderer.Disable(EnableCap.CullFace);
-            
+
             Shader.Bind();
-            Shader["Tint"] = User.Mana - this.ManaCost < 0 && Tint == NormalTint ? new Vector3(.9f,.6f,.6f) : Tint;
-            Shader["Scale"] = Scale * new Vector2(1,-1);
+            Shader["Tint"] = User.Mana - ManaCost < 0 && Tint == NormalTint ? new Vector3(.9f, .6f, .6f) : Tint;
+            Shader["Scale"] = Scale * new Vector2(1, -1);
             Shader["Position"] = _adjustedPosition;
             Shader["Bools"] = new Vector2(Level == 0 || ShouldDisable ? 1 : 0, 1);
             Shader["Cooldown"] = OverlayBlending;
-            
+
             Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.Texture2D, TextureId = IconId);
-            
+
             Renderer.ActiveTexture(TextureUnit.Texture1);
             Renderer.BindTexture(TextureTarget.Texture2D, InventoryArrayInterface.DefaultId);
             Shader["Mask"] = 1;
-            
+
             DrawManager.UIRenderer.DrawQuad();
-            
+
             Shader.Unbind();
-            
+
             Renderer.Disable(EnableCap.Blend);
             Renderer.Enable(EnableCap.DepthTest);
             Renderer.Enable(EnableCap.CullFace);
-            
+
             //Renderer.ActiveTexture(TextureUnit.Texture0);
             //Renderer.BindTexture(TextureTarget.Texture2D, 0);
             //Renderer.ActiveTexture(TextureUnit.Texture1);
             //Renderer.BindTexture(TextureTarget.Texture2D, 0);
-            
+
             _cooldownSecondsText.Draw();
         }
 
@@ -172,7 +176,7 @@ namespace Hedra.Engine.SkillSystem
         {
             Cooldown = 0;
         }
-        
+
         protected void SetOnCooldown()
         {
             Cooldown = MaxCooldown / User.Attributes.CooldownReductionModifier;
@@ -194,9 +198,17 @@ namespace Hedra.Engine.SkillSystem
             Update();
         }
 
-        public override void KeyUp(){}
-        public override void Unload(){}
-        public override void Load(){}
+        public override void KeyUp()
+        {
+        }
+
+        public override void Unload()
+        {
+        }
+
+        public override void Load()
+        {
+        }
 
         public override Vector2 Scale { get; set; }
         public override string[] Attributes => new string[0];
@@ -207,20 +219,20 @@ namespace Hedra.Engine.SkillSystem
             set
             {
                 _position = value;
-                this.Adjust();
+                Adjust();
             }
         }
 
         public override void Enable()
         {
-            this.Enabled = true;
+            Enabled = true;
         }
-        
+
         public override void Disable()
         {
-            this.Enabled = false;
+            Enabled = false;
         }
-        
+
         public override void Dispose()
         {
             UpdateManager.Remove(this);
@@ -230,6 +242,6 @@ namespace Hedra.Engine.SkillSystem
                 TextureRegistry.Remove(IconId);
                 _cooldownSecondsText.Dispose();
             }
-        }    
+        }
     }
 }

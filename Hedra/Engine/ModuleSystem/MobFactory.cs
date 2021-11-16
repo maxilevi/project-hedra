@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using Hedra.AISystem;
 using Hedra.Components;
 using Hedra.Engine.EntitySystem;
@@ -27,10 +28,7 @@ namespace Hedra.Engine.ModuleSystem
         {
             lock (_lock)
             {
-                foreach (var factory in Factory)
-                {
-                    _factories.Add(factory.Name.ToLowerInvariant(), factory);
-                }
+                foreach (var factory in Factory) _factories.Add(factory.Name.ToLowerInvariant(), factory);
             }
         }
 
@@ -53,7 +51,9 @@ namespace Hedra.Engine.ModuleSystem
         public IEnemyFactory GetFactory(string Type)
         {
             lock (_lock)
+            {
                 return _factories[Type.ToLowerInvariant()];
+            }
         }
 
         public SkilledAnimableEntity Build(string Type, int Seed)
@@ -71,14 +71,16 @@ namespace Hedra.Engine.ModuleSystem
 
             var dmg = mob.SearchComponent<DamageComponent>();
             if (dmg == null) throw new ArgumentException("No DamageComponent has been set");
-            
+
             var mobDifficulty = GetMobDifficulty(new Random(Seed));
             var mobDifficultyModifier = GetMobDifficultyModifier(mobDifficulty);
-            var mobName = Translations.Has(mob.Name.ToLowerInvariant()) ? Translations.Get(mob.Name.ToLowerInvariant()) : mob.Name.AddSpacesToSentence(true);
-            if(!Translations.Has(mob.Name.ToLowerInvariant()))
+            var mobName = Translations.Has(mob.Name.ToLowerInvariant())
+                ? Translations.Get(mob.Name.ToLowerInvariant())
+                : mob.Name.AddSpacesToSentence(true);
+            if (!Translations.Has(mob.Name.ToLowerInvariant()))
                 Log.WriteLine($"Failed to find translation for mob '{mob.Name}', using name as default.");
             mob.Name = mobName;
-            
+
             var barComponent = new HealthBarComponent(
                 mob,
                 mobName,
@@ -86,9 +88,9 @@ namespace Hedra.Engine.ModuleSystem
                 mobDifficulty == 1 ? Color.White : mobDifficulty == 3 ? Color.Red : Color.Gold
             );
             mob.AddComponent(barComponent);
-            
+
             mob.MaxHealth = mob.MaxHealth * mobDifficultyModifier;
-            dmg.XpToGive = dmg.XpToGive * mobDifficultyModifier; 
+            dmg.XpToGive = dmg.XpToGive * mobDifficultyModifier;
             mob.Health = mob.MaxHealth;
             return mob;
         }
@@ -109,7 +111,7 @@ namespace Hedra.Engine.ModuleSystem
                     ? HealthBarType.Hostile
                     : HealthBarType.Neutral;
         }
-        
+
         private static int GetMobDifficulty(Random Rng)
         {
             var levelN = Rng.Next(0, 10);

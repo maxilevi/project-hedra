@@ -1,5 +1,6 @@
 using System;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Linq;
 using Hedra.Core;
 using Hedra.Crafting;
@@ -24,7 +25,7 @@ namespace Hedra.Engine.Player.CraftingSystem
         private readonly Button _craftButton;
         private Item _currentRecipe;
         private readonly IPlayer _player;
-        private string _lastRecipeChecked;        
+        private string _lastRecipeChecked;
         private bool _canCraft;
         private readonly Timer _cooldownTimer;
         private readonly Vector4 _normalTint;
@@ -40,11 +41,11 @@ namespace Hedra.Engine.Player.CraftingSystem
             _cooldownTint = new Vector4(Color.Orange.ToVector4().Xyz() * 2f, 1);
             _cooldownTimer = new Timer(.5f)
             {
-                AutoReset = false,
+                AutoReset = false
             };
             _cooldownTimer.MarkReady();
             _panel = new Panel();
-            _ingredientsText = new GUIText[MaxIngredients+1];
+            _ingredientsText = new GUIText[MaxIngredients + 1];
             for (var i = 0; i < _ingredientsText.Length; i++)
             {
                 _ingredientsText[i] = new GUIText(
@@ -52,6 +53,7 @@ namespace Hedra.Engine.Player.CraftingSystem
                 );
                 _panel.AddElement(_ingredientsText[i]);
             }
+
             HintTexture.TextureElement.Grayscale = true;
             HintTexture.Position = BackgroundTexture.Position - DefaultSize.Y * Vector2.UnitY * .65f;
             HintTexture.Scale *= 1.5f;
@@ -59,11 +61,11 @@ namespace Hedra.Engine.Player.CraftingSystem
             HintText.Position = HintTexture.Position;
             HintText.TextFont = FontCache.GetBold(14);
             _craftButton = new Button(HintTexture.Position, HintTexture.Scale, GUIRenderer.TransparentTexture);
-            _craftButton.Click += (O, E) => Craft(); 
+            _craftButton.Click += (O, E) => Craft();
             _panel.AddElement(_craftButton);
             _player.Inventory.InventoryUpdated += () =>
             {
-                if(_currentRecipe != null)
+                if (_currentRecipe != null)
                     UpdateCanCraft();
             };
         }
@@ -79,8 +81,9 @@ namespace Hedra.Engine.Player.CraftingSystem
                 SoundPlayer.PlayUISound(SoundType.NotificationSound);
                 return true;
             }
-            _player.MessageDispatcher.ShowNotification(_canCraft 
-                ? Translations.Get("is_on_cooldown") 
+
+            _player.MessageDispatcher.ShowNotification(_canCraft
+                ? Translations.Get("is_on_cooldown")
                 : Translations.Get("insufficient_ingredients"), Color.Red, 3, true);
             return false;
         }
@@ -89,9 +92,10 @@ namespace Hedra.Engine.Player.CraftingSystem
         {
             var ready = _cooldownTimer.Tick() && _canCraft;
             HintText.TextColor = ready ? Color.White : Color.Gray;
-            HintTexture.TextureElement.Tint = Mathf.Lerp(HintTexture.TextureElement.Tint, ready ? _normalTint : _cooldownTint, Time.DeltaTime * 8f);
+            HintTexture.TextureElement.Tint = Mathf.Lerp(HintTexture.TextureElement.Tint,
+                ready ? _normalTint : _cooldownTint, Time.DeltaTime * 8f);
         }
-        
+
         public void Show(Item Output, Item Recipe)
         {
             _currentRecipe = Recipe;
@@ -100,10 +104,7 @@ namespace Hedra.Engine.Player.CraftingSystem
 
         protected override void AddLayout()
         {
-            if (_currentRecipe != null && _lastRecipeChecked != _currentRecipe.Name)
-            {
-                UpdateCanCraft();
-            }
+            if (_currentRecipe != null && _lastRecipeChecked != _currentRecipe.Name) UpdateCanCraft();
         }
 
         protected override void AddAttributes()
@@ -113,8 +114,9 @@ namespace Hedra.Engine.Player.CraftingSystem
             var ingredients = CraftingInventory.GetIngredients(_currentRecipe);
             ItemAttributes.Text = $@"{Translations.Get("ingredients")}:";
             ItemAttributes.Position -= Vector2.UnitX * ItemAttributes.Scale.X;
-            if (ingredients.Length > MaxIngredients) 
-                throw new ArgumentOutOfRangeException($"Cannot display a recipe with more than {MaxIngredients} ingredients, has {ingredients.Length}");
+            if (ingredients.Length > MaxIngredients)
+                throw new ArgumentOutOfRangeException(
+                    $"Cannot display a recipe with more than {MaxIngredients} ingredients, has {ingredients.Length}");
 
             DisableIngredientsText();
             var offset = -ItemAttributes.Scale.Y * 2f;
@@ -127,44 +129,43 @@ namespace Hedra.Engine.Player.CraftingSystem
                 _ingredientsText[i].Position = ItemAttributes.Position + Vector2.UnitY * offset;
                 _ingredientsText[i].Text =
                     $@"{new string(' ', 4)}• {currentAmount}/{ingredients[i].Amount} {ingredientName}";
-                _ingredientsText[i].Position += Vector2.UnitX * _ingredientsText[i].Scale.X - Vector2.UnitX * ItemAttributes.Scale.X;
+                _ingredientsText[i].Position += Vector2.UnitX * _ingredientsText[i].Scale.X -
+                                                Vector2.UnitX * ItemAttributes.Scale.X;
                 _ingredientsText[i].TextColor = currentAmount >= ingredients[i].Amount ? Color.LawnGreen : Color.Red;
                 _ingredientsText[i].Enable();
                 offset -= _ingredientsText[i].Scale.Y * 2;
             }
+
             AddStationRequirement(Vector2.UnitY * offset);
-            _descriptionHeight = _ingredientsText.Where(I => I.UIText.Enabled).Sum(I => I.Scale.Y) + base.DescriptionHeight;
+            _descriptionHeight = _ingredientsText.Where(I => I.UIText.Enabled).Sum(I => I.Scale.Y) +
+                                 base.DescriptionHeight;
             AccomodateScale(ItemTexture);
             AccomodatePosition(ItemTexture);
             AccomodatePosition(ItemAttributes);
-            for (var i = 0; i < _ingredientsText.Length; i++)
-            {
-                AccomodatePosition(_ingredientsText[i]);
-            }
+            for (var i = 0; i < _ingredientsText.Length; i++) AccomodatePosition(_ingredientsText[i]);
         }
 
         private void AddStationRequirement(Vector2 Offset)
         {
-            if(_currentRecipe.GetAttribute<CraftingStation>(CommonAttributes.CraftingStation) == CraftingStation.None) return;
+            if (_currentRecipe.GetAttribute<CraftingStation>(CommonAttributes.CraftingStation) ==
+                CraftingStation.None) return;
             StationRequirementText.Position = ItemAttributes.Position + Offset;
             StationRequirementText.Enable();
             StationRequirementText.Text =
                 $"• {Translations.Get($"requires_{_currentRecipe.GetAttribute<string>(CommonAttributes.CraftingStation).ToLowerInvariant()}")}";
             StationRequirementText.TextColor =
                 CraftingInventory.IsInStation(_currentRecipe, _player.Position) ? Color.LawnGreen : Color.Red;
-            StationRequirementText.Position += Vector2.UnitX * StationRequirementText.Scale.X - Vector2.UnitX * ItemAttributes.Scale.X;
+            StationRequirementText.Position += Vector2.UnitX * StationRequirementText.Scale.X -
+                                               Vector2.UnitX * ItemAttributes.Scale.X;
         }
 
-        private GUIText StationRequirementText => _ingredientsText[MaxIngredients - 1]; 
-        
+        private GUIText StationRequirementText => _ingredientsText[MaxIngredients - 1];
+
         protected override float DescriptionHeight => _descriptionHeight;
 
         private void DisableIngredientsText()
         {
-            for (var i = 0; i < _ingredientsText.Length; i++)
-            {
-                _ingredientsText[i].Disable();
-            }
+            for (var i = 0; i < _ingredientsText.Length; i++) _ingredientsText[i].Disable();
         }
 
         protected override void AddHint()
@@ -185,7 +186,7 @@ namespace Hedra.Engine.Player.CraftingSystem
             get => base.Enabled;
             set
             {
-                if(value) _panel.Enable();
+                if (value) _panel.Enable();
                 else _panel.Disable();
                 base.Enabled = value;
             }
@@ -198,9 +199,7 @@ namespace Hedra.Engine.Player.CraftingSystem
             {
                 var elements = _panel.Elements.ToArray();
                 for (var i = 0; i < elements.Length; i++)
-                {
                     elements[i].Position = elements[i].Position - base.Position + value;
-                }
                 base.Position = value;
             }
         }

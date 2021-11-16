@@ -1,5 +1,6 @@
 using System.Collections.Generic;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.IO;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
@@ -29,7 +30,7 @@ namespace Hedra.Engine.Management
             _exePath = path;
             SampleAnimation = Encoding.ASCII.GetBytes(File.ReadAllText(_exePath + "/test_model.xml"));
         }
-        
+
         public void Load()
         {
         }
@@ -67,10 +68,7 @@ namespace Hedra.Engine.Management
         public List<CollisionShape> LoadCollisionShapes(string Filename, int Count, Vector3 Scale)
         {
             var list = new List<CollisionShape>();
-            for (var i = 0; i < Count; i++)
-            {
-                list.Add(new CollisionShape(VertexData.Empty));
-            }
+            for (var i = 0; i < Count; i++) list.Add(new CollisionShape(VertexData.Empty));
             return list;
         }
 
@@ -94,21 +92,23 @@ namespace Hedra.Engine.Management
             return PLYLoader(Filename, Scale, Vector3.Zero, Vector3.Zero);
         }
 
-        public VertexData PLYLoader(string File, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true)
+        public VertexData PLYLoader(string File, Vector3 Scale, Vector3 Position, Vector3 Rotation,
+            bool HasColors = true)
         {
             return new VertexData()
             {
-                Vertices = new List<Vector3>(new[] {-Vector3.One, Vector3.UnitY * 3, Vector3.One * 2}),
-                Colors = new List<Vector4>(new[] {new Vector4(), new Vector4(), new Vector4()}),
-                Normals = new List<Vector3>(new[] {new Vector3(), new Vector3(), new Vector3()}),
-                Indices = new List<uint>(new[] {(uint) 0, (uint)1, (uint)2}),
-                Extradata = new List<float>(new[] {1f, 1f, 1f}),
+                Vertices = new List<Vector3>(new[] { -Vector3.One, Vector3.UnitY * 3, Vector3.One * 2 }),
+                Colors = new List<Vector4>(new[] { new Vector4(), new Vector4(), new Vector4() }),
+                Normals = new List<Vector3>(new[] { new Vector3(), new Vector3(), new Vector3() }),
+                Indices = new List<uint>(new[] { (uint)0, (uint)1, (uint)2 }),
+                Extradata = new List<float>(new[] { 1f, 1f, 1f })
             };
         }
 
         public ModelData DAELoader(string File)
         {
-            return new ModelData(new Vector3[0], new Vector3[0], new Vector3[0], new uint[0], new Vector3[0], new Vector3[0], new []{"Chest"});
+            return new ModelData(new Vector3[0], new Vector3[0], new Vector3[0], new uint[0], new Vector3[0],
+                new Vector3[0], new[] { "Chest" });
         }
 
         public void Dispose()
@@ -119,7 +119,7 @@ namespace Hedra.Engine.Management
         {
             137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68,
             82, 0, 0, 0, 1, 0, 0, 0, 1, 8, 6, 0, 0, 0, 31, 21, 196, 137,
-            0, 0, 0, 1, 115, 82, 71, 66, 0, 174, 206, 28, 233, 0, 0, 0, 4, 103, 
+            0, 0, 0, 1, 115, 82, 71, 66, 0, 174, 206, 28, 233, 0, 0, 0, 4, 103,
             65, 77, 65, 0, 0, 177, 143, 11, 252, 97, 5, 0, 0, 0, 9, 112,
             72, 89, 115, 0, 0, 14, 195, 0, 0, 14, 195, 1,
             199, 111, 168, 100, 0, 0, 0, 13, 73, 68, 65, 84, 24, 87,

@@ -1,5 +1,6 @@
 using System;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using Hedra.Core;
 using System.Numerics;
 using Hedra.Numerics;
@@ -10,7 +11,7 @@ namespace Hedra.Engine.WorldBuilding
     {
         private float Width { get; }
         public float Hardness { get; set; } = 1f;
-        
+
         public SquaredPlateau(Vector2 Position, float Width) : base(Position)
         {
             this.Width = Width;
@@ -39,7 +40,7 @@ namespace Hedra.Engine.WorldBuilding
             );
             return Math.Max(0f, 1.0f - (nearest - Point).LengthFast() * .04f * Hardness);
         }
-        
+
         public Vector2 LeftCorner => Position - new Vector2(Width * .5f, 0);
         public Vector2 RightCorner => Position + new Vector2(Width * .5f, 0);
         public Vector2 BackCorner => Position - new Vector2(0, Width * .5f);

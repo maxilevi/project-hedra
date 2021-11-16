@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Linq;
 using Hedra.AISystem.Humanoid;
 using Hedra.Components;
@@ -22,11 +23,14 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
     public class RaiseSkeleton : SingleAnimationSkill<ISkilledAnimableEntity>
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/RaiseSkeletons.png");
-        protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/NecromancerRaiseSkeleton.dae");
+
+        protected override Animation SkillAnimation { get; } =
+            AnimationLoader.LoadAnimation("Assets/Chr/NecromancerRaiseSkeleton.dae");
+
         protected override float AnimationSpeed => 1.5f;
         protected override bool CanMoveWhileCasting => false;
         private readonly List<IEntity> _skeletons = new List<IEntity>();
-        
+
         protected override void OnAnimationEnd()
         {
             base.OnAnimationEnd();
@@ -47,9 +51,11 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
             skeleton.AttackPower = MasterySkill.AttackPower;
             skeleton.AttackResistance = MasterySkill.AttackResistance;
             skeleton.Level = MasterySkill.SkeletonLevel;
-            skeleton.SearchComponent<DamageComponent>().Ignore(E => E == Owner || E.SearchComponent<DamageComponent>().HasIgnoreFor(Owner));
+            skeleton.SearchComponent<DamageComponent>()
+                .Ignore(E => E == Owner || E.SearchComponent<DamageComponent>().HasIgnoreFor(Owner));
             skeleton.RemoveComponent(skeleton.SearchComponent<HealthBarComponent>());
-            skeleton.AddComponent(new HealthBarComponent(skeleton, Translations.Get("skeleton_mastery_minion_name"), HealthBarType.Black, Color.FromArgb(255, 40, 40, 40)));
+            skeleton.AddComponent(new HealthBarComponent(skeleton, Translations.Get("skeleton_mastery_minion_name"),
+                HealthBarType.Black, Color.FromArgb(255, 40, 40, 40)));
             skeleton.AddComponent(new SkeletonEffectComponent(skeleton));
             skeleton.Physics.CollidesWithEntities = false;
             skeleton.RemoveComponentsOfType<DropComponent>();
@@ -60,15 +66,12 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 
         private void Spawn()
         {
-            if (_skeletons.Count == MaxMinions)
-            {
-                _skeletons[0].Damage(_skeletons[0].Health, null, out _, false);
-            }
+            if (_skeletons.Count == MaxMinions) _skeletons[0].Damage(_skeletons[0].Health, null, out _, false);
             var skeleton = SpawnMinion(User, User.SearchSkill<SkeletonMastery>());
             skeleton.SearchComponent<DamageComponent>().OnDeadEvent += A => _skeletons.Remove(skeleton);
             _skeletons.Add(skeleton);
         }
-        
+
         private class SkeletonEffectComponent : Component<IHumanoid>
         {
             public SkeletonEffectComponent(IHumanoid Parent) : base(Parent)
@@ -81,13 +84,14 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
             }
         }
 
-        private int MaxMinions => 1 + (int) (4 * (Level / (float) MaxLevel));
+        private int MaxMinions => 1 + (int)(4 * (Level / (float)MaxLevel));
         public override float IsAffectingModifier => Math.Min(_skeletons.Count, 1);
         protected override int MaxLevel => 20;
-        public override float ManaCost => 140 - 70 * (Level / (float) MaxLevel);
-        public override float MaxCooldown => 54 - 30 * (Level / (float) MaxLevel);
+        public override float ManaCost => 140 - 70 * (Level / (float)MaxLevel);
+        public override float MaxCooldown => 54 - 30 * (Level / (float)MaxLevel);
         public override string Description => Translations.Get("raise_skeleton_desc");
         public override string DisplayName => Translations.Get("raise_skeleton_skill");
+
         public override string[] Attributes => new[]
         {
             Translations.Get("raise_skeleton_max_change", MaxMinions)

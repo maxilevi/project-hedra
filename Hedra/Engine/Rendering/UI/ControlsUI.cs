@@ -8,7 +8,8 @@
  */
 
 using System;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Linq;
 using Hedra.Core;
 using Hedra.Engine.Events;
@@ -39,14 +40,15 @@ namespace Hedra.Engine.Rendering.UI
         private readonly Button _resetToDefaults;
         private readonly Timer _timer;
         private int _currentSelected = -1;
-        
+
         public ControlsUI()
         {
             _timer = new Timer(.5f)
             {
                 UseTimeScale = false
             };
-            _controlMapKeys = Controls.ChangeableKeys.OrderBy(P => Translations.Get(P.Key)).Select(P => P.Key).ToArray();
+            _controlMapKeys = Controls.ChangeableKeys.OrderBy(P => Translations.Get(P.Key)).Select(P => P.Key)
+                .ToArray();
             _labels = new GUIText[_controlMapKeys.Length];
             _keys = new GUIText[_controlMapKeys.Length];
             _keyPositions = new Vector2[_controlMapKeys.Length];
@@ -62,16 +64,17 @@ namespace Hedra.Engine.Rendering.UI
             {
                 _backgrounds[i] = new Button(
                     _keyPositions[i] = columnPosition + accumulatedOffset,
-                    Vector2.Zero, 
+                    Vector2.Zero,
                     backgroundTexId
                 );
-                _labels[i] = new GUIText(Translation.Create(_controlMapKeys[i]), -columnPosition + accumulatedOffset, Color.White, normalFont);
+                _labels[i] = new GUIText(Translation.Create(_controlMapKeys[i]), -columnPosition + accumulatedOffset,
+                    Color.White, normalFont);
                 _labels[i].Position += _labels[i].Scale.X * Vector2.UnitX;
                 maxWidth = Math.Max(maxWidth, _labels[i].Scale.X);
                 _keys[i] = new GUIText(Translation.Default("ControlLeft"), _keyPositions[i], Color.White, boldFont);
-                
+
                 SetButtonParameters(_backgrounds[i], _keys[i]);
-                
+
                 AddElement(_backgrounds[i]);
                 AddElement(_labels[i]);
                 AddElement(_keys[i]);
@@ -80,9 +83,10 @@ namespace Hedra.Engine.Rendering.UI
 
             for (var i = 0; i < _controlMapKeys.Length; ++i)
                 _labels[i].Position -= maxWidth * Vector2.UnitX;
-            
+
             _resetToDefaults = new Button(accumulatedOffset, Vector2.One, backgroundTexId);
-            _resetToDefaultsText = new GUIText(Translation.Create("reset_to_default"), _resetToDefaults.Position, Color.White, FontCache.GetBold(14));
+            _resetToDefaultsText = new GUIText(Translation.Create("reset_to_default"), _resetToDefaults.Position,
+                Color.White, FontCache.GetBold(14));
             SetButtonParameters(_resetToDefaults, _resetToDefaultsText, false);
             _resetToDefaults.Click += (_, __) => ResetToDefaults();
             _resetToDefaults.Position += _resetToDefaults.Scale.X * Vector2.UnitX * 0f;
@@ -96,7 +100,7 @@ namespace Hedra.Engine.Rendering.UI
 
         private void SetButtonParameters(Button Background, GUIText Text, bool AddClickEvent = true)
         {
-            if(AddClickEvent)
+            if (AddClickEvent)
                 Background.Click += (Sender, Args) => OnClick(Background, Args);
             Background.HoverEnter += () =>
             {
@@ -118,18 +122,15 @@ namespace Hedra.Engine.Rendering.UI
             Controls.Reset();
             FillMappings();
         }
-        
+
         private void FillMappings()
         {
-            for (var i = 0; i < _keys.Length; ++i)
-            {
-                UpdateControlUI(i);
-            }
+            for (var i = 0; i < _keys.Length; ++i) UpdateControlUI(i);
         }
 
         public void Update()
         {
-            if(_currentSelected == -1) return;
+            if (_currentSelected == -1) return;
             if (_timer.Tick())
             {
                 if (_keys[_currentSelected].Text == " ")
@@ -138,13 +139,12 @@ namespace Hedra.Engine.Rendering.UI
                     _keys[_currentSelected].SetTranslation(Translation.Default(" "));
             }
         }
-        
+
         private void OnClick(Button Sender, MouseButtonEventArgs Args)
         {
             if (_currentSelected != -1) Reset();
             _currentSelected = Array.IndexOf(_backgrounds, Sender);
             _keys[_currentSelected].SetTranslation(Translation.Default("."));
-            
         }
 
         private void Reset()
@@ -165,30 +165,32 @@ namespace Hedra.Engine.Rendering.UI
             {
                 var index = Array.IndexOf(_controlMapKeys, conflictName);
                 _keys[index].TextColor = Color.Red;
-                TaskScheduler.After(.5f,() => _keys[index].TextColor = Color.White);
-                GameManager.Player.MessageDispatcher.ShowNotification(Translations.Get("key_already_used", Args.Key), Color.DarkRed, 1f);
+                TaskScheduler.After(.5f, () => _keys[index].TextColor = Color.White);
+                GameManager.Player.MessageDispatcher.ShowNotification(Translations.Get("key_already_used", Args.Key),
+                    Color.DarkRed, 1f);
             }
+
             Args.Cancel();
         }
-        
+
         private static bool CanUseKey(string Name, Key New, out string ConflictName)
         {
             var current = Controls.ChangeableKeys;
             foreach (var pair in current)
-            {
                 if (pair.Value == New && pair.Key != Name)
                 {
                     ConflictName = pair.Key;
                     return false;
                 }
-            }
-            ConflictName = default(string);
+
+            ConflictName = default;
             return true;
         }
 
         private void UpdateControlUI(int Index)
         {
-            _keys[Index].SetTranslation(Translation.Default(Controls.ChangeableKeys[_controlMapKeys[Index]].ToString()));
+            _keys[Index]
+                .SetTranslation(Translation.Default(Controls.ChangeableKeys[_controlMapKeys[Index]].ToString()));
             //_backgrounds[Index].Scale = (_keys[Index].Scale.X * 1.5f) * Vector2.UnitX + Vector2.UnitY * (_keys[Index].Scale.Y);
         }
 

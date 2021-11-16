@@ -1,5 +1,6 @@
 using System;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Linq;
 using Hedra.Crafting;
 using Hedra.Engine.Generation;
@@ -23,7 +24,7 @@ namespace Hedra.Engine.Player.Inventory
         {
             _staticTrader = new StaticTradeManager();
         }
-        
+
         private readonly InventoryArrayInterface _buyerInterface;
         private readonly InventoryArrayInterface _sellerInterface;
 
@@ -39,7 +40,7 @@ namespace Hedra.Engine.Player.Inventory
             var amount = Item.HasAttribute(CommonAttributes.Amount) ? Item.GetAttribute<int>(CommonAttributes.Amount) : 1;
             if(amount != int.MaxValue)
                 price *= amount;*/
-            return (int) (Trader.SingleItemPrice(Item) * GetPriceMultiplier(Item));
+            return (int)(Trader.SingleItemPrice(Item) * GetPriceMultiplier(Item));
         }
 
         protected virtual float GetPriceMultiplier(Item Item)
@@ -48,7 +49,7 @@ namespace Hedra.Engine.Player.Inventory
         }
 
         public void ProcessTrade(Humanoid Buyer, Humanoid Seller,
-    InventoryArrayInterface BuyerInterface, InventoryArrayInterface SellerInterface, Item Item, int Price)
+            InventoryArrayInterface BuyerInterface, InventoryArrayInterface SellerInterface, Item Item, int Price)
         {
             if (Buyer.Gold >= Price || Buyer.Gold == int.MaxValue)
             {
@@ -87,6 +88,7 @@ namespace Hedra.Engine.Player.Inventory
                         SoundPlayer.PlaySound(SoundType.NotificationSound, Buyer.Position);
                     }
                 }
+
                 SoundPlayer.PlaySound(SoundType.TransactionSound, Buyer.Position);
             }
             else
@@ -95,7 +97,10 @@ namespace Hedra.Engine.Player.Inventory
             }
         }
 
-        public static int Price(Item Item) => _staticTrader.ItemPrice(Item);
+        public static int Price(Item Item)
+        {
+            return _staticTrader.ItemPrice(Item);
+        }
 
         private class StaticTradeManager : TradeManager
         {
@@ -103,7 +108,10 @@ namespace Hedra.Engine.Player.Inventory
             {
             }
 
-            protected override float GetPriceMultiplier(Item Item) => 1;
+            protected override float GetPriceMultiplier(Item Item)
+            {
+                return 1;
+            }
         }
     }
 

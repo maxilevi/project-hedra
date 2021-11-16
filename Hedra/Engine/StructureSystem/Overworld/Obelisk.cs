@@ -8,7 +8,8 @@
  */
 
 using System;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using Hedra.Core;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Localization;
@@ -26,7 +27,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
     /// <summary>
     /// Description of Obelisk.
     /// </summary>
-    
     public sealed class Obelisk : InteractableStructure
     {
         public override string Message => Translations.Get("interact_obelisk");
@@ -46,15 +46,18 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 case ObeliskType.Xp:
                     const float xpToGive = 4;
                     Humanoid.XP += xpToGive;
-                    Humanoid.MessageDispatcher.ShowMessage(Translations.Get("obelisk_xp", xpToGive), 2, Colors.Violet.ToColor());
+                    Humanoid.MessageDispatcher.ShowMessage(Translations.Get("obelisk_xp", xpToGive), 2,
+                        Colors.Violet.ToColor());
                     break;
                 case ObeliskType.Health:
                     Humanoid.Health = Humanoid.MaxHealth;
-                    Humanoid.MessageDispatcher.ShowMessage(Translations.Get("obelisk_health"), 2, Colors.LowHealthRed.ToColor());
+                    Humanoid.MessageDispatcher.ShowMessage(Translations.Get("obelisk_health"), 2,
+                        Colors.LowHealthRed.ToColor());
                     break;
                 case ObeliskType.Mana:
                     Humanoid.Mana = Humanoid.MaxMana;
-                    Humanoid.MessageDispatcher.ShowMessage(Translations.Get("obelisk_mana"), 2, Colors.LightBlue.ToColor());
+                    Humanoid.MessageDispatcher.ShowMessage(Translations.Get("obelisk_mana"), 2,
+                        Colors.LightBlue.ToColor());
                     break;
                 case ObeliskType.Stamina:
                     Humanoid.Stamina = Humanoid.MaxStamina;
@@ -63,33 +66,35 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 default:
                     throw new ArgumentOutOfRangeException($"Obelisk type does not exist.");
             }
-            
-            SoundPlayer.PlaySound(SoundType.NotificationSound, this.Position, false, 1f, 0.6f);
+
+            SoundPlayer.PlaySound(SoundType.NotificationSound, Position, false, 1f, 0.6f);
         }
-        
+
         public static Vector4 GetObeliskColor(ObeliskType Type)
         {
-            switch(Type){
+            switch (Type)
+            {
                 case ObeliskType.Health:
                     return Colors.LowHealthRed * .3f;
-                    
+
                 case ObeliskType.Mana:
                     return Colors.LightBlue * .3f;
-                
+
                 case ObeliskType.Xp:
                     return Colors.Violet * .3f;
-                    
+
                 case ObeliskType.Stamina:
                     return Color.Coral.ToVector4() * .3f;
-                    
+
                 default: throw new ArgumentOutOfRangeException($"Obelisk color wasnt found.");
             }
         }
-        
+
         public static Vector4 GetObeliskStoneColor(Random Rng)
         {
-            int randomN = Rng.Next(0, 4);
-            switch(randomN){
+            var randomN = Rng.Next(0, 4);
+            switch (randomN)
+            {
                 case 0:
                     return new Vector4(0.145f, 0.165f, 0.180f, 1.000f);
                 case 1:
@@ -98,7 +103,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                     return new Vector4(0.561f, 0.416f, 0.345f, 1.000f);
                 case 3:
                     return new Vector4(0.792f, 0.796f, 0.812f, 1.000f);
-                    
+
                 default: throw new ArgumentOutOfRangeException($"Obelisk color wasnt found.");
             }
         }
@@ -109,7 +114,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             base.Dispose();
         }
     }
-    
+
     public enum ObeliskType
     {
         Xp,

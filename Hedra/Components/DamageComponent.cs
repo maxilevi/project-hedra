@@ -10,7 +10,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Linq;
 using Hedra.AISystem;
 using Hedra.Core;
@@ -32,13 +33,14 @@ namespace Hedra.Components
     /// Description of DamageComponent.
     /// </summary>
     public delegate void OnDamageEventHandler(DamageEventArgs Args);
+
     public delegate void OnDeadEvent(DeadEventArgs Args);
 
     public class DamageComponent : SingularComponent<DamageComponent, IEntity>
     {
         private static readonly Vector4 DamageTint = new Vector4(2.0f, 0.1f, 0.1f, 1);
         private static readonly Vector4 DamageTint2 = Vector4.One;
-        
+
         public const float DefaultMissChance = 0.05f;
         public event OnDamageEventHandler OnDamageEvent;
         public event OnDeadEvent OnDeadEvent;
@@ -75,33 +77,23 @@ namespace Hedra.Components
 
         public override void Update()
         {
-
             if ((Parent.Model.Tint - _targetTint).LengthFast() > 0.005f)
-            {
                 Parent.Model.Tint = Mathf.Lerp(Parent.Model.Tint, _targetTint, Time.DeltaTime * 8f);
-            }
 
             _tintTimer -= Time.IndependentDeltaTime;
             _tintTimer = Math.Max(_tintTimer, 0);
 
-            if (Math.Abs(_tintTimer) < 0.005f)
-            {
-                _targetTint = Vector4.One;
-            }
+            if (Math.Abs(_tintTimer) < 0.005f) _targetTint = Vector4.One;
 
             if (HasBeenAttacked)
             {
                 _attackedTimer -= Time.IndependentDeltaTime;
-                if (_attackedTimer < 0)
-                {
-                    _hasBeenAttacked = false;
-                }
+                if (_attackedTimer < 0) _hasBeenAttacked = false;
             }
 
             for (var i = _damageLabels.Count - 1; i > -1; i--)
-            {
-                if (_damageLabels[i].Disposed) _damageLabels.RemoveAt(i);
-            }
+                if (_damageLabels[i].Disposed)
+                    _damageLabels.RemoveAt(i);
         }
 
         private void TriggerTint(float Strength)
@@ -111,78 +103,80 @@ namespace Hedra.Components
             _targetTint = Mathf.Lerp(DamageTint * 8f, Vector4.One, 1f - _tintStrength);
             Parent.Model.Tint = _targetTint;
         }
-        
+
         public void Damage(float Amount, IEntity Damager, out float Exp, bool PlaySound, bool PushBack)
         {
             Damage(Amount, Damager, out Exp, PlaySound, PushBack, DamageType.Unknown);
         }
 
-        public void Damage(float Amount, IEntity Damager, out float Exp, bool PlaySound, bool PushBack, DamageType DamageType)
+        public void Damage(float Amount, IEntity Damager, out float Exp, bool PlaySound, bool PushBack,
+            DamageType DamageType)
         {
             Damage(Amount, Damager, out Exp, out _, PlaySound, PushBack, DamageType);
         }
-        
-        public void Damage(float Amount, IEntity Damager, out float Exp, out float Inflicted, bool PlaySound, bool PushBack, DamageType DamageType)
+
+        public void Damage(float Amount, IEntity Damager, out float Exp, out float Inflicted, bool PlaySound,
+            bool PushBack, DamageType DamageType)
         {
             Exp = 0;
             Inflicted = 0;
 
-            var armor = (Parent is IHumanoid human) ? human.Armor : 0;
-            Amount *= (1.0f - armor / 100f);
-            Amount *= (1.0f / Parent.AttackResistance);
+            var armor = Parent is IHumanoid human ? human.Armor : 0;
+            Amount *= 1.0f - armor / 100f;
+            Amount *= 1.0f / Parent.AttackResistance;
             Amount *= Parent.IsUndead ? Damager?.Attributes.UndeadDamageModifier ?? 1 : 1;
             if (Parent.IsDead || Damager != null && _ignoreList.Any(I => I.Invoke(Damager))) return;
 
             var shouldMiss = Parent is LocalPlayer && Utils.Rng.NextFloat() < MissChance;
             _attackedTimer = 6;
             _hasBeenAttacked = true;
-            var isImmune = Immune;// || (Parent.IsStuck && !Parent.Model.Pause) || !AICanReach;
+            var isImmune = Immune; // || (Parent.IsStuck && !Parent.Model.Pause) || !AICanReach;
 
-            if (!Parent.IsStatic && PlaySound && (GameManager.Player.Position - Parent.Position).LengthSquared() < 80*80 && Amount >= 1f)
+            if (!Parent.IsStatic && PlaySound &&
+                (GameManager.Player.Position - Parent.Position).LengthSquared() < 80 * 80 && Amount >= 1f)
             {
                 var asHuman = Damager as Humanoid;
-                var baseDamage = Damager != null ? asHuman?.BaseDamageEquation 
-                    ?? (Damager.SearchComponent<BasicAIComponent>() != null ? Damager.AttackDamage : Amount) : Amount / 3f;
+                var baseDamage = Damager != null
+                    ? asHuman?.BaseDamageEquation
+                      ?? (Damager.SearchComponent<BasicAIComponent>() != null ? Damager.AttackDamage : Amount)
+                    : Amount / 3f;
                 var color = Color.White;
                 var dmgDiff = Amount / baseDamage;
                 if (dmgDiff > 1.85f) color = Color.Gold;
                 if (dmgDiff > 2.25f) color = Color.Red;
                 if (isImmune || shouldMiss) color = Color.White;
                 var maxSize = float.MaxValue;
-                if (Parent is LocalPlayer)
-                {
-                    color = Color.Red;
-                }
+                if (Parent is LocalPlayer) color = Color.Red;
                 var font = FontCache.GetBold(Math.Min(12 + 6 * dmgDiff, maxSize));
-                var dmgString = ((int) Amount).ToString();
+                var dmgString = ((int)Amount).ToString();
                 var missString = isImmune ? "IMMUNE" : "MISS";
                 var dmgLabel = new TextBillboard(1.8f, !isImmune && !shouldMiss ? dmgString : missString, color,
                     font, () => Parent.Position)
                 {
                     Vanish = true,
-                    VanishSpeed = 4,
+                    VanishSpeed = 4
                 };
                 _damageLabels.Add(dmgLabel);
             }
+
             Exp = 0;
 
             if (PlaySound)
-            {
-                SoundPlayer.PlaySoundWithVariation(!shouldMiss ? SoundType.HitSound : SoundType.SlashSound, Parent.Position);
-            }
+                SoundPlayer.PlaySoundWithVariation(!shouldMiss ? SoundType.HitSound : SoundType.SlashSound,
+                    Parent.Position);
 
             if (shouldMiss || isImmune) return;
 
             TriggerTint(Amount / Parent.Health);
             Inflicted = Amount;
             Parent.Health = Math.Max(Parent.Health - Amount, 0);
-            if (Damager != null && Damager != Parent && PushBack 
+            if (Damager != null && Damager != Parent && PushBack
                 && Parent.Size.LengthFast() < Damager.Size.LengthFast())
             {
                 var direction = (Damager.Position - Parent.Position).Normalized();
                 var factor = 0.5f;
                 var averageSize = (Parent.Size.X + Parent.Size.Z) * .5f;
-                if(PushOnHit)
+                if (PushOnHit)
                     Parent.Physics.ApplyImpulse(-direction * factor * averageSize);
             }
 
@@ -191,14 +185,14 @@ namespace Hedra.Components
                 Parent.IsDead = true;
                 Parent.Physics.CollidesWithEntities = false;
                 Exp = XPObtained;
-                if(PlayDeleteAnimation)
-                    RoutineManager.StartRoutine(this.DisposeCoroutine);
-                
+                if (PlayDeleteAnimation)
+                    RoutineManager.StartRoutine(DisposeCoroutine);
             }
+
             if (OnDamageEvent != null && Math.Abs(Amount) > 0.005f)
                 OnDamageEvent.Invoke(new DamageEventArgs(Parent, Damager, Amount, Exp, DamageType));
         }
-        
+
 
         public IEnumerator DisposeCoroutine()
         {
@@ -225,7 +219,7 @@ namespace Hedra.Components
                     yield return null;
                 }
             }
-            
+
             if (Delete)
                 Parent.Dispose();
         }
@@ -270,7 +264,8 @@ namespace Hedra.Components
 
     public class DeadEventArgs : DamageEventArgs
     {
-        public DeadEventArgs(IEntity Victim, IEntity Damager, float Amount, float Experience, DamageType DamageType) : base(Victim, Damager, Amount, Experience, DamageType)
+        public DeadEventArgs(IEntity Victim, IEntity Damager, float Amount, float Experience, DamageType DamageType) :
+            base(Victim, Damager, Amount, Experience, DamageType)
         {
         }
     }

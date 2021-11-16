@@ -1,5 +1,6 @@
 using System;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Globalization;
 using Hedra.Components;
 using Hedra.Engine.Management;
@@ -34,15 +35,17 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
         protected override int MaxLevel => 15;
         public override string Description => Translations.Get("leech_desc");
         public override string DisplayName => Translations.Get("leech_skill");
-        protected override float Radius => 48 + 48 * (Level / (float) MaxLevel);
+        protected override float Radius => 48 + 48 * (Level / (float)MaxLevel);
         private float Health => Damage;
         private float Damage => Math.Min(10, 5 + 5 * (Level / 10));
         private float Duration => 7 + 10 * (Level / (float)MaxLevel);
         public override float ManaCost => 60;
-        public override float MaxCooldown => 27 - 5 * (MaxLevel / (float) MaxLevel) + Duration;
+        public override float MaxCooldown => 27 - 5 * (MaxLevel / (float)MaxLevel) + Duration;
+
         public override string[] Attributes => new[]
         {
-            Translations.Get("leech_damage_and_health_change", Damage.ToString("0.0", CultureInfo.InvariantCulture), Health.ToString("0.0", CultureInfo.InvariantCulture)),
+            Translations.Get("leech_damage_and_health_change", Damage.ToString("0.0", CultureInfo.InvariantCulture),
+                Health.ToString("0.0", CultureInfo.InvariantCulture)),
             Translations.Get("leech_duration_change", Duration.ToString("0.0", CultureInfo.InvariantCulture)),
             Translations.Get("leech_radius_change", Radius.ToString("0.0", CultureInfo.InvariantCulture))
         };
@@ -53,8 +56,9 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
             private readonly Timer _timer;
             private readonly float _damagePerSecond;
             private readonly float _healPerSecond;
-            
-            public LeechComponent(IEntity Entity, ISkilledAnimableEntity Caster, float DamagePerSecond, float HealthPerSecond) : base(Entity)
+
+            public LeechComponent(IEntity Entity, ISkilledAnimableEntity Caster, float DamagePerSecond,
+                float HealthPerSecond) : base(Entity)
             {
                 _caster = Caster;
                 _timer = new Timer(1 + Utils.Rng.NextFloat());
@@ -69,7 +73,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
                 if (_timer.Tick())
                 {
                     Parent.Damage(_damagePerSecond, _caster, out var xp);
-                    if(_caster is IHumanoid humanoid)
+                    if (_caster is IHumanoid humanoid)
                         humanoid.XP += xp;
                     BloodSkill.LaunchParticle(_caster, Parent, _caster, (_, __) =>
                     {
@@ -77,10 +81,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
                         _caster.Health += _healPerSecond;
                         _caster.Model.Outline = true;
                         _caster.Model.OutlineColor = Colors.GreenYellow;
-                        TaskScheduler.After(.5f, () =>
-                        {
-                            _caster.Model.Outline = false;
-                        });
+                        TaskScheduler.After(.5f, () => { _caster.Model.Outline = false; });
                     });
                 }
             }

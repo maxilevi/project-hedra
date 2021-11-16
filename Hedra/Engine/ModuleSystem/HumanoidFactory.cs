@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Linq;
 using System.Text;
 using Hedra.AISystem.Humanoid;
@@ -24,20 +25,20 @@ namespace Hedra.Engine.ModuleSystem
     {
         private static Dictionary<string, HumanoidConfiguration> _behaviours;
         private static Dictionary<string, Type> _ais;
-        
+
         static HumanoidFactory()
         {
             _behaviours = new Dictionary<string, HumanoidConfiguration>
             {
-                {"Hostile", new HumanoidConfiguration(HealthBarType.Hostile)},
-                {"Neutral", new HumanoidConfiguration(HealthBarType.Neutral)},
-                {"Friendly", new HumanoidConfiguration(HealthBarType.Friendly)}
+                { "Hostile", new HumanoidConfiguration(HealthBarType.Hostile) },
+                { "Neutral", new HumanoidConfiguration(HealthBarType.Neutral) },
+                { "Friendly", new HumanoidConfiguration(HealthBarType.Friendly) }
             };
             _ais = new Dictionary<string, Type>
             {
-                {"Melee", typeof(MeleeAIComponent)},
-                {"Archer", typeof(RangedAIComponent)},
-                {"Mage", typeof(MageAIComponent)}
+                { "Melee", typeof(MeleeAIComponent) },
+                { "Archer", typeof(RangedAIComponent) },
+                { "Mage", typeof(MageAIComponent) }
             };
         }
 
@@ -45,8 +46,9 @@ namespace Hedra.Engine.ModuleSystem
         {
             return BuildHumanoid(HumanoidType, HumanoidLoader.HumanoidTemplater[HumanoidType], Level, Configuration);
         }
-        
-        public static Humanoid BuildHumanoid(string HumanoidType, HumanoidTemplate Template, int Level, HumanoidConfiguration Configuration)
+
+        public static Humanoid BuildHumanoid(string HumanoidType, HumanoidTemplate Template, int Level,
+            HumanoidConfiguration Configuration)
         {
             var behaviour = Configuration ?? _behaviours[Template.Behaviour];
 
@@ -65,15 +67,15 @@ namespace Hedra.Engine.ModuleSystem
 
             var components = HumanoidLoader.HumanoidTemplater[HumanoidType].Components;
             for (var i = 0; i < components.Length; i++)
-            {
                 human.AddComponent(CreateComponentFromTemplate(human, components[i]));
-            }
 
             if (Template.Weapons != null && Template.Weapons.Length > 0)
             {
                 var weapon = Template.Weapons[Utils.Rng.Next(0, Template.Weapons.Length)];
-                human.Ring = ItemPool.Grab( new ItemPoolSettings(ItemTier.Common, "Ring"));
-                human.MainWeapon = weapon.Name != null ?  ItemPool.Grab(weapon.Name) : ItemPool.Grab( new ItemPoolSettings(weapon.Tier, weapon.Type));
+                human.Ring = ItemPool.Grab(new ItemPoolSettings(ItemTier.Common, "Ring"));
+                human.MainWeapon = weapon.Name != null
+                    ? ItemPool.Grab(weapon.Name)
+                    : ItemPool.Grab(new ItemPoolSettings(weapon.Tier, weapon.Type));
 
                 var drop = new DropComponent(human)
                 {
@@ -82,7 +84,7 @@ namespace Hedra.Engine.ModuleSystem
                 };
                 human.AddComponent(drop);
             }
-    
+
             human.AddComponent(new HealthBarComponent(human, Template.DisplayName ?? Template.Name, behaviour.Type));
             human.SearchComponent<DamageComponent>().Immune = Template.Immune;
             human.SearchComponent<DamageComponent>().XpToGive = 6f;
@@ -93,20 +95,21 @@ namespace Hedra.Engine.ModuleSystem
 
         public static void AddAI(IHumanoid Humanoid, bool Friendly)
         {
-            var aiType = (Humanoid.LeftWeapon.IsMelee ? "Melee" : Humanoid.LeftWeapon is Staff ? "Mage" : "Archer");
-            var instance = (Component<IHumanoid>) Activator.CreateInstance(_ais[aiType], Humanoid, Friendly);
+            var aiType = Humanoid.LeftWeapon.IsMelee ? "Melee" : Humanoid.LeftWeapon is Staff ? "Mage" : "Archer";
+            var instance = (Component<IHumanoid>)Activator.CreateInstance(_ais[aiType], Humanoid, Friendly);
             Humanoid.AddComponent(instance);
         }
 
-        private static IComponent<IEntity> CreateComponentFromTemplate(IHumanoid Human, HumanoidComponentsItemTemplate Template)
+        private static IComponent<IEntity> CreateComponentFromTemplate(IHumanoid Human,
+            HumanoidComponentsItemTemplate Template)
         {
-            var paramsList = new List<object>(new[] {Human});
+            var paramsList = new List<object>(new[] { Human });
             paramsList.AddRange(Template.Parameters);
-            var type = Type.GetType(Template.Type); 
-            var component = (IComponent<IEntity>) Activator.CreateInstance(type, paramsList.ToArray()); 
+            var type = Type.GetType(Template.Type);
+            var component = (IComponent<IEntity>)Activator.CreateInstance(type, paramsList.ToArray());
             return component;
         }
-        
+
         private static int GetDifficulty(Random Rng)
         {
             var levelN = Rng.Next(0, 10);

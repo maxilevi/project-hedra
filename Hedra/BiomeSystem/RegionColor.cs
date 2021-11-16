@@ -6,7 +6,8 @@
  */
 
 using System;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.Generation;
@@ -28,7 +29,7 @@ namespace Hedra.BiomeSystem
         public Vector4 WaterColor;
         public Vector4 StoneColor;
         public Vector4 DirtColor;
-        public Vector4 SeafloorColor; 
+        public Vector4 SeafloorColor;
         public Vector4 SandColor;
         public Vector4[] LeavesColors;
         public Vector4[] WoodColors;
@@ -37,14 +38,14 @@ namespace Hedra.BiomeSystem
 
         public RegionColor(int Seed)
         {
-            this._seed = Seed;
+            _seed = Seed;
         }
 
         public RegionColor(int Seed, BiomeColorsDesign Design)
         {
-            this._seed = Seed;
-            this.BuildColors(Design);
-            this.IntegrityCheck();
+            _seed = Seed;
+            BuildColors(Design);
+            IntegrityCheck();
         }
 
         public static RegionColor Interpolate(params RegionColor[] RegionsColor)
@@ -67,76 +68,62 @@ namespace Hedra.BiomeSystem
 
 
                 for (var j = 0; j < newRegion.GrassColors.Length; j++)
-                {
                     newRegion.GrassColors[j] += RegionsColor[i].GrassColors[j] * inverseSize;
-                }
 
                 for (var j = 0; j < newRegion.WoodColors.Length; j++)
-                {
                     newRegion.WoodColors[j] += RegionsColor[i].WoodColors[j] * inverseSize;
-                }
 
                 for (var j = 0; j < newRegion.LeavesColors.Length; j++)
-                {
                     newRegion.LeavesColors[j] += RegionsColor[i].LeavesColors[j] * inverseSize;
-                }
             }
+
             return newRegion;
         }
 
         public void IntegrityCheck()
         {
-
-            if (WaterColor == default(Vector4)) throw new ArgumentException("Region has invalid values.");
-            if (StoneColor == default(Vector4)) throw new ArgumentException("Region has invalid values.");
-            if (DirtColor == default(Vector4)) throw new ArgumentException("Region has invalid values.");
-            if (SeafloorColor == default(Vector4)) throw new ArgumentException("Region has invalid values.");
-            if (SandColor == default(Vector4)) throw new ArgumentException("Region has invalid values.");
+            if (WaterColor == default) throw new ArgumentException("Region has invalid values.");
+            if (StoneColor == default) throw new ArgumentException("Region has invalid values.");
+            if (DirtColor == default) throw new ArgumentException("Region has invalid values.");
+            if (SeafloorColor == default) throw new ArgumentException("Region has invalid values.");
+            if (SandColor == default) throw new ArgumentException("Region has invalid values.");
 
 
             if (LeavesColors == null) throw new ArgumentException("Region has invalid values.");
             for (var i = 0; i < LeavesColors.Length; i++)
-            {
-                if (LeavesColors[i] == default(Vector4)) throw new ArgumentException("Region has invalid values.");
-            }
+                if (LeavesColors[i] == default)
+                    throw new ArgumentException("Region has invalid values.");
 
             if (WoodColors == null) throw new ArgumentException("Region has invalid values.");
             for (var i = 0; i < WoodColors.Length; i++)
-            {
-                if (WoodColors[i] == default(Vector4)) throw new ArgumentException("Region has invalid values.");
-            }
+                if (WoodColors[i] == default)
+                    throw new ArgumentException("Region has invalid values.");
 
             if (GrassColors == null) throw new ArgumentException("Region has invalid values.");
             for (var i = 0; i < GrassColors.Length; i++)
-            {
-                if (GrassColors[i] == default(Vector4)) throw new ArgumentException("Region has invalid values.");
-            }
+                if (GrassColors[i] == default)
+                    throw new ArgumentException("Region has invalid values.");
         }
 
         public void BuildColors(BiomeColorsDesign Design)
         {
+            DirtColor = Design.DirtColor(_seed);
+            SandColor = Design.SandColor(_seed);
+            SeafloorColor = Design.SeafloorColor(_seed);
+            StoneColor = Design.StoneColor(_seed);
+            WaterColor = Design.WaterColor(_seed);
+            GrassColors = Design.GrassColors(_seed);
+            LeavesColors = Design.LeavesColors(_seed);
+            WoodColors = Design.WoodColors(_seed);
 
-            this.DirtColor = Design.DirtColor(_seed);
-            this.SandColor = Design.SandColor(_seed);
-            this.SeafloorColor = Design.SeafloorColor(_seed);
-            this.StoneColor = Design.StoneColor(_seed);
-            this.WaterColor = Design.WaterColor(_seed);
-            this.GrassColors = Design.GrassColors(_seed);
-            this.LeavesColors = Design.LeavesColors(_seed);
-            this.WoodColors = Design.WoodColors(_seed);
 
-
-            for (int i = 0; i < GrassColors.Length; i++)
-            {
-                GrassColors[i] = GrassColors[i] * 1.25f;
-            }
+            for (var i = 0; i < GrassColors.Length; i++) GrassColors[i] = GrassColors[i] * 1.25f;
         }
-        
+
         public Vector4 LeavesColor => LeavesColors[new Random(_seed + 42).Next(0, LeavesColors.Length)];
 
         public Vector4 WoodColor => WoodColors[new Random(_seed + 12).Next(0, WoodColors.Length)];
 
         public Vector4 GrassColor => GrassColors[new Random(_seed + 54).Next(0, GrassColors.Length)];
-
     }
 }

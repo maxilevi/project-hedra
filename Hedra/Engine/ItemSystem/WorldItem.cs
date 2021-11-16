@@ -9,7 +9,8 @@
 
 using System;
 using System.Diagnostics;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Events;
@@ -51,41 +52,48 @@ namespace Hedra.Engine.ItemSystem
         {
             var modelData = ItemSpecification.Model.Clone();
             this.ItemSpecification = ItemSpecification;
-            this.ItemId = ++_itemCounter;
-            this.Model = ObjectMesh.FromVertexData(modelData);
-            this.Model.OutlineColor = ItemUtils.TierToColor(ItemSpecification.Tier).ToVector4();
-            this.Model.BaseTint = EffectDescriber.EffectColorFromItem(ItemSpecification);
-            this.Scale = new Vector3(1.5f, 1.5f, 1.5f);
+            ItemId = ++_itemCounter;
+            Model = ObjectMesh.FromVertexData(modelData);
+            Model.OutlineColor = ItemUtils.TierToColor(ItemSpecification.Tier).ToVector4();
+            Model.BaseTint = EffectDescriber.EffectColorFromItem(ItemSpecification);
+            Scale = new Vector3(1.5f, 1.5f, 1.5f);
             this.Position = Position;
-            this._originalPosition = Position;
-            this._height = Math.Abs(modelData.SupportPoint(-Vector3.UnitY).Y - modelData.SupportPoint(Vector3.UnitY).Y);
-            this.OnPickup += Player => PickedUp = true;
+            _originalPosition = Position;
+            _height = Math.Abs(modelData.SupportPoint(-Vector3.UnitY).Y - modelData.SupportPoint(Vector3.UnitY).Y);
+            OnPickup += Player => PickedUp = true;
 
-            EventDispatcher.RegisterKeyDown(this, delegate(Object Sender, KeyEventArgs EventArgs)
+            EventDispatcher.RegisterKeyDown(this, delegate(object Sender, KeyEventArgs EventArgs)
             {
                 if (_canPickup && Controls.Interact == EventArgs.Key) _shouldPickup = true;
             });
             _initialized = true;
         }
-        
+
         public override void Update()
         {
-            if(!_initialized) return;
+            if (!_initialized) return;
             base.Update();
-            this.Model.Alpha = this.Alpha;
-            if(this.PickedUp) return;
-            
-            this.Position = new Vector3(_originalPosition.X,
-                Math.Max(_originalPosition.Y + _height, _originalPosition.Y + _height + (float) Math.Cos(Time.AccumulatedFrameTime)),
-                _originalPosition.Z);
-            this.Model.LocalRotation += Vector3.UnitY * 35f * (float) Time.DeltaTime;
-            
-            float DotFunc() => Vector2.Dot((this.Position - GameManager.Player.Position).Xz().NormalizedFast(), LocalPlayer.Instance.View.LookingDirection.Xz().NormalizedFast());
+            Model.Alpha = Alpha;
+            if (PickedUp) return;
 
-            if(DotFunc() > .9f && (this.Position - LocalPlayer.Instance.Position).LengthSquared() < 12f * 12f)
+            Position = new Vector3(_originalPosition.X,
+                Math.Max(_originalPosition.Y + _height,
+                    _originalPosition.Y + _height + (float)Math.Cos(Time.AccumulatedFrameTime)),
+                _originalPosition.Z);
+            Model.LocalRotation += Vector3.UnitY * 35f * (float)Time.DeltaTime;
+
+            float DotFunc()
             {
-                LocalPlayer.Instance.MessageDispatcher.ShowMessageWhile(Translations.Get("to_pickup", Controls.Interact), 
-                    () => !Disposed && DotFunc() > .9f && (this.Position - LocalPlayer.Instance.Position).LengthSquared() < 14f * 14f);
+                return Vector2.Dot((Position - GameManager.Player.Position).Xz().NormalizedFast(),
+                    LocalPlayer.Instance.View.LookingDirection.Xz().NormalizedFast());
+            }
+
+            if (DotFunc() > .9f && (Position - LocalPlayer.Instance.Position).LengthSquared() < 12f * 12f)
+            {
+                LocalPlayer.Instance.MessageDispatcher.ShowMessageWhile(
+                    Translations.Get("to_pickup", Controls.Interact),
+                    () => !Disposed && DotFunc() > .9f &&
+                          (Position - LocalPlayer.Instance.Position).LengthSquared() < 14f * 14f);
                 _canPickup = true;
 
                 if (LocalPlayer.Instance.Inventory.HasAvailableSpace && _shouldPickup && !PickedUp && !Disposed)
@@ -97,32 +105,32 @@ namespace Hedra.Engine.ItemSystem
                     if (_shouldPickup)
                     {
                         _shouldPickup = false;
-                        GameManager.Player.MessageDispatcher.ShowNotification(Translations.Get("full_inventory"), Color.Red, 3f, true);
+                        GameManager.Player.MessageDispatcher.ShowNotification(Translations.Get("full_inventory"),
+                            Color.Red, 3f, true);
                     }
                 }
-            }else
+            }
+            else
             {
                 _canPickup = false;
             }
-            this.Model.Tint = _canPickup ? Vector4.One * 1.5f : Vector4.One;
-            this.Model.Outline = true;
 
-            if ((this.Position - GameManager.Player.Position).Xz().LengthSquared() < 12 * 12 && ItemSpecification.HasAttribute(CommonAttributes.Amount)
+            Model.Tint = _canPickup ? Vector4.One * 1.5f : Vector4.One;
+            Model.Outline = true;
+
+            if ((Position - GameManager.Player.Position).Xz().LengthSquared() < 12 * 12 &&
+                ItemSpecification.HasAttribute(CommonAttributes.Amount)
                 && GameManager.Player.Inventory.Search(I => I.Name == ItemSpecification.Name) != null)
-            {
                 if (!PickedUp && !Disposed)
-                {
                     OnPickup?.Invoke(GameManager.Player);
-                }
-            }
         }
-        
+
         public bool Outline
         {
             get => Model.Outline;
             set => Model.Outline = value;
         }
-        
+
         public new void Dispose()
         {
             _disposed = true;

@@ -1,5 +1,6 @@
 using System;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.UI;
@@ -20,14 +21,15 @@ namespace Hedra.Engine.Player.Inventory
 
         public TradeInventoryInterfaceItemInfo()
         {
-            _topTexture = new BackgroundTexture(HintTexture.TextureElement.TextureId, Vector2.UnitY * .325f, HintTexture.Scale * 1.25f);
+            _topTexture = new BackgroundTexture(HintTexture.TextureElement.TextureId, Vector2.UnitY * .325f,
+                HintTexture.Scale * 1.25f);
             _topText = new GUIText(string.Empty, _topTexture.Position, Color.White, FontCache.GetBold(10));
 
             HintText.TextFont = FontCache.GetBold(10);
             HintText.TextColor = Color.Gold;
-            
-            base.Panel.AddElement(_topText);
-            base.Panel.AddElement(_topTexture);
+
+            Panel.AddElement(_topText);
+            Panel.AddElement(_topTexture);
         }
 
         protected override void AddHint()
@@ -40,10 +42,11 @@ namespace Hedra.Engine.Player.Inventory
                 clone.SetAttribute(CommonAttributes.Amount, 1);
                 priceString = _manager.ItemPrice(clone).ToString();
             }
+
             HintText.Text = $"{priceString} G";
             HintText.Enable();
             HintTexture.Enable();
-            
+
             var classFromEquipment =
                 CurrentItem.EquipmentType == null ? null : GetClassFromEquipment(CurrentItem.EquipmentType);
             if (classFromEquipment != null)

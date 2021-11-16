@@ -1,4 +1,5 @@
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using Hedra.Core;
 using Hedra.Engine.Core;
 using Hedra.Engine.Rendering;
@@ -23,8 +24,8 @@ namespace Hedra.Engine.EntitySystem
         protected static uint BuildTexture(Bitmap Blueprint, Color Paint, string Name)
         {
             return Graphics2D.LoadTexture(new BitmapObject
-            {
-                Bitmap = Graphics2D.ReplaceColor(
+                {
+                    Bitmap = Graphics2D.ReplaceColor(
                         Blueprint,
                         Color.FromArgb(255, 255, 255, 255),
                         Paint
@@ -33,7 +34,7 @@ namespace Hedra.Engine.EntitySystem
                 }, TextureMinFilter.Nearest, TextureMagFilter.Nearest, TextureWrapMode.ClampToEdge
             );
         }
-        
+
         protected float GetRatio()
         {
             return Parent.Health / Parent.MaxHealth;

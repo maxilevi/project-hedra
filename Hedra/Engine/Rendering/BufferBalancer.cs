@@ -1,7 +1,8 @@
 using System.Linq;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using Hedra.Engine.Core;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Rendering.Core;
@@ -20,25 +21,20 @@ namespace Hedra.Engine.Rendering
         {
             _buffers = Buffers;
         }
-        
+
         public bool Remove(Vector2 Offset)
         {
             var result = true;
-            for (var i = 0; i < _buffers.Length; ++i)
-            {
-                result &= _buffers[i].Remove(Offset);
-            }
+            for (var i = 0; i < _buffers.Length; ++i) result &= _buffers[i].Remove(Offset);
             return result;
         }
 
         public bool Update(Vector2 Offset, NativeVertexData Data)
         {
             for (var i = 0; i < _buffers.Length; ++i)
-            {
                 if (_buffers[i].Has(Offset))
-                    return _buffers[i].Update(Offset, Data);              
-            }
-            return _buffers.OrderBy(B => 1f - (B.AvailableMemory / (float) B.TotalMemory)).First().Update(Offset, Data);
+                    return _buffers[i].Update(Offset, Data);
+            return _buffers.OrderBy(B => 1f - B.AvailableMemory / (float)B.TotalMemory).First().Update(Offset, Data);
         }
 
         public void Draw(Dictionary<Vector2, Chunk> ToDraw)
@@ -47,21 +43,24 @@ namespace Hedra.Engine.Rendering
             {
                 B.Bind();
                 B.BindIndices();
-                Renderer.MultiDrawElements(PrimitiveType.Triangles, B.Counts, DrawElementsType.UnsignedInt, B.Offsets, B.BuildCounts(ToDraw));
+                Renderer.MultiDrawElements(PrimitiveType.Triangles, B.Counts, DrawElementsType.UnsignedInt, B.Offsets,
+                    B.BuildCounts(ToDraw));
                 B.UnbindIndices();
                 B.Unbind();
             });
         }
 
-        public void DrawShadows(Dictionary<Vector2, Chunk> ShadowDraw, ref IntPtr[] ShadowOffsets, ref uint[] ShadowCounts)
+        public void DrawShadows(Dictionary<Vector2, Chunk> ShadowDraw, ref IntPtr[] ShadowOffsets,
+            ref uint[] ShadowCounts)
         {
-            for(var i = 0; i < _buffers.Length; ++i)
+            for (var i = 0; i < _buffers.Length; ++i)
             {
                 _buffers[i].Bind();
                 Renderer.DisableVertexAttribArray(2);
                 _buffers[i].BindIndices();
                 var shadowCount = _buffers[i].BuildCounts(ShadowDraw, ref ShadowOffsets, ref ShadowCounts);
-                Renderer.MultiDrawElements(PrimitiveType.Triangles, ShadowCounts, DrawElementsType.UnsignedInt, ShadowOffsets, shadowCount);
+                Renderer.MultiDrawElements(PrimitiveType.Triangles, ShadowCounts, DrawElementsType.UnsignedInt,
+                    ShadowOffsets, shadowCount);
                 _buffers[i].UnbindIndices();
                 _buffers[i].Unbind();
             }
@@ -99,10 +98,7 @@ namespace Hedra.Engine.Rendering
 
         private void Each(Action<WorldBuffer> Buffer)
         {
-            for (var i = 0; i < _buffers.Length; ++i)
-            {
-                Buffer(_buffers[i]);
-            }
+            for (var i = 0; i < _buffers.Length; ++i) Buffer(_buffers[i]);
         }
 
         public IComparer<KeyValuePair<Vector2, ChunkRenderCommand>> Comparer

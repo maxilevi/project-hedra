@@ -4,13 +4,15 @@
  * Time: 12:43 a.m.
  *
  */
+
 using System;
 using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Rendering.UI;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
@@ -29,7 +31,7 @@ namespace Hedra.Engine.Rendering.Effects
     {
         public static Shader DefaultShader { get; }
         public static Shader FXAAShader { get; }
-        public bool Enabled {get; set;}
+        public bool Enabled { get; set; }
         public FBO Default;
         public FBO FinalFbo;
         public FBO AdditiveFbo;
@@ -38,7 +40,7 @@ namespace Hedra.Engine.Rendering.Effects
         public UnderWaterFilter UnderWater;
         public DistortionFilter Distortion;
         public BloomFilter Bloom;
-        public BlurFilter Blur;    
+        public BlurFilter Blur;
         public DeferedRenderer Ssao;
         public FBO SSRFBO;
 
@@ -51,7 +53,8 @@ namespace Hedra.Engine.Rendering.Effects
         public MainFBO()
         {
             Ssao = new DeferedRenderer();
-            Default = new FBO(GameSettings.Width, GameSettings.Height, false, 0, FramebufferAttachment.ColorAttachment0, PixelInternalFormat.Rgba32f);
+            Default = new FBO(GameSettings.Width, GameSettings.Height, false, 0, FramebufferAttachment.ColorAttachment0,
+                PixelInternalFormat.Rgba32f);
             FinalFbo = new FBO(GameSettings.Width, GameSettings.Height);
             AdditiveFbo = new FBO(GameSettings.Width, GameSettings.Height);
             SSRFBO = new FBO(GameSettings.Width, GameSettings.Height);
@@ -66,54 +69,57 @@ namespace Hedra.Engine.Rendering.Effects
 
         public void Draw()
         {
-            
             #region Normal
+
             //Just paste the contents without any effect
-            if(!GameSettings.SSAO)
+            if (!GameSettings.SSAO)
             {
                 FinalFbo.Bind();
                 DefaultShader.Bind();
                 DrawQuad(Default.TextureId[0]);
                 DefaultShader.Unbind();
                 FinalFbo.Unbind();
-                
-                if(GameSettings.BlurFilter)
+
+                if (GameSettings.BlurFilter)
                 {
                     Default.Bind();
                     DefaultShader.Bind();
                     DrawQuad(FinalFbo.TextureId[0]);
                     DefaultShader.Unbind();
                     Default.Unbind();
-                    
+
                     //Clear it
                     FinalFbo.Bind();
                     Renderer.ClearColor(Colors.Transparent);
                     FinalFbo.Unbind();
                 }
             }
-            #endregion
-            
-            #region SSAO
-            if(GameSettings.SSAO)
-            {
 
-                var DrawFBO = (GameSettings.UnderWaterEffect || GameSettings.BlurFilter || GameSettings.DarkEffect) ? Default : FinalFbo;
+            #endregion
+
+            #region SSAO
+
+            if (GameSettings.SSAO)
+            {
+                var DrawFBO = GameSettings.UnderWaterEffect || GameSettings.BlurFilter || GameSettings.DarkEffect
+                    ? Default
+                    : FinalFbo;
 
                 Ssao.SecondPass.Bind();
-                
+
                 Ssao.FirstPassShader.Bind();
-            
+
                 Renderer.Enable(EnableCap.Blend);
 
                 Renderer.ActiveTexture(TextureUnit.Texture0);
                 Renderer.BindTexture(TextureTarget.Texture2D, Ssao.FirstPass.TextureId[1]);
-                
+
                 Renderer.ActiveTexture(TextureUnit.Texture1);
                 Renderer.BindTexture(TextureTarget.Texture2D, Ssao.FirstPass.TextureId[2]);
-                
+
                 Renderer.ActiveTexture(TextureUnit.Texture2);
-                Renderer.BindTexture(TextureTarget.Texture2D, (uint) Ssao.RandomTex);
-                
+                Renderer.BindTexture(TextureTarget.Texture2D, (uint)Ssao.RandomTex);
+
                 Renderer.Uniform1(Ssao.PositionSampler, 0);
                 Renderer.Uniform1(Ssao.NormalSampler, 1);
                 Renderer.Uniform1(Ssao.RandomSampler, 2);
@@ -151,64 +157,75 @@ namespace Hedra.Engine.Rendering.Effects
                 DrawManager.UIRenderer.DrawQuad();
 
                 Ssao.ThirdPassShader.Unbind();
-                DrawFBO.Unbind();//Unbind is the same
-                
+                DrawFBO.Unbind(); //Unbind is the same
+
                 Renderer.Enable(EnableCap.CullFace);
                 Renderer.Disable(EnableCap.Blend);
             }
+
             #endregion
-            
+
             #region Bloom
-            if(GameSettings.Bloom)
-            {
-                Bloom.Pass(FinalFbo, AdditiveFbo);
-            }
+
+            if (GameSettings.Bloom) Bloom.Pass(FinalFbo, AdditiveFbo);
+
             #endregion
-            
+
             #region UnderWater
-            if(GameSettings.UnderWaterEffect)
+
+            if (GameSettings.UnderWaterEffect)
             {
                 var underChunk = World.GetChunkAt(LocalPlayer.Instance.View.CameraEyePosition);
-                UnderWater.Multiplier = underChunk?.Biome?.Colors.WaterColor * .7f + Vector4.One * .3f ?? Colors.DeepSkyBlue;
+                UnderWater.Multiplier =
+                    underChunk?.Biome?.Colors.WaterColor * .7f + Vector4.One * .3f ?? Colors.DeepSkyBlue;
                 UnderWater.Pass(Default, FinalFbo);
             }
+
             #endregion
-            
+
             #region Distortion
-            if(GameSettings.DistortEffect){
-            //    Distortion.Pass(Default, FinalFBO);
+
+            if (GameSettings.DistortEffect)
+            {
+                //    Distortion.Pass(Default, FinalFBO);
             }
+
             #endregion
-            
+
             #region Dark
-            if(GameSettings.DarkEffect){
+
+            if (GameSettings.DarkEffect)
+            {
                 UnderWater.Multiplier = new Vector4(.4f, .4f, .4f, 1);
                 UnderWater.Pass(Default, FinalFbo);
             }
+
             #endregion
-            
+
             #region Blur
-            if(GameSettings.BlurFilter)
-            {
-                Blur.Pass(Default, FinalFbo);
-            }
-            #endregion 
-            
+
+            if (GameSettings.BlurFilter) Blur.Pass(Default, FinalFbo);
+
+            #endregion
+
             #region UnderWater & SSAO Flip
-            if( (GameSettings.UnderWaterEffect || GameSettings.DarkEffect || GameSettings.BlurFilter) && GameSettings.SSAO)
+
+            if ((GameSettings.UnderWaterEffect || GameSettings.DarkEffect || GameSettings.BlurFilter) &&
+                GameSettings.SSAO)
             {
                 Default.Bind();
                 DefaultShader.Bind();
                 DrawQuad(FinalFbo.TextureId[0], 0, true);
                 DefaultShader.Unbind();
                 Default.Unbind();
-                   
+
                 FinalFbo.Bind();
                 DefaultShader.Bind();
                 DrawQuad(Default.TextureId[0], 0, false);
                 DefaultShader.Unbind();
                 FinalFbo.Unbind();
             }
+
             #endregion
 
             if (GameSettings.UseSSR)
@@ -216,14 +233,14 @@ namespace Hedra.Engine.Rendering.Effects
                 Ssao.FirstPass.Bind(false);
                 World.Draw(WorldRenderType.Water);
                 Ssao.FirstPass.Unbind();
-                
+
                 SSR.Pass(WaterFbo, SSRFBO);
                 Default.Bind();
                 DefaultShader.Bind();
                 DrawQuad(FinalFbo.TextureId[0], SSRFBO.TextureId[0]);
                 DefaultShader.Unbind();
                 Default.Unbind();
-                
+
                 FinalFbo.Bind();
                 DefaultShader.Bind();
                 DrawQuad(Default.TextureId[0], 0);
@@ -233,7 +250,6 @@ namespace Hedra.Engine.Rendering.Effects
 
             if (GameSettings.DepthEffect)
             {
-                
             }
 
             Culling.SetViewport(GameSettings.DeviceWidth, GameSettings.DeviceHeight);
@@ -255,9 +271,9 @@ namespace Hedra.Engine.Rendering.Effects
         {
             Renderer.Disable(EnableCap.DepthTest);
             Renderer.Disable(EnableCap.Blend);
-            
+
             FXAAShader.Bind();
-            
+
             Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.Texture2D, Texture);
             FXAAShader["Texture"] = 0;
@@ -269,20 +285,20 @@ namespace Hedra.Engine.Rendering.Effects
             FXAAShader["Scale"] = Vector2.One;
             FXAAShader["Position"] = Vector2.Zero;
             FXAAShader["Resolution"] = new Vector2(1.0f / GameSettings.Width, 1.0f / GameSettings.Height);
-            
+
             DrawManager.UIRenderer.DrawQuad();
-            
+
             Renderer.Enable(EnableCap.DepthTest);
             FXAAShader.Unbind();
         }
-        
+
         public static void DrawQuad(uint TexID, uint Additive = 0, bool Flipped = false)
         {
             Renderer.Disable(EnableCap.DepthTest);
             Renderer.Disable(EnableCap.Blend);
-            
+
             DefaultShader.Bind();
-            
+
             Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.Texture2D, TexID);
             DefaultShader["Texture"] = 0;
@@ -304,24 +320,23 @@ namespace Hedra.Engine.Rendering.Effects
         public void Clear()
         {
         }
-        
+
         public void CaptureData()
         {
-            if(!GameSettings.SSAO)
+            if (!GameSettings.SSAO)
                 Default.Bind();
             else
                 Ssao.FirstPass.Bind();
-            
-            
         }
+
         public void UnCaptureData()
         {
-            if(!GameSettings.SSAO)
+            if (!GameSettings.SSAO)
                 Default.Unbind();
             else
-                Ssao.FirstPass.Unbind();//Unbind ids the same
+                Ssao.FirstPass.Unbind(); //Unbind ids the same
         }
-        
+
         public static MainFBO DefaultBuffer => DrawManager.MainBuffer;
 
         public void Dispose()

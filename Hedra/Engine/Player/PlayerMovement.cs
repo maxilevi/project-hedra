@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.IO;
-
 using Hedra.Core;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
@@ -41,19 +41,19 @@ namespace Hedra.Engine.Player
             _player = Player;
             _registeredKeys = new Dictionary<Key, Action>();
 
-            EventDispatcher.RegisterMouseDown(this, this.OnMouseButtonDown);
-            EventDispatcher.RegisterKeyDown(this, this.OnKeyDown);
-            this.RegisterListeners();
+            EventDispatcher.RegisterMouseDown(this, OnMouseButtonDown);
+            EventDispatcher.RegisterKeyDown(this, OnKeyDown);
+            RegisterListeners();
         }
 
         private void OnMouseButtonDown(object Sender, MouseButtonEventArgs EventArgs)
         {
-            if (!this.CaptureMovement || GameSettings.Paused || Human.IsKnocked || Human.IsDead
+            if (!CaptureMovement || GameSettings.Paused || Human.IsKnocked || Human.IsDead
                 || !Human.CanInteract || Human.IsRiding || Human.IsEating) return;
 
             if (EventArgs.Button == MouseButton.Middle)
             {
-                if(GameManager.Keyboard[Controls.Rightward] || GameManager.Keyboard[Controls.Leftward])
+                if (GameManager.Keyboard[Controls.Rightward] || GameManager.Keyboard[Controls.Leftward])
                     _player.Roll(RollType.Sideways);
                 else
                     _player.Roll(RollType.Normal);
@@ -67,11 +67,10 @@ namespace Hedra.Engine.Player
                 return;
 
 
-            if ((GameManager.Keyboard[Controls.Forward] || GameManager.Keyboard[Controls.Leftward] || GameManager.Keyboard[Controls.Backward] || GameManager.Keyboard[Controls.Rightward]) && !_player.IsCasting)
-            {
+            if ((GameManager.Keyboard[Controls.Forward] || GameManager.Keyboard[Controls.Leftward] ||
+                 GameManager.Keyboard[Controls.Backward] || GameManager.Keyboard[Controls.Rightward]) &&
+                !_player.IsCasting)
                 Human.Model.LocalRotation = new Vector3(0, Human.Model.LocalRotation.Y, Human.Model.LocalRotation.Z);
-
-            }
 
             HandleSprinting();
 
@@ -82,10 +81,14 @@ namespace Hedra.Engine.Player
                 if (GameManager.Keyboard[Controls.Leftward]) _characterRotation += 90f;
                 if (GameManager.Keyboard[Controls.Backward]) _characterRotation += 180f;
                 if (GameManager.Keyboard[Controls.Forward]) _characterRotation += 0f;
-                if (GameManager.Keyboard[Controls.Forward] && GameManager.Keyboard[Controls.Rightward]) _characterRotation += 45f;
-                if (GameManager.Keyboard[Controls.Forward] && GameManager.Keyboard[Controls.Leftward]) _characterRotation += -45f;
-                if (GameManager.Keyboard[Controls.Backward] && GameManager.Keyboard[Controls.Rightward]) _characterRotation += 135f;
-                if (GameManager.Keyboard[Controls.Backward] && GameManager.Keyboard[Controls.Leftward]) _characterRotation += -135f;
+                if (GameManager.Keyboard[Controls.Forward] && GameManager.Keyboard[Controls.Rightward])
+                    _characterRotation += 45f;
+                if (GameManager.Keyboard[Controls.Forward] && GameManager.Keyboard[Controls.Leftward])
+                    _characterRotation += -45f;
+                if (GameManager.Keyboard[Controls.Backward] && GameManager.Keyboard[Controls.Rightward])
+                    _characterRotation += 135f;
+                if (GameManager.Keyboard[Controls.Backward] && GameManager.Keyboard[Controls.Leftward])
+                    _characterRotation += -135f;
 
                 var keysPresses = 0f;
                 var wPressed = GameManager.Keyboard[Controls.Forward];
@@ -97,11 +100,13 @@ namespace Hedra.Engine.Player
                     dPressed = false;
                     aPressed = false;
                 }
+
                 if (wPressed && sPressed)
                 {
                     wPressed = false;
                     sPressed = false;
                 }
+
                 keysPresses += wPressed ? 1f : 0f;
                 keysPresses += sPressed ? 1f : 0f;
                 keysPresses += dPressed ? 1f : 0f;
@@ -111,9 +116,10 @@ namespace Hedra.Engine.Player
 
                 var isRiding = _player.IsRiding;
                 var limit = isRiding ? 25f : 17.5f;
-                _targetAngles.Z = (limit / 2) * (_player.View.StackedYaw - _yaw);
+                _targetAngles.Z = limit / 2 * (_player.View.StackedYaw - _yaw);
                 _targetAngles = Mathf.Clamp(_targetAngles, -limit, limit);
-                _angles = Mathf.Lerp(_angles, _targetAngles * (GameManager.Keyboard[Controls.Forward] ? 1.0F : 0.0F), (float)Time.DeltaTime * 8f);
+                _angles = Mathf.Lerp(_angles, _targetAngles * (GameManager.Keyboard[Controls.Forward] ? 1.0F : 0.0F),
+                    (float)Time.DeltaTime * 8f);
                 _yaw = Mathf.Lerp(_yaw, _player.View.StackedYaw, (float)Time.DeltaTime * 2f);
                 IsMovingForward = GameManager.Keyboard[Controls.Forward];
                 IsMovingBackwards = GameManager.Keyboard[Controls.Backward];
@@ -124,30 +130,34 @@ namespace Hedra.Engine.Player
                         Human.Physics.CollidesWithStructures = false;
                         Human.Physics.CollidesWithEntities = false;
                     }
+
                     _targetYaw = _player.View.TargetYaw;
-                    this.ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Forward) * keysPresses);                   
-                    this.Orientate();
+                    ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Forward) * keysPresses);
+                    Orientate();
                 }
+
                 _player.Model.TiltMatrix =
                     Matrix4x4.CreateRotationZ(_angles.Z * Mathf.Radian * (_player.IsUnderwater ? 0.0f : 1.0f));
                 _player.Model.TransformationMatrix = Matrix4x4.Identity;
                 if (GameManager.Keyboard[Controls.Backward])
                 {
-                    this.ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Backward) * keysPresses);
+                    ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Backward) * keysPresses);
                     RollFacing = _characterRotation;
                 }
 
                 if (GameManager.Keyboard[Controls.Leftward])
                 {
-                    this.ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Left) * keysPresses);
-                    RollDirection = Human.Physics.MoveFormula(_player.View.Left, false).Xz().ToVector3().NormalizedFast();
+                    ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Left) * keysPresses);
+                    RollDirection = Human.Physics.MoveFormula(_player.View.Left, false).Xz().ToVector3()
+                        .NormalizedFast();
                     RollFacing = _characterRotation;
                 }
 
                 if (GameManager.Keyboard[Controls.Rightward])
                 {
                     ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Right) * keysPresses);
-                    RollDirection = Human.Physics.MoveFormula(_player.View.Right, false).Xz().ToVector3().NormalizedFast();
+                    RollDirection = Human.Physics.MoveFormula(_player.View.Right, false).Xz().ToVector3()
+                        .NormalizedFast();
                     RollFacing = _characterRotation;
                 }
                 /*
@@ -173,11 +183,11 @@ namespace Hedra.Engine.Player
                         _player.IsClimbing = false;
                 }*/
             }
-        
+
 
             if (!_player.IsUnderwater) return;
-            if (GameManager.Keyboard[Controls.Jump]) this.MoveInWater(true);
-            if (GameManager.Keyboard[Controls.Descend]) this.MoveInWater(false);
+            if (GameManager.Keyboard[Controls.Jump]) MoveInWater(true);
+            if (GameManager.Keyboard[Controls.Descend]) MoveInWater(false);
         }
 
         private void HandleSprinting()
@@ -188,7 +198,7 @@ namespace Hedra.Engine.Player
             }
             else
             {
-                if(_player.IsSprinting)
+                if (_player.IsSprinting)
                     _player.IsSprinting = false;
             }
         }
@@ -200,12 +210,12 @@ namespace Hedra.Engine.Player
 
         private void RegisterListeners()
         {
-            this.RegisterKey(Controls.Eat, delegate
+            RegisterKey(Controls.Eat, delegate
             {
                 if (_player.CanInteract) _player.EatFood();
             });
 
-            this.RegisterKey(Controls.SpecialItem, delegate
+            RegisterKey(Controls.SpecialItem, delegate
             {
                 if (!GameManager.InStartMenu && !GameManager.InMenu && !Human.IsKnocked
                     && Human.CanInteract && _vehicleCooldown < 0)
@@ -213,7 +223,8 @@ namespace Hedra.Engine.Player
                     var vehicleItem = _player.Inventory.Vehicle;
                     if (vehicleItem == null && !GameSettings.Paused)
                     {
-                        _player.MessageDispatcher.ShowNotification(Translations.Get("need_vehicle"), Color.Red, 3f, true);
+                        _player.MessageDispatcher.ShowNotification(Translations.Get("need_vehicle"), Color.Red, 3f,
+                            true);
                     }
                     else if (vehicleItem != null)
                     {
@@ -226,33 +237,35 @@ namespace Hedra.Engine.Player
                                 vehicle = _player.Boat;
                                 break;
                             case "Glider":
-                                vehicle =_player.Glider;
+                                vehicle = _player.Glider;
                                 break;
                             default:
-                                throw new ArgumentOutOfRangeException($"Failed to find a vehicle from '{vehicleItem.Name}'.");
+                                throw new ArgumentOutOfRangeException(
+                                    $"Failed to find a vehicle from '{vehicleItem.Name}'.");
                         }
+
                         if (vehicle.Enabled) vehicle.Disable();
                         else vehicle.Enable();
                     }
                 }
             });
-            this.RegisterKey(Controls.Help, delegate
-            {
-                _player.UI.ShowHelp = !_player.UI.ShowHelp && !GameManager.Provider.InStartMenu && !_player.UI.InMenu;             
-            });
-            
-            this.RegisterKey(Key.F3, delegate
-            {
-                GameSettings.DebugView = !GameSettings.DebugView && GameSettings.DebugMode;             
-            });
-            this.RegisterKey(Key.F12, delegate
-            {
-                GameSettings.DebugPhysics = !GameSettings.DebugPhysics && GameSettings.DebugMode;             
-            });
-            this.RegisterKey(Key.F5, delegate
-            {
-                Chat.Log($"ObjectsInSimulation = '{Bullet.BulletPhysics.ObjectsInSimulation}'; RigidbodyCount = '{Bullet.BulletPhysics.RigidbodyCount}'");
-            });
+            RegisterKey(Controls.Help,
+                delegate
+                {
+                    _player.UI.ShowHelp =
+                        !_player.UI.ShowHelp && !GameManager.Provider.InStartMenu && !_player.UI.InMenu;
+                });
+
+            RegisterKey(Key.F3,
+                delegate { GameSettings.DebugView = !GameSettings.DebugView && GameSettings.DebugMode; });
+            RegisterKey(Key.F12,
+                delegate { GameSettings.DebugPhysics = !GameSettings.DebugPhysics && GameSettings.DebugMode; });
+            RegisterKey(Key.F5,
+                delegate
+                {
+                    Chat.Log(
+                        $"ObjectsInSimulation = '{Bullet.BulletPhysics.ObjectsInSimulation}'; RigidbodyCount = '{Bullet.BulletPhysics.RigidbodyCount}'");
+                });
         }
 
         public void OnKeyDown(object Sender, KeyEventArgs EventArgs)
@@ -260,61 +273,48 @@ namespace Hedra.Engine.Player
             if (_registeredKeys.ContainsKey(EventArgs.Key)) _registeredKeys[EventArgs.Key]();
 
             if (Controls.Jump == EventArgs.Key)
-            {
-                if (!_player.IsUnderwater) this.Jump();
-            }
+                if (!_player.IsUnderwater)
+                    Jump();
 
             if (EventArgs.Key == Key.Escape && !_player.UI.GamePanel.Enabled && !_player.UI.Hide)
                 SoundPlayer.PlayUISound(SoundType.ButtonClick);
 
             if (EventArgs.Key == Key.F2)
             {
-                if (!Directory.Exists(AssetManager.AppPath + "/Screenshots/")) Directory.CreateDirectory(AssetManager.AppPath + "/Screenshots/");
-                _player.MessageDispatcher.ShowNotification($"{Translations.Get("saved_screenshot", Recorder.SaveScreenshot($"{AssetManager.AppPath}/Screenshots/"))}", Color.White, 3f, false);
+                if (!Directory.Exists(AssetManager.AppPath + "/Screenshots/"))
+                    Directory.CreateDirectory(AssetManager.AppPath + "/Screenshots/");
+                _player.MessageDispatcher.ShowNotification(
+                    $"{Translations.Get("saved_screenshot", Recorder.SaveScreenshot($"{AssetManager.AppPath}/Screenshots/"))}",
+                    Color.White, 3f, false);
             }
 
             if (EventArgs.Key == Key.F6)
             {
                 AutosaveManager.Save();
-                _player.MessageDispatcher.ShowNotification($"{Translations.Get("game_saved_success")}", Color.White, 2f);
+                _player.MessageDispatcher.ShowNotification($"{Translations.Get("game_saved_success")}", Color.White,
+                    2f);
             }
 
-            if (EventArgs.Key == Key.F1)
-            {
-                _player.UI.Hide = !_player.UI.Hide;
-            }
+            if (EventArgs.Key == Key.F1) _player.UI.Hide = !_player.UI.Hide;
 
             if (GameSettings.DebugView && EventArgs.Key == Key.F5)
-            {
                 World.ReloadModules();
 
-                //_player.Chat.AddLine("Modules reloaded.");
-            }
+            //_player.Chat.AddLine("Modules reloaded.");
 #if DEBUG
-            if (EventArgs.Key == Key.F10)
-            {
-                ShaderManager.ReloadShaders();
-            }
-            if (EventArgs.Key == Key.F9 && _player.CanInteract)
-            {
-                Recorder.Active = !Recorder.Active;
-            }
+            if (EventArgs.Key == Key.F10) ShaderManager.ReloadShaders();
+            if (EventArgs.Key == Key.F9 && _player.CanInteract) Recorder.Active = !Recorder.Active;
             if (EventArgs.Key == Key.O && _player.CanInteract) GameSettings.LockFrustum = !GameSettings.LockFrustum;
 
             if (EventArgs.Key == Key.Number7 && _player.CanInteract)
-            {
                 EnvironmentSystem.SkyManager.Sky.Enabled = !EnvironmentSystem.SkyManager.Sky.Enabled;
-            }
 
             if (EventArgs.Key == Key.J)
-            {
-                World.AddChunkToQueue(World.GetChunkByOffset(World.ToChunkSpace(_player.Position)), ChunkQueueType.Mesh);
-            }
+                World.AddChunkToQueue(World.GetChunkByOffset(World.ToChunkSpace(_player.Position)),
+                    ChunkQueueType.Mesh);
 
             if (EventArgs.Key == Key.K)
-            {
                 World.MarkChunkReady(World.GetChunkByOffset(World.ToChunkSpace(_player.Position)));
-            }
 
             if (EventArgs.Key == Key.P)
             {
@@ -324,23 +324,11 @@ namespace Hedra.Engine.Player
             if (EventArgs.Key == Key.L && _player.CanInteract) GameSettings.Wireframe = !GameSettings.Wireframe;
 
 
-            if (EventArgs.Key == Key.Keypad0 && _player.CanInteract)
-            {
-                _player.Physics.Translate(Vector3.UnitY * 25f);
-            }
-            if (EventArgs.Key == Key.Insert && _player.CanInteract)
-            {
-                _player.AbilityTree.Reset();
-            }
-            if (EventArgs.Key == Key.Keypad2 && _player.CanInteract)
-            {
-                _player.Health = _player.MaxHealth;
-            }
+            if (EventArgs.Key == Key.Keypad0 && _player.CanInteract) _player.Physics.Translate(Vector3.UnitY * 25f);
+            if (EventArgs.Key == Key.Insert && _player.CanInteract) _player.AbilityTree.Reset();
+            if (EventArgs.Key == Key.Keypad2 && _player.CanInteract) _player.Health = _player.MaxHealth;
 
-            if (EventArgs.Key == Key.F11)
-            {
-                GameManager.LoadCharacter(DataManager.PlayerFiles[0]);
-            }
+            if (EventArgs.Key == Key.F11) GameManager.LoadCharacter(DataManager.PlayerFiles[0]);
 #endif
         }
 

@@ -6,7 +6,9 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System.Drawing;
+
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System;
 using System.Numerics;
 using Hedra.Engine.Core;
@@ -26,14 +28,16 @@ namespace Hedra.Engine.Rendering.UI
 
         public RenderableText(string Text, Vector2 Position, Color FontColor, Font FontType)
         {
-            this.UIText = new GUIText(Text, Position, FontColor, FontType);
-            DrawManager.UIRenderer.Remove(this.UIText.UIText);
+            UIText = new GUIText(Text, Position, FontColor, FontType);
+            DrawManager.UIRenderer.Remove(UIText.UIText);
         }
 
         public void Draw()
         {
-            if (!UIText.UIText.Enabled || UIText.UIText.IdPointer == null && UIText.UIText.Id == GUIRenderer.TransparentTexture) return;
-            if ((UIText.UIText.Scale * new Vector2(GameSettings.Width, GameSettings.Height)).LengthSquared() < 2) return;
+            if (!UIText.UIText.Enabled ||
+                UIText.UIText.IdPointer == null && UIText.UIText.Id == GUIRenderer.TransparentTexture) return;
+            if ((UIText.UIText.Scale * new Vector2(GameSettings.Width, GameSettings.Height)).LengthSquared() <
+                2) return;
             DrawManager.UIRenderer.Draw(UIText.UIText);
         }
 
@@ -41,29 +45,29 @@ namespace Hedra.Engine.Rendering.UI
         {
             UIText.UIText.Adjust();
         }
-        
+
         public string Text
         {
             get => UIText.Text;
             set
             {
                 UIText.Text = value;
-                DrawManager.UIRenderer.Remove(this.UIText.UIText);
+                DrawManager.UIRenderer.Remove(UIText.UIText);
             }
         }
-        
+
         public Vector2 Scale
         {
             get => UIText.Scale;
             set => UIText.Scale = value;
         }
-        
+
         public Vector2 Position
         {
             get => UIText.Position;
             set => UIText.Position = value;
         }
-        
+
         public Color Color
         {
             get => UIText.TextColor;
@@ -106,14 +110,14 @@ namespace Hedra.Engine.Rendering.UI
         {
             UIText.Enable();
         }
-        
+
         public void Disable()
         {
             UIText.Disable();
         }
 
         public bool Enabled => UIText.Enabled;
-        
+
         public void Dispose()
         {
             UIText.Dispose();

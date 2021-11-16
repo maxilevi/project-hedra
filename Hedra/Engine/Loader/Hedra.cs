@@ -1,9 +1,10 @@
 #if DEBUG
-    //#define SHOW_COLLISION
+//#define SHOW_COLLISION
 #endif
 
 using System;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Globalization;
 using System.Numerics;
 using System.Reflection;
@@ -43,7 +44,7 @@ using Silk.NET.Windowing;
 namespace Hedra.Engine.Loader
 {
     public delegate void OnFrameChanged();
-    
+
     public class Hedra : HedraWindow, IHedra
     {
         public int BuildNumber => 17;
@@ -57,7 +58,8 @@ namespace Hedra.Engine.Loader
         private int _passedFrames;
         private double _passedMillis;
 
-        public Hedra(int Width, int Height, IMonitor Monitor, int Major, int Minor, ContextProfile Profile, ContextFlags Flags) : 
+        public Hedra(int Width, int Height, IMonitor Monitor, int Major, int Minor, ContextProfile Profile,
+            ContextFlags Flags) :
             base(Width, Height, Monitor, Profile, Flags, new APIVersion(Major, Minor))
         {
         }
@@ -91,22 +93,20 @@ namespace Hedra.Engine.Loader
             var shadingOpenGlVersion = GetShadingVersion(glVersion);
             var maxUniforms = Renderer.GetInteger(GetPName.MaxVertexUniformVectors);
             if (maxUniforms / 4 < GeneralSettings.MaxJoints)
-            {
-                OSManager.Show($"Max uniforms is '{maxUniforms}' but max joints is '{GeneralSettings.MaxJoints}'", "Warning");
-            }
+                OSManager.Show($"Max uniforms is '{maxUniforms}' but max joints is '{GeneralSettings.MaxJoints}'",
+                    "Warning");
             else
-            {
                 Log.WriteLine($"Max uniforms is '{maxUniforms}' but max joints is '{GeneralSettings.MaxJoints}'");
-            }
 
-            if( shadingOpenGlVersion < 3.3f)
+            if (shadingOpenGlVersion < 3.3f)
             {
-                
-                OSManager.Show($"Minimum OpenGL version is 3.3, yours is {shadingOpenGlVersion}", "OpenGL Version not supported");
+                OSManager.Show($"Minimum OpenGL version is 3.3, yours is {shadingOpenGlVersion}",
+                    "OpenGL Version not supported");
                 return false;
             }
+
             Log.WriteLine(glVersion);
-            
+
             AssetManager.Load();
             CompatibilityManager.Load();
             GameLoader.LoadSoundEngine();
@@ -118,24 +118,24 @@ namespace Hedra.Engine.Loader
             BackgroundUpdater.Load();
             BulletPhysics.Load();
             Log.WriteLine("Translations loaded successfully.");
-            
+
             GameLoader.CreateCharacterFolders();
             GameLoader.AllocateMemory();
             Log.WriteLine("Assets loading was successful.");
-            
+
             GameSettings.LoadNormalSettings(GameSettings.SettingsPath);
             Log.WriteLine($"Setting loaded successfully.");
 
             Renderer.Load();
-            Log.WriteLine("Supported GLSL version is : "+Renderer.GetString(StringName.ShadingLanguageVersion));
+            Log.WriteLine("Supported GLSL version is : " + Renderer.GetString(StringName.ShadingLanguageVersion));
             OSManager.WriteSpecs();
-            
+
             GameManager.Load();
             Log.WriteLine("Scene loading was Successful.");
-            
+
             Steam.Instance.Initialize();
             Log.WriteLine("Hooking steam into necessary events...");
-            
+
             LoadInterpreter();
             Program.GameWindow.WindowState = WindowState.Maximized;
             return true;
@@ -146,13 +146,13 @@ namespace Hedra.Engine.Loader
             //if(GameSettings.DebugMode)
             //    TaskScheduler.Parallel(Interpreter.Load);
             //else
-                Interpreter.Load();
+            Interpreter.Load();
             MissionPool.Load();
         }
 
         protected override void UpdateFrame(double Delta)
         {
-            this._splashScreen.Update();
+            _splashScreen.Update();
             var frameTime = Delta;
             while (frameTime > 0f)
             {
@@ -173,14 +173,14 @@ namespace Hedra.Engine.Loader
                 LocalPlayer.Instance.Loader.Dispatch();
                 frameTime -= delta;
             }
-            
+
             Time.Set(Delta);
             Time.IncrementFrame(Delta);
-            
+
             // Utils.RNG is not thread safe so it might break itself
             // Here is the autofix because thread-safety is for loosers
             var newNumber = Utils.Rng.NextFloat();
-            if(newNumber < 0.0005f && _lastValue < 0.0005f)
+            if (newNumber < 0.0005f && _lastValue < 0.0005f)
             {
                 Utils.Rng = new Random();
                 _lastValue = float.MinValue;
@@ -189,15 +189,17 @@ namespace Hedra.Engine.Loader
             {
                 _lastValue = newNumber;
             }
+
             _debugProvider.Update();
             Steam.Update();
-            AnalyticsManager.PlayTime += (float) Delta;
+            AnalyticsManager.PlayTime += (float)Delta;
             FrameChanged?.Invoke();
         }
 
         protected override void RenderFrame(double Delta)
-        {    
-            Renderer.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit | ClearBufferMask.StencilBufferBit);        
+        {
+            Renderer.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit |
+                           ClearBufferMask.StencilBufferBit);
             if (!_splashScreen.FinishedLoading)
             {
                 _splashScreen.Draw();
@@ -220,20 +222,16 @@ namespace Hedra.Engine.Loader
         {
             if (_splashScreen == null || !_splashScreen.FinishedLoading) return;
             if (!IsFocused)
-            {
-                if(!GameManager.InStartMenu && !GameManager.IsLoading && !GameSettings.Paused &&
+                if (!GameManager.InStartMenu && !GameManager.IsLoading && !GameSettings.Paused &&
                     GameManager.Player != null && !GameManager.Player.InterfaceOpened)
-                {
                     GameManager.Player.UI.ShowMenu();
-                }
-            }
         }
-        
+
         protected override void Unload()
         {
             AssetManager.Dispose();
             GameSettings.Save($"{AssetManager.AppData}/settings.cfg");
-            if(!GameManager.InStartMenu) AutosaveManager.Save();
+            if (!GameManager.InStartMenu) AutosaveManager.Save();
             Graphics2D.Dispose();
             DrawManager.Dispose();
             InventoryItemRenderer.Dispose();
@@ -245,10 +243,9 @@ namespace Hedra.Engine.Loader
             var shadingReg = new Regex(@"([0-9]+\.[0-9]+|[0-9]+)");
             var shadingStringVersion = shadingReg.Match(GLVersion);
             var shadingOpenGlVersion = float.Parse(shadingStringVersion.Value, CultureInfo.InvariantCulture);
-            return (shadingOpenGlVersion >= 310) ? shadingOpenGlVersion / 100f : shadingOpenGlVersion;
+            return shadingOpenGlVersion >= 310 ? shadingOpenGlVersion / 100f : shadingOpenGlVersion;
         }
-        
+
         public bool FinishedLoadingSplashScreen => _splashScreen?.FinishedLoading ?? true;
     }
 }
-

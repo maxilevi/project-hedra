@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Linq;
 using System.Diagnostics;
 using Hedra.Rendering;
@@ -11,11 +12,15 @@ namespace Hedra.Engine.Rendering.UI
     {
         private static readonly object Lock = new object();
         private static readonly List<CacheOptions> Cache = new List<CacheOptions>();
-        
+
         private static CacheOptions GetCache(string Text, Font TextFont, Color TextColor)
         {
-            lock(Lock)
-                return Cache.FirstOrDefault(C => C.Text == Text && Math.Abs(C.TextFont.Size - TextFont.Size) < 0.005f && C.TextFont.Style == TextFont.Style && TextColor == C.TextColor);
+            lock (Lock)
+            {
+                return Cache.FirstOrDefault(C =>
+                    C.Text == Text && Math.Abs(C.TextFont.Size - TextFont.Size) < 0.005f &&
+                    C.TextFont.Style == TextFont.Style && TextColor == C.TextColor);
+            }
         }
 
         private static bool Contains(string Text, Font TextFont, Color TextColor)
@@ -25,10 +30,12 @@ namespace Hedra.Engine.Rendering.UI
 
         public static bool Exists(uint Id)
         {
-            lock(Lock)
+            lock (Lock)
+            {
                 return Cache.FirstOrDefault(C => C.Id == Id) != null;
+            }
         }
-        
+
         public static uint UseOrCreate(string Text, Font TextFont, Color TextColor, BitmapObject Bitmap, StackTrace _t)
         {
             var cache = GetCache(Text, TextFont, TextColor);
@@ -42,12 +49,14 @@ namespace Hedra.Engine.Rendering.UI
                 id = cache.Id;
                 cache.Uses++;
             }
+
             return id;
-        } 
+        }
 
         private static void Add(string Text, Font TextFont, Color TextColor, uint Id, StackTrace T)
         {
-            if (Contains(Text, TextFont, TextColor)) throw new ArgumentOutOfRangeException($"Duplicate cache for '{Text}'");
+            if (Contains(Text, TextFont, TextColor))
+                throw new ArgumentOutOfRangeException($"Duplicate cache for '{Text}'");
             lock (Lock)
             {
                 var cache = Cache.FirstOrDefault(C => C.Id == Id);
@@ -67,7 +76,7 @@ namespace Hedra.Engine.Rendering.UI
 
         public static void Remove(uint Id)
         {
-            if(Id == 0) return;
+            if (Id == 0) return;
             lock (Lock)
             {
                 var cache = Cache.FirstOrDefault(C => C.Id == Id);
@@ -75,12 +84,13 @@ namespace Hedra.Engine.Rendering.UI
                     return; // throw new ArgumentOutOfRangeException($"Cache does not exist for id '{Id}'");
                 if (cache.Text.Contains("FXAA"))
                 {
-                    int a = 0;
+                    var a = 0;
                 }
-                if ((--cache.Uses) == 0)
+
+                if (--cache.Uses == 0)
                 {
                     Cache.Remove(cache);
-                    Engine.Rendering.Core.TextureRegistry.Dispose(Id);
+                    Core.TextureRegistry.Dispose(Id);
                 }
             }
         }
@@ -89,11 +99,13 @@ namespace Hedra.Engine.Rendering.UI
         {
             get
             {
-                lock(Lock)
+                lock (Lock)
+                {
                     return Cache.Count;
+                }
             }
         }
-        
+
         private class CacheOptions
         {
             public string Text { get; set; }
@@ -105,9 +117,9 @@ namespace Hedra.Engine.Rendering.UI
 
             public CacheOptions()
             {
-                #if DEBUG
-                    _stack = new StackTrace();
-                #endif
+#if DEBUG
+                _stack = new StackTrace();
+#endif
             }
 
             public override string ToString()

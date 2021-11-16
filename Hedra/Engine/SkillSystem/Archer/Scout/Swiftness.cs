@@ -1,4 +1,5 @@
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Globalization;
 using Hedra.Components.Effects;
 using Hedra.Core;
@@ -21,11 +22,12 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
         protected override void DoEnable()
         {
             User.AddComponent(_currentSpeedBonus = new SpeedBonusComponent(User, User.Speed * SpeedChange));
-            User.AddComponent(_currentAttackSpeedBonus = new AttackSpeedBonusComponent(User, User.AttackSpeed * AttackSpeedChange));
+            User.AddComponent(_currentAttackSpeedBonus =
+                new AttackSpeedBonusComponent(User, User.AttackSpeed * AttackSpeedChange));
             User.Model.Outline = true;
             User.Model.OutlineColor = Color.FromArgb(128, 102, 204, 255).ToVector4() * 2;
         }
-        
+
         protected override void DoDisable()
         {
             User.RemoveComponent(_currentSpeedBonus);
@@ -47,8 +49,8 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
         public override string[] Attributes => new[]
         {
             Translations.Get("swiftness_time_change", Duration.ToString("0.0", CultureInfo.InvariantCulture)),
-            Translations.Get("swiftness_speed_bonus_change", (int) (SpeedChange * 100)),
-            Translations.Get("swiftness_attack_speed_bonus_change", (int) (AttackSpeedChange * 100))
+            Translations.Get("swiftness_speed_bonus_change", (int)(SpeedChange * 100)),
+            Translations.Get("swiftness_attack_speed_bonus_change", (int)(AttackSpeedChange * 100))
         };
     }
 }

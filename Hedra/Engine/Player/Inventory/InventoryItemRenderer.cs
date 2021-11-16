@@ -1,7 +1,7 @@
-
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Linq;
 using Hedra.Core;
 using Hedra.Engine.Game;
@@ -39,12 +39,12 @@ namespace Hedra.Engine.Player.Inventory
 
         public InventoryItemRenderer(InventoryArray Array, int Offset, int Length)
         {
-            this._array = Array;
-            this._length = Length;
-            this._offset = Offset;
-            this._models = new ObjectMesh[_length];
-            this._modelsSize = new Vector3[_length];
-            this._modelCache = new VertexData[_length];
+            _array = Array;
+            _length = Length;
+            _offset = Offset;
+            _models = new ObjectMesh[_length];
+            _modelsSize = new Vector3[_length];
+            _modelCache = new VertexData[_length];
         }
 
         public void SetArray(InventoryArray New)
@@ -64,7 +64,8 @@ namespace Hedra.Engine.Player.Inventory
                     _models[i] = null;
                     _modelCache[i] = null;
                 }
-                if (_array[i+ _offset] != null)
+
+                if (_array[i + _offset] != null)
                 {
                     _models[i] = BuildModel(_array[i + _offset].Model, out _modelsSize[i]);
                     _modelCache[i] = _array[i + _offset].Model;
@@ -80,7 +81,7 @@ namespace Hedra.Engine.Player.Inventory
                 model.SupportPoint(Vector3.UnitX).X - model.SupportPoint(-Vector3.UnitX).X,
                 model.SupportPoint(Vector3.UnitY).Y - model.SupportPoint(-Vector3.UnitY).Y,
                 model.SupportPoint(Vector3.UnitZ).Z - model.SupportPoint(-Vector3.UnitZ).Z
-            );           
+            );
             var mesh = ObjectMesh.FromVertexData(model);
             //mesh.BaseTint = EffectDescriber.EffectColorFromItem(Item);
             mesh.ApplyFog = false;
@@ -101,7 +102,7 @@ namespace Hedra.Engine.Player.Inventory
 
         public static uint Draw(ObjectMesh Mesh, Item Item, bool TiltIfWeapon, Vector3 Size)
         {
-            if(Item == null) return GUIRenderer.TransparentTexture;
+            if (Item == null) return GUIRenderer.TransparentTexture;
             return Draw(Mesh, Item.IsWeapon, TiltIfWeapon, Size);
         }
 
@@ -115,7 +116,7 @@ namespace Hedra.Engine.Player.Inventory
             var previousBound = Renderer.ShaderBound;
             var previousFBO = Renderer.FBOBound;
             Framebuffer.Bind();
-            
+
             var meshPrematureCulling = Mesh.PrematureCulling;
             Mesh.PrematureCulling = false;
 
@@ -129,13 +130,14 @@ namespace Hedra.Engine.Player.Inventory
             var projectionMatrix = Matrix4x4.CreatePerspectiveFieldOfView(10 * Mathf.Radian, aspect, 1, 1024f);
             Renderer.LoadProjection(projectionMatrix);
 
-            var lookAt = Matrix4x4.CreateLookAt(Vector3.UnitZ * ZOffset * (willTilt ? .75f : 1f), Vector3.Zero, Vector3.UnitY);
+            var lookAt = Matrix4x4.CreateLookAt(Vector3.UnitZ * ZOffset * (willTilt ? .75f : 1f), Vector3.Zero,
+                Vector3.UnitY);
             Renderer.LoadModelView(lookAt);
 
             Renderer.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             Renderer.Enable(EnableCap.DepthTest);
             Renderer.Disable(EnableCap.Blend);
-            
+
             Mesh.Draw();
 
             /*
@@ -146,7 +148,7 @@ namespace Hedra.Engine.Player.Inventory
             
             Renderer.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);
             Renderer.BindFramebuffer(FramebufferTarget.ReadFramebuffer, 0);
-          */  
+          */
             ShaderManager.SetLightColorInTheSameThread(currentDayColor);
             GameSettings.GlobalShadows = previousShadows;
             Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, previousFBO);
@@ -162,7 +164,7 @@ namespace Hedra.Engine.Player.Inventory
         {
             _itemRotation += 25 * Time.DeltaTime;
         }
-        
+
         private static VertexData CenterModel(VertexData Model)
         {
             Model.Center();

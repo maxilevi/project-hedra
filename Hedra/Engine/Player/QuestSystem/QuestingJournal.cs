@@ -1,4 +1,5 @@
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Drawing.Printing;
 using System.Linq;
 using Hedra.Core;
@@ -32,13 +33,14 @@ namespace Hedra.Engine.Player.QuestSystem
         private readonly GUIText _storylineLabel;
         private readonly BackgroundTexture _renderBackground;
         private readonly IPlayer _player;
-        
-        public QuestingJournal(IPlayer Player) 
+
+        public QuestingJournal(IPlayer Player)
             : base(Player, null, 0, 0, Vector2.One)
         {
             _player = Player;
-            _journalBackground = 
-                new BackgroundTexture(InventoryInterfaceItemInfo.DefaultId, Position, InventoryInterfaceItemInfo.DefaultSize * .55f);
+            _journalBackground =
+                new BackgroundTexture(InventoryInterfaceItemInfo.DefaultId, Position,
+                    InventoryInterfaceItemInfo.DefaultSize * .55f);
             _journalBackground.SendBack();
             _descriptionText = new GUIText(
                 string.Empty,
@@ -68,7 +70,8 @@ namespace Hedra.Engine.Player.QuestSystem
                 Color.Gold,
                 FontCache.GetBold(10)
             );
-            _storylineLabel.Position = _journalBackground.Position - Vector2.UnitY * (_journalBackground.Scale.Y - _storylineLabel.Scale.Y);
+            _storylineLabel.Position = _journalBackground.Position -
+                                       Vector2.UnitY * (_journalBackground.Scale.Y - _storylineLabel.Scale.Y);
             var abandonSize = Graphics2D.SizeFromAssets("Assets/UI/AbandonButton.png") * .4f;
             _abandonButton = new Button(
                 _journalBackground.Position - Vector2.UnitY * (_journalBackground.Scale.Y - abandonSize.Y),
@@ -94,12 +97,13 @@ namespace Hedra.Engine.Player.QuestSystem
             Panel.AddElement(_journalBackground);
             Panel.AddElement(_storylineLabel);
 
-            var leftJournalTopCorner = -Vector2.UnitX * _journalBackground.Scale.X 
+            var leftJournalTopCorner = -Vector2.UnitX * _journalBackground.Scale.X
                                        + Vector2.UnitY * (_journalBackground.Scale.Y + TitleText.Scale.Y * .5f);
             TitleText.Position += Vector2.UnitX * TitleText.Scale.X * 1.25f;
             TitleText.Position += leftJournalTopCorner;
-            var rightJournalCorner = leftJournalTopCorner * new Vector2(-1, 1) 
-                - Vector2.UnitX * 1.25f * (PageSelector.Scale.X + NextPageText.Scale.X + PreviousPageText.Scale.X + CurrentPageText.Scale.X);
+            var rightJournalCorner = leftJournalTopCorner * new Vector2(-1, 1)
+                                     - Vector2.UnitX * 1.25f * (PageSelector.Scale.X + NextPageText.Scale.X +
+                                                                PreviousPageText.Scale.X + CurrentPageText.Scale.X);
             PageSelector.Position += rightJournalCorner;
             NextPageText.Position += rightJournalCorner;
             PreviousPageText.Position += rightJournalCorner;
@@ -148,27 +152,24 @@ namespace Hedra.Engine.Player.QuestSystem
             {
                 var quest = CurrentQuest;
                 if (quest.HasLocation)
-                {
                     _player.Minimap.MarkQuest(
                         () =>
                         {
-                            if(!quest.Disposed) return quest.Location;
+                            if (!quest.Disposed) return quest.Location;
                             _player.Minimap.UnMarkQuest();
                             return Vector3.Zero;
                         });
-                }
                 else
-                {
                     _player.Minimap.UnMarkQuest();
-                }
             }
             else
             {
                 _player.Minimap.UnMarkQuest();
             }
         }
-        
-        private MissionObject CurrentQuest => Quests.Length != 0 ? Quests[Mathf.Modulo(CurrentPage, Quests.Length)] : null;
+
+        private MissionObject CurrentQuest =>
+            Quests.Length != 0 ? Quests[Mathf.Modulo(CurrentPage, Quests.Length)] : null;
 
         protected override Translation TitleTranslation => Translation.Create("quests");
 

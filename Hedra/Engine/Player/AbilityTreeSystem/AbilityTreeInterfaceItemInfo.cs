@@ -1,5 +1,6 @@
 using System;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Globalization;
 using System.Text;
 using Hedra.Core;
@@ -17,6 +18,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
     public class AbilityTreeInterfaceItemInfo : InventoryInterfaceItemInfo
     {
         private readonly Vector2 _targetResolution = new Vector2(1366, 705);
+
         public AbilityTreeInterfaceItemInfo()
         {
             BackgroundTexture.Scale *= 1.15f;
@@ -61,18 +63,17 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 : string.Empty;
             var attributes = new StringBuilder();
             var skillAttributes = RealSkill.Attributes;
-            for (var i = 0; i < skillAttributes.Length; ++i)
-            {
-                attributes.AppendLine($"• {skillAttributes[i]}");
-            }
+            for (var i = 0; i < skillAttributes.Length; ++i) attributes.AppendLine($"• {skillAttributes[i]}");
             return $"{passive}{manaCost}{cooldown}{attributes}";
         }
-        
+
         protected virtual void SetPosition()
         {
             ItemDescription.Position = Position - Vector2.UnitY * .02f;
             ItemTexture.Position = Position + Vector2.UnitY * .1f;
-            ItemAttributes.Position = ItemDescription.Position - (ItemDescription.Scale.Y + ItemAttributes.Scale.Y) * Vector2.UnitY - Vector2.UnitY * .01f;
+            ItemAttributes.Position = ItemDescription.Position -
+                                      (ItemDescription.Scale.Y + ItemAttributes.Scale.Y) * Vector2.UnitY -
+                                      Vector2.UnitY * .01f;
             SetTitlePosition();
         }
     }

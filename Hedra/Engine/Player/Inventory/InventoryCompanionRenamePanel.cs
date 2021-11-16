@@ -1,4 +1,5 @@
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
@@ -7,10 +8,10 @@ using Hedra.Rendering.UI;
 using System.Numerics;
 
 
-
 namespace Hedra.Engine.Player.Inventory
 {
     public delegate void OnApply();
+
     public class InventoryCompanionRenamePanel : Panel
     {
         public event OnApply Apply;
@@ -24,7 +25,8 @@ namespace Hedra.Engine.Player.Inventory
             _backgroundTexture = new BackgroundTexture(InventoryBackground.DefaultId, Vector2.Zero, Vector2.Zero);
             _field = new TextField(Vector2.Zero, _backgroundTexture.Scale * .5f, false);
             _applyButton = new Button(Vector2.Zero, Vector2.Zero, InventoryBackground.DefaultId);
-            _applyText = new GUIText(Translation.Create("apply_rename_btn"), Vector2.Zero, Color.White, FontCache.GetBold(11));
+            _applyText = new GUIText(Translation.Create("apply_rename_btn"), Vector2.Zero, Color.White,
+                FontCache.GetBold(11));
             _applyButton.Click += OnApply;
             _applyButton.HoverEnter += () =>
             {
@@ -59,7 +61,7 @@ namespace Hedra.Engine.Player.Inventory
             Apply?.Invoke();
             _field.Defocus();
         }
-        
+
         public string Text
         {
             get => _field.Text;

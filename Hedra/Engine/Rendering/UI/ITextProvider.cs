@@ -1,4 +1,5 @@
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 
 namespace Hedra.Engine.Rendering.UI
 {

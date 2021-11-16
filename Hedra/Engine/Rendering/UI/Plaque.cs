@@ -1,5 +1,8 @@
 using System;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;\
+
+nusing SixLabors.Fonts;
 using Hedra.Engine.Management;
 using Hedra.Rendering.UI;
 using System.Numerics;
@@ -10,7 +13,7 @@ namespace Hedra.Engine.Rendering.UI
     {
         private readonly BackgroundTexture _plaqueBackground;
         private readonly GUIText _plaqueText;
-        
+
         public Plaque(Vector2 Position)
         {
             _plaqueBackground = new BackgroundTexture("Assets/UI/Plaque.png", Position, Vector2.One * .45f);
@@ -19,10 +22,10 @@ namespace Hedra.Engine.Rendering.UI
                 _plaqueBackground.Position,
                 Color.White,
                 FontCache.GetNormal(11)
-             );
+            );
         }
-        
-        
+
+
         public string Text
         {
             get => _plaqueText.Text;
@@ -37,7 +40,7 @@ namespace Hedra.Engine.Rendering.UI
                 _plaqueText.Scale *= scalar;
             }
         }
-        
+
         public float Opacity
         {
             get => _plaqueBackground.TextureElement.Opacity;

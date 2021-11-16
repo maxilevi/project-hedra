@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Linq;
 using Hedra.Engine.Game;
 using Hedra.Engine.Management;
@@ -58,7 +59,7 @@ namespace Hedra.Engine.Rendering.UI
                 Bitmap = bmp,
                 Path = "UI:TransparentTexture"
             });
-            ImmortalTextures = new[] {TransparentTexture};
+            ImmortalTextures = new[] { TransparentTexture };
         }
 
         public void DrawQuad()
@@ -70,9 +71,9 @@ namespace Hedra.Engine.Rendering.UI
 
         public void Add(GUITexture Texture)
         {
-            lock(_lock)
+            lock (_lock)
             {
-                if(!_textures.Contains(Texture))
+                if (!_textures.Contains(Texture))
                     _textures.Add(Texture);
             }
         }
@@ -96,10 +97,10 @@ namespace Hedra.Engine.Rendering.UI
                 _renderableUISet.Add(command);
             }
         }
-        
+
         public void Remove(GUITexture Texture)
         {
-            lock(_lock)
+            lock (_lock)
             {
                 if (_textures.Contains(Texture))
                     _textures.Remove(Texture);
@@ -119,16 +120,11 @@ namespace Hedra.Engine.Rendering.UI
         {
             lock (_lock)
             {
-                foreach (var texture in _textures)
-                {
-                    texture.Adjust();
-                }
-                
+                foreach (var texture in _textures) texture.Adjust();
+
                 foreach (var item in _renderableUISet)
-                {
-                    if(item.Renderable is IAdjustable adjustable)
+                    if (item.Renderable is IAdjustable adjustable)
                         adjustable.Adjust();
-                }
             }
         }
 
@@ -143,14 +139,11 @@ namespace Hedra.Engine.Rendering.UI
             DrawCount = 0;
             lock (_lock)
             {
-                for(var i = 0; i < _renderableUIList.Count; i++)
-                {
+                for (var i = 0; i < _renderableUIList.Count; i++)
                     if (_renderableUIList[i].Order == DrawOrder.Before)
-                    {
                         _renderableUIList[i].Renderable.Draw();
-                    }
-                }
             }
+
             SetDraw();
             lock (_lock)
             {
@@ -158,28 +151,22 @@ namespace Hedra.Engine.Rendering.UI
                 {
                     if (texture == null || !texture.Enabled || texture.Scale == Vector2.Zero) continue;
                     var id = texture.Id;
-                    if (IsValidId(id))
-                    {
-                        this.BaseDraw(texture, id);
-                    }
+                    if (IsValidId(id)) BaseDraw(texture, id);
                 }
             }
+
             UnsetDrawing();
             lock (_lock)
             {
                 for (var i = 0; i < _renderableUIList.Count; i++)
-                {
                     if (_renderableUIList[i].Order == DrawOrder.After)
-                    {
                         _renderableUIList[i].Renderable.Draw();
-                    }
-                }
             }
         }
 
         private void BaseDraw(GUITexture Texture, uint Id)
         {
-            if(Texture.Scale == Vector2.Zero || !Texture.Enabled) return;
+            if (Texture.Scale == Vector2.Zero || !Texture.Enabled) return;
 
             Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.Texture2D, Id);
@@ -235,7 +222,7 @@ namespace Hedra.Engine.Rendering.UI
             Renderer.ActiveTexture((TextureUnit)((uint)TextureUnit.Texture0 + Position));
             Renderer.BindTexture(TextureTarget.Texture2D, Id);
         }
-        
+
         public void Draw(GUITexture Texture, Shader CustomProgram = null)
         {
             if (!Texture.Enabled) return;
@@ -243,7 +230,7 @@ namespace Hedra.Engine.Rendering.UI
             if (IsValidId(id))
             {
                 SetDraw(CustomProgram);
-                this.BaseDraw(Texture, id);
+                BaseDraw(Texture, id);
                 UnsetDrawing(CustomProgram);
             }
         }
@@ -252,7 +239,7 @@ namespace Hedra.Engine.Rendering.UI
         {
             return Id != TransparentTexture && Id != 0;
         }
-        
+
         public void Dispose()
         {
             _vbo.Dispose();

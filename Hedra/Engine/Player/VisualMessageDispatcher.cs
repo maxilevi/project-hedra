@@ -1,7 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Linq;
 using System.Threading;
 using Hedra.Core;
@@ -36,7 +37,7 @@ namespace Hedra.Engine.Player
 
         public VisualMessageDispatcher(LocalPlayer Player)
         {
-            this._player = Player;
+            _player = Player;
             _messageQueue = new List<MessageItem>();
 
             _mainText = new GUIText(string.Empty, new Vector2(0, .7f), Color.White, FontCache.GetBold(32));
@@ -59,12 +60,12 @@ namespace Hedra.Engine.Player
             Player.UI.GamePanel.AddElement(_mainText);
             Player.UI.GamePanel.AddElement(_playerText);
 
-            RoutineManager.StartRoutine(this.ProcessMessages);
+            RoutineManager.StartRoutine(ProcessMessages);
         }
 
         private IEnumerator ProcessMessages()
         {
-            int prevSeed = World.Seed;
+            var prevSeed = World.Seed;
             var processing = false;
 
             while (Program.GameWindow.Exists)
@@ -132,7 +133,7 @@ namespace Hedra.Engine.Player
             };
             _messageQueue.Add(item);
         }
- 
+
         private void ProcessPlaqueMessage(MessageItem Item, Action Callback)
         {
             _plaqueText.Text = Item.Content;
@@ -140,15 +141,15 @@ namespace Hedra.Engine.Player
             _plaqueText.Enable();
             if (Item.PlaySound)
                 SoundPlayer.PlaySound(SoundType.NotificationSound, _player.Position);
-            
+
             FadeAndShow(Item, Callback);
         }
 
         public bool HasTitleMessages => _messageQueue.Any(M => M.Type == MessageType.Title);
-        
+
         public void ShowTitleMessage(string Message, float Seconds)
         {
-            this.ShowTitleMessage(Message, Seconds, Color.FromArgb(255, 40, 40, 40));
+            ShowTitleMessage(Message, Seconds, Color.FromArgb(255, 40, 40, 40));
         }
 
         private void ShowTitleMessage(string Message, float Seconds, Color TextColor)
@@ -163,7 +164,7 @@ namespace Hedra.Engine.Player
                 UIObject = _mainText
             };
 
-            _messageQueue.Add( item );
+            _messageQueue.Add(item);
         }
 
         private void ProcessTitleMessage(MessageItem Item, Action Callback)
@@ -177,12 +178,12 @@ namespace Hedra.Engine.Player
 
         public void ShowMessage(string Message, float Seconds)
         {
-            this.ShowMessage(Message, Seconds, DefaultColor);
+            ShowMessage(Message, Seconds, DefaultColor);
         }
 
         public void ShowMessage(string Message, float Seconds, Color TextColor)
         {
-            if(_messageQueue.Any( Item => Item.Content == Message.ToUpperInvariant() )) return;
+            if (_messageQueue.Any(Item => Item.Content == Message.ToUpperInvariant())) return;
             var item = new MessageItem
             {
                 Type = MessageType.Normal,
@@ -197,30 +198,26 @@ namespace Hedra.Engine.Player
         {
             _playerText.TextColor = Item.Color;
             _playerText.Text = Item.Content;
-            
+
             if (_player.UI.GamePanel.Enabled)
-            {
                 TaskScheduler.Asynchronous(delegate
                 {
                     _playerText.UIText.Opacity = 1;
-                    Thread.Sleep( (int) (Item.Time * 1000) );
+                    Thread.Sleep((int)(Item.Time * 1000));
                     _playerText.UIText.Opacity = 0;
                 }, Callback);
-            }
             else
-            {
                 Callback();
-            }
         }
 
         public void ShowMessageWhile(string Message, Func<bool> Condition)
         {
-            this.ShowMessageWhile(Message, Color.White, Condition);
+            ShowMessageWhile(Message, Color.White, Condition);
         }
 
         public void ShowMessageWhile(string Message, Color TextColor, Func<bool> Condition)
         {
-            if(!Condition()) return;
+            if (!Condition()) return;
             try
             {
                 if (_messageQueue.Any(Item => Item.Content == Message.ToUpperInvariant())) return;
@@ -230,6 +227,7 @@ namespace Hedra.Engine.Player
                 Log.WriteLine(e.Message);
                 return;
             }
+
             var item = new MessageItem
             {
                 Type = MessageType.While,
@@ -247,27 +245,20 @@ namespace Hedra.Engine.Player
             _playerText.Text = Item.Content;
 
             if (_player.UI.GamePanel.Enabled)
-            {
                 TaskScheduler.Asynchronous(delegate
                 {
                     _playerText.UIText.Opacity = 1;
-                    while (Item.Condition())
-                    {
-                        Thread.Sleep(5);
-                    }
-                    Thread.Sleep((int)(Item.Time * 1000));           
+                    while (Item.Condition()) Thread.Sleep(5);
+                    Thread.Sleep((int)(Item.Time * 1000));
                     _playerText.UIText.Opacity = 0;
                 }, Callback);
-            }
             else
-            {
                 Callback();
-            }
         }
 
         public void ShowNotification(string Message, Color FontColor, float Seconds)
         {
-            this.ShowNotification(Message, FontColor, Seconds, true);
+            ShowNotification(Message, FontColor, Seconds, true);
         }
 
         public void ShowNotification(string Message, Color FontColor, float Seconds, bool PlaySound)
@@ -294,40 +285,38 @@ namespace Hedra.Engine.Player
                 SoundPlayer.PlayUISound(SoundType.ButtonHover);
             FadeAndShow(Item, Callback);
         }
-        
+
         private void FadeAndShow(MessageItem Item, Action Callback)
         {
             if (_player.UI.GamePanel.Enabled || _player.UI.InMenu)
-            {
                 RoutineManager.StartRoutine(
                     FadeOverTimeCoroutine,
                     Item.UIObject,
                     Item.Time,
                     Callback
                 );
-            }
             else
-            {
                 Callback();
-            }
         }
-        
+
         private IEnumerator FadeOverTimeCoroutine(object[] Params)
         {
             var time = 0f;
-            var element = (ITransparent) Params[0];
-            var seconds = (float) Params[1];
-            var callback = (Action) Params[2];
+            var element = (ITransparent)Params[0];
+            var seconds = (float)Params[1];
+            var callback = (Action)Params[2];
             while (element.Opacity < 1 && (_player.UI.GamePanel.Enabled || _player.UI.InMenu))
             {
                 element.Opacity += Time.IndependentDeltaTime * FadeSpeed;
                 yield return null;
             }
+
             while (time < seconds && (_player.UI.GamePanel.Enabled || _player.UI.InMenu))
             {
                 time += Time.IndependentDeltaTime;
                 yield return null;
             }
+
             while (element.Opacity > 0 && (_player.UI.GamePanel.Enabled || _player.UI.InMenu))
             {
                 element.Opacity -= Time.IndependentDeltaTime * FadeSpeed;
@@ -350,7 +339,8 @@ namespace Hedra.Engine.Player
         public Func<bool> Condition;
     }
 
-    public enum MessageType{
+    public enum MessageType
+    {
         Title,
         Notification,
         Normal,

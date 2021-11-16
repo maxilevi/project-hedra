@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Linq;
 using Hedra.Components;
 using Hedra.Core;
@@ -32,7 +33,7 @@ namespace Hedra.Engine.Game
         public event EventHandler AfterSave;
         public event EventHandler BeforeSave;
         public bool Exists => Program.GameWindow.Exists;
-        public bool IsExiting => Program.GameWindow.IsExiting;    
+        public bool IsExiting => Program.GameWindow.IsExiting;
         public KeyboardManager Keyboard { get; private set; }
         public bool IsLoading => _loadingScreen?.IsLoading ?? false;
         private IPlayer[] _players;
@@ -43,10 +44,10 @@ namespace Hedra.Engine.Game
         public void Load()
         {
             Keyboard = new KeyboardManager();
-            
+
             Log.WriteLine("Loading the world...");
             World.Load();
-            
+
             Log.WriteLine("Loading the player...");
             _players = new IPlayer[]
             {
@@ -59,20 +60,20 @@ namespace Hedra.Engine.Game
                     }
                 }
             };
-            
+
             Log.WriteLine("Creating the GUI...");
             Player.UI.ShowMenu();
-            Player.UI.CharacterSelector.Disable(); 
+            Player.UI.CharacterSelector.Disable();
             Player.UI.Menu.Enable();
             _loadingScreen = new LoadingScreen(Player);
             RoutineManager.StartRoutine(LoadingScreenCoroutine);
             LoadMenu();
-            
+
             Log.WriteLine("Loading the character classes...");
             var classes = ClassDesign.AvailableClasses;
             for (var i = 0; i < classes.Length; i++)
             {
-                var classObject = ClassDesign.FromType(classes[i]); 
+                var classObject = ClassDesign.FromType(classes[i]);
                 Log.WriteLine($"Loading character class '{classObject.Name}'");
             }
         }
@@ -86,12 +87,12 @@ namespace Hedra.Engine.Game
             Player.Reset();
             Player.UI.ShowMenu();
         }
-        
+
         private IEnumerator MenuCoroutine()
         {
-            while(GameManager.InStartMenu)
-            {               
-                var location = MenuBackground.NewLocation;            
+            while (GameManager.InStartMenu)
+            {
+                var location = MenuBackground.NewLocation;
                 Player.Position = location;
                 Player.Model.Position = location;
                 Player.Model.Alpha = 0f;
@@ -106,17 +107,17 @@ namespace Hedra.Engine.Game
 
         public void LoadCharacter(PlayerInformation Information)
         {
-            if(Information.RealmData.Length == 0 || GameSettings.NewWorld)
+            if (Information.RealmData.Length == 0 || GameSettings.NewWorld)
                 NewRun(Information);
             else
                 MakeCurrent(Information);
         }
-        
+
         public void MakeCurrent(PlayerInformation Information)
         {
             Player.Reset();
             Player.Loader.Reset();
-            Player.UI.CharacterSelector.StopModels();//So as to fix loose ends
+            Player.UI.CharacterSelector.StopModels(); //So as to fix loose ends
             Player.Class = Information.Class;
             Player.Customization = Information.Customization;
             Player.Level = Information.Level;
@@ -132,9 +133,9 @@ namespace Hedra.Engine.Game
             Player.Realms.UnSerialize(Information.RealmData);
             Player.View.CameraHeight = Camera.DefaultCameraHeight;
 
-            if(Player.IsDead)
+            if (Player.IsDead)
                 Player.Respawn();
-            if(Player.IsDead)
+            if (Player.IsDead)
                 Player.Respawn();
             Player.Inventory.SetItems(Information.Items);
             Player.Crafting.SetRecipes(Information.Recipes);
@@ -144,7 +145,7 @@ namespace Hedra.Engine.Game
             GameSettings.DarkEffect = false;
             RoutineManager.StartRoutine(SpawnCoroutine);
             Log.WriteLine($"Making '{Information.Name}' current with seed {World.Seed}.");
-            
+
             /* Skills need to be updated after everything is set */
             Player.Toolbar.UpdateSkills();
             /* We set health and mana last in order to not affect stuff like bonus health */
@@ -166,24 +167,21 @@ namespace Hedra.Engine.Game
                 ItemType.FishingRodRecipe,
                 ItemType.CookedSalmonRecipe,
                 ItemType.CookedTroutRecipe,
-                ItemType.CookedFishRecipe,
+                ItemType.CookedFishRecipe
             }.Select(T => T.ToString()).ToArray();
             for (var i = 0; i < defaultRecipes.Length; i++)
-            {
                 if (!Player.Crafting.HasRecipe(defaultRecipes[i]))
                     Player.Crafting.LearnRecipe(defaultRecipes[i]);
-            }
         }
 
         private void SetRestrictions(PlayerInformation Information)
         {
             var modRestrictions = RestrictionsFactory.Instance.Build(Information.Class.GetType());
             for (var i = 0; i < modRestrictions.Length; i++)
-            {
                 Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, modRestrictions[i]);
-            }
 
-            Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, Information.Class.StartingItems.First(P => P.Key == PlayerInventory.WeaponHolder).Value.EquipmentType);
+            Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder,
+                Information.Class.StartingItems.First(P => P.Key == PlayerInventory.WeaponHolder).Value.EquipmentType);
             Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, EquipmentType.HoldableObject);
             Player.Inventory.AddRestriction(PlayerInventory.BootsHolder, EquipmentType.Boots);
             Player.Inventory.AddRestriction(PlayerInventory.PantsHolder, EquipmentType.Pants);
@@ -201,12 +199,13 @@ namespace Hedra.Engine.Game
             Player.Realms.Create(World.RandomSeed);
             Player.Realms.Create(World.RandomSeed, WorldType.GhostTown);
             Player.Realms.GoTo(RealmHandler.Overworld);
-            Player.Model = new HumanoidModel(Player);         
-            if(Player.Inventory.MainWeapon != null)
+            Player.Model = new HumanoidModel(Player);
+            if (Player.Inventory.MainWeapon != null)
             {
                 Player.Inventory.MainWeapon.FlushCache();
-                Player.SetWeapon(Player.Inventory.MainWeapon.Weapon);               
+                Player.SetWeapon(Player.Inventory.MainWeapon.Weapon);
             }
+
             SpawnCampfireDesign.AlignPlayer(Player);
             Player.Health = Player.MaxHealth;
             Player.Mana = Player.MaxMana;
@@ -216,17 +215,14 @@ namespace Hedra.Engine.Game
             Player.Enabled = true;
             _isNewRun = true;
         }
-        
+
         private IEnumerator SpawnCoroutine()
         {
             SoundtrackManager.PlayAmbient();
             Player.SearchComponent<DamageComponent>().Immune = true;
             var chunkOffset = World.ToChunkSpace(Player.Position);
             World.StructureHandler.CheckStructures(chunkOffset);
-            while (_loadingScreen.IsLoading)
-            {
-                yield return null;
-            }
+            while (_loadingScreen.IsLoading) yield return null;
             Player.UI.HideMenu();
             Player.UI.GamePanel.Enable();
 
@@ -236,7 +232,7 @@ namespace Hedra.Engine.Game
             Player.CanInteract = true;
             GameManager.Player.PlaySpawningAnimation = true;
             if (!GameManager.Player.MessageDispatcher.HasTitleMessages)
-                GameManager.Player.MessageDispatcher.ShowTitleMessage(World.WorldBuilding.GenerateName(), 1.5f);           
+                GameManager.Player.MessageDispatcher.ShowTitleMessage(World.WorldBuilding.GenerateName(), 1.5f);
         }
 
         private IEnumerator LoadingScreenCoroutine()
@@ -285,8 +281,8 @@ namespace Hedra.Engine.Game
 
         public bool InStartMenu => World.Seed == World.MenuSeed;
 
-        public bool InMenu => Player != null && Player.UI.InMenu && !Player.UI.Hide && World.Seed != World.MenuSeed;        
-        
+        public bool InMenu => Player != null && Player.UI.InMenu && !Player.UI.Hide && World.Seed != World.MenuSeed;
+
         public bool SpawningEffect
         {
             get => _spawningEffect;
@@ -295,11 +291,13 @@ namespace Hedra.Engine.Game
                 if (!value || SpawningEffect || GameSettings.Paused) return;
                 _spawningEffect = true;
                 GameSettings.BloomModifier = 8.0f;
-                TaskScheduler.While( () => Math.Abs(GameSettings.BloomModifier - 1.0f) > .005f, delegate
-                {
-                    GameSettings.BloomModifier = Mathf.Lerp(GameSettings.BloomModifier, 1.0f, Time.IndependentDeltaTime);
-                });
-                TaskScheduler.When( () => Math.Abs(GameSettings.BloomModifier - 1.0f) < .005f, delegate
+                TaskScheduler.While(() => Math.Abs(GameSettings.BloomModifier - 1.0f) > .005f,
+                    delegate
+                    {
+                        GameSettings.BloomModifier =
+                            Mathf.Lerp(GameSettings.BloomModifier, 1.0f, Time.IndependentDeltaTime);
+                    });
+                TaskScheduler.When(() => Math.Abs(GameSettings.BloomModifier - 1.0f) < .005f, delegate
                 {
                     GameSettings.BloomModifier = 1.0f;
                     _spawningEffect = false;

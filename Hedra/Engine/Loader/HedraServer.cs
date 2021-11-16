@@ -1,7 +1,7 @@
 using System;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Threading;
-
 using Hedra.API;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ClassSystem;
@@ -41,10 +41,11 @@ namespace Hedra.Engine.Loader
 
             Renderer.Provider = new DummyGLProvider();
             SoundPlayer.Provider = new DummySoundProvider();
-            
+
             Log.WriteLine("Starting hedra dedicated server...");
             Hedra.LoadBoilerplate();
-            var information = LocalPlayer.BuildNewPlayer("HOST", ClassDesign.FromString(Class.Mage), new CustomizationData());
+            var information =
+                LocalPlayer.BuildNewPlayer("HOST", ClassDesign.FromString(Class.Mage), new CustomizationData());
             GameManager.MakeCurrent(information);
             Network.Instance.Host();
         }
@@ -58,14 +59,31 @@ namespace Hedra.Engine.Loader
 
         private bool IsAlive => true;
 
-        public void RunOnce() => throw new System.NotImplementedException();
-        public void Dispose() => throw new System.NotImplementedException();
+        public void RunOnce()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+
         public bool Fullscreen { get; set; }
-        public void Close() => throw new System.NotImplementedException();
-        public void Exit() => throw new System.NotImplementedException();
+
+        public void Close()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Exit()
+        {
+            throw new NotImplementedException();
+        }
+
         public bool IsExiting => false;
         public bool Exists => true;
-        
+
         public double TargetFramerate { get; set; }
         public bool VSync { get; set; }
         public WindowState WindowState { get; set; }
@@ -74,7 +92,7 @@ namespace Hedra.Engine.Loader
         public int Width { get; set; }
         public WindowBorder WindowBorder { get; set; }
         public bool CursorVisible { get; set; }
-        
+
         public bool FinishedLoadingSplashScreen => true;
         public string GameVersion => "SERVER";
         public int BuildNumber { get; }
@@ -86,6 +104,7 @@ namespace Hedra.Engine.Loader
         public IWindow Window => null;
 
         public Vector2 MousePosition { get; }
+
         public void SetIcon(Image Icon)
         {
             throw new NotImplementedException();

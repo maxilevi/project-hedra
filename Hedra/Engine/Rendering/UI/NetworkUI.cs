@@ -6,8 +6,10 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using System;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Numerics;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
@@ -26,40 +28,43 @@ namespace Hedra.Engine.Rendering.UI
         private TextField _ipField;
         private List<UIElement> _joinButtons = new List<UIElement>();
         private List<UIElement> _hostButtons = new List<UIElement>();
-        
+
         public NetworkUI()
         {
-            int fontSize = 14;
-            Color fontColor = Color.White;
-            
-            Vector2 bandPosition = new Vector2(0f, .8f);
-            BackgroundTexture blackBand = new BackgroundTexture(Color.FromArgb(255,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LeftRight);
-            
-            Button hostTab = new Button(new Vector2(-0.1f, bandPosition.Y),
-                                new Vector2(0.15f,0.075f), "Host", Color.White, FontCache.GetNormal(fontSize));
-            
-            hostTab.Click += delegate { 
-                this.SetHostButtonState(true);
-                this.SetJoinButtonState(false);
-            };
-            
-            Button joinTab = new Button(new Vector2(0.1f, bandPosition.Y),
-                                new Vector2(0.15f,0.075f), "Join", Color.White, FontCache.GetNormal(fontSize));
-            joinTab.Click += delegate { 
-                this.SetHostButtonState(false);
-                this.SetJoinButtonState(true);
-            };
-            
-            GUIText gameId = new GUIText("Game ID", new Vector2(0,-.25f), Color.White, FontCache.GetNormal(fontSize));
-            _ipField = new TextField(new Vector2(0,-.4f), new Vector2(.20f,.05f));
-            _ipField.Text = string.Empty;
-            
-            var join = new Button(new Vector2(0,-.65f), new Vector2(.15f,.05f), "Join", Color.White, FontCache.GetNormal(fontSize));
-            join.Click += delegate {
+            var fontSize = 14;
+            var fontColor = Color.White;
 
+            var bandPosition = new Vector2(0f, .8f);
+            var blackBand = new BackgroundTexture(Color.FromArgb(255, 69, 69, 69), Color.FromArgb(255, 19, 19, 19),
+                bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LeftRight);
+
+            var hostTab = new Button(new Vector2(-0.1f, bandPosition.Y),
+                new Vector2(0.15f, 0.075f), "Host", Color.White, FontCache.GetNormal(fontSize));
+
+            hostTab.Click += delegate
+            {
+                SetHostButtonState(true);
+                SetJoinButtonState(false);
             };
-            
-            Button host = new Button(new Vector2(0,-.65f), new Vector2(.15f,.05f), "Host", Color.White, FontCache.GetNormal(fontSize));
+
+            var joinTab = new Button(new Vector2(0.1f, bandPosition.Y),
+                new Vector2(0.15f, 0.075f), "Join", Color.White, FontCache.GetNormal(fontSize));
+            joinTab.Click += delegate
+            {
+                SetHostButtonState(false);
+                SetJoinButtonState(true);
+            };
+
+            var gameId = new GUIText("Game ID", new Vector2(0, -.25f), Color.White, FontCache.GetNormal(fontSize));
+            _ipField = new TextField(new Vector2(0, -.4f), new Vector2(.20f, .05f));
+            _ipField.Text = string.Empty;
+
+            var join = new Button(new Vector2(0, -.65f), new Vector2(.15f, .05f), "Join", Color.White,
+                FontCache.GetNormal(fontSize));
+            join.Click += delegate { };
+
+            var host = new Button(new Vector2(0, -.65f), new Vector2(.15f, .05f), "Host", Color.White,
+                FontCache.GetNormal(fontSize));
             /*host.Click += delegate {
                 if(NetworkManager.Host()){
                     
@@ -79,55 +84,53 @@ namespace Hedra.Engine.Rendering.UI
                 }
             };*/
 
-            this._joinButtons.Add(_ipField);
-            this._joinButtons.Add(join);
-            this._joinButtons.Add(gameId);
-            this._hostButtons.Add(host);
-            this.AddElement(blackBand);
-            this.AddElement(joinTab);
-            this.AddElement(hostTab);
-            
-            for(int i = 0; i < _joinButtons.Count; i++){
-                this.AddElement(_joinButtons[i]);
-            }
-            for(int i = 0; i < _hostButtons.Count; i++){
-                this.AddElement(_hostButtons[i]);
-            }
-            
-            OnPanelStateChange += delegate(object Sender, PanelState E) {
+            _joinButtons.Add(_ipField);
+            _joinButtons.Add(join);
+            _joinButtons.Add(gameId);
+            _hostButtons.Add(host);
+            AddElement(blackBand);
+            AddElement(joinTab);
+            AddElement(hostTab);
+
+            for (var i = 0; i < _joinButtons.Count; i++) AddElement(_joinButtons[i]);
+            for (var i = 0; i < _hostButtons.Count; i++) AddElement(_hostButtons[i]);
+
+            OnPanelStateChange += delegate(object Sender, PanelState E)
+            {
                 //if(e == PanelState.DISABLED){
                 //    GraphicsOptions.DarkEffect = false;
                 //}
-                if(E == PanelState.Enabled){
-                    this.SetJoinButtonState(false);
-                    this.SetHostButtonState(true);
+                if (E == PanelState.Enabled)
+                {
+                    SetJoinButtonState(false);
+                    SetHostButtonState(true);
                     GameSettings.DarkEffect = true;
                 }
             };
-            
-            this.OnEscapePressed += delegate {
-                this.Disable(); 
+
+            OnEscapePressed += delegate
+            {
+                Disable();
                 GameManager.Player.UI.Menu.Enable();
             };
         }
-        
-        public void SetJoinButtonState(bool State){
-            for(int i = 0; i < _joinButtons.Count; i++){
-                if(State)
+
+        public void SetJoinButtonState(bool State)
+        {
+            for (var i = 0; i < _joinButtons.Count; i++)
+                if (State)
                     _joinButtons[i].Enable();
                 else
                     _joinButtons[i].Disable();
-            }
         }
-        
-        public void SetHostButtonState(bool State){
-            for(int i = 0; i < _hostButtons.Count; i++){
-                if(State)
+
+        public void SetHostButtonState(bool State)
+        {
+            for (var i = 0; i < _hostButtons.Count; i++)
+                if (State)
                     _hostButtons[i].Enable();
                 else
                     _hostButtons[i].Disable();
-            }
         }
-        
     }
 }

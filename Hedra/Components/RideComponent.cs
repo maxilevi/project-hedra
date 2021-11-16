@@ -7,7 +7,8 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using Hedra.AISystem;
 using Hedra.Components.Effects;
 using Hedra.Core;
@@ -50,7 +51,7 @@ namespace Hedra.Components
                 _shouldUnride = EventArgs.Key == Controls.Descend && _canUnride;
             });
         }
-        
+
         public override void Update()
         {
             var player = GameManager.Player;
@@ -67,11 +68,11 @@ namespace Hedra.Components
                             Color.White);
                         Parent.Model.Tint = new Vector4(2.0f, 2.0f, 2.0f, 1f);
                         _canRide = true;
-                        if (_shouldRide) this.Ride(player);
+                        if (_shouldRide) Ride(player);
                     }
                 }
                 else
-                {                    
+                {
                     _canRide = false;
                 }
             }
@@ -81,31 +82,27 @@ namespace Hedra.Components
             }
 
             if (_hasRider && _rider.IsRiding)
-            {
                 _canUnride = true;
-            }
             else
-            {
                 _canUnride = false;
-            }
-            if( _hasRider && _rider is LocalPlayer && _shouldUnride || _hasRider && (_rider.IsDead || _rider.IsInsideABuilding))
+            if (_hasRider && _rider is LocalPlayer && _shouldUnride ||
+                _hasRider && (_rider.IsDead || _rider.IsInsideABuilding))
                 _rider.IsRiding = false;
 
 
-            if(_hasRider && !_rider.IsRiding)
-            {
-                Quit();
-            }
+            if (_hasRider && !_rider.IsRiding) Quit();
         }
 
         private void Ride(IHumanoid Entity)
         {
-            if(_hasRider || Entity.IsRiding) return;
-            
+            if (_hasRider || Entity.IsRiding) return;
+
             _rider = Entity;
-            _rider.ComponentManager.AddComponentWhile(new SpeedBonusComponent(_rider, -_rider.Speed + Parent.Speed * SpeedMultiplier), () => _rider != null && _rider.IsRiding);
+            _rider.ComponentManager.AddComponentWhile(
+                new SpeedBonusComponent(_rider, -_rider.Speed + Parent.Speed * SpeedMultiplier),
+                () => _rider != null && _rider.IsRiding);
             _hasRider = true;
-            var model = (QuadrupedModel) Parent.Model;
+            var model = (QuadrupedModel)Parent.Model;
             _rider.IsRiding = true;
             _rider.Model.RidingOffset = Vector3.UnitY * (_normalizedHeightOffset * model.Scale.Y - 1.0f);
             model.AlignWithTerrain = false;
@@ -123,7 +120,7 @@ namespace Hedra.Components
         private void Quit()
         {
             Parent.Position = _rider.Position;
-            var model = (QuadrupedModel) Parent.Model;
+            var model = (QuadrupedModel)Parent.Model;
             model.AlignWithTerrain = true;
             model.Rider = null;
             _rider.IsRiding = false;
@@ -131,7 +128,7 @@ namespace Hedra.Components
             _hasRider = false;
             _ai.Enabled = true;
             _healthBar.Hide = false;
-            
+
             Parent.Physics.UsePhysics = true;
             Parent.Physics.CollidesWithEntities = true;
             Parent.SearchComponent<DamageComponent>().Immune = false;
@@ -141,7 +138,7 @@ namespace Hedra.Components
         {
             EventDispatcher.UnregisterKeyDown(this);
             if (!_hasRider) return;
-            this.Quit();
+            Quit();
         }
     }
 }

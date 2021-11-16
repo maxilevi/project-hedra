@@ -6,11 +6,12 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Drawing.Text;
 using System.Reflection;
 using Hedra.Core;
@@ -45,11 +46,11 @@ namespace Hedra.Engine.Rendering.UI
         private readonly Button _loadButton;
         public bool InMenu => Menu.Enabled || _optionsMenu.Enabled || ConnectPanel.Enabled;
         private static readonly Color DefaultFontColor = Color.White;
-        
-        public UserInterface (IPlayer Player)
+
+        public UserInterface(IPlayer Player)
         {
-            this._player = Player;
-            
+            _player = Player;
+
             Menu = new Panel();
             _optionsMenu = new OptionsUI();
             GamePanel = new GameUI(Player);
@@ -61,19 +62,21 @@ namespace Hedra.Engine.Rendering.UI
             var bandPosition = new Vector2(0, -.8f);
             const int fontSize = 16;
             _title = new BackgroundTexture(Graphics2D.LoadFromAssets("Assets/UI/MenuLogo.png"),
-                                   new Vector2(-.405f, .35f), Graphics2D.SizeFromAssets("Assets/UI/MenuLogo.png").As1920x1080() * .75f);
-            
-            var blackBand = new BackgroundTexture(Color.FromArgb(0,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, BlackBandSize, GradientType.LeftRight);
-            
-            
+                new Vector2(-.405f, .35f), Graphics2D.SizeFromAssets("Assets/UI/MenuLogo.png").As1920x1080() * .75f);
+
+            var blackBand = new BackgroundTexture(Color.FromArgb(0, 69, 69, 69), Color.FromArgb(255, 19, 19, 19),
+                bandPosition, BlackBandSize, GradientType.LeftRight);
+
+
             var newRun = new Button(new Vector2(.1f, bandPosition.Y),
-                                new Vector2(0.15f,0.075f), Translation.Create("new_world"), DefaultFontColor, FontCache.GetNormal(fontSize));
-            
+                new Vector2(0.15f, 0.075f), Translation.Create("new_world"), DefaultFontColor,
+                FontCache.GetNormal(fontSize));
+
             newRun.Click += delegate
             {
                 GameSettings.NewWorld = true;
                 CharacterSelector.ShouldHost = false;
-                if(GameManager.InStartMenu)
+                if (GameManager.InStartMenu)
                 {
                     Menu.Disable();
                     CharacterSelector.Enable();
@@ -83,36 +86,37 @@ namespace Hedra.Engine.Rendering.UI
                     GameManager.NewRun(_player);
                 }
             };
-            
+
             _loadButton = new Button(new Vector2(.3f, bandPosition.Y),
-                                         new Vector2(0.15f,0.075f), Translation.Create("load_world"), DefaultFontColor, FontCache.GetNormal(fontSize));
+                new Vector2(0.15f, 0.075f), Translation.Create("load_world"), DefaultFontColor,
+                FontCache.GetNormal(fontSize));
             _loadButton.Click += delegate
             {
                 GameSettings.NewWorld = false;
-                if(!GameManager.InStartMenu)
+                if (!GameManager.InStartMenu)
                 {
                     AutosaveManager.Save();
                     GameManager.LoadMenu();
                 }
+
                 CharacterSelector.ShouldHost = false;
                 Menu.Disable();
                 CharacterSelector.Enable();
             };
-            
+
             var inviteFriends = new Button(new Vector2(.3f, bandPosition.Y), Vector2.Zero,
                 Translation.Create("invite_friends"), DefaultFontColor, FontCache.GetNormal(fontSize));
-            
+
             var hostWorld = new Button(new Vector2(.535f, bandPosition.Y),
-                                         new Vector2(0.15f,0.075f), Translation.Create("host_world"), DefaultFontColor, FontCache.GetNormal(fontSize));
-            
+                new Vector2(0.15f, 0.075f), Translation.Create("host_world"), DefaultFontColor,
+                FontCache.GetNormal(fontSize));
+
             var disconnect = new Button(new Vector2(.535f, bandPosition.Y),
-                                         new Vector2(0.15f,0.075f), Translation.Create("disconnect"), DefaultFontColor, FontCache.GetNormal(fontSize));
-            
-            inviteFriends.Click += delegate
-            {
-                Network.Instance.InviteFriends();
-            };
-            
+                new Vector2(0.15f, 0.075f), Translation.Create("disconnect"), DefaultFontColor,
+                FontCache.GetNormal(fontSize));
+
+            inviteFriends.Click += delegate { Network.Instance.InviteFriends(); };
+
             hostWorld.Click += delegate
             {
                 if (GameManager.InStartMenu)
@@ -129,7 +133,7 @@ namespace Hedra.Engine.Rendering.UI
                     TaskScheduler.After(.05f, () => disconnect.CanClick = true);
                 }
             };
-            
+
             disconnect.Click += delegate
             {
                 Network.Instance.Disconnect();
@@ -137,27 +141,31 @@ namespace Hedra.Engine.Rendering.UI
                 hostWorld.CanClick = false;
                 TaskScheduler.After(.05f, () => hostWorld.CanClick = true);
             };
-            
-            Button options = new Button(new Vector2(.75f, bandPosition.Y),
-                                        new Vector2(0.15f,0.075f), Translation.Create("options"), DefaultFontColor, FontCache.GetNormal(fontSize));
-            
+
+            var options = new Button(new Vector2(.75f, bandPosition.Y),
+                new Vector2(0.15f, 0.075f), Translation.Create("options"), DefaultFontColor,
+                FontCache.GetNormal(fontSize));
+
             options.Click += delegate
             {
-                Menu.Disable(); _optionsMenu.Enable();
+                Menu.Disable();
+                _optionsMenu.Enable();
             };
-            
-            Button quit = new Button(new Vector2(.9f, bandPosition.Y),
-                                     new Vector2(0.15f,0.075f), Translation.Create("exit"), DefaultFontColor, FontCache.GetNormal(fontSize));
-            
+
+            var quit = new Button(new Vector2(.9f, bandPosition.Y),
+                new Vector2(0.15f, 0.075f), Translation.Create("exit"), DefaultFontColor,
+                FontCache.GetNormal(fontSize));
+
             quit.Click += delegate { Program.GameWindow.Close(); };
-            
-            if(Program.GameWindow.GameVersion != "Unknown")
+
+            if (Program.GameWindow.GameVersion != "Unknown")
             {
-                var versionText = new GUIText(Program.GameWindow.GameVersion, Vector2.Zero, Color.Black, FontCache.GetNormal(8));
-                versionText.Position = new Vector2(-1,1) + new Vector2(versionText.Scale.X, -versionText.Scale.Y);
+                var versionText = new GUIText(Program.GameWindow.GameVersion, Vector2.Zero, Color.Black,
+                    FontCache.GetNormal(8));
+                versionText.Position = new Vector2(-1, 1) + new Vector2(versionText.Scale.X, -versionText.Scale.Y);
                 Menu.AddElement(versionText);
             }
-            
+
             Menu.AddElement(blackBand);
             Menu.AddElement(hostWorld);
             Menu.AddElement(_title);
@@ -175,7 +183,6 @@ namespace Hedra.Engine.Rendering.UI
                 //if(!Steam.Instance.IsAvailable) hostWorld.Disable();
                 if (Network.Instance.IsAlive)
                 {
-
                     newRun.Disable();
                     _loadButton.Disable();
                     hostWorld.Disable();
@@ -195,25 +202,22 @@ namespace Hedra.Engine.Rendering.UI
                 Menu.Enable();
             }
         }
-        
+
         public void Update()
         {
             if (_player == null) return;
 
             _optionsMenu.Update();
             GamePanel.Update();
-            _loadButton.Text.Text = GameManager.InStartMenu 
-                ? Translations.Get("load_world") 
+            _loadButton.Text.Text = GameManager.InStartMenu
+                ? Translations.Get("load_world")
                 : Translations.Get("start_menu");
         }
-        
+
         public void ShowMenu()
         {
-            if (GameSettings.ContinousMove)
-            {
-                _player.View.LockMouse = false;
-            }
-            if(GameManager.IsLoading || GameManager.InMenu || GameSettings.ContinousMove) return;
+            if (GameSettings.ContinousMove) _player.View.LockMouse = false;
+            if (GameManager.IsLoading || GameManager.InMenu || GameSettings.ContinousMove) return;
 
             if (ShowHelp)
                 _helpPanel.Enable();
@@ -228,7 +232,7 @@ namespace Hedra.Engine.Rendering.UI
             CharacterCreator.Disable();
             ConnectPanel.Disable();
             _helpPanel.Disable();
-            if(!Network.Instance.IsAlive)
+            if (!Network.Instance.IsAlive)
             {
                 GameSettings.Paused = true;
             }
@@ -238,6 +242,7 @@ namespace Hedra.Engine.Rendering.UI
                 _player.View.CaptureMovement = false;
                 _player.CanInteract = false;
             }
+
             Cursor.Show = true;
             GameSettings.DarkEffect = false;
             Cursor.Center();
@@ -260,6 +265,7 @@ namespace Hedra.Engine.Rendering.UI
         }
 
         private bool _showHelp;
+
         public bool ShowHelp
         {
             get => _showHelp;
@@ -274,31 +280,40 @@ namespace Hedra.Engine.Rendering.UI
                     _helpPanel.Disable();
             }
         }
-        
+
         private List<bool> _wasEnabled = new List<bool>();
         private bool _mEnabled;
-        public bool Hide{
-            get{ return _mEnabled; }
-            set{
+
+        public bool Hide
+        {
+            get => _mEnabled;
+            set
+            {
                 var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-                int k = 0 ;
-                for(int i = 0; i < this.GetType().GetFields(flags).Length; i++)
+                var k = 0;
+                for (var i = 0; i < GetType().GetFields(flags).Length; i++)
                 {
-                    var field = this.GetType().GetFields(flags)[i];
-                    if(typeof(Panel).IsAssignableFrom(field.FieldType)){
-                        if(value){
+                    var field = GetType().GetFields(flags)[i];
+                    if (typeof(Panel).IsAssignableFrom(field.FieldType))
+                    {
+                        if (value)
+                        {
                             _wasEnabled.Add((field.GetValue(this) as Panel).Enabled);
                             (field.GetValue(this) as Panel).Disable();
-                        }else{
-                            if(!_mEnabled)
+                        }
+                        else
+                        {
+                            if (!_mEnabled)
                                 return;
-                            if(_wasEnabled[k])
+                            if (_wasEnabled[k])
                                 (field.GetValue(this) as Panel).Enable();
                         }
+
                         k++;
                     }
                 }
-                if(!value)
+
+                if (!value)
                     _wasEnabled.Clear();
                 _mEnabled = value;
             }

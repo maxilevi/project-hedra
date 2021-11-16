@@ -10,9 +10,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Linq;
-
 using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
@@ -72,7 +72,7 @@ namespace Hedra.Components
         public TalkComponent(IHumanoid Parent, Translation LiveTranslation = null) : base(Parent)
         {
             _lines = new List<Translation>();
-            if(LiveTranslation != null) _lines.Add(LiveTranslation);
+            if (LiveTranslation != null) _lines.Add(LiveTranslation);
             _talkingAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorTalk.dae");
             _talkingAnimation.Loop = false;
             _talkingAnimation.OnAnimationEnd += Sender =>
@@ -90,11 +90,11 @@ namespace Hedra.Components
         private bool IsAvailableToTalk()
         {
             var earlyExit = Parent.IsNear(GameManager.Player, TalkRadius)
-                   && !Talking
-                   && GameManager.Player.CanInteract
-                   && !PlayerInterface.Showing
-                   && !Parent.Model.IsMoving
-                   && CanTalk;
+                            && !Talking
+                            && GameManager.Player.CanInteract
+                            && !PlayerInterface.Showing
+                            && !Parent.Model.IsMoving
+                            && CanTalk;
             if (!earlyExit) return false;
             return true;
         }
@@ -108,28 +108,21 @@ namespace Hedra.Components
         {
             _lines.Clear();
         }
-        
+
         public override void Update()
         {
             var availableToTalk = IsAvailableToTalk();
             if (availableToTalk)
             {
-                GameManager.Player.MessageDispatcher.ShowMessageWhile(Translations.Get("to_talk", Controls.Interact), Color.White, IsAvailableToTalk);
+                GameManager.Player.MessageDispatcher.ShowMessageWhile(Translations.Get("to_talk", Controls.Interact),
+                    Color.White, IsAvailableToTalk);
                 Parent.Model.Tint = Vector4.One * 3f;
 
-                if (_shouldTalk)
-                {
-                    this.TalkToPlayer();
-                }         
+                if (_shouldTalk) TalkToPlayer();
             }
-            if (Talking && Parent.IsNear(_talker, TalkRadius))
-            {
-                Parent.LookAt(_talker);
-            }
-            if(_wasAvailableToTalk && !availableToTalk)
-            {
-                Parent.Model.Tint = Vector4.One;
-            }
+
+            if (Talking && Parent.IsNear(_talker, TalkRadius)) Parent.LookAt(_talker);
+            if (_wasAvailableToTalk && !availableToTalk) Parent.Model.Tint = Vector4.One;
             _wasAvailableToTalk = availableToTalk;
         }
 
@@ -152,7 +145,7 @@ namespace Hedra.Components
                 _talker = null;
                 TaskScheduler.When(
                     () => Parent.Model.AnimationBlending != _talkingAnimation
-                    && Parent.Model.AnimationPlaying != _talkingAnimation,
+                          && Parent.Model.AnimationPlaying != _talkingAnimation,
                     () =>
                     {
                         OnTalkingEnded?.Invoke(_talker);
@@ -166,12 +159,12 @@ namespace Hedra.Components
         {
             if (_dialogCreated) return;
             _dialogCreated = true;
-            
+
             var dialog = SelectMainThought();
             _lines.AddRange(GetBeforeLines());
-            if(dialog != null) _lines.Insert(0, dialog);
+            if (dialog != null) _lines.Insert(0, dialog);
             _lines.AddRange(GetAfterLines());
-            
+
             if (_lines.Count == 0) _lines.Add(Phrases[Utils.Rng.Next(0, Phrases.Length)]);
         }
 
@@ -181,7 +174,7 @@ namespace Hedra.Components
                 return ThoughtComponent.BeforeDialog;
             return new Translation[0];
         }
-        
+
         private Translation[] GetAfterLines()
         {
             if (ThoughtComponent != null)
@@ -206,7 +199,7 @@ namespace Hedra.Components
 
             _board = new TextBillboard(lifetime, string.Empty, Color.White,
                 FontCache.GetNormal(10), FollowFunc);
-            
+
             RoutineManager.StartRoutine(TalkRoutine, _board, backBoard);
 
             _shouldTalk = false;
@@ -217,7 +210,7 @@ namespace Hedra.Components
                 {
                     _talker = null;
                     Talking = false;
-                    if(AutoRemove)
+                    if (AutoRemove)
                         Parent.RemoveComponent(this);
                 }
             );
@@ -235,8 +228,8 @@ namespace Hedra.Components
 
         private IEnumerator TalkRoutine(params object[] Args)
         {
-            var billboard = (TextBillboard) Args[0];
-            var backBoard = (TextureBillboard) Args[1];
+            var billboard = (TextBillboard)Args[0];
+            var backBoard = (TextureBillboard)Args[1];
             PlayTalkingAnimation();
             var realLines = _lines.SelectMany(GetMany).ToArray();
             for (var i = 0; i < realLines.Length; ++i)
@@ -246,11 +239,12 @@ namespace Hedra.Components
                 var waitRoutine = RoutineManager.WaitForSeconds(2f);
                 while (waitRoutine.MoveNext()) yield return null;
             }
+
             OnTalkingEnded?.Invoke(_talker);
             backBoard.Dispose();
             billboard.Dispose();
         }
-        
+
         private static IEnumerator SingleLineRoutine(TextBillboard Billboard, string Text)
         {
             var strippedText = TextProvider.StripFormat(Text);
@@ -265,6 +259,7 @@ namespace Hedra.Components
                     iterator++;
                     passedTime = 0;
                 }
+
                 passedTime += Time.DeltaTime;
                 yield return null;
             }
@@ -280,7 +275,7 @@ namespace Hedra.Components
         {
             Translation.Default("...")
         };
-        
+
         private ThoughtsComponent ThoughtComponent => Parent.SearchComponent<ThoughtsComponent>();
     }
 }

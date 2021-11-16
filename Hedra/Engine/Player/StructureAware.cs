@@ -1,5 +1,6 @@
 using System.Collections.Generic;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Linq;
 using BulletSharp;
 using Hedra.Core;
@@ -18,9 +19,11 @@ using TaskScheduler = Hedra.Core.TaskScheduler;
 namespace Hedra.Engine.Player
 {
     public delegate void OnStructureEnter(CollidableStructure Structure);
+
     public delegate void OnStructureLeave(CollidableStructure Structure);
+
     public delegate void OnStructureCompleted(CollidableStructure Structure);
-    
+
     public class StructureAware : IStructureAware
     {
         public event OnStructureEnter StructureEnter;
@@ -49,10 +52,10 @@ namespace Hedra.Engine.Player
             _insideStructures = new HashSet<CollidableStructure>();
             NearCollisions = new CollisionGroup[0];
         }
-        
+
         public void Update()
         {
-            /* Use all the structures */    
+            /* Use all the structures */
             var collidableStructures = World.StructureHandler.StructureItems;
 
             if (_updateTimer.Tick() && NeedsUpdating(collidableStructures))
@@ -60,30 +63,34 @@ namespace Hedra.Engine.Player
                 _currentNearStructures = collidableStructures.ToArray();
                 SetNearCollisions(collidableStructures.SelectMany(S => S.Colliders).ToArray());
             }
-            
+
             HandleSounds();
             HandleEvents();
         }
 
         private void HandleSounds()
         {
-            if(!_soundTimer.Tick() || _currentNearStructures == null) return;
+            if (!_soundTimer.Tick() || _currentNearStructures == null) return;
             var none = true;
             var playerPosition = _player.Position;
             for (var i = 0; i < _currentNearStructures.Length; i++)
             {
                 var structure = _currentNearStructures[i];
-                if ((structure.Position.Xz() - playerPosition.Xz()).LengthFast() < (structure.Mountain?.Radius ?? structure.Radius))
+                if ((structure.Position.Xz() - playerPosition.Xz()).LengthFast() <
+                    (structure.Mountain?.Radius ?? structure.Radius))
                 {
                     if (!_wasPlayingCustom && structure.Design.AmbientSongs.Length > 0)
                     {
-                        var song = structure.Design.AmbientSongs[Utils.Rng.Next(0, structure.Design.AmbientSongs.Length)];
+                        var song = structure.Design.AmbientSongs[
+                            Utils.Rng.Next(0, structure.Design.AmbientSongs.Length)];
                         SoundtrackManager.PlayRepeating(song);
                         _wasPlayingCustom = true;
                     }
+
                     none = false;
                 }
             }
+
             if (_wasPlayingCustom && none)
             {
                 _wasPlayingCustom = false;
@@ -93,7 +100,7 @@ namespace Hedra.Engine.Player
 
         private void HandleEvents()
         {
-            if(!_insideTimer.Tick() || _currentNearStructures == null) return;
+            if (!_insideTimer.Tick() || _currentNearStructures == null) return;
 
             var playerPosition = _player.Position;
             /* Fill the hashset with the current structures we are inside */
@@ -101,49 +108,42 @@ namespace Hedra.Engine.Player
             for (var i = 0; i < _currentNearStructures.Length; i++)
             {
                 var structure = _currentNearStructures[i];
-                if ((structure.Position.Xz() - playerPosition.Xz()).LengthFast() < (structure.Mountain?.Radius ?? structure.Radius))// * .75f)
-                {
+                if ((structure.Position.Xz() - playerPosition.Xz()).LengthFast() <
+                    (structure.Mountain?.Radius ?? structure.Radius)) // * .75f)
                     _insideStructures.Add(structure);
-                }
             }
 
             /* Check which structure were entered */
             foreach (var structure in _insideStructures)
-            {
                 if (!_previousInsideStructures.Contains(structure))
                 {
                     structure.Design.OnEnter(_player);
                     StructureEnter?.Invoke(structure);
                 }
-            }
 
             /* Check which structures were left */
             foreach (var structure in _previousInsideStructures)
-            {
                 if (!_insideStructures.Contains(structure))
-                {
                     StructureLeave?.Invoke(structure);
-                }
-            }
 
             /* Swap for the next iteration */
             var tmp = _insideStructures;
             _insideStructures = _previousInsideStructures;
             _previousInsideStructures = tmp;
         }
-        
+
         private bool NeedsUpdating(CollidableStructure[] Structures)
         {
-            if (_currentNearStructures == null || Structures.Length != _currentNearStructures.Length || Structures.Sum(S => S.Colliders.Length) != NearCollisions.Length) return true;
+            if (_currentNearStructures == null || Structures.Length != _currentNearStructures.Length ||
+                Structures.Sum(S => S.Colliders.Length) != NearCollisions.Length) return true;
             var differences = false;
             for (var i = 0; i < Structures.Length; i++)
-            {
                 if (!_currentNearStructures.Contains(Structures[i]))
                 {
                     differences = true;
                     break;
                 }
-            }
+
             return differences;
         }
 
@@ -167,37 +167,29 @@ namespace Hedra.Engine.Player
             {
                 toRemove.Clear();
                 for (var j = 0; j < _bodies.Count; ++j)
-                {
                     if (Removed[i] == _bodies[j].Two)
                     {
                         removedBodies.Add(_bodies[j].One);
                         toRemove.Add(j);
                     }
-                }
-                for (var j = 0; j < toRemove.Count; ++j)
-                {
-                    _bodies.RemoveAt(toRemove[j]);
-                }
+
+                for (var j = 0; j < toRemove.Count; ++j) _bodies.RemoveAt(toRemove[j]);
             }
-            for (var i = 0; i < removedBodies.Count; ++i)
-            {
-                BulletPhysics.RemoveAndDispose(removedBodies[i]);
-            }
+
+            for (var i = 0; i < removedBodies.Count; ++i) BulletPhysics.RemoveAndDispose(removedBodies[i]);
         }
 
         private void Add(CollisionGroup[] Adds)
         {
             for (var i = 0; i < Adds.Length; ++i)
-            {
                 _bodies.Add(new Pair<RigidBody, CollisionGroup>(BulletPhysics.AddGroup(Adds[i]), Adds[i]));
-            }
         }
 
         public void Discard()
         {
             Remove(NearCollisions);
         }
-        
+
         public CollisionGroup[] NearCollisions { get; private set; }
     }
 }

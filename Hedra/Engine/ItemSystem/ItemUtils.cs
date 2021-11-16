@@ -1,5 +1,6 @@
 using System;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using Hedra.Items;
 
 namespace Hedra.Engine.ItemSystem
@@ -10,12 +11,12 @@ namespace Hedra.Engine.ItemSystem
         {
             return
                 Tier == ItemTier.Common || Tier == ItemTier.Misc ? Color.White :
-                    Tier == ItemTier.Uncommon ? Color.LawnGreen :
-                        Tier == ItemTier.Rare ? Color.CornflowerBlue :
-                            Tier == ItemTier.Unique ? Color.Magenta :
-                                Tier == ItemTier.Legendary ? Color.Gold :
-                                    Tier == ItemTier.Divine ? Color.OrangeRed :
-                                        throw new ArgumentOutOfRangeException();
+                Tier == ItemTier.Uncommon ? Color.LawnGreen :
+                Tier == ItemTier.Rare ? Color.CornflowerBlue :
+                Tier == ItemTier.Unique ? Color.Magenta :
+                Tier == ItemTier.Legendary ? Color.Gold :
+                Tier == ItemTier.Divine ? Color.OrangeRed :
+                throw new ArgumentOutOfRangeException();
         }
     }
 }

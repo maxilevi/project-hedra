@@ -1,5 +1,6 @@
 using System;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Globalization;
 using Hedra.AISystem.Behaviours;
 using Hedra.AISystem.Humanoid;
@@ -22,14 +23,15 @@ namespace Hedra.Engine.SkillSystem.Rogue
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/ShadowWarrior.png");
         private IHumanoid _warrior;
-        
+
         protected override void DoEnable()
         {
             _warrior = NPCCreator.SpawnHumanoid(HumanType.Rogue, User.Position + User.Orientation * 12);
             _warrior.Model.Outline = true;
             _warrior.Model.OutlineColor = new Vector4(.2f, .2f, .2f, 1);
             _warrior.RemoveComponent(_warrior.SearchComponent<HealthBarComponent>());
-            _warrior.AddComponent(new HealthBarComponent(_warrior, Translations.Get("shadow_warrior_name"), HealthBarType.Black, Color.FromArgb(255, 40, 40, 40)));
+            _warrior.AddComponent(new HealthBarComponent(_warrior, Translations.Get("shadow_warrior_name"),
+                HealthBarType.Black, Color.FromArgb(255, 40, 40, 40)));
             _warrior.Speed = User.Speed;
             _warrior.AttackPower = User.AttackPower;
             _warrior.AttackSpeed = User.AttackSpeed;
@@ -56,19 +58,19 @@ namespace Hedra.Engine.SkillSystem.Rogue
             _warrior.Dispose();
             _warrior = null;
         }
-        
+
         private class ShadowWarriorComponent : MeleeMinionComponent
         {
             public ShadowWarriorComponent(IHumanoid Parent, IHumanoid Owner) : base(Parent, Owner)
             {
             }
-            
+
             public override void Update()
             {
                 base.Update();
                 ShowParticles();
-            }           
-            
+            }
+
             private void ShowParticles()
             {
                 SkillUtils.DarkContinuousParticles(Parent);
@@ -82,6 +84,7 @@ namespace Hedra.Engine.SkillSystem.Rogue
         protected override float CooldownDuration => 82 - Level;
         public override string Description => Translations.Get("shadow_warrior_desc");
         public override string DisplayName => Translations.Get("shadow_warrior_skill");
+
         public override string[] Attributes => new[]
         {
             Translations.Get("shadow_warrior_time_change", Duration.ToString("0.0", CultureInfo.InvariantCulture))

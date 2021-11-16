@@ -1,5 +1,6 @@
 using System;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Events;
 using Hedra.Engine.Localization;
@@ -16,6 +17,7 @@ namespace Hedra.Components
         private readonly TalkComponent _talkComponent;
         private bool _accepted;
         private bool _asked;
+
         public ResetSkillPointsDialogComponent(IHumanoid Parent) : base(Parent)
         {
             _talkComponent = new TalkComponent(Parent);
@@ -42,14 +44,10 @@ namespace Hedra.Components
                 if (neededGold != 0)
                 {
                     if (talkee.Gold >= neededGold)
-                    {
                         _talkComponent.AddDialogLine(Translation.Create("reset_skill_points_dialog", neededGold));
-                    }
                     else
-                    {
                         _talkComponent.AddDialogLine(Translation.Create("cannot_reset_skill_points_dialog",
                             neededGold));
-                    }
                 }
                 else
                 {
@@ -70,7 +68,8 @@ namespace Hedra.Components
             if (neededGold != 0 && talkee.Gold >= neededGold)
             {
                 _asked = true;
-                talkee.MessageDispatcher.ShowMessage(Translations.Get("accept_skill_change", Controls.Interact), 3, Color.Gold);
+                talkee.MessageDispatcher.ShowMessage(Translations.Get("accept_skill_change", Controls.Interact), 3,
+                    Color.Gold);
             }
         }
 
@@ -81,7 +80,7 @@ namespace Hedra.Components
             SoundPlayer.PlayUISound(SoundType.TransactionSound);
             _accepted = true;
             _asked = false;
-            
+
             _talkComponent.ClearDialogLines();
             _talkComponent.AutoRemove = true;
             _talkComponent.TalkToPlayer();
@@ -96,12 +95,11 @@ namespace Hedra.Components
 
         private int CalculatePrice(IPlayer Player)
         {
-            return (int) (Player.AbilityTree.UsedPoints * 47.5f) + (Player.AbilityTree.HasSpecialization ? 200 : 0);
+            return (int)(Player.AbilityTree.UsedPoints * 47.5f) + (Player.AbilityTree.HasSpecialization ? 200 : 0);
         }
-        
+
         public override void Update()
         {
-            
         }
 
         public override void Dispose()

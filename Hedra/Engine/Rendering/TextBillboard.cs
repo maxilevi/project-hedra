@@ -1,5 +1,6 @@
 using System;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.UI;
@@ -14,20 +15,20 @@ namespace Hedra.Engine.Rendering
         private Vector2 _scale;
         private readonly Color _color;
         private readonly Font _font;
-        
-        public TextBillboard(float Lifetime, string Text, Color TextColor, Font TextFont, Vector3 Position) 
+
+        public TextBillboard(float Lifetime, string Text, Color TextColor, Font TextFont, Vector3 Position)
             : this(Lifetime, Text, TextColor, TextFont, () => Position)
         {
         }
-      
-        public TextBillboard(float Lifetime, string Text, Color TextColor, Font TextFont, Func<Vector3> Follow) 
+
+        public TextBillboard(float Lifetime, string Text, Color TextColor, Font TextFont, Func<Vector3> Follow)
             : base(Lifetime, Follow)
         {
             _color = TextColor;
             _font = TextFont;
             UpdateText(Text);
         }
-        
+
         public void UpdateText(string Text)
         {
             Executer.ExecuteOnMainThread(() =>

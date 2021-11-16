@@ -1,5 +1,6 @@
 using System;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Linq;
 using Hedra.Core;
 using Hedra.Engine.ItemSystem;
@@ -32,7 +33,8 @@ namespace Hedra.Engine.Player.PagedInterface
         protected Button PreviousPageText { get; }
         protected Button NextPageText { get; }
 
-        protected PagedInventoryArrayInterface(IPlayer Player, InventoryArray Array, int Rows, int Columns, Vector2 Spacing) 
+        protected PagedInventoryArrayInterface(IPlayer Player, InventoryArray Array, int Rows, int Columns,
+            Vector2 Spacing)
             : base(Array, 0, Rows * Columns, Columns, Spacing)
         {
             this.Player = Player;
@@ -61,14 +63,16 @@ namespace Hedra.Engine.Player.PagedInterface
             Title = new BackgroundTexture(InventoryBackground.DefaultId, barPosition - offset, realScale);
             TitleText = new GUIText(TitleTranslation, Title.Position, Color.White, FontCache.GetBold(12));
             PageSelector = new BackgroundTexture(InventoryBackground.DefaultId, -barPosition - offset, realScale);
-            
+
             CurrentPageText = new GUIText("00/00", PageSelector.Position, Color.White, FontCache.GetBold(11));
             var footerFont = FontCache.GetBold(14);
-            PreviousPageText = new Button(CurrentPageText.Position - Vector2.UnitX * CurrentPageText.Scale.X * 1.25f, Vector2.One, "\u25C0", Color.White, footerFont);
+            PreviousPageText = new Button(CurrentPageText.Position - Vector2.UnitX * CurrentPageText.Scale.X * 1.25f,
+                Vector2.One, "\u25C0", Color.White, footerFont);
             PreviousPageText.Click += (O, E) => PreviousPage();
-            NextPageText = new Button(CurrentPageText.Position + Vector2.UnitX * CurrentPageText.Scale.X * 1.25f, Vector2.One, "\u25B6", Color.White, footerFont);
+            NextPageText = new Button(CurrentPageText.Position + Vector2.UnitX * CurrentPageText.Scale.X * 1.25f,
+                Vector2.One, "\u25B6", Color.White, footerFont);
             NextPageText.Click += (O, E) => NextPage();
-            
+
             Panel.AddElement(CurrentPageText);
             Panel.AddElement(PreviousPageText);
             Panel.AddElement(NextPageText);
@@ -78,10 +82,10 @@ namespace Hedra.Engine.Player.PagedInterface
         }
 
         protected abstract Translation TitleTranslation { get; }
-        
+
         public override void UpdateView()
         {
-            ResetSelector();        
+            ResetSelector();
             Array.Empty();
             var recipes = Player.Crafting.Recipes;
             var outputs = ArrayObjects;
@@ -90,6 +94,7 @@ namespace Hedra.Engine.Player.PagedInterface
                 Array.AddItem(outputs[i]);
                 SetSlot(Array.IndexOf(outputs[i]));
             }
+
             UpdatePages(outputs.Length);
             Renderer.UpdateView();
         }
@@ -104,10 +109,7 @@ namespace Hedra.Engine.Player.PagedInterface
         private void ResetSelector()
         {
             if (!Enabled) return;
-            for (var i = 0; i < SelectedTextures.Length; i++)
-            {
-                ResetSlot(i);
-            }
+            for (var i = 0; i < SelectedTextures.Length; i++) ResetSlot(i);
             SelectedTextures[SelectedIndex].Enable();
         }
 
@@ -134,7 +136,7 @@ namespace Hedra.Engine.Player.PagedInterface
             CurrentPage = Mathf.Modulo(CurrentPage - 1, TotalPages);
             UpdateView();
         }
-        
+
         private void NextPage()
         {
             CurrentPage = Mathf.Modulo(CurrentPage + 1, TotalPages);
@@ -143,7 +145,7 @@ namespace Hedra.Engine.Player.PagedInterface
 
         public int SelectedIndex { get; set; }
 
-        
+
         public override bool Enabled
         {
             get => base.Enabled;
@@ -151,7 +153,7 @@ namespace Hedra.Engine.Player.PagedInterface
             {
                 base.Enabled = value;
                 if (Enabled) Panel.Enable();
-                else Panel.Disable();            
+                else Panel.Disable();
             }
         }
 
@@ -163,12 +165,15 @@ namespace Hedra.Engine.Player.PagedInterface
                 var elements = Panel.Elements.ToArray();
                 for (var i = 0; i < elements.Length; i++)
                 {
-                    elements[i].Scale = 
-                        new Vector2(elements[i].Scale.X / base.IndividualScale.X, elements[i].Scale.Y / base.IndividualScale.Y) * value;
+                    elements[i].Scale =
+                        new Vector2(elements[i].Scale.X / base.IndividualScale.X,
+                            elements[i].Scale.Y / base.IndividualScale.Y) * value;
                     var relativePosition = elements[i].Position - Position;
-                    elements[i].Position = 
-                        new Vector2(relativePosition.X / base.Scale.X, relativePosition.Y / base.Scale.Y) * value + Position;
+                    elements[i].Position =
+                        new Vector2(relativePosition.X / base.Scale.X, relativePosition.Y / base.Scale.Y) * value +
+                        Position;
                 }
+
                 base.Scale = value;
             }
         }
@@ -180,10 +185,8 @@ namespace Hedra.Engine.Player.PagedInterface
             {
                 var elements = Panel.Elements.ToArray();
                 for (var i = 0; i < elements.Length; i++)
-                {
                     elements[i].Scale = new Vector2(elements[i].Scale.X / base.IndividualScale.X,
-                                            elements[i].Scale.Y / base.IndividualScale.Y) * value;
-                }
+                        elements[i].Scale.Y / base.IndividualScale.Y) * value;
                 base.IndividualScale = value;
             }
         }
@@ -195,11 +198,9 @@ namespace Hedra.Engine.Player.PagedInterface
             {
                 var elements = Panel.Elements.ToArray();
                 for (var i = 0; i < elements.Length; i++)
-                {
                     elements[i].Position = elements[i].Position - base.Position + value;
-                }
                 base.Position = value;
             }
-        }      
+        }
     }
 }

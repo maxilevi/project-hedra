@@ -1,4 +1,6 @@
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
+using SixLabors.Fonts;
 using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Player;
@@ -15,6 +17,7 @@ namespace Hedra.AISystem.Behaviours
     {
         protected readonly Timer SpitTimer;
         protected ChargeBehaviour Charge { get; }
+
         protected BaseBeetleAttackBehaviour(IEntity Parent) : base(Parent)
         {
             Charge = new ChargeBehaviour(Parent);
@@ -26,10 +29,7 @@ namespace Hedra.AISystem.Behaviours
 
         public override void Update()
         {
-            if (!Charge.IsCharging)
-            {
-                DoUpdate();
-            }
+            if (!Charge.IsCharging) DoUpdate();
             Charge.Update();
         }
 
@@ -51,31 +51,29 @@ namespace Hedra.AISystem.Behaviours
                     FollowTimer.Reset();
                     Spit(5.5f);
                 }
-                else if(HasBite && inAttackRange)
+                else if (HasBite && inAttackRange)
                 {
                     FollowTimer.Reset();
                     Bite(5.5f);
                 }
+
                 if (!Parent.Model.IsAttacking && (!inAttackRange && HasBite || !inSpitRange && HasSpit))
                 {
                     if (!inSpitRange && HasSpit)
                     {
-                        if(!Parent.IsNear(Target, 80))
+                        if (!Parent.IsNear(Target, 80))
                             Follow.Update();
-                        else if(Parent.IsNear(Target, 24) && HasBite)
+                        else if (Parent.IsNear(Target, 24) && HasBite)
                             Follow.Update();
                     }
                     else
                     {
-                        Follow.Update();    
+                        Follow.Update();
                     }
                 }
             }
 
-            if (Parent.Model.IsAttacking && Target != null)
-            {
-                Parent.LookAt(Target);
-            }
+            if (Parent.Model.IsAttacking && Target != null) Parent.LookAt(Target);
             SpitTimer.Tick();
         }
 
@@ -87,13 +85,15 @@ namespace Hedra.AISystem.Behaviours
 
         private void SpitAttack(IEntity Victim, QuadrupedModel Model, float RangeModifier, Animation SpitAnimation)
         {
-            if(!Model.CanAttack()) return;
+            if (!Model.CanAttack()) return;
+
             void AttackHandler(Animation Sender)
             {
                 Parent.LookAt(Victim);
                 SpitAnimation.OnAnimationMid -= AttackHandler;
                 var direction = (Victim.Position - Parent.Position).NormalizedFast();
-                var spit = new ParticleProjectile(Parent, Parent.Position + Parent.Orientation * 2f + Vector3.UnitY * 2f)
+                var spit = new ParticleProjectile(Parent,
+                    Parent.Position + Parent.Orientation * 2f + Vector3.UnitY * 2f)
                 {
                     Propulsion = direction * 2f,
                     Color = Color.LawnGreen.ToVector4() * .5f,
@@ -102,18 +102,20 @@ namespace Hedra.AISystem.Behaviours
                 spit.HitEventHandler += delegate(Projectile Projectile, IEntity Hit)
                 {
                     Hit.KnockForSeconds(3);
-                    Hit.Damage(Parent.AttackDamage, this.Parent, out _);
+                    Hit.Damage(Parent.AttackDamage, Parent, out _);
                     Parent.AddBonusSpeedForSeconds(1.5f, 3);
                 };
                 World.AddWorldObject(spit);
                 SoundPlayer.PlaySoundWithVariation(SoundType.BeetleSpitSound, Parent.Position);
             }
+
             Model.Attack(null, SpitAnimation, AttackHandler, RangeModifier);
         }
 
         private void BiteAttack(IEntity Victim, QuadrupedModel Model, float RangeModifier, Animation BiteAnimation)
         {
             if (!Model.CanAttack()) return;
+
             void AttackHandler(Animation Sender)
             {
                 BiteAnimation.OnAnimationMid -= AttackHandler;
@@ -122,21 +124,23 @@ namespace Hedra.AISystem.Behaviours
                     SoundPlayer.PlaySoundWithVariation(SoundType.SlashSound, Parent.Position, 1f, .5f);
                     return;
                 }
+
                 Victim.Damage(Parent.AttackDamage, Parent, out _);
             }
+
             Model.Attack(null, BiteAnimation, AttackHandler, RangeModifier);
         }
 
         private void Spit(float RangeModifier)
         {
-            var asQuadruped = (QuadrupedModel) Parent.Model;
+            var asQuadruped = (QuadrupedModel)Parent.Model;
             SpitAttack(Target, asQuadruped, RangeModifier, GetSpitAnimation(asQuadruped));
             SpitTimer.Reset();
         }
 
         private void Bite(float RangeModifier)
         {
-            var asQuadruped = (QuadrupedModel) Parent.Model;
+            var asQuadruped = (QuadrupedModel)Parent.Model;
             BiteAttack(Target, asQuadruped, RangeModifier, GetBiteAnimation(asQuadruped));
         }
 

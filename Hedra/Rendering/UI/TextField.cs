@@ -8,7 +8,8 @@
  */
 
 using System.Collections.Generic;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using Hedra.Engine.Events;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.UI;
@@ -47,24 +48,24 @@ namespace Hedra.Rendering.UI
             Script.Execute("init", _state, _textBar, _caret, _focusButton);
             UpdateManager.Add(this);
             DrawManager.UIRenderer.Add(_caret, DrawOrder.After);
-            
-            EventDispatcher.RegisterKeyDown(this, this.OnKeyDown, EventPriority.High);
+
+            EventDispatcher.RegisterKeyDown(this, OnKeyDown, EventPriority.High);
             EventDispatcher.RegisterCharWritten(this, OnCharWritten);
 
             AddElement(_caret);
             AddElement(_focusButton);
             AddElement(_textBar);
         }
-        
+
         public void Update()
         {
-            if(!Enabled) return;
+            if (!Enabled) return;
             Script.Execute("update_caret", _state);
         }
-        
+
         private void OnKeyDown(object Sender, KeyEventArgs EventArgs)
         {
-           Script.Execute("on_key_down", EventArgs, _state);
+            Script.Execute("on_key_down", EventArgs, _state);
         }
 
         private void OnCharWritten(string Char)
@@ -81,19 +82,19 @@ namespace Hedra.Rendering.UI
         {
             Script.Execute("defocus", _state);
         }
-        
+
         public string Text
         {
-            get => this._textBar.Text;
+            get => _textBar.Text;
             set => Script.Execute("set_text", value, _state);
         }
-        
+
         public Vector2 Scale
         {
             get => _textBar.Scale;
             set => _textBar.Scale = value;
         }
-        
+
         public Vector2 Position
         {
             get => _textBar.Position;

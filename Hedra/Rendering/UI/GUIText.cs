@@ -6,7 +6,6 @@
  */
 
 using System.Diagnostics;
-using System.Drawing;
 using System.Threading;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
@@ -14,6 +13,9 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Game;
 using System.Numerics;
+using SixLabors.Fonts;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 
 namespace Hedra.Rendering.UI
 {
@@ -30,7 +32,7 @@ namespace Hedra.Rendering.UI
         private Vector2 _temporalPosition;
         private string _text;
         private Translation _translation;
-        
+
         public GUIText(Translation Translation, Vector2 Position, Color TextColor, Font TextFont)
         {
             _temporalPosition = Position;
@@ -38,17 +40,19 @@ namespace Hedra.Rendering.UI
             SetTranslation(Translation);
         }
 
-        public GUIText(string Text, Vector2 Position, Color TextColor, Font TextFont) 
+        public GUIText(string Text, Vector2 Position, Color TextColor, Font TextFont)
             : this(Translation.Default(Text), Position, TextColor, TextFont)
-        {         
+        {
         }
 
-        private static BitmapObject BuildBitmap(string Text, Color Color, Font Font, TextOptions Options, out Vector2 Measurements)
+        private static BitmapObject BuildBitmap(string Text, Color Color, Font Font, TextOptions Options,
+            out Vector2 Measurements)
         {
             const float crispModifier = 1.5f;
             var textBitmap = Provider.BuildText(Text, FontCache.Get(Font, Font.Size * crispModifier), Color, Options);
-            Measurements = 
-                new Vector2((float) (textBitmap.Width * (1.0 / crispModifier)), (float) (textBitmap.Height * (1.0 / crispModifier)));
+            Measurements =
+                new Vector2((float)(textBitmap.Width * (1.0 / crispModifier)),
+                    (float)(textBitmap.Height * (1.0 / crispModifier)));
             var obj = new BitmapObject
             {
                 Bitmap = textBitmap,
@@ -61,7 +65,7 @@ namespace Hedra.Rendering.UI
         {
             return Graphics2D.LoadTexture(BuildBitmap(Text, Color, Font, new TextOptions(), out Measurements));
         }
-        
+
         public void UpdateText()
         {
             var obj = BuildBitmap(Text, TextColor, TextFont, BuildTextOptions(), out var measurements);
@@ -72,14 +76,13 @@ namespace Hedra.Rendering.UI
                 DrawManager.UIRenderer.Remove(UIText);
                 UIText.Dispose();
             }
-            UIText = new GUITexture(0, new Vector2(measurements.X / DefaultSize.X, measurements.Y / DefaultSize.Y), _temporalPosition);
+
+            UIText = new GUITexture(0, new Vector2(measurements.X / DefaultSize.X, measurements.Y / DefaultSize.Y),
+                _temporalPosition);
             UIText.UseTextureCache = false;
             DrawManager.UIRenderer.Add(UIText);
 
-            if (_align == AlignMode.Left)
-            {
-                UIText.Position -= UIText.Scale;
-            }
+            if (_align == AlignMode.Left) UIText.Position -= UIText.Scale;
 
             UIText.Enabled = previousState;
             if (Text != string.Empty)
@@ -88,6 +91,7 @@ namespace Hedra.Rendering.UI
                 var font = TextFont;
                 var color = TextColor;
                 var t = new StackTrace();
+
                 void UpdateTexture()
                 {
                     UIText.TextureId = TextCache.UseOrCreate(text, font, color, obj, t);
@@ -97,7 +101,7 @@ namespace Hedra.Rendering.UI
                 if (Thread.CurrentThread.ManagedThreadId != Engine.Loader.Hedra.MainThreadId)
                     Executer.ExecuteOnMainThread(UpdateTexture);
                 else
-                    UpdateTexture(); 
+                    UpdateTexture();
             }
             else
             {
@@ -119,13 +123,10 @@ namespace Hedra.Rendering.UI
         {
             _translation?.Dispose();
             _translation = Translation;
-            Translation.LanguageChanged += delegate
-            {
-                Text = Translation.Get();
-            };
+            Translation.LanguageChanged += delegate { Text = Translation.Get(); };
             Text = Translation.Get();
         }
-        
+
         public Color TextColor
         {
             get => _configuration.Color;
@@ -133,7 +134,7 @@ namespace Hedra.Rendering.UI
             {
                 if (_configuration.Color == value) return;
                 _configuration.Color = value;
-                this.UpdateText();
+                UpdateText();
             }
         }
 
@@ -150,7 +151,7 @@ namespace Hedra.Rendering.UI
             {
                 if (value == _text || _configuration == null || value == null) return;
                 _text = value;
-                this.UpdateText();
+                UpdateText();
             }
         }
 
@@ -185,11 +186,11 @@ namespace Hedra.Rendering.UI
             get => UIText.Grayscale;
             set => UIText.Grayscale = value;
         }
-        
+
         public bool Stroke { get; set; }
-        
+
         public float StrokeWidth { get; set; }
-        
+
         public Color StrokeColor { get; set; }
 
         public void Enable()

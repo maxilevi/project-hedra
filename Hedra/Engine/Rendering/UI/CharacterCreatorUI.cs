@@ -6,11 +6,13 @@
  * 
  * To change  template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using System;
 using Hedra.Engine.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Numerics;
 using System.Collections;
 using System.Linq;
@@ -49,7 +51,7 @@ namespace Hedra.Engine.Rendering.UI
         private CustomizationData _customization;
         private ColorPicker _secondHairColorPicker;
 
-        public CharacterCreatorUI(IPlayer Player) 
+        public CharacterCreatorUI(IPlayer Player)
         {
             _customization = new CustomizationData();
             _clickTimer = new Timer(.25f)
@@ -58,22 +60,21 @@ namespace Hedra.Engine.Rendering.UI
             };
             var defaultFont = FontCache.GetNormal(12);
             var defaultColor = Color.White;
-            
+
             var bandPosition = new Vector2(0f, .8f);
-            var blackBand = new BackgroundTexture(Color.FromArgb(255,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, UserInterface.BlackBandSize, GradientType.LeftRight);
+            var blackBand = new BackgroundTexture(Color.FromArgb(255, 69, 69, 69), Color.FromArgb(255, 19, 19, 19),
+                bandPosition, UserInterface.BlackBandSize, GradientType.LeftRight);
 
-            var currentTab = new GUIText(Translation.Create("new_character"), new Vector2(0f, bandPosition.Y), Color.White, FontCache.GetBold(15));
+            var currentTab = new GUIText(Translation.Create("new_character"), new Vector2(0f, bandPosition.Y),
+                Color.White, FontCache.GetBold(15));
 
-            _openFolder = new Button(new Vector2(0.8f,bandPosition.Y), new Vector2(0.15f,0.05f),
+            _openFolder = new Button(new Vector2(0.8f, bandPosition.Y), new Vector2(0.15f, 0.05f),
                 Translation.Create("character_folder"), Color.White, FontCache.GetNormal(13));
-            _openFolder.Click += delegate
-            {
-                System.Diagnostics.Process.Start(DataManager.CharactersFolder);
-            };
+            _openFolder.Click += delegate { System.Diagnostics.Process.Start(DataManager.CharactersFolder); };
 
             _human = new Humanoid
             {
-                Name = "CreatorHumanoid",
+                Name = "CreatorHumanoid"
             };
             _human.Model = new HumanoidModel(_human)
             {
@@ -92,26 +93,27 @@ namespace Hedra.Engine.Rendering.UI
             var classChooser = CreateClassChooser(defaultFont, defaultColor, rng);
             var genderChooser = CreateGenderChooser(defaultFont, defaultColor, rng);
             CreateColorPickers(this);
-            
+
             UpdateModel(null, default);
-            
-            var nameField = new TextField(new Vector2(0,-.7f), new Vector2(.15f,.03f).As1920x1080());
-            var createChr = new Button(new Vector2(0f,-.8f), new Vector2(.15f,.05f), Translation.Create("create"), defaultColor, FontCache.GetBold(11));
+
+            var nameField = new TextField(new Vector2(0, -.7f), new Vector2(.15f, .03f).As1920x1080());
+            var createChr = new Button(new Vector2(0f, -.8f), new Vector2(.15f, .05f), Translation.Create("create"),
+                defaultColor, FontCache.GetBold(11));
             createChr.Click += delegate
             {
-                for(var i = 0; i < DataManager.PlayerFiles.Length; i++)
+                for (var i = 0; i < DataManager.PlayerFiles.Length; i++)
                 {
                     if (nameField.Text != DataManager.PlayerFiles[i].Name) continue;
                     Player.MessageDispatcher.ShowNotification(Translations.Get("name_exists"), Color.Red, 3f, true);
                     return;
                 }
 
-                if(!LocalPlayer.CreatePlayer(nameField.Text, _classType, _customization)) return;          
-                base.Disable();
+                if (!LocalPlayer.CreatePlayer(nameField.Text, _classType, _customization)) return;
+                Disable();
                 GameManager.Player.UI.CharacterSelector.Enable();
-                nameField.Text = string.Empty;    
+                nameField.Text = string.Empty;
             };
-            
+
             AddElement(genderChooser);
             AddElement(classChooser);
             AddElement(nameField);
@@ -119,7 +121,7 @@ namespace Hedra.Engine.Rendering.UI
             AddElement(blackBand);
             AddElement(_openFolder);
             AddElement(currentTab);
-            base.Disable();
+            Disable();
 
             OnPanelStateChange += PanelStateChange;
             OnEscapePressed += EscapePressed;
@@ -133,14 +135,12 @@ namespace Hedra.Engine.Rendering.UI
             var allColors = new Vector4[columnCount * rowCount];
             const float step = 360f / columnCount;
             for (var j = 0; j < rowCount; ++j)
-            {
-                for (var i = 0; i < columnCount; ++i)
-                {
-                    allColors[j * columnCount + i] = Colors.HsLtoRgba(i * step, 1.0f, 1.0f - (j+1) / (float) (rowCount+2), 1f);
-                }
-            }
-            
-            var picker1 = new ColorPicker(allColors, Translation.Create("first_hair_picker"), new Vector2(.3f, .4f), Vector2.One * 0.25f, InPanel, columnCount, 13);
+            for (var i = 0; i < columnCount; ++i)
+                allColors[j * columnCount + i] =
+                    Colors.HsLtoRgba(i * step, 1.0f, 1.0f - (j + 1) / (float)(rowCount + 2), 1f);
+
+            var picker1 = new ColorPicker(allColors, Translation.Create("first_hair_picker"), new Vector2(.3f, .4f),
+                Vector2.One * 0.25f, InPanel, columnCount, 13);
             picker1.ColorPickedEvent += V =>
             {
                 _customization.FirstHairColor = V;
@@ -148,7 +148,8 @@ namespace Hedra.Engine.Rendering.UI
             };
             InPanel.AddElement(picker1);
 
-            _secondHairColorPicker = new ColorPicker(allColors, Translation.Create("second_hair_picker"), new Vector2(.3f, -.2f), Vector2.One * 0.25f, InPanel, columnCount, 13);
+            _secondHairColorPicker = new ColorPicker(allColors, Translation.Create("second_hair_picker"),
+                new Vector2(.3f, -.2f), Vector2.One * 0.25f, InPanel, columnCount, 13);
             _secondHairColorPicker.ColorPickedEvent += V =>
             {
                 _customization.SecondHairColor = V;
@@ -156,7 +157,8 @@ namespace Hedra.Engine.Rendering.UI
             };
             InPanel.AddElement(_secondHairColorPicker);
 
-            var skinPicker = new ColorPicker(_skinColors, Translation.Create("skin_picker"), new Vector2(-.75f, .35f), Vector2.One * 0.4f, InPanel, 4);
+            var skinPicker = new ColorPicker(_skinColors, Translation.Create("skin_picker"), new Vector2(-.75f, .35f),
+                Vector2.One * 0.4f, InPanel, 4);
             skinPicker.ColorPickedEvent += V =>
             {
                 _customization.SkinColor = V;
@@ -173,7 +175,8 @@ namespace Hedra.Engine.Rendering.UI
                     new Pair<string, ClassDesign>(S, ClassDesign.FromString(S))).ToArray();
             classes.Shuffle(Rng);
             var classesNames = classes.Select(S => Translation.Create(S.One.ToLowerInvariant())).ToArray();
-            var classChooser = new OptionChooser(new Vector2(0,.5f), Vector2.Zero, Translation.Create("class"), DefaultColor,
+            var classChooser = new OptionChooser(new Vector2(0, .5f), Vector2.Zero, Translation.Create("class"),
+                DefaultColor,
                 DefaultFont, classesNames, true);
 
             void UpdateClass(object Sender, MouseButtonEventArgs _)
@@ -184,13 +187,14 @@ namespace Hedra.Engine.Rendering.UI
             }
 
             UpdateClass(null, default);
-            
+
             classChooser.RightArrow.Click += UpdateClass;
             classChooser.LeftArrow.Click += UpdateClass;
             classChooser.CurrentValue.TextColor = DefaultColor;
             classChooser.CurrentValue.UpdateText();
             return classChooser;
         }
+
         private OptionChooser CreateGenderChooser(Font DefaultFont, Color DefaultColor, Random Rng)
         {
             var genders = new[]
@@ -198,9 +202,10 @@ namespace Hedra.Engine.Rendering.UI
                 new Pair<Translation, HumanGender>(Translation.Create("male"), HumanGender.Male),
                 new Pair<Translation, HumanGender>(Translation.Create("female"), HumanGender.Female)
             };
-            var genderChooser = new OptionChooser(new Vector2(0,.3f), Vector2.Zero, Translation.Create("gender"), DefaultColor, DefaultFont, genders.Select(P => P.One).ToArray(), true);
+            var genderChooser = new OptionChooser(new Vector2(0, .3f), Vector2.Zero, Translation.Create("gender"),
+                DefaultColor, DefaultFont, genders.Select(P => P.One).ToArray(), true);
             genderChooser.Index = Rng.Next(0, 2);
-            
+
             void UpdateGender(object Sender, MouseButtonEventArgs _)
             {
                 _customization = CustomizationData.FromClass(_classType, genders[genderChooser.Index].Two);
@@ -213,7 +218,7 @@ namespace Hedra.Engine.Rendering.UI
             genderChooser.CurrentValue.UpdateText();
             return genderChooser;
         }
-        
+
         private void UpdateModel(object Sender, MouseButtonEventArgs E)
         {
             var previousModel = _human.Model;
@@ -248,30 +253,31 @@ namespace Hedra.Engine.Rendering.UI
 
         private void EscapePressed(object Sender, EventArgs Args)
         {
-            base.Disable();
+            Disable();
             GameManager.Player.UI.CharacterSelector.Enable();
         }
-        
+
         public void Update()
         {
-            _human.Model.Enabled = this.Enabled;
-            if (this.Enabled)
+            _human.Model.Enabled = Enabled;
+            if (Enabled)
             {
-                if(_clickTimer.Tick())
+                if (_clickTimer.Tick())
                     _openFolder.CanClick = true;
                 _human.Update();
                 _human.UpdateCriticalComponents();
                 _newRot += Time.IndependentDeltaTime * 30f;
                 _human.Model.LocalRotation = Vector3.UnitY * -90 + Vector3.UnitY * _newRot;
                 _human.Model.TargetRotation = Vector3.UnitY * -90 + Vector3.UnitY * _newRot;
-                _human.Position = new Vector3(Scenes.MenuBackground.PlatformPosition.X, _human.Position.Y, Scenes.MenuBackground.PlatformPosition.Z);
-                if(_human.Position.Y <= Physics.HeightAtPosition(_human.Position))
-                {
-                    _human.Position = new Vector3(_human.Position.X, Physics.HeightAtPosition(_human.Position), _human.Position.Z);
-                }
+                _human.Position = new Vector3(Scenes.MenuBackground.PlatformPosition.X, _human.Position.Y,
+                    Scenes.MenuBackground.PlatformPosition.Z);
+                if (_human.Position.Y <= Physics.HeightAtPosition(_human.Position))
+                    _human.Position = new Vector3(_human.Position.X, Physics.HeightAtPosition(_human.Position),
+                        _human.Position.Z);
                 _human.IsKnocked = false;
-                
-                if(_customization.Gender == HumanGender.Female && _classType.HasSecondFemaleHairColor || _customization.Gender == HumanGender.Male && _classType.HasSecondHairColor)
+
+                if (_customization.Gender == HumanGender.Female && _classType.HasSecondFemaleHairColor ||
+                    _customization.Gender == HumanGender.Male && _classType.HasSecondHairColor)
                     _secondHairColorPicker?.Enable();
                 else
                     _secondHairColorPicker?.Disable();
@@ -293,7 +299,7 @@ namespace Hedra.Engine.Rendering.UI
             Colors.FromHtml("#D19477"),
             Colors.FromHtml("#DFAA8B"),
             Colors.FromHtml("#E5B5A1"),
-            Colors.FromHtml("#FEE3D4"),
+            Colors.FromHtml("#FEE3D4")
         };
 
         private static Vector4[] _hairColors = new[]
@@ -302,7 +308,7 @@ namespace Hedra.Engine.Rendering.UI
             Colors.FromHtml("#8E7B6A"),
             Colors.FromHtml("#B2ABA7"),
             Colors.FromHtml("#59442F"),
-            Colors.FromHtml("#FFFFFF"),
+            Colors.FromHtml("#FFFFFF")
             //Colors.FromHtml("#FFBFA1"),
             //Colors.FromHtml("#FFBFA1"),
             //Colors.FromHtml("#FFBFA1"),

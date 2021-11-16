@@ -1,4 +1,6 @@
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
+using SixLabors.Fonts;
 using Hedra.AISystem;
 using Hedra.AISystem.Humanoid;
 using Hedra.Components;
@@ -18,10 +20,13 @@ namespace Hedra.Engine.SkillSystem.Warrior.Paladin
     public class Conversion : WeaponBonusWithAnimationSkill
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Salvation.png");
-        protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/WarriorImbueAttack.dae");
+
+        protected override Animation SkillAnimation { get; } =
+            AnimationLoader.LoadAnimation("Assets/Chr/WarriorImbueAttack.dae");
+
         protected override float AnimationSpeed => 1.25f;
         private bool _hasMinion;
-        
+
         protected override void ApplyBonusToEnemy(IEntity Victim, ref float Damage)
         {
             if (!Victim.IsBoss() && !Victim.IsHumanoid && Utils.Rng.NextFloat() < ConvertChance)
@@ -33,8 +38,10 @@ namespace Hedra.Engine.SkillSystem.Warrior.Paladin
                 Victim.Model.OutlineColor = OutlineColor;
                 Victim.IsFriendly = true;
                 Victim.RemoveComponent(Victim.SearchComponent<HealthBarComponent>());
-                Victim.AddComponent(new HealthBarComponent(Victim, Victim.Name, HealthBarType.Gold, OutlineColor.ToColor()));
-                Victim.SearchComponent<DamageComponent>().Ignore(E => E == User || E.SearchComponent<MinionAIComponent>()?.Owner == User);
+                Victim.AddComponent(new HealthBarComponent(Victim, Victim.Name, HealthBarType.Gold,
+                    OutlineColor.ToColor()));
+                Victim.SearchComponent<DamageComponent>()
+                    .Ignore(E => E == User || E.SearchComponent<MinionAIComponent>()?.Owner == User);
                 Victim.SearchComponent<DamageComponent>().OnDeadEvent += A => _hasMinion = false;
             }
         }
@@ -45,9 +52,10 @@ namespace Hedra.Engine.SkillSystem.Warrior.Paladin
         public override float MaxCooldown => 34;
         public override float ManaCost => 54;
         protected override bool ShouldDisable => _hasMinion;
-        private float ConvertChance => .2f + .55f * (Level / (float) MaxLevel);
+        private float ConvertChance => .2f + .55f * (Level / (float)MaxLevel);
         public override string Description => Translations.Get("conversion_desc");
         public override string DisplayName => Translations.Get("conversion_skill");
+
         public override string[] Attributes => new[]
         {
             Translations.Get("conversion_convert_change", (int)(ConvertChance * 100)),

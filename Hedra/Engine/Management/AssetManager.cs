@@ -7,7 +7,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.IO;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
@@ -27,7 +28,7 @@ namespace Hedra.Engine.Management
         public static string ShaderResource => Provider.ShaderResource;
         public static string SoundResource => Provider.SoundResource;
         public static string AssetsResource => Provider.AssetsResource;
-        
+
         public static Vector4 ColorCode0 { get; }
         public static Vector4 ColorCode1 { get; }
         public static Vector4 ColorCode2 { get; }
@@ -37,11 +38,11 @@ namespace Hedra.Engine.Management
 
         static AssetManager()
         {
-            ColorCode0 = new Vector4(.0f,.0f,.0f,1f);
-            ColorCode1 = new Vector4(.2f,.2f,.2f,1f);
-            ColorCode2 = new Vector4(.4f,.4f,.4f,1f);
-            ColorCode3 = new Vector4(.6f,.6f,.6f,1f);
-            ColorCodes = new[] {ColorCode0, ColorCode1, ColorCode2, ColorCode3};
+            ColorCode0 = new Vector4(.0f, .0f, .0f, 1f);
+            ColorCode1 = new Vector4(.2f, .2f, .2f, 1f);
+            ColorCode2 = new Vector4(.4f, .4f, .4f, 1f);
+            ColorCode3 = new Vector4(.6f, .6f, .6f, 1f);
+            ColorCodes = new[] { ColorCode0, ColorCode1, ColorCode2, ColorCode3 };
             Provider = new CompressedAssetProvider();
         }
 
@@ -114,13 +115,13 @@ namespace Hedra.Engine.Management
         {
             return Provider.LoadPLYWithLODs(Filename, Scale);
         }
-        
+
         public static VertexData PLYLoader(string File, Vector3 Scale, Vector3 Position, Vector3 Rotation,
             bool HasColors = true)
         {
             return Provider.PLYLoader(File, Scale, Position, Rotation, HasColors);
         }
-        
+
         public static ModelData DAELoader(string File)
         {
             return Provider.DAELoader(File);

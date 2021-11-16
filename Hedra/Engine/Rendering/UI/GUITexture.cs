@@ -4,11 +4,13 @@
  * Time: 05:51 a.m.
  *
  */
+
 using System;
 using System.Diagnostics;
 using System.Numerics;
 using Hedra.Engine.Core;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.IO;
@@ -29,7 +31,7 @@ namespace Hedra.Engine.Rendering.UI
         public float Opacity { get; set; }
         public uint BackGroundId { get; set; }
         public Vector2 Scale { get; set; }
-        public bool Enabled {get; set;}
+        public bool Enabled { get; set; }
         public Vector4 Tint { get; set; }
         public bool Grayscale { get; set; }
         public float Angle { get; set; }
@@ -52,7 +54,7 @@ namespace Hedra.Engine.Rendering.UI
 
         public void Adjust()
         {
-            AdjustedPosition = Adjust(this.Position);
+            AdjustedPosition = Adjust(Position);
         }
 
         public static Vector2 Adjust(Vector2 Position)
@@ -66,7 +68,7 @@ namespace Hedra.Engine.Rendering.UI
 
         public void Dispose()
         {
-            if(_disposed) return;
+            if (_disposed) return;
             MaskId = DisposeId(MaskId, UseTextureCache);
             TextureId = DisposeId(TextureId, UseTextureCache);
             _disposed = true;
@@ -76,7 +78,7 @@ namespace Hedra.Engine.Rendering.UI
         {
             if (IsImmortal(DisposeId) || DisposeId == 0) return DisposeId;
 
-            if(UseTextureCache)
+            if (UseTextureCache)
                 TextureRegistry.Remove(DisposeId);
 
             return DisposeId;
@@ -86,11 +88,11 @@ namespace Hedra.Engine.Rendering.UI
         {
             return Array.IndexOf(GUIRenderer.ImmortalTextures, Id) != -1;
         }
-        
+
         public uint Id => IdPointer?.Invoke() ?? TextureId;
-        
+
         public bool UseMask => MaskId != 0;
-        
+
         public Matrix4x4 RotationMatrix => Matrix4x4.CreateRotationZ(Angle * Mathf.Radian);
 
         public Vector2 Position
@@ -99,17 +101,17 @@ namespace Hedra.Engine.Rendering.UI
             set
             {
                 _position = value;
-                this.Adjust();
+                Adjust();
             }
         }
-        
+
         ~GUITexture()
         {
             if (!_disposed)
             {
-                if(GameManager.IsExiting || Program.IsDummy || GameSettings.TestingMode) return;
+                if (GameManager.IsExiting || Program.IsDummy || GameSettings.TestingMode) return;
                 Log.WriteLine($"Texture {Id} failed to dispose correctly.");
-                Executer.ExecuteOnMainThread(this.Dispose);
+                Executer.ExecuteOnMainThread(Dispose);
             }
         }
     }

@@ -1,4 +1,5 @@
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Drawing.Imaging;
 using Hedra.Engine.IO;
 using Hedra.Engine.Rendering.Core;
@@ -11,18 +12,19 @@ namespace Hedra.Engine.Rendering
 {
     public class Texture2DProvider : ITexture2DProvider
     {
-        public uint LoadTexture(BitmapObject BitmapObject, TextureMinFilter Min, TextureMagFilter Mag, TextureWrapMode Wrap)
+        public uint LoadTexture(BitmapObject BitmapObject, TextureMinFilter Min, TextureMagFilter Mag,
+            TextureWrapMode Wrap)
         {
             var bmp = BitmapObject.Bitmap;
             var id = Renderer.GenTexture();
             Renderer.BindTexture(TextureTarget.Texture2D, id);
-            var bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, 
+            var bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly,
                 System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             Renderer.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmpData.Width, bmpData.Height, 0,
                 PixelFormat.Bgra, PixelType.UnsignedByte, bmpData.Scan0);
-    
+
             bmp.UnlockBits(bmpData);
-    
+
             Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)Min);
             Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)Mag);
             Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)Wrap);

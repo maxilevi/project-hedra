@@ -1,4 +1,6 @@
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
+using SixLabors.Fonts;
 using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
@@ -18,14 +20,20 @@ namespace Hedra.AISystem.Behaviours
     {
         private const int SpitAnimationIndex = 1;
         private const int BiteAnimationIndex = 0;
-        
+
         public GiantBeetleAttackBehaviour(IEntity Parent) : base(Parent)
         {
         }
-        
-        protected override Animation GetBiteAnimation(QuadrupedModel Model) => Model.AttackAnimations[BiteAnimationIndex];
 
-        protected override Animation GetSpitAnimation(QuadrupedModel Model) => Model.AttackAnimations[SpitAnimationIndex];
+        protected override Animation GetBiteAnimation(QuadrupedModel Model)
+        {
+            return Model.AttackAnimations[BiteAnimationIndex];
+        }
+
+        protected override Animation GetSpitAnimation(QuadrupedModel Model)
+        {
+            return Model.AttackAnimations[SpitAnimationIndex];
+        }
 
         protected override float SpitCooldown => 5;
         protected override bool HasSpit => true;

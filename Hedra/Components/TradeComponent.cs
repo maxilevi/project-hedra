@@ -1,5 +1,6 @@
 using System.Collections.Generic;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
@@ -18,6 +19,7 @@ using Hedra.Numerics;
 namespace Hedra.Components
 {
     public delegate void OnItemBought(Item Item);
+
     public abstract class TradeComponent : Component<IHumanoid>
     {
         protected int MerchantSpaces => TradeInventory.MerchantSpaces;
@@ -36,7 +38,7 @@ namespace Hedra.Components
         public void TransactionComplete(Item Item, TransactionType Type)
         {
             Items = new Dictionary<int, Item>(_originalItems);
-            if(Type == TransactionType.Buy)
+            if (Type == TransactionType.Buy)
                 ItemBought?.Invoke(Item);
         }
 
@@ -44,26 +46,34 @@ namespace Hedra.Components
         {
             if (_originalItems == null)
             {
-                _originalItems = this.BuildInventory();
+                _originalItems = BuildInventory();
                 Items = new Dictionary<int, Item>(_originalItems);
             }
+
             var player = LocalPlayer.Instance;
 
-            if ((LocalPlayer.Instance.Position - this.Parent.Position).Xz().LengthSquared() < TradeRadius * TradeRadius)
+            if ((LocalPlayer.Instance.Position - Parent.Position).Xz().LengthSquared() < TradeRadius * TradeRadius)
             {
-                Parent.Orientation = (LocalPlayer.Instance.Position - Parent.Position).Xz().NormalizedFast().ToVector3();
+                Parent.Orientation =
+                    (LocalPlayer.Instance.Position - Parent.Position).Xz().NormalizedFast().ToVector3();
                 Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
             }
 
             var canTrade = player.CanInteract && !player.IsDead && !GameSettings.Paused &&
                            !player.InterfaceOpened;
-            bool InRadiusFunc() => (player.Position - Parent.Position).LengthSquared() < TradeInventory.TradeRadius * TradeInventory.TradeRadius && !player.Trade.IsTrading;
+
+            bool InRadiusFunc()
+            {
+                return (player.Position - Parent.Position).LengthSquared() <
+                    TradeInventory.TradeRadius * TradeInventory.TradeRadius && !player.Trade.IsTrading;
+            }
 
             var inRadius = InRadiusFunc();
 
             if (!canTrade || !inRadius) return;
 
-            player.MessageDispatcher.ShowMessageWhile(Translations.Get("to_trade", Controls.Interact), Color.White, InRadiusFunc);
+            player.MessageDispatcher.ShowMessageWhile(Translations.Get("to_trade", Controls.Interact), Color.White,
+                InRadiusFunc);
         }
     }
 }

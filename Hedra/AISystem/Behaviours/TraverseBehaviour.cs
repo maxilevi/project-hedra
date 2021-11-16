@@ -5,7 +5,8 @@ using Hedra.Engine;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.EntitySystem;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using Hedra.Components.Effects;
 using Hedra.Engine.Game;
 using System.Linq;
@@ -39,6 +40,7 @@ namespace Hedra.AISystem.Behaviours
                 Parent.Physics.CollidesWithStructures = false;
                 Parent.Physics.UpdateColliderList = true;
             }
+
             _stuckTimer = new Timer(1);
             CreateGraph();
         }
@@ -47,12 +49,12 @@ namespace Hedra.AISystem.Behaviours
         {
             TraverseStorage.Instance.CreateIfNecessary(Parent, OnGridUpdated);
         }
-        
+
         protected virtual void UpdateGraph()
         {
             TraverseStorage.Instance.Update(Parent);
         }
-        
+
         protected virtual void RebuildGraph()
         {
             /* Force the rebuild because its stuck */
@@ -72,11 +74,8 @@ namespace Hedra.AISystem.Behaviours
 
         public override void Update()
         {
-            if(!_hasTarget) return;
-            if (!Walk.HasTarget || Parent.IsStuck)
-            {
-                RebuildAndResetPathIfNecessary();
-            }
+            if (!_hasTarget) return;
+            if (!Walk.HasTarget || Parent.IsStuck) RebuildAndResetPathIfNecessary();
             Walk.Update();
             if (_canReach)
             {
@@ -84,10 +83,7 @@ namespace Hedra.AISystem.Behaviours
             }
             else
             {
-                if ((_lastCanNotReachPosition - Target).Xz().LengthSquared() > 2 * 2)
-                {
-                    _canReach = true;
-                }
+                if ((_lastCanNotReachPosition - Target).Xz().LengthSquared() > 2 * 2) _canReach = true;
             }
         }
 
@@ -96,7 +92,6 @@ namespace Hedra.AISystem.Behaviours
             RebuildGraph();
             RebuildPathIfNecessary();
             if (_currentIndex < _currentPath.Length)
-            {
                 Walk.SetTarget(CalculateTargetPoint(_currentPath[_currentIndex]),
                     () =>
                     {
@@ -104,7 +99,6 @@ namespace Hedra.AISystem.Behaviours
                         if (_currentIndex > _currentPath.Length - 1) Cancel();
                     }
                 );
-            }
         }
 
         private void OnGridUpdated(WaypointGrid UpdatedGrid)
@@ -114,7 +108,7 @@ namespace Hedra.AISystem.Behaviours
 
         private void RebuildPathIfNecessary()
         {
-            if(_currentPath == null)
+            if (_currentPath == null)
                 UpdatePath();
         }
 
@@ -122,21 +116,22 @@ namespace Hedra.AISystem.Behaviours
         {
             var sourceVertex = CurrentGrid.GetNearestVertex(Origin);
             var targetVertex = CurrentGrid.GetNearestVertex(Target);
-            return CurrentGrid.GetShortestPath(sourceVertex, targetVertex, out CanReach).Select(W => W.Position.Xz()).ToArray();
+            return CurrentGrid.GetShortestPath(sourceVertex, targetVertex, out CanReach).Select(W => W.Position.Xz())
+                .ToArray();
         }
 
         private Vector3 CalculateTargetPoint(Vector2 PathPoint)
         {
             return PathPoint.ToVector3() + Parent.Position.Y * Vector3.UnitY;
         }
-        
+
         protected void UpdatePath()
         {
             _origin = Parent.Position;
             _currentIndex = 0;
             _currentPath = DoUpdatePath(_origin, out var canReach);
             var dmgComponent = Parent.SearchComponent<DamageComponent>();
-            if(dmgComponent != null) dmgComponent.AICanReach = canReach;
+            if (dmgComponent != null) dmgComponent.AICanReach = canReach;
             if (!canReach) _lastCanNotReachPosition = Target;
             _canReach = canReach;
         }
@@ -151,7 +146,7 @@ namespace Hedra.AISystem.Behaviours
             RebuildPathIfNecessary();
             var traverse = Parent.SearchComponent<ITraverseAIComponent>();
             /* Sometimes we remove the component and then update */
-            if(traverse != null)
+            if (traverse != null)
                 traverse.TargetPoint = Target;
         }
 
@@ -184,17 +179,17 @@ namespace Hedra.AISystem.Behaviours
         public Vector3 Target { get; private set; }
 
         public bool HasTarget => _hasTarget;
-        
+
         public override void Dispose()
         {
             Walk.Dispose();
             DisposeGraph();
         }
-        
     }
 }
 
 #region DEBUG
+
 /*
 if (Parent.Type != "Boar" || true) return currentPath;
 
@@ -218,4 +213,5 @@ bmp1.SetPixel((int)unblockedCenter.X, (int)unblockedCenter.Y, Color.White);
 bmp1.SetPixel((int)center.X, (int)center.Y, Color.Violet);
 bmp1.Save(GameLoader.AppPath + $"/test{Parent.MobId}.png");
 */
+
 #endregion

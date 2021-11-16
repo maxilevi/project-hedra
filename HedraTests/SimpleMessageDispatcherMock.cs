@@ -1,14 +1,14 @@
 using System;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using Hedra.Engine.Player;
 
 namespace HedraTests
 {
-    
     public class SimpleMessageDispatcherMock : IMessageDispatcher
     {
         public string LastMessage { get; private set; }
-        
+
         public void ShowTitleMessage(string Message, float Seconds)
         {
             LastMessage = Message;
@@ -21,7 +21,7 @@ namespace HedraTests
 
         public void ShowMessageWhile(string Message, Func<bool> Condition)
         {
-            if(!Condition()) return;
+            if (!Condition()) return;
             LastMessage = Message;
         }
 
@@ -44,7 +44,7 @@ namespace HedraTests
 
         public void ShowMessageWhile(string Message, Color TextColor, Func<bool> Condition)
         {
-            if(!Condition()) return;
+            if (!Condition()) return;
             LastMessage = Message;
         }
 

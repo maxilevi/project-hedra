@@ -1,5 +1,6 @@
 using System;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using Hedra.Core;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
@@ -74,18 +75,18 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                     Color.Red, 3f);
             }
         }
-        
+
         protected override void UpdateView()
         {
             ItemText.Text = _blueprint.DisplayName;
-            ItemDescription.Text = Utils.FitString(_blueprint.Description, (int)(40.As1920x1080()));
+            ItemDescription.Text = Utils.FitString(_blueprint.Description, (int)40.As1920x1080());
             ItemDescription.Color = Color.White;
             ItemTexture.TextureElement.TextureId = _blueprint.Icon;
             HintTexture.Disable();
             HintText.Disable();
             SetPosition();
             ItemTexture.Position += ItemTexture.Scale.Y * Vector2.UnitY * .5f;
-            _learnSpecializationButton.Texture.Tint = _player.Level < 5 
+            _learnSpecializationButton.Texture.Tint = _player.Level < 5
                 ? new Vector4(Color.Orange.ToVector4().Xyz() * 2f, 1)
                 : new Vector4(Color.Orange.ToVector4().Xyz() * 5f, 1);
             _learnSpecializationText.TextColor = _player.Level < 5
@@ -118,11 +119,15 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         {
             base.SetPosition();
             ItemTexture.Position = Position + DefaultSize.Y * Vector2.UnitY * .1f;
-            ItemDescription.Position = ItemTexture.Position - ItemTexture.Scale.Y * Vector2.UnitY * 2 - Vector2.UnitY * .01f; 
-                                       _learnSpecializationButton.Position = BackgroundTexture.Position - DefaultSize.Y * Vector2.UnitY * .65f;
+            ItemDescription.Position =
+                ItemTexture.Position - ItemTexture.Scale.Y * Vector2.UnitY * 2 - Vector2.UnitY * .01f;
+            _learnSpecializationButton.Position = BackgroundTexture.Position - DefaultSize.Y * Vector2.UnitY * .65f;
             _learnSpecializationText.Position = _learnSpecializationButton.Position;
         }
 
-        public override void Show(Item Item) => throw new NotImplementedException();
+        public override void Show(Item Item)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

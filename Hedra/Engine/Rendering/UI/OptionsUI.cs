@@ -6,14 +6,16 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
- #define DONATE_BTC
+
+#define DONATE_BTC
 
 using Hedra.Engine.Management;
 using System.Numerics;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using System.Globalization;
 using System.Linq;
 using Hedra.Engine.Game;
@@ -27,7 +29,6 @@ using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
-
 
 
 namespace Hedra.Engine.Rendering.UI
@@ -66,7 +67,7 @@ namespace Hedra.Engine.Rendering.UI
             var vDist = .25f;
             _normalFont = FontCache.GetNormal(fontSize - 1);
             _boldFont = FontCache.GetBold(fontSize + 1);
-            Color fontColor = Color.White;
+            var fontColor = Color.White;
             _controlsPanel = new ControlsUI();
 
             var bandPosition = new Vector2(0f, .8f);
@@ -77,12 +78,11 @@ namespace Hedra.Engine.Rendering.UI
                 new Vector2(0.15f, 0.075f), Translation.Create("graphics"), Color.White, _normalFont);
             _graphics.Click += delegate
             {
-
-                this.SetGraphicsButtonState(true);
-                this.SetAudioButtonState(false);
-                this.SetInputButtonState(false);
-                this.SetDisplayButtonState(false);
-                this.SetControlsButtonState(false);
+                SetGraphicsButtonState(true);
+                SetAudioButtonState(false);
+                SetInputButtonState(false);
+                SetDisplayButtonState(false);
+                SetControlsButtonState(false);
             };
 
             _audio = new Button(new Vector2(-0.2f, bandPosition.Y),
@@ -135,10 +135,8 @@ namespace Hedra.Engine.Rendering.UI
 
             GameSettings.ChunkLoaderRadius = Math.Max(GameSettings.ChunkLoaderRadius, GeneralSettings.MinLoadingRadius);
             var viewValuesList = new List<string>();
-            for (int i = GeneralSettings.MinLoadingRadius; i < GeneralSettings.MaxLoadingRadius + 1; i++)
-            {
+            for (var i = GeneralSettings.MinLoadingRadius; i < GeneralSettings.MaxLoadingRadius + 1; i++)
                 viewValuesList.Add(i.ToString());
-            }
 
             var viewValues = viewValuesList.ToArray();
 
@@ -149,17 +147,15 @@ namespace Hedra.Engine.Rendering.UI
             {
                 Index = (GeneralSettings.MaxLoadingRadius - GeneralSettings.MinLoadingRadius) / 2,
                 CurrentValue =
-                    {Text = viewValues[(GeneralSettings.MaxLoadingRadius - GeneralSettings.MinLoadingRadius) / 2]}
+                    { Text = viewValues[(GeneralSettings.MaxLoadingRadius - GeneralSettings.MinLoadingRadius) / 2] }
             };
 
-            for (int i = 0; i < viewValues.Length; i++)
-            {
+            for (var i = 0; i < viewValues.Length; i++)
                 if (int.Parse(viewValues[i]) == GameSettings.ChunkLoaderRadius)
                 {
                     viewDistance.CurrentValue.Text = viewValues[i];
                     viewDistance.Index = i;
                 }
-            }
 
             viewDistance.LeftArrow.Click += delegate
             {
@@ -242,7 +238,7 @@ namespace Hedra.Engine.Rendering.UI
             {
                 "none", "low", "medium", "high"
             }.Select(S => Translation.Create(S)).ToArray();
-            OptionChooser shadows = new OptionChooser(new Vector2(dist, vDist), new Vector2(0.15f, 0.075f),
+            var shadows = new OptionChooser(new Vector2(dist, vDist), new Vector2(0.15f, 0.075f),
                 Translation.Create("shadow_quality", "{0}: "),
                 fontColor, _normalFont,
                 shadowsValues, false);
@@ -250,14 +246,12 @@ namespace Hedra.Engine.Rendering.UI
             shadows.CurrentValue.Text = Translations.Get("medium");
 
             for (var i = 0; i < shadowsValues.Length; i++)
-            {
                 if (i == GameSettings.ShadowQuality)
                 {
                     shadows.CurrentValue.Text = i == 0 ? Translations.Get("off") : shadowsValues[i].Get();
                     shadows.Index = i;
                     break;
                 }
-            }
 
             shadows.LeftArrow.Click += delegate
             {
@@ -314,10 +308,7 @@ namespace Hedra.Engine.Rendering.UI
 
             var langs = Translations.Languages;
             var languageOptions = new Translation[langs.Length];
-            for (var i = 0; i < langs.Length; i++)
-            {
-                languageOptions[i] = Translation.Default(langs[i]);
-            }
+            for (var i = 0; i < langs.Length; i++) languageOptions[i] = Translation.Default(langs[i]);
 
             var language = new OptionChooser(new Vector2(0, -.2f), Vector2.Zero,
                 Translation.Create("language", "{0}: "),
@@ -329,8 +320,9 @@ namespace Hedra.Engine.Rendering.UI
             language.LeftArrow.Click += delegate { GameSettings.Language = languageOptions[language.Index].Get(); };
             language.RightArrow.Click += delegate { GameSettings.Language = languageOptions[language.Index].Get(); };
 
-            
-            var fovOptions = Enumerable.Range(40, 80 + 1).Select(I => I.ToString()).Select(Translation.Default).ToArray();
+
+            var fovOptions = Enumerable.Range(40, 80 + 1).Select(I => I.ToString()).Select(Translation.Default)
+                .ToArray();
             var fovChooser = new OptionChooser(new Vector2(0, -.4f), new Vector2(0.15f, 0.075f),
                 Translation.Create("field_of_view", "{0}: "), fontColor, _normalFont, fovOptions);
             for (var i = 0; i < fovOptions.Length; i++)
@@ -353,17 +345,22 @@ namespace Hedra.Engine.Rendering.UI
 
             void RestartNotice()
             {
-                LocalPlayer.Instance.MessageDispatcher.ShowNotification(Translations.Get("restart_game_changes_take_effect"), Color.Red, 3f);
-            };
-            
+                LocalPlayer.Instance.MessageDispatcher.ShowNotification(
+                    Translations.Get("restart_game_changes_take_effect"), Color.Red, 3f);
+            }
+
+            ;
+
             var resolutionChooser = new OptionChooser(new Vector2(0, -.6f), new Vector2(0.15f, 0.075f),
-                Translation.Create("available_resolutions", "{0}: "), fontColor, _normalFont, GameSettings.AvailableResolutions.Select(V => Translation.Default(V.ToString())).ToArray());
+                Translation.Create("available_resolutions", "{0}: "), fontColor, _normalFont,
+                GameSettings.AvailableResolutions.Select(V => Translation.Default(V.ToString())).ToArray());
 
             void SetResolutionName()
             {
-                resolutionChooser.CurrentValue.Text = GameSettings.AvailableResolutions[GameSettings.ResolutionIndex].ToString().Replace("<","(").Replace(">",")").Replace(".",",");
+                resolutionChooser.CurrentValue.Text = GameSettings.AvailableResolutions[GameSettings.ResolutionIndex]
+                    .ToString().Replace("<", "(").Replace(">", ")").Replace(".", ",");
             }
-            
+
             for (var i = 0; i < GameSettings.AvailableResolutions.Length; i++)
             {
                 resolutionChooser.Index = GameSettings.ResolutionIndex;
@@ -373,150 +370,157 @@ namespace Hedra.Engine.Rendering.UI
 
             resolutionChooser.LeftArrow.Click += (S, A) =>
             {
-                GameSettings.ResolutionIndex = Mathf.Modulo(GameSettings.ResolutionIndex - 1, GameSettings.AvailableResolutions.Length);
+                GameSettings.ResolutionIndex = Mathf.Modulo(GameSettings.ResolutionIndex - 1,
+                    GameSettings.AvailableResolutions.Length);
                 SetResolutionName();
                 RestartNotice();
             };
 
             resolutionChooser.RightArrow.Click += (S, A) =>
             {
-                GameSettings.ResolutionIndex = Mathf.Modulo(GameSettings.ResolutionIndex + 1, GameSettings.AvailableResolutions.Length);
+                GameSettings.ResolutionIndex = Mathf.Modulo(GameSettings.ResolutionIndex + 1,
+                    GameSettings.AvailableResolutions.Length);
                 SetResolutionName();
                 RestartNotice();
             };
-            
+
             #region ScaleUI
-            var scaleOptions = new []
+
+            var scaleOptions = new[]
             {
-                "0.5","0.6","0.7","0.8","0.9","1.0","1.1","1.2","1.3","1.4","1.5","1.6","1.7","1.8","1.9","2.0"
+                "0.5", "0.6", "0.7", "0.8", "0.9", "1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9",
+                "2.0"
             }.Select(Translation.Default).ToArray();
             var scaleUI = new OptionChooser(
                 new Vector2(0, -.8f), Vector2.Zero,
                 Translation.Create("scale_interface", "{0}: "),
                 fontColor, _normalFont, scaleOptions);
-            
+
             scaleUI.LeftArrow.Click += delegate
             {
-                GameSettings.UIScaling = 
+                GameSettings.UIScaling =
                     float.Parse(scaleOptions[scaleUI.Index].Get(), NumberStyles.Any, CultureInfo.InvariantCulture);
                 RestartNotice();
             };
-            
-            scaleUI.RightArrow.Click += delegate 
-            { 
-                GameSettings.UIScaling = 
-                    float.Parse(scaleOptions[scaleUI.Index].Get(), NumberStyles.Any, CultureInfo.InvariantCulture);
-                RestartNotice();
-            };
-            
-            for(var i = 0; i < scaleOptions.Length; i++)
+
+            scaleUI.RightArrow.Click += delegate
             {
-                if(Math.Abs(float.Parse(scaleOptions[i].Get(), NumberStyles.Any, CultureInfo.InvariantCulture) - GameSettings.UIScaling) < 0.005f)
+                GameSettings.UIScaling =
+                    float.Parse(scaleOptions[scaleUI.Index].Get(), NumberStyles.Any, CultureInfo.InvariantCulture);
+                RestartNotice();
+            };
+
+            for (var i = 0; i < scaleOptions.Length; i++)
+                if (Math.Abs(float.Parse(scaleOptions[i].Get(), NumberStyles.Any, CultureInfo.InvariantCulture) -
+                             GameSettings.UIScaling) < 0.005f)
                 {
                     scaleUI.CurrentValue.Text = scaleOptions[i].Get();
                     scaleUI.Index = i;
                 }
-            }
+
             #endregion
 
             var smoothLod = new Button(new Vector2(0, .0f),
                 new Vector2(0.15f, 0.075f), BuildOnOff("smooth_lod", () => GameSettings.SmoothLod),
                 fontColor, _normalFont);
 
-            smoothLod.Click += delegate
-            {
-                GameSettings.SmoothLod = !GameSettings.SmoothLod;
-            };
-            
-            var volumeOptions = new []
-            {
-                "0%","5%","10%","15%","20%","25%","30%","35%","40%","45%","50%",
-                "55%","60%","65%","70%","75%","80%","85%","90%","95%","100%"
-            }.Select(Translation.Default).ToArray();
-            var musicVolume = new OptionChooser(new Vector2(0, .6f), new Vector2(0.15f, 0.075f), Translation.Create("music_volume", "{0}: "),  fontColor, _normalFont, volumeOptions);
+            smoothLod.Click += delegate { GameSettings.SmoothLod = !GameSettings.SmoothLod; };
 
-            for(int i = 0; i < volumeOptions.Length; i++)
+            var volumeOptions = new[]
             {
-                if(Math.Abs(int.Parse(volumeOptions[i].Get().Replace("%",string.Empty) ) / 100f - SoundtrackManager.Volume) < 0.005f)
+                "0%", "5%", "10%", "15%", "20%", "25%", "30%", "35%", "40%", "45%", "50%",
+                "55%", "60%", "65%", "70%", "75%", "80%", "85%", "90%", "95%", "100%"
+            }.Select(Translation.Default).ToArray();
+            var musicVolume = new OptionChooser(new Vector2(0, .6f), new Vector2(0.15f, 0.075f),
+                Translation.Create("music_volume", "{0}: "), fontColor, _normalFont, volumeOptions);
+
+            for (var i = 0; i < volumeOptions.Length; i++)
+                if (Math.Abs(int.Parse(volumeOptions[i].Get().Replace("%", string.Empty)) / 100f -
+                             SoundtrackManager.Volume) < 0.005f)
                 {
                     musicVolume.Index = i;
-                    musicVolume.CurrentValue.Text = volumeOptions[i].Get();                
+                    musicVolume.CurrentValue.Text = volumeOptions[i].Get();
                     break;
                 }
-            }
-            
-            musicVolume.LeftArrow.Click += delegate { 
-                GameSettings.MusicVolume = int.Parse( volumeOptions[musicVolume.Index].Get().Replace("%",string.Empty) ) / 100f;
-            };
-            
-            musicVolume.RightArrow.Click += delegate { 
-                GameSettings.MusicVolume = int.Parse( volumeOptions[musicVolume.Index].Get().Replace("%",string.Empty) ) / 100f;
-            };
-            
-            var sfxVolume = new OptionChooser(new Vector2(0, .4f), new Vector2(0.15f, 0.075f), Translation.Create("sfx_volume", "{0}: "),  fontColor, _normalFont,
-                                                         volumeOptions, false);
 
-            for(int i = 0; i < volumeOptions.Length; i++){
-                if( Math.Abs((float) (Int32.Parse( volumeOptions[i].Get().Replace("%",string.Empty) ) / 100f) - SoundPlayer.Volume) < 0.005f)
+            musicVolume.LeftArrow.Click += delegate
+            {
+                GameSettings.MusicVolume =
+                    int.Parse(volumeOptions[musicVolume.Index].Get().Replace("%", string.Empty)) / 100f;
+            };
+
+            musicVolume.RightArrow.Click += delegate
+            {
+                GameSettings.MusicVolume =
+                    int.Parse(volumeOptions[musicVolume.Index].Get().Replace("%", string.Empty)) / 100f;
+            };
+
+            var sfxVolume = new OptionChooser(new Vector2(0, .4f), new Vector2(0.15f, 0.075f),
+                Translation.Create("sfx_volume", "{0}: "), fontColor, _normalFont,
+                volumeOptions, false);
+
+            for (var i = 0; i < volumeOptions.Length; i++)
+                if (Math.Abs((float)(int.Parse(volumeOptions[i].Get().Replace("%", string.Empty)) / 100f) -
+                             SoundPlayer.Volume) < 0.005f)
                 {
                     sfxVolume.Index = i;
-                    sfxVolume.CurrentValue.Text = volumeOptions[i].Get();            
+                    sfxVolume.CurrentValue.Text = volumeOptions[i].Get();
                     break;
                 }
-            }
-            
+
             sfxVolume.LeftArrow.Click += (Sender, Args) =>
                 SoundPlayer.Volume = int.Parse(volumeOptions[sfxVolume.Index].Get().Replace("%", string.Empty)) / 100f;
-            
+
             sfxVolume.RightArrow.Click += (Sender, Args) =>
                 SoundPlayer.Volume = int.Parse(volumeOptions[sfxVolume.Index].Get().Replace("%", string.Empty)) / 100f;
-            
-            var sensitivityOptions = new []
+
+            var sensitivityOptions = new[]
             {
-                "0.1","0.2","0.3","0.4","0.5","0.6","0.7","0.8","0.9","1.0",
-                "1.1","1.2","1.3","1.4","1.5","1.6","1.7","1.8","1.9","2.0",
-                "2.1","2.2","2.3","2.4","2.5"
+                "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0",
+                "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "2.0",
+                "2.1", "2.2", "2.3", "2.4", "2.5"
             }.Select(Translation.Default).ToArray();
             var mouseSensitivity = new OptionChooser(
                 new Vector2(0, .4f), Vector2.Zero,
                 Translation.Create("mouse_sensitivity", "{0}: "),
                 fontColor, _normalFont, sensitivityOptions);
-            
+
             mouseSensitivity.LeftArrow.Click += delegate
             {
-                GameSettings.MouseSensibility = 
-                    float.Parse(sensitivityOptions[mouseSensitivity.Index].Get(), NumberStyles.Any, CultureInfo.GetCultureInfo("en-US"));
+                GameSettings.MouseSensibility =
+                    float.Parse(sensitivityOptions[mouseSensitivity.Index].Get(), NumberStyles.Any,
+                        CultureInfo.GetCultureInfo("en-US"));
             };
-            
-            mouseSensitivity.RightArrow.Click += delegate 
-            { 
-                GameSettings.MouseSensibility = 
-                    float.Parse(sensitivityOptions[mouseSensitivity.Index].Get(), NumberStyles.Any, CultureInfo.GetCultureInfo("en-US"));
-            };
-            
-            for(var i = 0; i < sensitivityOptions.Length; i++)
+
+            mouseSensitivity.RightArrow.Click += delegate
             {
-                if(Math.Abs(float.Parse(sensitivityOptions[i].Get(), NumberStyles.Any, CultureInfo.GetCultureInfo("en-US")) - GameSettings.MouseSensibility) < 0.005f)
+                GameSettings.MouseSensibility =
+                    float.Parse(sensitivityOptions[mouseSensitivity.Index].Get(), NumberStyles.Any,
+                        CultureInfo.GetCultureInfo("en-US"));
+            };
+
+            for (var i = 0; i < sensitivityOptions.Length; i++)
+                if (Math.Abs(
+                    float.Parse(sensitivityOptions[i].Get(), NumberStyles.Any, CultureInfo.GetCultureInfo("en-US")) -
+                    GameSettings.MouseSensibility) < 0.005f)
                 {
                     mouseSensitivity.CurrentValue.Text = sensitivityOptions[i].Get();
                     mouseSensitivity.Index = i;
                 }
-            }
-            
-            var autosave = new Button(new Vector2(0f, .2f),
-                                 new Vector2(0.15f,0.075f), BuildOnOff("autosave", () => GameSettings.Autosave), fontColor, _normalFont);
-            
-            autosave.Click += delegate
-            {
-                GameSettings.Autosave = !GameSettings.Autosave;
-            };
 
-            var smoothCamera = new Button(new Vector2(0, 0), Vector2.Zero, BuildOnOff("smooth_camera", () => GameSettings.SmoothCamera), fontColor,
+            var autosave = new Button(new Vector2(0f, .2f),
+                new Vector2(0.15f, 0.075f), BuildOnOff("autosave", () => GameSettings.Autosave), fontColor,
+                _normalFont);
+
+            autosave.Click += delegate { GameSettings.Autosave = !GameSettings.Autosave; };
+
+            var smoothCamera = new Button(new Vector2(0, 0), Vector2.Zero,
+                BuildOnOff("smooth_camera", () => GameSettings.SmoothCamera), fontColor,
                 _normalFont);
 
             smoothCamera.Click += delegate { GameSettings.SmoothCamera = !GameSettings.SmoothCamera; };
 
-            
+
             _graphicsButtons.Add(quality);
             _graphicsButtons.Add(vSync);
             _graphicsButtons.Add(shadows);
@@ -541,58 +545,47 @@ namespace Hedra.Engine.Rendering.UI
             _displayButtons.Add(fovChooser);
             _displayButtons.Add(scaleUI);
             _displayButtons.Add(resolutionChooser);
-            if(showConsole != null) _displayButtons.Add(showConsole);
-            
+            if (showConsole != null) _displayButtons.Add(showConsole);
+
             AddElement(_controls);
             AddElement(blackBand);
             AddElement(_audio);
             AddElement(_input);
             AddElement(_graphics);
             AddElement(_display);
-            
-            
-            for(var i = 0; i < _graphicsButtons.Count; i++)
-            {
-                AddElement(_graphicsButtons[i]);
-            }
-            for(var i = 0; i < _inputButtons.Count; i++)
-            {
-                AddElement(_inputButtons[i]);
-            }
-            for(var i = 0; i < _audioButtons.Count; i++)
-            {
-                AddElement(_audioButtons[i]);
-            }
-            for(var i = 0; i < _displayButtons.Count; i++)
-            {
-                AddElement(_displayButtons[i]);
-            }
+
+
+            for (var i = 0; i < _graphicsButtons.Count; i++) AddElement(_graphicsButtons[i]);
+            for (var i = 0; i < _inputButtons.Count; i++) AddElement(_inputButtons[i]);
+            for (var i = 0; i < _audioButtons.Count; i++) AddElement(_audioButtons[i]);
+            for (var i = 0; i < _displayButtons.Count; i++) AddElement(_displayButtons[i]);
             AddElement(_controlsPanel);
-            
+
             Disable();
-            
-            OnEscapePressed += delegate { 
+
+            OnEscapePressed += delegate
+            {
                 Disable();
                 GameManager.Player.UI.Menu.Enable();
             };
-            
+
             OnPanelStateChange += delegate(object Sender, PanelState E)
             {
-                if(E == PanelState.Disabled)
+                if (E == PanelState.Disabled)
                 {
-                    if(GameSettings.Loaded)
+                    if (GameSettings.Loaded)
                         GameSettings.Save($"{AssetManager.AppData}/settings.cfg");
                     GameSettings.DarkEffect = false;
                 }
-                if(E == PanelState.Enabled){
+
+                if (E == PanelState.Enabled)
+                {
                     SetGraphicsButtonState(true);
                     SetAudioButtonState(false);
                     SetInputButtonState(false);
                     SetDisplayButtonState(false);
                     SetControlsButtonState(false);
                     GameSettings.DarkEffect = true;
-                    
-                    
                 }
             };
         }
@@ -601,7 +594,7 @@ namespace Hedra.Engine.Rendering.UI
         {
             _controlsPanel.Update();
         }
-        
+
         private void ResetFonts()
         {
             _graphics.Text.TextFont = _normalFont;
@@ -624,70 +617,66 @@ namespace Hedra.Engine.Rendering.UI
         {
             if (Enabled)
             {
-                this.ResetFonts();
+                ResetFonts();
                 _graphics.Text.TextFont = _boldFont;
-                this.UpdateFonts();
+                UpdateFonts();
             }
-            for(int i = 0; i < _graphicsButtons.Count; i++)
-            {
-                if(Enabled)
+
+            for (var i = 0; i < _graphicsButtons.Count; i++)
+                if (Enabled)
                     _graphicsButtons[i].Enable();
                 else
                     _graphicsButtons[i].Disable();
-            }
         }
 
         private void SetInputButtonState(bool Enabled)
         {
             if (Enabled)
             {
-                this.ResetFonts();
+                ResetFonts();
                 _input.Text.TextFont = _boldFont;
-                this.UpdateFonts();
+                UpdateFonts();
             }
-            for (int i = 0; i < _inputButtons.Count; i++)
-            {
-                if(Enabled)
+
+            for (var i = 0; i < _inputButtons.Count; i++)
+                if (Enabled)
                     _inputButtons[i].Enable();
                 else
                     _inputButtons[i].Disable();
-            }
-            
         }
 
         private void SetAudioButtonState(bool Enabled)
         {
             if (Enabled)
             {
-                this.ResetFonts();
+                ResetFonts();
                 _audio.Text.TextFont = _boldFont;
-                this.UpdateFonts();
+                UpdateFonts();
             }
-            for (int i = 0; i < _audioButtons.Count; i++)
-            {
-                if(Enabled)
+
+            for (var i = 0; i < _audioButtons.Count; i++)
+                if (Enabled)
                     _audioButtons[i].Enable();
                 else
                     _audioButtons[i].Disable();
-            }
         }
 
-        private void SetDisplayButtonState(bool Enabled){
+        private void SetDisplayButtonState(bool Enabled)
+        {
             if (Enabled)
             {
-                this.ResetFonts();
+                ResetFonts();
                 _display.Text.TextFont = _boldFont;
-                this.UpdateFonts();
+                UpdateFonts();
             }
-            for (int i = 0; i < _displayButtons.Count; i++)
-            {
-                if(Enabled)
+
+            for (var i = 0; i < _displayButtons.Count; i++)
+                if (Enabled)
                     _displayButtons[i].Enable();
                 else
                     _displayButtons[i].Disable();
-            }
         }
-        
+
         private static Translation BuildOnOff(string Key, Func<bool> Getter,
             Translation OptionalOn = null, Translation OptionalOff = null)
         {
@@ -697,16 +686,17 @@ namespace Hedra.Engine.Rendering.UI
             trans.Concat(() => Getter() ? on.Get() : off.Get());
             return trans;
         }
-        
+
         private void SetControlsButtonState(bool Enabled)
         {
             if (Enabled)
             {
-                this.ResetFonts();
+                ResetFonts();
                 _controls.Text.TextFont = _boldFont;
-                this.UpdateFonts();
+                UpdateFonts();
             }
-            if(Enabled)
+
+            if (Enabled)
                 _controlsPanel.Enable();
             else
                 _controlsPanel.Disable();

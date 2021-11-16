@@ -8,7 +8,8 @@
  */
 
 using System;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Management;
@@ -53,27 +54,28 @@ namespace Hedra.Engine.Rendering.UI
         public Bar(Vector2 Position, Vector2 Scale, Func<float> Value, Func<float> Max, Panel InPanel,
             DrawOrder Order = DrawOrder.Before, bool CurvedBorders = true)
         {
-            this.Initialize(Position, Scale, Value, Max, InPanel, null, Order, CurvedBorders);
+            Initialize(Position, Scale, Value, Max, InPanel, null, Order, CurvedBorders);
         }
 
         public Bar(Vector2 Position, Vector2 Scale, Func<float> Value, Func<float> Max, Vector4 Color, Panel InPanel,
             DrawOrder Order = DrawOrder.Before, bool CurvedBorders = true)
         {
-            if(Color != default(Vector4)) _uniformColor = Color;
-            this.Initialize(Position, Scale, Value, Max, InPanel, null, Order, CurvedBorders);
+            if (Color != default) _uniformColor = Color;
+            Initialize(Position, Scale, Value, Max, InPanel, null, Order, CurvedBorders);
         }
 
-        public Bar(Vector2 Position, Vector2 Scale, string Text, Func<float> Value, Func<float> Max, Vector4 Color, Panel InPanel,
+        public Bar(Vector2 Position, Vector2 Scale, string Text, Func<float> Value, Func<float> Max, Vector4 Color,
+            Panel InPanel,
             DrawOrder Order = DrawOrder.Before)
         {
             _uniformColor = Color;
-            this.Initialize(Position, Scale, Value, Max, InPanel, Text, Order);
+            Initialize(Position, Scale, Value, Max, InPanel, Text, Order);
         }
-        
+
         public Bar(Vector2 Position, Vector2 Scale, string Text, Func<float> Value, Func<float> Max, Panel InPanel,
             DrawOrder Order = DrawOrder.Before)
         {
-            this.Initialize(Position, Scale, Value, Max, InPanel, Text, Order);
+            Initialize(Position, Scale, Value, Max, InPanel, Text, Order);
         }
 
         public void Dispose()
@@ -88,12 +90,12 @@ namespace Hedra.Engine.Rendering.UI
                 return;
 
             _barSize = Mathf.Clamp(Mathf.Lerp(_barSize, _value() / _max(), Time.IndependentDeltaTime * 8f), 0, 1);
-            if(AlignLeft)
+            if (AlignLeft)
                 _barText.Position = Position + _barText.Scale.X * Vector2.UnitX - Scale.X * Vector2.UnitX * .5f;
 
             if (UpdateTextRatio)
-                _barText.Text = (int) _value() + " / " + (int) _max();
-            Shader.Bind();          
+                _barText.Text = (int)_value() + " / " + (int)_max();
+            Shader.Bind();
             Renderer.Disable(EnableCap.DepthTest);
             Renderer.Enable(EnableCap.Blend);
 
@@ -102,21 +104,25 @@ namespace Hedra.Engine.Rendering.UI
 
             Shader["Scale"] =
                 Mathf.DivideVector(_targetResolution * Scale, new Vector2(GameSettings.Width, GameSettings.Height)) +
-                Mathf.DivideVector(_targetResolution * new Vector2(0.015f, 0.015f), new Vector2(GameSettings.Width, GameSettings.Height));
+                Mathf.DivideVector(_targetResolution * new Vector2(0.015f, 0.015f),
+                    new Vector2(GameSettings.Width, GameSettings.Height));
             Shader["Position"] = AdjustedPosition;
             Shader["Color"] = BackgroundColor;
 
             DrawManager.UIRenderer.DrawQuad();
 
             Shader["Scale"] = ShowBar
-                    ? Mathf.DivideVector(_targetResolution * Scale, new Vector2(GameSettings.Width, GameSettings.Height)) *
-                      new Vector2(_barSize, 1)
-                    : new Vector2(0, 0);
+                ? Mathf.DivideVector(_targetResolution * Scale, new Vector2(GameSettings.Width, GameSettings.Height)) *
+                  new Vector2(_barSize, 1)
+                : new Vector2(0, 0);
             Shader["Position"] = AdjustedPosition;
-            Shader["Color"] =  _uniformColor != Vector4.Zero 
-                ? _uniformColor : _barSize > 0.6f 
-                ? Colors.FullHealthGreen : _barSize < 2.5f 
-                ? Colors.LowHealthRed : throw new ArgumentOutOfRangeException("Health is out of range");
+            Shader["Color"] = _uniformColor != Vector4.Zero
+                ? _uniformColor
+                : _barSize > 0.6f
+                    ? Colors.FullHealthGreen
+                    : _barSize < 2.5f
+                        ? Colors.LowHealthRed
+                        : throw new ArgumentOutOfRangeException("Health is out of range");
 
             DrawManager.UIRenderer.DrawQuad();
 
@@ -139,7 +145,7 @@ namespace Hedra.Engine.Rendering.UI
                 _position = value;
                 if (_barText != null)
                     _barText.Position = _position;
-                this.Adjust();
+                Adjust();
             }
         }
 
@@ -154,13 +160,13 @@ namespace Hedra.Engine.Rendering.UI
             get => _barText.Color;
             set => _barText.Color = value;
         }
-        
+
         public Font TextFont
         {
             get => _barText.TextFont;
             set => _barText.TextFont = value;
         }
-        
+
         public void Enable()
         {
             Enabled = true;
@@ -185,13 +191,13 @@ namespace Hedra.Engine.Rendering.UI
         {
             this.Position = Position;
             this.Scale = Scale;
-            this._order = Order;
+            _order = Order;
             this.CurvedBorders = CurvedBorders;
             _value = Value;
             _max = Max;
             _inPanel = InPanel;
             _optionalText = OptionalText;
-            this.Build();
+            Build();
         }
 
         private void Build()
@@ -205,18 +211,20 @@ namespace Hedra.Engine.Rendering.UI
                 _barText = new RenderableText(_optionalText, Position, Color.White, FontCache.GetBold(11));
                 UpdateTextRatio = false;
             }
-            DrawManager.UIRenderer.Add(this, this._order);
+
+            DrawManager.UIRenderer.Add(this, _order);
             _inPanel?.AddElement(_barText);
-            
+
             if (_barBlueprint == 0)
             {
                 _barBlueprint = uint.MaxValue;
                 Executer.ExecuteOnMainThread(delegate
                 {
-                    _barBlueprint = Graphics2D.LoadFromAssets("Assets/Bar.png"); 
+                    _barBlueprint = Graphics2D.LoadFromAssets("Assets/Bar.png");
                     TextureRegistry.MarkStatic(_barBlueprint);
                 });
             }
+
             if (_rectangleBlueprint == 0)
             {
                 _rectangleBlueprint = uint.MaxValue;

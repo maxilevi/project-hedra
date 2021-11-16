@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
@@ -35,10 +36,10 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public override void Build(CollidableStructure Structure)
         {
             var position = Structure.Position;
-            var rng = new Random( (int) ( position.X / 11 * (position.Z / 13) ) );
+            var rng = new Random((int)(position.X / 11 * (position.Z / 13)));
 
             const int tombstoneCount = 25;
-            
+
             var rotationMatrix = Matrix4x4.CreateRotationY(rng.NextFloat() * 360 * Mathf.Radian);
             var originalMausoleum = CacheManager.GetModel(CacheItem.Mausoleum);
             var mausoleum = originalMausoleum.ShallowClone();
@@ -59,7 +60,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
             int k = 0, j = 0;
             for (var i = 0; i < tombstoneCount * 2; i++)
             {
-
                 if (i % 2 == 0) continue;
 
                 if (j >= 5)
@@ -69,11 +69,12 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 }
 
                 j++;
-                if (rng.Next(0, 4) == 1 || (j == 3 && k == 2)) continue;
+                if (rng.Next(0, 4) == 1 || j == 3 && k == 2) continue;
 
-                var gravePosition = position + Vector3.UnitX * 28f * Chunk.BlockSize + Vector3.UnitZ * 18f * Chunk.BlockSize
-                    + Vector3.UnitX * -11 * j * Chunk.BlockSize
-                    + Vector3.UnitZ * -11 * k * Chunk.BlockSize;
+                var gravePosition = position + Vector3.UnitX * 28f * Chunk.BlockSize +
+                                    Vector3.UnitZ * 18f * Chunk.BlockSize
+                                    + Vector3.UnitX * -11 * j * Chunk.BlockSize
+                                    + Vector3.UnitZ * -11 * k * Chunk.BlockSize;
                 gravePosition = new Vector3(gravePosition.X, position.Y, gravePosition.Z);
 
                 var graveScale = Vector3.One * (3.25f + rng.NextFloat() * .5f) * 1.5f;
@@ -92,21 +93,19 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
                 Structure.AddCollisionShape(shapes.ToArray());
                 Structure.AddStaticElement(grave);
-                if (rng.Next(0, 5) == 1)
-                {
-                    Structure.WorldObject.AddChildren(new Tombstone(gravePosition));
-                }
+                if (rng.Next(0, 5) == 1) Structure.WorldObject.AddChildren(new Tombstone(gravePosition));
             }
+
             for (var i = 0; i < mausoleum.Colors.Count; i++)
                 mausoleum.Colors[i] *= new Vector4(.75f, .75f, .75f, 1);
 
             Structure.AddCollisionShape(mausoleumShapes.ToArray());
             Structure.AddStaticElement(mausoleum);
-            ((Graveyard) Structure.WorldObject).AreaWrapper =
+            ((Graveyard)Structure.WorldObject).AreaWrapper =
                 World.HighlightArea(position, new Vector4(.1f, .1f, .1f, 1f), PlateauRadius, -1);
 
-            this.BuildLamps(position, Structure.WorldObject, Structure);
-            BuildReward(position, (Graveyard) Structure.WorldObject, rng);
+            BuildLamps(position, Structure.WorldObject, Structure);
+            BuildReward(position, (Graveyard)Structure.WorldObject, rng);
         }
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
@@ -122,24 +121,25 @@ namespace Hedra.Engine.StructureSystem.Overworld
             for (var i = 0; i < skeletonCount; i++)
             {
                 var skeleton = NPCCreator.SpawnBandit(
-                        Position + new Vector3(Rng.NextFloat() * 60f - 30f, 0, Rng.NextFloat() * 60f - 30f) * Chunk.BlockSize,
-                        Level, BanditOptions.Undead);
-                    enemies.Add(skeleton);
+                    Position + new Vector3(Rng.NextFloat() * 60f - 30f, 0, Rng.NextFloat() * 60f - 30f) *
+                    Chunk.BlockSize,
+                    Level, BanditOptions.Undead);
+                enemies.Add(skeleton);
             }
+
             Cementery.Enemies = enemies.ToArray();
 
-            var prize = World.SpawnChest(Position + Vector3.UnitX * 40f, 
-                    ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon)
-                    {
-                        RandomizeTier = false
-                    }));
+            var prize = World.SpawnChest(Position + Vector3.UnitX * 40f,
+                ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon)
+                {
+                    RandomizeTier = false
+                }));
             Cementery.Chest = prize;
             prize.Condition = delegate
             {
                 if (!Cementery.Completed)
-                {
-                    LocalPlayer.Instance.MessageDispatcher.ShowNotification(Translations.Get("enemies_around"), Color.DarkRed, 2f);
-                }
+                    LocalPlayer.Instance.MessageDispatcher.ShowNotification(Translations.Get("enemies_around"),
+                        Color.DarkRed, 2f);
                 return Cementery.Completed;
             };
             Cementery.AddChildren(prize);
@@ -147,28 +147,28 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         private void BuildLamps(Vector3 Position, BaseStructure Cementery, CollidableStructure Structure)
         {
-            for (int i = 0; i < 4; i++)
+            for (var i = 0; i < 4; i++)
             {
-                Vector3 addonPosition = Vector3.Zero;
+                var addonPosition = Vector3.Zero;
 
                 if (i == 0) addonPosition = Vector3.UnitZ * 14 * Chunk.BlockSize + Vector3.UnitX * 14 * Chunk.BlockSize;
-                if (i == 1) addonPosition = -Vector3.UnitZ * 14 * Chunk.BlockSize - Vector3.UnitX * 14 * Chunk.BlockSize;
-                if (i == 2) addonPosition = -Vector3.UnitZ * 14 * Chunk.BlockSize + Vector3.UnitX * 14 * Chunk.BlockSize;
+                if (i == 1)
+                    addonPosition = -Vector3.UnitZ * 14 * Chunk.BlockSize - Vector3.UnitX * 14 * Chunk.BlockSize;
+                if (i == 2)
+                    addonPosition = -Vector3.UnitZ * 14 * Chunk.BlockSize + Vector3.UnitX * 14 * Chunk.BlockSize;
                 if (i == 3) addonPosition = Vector3.UnitZ * 14 * Chunk.BlockSize - Vector3.UnitX * 14 * Chunk.BlockSize;
 
-                Vector3 lightPosition = Position + addonPosition;
-                VertexData lampPost = AssetManager.PLYLoader("Assets/Env/Village/Lamp0.ply", Vector3.One * 3.25f * 1.5f);
+                var lightPosition = Position + addonPosition;
+                var lampPost = AssetManager.PLYLoader("Assets/Env/Village/Lamp0.ply", Vector3.One * 3.25f * 1.5f);
                 lampPost.Translate(lightPosition);
                 lampPost.GraduateColor(Vector3.UnitY);
                 lampPost.FillExtraData(WorldRenderer.NoHighlightFlag);
-                List<CollisionShape> shapes = AssetManager.LoadCollisionShapes("Assets/Env/Village/Lamp0.ply", 1, Vector3.One * 3.25f * 1.5f);
-                for (int l = 0; l < shapes.Count; l++)
-                {
-                    shapes[l].Transform(lightPosition);
-                }
+                var shapes =
+                    AssetManager.LoadCollisionShapes("Assets/Env/Village/Lamp0.ply", 1, Vector3.One * 3.25f * 1.5f);
+                for (var l = 0; l < shapes.Count; l++) shapes[l].Transform(lightPosition);
                 Structure.AddCollisionShape(shapes.ToArray());
                 Structure.AddStaticElement(lampPost);
-                
+
                 var lamp = new WorldLight(lightPosition + Vector3.UnitY * 7)
                 {
                     Radius = PointLight.DefaultRadius,
@@ -178,18 +178,19 @@ namespace Hedra.Engine.StructureSystem.Overworld
             }
         }
 
-        protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
+        protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome,
+            IRandom Rng)
         {
             if (Rng.Next(0, StructureGrid.GraveyardChance) != 1) return false;
             var height = Biome.Generation.GetMaxHeight(TargetPosition.X, TargetPosition.Z);
             return height > BiomePool.SeaLevel;
         }
-        
-        public override int[] AmbientSongs { get; } = new []
+
+        public override int[] AmbientSongs { get; } = new[]
         {
             SoundtrackManager.GraveyardChampion
         };
-        
+
         public override string DisplayName => Translations.Get("structure_graveyard");
 
         protected override string GetShortDescription(Graveyard Structure)
@@ -199,7 +200,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         protected override string GetDescription(Graveyard Structure)
         {
-            return Translations.Get("quest_complete_structure_description_graveyard", DisplayName, Structure.EnemiesLeft);
+            return Translations.Get("quest_complete_structure_description_graveyard", DisplayName,
+                Structure.EnemiesLeft);
         }
     }
 }
