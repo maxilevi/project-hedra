@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Ultz.Native.GLFW.3.3.2.1\build\net461\Ultz.Native.GLFW.props" Condition="Exists('..\packages\Ultz.Native.GLFW.3.3.2.1\build\net461\Ultz.Native.GLFW.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -73,143 +72,20 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Reference Include="AdvancedDLSupport, Version=3.1.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\AdvancedDLSupport.3.1.0\lib\netstandard2.0\AdvancedDLSupport.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="BulletSharp, Version=0.12.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\references\BulletSharp.dll</HintPath>
     </Reference>
     <Reference Include="Facepunch.Steamworks">
       <HintPath>..\references\Facepunch.Steamworks.dll</HintPath>
     </Reference>
-    <Reference Include="Humanizer, Version=2.5.0.0, Culture=neutral, PublicKeyToken=979442b78dfc278e">
-      <HintPath>..\packages\Humanizer.Core.2.5.16\lib\netstandard2.0\Humanizer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73">
-      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="IronPython, Version=2.7.5.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1">
-      <HintPath>..\packages\IronPython.2.7.5\lib\Net40\IronPython.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="IronPython.Modules, Version=2.7.5.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1">
-      <HintPath>..\packages\IronPython.2.7.5\lib\Net40\IronPython.Modules.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Bcl.HashCode, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-      <HintPath>..\packages\Microsoft.Bcl.HashCode.1.1.0\lib\net461\Microsoft.Bcl.HashCode.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Dynamic, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1">
-      <HintPath>..\packages\IronPython.2.7.5\lib\Net40\Microsoft.Dynamic.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.DependencyModel, Version=3.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
-      <HintPath>..\packages\Microsoft.Extensions.DependencyModel.3.1.1\lib\net451\Microsoft.Extensions.DependencyModel.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Scripting, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1">
-      <HintPath>..\packages\IronPython.2.7.5\lib\Net40\Microsoft.Scripting.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Scripting.Metadata, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1">
-      <HintPath>..\packages\IronPython.2.7.5\lib\Net40\Microsoft.Scripting.Metadata.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Mono.DllMap, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Mono.DllMap.1.0.1\lib\netstandard2.0\Mono.DllMap.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="mscorlib" />
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NVorbis, Version=0.8.6.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\NVorbis.0.8.6\lib\net35\NVorbis.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Silk.NET.Core, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Silk.NET.Core.2.9.0\lib\netstandard2.0\Silk.NET.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Silk.NET.GLFW, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Silk.NET.GLFW.2.9.0\lib\netstandard2.0\Silk.NET.GLFW.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Silk.NET.Input.Common, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Silk.NET.Input.Common.2.9.0\lib\netstandard2.0\Silk.NET.Input.Common.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Silk.NET.Input.Glfw, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Silk.NET.Input.Glfw.2.9.0\lib\netstandard2.0\Silk.NET.Input.Glfw.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Silk.NET.Maths, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Silk.NET.Maths.2.9.0\lib\netstandard2.0\Silk.NET.Maths.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Silk.NET.OpenAL, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Silk.NET.OpenAL.2.9.0\lib\netstandard2.0\Silk.NET.OpenAL.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Silk.NET.OpenGL, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Silk.NET.OpenGL.2.9.0\lib\netstandard2.0\Silk.NET.OpenGL.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Silk.NET.OpenGL.Legacy, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Silk.NET.OpenGL.Legacy.2.9.0\lib\netstandard2.0\Silk.NET.OpenGL.Legacy.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Silk.NET.Windowing.Common, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Silk.NET.Windowing.Common.2.9.0\lib\netstandard2.0\Silk.NET.Windowing.Common.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Silk.NET.Windowing.Glfw, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Silk.NET.Windowing.Glfw.2.9.0\lib\netstandard2.0\Silk.NET.Windowing.Glfw.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="StrictEmit, Version=2.4.2.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\StrictEmit.2.4.2\lib\net45\StrictEmit.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors, Version=4.1.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <HintPath>..\packages\System.Numerics.Vectors.4.6.0-preview5.19224.8\lib\net46\System.Numerics.Vectors.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.5.0.0\lib\net45\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.0.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net47\System.ValueTuple.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="Ultz.Bcl.Half, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Ultz.Bcl.Half.Fallback.1.0.0\lib\netstandard2.0\Ultz.Bcl.Half.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AISystem\AdaptiveAIComponent.cs" />
@@ -8134,7 +8010,6 @@
     <None Include="Modules\Mobs\Wolf.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config" />
     <None Include="Shaders\AnimatedModel.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -15578,6 +15453,41 @@
       <Name>Framework</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AdvancedDLSupport">
+      <Version>3.1.0</Version>
+    </PackageReference>
+    <PackageReference Include="IronPython">
+      <Version>2.7.5</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="NVorbis">
+      <Version>0.8.6</Version>
+    </PackageReference>
+    <PackageReference Include="SharpZipLib">
+      <Version>0.86.0</Version>
+    </PackageReference>
+    <PackageReference Include="Silk.NET.Input.Glfw">
+      <Version>2.9.0</Version>
+    </PackageReference>
+    <PackageReference Include="Silk.NET.OpenAL">
+      <Version>2.9.0</Version>
+    </PackageReference>
+    <PackageReference Include="Silk.NET.OpenGL">
+      <Version>2.9.0</Version>
+    </PackageReference>
+    <PackageReference Include="Silk.NET.OpenGL.Legacy">
+      <Version>2.9.0</Version>
+    </PackageReference>
+    <PackageReference Include="System.Numerics.Vectors">
+      <Version>4.6.0-preview5.19224.8</Version>
+    </PackageReference>
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe">
+      <Version>5.0.0</Version>
+    </PackageReference>
+  </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent Condition="'$(OS)' == 'Windows_NT' ">
         call "$(ProjectDir)/../utilities/make_atlas.sh"
@@ -15625,10 +15535,4 @@
     <Optimize>false</Optimize>
   </PropertyGroup>
   <ProjectExtensions />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Ultz.Native.GLFW.3.3.2.1\build\net461\Ultz.Native.GLFW.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Ultz.Native.GLFW.3.3.2.1\build\net461\Ultz.Native.GLFW.props'))" />
-  </Target>
 </Project>
