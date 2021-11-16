@@ -19,9 +19,10 @@ jobs:
     - name: Setup Dotnet for use with actions
       uses: actions/setup-dotnet@v1.0.0
 
-    - name: Build Dependencies
+    - name: Build Dependencies windows
+      if: matrix.os == 'windows-latest'
       shell: bash
-      run: sudo ./build-deps.sh
+      run: ./build-deps.sh
       
     - name: Build and Test solution
       run: dotnet test -c Release "Project Hedra.sln"
