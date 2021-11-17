@@ -5,11 +5,7 @@ namespace Hedra.Engine.Native
 {
     public class HedraCoreNative
     {
-#if _WINDOWS
-        private const string HedraCoreDLL = "hedracore.dll";
-#else
-        private const string HedraCoreDLL = "libhedracore.so";
-#endif
+        private const string HedraCoreDLL = "hedracore";
 
         [DllImport(HedraCoreDLL, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
         public static extern uint meshopt_simplify(IntPtr Destination, IntPtr Indices, UIntPtr IndexCount,
