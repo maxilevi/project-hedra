@@ -104,10 +104,11 @@ namespace Hedra.Engine.Game
             var is64 = Environment.Is64BitProcess;
             var dllPath = $"{Path}/{(is64 ? "x64" : "x86")}";
             var ext = (isWindows ? "dll" : "so");
+            var prefix = (isWindows ? "" : "lib");
 
             _nativeLibs = new List<IntPtr>
             {
-                TryLoad($"{dllPath}/hedracore.{ext}"),
+                TryLoad($"{dllPath}/{prefix}hedracore.{ext}"),
                 TryLoad($"{dllPath}/steam_api{(is64 ? "64" : string.Empty)}.{ext}"),
                 TryLoad($"{dllPath}/libbulletc.{ext}"),
                 TryLoad($"{dllPath}/openal32.{ext}"),
