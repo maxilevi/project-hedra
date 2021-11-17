@@ -73,6 +73,7 @@ namespace Hedra.Engine
             else
                 RunNormalAndDummyMode(dummyMode);
 
+            GameLoader.UnloadNativeLibs();
             Environment.Exit(0);
         }
 

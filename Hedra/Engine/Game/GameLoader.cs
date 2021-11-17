@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -18,6 +19,7 @@ namespace Hedra.Engine.Game
     public static class GameLoader
     {
         private static bool _loadedArchitectureFiles;
+        private static List<IntPtr> _nativeLibs;
 
         public static string AppData =>
             $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}/Project Hedra/".Replace("\\", "/");
@@ -98,13 +100,29 @@ namespace Hedra.Engine.Game
         {
             if (_loadedArchitectureFiles) return;
 
-            string dllPath = null;
-            if (IntPtr.Size == 8) dllPath = Path + "x64/";
-            if (IntPtr.Size == 4) dllPath = Path + "x86/";
-            Log.WriteLine($"Appending '{dllPath}' to the PATH for library finding.");
-            Environment.SetEnvironmentVariable("PATH", Environment.GetEnvironmentVariable("PATH") + ";" + dllPath);
-
+            var isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+            var is64 = Environment.Is64BitProcess;
+            var dllPath = $"{Path}/{(is64 ? "x64" : "x86")}";
+            var ext = (isWindows ? "dll" : "so");
+            
+            _nativeLibs = new List<IntPtr>
+            {
+                NativeLibrary.Load($"{dllPath}/hedracore.{ext}"),
+                NativeLibrary.Load($"{dllPath}/steam_api{(is64 ? "64" : string.Empty)}.{ext}"),
+                NativeLibrary.Load($"{dllPath}/libbulletc.{ext}"),
+                NativeLibrary.Load($"{dllPath}/openal32.{ext}"),
+                NativeLibrary.Load($"{dllPath}/glfw3.{ext}")
+            };
             _loadedArchitectureFiles = true;
+        }
+
+        public static void UnloadNativeLibs()
+        {
+            for (var i = 0; i < _nativeLibs.Count; ++i)
+            {
+                NativeLibrary.Free(_nativeLibs[i]);
+            }
+            _nativeLibs.Clear();
         }
 
         public static void CreateCharacterFolders()
