@@ -10,6 +10,7 @@
 using System;
 using System.Collections;
 using System.Diagnostics;
+using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
@@ -137,6 +138,7 @@ namespace Hedra.Engine.Management
             {
                 if (!Online) return;
 #if !DEBUG
+                /*
                 if(File.Exists(AssetManager.AppPath+"log.txt"))
                     Ex = Ex + Environment.NewLine + "----- PROGRAM LOG -----" + Environment.NewLine + Log.Output;
                         //+ Enviroment.NewLine+" --- Graphic Options ---" + Environment.NewLine+ GraphicsOptions.s;
@@ -144,7 +146,7 @@ namespace Hedra.Engine.Management
                 WebRequest Request =
  WebRequest.Create(Server+"request?type=crash&state="+State.ToString()+"&version="+Program.GameWindow.GameVersion+"&ex="+Ex);
                 Request.GetResponse().Close();
-                Request.Abort();
+                Request.Abort();*/
 #endif
             }
             catch (Exception e)
