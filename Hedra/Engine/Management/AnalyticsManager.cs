@@ -104,7 +104,7 @@ namespace Hedra.Engine.Management
             {
                 if (PassedTime > 60)
                 {
-                    TaskScheduler.Asynchronous(() => SendData());
+                    TaskScheduler.Asynchronous(SendData);
                     PassedTime = 0;
                 }
 
