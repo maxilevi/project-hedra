@@ -28,8 +28,8 @@
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="&quot;$(MSBuildProjectDirectory)/../utilities/make_atlas.sh&quot;" />
-    <Exec Command="&quot;$(MSBuildProjectDirectory)/../utilities/AssetBuilder.exe&quot; &quot;$(TargetDir)/Shaders/&quot; &quot;$(TargetDir)/data1.db&quot; normal text" />
-    <Exec Command="&quot;$(MSBuildProjectDirectory)/../utilities/AssetBuilder.exe&quot; &quot;$(TargetDir)/Sounds/&quot; &quot;$(TargetDir)/data2.db&quot; normal binary" />
-    <Exec Command="&quot;$(MSBuildProjectDirectory)/../utilities/AssetBuilder.exe&quot; &quot;$(TargetDir)/Assets/&quot; &quot;$(TargetDir)/data3.db&quot; normal binary" />
+    <Exec Command="dotnet &quot;$(MSBuildProjectDirectory)/../AssetBuilder/bin/Release/netcoreapp3.1/AssetBuilder.dll&quot; &quot;$(TargetDir)/Shaders/&quot; &quot;$(TargetDir)/data1.db&quot; normal text" />
+    <Exec Command="dotnet &quot;$(MSBuildProjectDirectory)/../AssetBuilder/bin/Release/netcoreapp3.1/AssetBuilder.dll&quot; &quot;$(TargetDir)/Sounds/&quot; &quot;$(TargetDir)/data2.db&quot; normal binary" />
+    <Exec Command="dotnet &quot;$(MSBuildProjectDirectory)/../AssetBuilder/bin/Release/netcoreapp3.1/AssetBuilder.dll&quot; &quot;$(TargetDir)/Assets/&quot; &quot;$(TargetDir)/data3.db&quot; normal binary" />
   </Target>
 </Project>
