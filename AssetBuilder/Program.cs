@@ -65,6 +65,7 @@ namespace AssetBuilder
         private static void WriteHistory(string Name, string ParentName, BuildHistory History)
         {
             var historyPath = $"{AppPath}/{ParentName}/{Name}.hst";
+            Console.WriteLine(historyPath);
             Directory.CreateDirectory($"{AppPath}/{ParentName}/");
             File.WriteAllText(historyPath, BuildHistory.To(History));
         }
@@ -72,6 +73,7 @@ namespace AssetBuilder
         private static BuildHistory LoadHistory(string Name, string ParentName)
         {
             var historyPath = $"{AppPath}/{ParentName}/{Name}.hst";
+            Console.WriteLine(historyPath);
             if (!File.Exists(historyPath)) return null;
             return BuildHistory.From(File.ReadAllLines(historyPath));
         }
@@ -104,21 +106,9 @@ namespace AssetBuilder
 
         private static string UniqueFrom(string Path)
         {
-            var alphabet = new []
-            {
-                "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"
-                
-            };
-            var rng = new Random( Path.GetHashCode() );
-            var builder = new StringBuilder();
-            for (var i = 0; i < 7; i++)
-            {
-                var code = alphabet[rng.Next(0, alphabet.Length)];
-                if (rng.Next(0, 2) == 0) code = code.ToUpperInvariant();
-                builder.Append(code);
-
-            }
-            return builder.ToString();
+            using var md5Hasher = MD5.Create();
+            var hashed = md5Hasher.ComputeHash(Encoding.ASCII.GetBytes(Path));
+            return System.Convert.ToBase64String(hashed).Replace("+", "-").Replace("/", "_");
         }
     }
 }
