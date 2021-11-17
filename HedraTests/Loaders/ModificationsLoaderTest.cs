@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using System.Net;
 using Hedra.API;
 using Hedra.Engine.Loader;
@@ -11,8 +12,8 @@ namespace HedraTests.Loaders
     {
         private string[] _dirs;
         private string[] _files;
-        
-        
+
+
         [SetUp]
         public void Setup()
         {
@@ -31,45 +32,45 @@ namespace HedraTests.Loaders
                 $"{path}/test5.json",
                 $"{path}/test/test6.json",
                 $"{path}/test/test6.meta"
-                
             };
             foreach (var dir in _dirs)
             {
                 Directory.CreateDirectory(dir);
             }
+
             foreach (var file in _files)
             {
                 File.WriteAllText(file, string.Empty);
             }
         }
-        
+
         [Test]
         public void TestLoadersLoadsTheExpectedFiles()
         {
-            Assert.AreEqual(new []
-            {
-               $"{ModificationsLoader.Path}test/test2.json",
-               $"{ModificationsLoader.Path}test/test4.json",
-               $"{ModificationsLoader.Path}test/test4.meta",
-               $"{ModificationsLoader.Path}test/test6.json",
-               $"{ModificationsLoader.Path}test/test6.meta"
-            },
-                ModificationsLoader.Get("/test/")
+            Assert.AreEqual(new[]
+                {
+                    $"{ModificationsLoader.Path}test/test2.json",
+                    $"{ModificationsLoader.Path}test/test4.json",
+                    $"{ModificationsLoader.Path}test/test4.meta",
+                    $"{ModificationsLoader.Path}test/test6.json",
+                    $"{ModificationsLoader.Path}test/test6.meta"
+                }.ToList().OrderBy(V => V),
+                ModificationsLoader.Get("/test/").OrderBy(V => V)
             );
         }
-        
+
         [Test]
         public void TestLoadersLoadsTheExpectedFilesByExtension()
         {
-            Assert.AreEqual(new []
+            Assert.AreEqual(new[]
                 {
                     $"{ModificationsLoader.Path}test5.json",
                     $"{ModificationsLoader.Path}test/test2.json",
                     $"{ModificationsLoader.Path}test/test4.json",
                     $"{ModificationsLoader.Path}test/test6.json",
                     $"{ModificationsLoader.Path}test2/test3.json"
-                },
-                ModificationsLoader.Get(".json")
+                }.ToList().OrderBy(V => V),
+                ModificationsLoader.Get(".json").OrderBy(V => V)
             );
         }
 
@@ -80,6 +81,7 @@ namespace HedraTests.Loaders
             {
                 File.Delete(file);
             }
+
             foreach (var dir in _dirs)
             {
                 Directory.Delete(dir);
