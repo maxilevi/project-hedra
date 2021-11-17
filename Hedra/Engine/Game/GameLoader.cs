@@ -105,17 +105,14 @@ namespace Hedra.Engine.Game
             var dllPath = $"{Path}/{(is64 ? "x64" : "x86")}";
             var ext = (isWindows ? "dll" : "so");
 
-            if (isWindows)
+            _nativeLibs = new List<IntPtr>
             {
-                _nativeLibs = new List<IntPtr>
-                {
-                    TryLoad($"{dllPath}/hedracore.{ext}"),
-                    TryLoad($"{dllPath}/steam_api{(is64 ? "64" : string.Empty)}.{ext}"),
-                    TryLoad($"{dllPath}/libbulletc.{ext}"),
-                    TryLoad($"{dllPath}/openal32.{ext}"),
-                    TryLoad($"{dllPath}/glfw3.{ext}")
-                };
-            }
+                TryLoad($"{dllPath}/hedracore.{ext}"),
+                TryLoad($"{dllPath}/steam_api{(is64 ? "64" : string.Empty)}.{ext}"),
+                TryLoad($"{dllPath}/libbulletc.{ext}"),
+                TryLoad($"{dllPath}/openal32.{ext}"),
+                TryLoad($"{dllPath}/glfw3.{ext}")
+            };
             _loadedArchitectureFiles = true;
         }
 
