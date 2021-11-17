@@ -12,6 +12,7 @@ using Hedra.Engine.Management;
 using Hedra.Game;
 using Hedra.Rendering;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -88,7 +89,7 @@ namespace Hedra.Engine.Rendering.UI
 
         private uint CreateGradient(Vector2 Scale, Color GradientColor0, Color GradientColor1, GradientType Type)
         {
-            var bmp = new Bitmap((int)(Scale.X * GameSettings.Width + 1), (int)(Scale.Y * GameSettings.Height + 1));
+            var bmp = new Image<Rgba32>((int)(Scale.X * GameSettings.Width + 1), (int)(Scale.Y * GameSettings.Height + 1));
             bmp = Graphics2D.CreateGradient(GradientColor0, GradientColor1, Type, bmp);
             return Graphics2D.LoadTexture(new BitmapObject
             {

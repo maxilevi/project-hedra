@@ -10,6 +10,7 @@ using System.Numerics;
 using System.Runtime.InteropServices;
 using Hedra.Game;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace Hedra.Numerics
 {
@@ -136,15 +137,16 @@ namespace Hedra.Numerics
             return cross.NormalizedFast();
         }
 
-        public static Vector4 ToVector4(this Color C)
+        public static Vector4 AsVector4(this Color C)
         {
-            return new Vector4(C.R / 255f, C.G / 255f, C.B / 255f, C.A / 255f);
+            var pixel = C.ToPixel<Rgba32>();
+            return new Vector4(pixel.R / 255f, pixel.G / 255f, pixel.B / 255f, pixel.A / 255f);
         }
 
         public static Color ToColor(this Vector4 V)
         {
-            return Color.FromArgb((byte)Clamp((int)(V.W * 255), 0, 255), (byte)Clamp((int)(V.X * 255), 0, 255),
-                (byte)Clamp((int)(V.Y * 255), 0, 255), (byte)Clamp((int)(V.Z * 255), 0, 255));
+            return Color.FromRgba((byte)Clamp((int)(V.X * 255), 0, 255),
+                (byte)Clamp((int)(V.Y * 255), 0, 255), (byte)Clamp((int)(V.Z * 255), 0, 255), (byte)Clamp((int)(V.W * 255), 0, 255));
         }
 
         public static Vector2 ToNormalizedDeviceCoordinates(Vector2 Vec2)
@@ -230,10 +232,14 @@ namespace Hedra.Numerics
 
         public static Color Lerp(this Color Origin, Color Target, float T)
         {
-            return Color.FromArgb((byte)Lerp(Origin.A, Target.A, T),
-                (byte)Lerp(Origin.R, Target.R, T),
-                (byte)Lerp(Origin.G, Target.G, T),
-                (byte)Lerp(Origin.B, Target.B, T));
+            var src = Origin.ToPixel<Rgba32>();
+            var dst = Target.ToPixel<Rgba32>();
+            return Color.FromRgba(
+                (byte)Lerp(src.R, dst.R, T),
+                (byte)Lerp(src.G, dst.G, T),
+                (byte)Lerp(src.B, dst.B, T),
+                (byte)Lerp(src.A, dst.A, T)
+            );
         }
 
         public static int Modulo(int Index, int Bounds)

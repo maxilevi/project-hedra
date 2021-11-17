@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing.Imaging;
-using System.Drawing.Text;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -19,7 +17,9 @@ using Hedra.Game;
 using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
+using SixLabors.Fonts;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace Hedra.Engine.Management
 {
@@ -42,16 +42,16 @@ namespace Hedra.Engine.Management
 
         public void Load()
         {
-            var boldFonts = new PrivateFontCollection();
-            var normalFonts = new PrivateFontCollection();
+            var boldFonts = new FontCollection();
+            var normalFonts = new FontCollection();
 
             var sansBold = ReadBinary("Assets/ClearSans-Bold.ttf", AssetsResource);
-            boldFonts.AddMemoryFont(Utils.IntPtrFromByteArray(sansBold), sansBold.Length);
+            boldFonts.Install(new MemoryStream(sansBold));
 
             var sansRegular = ReadBinary("Assets/ClearSans-Regular.ttf", AssetsResource);
-            normalFonts.AddMemoryFont(Utils.IntPtrFromByteArray(sansRegular), sansRegular.Length);
+            normalFonts.Install(new MemoryStream(sansRegular));
 
-            FontCache.SetFonts(normalFonts.Families[0], boldFonts.Families[0]);
+            FontCache.SetFonts(normalFonts.Families.First(), boldFonts.Families.First());
 
             ReloadShaderSources();
             lock (_hitboxCacheLock)
@@ -181,40 +181,27 @@ namespace Hedra.Engine.Management
             return builder.ToString();
         }
 
-        public unsafe byte[] LoadIcon(string Path, out int Width, out int Height)
+        public byte[] LoadIcon(string Path, out int Width, out int Height)
         {
-            using (var ms = new MemoryStream(AssetManager.ReadBinary(Path, AssetsResource)))
+            using var ms = new MemoryStream(AssetManager.ReadBinary(Path, AssetsResource));
+            using var original = Image.Load<Rgba32>(ms);
+            
+            Width = original.Width;
+            Height = original.Height;
+            var pixels = new byte[Width * Height * 4];
+            var k = 0;
+            for (var x = 0; x < Width; ++x)
             {
-                using (var original = new Bitmap(ms))
+                for (var y = 0; y < Height; ++y)
                 {
-                    using (var bitmap = new Bitmap(original, 48, 48))
-                    {
-                        var data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height),
-                            ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
-                        Width = data.Width;
-                        Height = data.Height;
-                        var pixels = new byte[data.Width * data.Height * 4];
-                        var ptr = (int*)data.Scan0;
-                        var k = 0;
-                        for (var i = 0; i < pixels.Length; i += 4)
-                        {
-                            var a = (byte)((ptr[k] & 0xFF000000) >> 24);
-                            var r = (byte)((ptr[k] & 0x00FF0000) >> 16);
-                            var g = (byte)((ptr[k] & 0x0000FF00) >> 8);
-                            var b = (byte)(ptr[k] & 0x000000FF);
-
-                            pixels[i + 0] = r;
-                            pixels[i + 1] = g;
-                            pixels[i + 2] = b;
-                            pixels[i + 3] = a;
-                            k++;
-                        }
-
-                        bitmap.UnlockBits(data);
-                        return pixels;
-                    }
+                    pixels[k + 0] = original[x, y].R;
+                    pixels[k + 1] = original[x, y].G;
+                    pixels[k + 2] = original[x, y].B;
+                    pixels[k + 3] = original[x, y].A;
+                    k += 4;
                 }
             }
+            return pixels;
         }
 
         public List<CollisionShape> LoadCollisionShapes(string Filename, int Count, Vector3 Scale)

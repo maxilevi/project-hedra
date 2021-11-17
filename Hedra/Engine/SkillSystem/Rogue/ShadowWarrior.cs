@@ -36,7 +36,7 @@ namespace Hedra.Engine.SkillSystem.Rogue
             _warrior.Model.OutlineColor = new Vector4(.2f, .2f, .2f, 1);
             _warrior.RemoveComponent(_warrior.SearchComponent<HealthBarComponent>());
             _warrior.AddComponent(new HealthBarComponent(_warrior, Translations.Get("shadow_warrior_name"),
-                HealthBarType.Black, Color.FromArgb(255, 40, 40, 40)));
+                HealthBarType.Black, Color.FromRgb(40, 40, 40)));
             _warrior.Speed = User.Speed;
             _warrior.AttackPower = User.AttackPower;
             _warrior.AttackSpeed = User.AttackSpeed;

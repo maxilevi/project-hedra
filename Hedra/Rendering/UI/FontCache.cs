@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing.Text;
 using System.Linq;
 using Hedra.Engine.IO;
 using SixLabors.Fonts;
@@ -10,8 +9,8 @@ namespace Hedra.Rendering.UI
     public static class FontCache
     {
         private static readonly Dictionary<FontEntry, Font> CachedFonts = new Dictionary<FontEntry, Font>();
-        private static FontFamily _normalFamily = new FontFamily(GenericFontFamilies.Serif);
-        private static FontFamily _boldFamily = new FontFamily(GenericFontFamilies.Serif);
+        private static FontFamily _normalFamily = SystemFonts.Families.First();
+        private static FontFamily _boldFamily = SystemFonts.Families.First();
 
         public static Font Default => Get(_normalFamily, 10);
 
@@ -25,7 +24,7 @@ namespace Hedra.Rendering.UI
 
         public static Font Get(Font Original, float Size)
         {
-            return Get(Original.Family, Size, Original.Style);
+            return Get(Original.Family, Size, Original.Instance.Description.Style);
         }
 
         private static Font Get(FontFamily Family, float Size, FontStyle Style = FontStyle.Regular)
@@ -77,7 +76,7 @@ namespace Hedra.Rendering.UI
 
         public override int GetHashCode()
         {
-            return Family.GetHashCode() + (int)Size * 29 + (int)Style * 13;
+            return (Family.Name + Family.Culture.Name).GetHashCode() + (int)Size * 29 + (int)Style * 13;
         }
 
         public override bool Equals(object obj)

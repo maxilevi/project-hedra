@@ -1,9 +1,8 @@
-using System.Drawing.Imaging;
+using System;
 using Hedra.Engine.IO;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Windowing;
 using SixLabors.ImageSharp;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace Hedra.Engine.Rendering
 {
@@ -15,12 +14,11 @@ namespace Hedra.Engine.Rendering
             var bmp = BitmapObject.Bitmap;
             var id = Renderer.GenTexture();
             Renderer.BindTexture(TextureTarget.Texture2D, id);
-            var bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly,
-                PixelFormat.Format32bppArgb);
-            Renderer.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmpData.Width, bmpData.Height, 0,
-                Windowing.PixelFormat.Bgra, PixelType.UnsignedByte, bmpData.Scan0);
-
-            bmp.UnlockBits(bmpData);
+            if (!bmp.TryGetSinglePixelSpan(out var pixelSpan))
+                throw new ArgumentException("Image is not contigous");
+            
+            Renderer.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmp.Width, bmp.Height, 0,
+                PixelFormat.Rgba, PixelType.UnsignedByte, pixelSpan.AsIntPtr());
 
             Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)Min);
             Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)Mag);

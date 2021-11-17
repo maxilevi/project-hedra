@@ -31,7 +31,7 @@ namespace Hedra.Engine.Rendering.UI
             {
                 return Cache.FirstOrDefault(C =>
                     C.Text == Text && Math.Abs(C.TextFont.Size - TextFont.Size) < 0.005f &&
-                    C.TextFont.Style == TextFont.Style && TextColor == C.TextColor);
+                    C.TextFont.Instance.Description.Style == TextFont.Instance.Description.Style && TextColor == C.TextColor);
             }
         }
 

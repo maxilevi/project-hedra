@@ -40,7 +40,7 @@ namespace Hedra.Engine.ItemSystem
             this.ItemSpecification = ItemSpecification;
             ItemId = ++_itemCounter;
             Model = ObjectMesh.FromVertexData(modelData);
-            Model.OutlineColor = ItemUtils.TierToColor(ItemSpecification.Tier).ToVector4();
+            Model.OutlineColor = ItemUtils.TierToColor(ItemSpecification.Tier).AsVector4();
             Model.BaseTint = EffectDescriber.EffectColorFromItem(ItemSpecification);
             Scale = new Vector3(1.5f, 1.5f, 1.5f);
             this.Position = Position;

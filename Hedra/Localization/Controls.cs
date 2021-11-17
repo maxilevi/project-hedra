@@ -36,7 +36,7 @@ namespace Hedra.Localization
             { "help_key", Key.F4 }
         };
 
-        public static Key Respawn = ChangeableKeys["respawn_key"];
+        public static Key Respawn => ChangeableKeys["respawn_key"];
 
         static Controls()
         {

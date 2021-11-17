@@ -9,7 +9,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing.Imaging;
 using System.IO;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
@@ -18,6 +17,7 @@ using Hedra.Engine.Windowing;
 using Hedra.Framework;
 using Hedra.Numerics;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace Hedra.Engine.Rendering
 {
@@ -75,21 +75,25 @@ namespace Hedra.Engine.Rendering
             Buffer.Unbind();
         }
 
-        public Bitmap Draw()
+        public Image Draw()
         {
             var size = 18000 * TypeSizeInBytes;
-            var bmp = new Bitmap(TotalMemory / size, 4);
+            var bmp = new Image<Rgba32>(TotalMemory / size, 4);
 
             for (var i = 0; i < ObjectMap.Count; i++)
             {
                 var entry = ObjectMap[i];
                 var len = (entry.Offset + entry.Length) / size;
                 var rng = new Random(i);
-                var color = Color.FromArgb(255, rng.Next(0, 256), rng.Next(0, 256), rng.Next(0, 256));
+                var color = Color.FromRgb((byte) rng.Next(0, 256), (byte)rng.Next(0, 256), (byte)rng.Next(0, 256));
 
                 for (var x = entry.Offset / size; x < Mathf.Clamp(len, 0, bmp.Width); x++)
-                for (var y = 0; y < bmp.Height; y++)
-                    bmp.SetPixel(x, y, color);
+                {
+                    for (var y = 0; y < bmp.Height; y++)
+                    {
+                        bmp[x, y] = color;
+                    }
+                }
             }
 
             return bmp;
@@ -99,9 +103,9 @@ namespace Hedra.Engine.Rendering
         {
             var bmp = Draw();
             Directory.CreateDirectory(AssetManager.AppPath + "/Snapshots/");
-            bmp.Save(
+            bmp.SaveAsPngAsync(
                 AssetManager.AppPath + "Snapshots/" + typeof(T) + "___" + DateTime.Now.ToString("dd-MM-yyyy_hh-mm-ss") +
-                ".png", ImageFormat.Png);
+                ".png");
             bmp.Dispose();
         }
 

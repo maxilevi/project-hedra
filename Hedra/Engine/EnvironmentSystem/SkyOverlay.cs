@@ -7,12 +7,13 @@ using Hedra.Engine.Rendering.Geometry;
 using Hedra.Engine.Windowing;
 using Hedra.Numerics;
 using Hedra.Rendering;
+using SixLabors.ImageSharp;
 
 namespace Hedra.Engine.EnvironmentSystem
 {
     public class SkyOverlay
     {
-        private static readonly Bitmap DefaultBitmap;
+        private static readonly Image DefaultBitmap;
         private static readonly Shader Shader;
         private readonly VAO<Vector3> _buffer;
         private readonly Cubemap _map;

@@ -15,6 +15,7 @@ namespace Hedra.Engine.Player.Inventory
 {
     public class InventoryInterfaceItemInfo
     {
+        private const string ArrowCharacter = "->";
         private readonly Vector2 _nonWeaponItemAttributesPosition;
         private readonly Vector2 _nonWeaponItemTexturePosition;
         private readonly Vector2 _targetResolution = new Vector2(1366, 705);
@@ -227,7 +228,7 @@ namespace Hedra.Engine.Player.Inventory
                 if (!attributes[i].Hidden || GameSettings.DebugView)
                     strBuilder.AppendLine(AttributeFormatter.Format(attributes[i]));
             if (GameSettings.DebugView && CurrentItem.HasAttribute(CommonAttributes.Damage))
-                strBuilder.AppendLine($"Modifier   ➝   {GameManager.Player.WeaponModifier(CurrentItem)}");
+                strBuilder.AppendLine($"Modifier   {ArrowCharacter}   {GameManager.Player.WeaponModifier(CurrentItem)}");
             ItemAttributes.Text = strBuilder.ToString();
         }
 

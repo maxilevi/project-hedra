@@ -1,8 +1,5 @@
 using System;
 using SixLabors.ImageSharp;
-
-nusing SixLabors.Fonts;
-using Hedra.Engine.Management;
 using Hedra.Rendering.UI;
 using System.Numerics;
 

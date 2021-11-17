@@ -96,18 +96,18 @@ namespace Hedra.Engine.Rendering.UI
 
             var helpTranslation = Translation.Create("help_label");
             helpTranslation.Concat(() => $" - {Controls.Help}");
-            var helpMsg = new GUIText(helpTranslation, new Vector2(0, .9f), Color.FromArgb(200, 255, 255, 255),
+            var helpMsg = new GUIText(helpTranslation, new Vector2(0, .9f), Color.FromRgba(255, 255, 255, 200),
                 FontCache.GetBold(14));
 
             var skillTreeTranslation = Translation.Create("skill_tree_label");
             skillTreeTranslation.Concat(() => $" - {Controls.Skilltree}");
             var skillTreeMsg = new GUIText(skillTreeTranslation, new Vector2(-.85f, -.9f),
-                Color.FromArgb(200, 255, 255, 255), FontCache.GetBold(14));
+                Color.FromRgba(255, 255, 255, 200), FontCache.GetBold(14));
 
             var questLogTranslation = Translation.Create("quest_log_label");
             questLogTranslation.Concat(() => $" - {Controls.QuestLog}");
             var questLogMsg = new GUIText(questLogTranslation, new Vector2(.85f, -.9f),
-                Color.FromArgb(200, 255, 255, 255), FontCache.GetBold(14));
+                Color.FromRgba(255, 255, 255, 200), FontCache.GetBold(14));
 
             Controls.OnControlsChanged += () =>
             {

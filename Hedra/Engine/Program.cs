@@ -159,9 +159,9 @@ namespace Hedra.Engine
             if (OSManager.RunningPlatform == Platform.Windows)
             {
                 Log.WriteLine("Loading Icon...");
-                var pixels = AssetManager.LoadIcon("Assets/Icon.ico", out var width, out var height);
-                var raw = new RawImage(width, height, new Memory<byte>(pixels));
-                GameWindow.Window.SetWindowIcon(ref raw);
+                //var pixels = AssetManager.LoadIcon("Assets/Icon.ico", out var width, out var height);
+                //var raw = new RawImage(width, height, new Memory<byte>(pixels));
+                //GameWindow.Window.SetWindowIcon(ref raw);
             }
 
             GameSettings.SurfaceWidth = GameWindow.Width;

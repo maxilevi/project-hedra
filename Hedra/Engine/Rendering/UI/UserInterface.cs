@@ -57,7 +57,7 @@ namespace Hedra.Engine.Rendering.UI
             _title = new BackgroundTexture(Graphics2D.LoadFromAssets("Assets/UI/MenuLogo.png"),
                 new Vector2(-.405f, .35f), Graphics2D.SizeFromAssets("Assets/UI/MenuLogo.png").As1920x1080() * .75f);
 
-            var blackBand = new BackgroundTexture(Color.FromArgb(0, 69, 69, 69), Color.FromArgb(255, 19, 19, 19),
+            var blackBand = new BackgroundTexture(Color.FromRgba(69, 69, 69, 0), Color.FromRgba(19, 19, 19, 255),
                 bandPosition, BlackBandSize, GradientType.LeftRight);
 
 

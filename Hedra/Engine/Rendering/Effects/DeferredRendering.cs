@@ -14,7 +14,6 @@ using Hedra.Game;
 using Hedra.Numerics;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace Hedra.Engine.Rendering.Effects
 {
@@ -89,15 +88,11 @@ namespace Hedra.Engine.Rendering.Effects
 
             Renderer.BindTexture(TextureTarget.Texture2D, RandomTex);
 
-            bmp.
-                var bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly,
-                    PixelFormat.Format32bppArgb);
+            if (!bmp.TryGetSinglePixelSpan(out var span))
+                throw new ArgumentException("Image not continous");
 
-            Renderer.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmpData.Width, bmpData.Height, 0,
-                Windowing.PixelFormat.Bgra, PixelType.UnsignedByte, bmpData.Scan0);
-
-            bmp.UnlockBits(bmpData);
-            //Bmp.Dispose();
+            Renderer.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmp.Width, bmp.Height, 0,
+                PixelFormat.Rgba, PixelType.UnsignedByte, span.AsIntPtr());
 
             Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter,
                 (int)TextureMinFilter.Nearest);

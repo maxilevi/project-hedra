@@ -13,6 +13,7 @@ namespace Hedra.Engine.Player.Inventory
 {
     public static class AttributeFormatter
     {
+        private const string ArrowCharacter = "->";//➝
         private static readonly Script Script;
         private static readonly Dictionary<string, Type> Codecs;
 
@@ -32,7 +33,7 @@ namespace Hedra.Engine.Player.Inventory
                 return
                     $"{Template.Name.AddSpacesToSentence()}:{Get(Template.Display, Template.Value, Template.Name, 4)}";
             return
-                $"{Template.Name.AddSpacesToSentence()}   ➝   {Get(Template.Display, Template.Value, Template.Name, 0)}";
+                $"{Template.Name.AddSpacesToSentence()}   {ArrowCharacter}   {Get(Template.Display, Template.Value, Template.Name, 0)}";
         }
 
         private static string GetString(object Value, string Name, int Padding)

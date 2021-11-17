@@ -130,7 +130,7 @@ namespace Hedra.User
                         var proj = new ParticleProjectile(Caster, Caster.Position)
                         {
                             Propulsion = Caster.Orientation * 2f,
-                            Color = Color.LawnGreen.ToVector4() * .85f,
+                            Color = Color.LawnGreen.AsVector4() * .85f,
                             UseLight = false
                         };
                         World.AddWorldObject(proj);

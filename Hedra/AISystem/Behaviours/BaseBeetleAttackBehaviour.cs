@@ -99,7 +99,7 @@ namespace Hedra.AISystem.Behaviours
                     Parent.Position + Parent.Orientation * 2f + Vector3.UnitY * 2f)
                 {
                     Propulsion = direction * 2f,
-                    Color = Color.LawnGreen.ToVector4() * .5f,
+                    Color = Color.LawnGreen.AsVector4() * .5f,
                     UseLight = false
                 };
                 spit.HitEventHandler += delegate(Projectile Projectile, IEntity Hit)

@@ -80,7 +80,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                     return Colors.Violet * .3f;
 
                 case ObeliskType.Stamina:
-                    return Color.Coral.ToVector4() * .3f;
+                    return Color.Coral.AsVector4() * .3f;
 
                 default: throw new ArgumentOutOfRangeException("Obelisk color wasnt found.");
             }

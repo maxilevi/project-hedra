@@ -17,6 +17,9 @@ namespace Hedra.Engine.Rendering.UI
 {
     public class OptionChooser : UIElement
     {
+        private const string RightArrowString = ">";
+        private const string LeftArrowString = "<";
+
         private bool _mClickable = true;
 
         private Vector2 _mPosition;
@@ -104,7 +107,6 @@ namespace Hedra.Engine.Rendering.UI
         public void Dispose()
         {
             Text?.Dispose();
-            Font?.Dispose();
             LeftArrow?.Dispose();
             RightArrow?.Dispose();
             CurrentValue?.Dispose();
@@ -121,8 +123,8 @@ namespace Hedra.Engine.Rendering.UI
 
 
             var prevCurrentValue = new GUIText(longestValue, Position, Color.Transparent, F);
-            var prevRightArrow = new Button(Position, Scale, "\u25B6", Color.Transparent, F);
-            var prevLeftArrow = new Button(Position, Scale, "\u25C0", Color.Transparent, F);
+            var prevRightArrow = new Button(Position, Scale, LeftArrowString, Color.Transparent, F);
+            var prevLeftArrow = new Button(Position, Scale, RightArrowString, Color.Transparent, F);
 
             if (!Centered)
             {
@@ -135,12 +137,12 @@ namespace Hedra.Engine.Rendering.UI
                 }
 
                 Translation.LanguageChanged += delegate { LeftArrow.Position = Place(); };
-                LeftArrow = new Button(Place(), Scale, "\u25C0", C, F);
+                LeftArrow = new Button(Place(), Scale, LeftArrowString, C, F);
                 CurrentValue = new GUIText(longestValue,
                     LeftArrow.Position + new Vector2(LeftArrow.Scale.X + prevCurrentValue.Scale.X, 0), C, F);
                 RightArrow =
                     new Button(CurrentValue.Position + new Vector2(CurrentValue.Scale.X + prevRightArrow.Scale.X, 0),
-                        Scale, "\u25B6", C, F);
+                        Scale, RightArrowString, C, F);
             }
             else
             {
@@ -148,10 +150,10 @@ namespace Hedra.Engine.Rendering.UI
 
                 CurrentValue = new GUIText(longestValue, Position, C, F);
                 LeftArrow = new Button(Position - new Vector2(prevLeftArrow.Scale.X + CurrentValue.Scale.X, 0), Scale,
-                    "\u25C0", C, F);
+                    LeftArrowString, C, F);
                 RightArrow =
                     new Button(CurrentValue.Position + new Vector2(CurrentValue.Scale.X + prevRightArrow.Scale.X, 0),
-                        Scale, "\u25B6", C, F);
+                        Scale, RightArrowString, C, F);
             }
 
             LeftArrow.Click += OnArrowClick;

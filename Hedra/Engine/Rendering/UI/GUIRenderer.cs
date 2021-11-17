@@ -7,6 +7,7 @@ using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Windowing;
 using Hedra.Rendering;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -43,9 +44,10 @@ namespace Hedra.Engine.Rendering.UI
 
             _vao = new VAO<Vector2>(_vbo);
             _lock = new object();
-            var bmp = new Bitmap(1, 1);
-            bmp.SetPixel(0, 0, Color.FromArgb(0, 0, 0, 0));
-            TransparentTexture = Graphics2D.LoadTexture(new BitmapObject
+            var bmp = new Image<Rgba32>(1, 1);
+            bmp[0, 0] = Color.Transparent;
+
+        TransparentTexture = Graphics2D.LoadTexture(new BitmapObject
             {
                 Bitmap = bmp,
                 Path = "UI:TransparentTexture"

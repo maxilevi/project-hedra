@@ -17,7 +17,7 @@ namespace Hedra.Engine.SkillSystem.Warrior.Paladin
 
         protected override float AnimationSpeed => 1.25f;
 
-        protected override Vector4 OutlineColor => Color.Gold.ToVector4();
+        protected override Vector4 OutlineColor => Color.Gold.AsVector4();
         protected override int MaxLevel => 15;
         public override float ManaCost => 65;
         public override float MaxCooldown => 22;

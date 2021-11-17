@@ -11,6 +11,7 @@ using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace Hedra.Components
 {
@@ -48,27 +49,27 @@ namespace Hedra.Components
             {
                 var blueprint = Graphics2D.LoadBitmapFromAssets("Assets/UI/EntityHealthBar.png");
                 _neutralTexture = BuildTexture(
-                    (Bitmap)blueprint.Clone(),
+                    blueprint.CloneAs<Rgba32>(),
                     Friendly,
                     "Neutral"
                 );
                 _hostileTexture = BuildTexture(
-                    (Bitmap)blueprint.Clone(),
+                    blueprint.CloneAs<Rgba32>(),
                     Hostile,
                     "Hostile"
                 );
                 _friendlyTexture = BuildTexture(
-                    (Bitmap)blueprint.Clone(),
+                    blueprint.CloneAs<Rgba32>(),
                     Friendly,
                     "Friendly"
                 );
                 _blackTexture = BuildTexture(
-                    (Bitmap)blueprint.Clone(),
-                    Color.FromArgb(35, 35, 35),
+                    blueprint.CloneAs<Rgba32>(),
+                    Color.FromRgba(35, 35, 35, 255),
                     "Black"
                 );
                 _goldTexture = BuildTexture(
-                    (Bitmap)blueprint.Clone(),
+                    blueprint.CloneAs<Rgba32>(),
                     Color.Gold,
                     "Gold"
                 );

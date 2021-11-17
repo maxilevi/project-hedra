@@ -1,32 +1,30 @@
+using System;
 using System.Collections.Generic;
-using System.Drawing.Imaging;
 using Hedra.Engine.IO;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Windowing;
 using SixLabors.ImageSharp;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace Hedra.Engine.Rendering
 {
     public class Cubemap
     {
-        public Cubemap(IList<Bitmap> TextureArray, bool Dispose = true)
+        public Cubemap(IList<Image<Rgba32>> TextureArray, bool Dispose = true)
         {
             TextureId = Renderer.GenTexture();
 
             Renderer.BindTexture(TextureTarget.TextureCubeMap, TextureId);
             for (var i = 0; i < TextureArray.Count; i++)
             {
-                BitmapData data = TextureArray[i].LockBits(
-                    new Rectangle(0, 0, TextureArray[i].Width, TextureArray[i].Height),
-                    ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+                if (!TextureArray[i].TryGetSinglePixelSpan(out var pixelSpan))
+                    throw new ArgumentException("Image is not contigous");
 
                 Renderer.TexImage2D((TextureTarget)((int)TextureTarget.TextureCubeMapPositiveX + i), 0,
                     PixelInternalFormat.Rgba,
-                    data.Width, data.Height, 0, Windowing.PixelFormat.Bgra, PixelType.UnsignedByte,
-                    data.Scan0);
-
-                TextureArray[i].UnlockBits(data);
+                    TextureArray[i].Width, TextureArray[i].Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte,
+                    pixelSpan.AsIntPtr());
+                
                 if (Dispose) TextureArray[i].Dispose();
             }
 

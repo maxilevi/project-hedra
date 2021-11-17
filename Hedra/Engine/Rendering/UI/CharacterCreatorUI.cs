@@ -79,7 +79,7 @@ namespace Hedra.Engine.Rendering.UI
             var defaultColor = Color.White;
 
             var bandPosition = new Vector2(0f, .8f);
-            var blackBand = new BackgroundTexture(Color.FromArgb(255, 69, 69, 69), Color.FromArgb(255, 19, 19, 19),
+            var blackBand = new BackgroundTexture(Color.FromRgb(69, 69, 69), Color.FromRgb(19, 19, 19),
                 bandPosition, UserInterface.BlackBandSize, GradientType.LeftRight);
 
             var currentTab = new GUIText(Translation.Create("new_character"), new Vector2(0f, bandPosition.Y),

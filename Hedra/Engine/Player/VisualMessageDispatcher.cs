@@ -42,7 +42,7 @@ namespace Hedra.Engine.Player
             _mainText.StrokeColor = Color.White;*/
             _playerText = new GUIText(string.Empty, new Vector2(0, 0), Color.White, FontCache.GetBold(13));
 
-            _notificationText = new GUIText(string.Empty, new Vector2(0.7f, -0.8f), Color.FromArgb(255, 39, 39, 39),
+            _notificationText = new GUIText(string.Empty, new Vector2(0.7f, -0.8f), Color.FromRgb(39, 39, 39),
                 FontCache.GetNormal(14))
             {
                 UIText =
@@ -78,7 +78,7 @@ namespace Hedra.Engine.Player
 
         public void ShowTitleMessage(string Message, float Seconds)
         {
-            ShowTitleMessage(Message, Seconds, Color.FromArgb(255, 40, 40, 40));
+            ShowTitleMessage(Message, Seconds, Color.FromRgb(40, 40, 40));
         }
 
         public void ShowMessage(string Message, float Seconds)

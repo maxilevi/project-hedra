@@ -1,16 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
-using Hedra.Engine.Native;
 using Hedra.Game;
 using Hedra.Rendering.UI;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Drawing.Processing;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -56,12 +57,12 @@ namespace Hedra.Engine.Rendering.UI
             };
         }
 
-        public Bitmap BuildText(string Text, Font TextFont, Color TextColor, TextOptions Options)
+        public Image<Rgba32> BuildText(string Text, Font TextFont, Color TextColor, TextOptions Options)
         {
             return DoBuildText(BuildParams(Text, TextFont, TextColor, Options));
         }
 
-        public Bitmap BuildText(string Text, Font TextFont, Color TextColor)
+        public Image<Rgba32> BuildText(string Text, Font TextFont, Color TextColor)
         {
             return BuildText(Text, TextFont, TextColor, new TextOptions());
         }
@@ -219,7 +220,7 @@ namespace Hedra.Engine.Rendering.UI
 
         private static Font FontMatch(string Text, Font TextFont)
         {
-            Match(Text, Color.Empty, TextFont, out _, out _, out var font);
+            Match(Text, Color.Transparent, TextFont, out _, out _, out var font);
             return font;
         }
 
@@ -231,14 +232,14 @@ namespace Hedra.Engine.Rendering.UI
 
         private static string StringMatch(string Text)
         {
-            Match(Text, Color.Empty, FontCache.Default, out _, out var cleaned, out _);
+            Match(Text, Color.Transparent, FontCache.Default, out _, out var cleaned, out _);
             return cleaned;
         }
 
-        private static Bitmap DoBuildText(TextParams Params)
+        private static Image<Rgba32> DoBuildText(TextParams Params)
         {
-            if (Params.TextFonts.Any(F => F.Size > 128) || Params.Texts.Length == 0) return new Bitmap(1, 1);
-            Bitmap textBitmap;
+            if (Params.TextFonts.Any(F => F.Size > 128) || Params.Texts.Length == 0) return new Image<Rgba32>(1, 1);
+            Image<Rgba32> textBitmap;
             lock (MeasureLock)
             {
                 textBitmap = DoBuildTextSync(Params);
@@ -247,124 +248,83 @@ namespace Hedra.Engine.Rendering.UI
             return textBitmap;
         }
 
-        private static Bitmap DoBuildTextSync(TextParams Params)
+        private static Image<Rgba32> DoBuildTextSync(TextParams Params)
         {
             var fullString = string.Join(string.Empty, Params.Texts);
             var size = CalculateNeededSize(Params);
-            var textBitmap = new Bitmap((int)Math.Ceiling(Math.Max(size.Width, 1)),
+            var textBitmap = new Image<Rgba32>((int)Math.Ceiling(Math.Max(size.Width, 1)),
                 (int)Math.Ceiling(Math.Max(size.Height, 1)));
-            using (var graphics = Graphics.FromImage(textBitmap))
+            
+
+            var offset = PointF.Empty;
+            var bounds = Vector2.Zero;
+            for (var i = 0; i < Params.Texts.Length; ++i)
             {
-                graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
-                graphics.SmoothingMode = SmoothingMode.HighQuality;
-                if (OSManager.RunningPlatform == Platform.Windows)
+                if (Params.Texts[i] == Environment.NewLine)
                 {
-                    // Mono doesnt support this quite well.
-                    graphics.ScaleTransform(1.3f, 1.3f);
-                    var factor = 1f / 1080f * GameSettings.Height;
-                    graphics.ScaleTransform(factor * GameSettings.UIScaling, factor * GameSettings.UIScaling);
+                    offset = new PointF(0, offset.Y + bounds.Y);
+                    continue;
                 }
 
-                graphics.Clear(Color.FromArgb(0, 0, 0, 0));
-                var offset = PointF.Empty;
-                var bounds = RectangleF.Empty;
-                for (var i = 0; i < Params.Texts.Length; ++i)
-                {
-                    if (Params.Texts[i] == Environment.NewLine)
-                    {
-                        offset = new PointF(0, offset.Y + bounds.Height * .75f * (DefaultDPI / graphics.DpiY));
-                        continue;
-                    }
+                /* Draw shadows & strokes */
+                if (Params.TextOptions[i].HasStroke)
+                    AddStroke(textBitmap, Params.Texts[i], Params.TextFonts[i], offset, Params.TextOptions[i]);
+                else
+                    AddShadows(textBitmap, Params.Texts[i], Params.TextFonts[i], offset);
+                
+                AddBackground(textBitmap, Params.Texts[i], Params.TextFonts[i], Params.TextColors[i], offset);
+                
+                var rectangle = TextMeasurer.Measure(Params.Texts[i], new RendererOptions(Params.TextFonts[i], DefaultDPI));
 
-                    /* Draw shadows & strokes */
-                    if (Params.TextOptions[i].HasStroke)
-                        AddStroke(graphics, Params.Texts[i], Params.TextFonts[i], offset, Params.TextOptions[i]);
-                    else
-                        AddShadows(graphics, Params.Texts[i], Params.TextFonts[i], offset);
+                bounds = rectangle.Size;
+                offset = new PointF(
+                    bounds.X + offset.X,
+                    offset.Y
+                );
 
-                    using (var brush = new SolidBrush(Params.TextColors[i]))
-                    {
-                        using (var gp = new GraphicsPath())
-                        {
-                            gp.AddString(
-                                Params.Texts[i],
-                                Params.TextFonts[i].FontFamily,
-                                (int)Params.TextFonts[i].Style,
-                                Params.TextFonts[i].Size,
-                                Point.Empty,
-                                StringFormat.GenericTypographic
-                            );
-                            var offsetMat = new Matrix();
-                            offsetMat.Translate(offset.X, offset.Y);
-                            gp.Transform(offsetMat);
-                            graphics.FillPath(brush, gp);
-                            var format = (StringFormat)StringFormat.GenericTypographic.Clone();
-                            format.SetMeasurableCharacterRanges(new[]
-                            {
-                                new CharacterRange(Params.Offsets[i], Params.Texts[i].Length)
-                            });
-                            var region = graphics.MeasureCharacterRanges(
-                                fullString,
-                                Params.TextFonts[i],
-                                new RectangleF(0, 0, 0, 0),
-                                format
-                            ).First();
-                            bounds = region.GetBounds(graphics);
-                            offset = new PointF(
-                                bounds.Width * .75f * (DefaultDPI / graphics.DpiX) + offset.X,
-                                offset.Y
-                            );
-                        }
-                    }
-                }
             }
 
             return textBitmap;
         }
 
-        private static void AddStroke(Graphics Graphics, string Text, Font TextFont, PointF Offset, TextOptions Options)
+        private static void AddStroke(Image<Rgba32> Bmp, string Text, Font TextFont, PointF Offset, TextOptions Options)
         {
-            AddBackground(Graphics, Text, TextFont,
-                Color.FromArgb(80, Options.StrokeColor.R, Options.StrokeColor.G, Options.StrokeColor.B),
+            AddBackground(Bmp, Text, TextFont,
+                Options.StrokeColor.WithAlpha(80),
                 new Vector2(Offset.X, Offset.Y + 1.75f));
-            AddBackground(Graphics, Text, TextFont,
-                Color.FromArgb(80, Options.StrokeColor.R, Options.StrokeColor.G, Options.StrokeColor.B),
+            AddBackground(Bmp, Text, TextFont,
+                Options.StrokeColor.WithAlpha(80),
                 new Vector2(Offset.X + 1.75f, Offset.Y));
-            AddBackground(Graphics, Text, TextFont,
-                Color.FromArgb(80, Options.StrokeColor.R, Options.StrokeColor.G, Options.StrokeColor.B),
+            AddBackground(Bmp, Text, TextFont,
+                Options.StrokeColor.WithAlpha(80),
                 new Vector2(Offset.X, Offset.Y - 1.75f));
-            AddBackground(Graphics, Text, TextFont,
-                Color.FromArgb(80, Options.StrokeColor.R, Options.StrokeColor.G, Options.StrokeColor.B),
+            AddBackground(Bmp, Text, TextFont,
+                Options.StrokeColor.WithAlpha(80),
                 new Vector2(Offset.X - 1.75f, Offset.Y));
         }
 
-        private static void AddShadows(Graphics Graphics, string Text, Font TextFont, PointF Offset)
+        private static void AddShadows(Image<Rgba32> Bmp, string Text, Font TextFont, PointF Offset)
         {
-            AddBackground(Graphics, Text, TextFont, Color.FromArgb(80, 0, 0, 0),
-                new Vector2(Offset.X + 1.5f, Offset.Y + 1.5f));
+            AddBackground(Bmp, Text, TextFont, Color.FromRgba(0, 0, 0, 90),
+                new Vector2(Offset.X + 1.95f, Offset.Y + 1.95f));
         }
 
-        private static void AddBackground(Graphics Graphics, string Text, Font TextFont, Color TextColor,
+        private static void AddBackground(Image<Rgba32> Bmp, string Text, Font TextFont, Color TextColor,
             Vector2 Offset)
         {
-            using (var gp = new GraphicsPath())
+            var brush = Brushes.Solid(TextColor);
+            var pen = Pens.Solid(TextColor, 0.35f);
+            var options = new DrawingOptions
             {
-                using (var shadowBrush = new SolidBrush(TextColor))
+                TextOptions =
                 {
-                    gp.AddString(
-                        Text,
-                        TextFont.FontFamily,
-                        (int)TextFont.Style,
-                        TextFont.Size,
-                        Point.Empty, StringFormat.GenericTypographic
-                    );
-                    var shadowOffset = new Matrix();
-                    shadowOffset.Translate(Offset.X, Offset.Y);
-                    gp.Transform(shadowOffset);
-
-                    Graphics.FillPath(shadowBrush, gp);
+                    DpiX = DefaultDPI,
+                    DpiY = DefaultDPI,
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    VerticalAlignment = VerticalAlignment.Top,
                 }
-            }
+            };
+            Bmp.Mutate(X => X.DrawText(options, Text, TextFont, brush, pen, Offset));
         }
 
         public static SizeF CalculateNeededSize(TextParams Params)
@@ -372,32 +332,24 @@ namespace Hedra.Engine.Rendering.UI
             var max = SizeF.Empty;
             var sizes = new SizeF[Params.Texts.Length];
             var fullString = string.Join(string.Empty, Params.Texts);
-            var dpi = Vector2.Zero;
-            using (var graphics = Graphics.FromHwnd(IntPtr.Zero))
+            var dpi = new Vector2(1, 1);
+
+            for (var i = 0; i < Params.Texts.Length; ++i)
             {
-                dpi = new Vector2(graphics.DpiX, graphics.DpiY);
-                for (var i = 0; i < Params.Texts.Length; ++i)
+                if (Params.Texts[i] == Environment.NewLine) continue;
+                var rectangle = TextMeasurer.Measure(fullString, new RendererOptions(Params.TextFonts[i], DefaultDPI)
                 {
-                    if (Params.Texts[i] == Environment.NewLine) continue;
-                    var format = StringFormat.GenericTypographic;
-                    format.SetMeasurableCharacterRanges(new[]
-                    {
-                        new CharacterRange(Params.Offsets[i], Params.Texts[i].Length)
-                    });
-                    var rectangle = graphics.MeasureCharacterRanges(
-                        fullString,
-                        Params.TextFonts[i],
-                        new RectangleF(0, 0, 0, 0),
-                        format
-                    ).First().GetBounds(graphics);
-                    sizes[i] = new SizeF(rectangle.Width, rectangle.Height);
-                }
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center,
+                });
+                sizes[i] = new SizeF(rectangle.Width, rectangle.Height) * 1.1f;
             }
 
             var bounds = SizeF.Empty;
             var offset = SizeF.Empty;
             for (var i = 0; i < sizes.Length; ++i)
-                if (Params.Texts[i] == Environment.NewLine && i != sizes.Length - 1)
+            {
+                /*if (Params.Texts[i] == Environment.NewLine && i != sizes.Length - 1)
                 {
                     max = new SizeF(max.Width, max.Height + bounds.Height);
                     offset = SizeF.Empty;
@@ -405,21 +357,15 @@ namespace Hedra.Engine.Rendering.UI
                 else
                 {
                     bounds = sizes[i];
-                    offset += bounds;
-                    max = new SizeF(Math.Max(offset.Width, max.Width), Math.Max(max.Height, bounds.Height));
-                }
-
-            var factor = 1f / 1080f * GameSettings.Height;
-            return new SizeF(max.Width * factor * (DefaultDPI / dpi.X) * GameSettings.UIScaling,
-                max.Height * factor * (DefaultDPI / dpi.Y) * GameSettings.UIScaling);
-        }
-
-        private static SizeF CalculateTextSize(string Text, Font TextFont)
-        {
-            using (var graphics = Graphics.FromHwnd(IntPtr.Zero))
-            {
-                return graphics.MeasureString(Text, TextFont);
+                    offset += bounds;*/
+                max = new SizeF(Math.Max(sizes[i].Width, max.Width), Math.Max(max.Height, sizes[i].Height));
+                //max = new SizeF(Math.Max(offset.Width, max.Width), Math.Max(max.Height, bounds.Height));
+                //}
             }
+
+        var factor = 1f / 1080f * GameSettings.Height;
+            return new SizeF(max.Width * factor * GameSettings.UIScaling,
+                max.Height * factor * GameSettings.UIScaling);
         }
     }
 

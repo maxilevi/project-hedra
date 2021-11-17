@@ -67,7 +67,7 @@ namespace HedraTests.Rendering
             var output = TextProvider.BuildParams(str, defaultFont, Color.White);
             output.Texts.ToList().ForEach(TestContext.WriteLine);
             output.TextColors.ToList().ForEach(C => TestContext.WriteLine(C.ToString()));
-            output.TextFonts.ToList().ForEach(F => TestContext.WriteLine($"Font: {F.Size} {F.Style} {F.FontFamily}"));
+            output.TextFonts.ToList().ForEach(F => TestContext.WriteLine($"Font: {F.Size} {F.Instance.Description.Style} {F.Family}"));
             Assert.AreEqual(new[]
             {
                 "Hi, how ",

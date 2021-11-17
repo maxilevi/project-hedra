@@ -21,7 +21,7 @@ namespace Hedra.Engine.SkillSystem.Warrior.Paladin
         protected override float AnimationSpeed => 1.25f;
 
         public override float IsAffectingModifier => _hasMinion ? 1 : 0 + base.IsAffectingModifier;
-        protected override Vector4 OutlineColor => Color.Gold.ToVector4();
+        protected override Vector4 OutlineColor => Color.Gold.AsVector4();
         protected override int MaxLevel => 15;
         public override float MaxCooldown => 34;
         public override float ManaCost => 54;

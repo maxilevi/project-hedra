@@ -97,8 +97,8 @@ namespace Hedra.Engine.Player.MapSystem
             var hint = new GUIText(Translation.Create("mark_waypoint"),
                 Vector2.UnitY * .8f, Color.White,
                 FontCache.GetBold(16f));
-            var underline = new GUIText("＿＿＿＿＿＿＿＿",
-                Vector2.UnitY * .75f, Color.FromArgb(255, 30, 30, 30),
+            var underline = new GUIText("_______________",
+                Vector2.UnitY * .75f, Color.FromRgb(30, 30, 30),
                 FontCache.GetBold(16f));
             _panel.AddElement(hint);
             _panel.AddElement(underline);
@@ -246,7 +246,7 @@ namespace Hedra.Engine.Player.MapSystem
                 _player.Model.Position.Xz().ToVector3() + Math.Max(_height, _player.Model.Position.Y) * Vector3.UnitY;
             SkyManager.FogManager.UpdateFogSettings(FogDistance * .95f, FogDistance);
             SkyManager.Sky.TopColor = Vector4.One;
-            SkyManager.Sky.BotColor = Color.CadetBlue.ToVector4();
+            SkyManager.Sky.BotColor = Color.CadetBlue.AsVector4();
         }
 
         public void Draw()
@@ -324,7 +324,7 @@ namespace Hedra.Engine.Player.MapSystem
             baseData.AddFace(Face.ALL);
             baseData.Scale(new Vector3(scale, 1f * Scalar, scale));
             baseData.TransformVerts(-Vector3.UnitY * 1f - new Vector3(scale, 0, scale) * .5f);
-            baseData.Color = CubeData.CreateCubeColor(Color.DarkSlateGray.ToVector4());
+            baseData.Color = CubeData.CreateCubeColor(Color.DarkSlateGray.AsVector4());
             return baseData.ToVertexData();
         }
 

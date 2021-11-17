@@ -12,11 +12,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Xml;
 using Hedra.Engine.Core;
 using Hedra.Framework;
 using Hedra.Numerics;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace Hedra.Engine
 {
@@ -25,9 +27,13 @@ namespace Hedra.Engine
     /// </summary>
     public static class Extensions
     {
-        public static SequentialList<T> ToSequential<T>(List<T> List)
+        
+        public static IntPtr AsIntPtr(this Span<Rgba32> pixels)
         {
-            return new SequentialList<T>(List);
+            unsafe
+            {
+                return (IntPtr)(Unsafe.AsPointer(ref pixels.GetPinnableReference()));
+            }
         }
 
         public static float Clamp01(this float Value)

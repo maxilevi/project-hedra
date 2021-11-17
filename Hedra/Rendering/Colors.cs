@@ -21,14 +21,14 @@ namespace Hedra.Rendering
         public static Vector4 DeepSkyBlue { get; } = new Vector4(0, 0.74609375f, 1, 1);
         public static Vector4 Transparent { get; } = new Vector4(0, 0, 0, 0);
         public static Vector4 Blue { get; } = new Vector4(0, 0, 1, 1);
-        public static Vector4 Yellow { get; } = Color.Yellow.ToVector4();
-        public static Vector4 White { get; } = Color.White.ToVector4();
-        public static Vector4 BlueViolet { get; } = Color.BlueViolet.ToVector4();
-        public static Vector4 OrangeRed { get; } = Color.OrangeRed.ToVector4();
-        public static Vector4 GreenYellow { get; } = Color.GreenYellow.ToVector4();
+        public static Vector4 Yellow { get; } = Color.Yellow.AsVector4();
+        public static Vector4 White { get; } = Color.White.AsVector4();
+        public static Vector4 BlueViolet { get; } = Color.BlueViolet.AsVector4();
+        public static Vector4 OrangeRed { get; } = Color.OrangeRed.AsVector4();
+        public static Vector4 GreenYellow { get; } = Color.GreenYellow.AsVector4();
         public static Vector4 CooldownBlue { get; } = new Vector4(.2f, .2f, .85f, 1);
-        public static Vector4 Brown { get; } = Color.FromArgb(255, 134, 94, 60).ToVector4() * .75f;
-        public static Vector4 Magenta { get; } = Color.Magenta.ToVector4();
+        public static Vector4 Brown { get; } = Color.FromRgb(134, 94, 60).AsVector4() * .75f;
+        public static Vector4 Magenta { get; } = Color.Magenta.AsVector4();
 
         public static Color ToColorStruct(Vector4 Color)
         {

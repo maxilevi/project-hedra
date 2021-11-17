@@ -17,9 +17,9 @@ namespace Hedra.BiomeSystem
     /// </summary>
     public class RegionColor
     {
-        public static Vector4 PathColor = Color.Sienna.ToVector4();
-        public static Vector4 StonePathColor = Color.Gray.ToVector4();
-        public static Vector4 DarkStonePathColor = Color.DimGray.ToVector4();
+        public static Vector4 PathColor = Color.Sienna.AsVector4();
+        public static Vector4 StonePathColor = Color.Gray.AsVector4();
+        public static Vector4 DarkStonePathColor = Color.DimGray.AsVector4();
         private readonly int _seed;
         public Vector4 DirtColor;
         public Vector4[] GrassColors;

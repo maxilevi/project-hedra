@@ -16,6 +16,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.Windowing;
 using Hedra.Game;
 using Hedra.Localization;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using Silk.NET.Input;
@@ -52,7 +53,7 @@ namespace Hedra.Engine.Rendering.UI
             var normalFont = FontCache.GetNormal(12);
             var boldFont = FontCache.GetBold(15);
             var accumulatedOffset = Vector2.UnitY * .6f;
-            var backgroundTexId = Graphics2D.ColorTexture(Color.FromArgb(170, 20, 20, 20).ToVector4());
+            var backgroundTexId = Graphics2D.ColorTexture(Color.FromRgba(20, 20, 20, 170).AsVector4());
             var maxWidth = 0f;
             for (var i = 0; i < _controlMapKeys.Length; ++i)
             {

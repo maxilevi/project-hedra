@@ -5,6 +5,9 @@ using System.Numerics;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Windowing;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 
 namespace Hedra.Engine.Rendering
 {
@@ -68,22 +71,22 @@ namespace Hedra.Engine.Rendering
             }
         }
 
-        public Bitmap Visualize()
+        public Image<Rgba32> Visualize()
         {
             var verticesBmp = _buffers.Where(B => B.Indices.Count == 0).Select(B => B.Vertices.Draw()).ToArray();
             var indicesBmp = _buffers.Where(B => B.Indices.Count != 0).Select(B => B.Indices.Draw()).ToArray();
             var allBmp = indicesBmp.Concat(verticesBmp).ToArray();
             const int padding = 16;
-            var bmp = new Bitmap(allBmp.First().Width, allBmp.Sum(B => B.Height) + padding * allBmp.Length);
-            using (var graphics = Graphics.FromImage(bmp))
+            var bmp = new Image<Rgba32>(allBmp.First().Width, allBmp.Sum(B => B.Height) + padding * allBmp.Length);
+            bmp.Mutate(I =>
             {
                 var accumulated = 0;
                 for (var i = 0; i < allBmp.Length; ++i)
                 {
-                    graphics.DrawImage(allBmp[i], 0, accumulated);
+                    I.DrawImage(allBmp[i], 0, accumulated);
                     accumulated += allBmp[i].Height + padding;
                 }
-            }
+            });
 
             return bmp;
         }

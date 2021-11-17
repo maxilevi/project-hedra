@@ -1,5 +1,4 @@
 using System;
-using System.Drawing;
 using System.Numerics;
 using Hedra.Core;
 using Hedra.Engine.Events;
@@ -12,6 +11,7 @@ using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Sound;
 using Silk.NET.Input;
+using SixLabors.ImageSharp;
 using Button = Hedra.Engine.Rendering.UI.Button;
 
 namespace Hedra.Engine.Player.Inventory

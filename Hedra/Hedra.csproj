@@ -6872,12 +6872,12 @@
         </BootstrapperPackage>
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="Assets\Items\Boots\"/>
-        <Folder Include="Assets\Items\Gems\"/>
-        <Folder Include="Assets\Items\Pants\"/>
-        <Folder Include="Modules\Items\Boots\"/>
-        <Folder Include="Modules\Items\Gems\"/>
-        <Folder Include="Modules\Items\Pants\"/>
+        <Folder Include="Assets\Items\Boots\" />
+        <Folder Include="Assets\Items\Gems\" />
+        <Folder Include="Assets\Items\Pants\" />
+        <Folder Include="Modules\Items\Boots\" />
+        <Folder Include="Modules\Items\Gems\" />
+        <Folder Include="Modules\Items\Pants\" />
     </ItemGroup>
     <ItemGroup>
         <Content Include="..\project-hedra-assets\Animations\ArcherArrowRain.dae">
@@ -13342,7 +13342,7 @@
         <Content Include="Modules\Items\Chestplates\LegendaryChitinChestplate.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="Modules\Items\Chestplates\RareArcherRobe.json"/>
+        <Content Include="Modules\Items\Chestplates\RareArcherRobe.json" />
         <Content Include="Modules\Items\Chestplates\LegendaryNecromancerChestplate.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
@@ -13850,7 +13850,7 @@
         <Content Include="Modules\Spawners\GhostTown.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="Modules\Spawners\Savanna.json"/>
+        <Content Include="Modules\Spawners\Savanna.json" />
         <Content Include="Modules\Villages\Woodland.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
@@ -13991,7 +13991,7 @@
         <Content Include="Shaders\SSR.vert">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="Translations\Español.po"/>
+        <Content Include="Translations\Español.po" />
         <Content Include="x64\glfw3.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
@@ -14036,15 +14036,15 @@
         </Content>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Framework\Framework.csproj"/>
+        <ProjectReference Include="..\Framework\Framework.csproj" />
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="Assets\Items\Boots\"/>
-        <Folder Include="Assets\Items\Gems\"/>
-        <Folder Include="Assets\Items\Pants\"/>
-        <Folder Include="Modules\Items\Boots\"/>
-        <Folder Include="Modules\Items\Gems\"/>
-        <Folder Include="Modules\Items\Pants\"/>
+        <Folder Include="Assets\Items\Boots\" />
+        <Folder Include="Assets\Items\Gems\" />
+        <Folder Include="Assets\Items\Pants\" />
+        <Folder Include="Modules\Items\Boots\" />
+        <Folder Include="Modules\Items\Gems\" />
+        <Folder Include="Modules\Items\Pants\" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="IronPython">
@@ -14077,6 +14077,9 @@
         <PackageReference Include="SixLabors.ImageSharp">
             <Version>1.0.4</Version>
         </PackageReference>
+        <PackageReference Include="SixLabors.ImageSharp.Drawing">
+          <Version>1.0.0-beta13</Version>
+        </PackageReference>
         <PackageReference Include="System.Numerics.Vectors">
             <Version>4.6.0-preview5.19224.8</Version>
         </PackageReference>
@@ -14088,10 +14091,10 @@
         <DefineConstants>_WINDOWS</DefineConstants>
     </PropertyGroup>
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-        <Exec Command="&quot;$(MSBuildProjectDirectory)/../utilities/make_atlas.sh&quot;"/>
-        <Exec Command="&quot;$(MSBuildProjectDirectory)/../utilities/AssetBuilder.exe&quot; &quot;$(TargetDir)/Shaders/&quot; &quot;$(TargetDir)/data1.db&quot; normal text"/>
-        <Exec Command="&quot;$(MSBuildProjectDirectory)/../utilities/AssetBuilder.exe&quot; &quot;$(TargetDir)/Sounds/&quot; &quot;$(TargetDir)/data2.db&quot; normal binary"/>
-        <Exec Command="&quot;$(MSBuildProjectDirectory)/../utilities/AssetBuilder.exe&quot; &quot;$(TargetDir)/Assets/&quot; &quot;$(TargetDir)/data3.db&quot; normal binary"/>
+        <Exec Command="&quot;$(MSBuildProjectDirectory)/../utilities/make_atlas.sh&quot;" />
+        <Exec Command="&quot;$(MSBuildProjectDirectory)/../utilities/AssetBuilder.exe&quot; &quot;$(TargetDir)/Shaders/&quot; &quot;$(TargetDir)/data1.db&quot; normal text" />
+        <Exec Command="&quot;$(MSBuildProjectDirectory)/../utilities/AssetBuilder.exe&quot; &quot;$(TargetDir)/Sounds/&quot; &quot;$(TargetDir)/data2.db&quot; normal binary" />
+        <Exec Command="&quot;$(MSBuildProjectDirectory)/../utilities/AssetBuilder.exe&quot; &quot;$(TargetDir)/Assets/&quot; &quot;$(TargetDir)/data3.db&quot; normal binary" />
     </Target>
-    <ProjectExtensions/>
+    <ProjectExtensions />
 </Project>

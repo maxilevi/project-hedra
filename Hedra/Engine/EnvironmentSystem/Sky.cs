@@ -53,8 +53,8 @@ namespace Hedra.Engine.EnvironmentSystem
         }
 
         public bool Enabled { get; set; } = true;
-        public Vector4 TopColor { get; set; } = Color.CornflowerBlue.ToVector4();
-        public Vector4 BotColor { get; set; } = Color.LightYellow.ToVector4();
+        public Vector4 TopColor { get; set; } = Color.CornflowerBlue.AsVector4();
+        public Vector4 BotColor { get; set; } = Color.LightYellow.AsVector4();
 
         public void Draw()
         {

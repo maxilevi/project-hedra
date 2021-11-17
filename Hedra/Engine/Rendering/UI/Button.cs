@@ -46,19 +46,9 @@ namespace Hedra.Engine.Rendering.UI
             Initialize(Position, Scale, Text, null, 0, FontColor, TextFont);
         }
 
-        public Button(Vector2 Position, Vector2 Scale, string Text, uint Texture, Color FontColor)
-        {
-            Initialize(Position, Scale, Text, null, Texture, FontColor, SystemFonts.DefaultFont);
-        }
-
-        public Button(Vector2 Position, Vector2 Scale, string Text, uint Texture)
-        {
-            Initialize(Position, Scale, Text, null, Texture, Color.Black, SystemFonts.DefaultFont);
-        }
-
         public Button(Vector2 Position, Vector2 Scale, uint Texture)
         {
-            Initialize(Position, Scale, null, null, Texture, Color.Black, SystemFonts.DefaultFont);
+            Initialize(Position, Scale, null, null, Texture, Color.Black, FontCache.Default);
         }
 
         public bool CanClick { get; set; } = true;

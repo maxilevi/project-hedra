@@ -81,8 +81,8 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             SetPosition();
             ItemTexture.Position += ItemTexture.Scale.Y * Vector2.UnitY * .5f;
             _learnSpecializationButton.Texture.Tint = _player.Level < 5
-                ? new Vector4(Color.Orange.ToVector4().Xyz() * 2f, 1)
-                : new Vector4(Color.Orange.ToVector4().Xyz() * 5f, 1);
+                ? new Vector4(Color.Orange.AsVector4().Xyz() * 2f, 1)
+                : new Vector4(Color.Orange.AsVector4().Xyz() * 5f, 1);
             _learnSpecializationText.TextColor = _player.Level < 5
                 ? Color.Gray
                 : Color.White;

@@ -189,7 +189,7 @@ if (Parent.Type != "Boar" || true) return currentPath;
 
 //Debug
 
-var bmp1 = new Bitmap(CurrentGrid.DimX, CurrentGrid.DimY);
+var bmp1 = new Image<Rgba32>(CurrentGrid.DimX, CurrentGrid.DimY);
 for (var x = 0; x < bmp1.Width; ++x)
 {
     for (var y = 0; y < bmp1.Width; ++y)

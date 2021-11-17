@@ -1,6 +1,7 @@
 using System.Globalization;
 using Hedra.Components.Effects;
 using Hedra.Localization;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using SixLabors.ImageSharp;
 
@@ -34,7 +35,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
             User.AddComponent(_currentAttackSpeedBonus =
                 new AttackSpeedBonusComponent(User, User.AttackSpeed * AttackSpeedChange));
             User.Model.Outline = true;
-            User.Model.OutlineColor = Color.FromArgb(128, 102, 204, 255).ToVector4() * 2;
+            User.Model.OutlineColor = Color.FromRgba(102, 204, 255, 128).AsVector4() * 2;
         }
 
         protected override void DoDisable()

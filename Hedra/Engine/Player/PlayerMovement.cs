@@ -303,7 +303,6 @@ namespace Hedra.Engine.Player
             //_player.Chat.AddLine("Modules reloaded.");
 #if DEBUG
             if (EventArgs.Key == Key.F10) ShaderManager.ReloadShaders();
-            if (EventArgs.Key == Key.F9 && _player.CanInteract) Recorder.Active = !Recorder.Active;
             if (EventArgs.Key == Key.O && _player.CanInteract) GameSettings.LockFrustum = !GameSettings.LockFrustum;
 
             if (EventArgs.Key == Key.Number7 && _player.CanInteract)

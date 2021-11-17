@@ -8,7 +8,6 @@
  */
 
 using System;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Numerics;
 using System.Threading;
@@ -22,7 +21,9 @@ using Hedra.Game;
 using Hedra.Numerics;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
+using SixLabors.ImageSharp.ColorSpaces;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 
 namespace Hedra.Rendering
 {
@@ -71,7 +72,7 @@ namespace Hedra.Rendering
 
         #region NonGL
 
-        public static Vector2 TextureSize(Bitmap bmp)
+        public static Vector2 TextureSize(Image bmp)
         {
             return new Vector2(bmp.Width, bmp.Height).ToRelativeSize();
         }
@@ -90,7 +91,7 @@ namespace Hedra.Rendering
         public static Vector2 SizeFromAssets(string Path)
         {
             return TextureSize(
-                new Bitmap(new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.AssetsResource))));
+                Image.Load(new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.AssetsResource))));
         }
 
         public static uint LoadFromAssets(string Path, TextureMinFilter Min = TextureMinFilter.Linear,
@@ -99,16 +100,16 @@ namespace Hedra.Rendering
             Log.WriteLine($"Resolving Path: {Path}", LogType.System);
             var id = LoadTexture(new BitmapObject
             {
-                Bitmap = new Bitmap(new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.AssetsResource))),
+                Bitmap = Image.Load<Rgba32>(new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.AssetsResource))),
                 Path = Path
             }, Min, Mag, Wrap);
             Log.WriteLine($"Loading Texture: {Path} Id={id}", LogType.System);
             return id;
         }
 
-        public static Bitmap LoadBitmapFromAssets(string Path)
+        public static Image<Rgba32> LoadBitmapFromAssets(string Path)
         {
-            return new Bitmap(new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.AssetsResource)));
+            return Image.Load<Rgba32>(new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.AssetsResource)));
         }
 
         public static Vector2 MeasureString(string Text, Font TextFont)
@@ -122,11 +123,11 @@ namespace Hedra.Rendering
         public static uint ColorTexture(Vector4 TextureColor)
         {
             var textureColor = TextureColor.ToColor();
-            var bmp = new Bitmap(2, 2);
-            bmp.SetPixel(0, 0, textureColor);
-            bmp.SetPixel(0, 1, textureColor);
-            bmp.SetPixel(1, 0, textureColor);
-            bmp.SetPixel(1, 1, textureColor);
+            var bmp = new Image<Rgba32>(2, 2);
+            bmp[0, 0] = textureColor;
+            bmp[0, 1] = textureColor;
+            bmp[1, 0] = textureColor;
+            bmp[1, 1] = textureColor;
             return LoadTexture(new BitmapObject
             {
                 Bitmap = bmp,
@@ -134,46 +135,39 @@ namespace Hedra.Rendering
             }, TextureMinFilter.Linear, TextureMagFilter.Linear, TextureWrapMode.Repeat);
         }
 
-        public static Bitmap ReplaceColor(Bitmap Bmp, Color Original, Color Replacement)
+        public static Image<Rgba32> ReplaceColor(Image<Rgba32> Bmp, Color Original, Color Replacement)
         {
-            return ReplaceColor(Bmp, C => C.R == Original.R && C.G == Original.G && C.B == Original.B, Replacement);
+            var original = Original.ToPixel<Rgba32>();
+            return ReplaceColor(Bmp, C =>
+            {
+                var p = C.ToPixel<Rgba32>();
+                return p.R == original.R && p.G == original.G && p.B == original.B;
+            }, Replacement);
         }
 
-        public static Bitmap ReplaceColor(Bitmap Bmp, Predicate<Color> Match, Color Replacement)
+        public static Image<Rgba32> ReplaceColor(Image<Rgba32> Bmp, Predicate<Color> Match, Color Replacement)
         {
-            var data = Bmp.LockBits(new Rectangle(0, 0, Bmp.Width, Bmp.Height), ImageLockMode.ReadWrite,
-                PixelFormat.Format32bppArgb);
-            unsafe
+            if (!Bmp.TryGetSinglePixelSpan(out var pixelSpan))
+                throw new ArgumentException("Image is not contigous");
+
+            var pixel = Replacement.ToPixel<Rgba32>();
+            for (var i = 0; i < Bmp.Height * Bmp.Width; i++)
             {
-                var dataPtr = (byte*)data.Scan0;
-                var stride = data.Stride;
-                if (dataPtr == null) throw new ArgumentNullException("dataPrt cannot be null");
-                for (var y = 0; y < Bmp.Height; y++)
-                for (var x = 0; x < Bmp.Width; x++)
-                {
-                    if (!Match(Color.FromArgb(dataPtr[x * 4 + y * stride + 3], dataPtr[x * 4 + y * stride + 2],
-                        dataPtr[x * 4 + y * stride + 1], dataPtr[x * 4 + y * stride + 0])))
-                        continue;
-                    dataPtr[x * 4 + y * stride] = Replacement.B;
-                    dataPtr[x * 4 + y * stride + 1] = Replacement.G;
-                    dataPtr[x * 4 + y * stride + 2] = Replacement.R;
-                }
+                if (!Match(new Color(pixelSpan[i])))
+                    continue;
+                pixelSpan[i] = new Rgba32(pixel.R, pixel.G, pixel.B, pixelSpan[i].A);
             }
 
-            Bmp.UnlockBits(data);
-            return Bmp;
+            return Image.LoadPixelData<Rgba32>(pixelSpan, Bmp.Width, Bmp.Height);
         }
 
-        public static Bitmap CreateGradient(Color Color1, Color Color2, GradientType Type, Bitmap Bmp)
+        public static Image<Rgba32> CreateGradient(Color Color1, Color Color2, GradientType Type, Image<Rgba32> Bmp)
         {
-            BitmapData Data = Bmp.LockBits(new Rectangle(0, 0, Bmp.Width, Bmp.Height), ImageLockMode.ReadWrite,
-                PixelFormat.Format32bppArgb);
-            unsafe
+            if (!Bmp.TryGetSinglePixelSpan(out var pixelSpan))
+                throw new ArgumentException("Image is not contigous");
+            
+            for (var y = 0; y < Bmp.Height; y++)
             {
-                var DataPtr = (byte*)Data.Scan0;
-                var Stride = Data.Stride;
-
-                for (var y = 0; y < Bmp.Height; y++)
                 for (var x = 0; x < Bmp.Width; x++)
                 {
                     float LerpValue = 0;
@@ -192,16 +186,13 @@ namespace Hedra.Rendering
                             (new Vector2(Bmp.Width / 2, Bmp.Height / 2) - new Vector2(x, y)).LengthFast() /
                             (Bmp.Width + Bmp.Height), 0, 1);
 
-                    var NewColor = Color1.Lerp(Color2, LerpValue);
-                    DataPtr[x * 4 + y * Stride] = NewColor.B; // Red
-                    DataPtr[x * 4 + y * Stride + 1] = NewColor.G; // Blue
-                    DataPtr[x * 4 + y * Stride + 2] = NewColor.R; // Green
-                    DataPtr[x * 4 + y * Stride + 3] = (byte)Math.Max(0x00, (int)NewColor.A);
+                    var newColor = Color1.Lerp(Color2, LerpValue).ToPixel<Rgba32>();
+                    pixelSpan[x + y * Bmp.Width] =
+                        new Rgba32(newColor.R, newColor.G, newColor.B, (byte)Math.Max(0, (int)newColor.A));
                 }
             }
 
-            Bmp.UnlockBits(Data);
-            return Bmp;
+            return Image.LoadPixelData<Rgba32>(pixelSpan, Bmp.Width, Bmp.Height);
         }
 
         #endregion

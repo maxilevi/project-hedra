@@ -8,7 +8,6 @@
  */
 
 using System;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using Hedra.Core;
@@ -17,6 +16,8 @@ using Hedra.Engine.Steamworks;
 using Hedra.Engine.Windowing;
 using Hedra.Game;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 using PixelFormat = Hedra.Engine.Windowing.PixelFormat;
 
 namespace Hedra.Engine
@@ -26,47 +27,6 @@ namespace Hedra.Engine
     /// </summary>
     public static class Recorder
     {
-        public static bool Active;
-        public static string Output = "C:/Recordings/" + DateTime.Now.TimeOfDay.Minutes + "/";
-
-        public static long FrameID;
-
-        public static void Record()
-        {
-            if (!Active)
-                return;
-
-            Directory.CreateDirectory(Output);
-            var w = (int)GameSettings.SurfaceWidth;
-            var h = (int)GameSettings.SurfaceHeight;
-            var pixels = new int[w * h];
-            Renderer.ReadPixels(0, 0, w, h, PixelFormat.Rgba, PixelType.Byte, pixels);
-
-            TaskScheduler.Asynchronous(delegate
-            {
-                // we need to process the pixels a bit to deal with the format difference between OpenGL and .NET
-                for (var i = 0; i < pixels.Length; i++)
-                {
-                    var p = pixels[i];
-                    var r = p & 0xff;
-                    var g = (p >> 8) & 0xff;
-                    var b = (p >> 16) & 0xff;
-                    pixels[i] = ((r << 16) | (g << 8) | b) << 1;
-                }
-
-                Bitmap Bmp = new Bitmap(w, h);
-                var data = Bmp.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.WriteOnly,
-                    System.Drawing.Imaging.PixelFormat.Format32bppRgb);
-                Marshal.Copy(pixels, 0, data.Scan0, pixels.Length);
-                Bmp.UnlockBits(data);
-
-
-                Bmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
-
-                Bmp.Save(Output + FrameID++ + ".png", ImageFormat.Png);
-            });
-        }
-
         public static string SaveScreenshot(string Path)
         {
             Steam.Instance.CallIf(S => S.Screenshots.Trigger());
@@ -76,26 +36,22 @@ namespace Hedra.Engine
             Renderer.ReadPixels(0, 0, w, h, PixelFormat.Rgba, PixelType.Byte, pixels);
 
             // we need to process the pixels a bit to deal with the format difference between OpenGL and .NET
+            var data = new byte[w * h * 3];
             for (var i = 0; i < pixels.Length; i++)
             {
                 var p = pixels[i];
                 var r = p & 0xff;
                 var g = (p >> 8) & 0xff;
                 var b = (p >> 16) & 0xff;
-                pixels[i] = ((r << 16) | (g << 8) | b) << 1;
+                data[i+0] = (byte)r;
+                data[i+1] = (byte)g;
+                data[i+2] = (byte)b;
             }
 
-            using (var Bmp = new Bitmap(w, h))
-            {
-                var data = Bmp.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.WriteOnly,
-                    System.Drawing.Imaging.PixelFormat.Format32bppRgb);
-                Marshal.Copy(pixels, 0, data.Scan0, pixels.Length);
-                Bmp.UnlockBits(data);
-                Bmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
-                Bmp.Save(Path + DateTime.Now.ToString("dd-MM-yyyy_hh-mm-ss") + ".png",
-                    ImageFormat.Png);
-                return DateTime.Now.ToString("dd-MM-yyyy_hh-mm-ss") + ".png";
-            }
+            using var bmp = Image.LoadPixelData<Rgb24>(data, w, h);
+            var name = DateTime.Now.ToString("dd-MM-yyyy_hh-mm-ss") + ".png";
+            bmp.SaveAsPngAsync(Path + name);
+            return name;
         }
     }
 }
