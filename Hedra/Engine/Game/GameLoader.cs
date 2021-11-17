@@ -104,16 +104,26 @@ namespace Hedra.Engine.Game
             var is64 = Environment.Is64BitProcess;
             var dllPath = $"{Path}/{(is64 ? "x64" : "x86")}";
             var ext = (isWindows ? "dll" : "so");
-            
-            _nativeLibs = new List<IntPtr>
+
+            if (isWindows)
             {
-                NativeLibrary.Load($"{dllPath}/hedracore.{ext}"),
-                NativeLibrary.Load($"{dllPath}/steam_api{(is64 ? "64" : string.Empty)}.{ext}"),
-                NativeLibrary.Load($"{dllPath}/libbulletc.{ext}"),
-                NativeLibrary.Load($"{dllPath}/openal32.{ext}"),
-                NativeLibrary.Load($"{dllPath}/glfw3.{ext}")
-            };
+                _nativeLibs = new List<IntPtr>
+                {
+                    TryLoad($"{dllPath}/hedracore.{ext}"),
+                    TryLoad($"{dllPath}/steam_api{(is64 ? "64" : string.Empty)}.{ext}"),
+                    TryLoad($"{dllPath}/libbulletc.{ext}"),
+                    TryLoad($"{dllPath}/openal32.{ext}"),
+                    TryLoad($"{dllPath}/glfw3.{ext}")
+                };
+            }
             _loadedArchitectureFiles = true;
+        }
+
+        private static IntPtr TryLoad(string Lib)
+        {
+            if (!NativeLibrary.TryLoad(Lib, out var outLib))
+                Log.WriteLine($"Failed to load library '{Lib}'");
+            return outLib;
         }
 
         public static void UnloadNativeLibs()
