@@ -72,8 +72,7 @@ namespace Hedra.Engine
                 RunDedicatedServer();
             else
                 RunNormalAndDummyMode(dummyMode);
-
-            GameLoader.UnloadNativeLibs();
+            
             Environment.Exit(0);
         }
 
@@ -100,6 +99,7 @@ namespace Hedra.Engine
         private static void DisposeLibraries()
         {
             Steam.Instance.Dispose();
+            GameLoader.UnloadNativeLibs();
         }
 
         private static unsafe void InitializeResolutions()

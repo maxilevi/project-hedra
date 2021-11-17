@@ -123,6 +123,7 @@ namespace Hedra.Engine.Game
         {
             if (!NativeLibrary.TryLoad(Lib, out var outLib))
                 Log.WriteLine($"Failed to load library '{Lib}'");
+            Log.WriteLine($"Successfully loaded {Lib}");
             return outLib;
         }
 
