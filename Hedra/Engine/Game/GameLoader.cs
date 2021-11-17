@@ -102,7 +102,7 @@ namespace Hedra.Engine.Game
 
             var isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
             var is64 = Environment.Is64BitProcess;
-            var dllPath = $"{Path}/{(is64 ? "x64" : "x86")}";
+            var dllPath = $"{Path}{(is64 ? "x64" : "x86")}";
             var ext = (isWindows ? "dll" : "so");
             var prefix = (isWindows ? "" : "lib");
 
@@ -121,7 +121,8 @@ namespace Hedra.Engine.Game
         {
             if (!NativeLibrary.TryLoad(Lib, out var outLib))
                 Log.WriteLine($"Failed to load library '{Lib}'");
-            Log.WriteLine($"Successfully loaded {Lib}");
+            else 
+                Log.WriteLine($"Successfully loaded {Lib}");
             return outLib;
         }
 
