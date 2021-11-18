@@ -4233,7 +4233,7 @@
         <None Update="x64\libsteam_api.so">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="x64\libglfw.so">
+        <None Update="x64\libglfw3.so">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="Assets\Icon.png">
