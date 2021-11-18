@@ -79,8 +79,8 @@ namespace Hedra.Engine.Generation
         public HalfBlock(BlockType Type, Half Density)
         {
             var type = (byte)Type;
-            var sign = Density < 0 ? 0 : 1;
-            var significant = Math.Min((int)Math.Abs(Density * 100), 2047);
+            var sign = Density < (Half)0 ? 0 : 1;
+            var significant = Math.Min((int)Math.Abs((float)Density * 100), 2047);
             if (type >= 16) throw new ArgumentOutOfRangeException($"BlockType should be less than 16 but its '{type}'");
             if (significant >= 2048)
                 throw new ArgumentOutOfRangeException($"Significant should be less than 2048 but its '{significant}'");
