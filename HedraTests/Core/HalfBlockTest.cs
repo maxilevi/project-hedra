@@ -20,13 +20,13 @@ namespace HedraTests.Core
         {           
             var block = new HalfBlock();
             Assert.AreEqual(BlockType.Air, block.Type);
-            Assert.AreEqual(0, block.Density, 0.01);
+            Assert.AreEqual(0f, (float) block.Density, 0.01);
         }
 
         [TestCaseSource(nameof(RandomBlocks))]
         public void TestDensity(TestTuple Tuple)
         {
-            Assert.AreEqual((double)Tuple.ExpectedDensity, Tuple.Block.Density, 0.02);
+            Assert.AreEqual((double)Tuple.ExpectedDensity, (float)Tuple.Block.Density, 0.02);
         }
         
         [TestCaseSource(nameof(RandomBlocks))]

@@ -23,7 +23,7 @@ namespace HedraTests.Generation
         [TestCaseSource(nameof(RandomBlocks))]
         public void TestDensity(TestTuple Tuple)
         {
-            Assert.AreEqual(Tuple.ExpectedDensity, Tuple.Block.Density, 0.02);
+            Assert.AreEqual((double)Tuple.ExpectedDensity, Tuple.Block.Density, 0.02);
         }
 
         [TestCaseSource(nameof(RandomBlocks))]
@@ -39,7 +39,7 @@ namespace HedraTests.Generation
                 var type = (BlockType) Utils.Rng.Next(0, (int) BlockType.MaxNums);
                 var density = (Half) (Utils.Rng.NextFloat() * 20f - 10f);
                 yield return new TestTuple(
-                    new Block(type, density),
+                    new Block(type, (float) density),
                     type,
                     density
                 );
