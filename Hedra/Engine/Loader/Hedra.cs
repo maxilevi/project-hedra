@@ -31,7 +31,6 @@ using Hedra.Mission;
 using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Sound;
-using JetBrains.Profiler.Api;
 using Silk.NET.Maths;
 using Silk.NET.Windowing;
 
@@ -98,7 +97,6 @@ namespace Hedra.Engine.Loader
                 return false;
             }
             
-            MeasureProfiler.StartCollectingData();
             Log.WriteLine(glVersion);
             AssetManager.Load();
             _wasLoading = true;
@@ -145,8 +143,6 @@ namespace Hedra.Engine.Loader
             t1.Wait();
 
             _splashScreen.Disable();
-            MeasureProfiler.SaveData();
-            MeasureProfiler.Detach();
             Program.GameWindow.WindowState = WindowState.Maximized;
             return true;
         }
