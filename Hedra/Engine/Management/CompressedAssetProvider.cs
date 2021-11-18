@@ -194,11 +194,10 @@ namespace Hedra.Engine.Management
             {
                 for (var y = 0; y < Height; ++y)
                 {
-                    pixels[k + 0] = original[x, y].R;
-                    pixels[k + 1] = original[x, y].G;
-                    pixels[k + 2] = original[x, y].B;
-                    pixels[k + 3] = original[x, y].A;
-                    k += 4;
+                    pixels[x * 4 + y * Width * 4 + 0] = original[x, y].R;
+                    pixels[x * 4 + y * Width * 4 + 1] = original[x, y].G;
+                    pixels[x * 4 + y * Width * 4 + 2] = original[x, y].B;
+                    pixels[x * 4 + y * Width * 4 + 3] = original[x, y].A;
                 }
             }
             return pixels;
