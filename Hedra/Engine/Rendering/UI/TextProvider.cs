@@ -313,7 +313,7 @@ namespace Hedra.Engine.Rendering.UI
             Vector2 Offset)
         {
             var brush = Brushes.Solid(TextColor);
-            var pen = Pens.Solid(TextColor, 0.35f);
+            var pen = Pens.Solid(TextColor, 0.25f);
             var options = new DrawingOptions
             {
                 TextOptions =
@@ -342,7 +342,7 @@ namespace Hedra.Engine.Rendering.UI
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Center,
                 });
-                sizes[i] = new SizeF(rectangle.Width, rectangle.Height) * 1.1f;
+                sizes[i] = new SizeF(rectangle.Width, rectangle.Height * 1.1f);
             }
 
             var bounds = SizeF.Empty;
