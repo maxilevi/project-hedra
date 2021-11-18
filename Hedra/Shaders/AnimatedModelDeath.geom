@@ -7,10 +7,24 @@ in float in_time[];
 in vec4 pass_colors[];
 in vec3 pass_positions[];
 in vec3 pass_normals[];
+in float pass_heights[];
+in vec3 base_vertex_positions[];
+in vec4 pass_botColors[];
+in vec4 pass_topColors[];
+in vec4 pass_coordss[];
+
+
 out vec4 pass_color;
 out vec3 pass_normal;
 out vec3 pass_position;
 out float pass_visibility;
+out float pass_height;
+
+
+out vec3 base_vertex_position;
+out vec4 pass_botColor;
+out vec4 pass_topColor;
+out vec4 pass_coords;
 
 uniform mat4 projectionViewMatrix;
 uniform mat4 viewMatrix;
@@ -31,7 +45,14 @@ void main()
         pass_color = vec4(pass_colors[i].xyz, 1.0 - disposeTime * .25);
         pass_normal = pass_normals[i];
         pass_position = (viewMatrix * vec4(pass_positions[i], 1.0) + addon).xyz;
+        
+        pass_height = pass_heights[i];
+        base_vertex_position = base_vertex_positions[i];
+        pass_botColor = pass_botColors[i];
+        pass_topColor = pass_topColors[i];
+        pass_coords = pass_coordss[i];
         pass_visibility = 1.0;
+        
         gl_Position = projectionViewMatrix * (modelViewSpace+addon);
         EmitVertex();
     }

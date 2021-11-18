@@ -33,6 +33,11 @@ namespace Hedra.Engine.Rendering.Animation
                     sourceV = sourceV.Replace("pass_position", "pass_positions");
                     sourceV = sourceV.Replace("pass_normal", "pass_normals");
                     sourceV = sourceV.Replace("pass_lightDiffuse", "pass_lightDiffuses");
+                    sourceV = sourceV.Replace("pass_height", "pass_heights");
+                    sourceV = sourceV.Replace("base_vertex_positions", "base_vertex_positions");
+                    sourceV = sourceV.Replace("pass_botColor", "pass_botColors");
+                    sourceV = sourceV.Replace("pass_topColor", "pass_topColors");
+                    sourceV = sourceV.Replace("pass_coords", "pass_coordss");
                 }
 
                 return sourceV;
@@ -47,7 +52,10 @@ namespace Hedra.Engine.Rendering.Animation
             {
                 var sourceF = AssetManager.ReadShader("Shaders/AnimatedModel.frag");
                 if (CompatibilityManager.SupportsGeometryShaders)
+                {
                     sourceF = sourceF.Replace("pass_visibility);", "1.0);");
+                }
+
                 return sourceF;
             }
 
