@@ -109,7 +109,7 @@ namespace Hedra.Engine.Game
             _nativeLibs = new List<IntPtr>
             {
                 TryLoad($"{dllPath}/{prefix}hedracore.{ext}"),
-                TryLoad($"{dllPath}/{prefix}steam_api{(is64 && isWindows ? "64" : string.Empty)}.{ext}"),
+                TryLoad($"{dllPath}/{prefix}steam_api{(is64 ? "64" : string.Empty)}.{ext}"),
                 TryLoad($"{dllPath}/libbulletc.{ext}"),
                 TryLoad($"{dllPath}/openal32.{ext}"),
                 TryLoad($"{dllPath}/{prefix}glfw3.{ext}"),
