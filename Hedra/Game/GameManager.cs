@@ -49,11 +49,16 @@ namespace Hedra.Game
         public static event EventHandler AfterSave;
         public static event EventHandler BeforeSave;
 
-        public static void Load()
+        public static void LoadWorld()
         {
-            Provider.Load();
+            Provider.LoadWorld();
             Provider.BeforeSave += (S, E) => BeforeSave?.Invoke(S, E);
             Provider.AfterSave += (S, E) => AfterSave?.Invoke(S, E);
+        }
+        
+        public static void LoadPlayer()
+        {
+            Provider.LoadPlayer();
         }
 
         public static bool NearAnyPlayer(Vector3 Position, float Radius)

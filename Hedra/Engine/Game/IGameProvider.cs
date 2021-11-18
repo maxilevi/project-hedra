@@ -20,7 +20,8 @@ namespace Hedra.Engine.Game
         event EventHandler BeforeSave;
         void MakeCurrent(PlayerInformation Information);
         void LoadMenu();
-        void Load();
+        void LoadWorld();
+        void LoadPlayer();
         void LoadCharacter(PlayerInformation Information);
         void NewRun(PlayerInformation Information);
         void Unload();

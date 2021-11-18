@@ -33,13 +33,16 @@ namespace Hedra.Engine.Game
         public KeyboardManager Keyboard { get; private set; }
         public bool IsLoading => _loadingScreen?.IsLoading ?? false;
 
-        public void Load()
+        public void LoadWorld()
         {
             Keyboard = new KeyboardManager();
 
             Log.WriteLine("Loading the world...");
             World.Load();
+        }
 
+        public void LoadPlayer()
+        {
             Log.WriteLine("Loading the player...");
             _players = new IPlayer[]
             {
