@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using Hedra.API;
 using Hedra.Core;
 using Hedra.Engine.Bullet;
@@ -30,6 +31,7 @@ using Hedra.Mission;
 using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Sound;
+using JetBrains.Profiler.Api;
 using Silk.NET.Maths;
 using Silk.NET.Windowing;
 
@@ -45,6 +47,7 @@ namespace Hedra.Engine.Loader
         private int _passedFrames;
         private double _passedMillis;
         private SplashScreen _splashScreen;
+        private bool _wasLoading;
 
         public Hedra(int Width, int Height, IMonitor Monitor, int Major, int Minor, ContextProfile Profile,
             ContextFlags Flags) :
@@ -63,11 +66,6 @@ namespace Hedra.Engine.Loader
             {
                 Close();
             }
-            else
-            {
-                _debugProvider = new DebugInfoProvider();
-                _splashScreen = new SplashScreen();
-            }
         }
 
         public bool FinishedLoadingSplashScreen => _splashScreen?.FinishedLoading ?? true;
@@ -77,7 +75,7 @@ namespace Hedra.Engine.Loader
         {
         }
 
-        public static bool LoadBoilerplate()
+        public bool LoadBoilerplate()
         {
             MainThreadId = Thread.CurrentThread.ManagedThreadId;
             Time.RegisterThread();
@@ -99,55 +97,80 @@ namespace Hedra.Engine.Loader
                     "OpenGL Version not supported");
                 return false;
             }
-
+            
+            MeasureProfiler.StartCollectingData();
             Log.WriteLine(glVersion);
-
             AssetManager.Load();
+            _wasLoading = true;
+            _splashScreen = new SplashScreen();
+            Renderer.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit | ClearBufferMask.StencilBufferBit);
+            _splashScreen.Draw();
+
+            var t1 = Task.Run(() =>
+            {
+                GameLoader.LoadSoundEngine();
+                HedraContent.Register();
+                ModificationsLoader.Reload();
+                NameGenerator.Load();
+                Translations.Load();
+                BackgroundUpdater.Load();
+                BulletPhysics.Load();
+                Log.WriteLine("Translations loaded successfully.");
+
+                GameLoader.CreateCharacterFolders();
+                Log.WriteLine("Assets loading was successful.");
+
+                GameSettings.LoadNormalSettings(GameSettings.SettingsPath);
+                Log.WriteLine("Setting loaded successfully.");
+
+                Steam.Instance.Initialize();
+                Log.WriteLine("Hooking steam into necessary events...");
+            });
+            
             CompatibilityManager.Load();
-            GameLoader.LoadSoundEngine();
-            HedraContent.Register();
-            ModificationsLoader.Reload();
-            NameGenerator.Load();
-            CacheManager.Load();
-            Translations.Load();
-            BackgroundUpdater.Load();
-            BulletPhysics.Load();
-            Log.WriteLine("Translations loaded successfully.");
-
-            GameLoader.CreateCharacterFolders();
             GameLoader.AllocateMemory();
-            Log.WriteLine("Assets loading was successful.");
-
-            GameSettings.LoadNormalSettings(GameSettings.SettingsPath);
-            Log.WriteLine("Setting loaded successfully.");
-
             Renderer.Load();
             Log.WriteLine("Supported GLSL version is : " + Renderer.GetString(StringName.ShadingLanguageVersion));
             OSManager.WriteSpecs();
 
-            GameManager.Load();
+            CacheManager.Load();
+            GameManager.LoadWorld();
             Log.WriteLine("Scene loading was Successful.");
-
-            Steam.Instance.Initialize();
-            Log.WriteLine("Hooking steam into necessary events...");
+            
+            GameManager.LoadPlayer();
+            Log.WriteLine("UI loading was Successful.");
 
             LoadInterpreter();
+
+            t1.Wait();
+
+            _splashScreen.Disable();
+            MeasureProfiler.SaveData();
+            MeasureProfiler.Detach();
             Program.GameWindow.WindowState = WindowState.Maximized;
             return true;
         }
 
+        private void SetupRendering()
+        {
+            Window.MakeCurrent();
+            _debugProvider = new DebugInfoProvider();
+        }
+        
         private static void LoadInterpreter()
         {
-            //if(GameSettings.DebugMode)
-            //    TaskScheduler.Parallel(Interpreter.Load);
-            //else
             Interpreter.Load();
             MissionPool.Load();
         }
 
         protected override void UpdateFrame(double Delta)
         {
-            _splashScreen.Update();
+            if (!_splashScreen.FinishedLoading)
+            {
+                _splashScreen.Update();
+                return;
+            }
+
             var frameTime = Delta;
             while (frameTime > 0f)
             {
@@ -193,17 +216,19 @@ namespace Hedra.Engine.Loader
 
         protected override void RenderFrame(double Delta)
         {
-            Renderer.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit |
-                           ClearBufferMask.StencilBufferBit);
             if (!_splashScreen.FinishedLoading)
             {
-                _splashScreen.Draw();
+                return;
             }
-            else
+            else if(_wasLoading)
             {
-                DrawManager.Draw();
-                _debugProvider.Draw();
+                SetupRendering();
+                _wasLoading = false;
             }
+
+            Renderer.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit | ClearBufferMask.StencilBufferBit);
+            DrawManager.Draw();
+            _debugProvider.Draw();
         }
 
         protected override void Resize(Vector2D<int> NewSize)

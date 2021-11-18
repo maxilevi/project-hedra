@@ -8,6 +8,8 @@
  */
 
 using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 using System.Numerics;
 using System.Threading;
@@ -29,6 +31,7 @@ namespace Hedra.Rendering
 {
     public static class Graphics2D
     {
+        private static ConcurrentDictionary<string, Vector2> _sizeCache = new ConcurrentDictionary<string, Vector2>();
         public static ITexture2DProvider Provider { get; set; } = new Texture2DProvider();
 
         public static uint LoadTexture(BitmapObject BitmapObject, bool UseCache)
@@ -37,6 +40,15 @@ namespace Hedra.Rendering
                 TextureWrapMode.ClampToBorder, UseCache);
         }
 
+         
+        public static Vector2 MeasureString(string Text, Font TextFont)
+        {
+            if (Text == string.Empty) return Vector2.Zero;
+            var size = TextProvider.CalculateNeededSize(new TextParams(new[] { Text }, new[] { 0 }, new[] { TextFont },
+                    null, null));
+            return new Vector2(size.Width / GameSettings.Width, size.Height / GameSettings.Height);
+        }
+        
         public static uint LoadTexture(BitmapObject BitmapObject, TextureMinFilter Min = TextureMinFilter.Linear,
             TextureMagFilter Mag = TextureMagFilter.Linear, TextureWrapMode Wrap = TextureWrapMode.ClampToBorder,
             bool UseCache = true)
@@ -58,11 +70,6 @@ namespace Hedra.Rendering
         public static Vector2 ToRelativeSize(this Vector2 Size)
         {
             return new Vector2(Size.X / GameSettings.Width, Size.Y / GameSettings.Height);
-        }
-
-        public static Vector2 ToPixelSize(this Vector2 Size)
-        {
-            return new Vector2(Size.X * GameSettings.Width, Size.Y * GameSettings.Height);
         }
 
         public static void Dispose()
@@ -90,8 +97,12 @@ namespace Hedra.Rendering
 
         public static Vector2 SizeFromAssets(string Path)
         {
-            return TextureSize(
-                Image.Load(new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.AssetsResource))));
+            if (_sizeCache.TryGetValue(Path, out var size))
+                return size;
+
+            size = TextureSize(Image.Load(new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.AssetsResource))));
+            _sizeCache.TryAdd(Path, size);
+            return size;
         }
 
         public static uint LoadFromAssets(string Path, TextureMinFilter Min = TextureMinFilter.Linear,
@@ -110,14 +121,6 @@ namespace Hedra.Rendering
         public static Image<Rgba32> LoadBitmapFromAssets(string Path)
         {
             return Image.Load<Rgba32>(new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.AssetsResource)));
-        }
-
-        public static Vector2 MeasureString(string Text, Font TextFont)
-        {
-            if (Text == string.Empty) return Vector2.Zero;
-            var size = TextProvider.CalculateNeededSize(new TextParams(new[] { Text }, new[] { 0 }, new[] { TextFont },
-                null, null));
-            return new Vector2(size.Width / GameSettings.Width, size.Height / GameSettings.Height);
         }
 
         public static uint ColorTexture(Vector4 TextureColor)

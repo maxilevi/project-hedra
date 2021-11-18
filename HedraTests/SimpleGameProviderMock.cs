@@ -39,6 +39,16 @@ namespace HedraTests
             throw new System.NotImplementedException();
         }
 
+        public void LoadWorld()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void LoadPlayer()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Load()
         {
             throw new System.NotImplementedException();

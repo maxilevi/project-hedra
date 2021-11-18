@@ -14,7 +14,7 @@ namespace Hedra.Engine.Loader
     {
         private readonly GUITexture _studioBackground;
         private readonly GUITexture _studioLogo;
-        private readonly float _splashOpacity = 1;
+        private float _splashOpacity = 1;
 
         public SplashScreen()
         {
@@ -36,8 +36,13 @@ namespace Hedra.Engine.Loader
             //TaskScheduler.After(4, () => _splashOpacity = 0);
 //#endif
 //#if DEBUG
-            FinishedLoading = true;
+            //FinishedLoading = true;
 //#endif
+        }
+
+        public void Disable()
+        {
+            _splashOpacity = 0;
         }
 
         public bool FinishedLoading { get; private set; }

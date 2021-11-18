@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Text;
 using Hedra.Engine;
 using Hedra.Engine.Game;
+using Hedra.Engine.Management;
 using Hedra.Engine.Native;
 using Hedra.Engine.Rendering;
 using Hedra.Localization;
@@ -169,7 +170,9 @@ namespace Hedra.Game
             set
             {
                 _shadowQuality = value;
-                ShadowRenderer.SetQuality(ShadowQuality);
+                Executer.ExecuteOnMainThread(
+                    () => ShadowRenderer.SetQuality(ShadowQuality)
+                );
             }
         }
 

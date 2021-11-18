@@ -78,7 +78,7 @@ namespace Hedra.Engine.Loader
             SoundPlayer.Provider = new DummySoundProvider();
 
             Log.WriteLine("Starting hedra dedicated server...");
-            Hedra.LoadBoilerplate();
+            //Hedra.LoadBoilerplate();
             var information =
                 LocalPlayer.BuildNewPlayer("HOST", ClassDesign.FromString(Class.Mage), new CustomizationData());
             GameManager.MakeCurrent(information);
