@@ -112,6 +112,7 @@ namespace Hedra.Engine.Game
                 TryLoad($"{dllPath}/{prefix}steam_api{(is64 && isWindows ? "64" : string.Empty)}.{ext}"),
                 TryLoad($"{dllPath}/libbulletc.{ext}"),
                 TryLoad($"{dllPath}/openal32.{ext}"),
+                TryLoad($"{dllPath}/{prefix}glfw3.{ext}"),
             };
             _loadedArchitectureFiles = true;
         }
