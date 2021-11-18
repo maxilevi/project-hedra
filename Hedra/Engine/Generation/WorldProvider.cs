@@ -438,7 +438,9 @@ namespace Hedra.Engine.Generation
         public Chunk GetChunkByOffset(int OffsetX, int OffsetZ)
         {
             var offset = new Vector2(OffsetX, OffsetZ);
-            SearcheableChunks.TryGetValue(offset, out var chunk);
+            Chunk chunk;
+            lock (SearcheableChunks)
+                SearcheableChunks.TryGetValue(offset, out chunk);
             return chunk;
         }
 
