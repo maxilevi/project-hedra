@@ -19,13 +19,12 @@ namespace Hedra.Engine.Loader
         private bool _cursorVisible;
         private bool _fullscreen;
         private Vector2 _mousePosition;
-        private SpinWait _spinner;
+        private IMouse _mouse;
 
         protected HedraWindow(int Width, int Height, IMonitor Monitor, ContextProfile Profile, ContextFlags Flags,
             APIVersion Version)
         {
             _watch = new Stopwatch();
-            _spinner = new SpinWait();
             var options = new WindowOptions
             {
                 API = new GraphicsAPI(ContextAPI.OpenGL, Profile, Flags, Version),
@@ -49,15 +48,15 @@ namespace Hedra.Engine.Loader
             keyboard.KeyDown += ProcessKeyDown;
             input.Keyboards[0].KeyUp += ProcessKeyUp;
 
-            var mouse = input.Mice[0];
-            mouse.MouseMove += (_, Point) =>
+            _mouse = input.Mice[0];
+            _mouse.MouseMove += (_, Point) =>
                 MouseMove?.Invoke(new MouseMoveEventArgs(_mousePosition = new Vector2(Point.X, Point.Y)));
-            mouse.MouseDown += (_, Button) =>
+            _mouse.MouseDown += (_, Button) =>
                 MouseDown?.Invoke(new MouseButtonEventArgs(Button, InputAction.Press, _mousePosition));
-            mouse.MouseUp += (_, Button) =>
+            _mouse.MouseUp += (_, Button) =>
                 MouseUp?.Invoke(new MouseButtonEventArgs(Button, InputAction.Release, _mousePosition));
-            mouse.Scroll += (_, Wheel) => MouseWheel?.Invoke(new MouseWheelEventArgs(Wheel.X, Wheel.Y));
-            HedraCursor.Mouse = mouse;
+            _mouse.Scroll += (_, Wheel) => MouseWheel?.Invoke(new MouseWheelEventArgs(Wheel.X, Wheel.Y));
+            HedraCursor.Mouse = _mouse;
 
             unsafe
             {
@@ -133,18 +132,7 @@ namespace Hedra.Engine.Loader
             set
             {
                 _fullscreen = value;
-                unsafe
-                {
-                    var glfw = GlfwProvider.GLFW.Value;
-                    var monitor = glfw.GetPrimaryMonitor();
-                    var mode = glfw.GetVideoMode(monitor);
-                    glfw.SetWindowMonitor
-                    (
-                        (WindowHandle*)Window.Handle,
-                        _fullscreen ? monitor : null, 0, 0, mode->Width, mode->Height,
-                        mode->RefreshRate
-                    );
-                }
+                Window.WindowState = _fullscreen ? WindowState.Fullscreen : WindowState.Normal;
             }
         }
 
@@ -153,13 +141,8 @@ namespace Hedra.Engine.Loader
             get => _cursorVisible;
             set
             {
-                unsafe
-                {
-                    _cursorVisible = value;
-                    var glfw = GlfwProvider.GLFW.Value;
-                    var mode = _cursorVisible ? CursorModeValue.CursorNormal : CursorModeValue.CursorHidden;
-                    glfw.SetInputMode((WindowHandle*)Window.Handle, CursorStateAttribute.Cursor, mode);
-                }
+                _cursorVisible = value;
+                _mouse.Cursor.CursorMode = _cursorVisible ? CursorMode.Normal : CursorMode.Hidden;
             }
         }
 
