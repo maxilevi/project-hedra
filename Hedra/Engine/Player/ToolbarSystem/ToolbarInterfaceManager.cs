@@ -140,6 +140,15 @@ namespace Hedra.Engine.Player.ToolbarSystem
             UpdateView();
         }
 
+        public void EmptyToolbar()
+        {
+            for (var i = 0; i < Toolbar.InteractableItems; ++i)
+            {
+                AddTo(_toolbarInferface.Buttons[i], _bagInterface);
+            }
+            UpdateView();
+        }
+
         private bool AddTo(Button Sender, InventoryArrayInterface Interface)
         {
             var item = ItemByButton(Sender);

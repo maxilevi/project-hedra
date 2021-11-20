@@ -150,6 +150,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             SetBlueprint(_player.Class.MainTree, MainTree);
             for (var i = 0; i < AbilityCount; i++) SetPoints(i, 0);
             SpecializationTreeIndex = 0;
+            _player.Toolbar.Empty();
         }
 
         public void ShowBlueprint(AbilityTreeBlueprint Blueprint, InventoryArray Array, byte[] AbilityTreeArray)

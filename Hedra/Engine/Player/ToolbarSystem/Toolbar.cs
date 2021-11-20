@@ -78,6 +78,11 @@ namespace Hedra.Engine.Player.ToolbarSystem
             LoadSkills();
         }
 
+        public void Empty()
+        {
+            _manager.EmptyToolbar();
+        }
+
         public void Dispose()
         {
             EventDispatcher.UnregisterMouseDown(this);

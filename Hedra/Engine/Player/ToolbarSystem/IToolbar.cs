@@ -18,5 +18,6 @@ namespace Hedra.Engine.Player.ToolbarSystem
         void ResetCooldowns();
         void ResetSkills();
         void UpdateSkills();
+        void Empty();
     }
 }
