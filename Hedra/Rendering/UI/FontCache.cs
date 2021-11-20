@@ -9,8 +9,16 @@ namespace Hedra.Rendering.UI
     public static class FontCache
     {
         private static readonly Dictionary<FontEntry, Font> CachedFonts = new Dictionary<FontEntry, Font>();
-        private static FontFamily _normalFamily = SystemFonts.Families.First();
-        private static FontFamily _boldFamily = SystemFonts.Families.First();
+        private static FontFamily _normalFamily;
+        private static FontFamily _boldFamily;
+
+        static FontCache()
+        {
+            if (!SystemFonts.TryFind("Arial", out _normalFamily))
+                _normalFamily = SystemFonts.Families.First();
+            if (!SystemFonts.TryFind("Arial", out _boldFamily))
+                _boldFamily = SystemFonts.Families.First();
+        }   
 
         public static Font Default => Get(_normalFamily, 10);
 
