@@ -14,10 +14,11 @@ namespace Hedra.Rendering.UI
 
         static FontCache()
         {
+            var defaultFamily = SystemFonts.Families.First(F => F.AvailableStyles.Contains(FontStyle.Bold));
             if (!SystemFonts.TryFind("Arial", out _normalFamily))
-                _normalFamily = SystemFonts.Families.First();
+                _normalFamily = defaultFamily;
             if (!SystemFonts.TryFind("Arial", out _boldFamily))
-                _boldFamily = SystemFonts.Families.First();
+                _boldFamily = defaultFamily;
         }   
 
         public static Font Default => Get(_normalFamily, 10);
