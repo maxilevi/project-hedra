@@ -250,7 +250,6 @@ namespace Hedra.Engine.Rendering.UI
 
         private static Image<Rgba32> DoBuildTextSync(TextParams Params)
         {
-            var fullString = string.Join(string.Empty, Params.Texts);
             var size = CalculateNeededSize(Params);
             var textBitmap = new Image<Rgba32>((int)Math.Ceiling(Math.Max(size.Width, 1)),
                 (int)Math.Ceiling(Math.Max(size.Height, 1)));
@@ -349,18 +348,7 @@ namespace Hedra.Engine.Rendering.UI
             var offset = SizeF.Empty;
             for (var i = 0; i < sizes.Length; ++i)
             {
-                /*if (Params.Texts[i] == Environment.NewLine && i != sizes.Length - 1)
-                {
-                    max = new SizeF(max.Width, max.Height + bounds.Height);
-                    offset = SizeF.Empty;
-                }
-                else
-                {
-                    bounds = sizes[i];
-                    offset += bounds;*/
                 max = new SizeF(Math.Max(sizes[i].Width, max.Width), Math.Max(max.Height, sizes[i].Height));
-                //max = new SizeF(Math.Max(offset.Width, max.Width), Math.Max(max.Height, bounds.Height));
-                //}
             }
 
         var factor = 1f / 1080f * GameSettings.Height;
