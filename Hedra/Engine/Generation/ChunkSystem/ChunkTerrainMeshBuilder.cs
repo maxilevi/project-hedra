@@ -181,8 +181,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if (ProcessWater && _parent.HasWater)
                 Loop(Helper, 1, 1, ProcessColors, true, ref waterData, ref failed, ref Cache);
         }
-
-        [MethodImpl(MethodImplOptions.AggressiveOptimization)]
+        
         private void Loop(ChunkTerrainMeshBuilderHelper Helper, int HorizontalSkip, int VerticalSkip,
             bool ProcessColors, bool isWater, ref NativeVertexData blockData, ref bool failed, ref RegionCache Cache)
         {
@@ -225,8 +224,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     ref isRiverConstant);
             }
         }
-
-        [MethodImpl(MethodImplOptions.AggressiveOptimization)]
+        
         private static void PolygoniseCell(ref GridCell Cell, ref NativeVertexData BlockData,
             ref Vector3[] VertexBuffer, ref Triangle[] TriangleBuffer, Vector4 Color, ref bool IsWater,
             ref bool IsRiverConstant)

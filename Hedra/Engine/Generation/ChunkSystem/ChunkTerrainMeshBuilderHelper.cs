@@ -226,7 +226,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return _grid[_x * noiseValuesMapWidth * noiseValuesMapHeight + _y * noiseValuesMapWidth + _z];
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private float GetSample(int x, int y, int z, out BlockType Type)
         {
             var x2 = (int)(x * _invSampleWidth);
@@ -253,7 +253,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             );
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void BuildCell(ref GridCell Cell, int X, int Y, int Z, int HorizontalLod, int VerticalLod)
         {
             var horizontalBlockSize = _blockSize * HorizontalLod;

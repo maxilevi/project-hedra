@@ -350,7 +350,8 @@ namespace Hedra.Engine.BiomeSystem
         {
             return 1 - (Y - heightAtPoint) + densityAtPoint;
         }
-
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static unsafe bool CanSetGrass(float* sampledDensity, int x, int y, int z, int depth)
         {
             const int border = OutOfChunkBorderSize / 2;
@@ -420,6 +421,7 @@ namespace Hedra.Engine.BiomeSystem
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static float CalculateDensity(int x, int y, int z, float[][][] noise3D)
         {
             /* Add half the border padding since its 1 for the back border and 1 for the front one*/
