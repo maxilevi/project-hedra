@@ -4239,6 +4239,9 @@
         <None Update="Assets\Icon.png">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Update="Modules\Mobs\Werewolf.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
     <ItemGroup>
         <None Include="..\project-hedra-assets\Animations\ArcherIdle.dae">

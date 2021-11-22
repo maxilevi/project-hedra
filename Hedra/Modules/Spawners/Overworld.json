@@ -5,12 +5,16 @@
       "Chance": 15.0
     },
     {
+      "Type": "Werewolf",
+      "Chance": 10.0
+    },
+    {
       "Type": "Gorilla",
       "Chance": 5.0
     },
     {
       "Type": "Explorers",
-      "Chance": 60.0,
+      "Chance": 50.0,
       "IsCustom": true
     },
     {

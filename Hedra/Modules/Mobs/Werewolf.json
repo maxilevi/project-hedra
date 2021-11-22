@@ -1,0 +1,40 @@
+{
+  "Name": "Werewolf",
+  "MaxHealth": 486.0,
+  "AttackDamage": 17.0,
+  "AttackCooldown": 1.25,
+  "Speed": 1.35,
+  "XP": 21.0,
+  "Level": 21,
+  "AIType": "Hostile",
+  "Effects": [],
+  "Drops": [
+  ],
+  "Model": {
+    "AlignWithTerrain": false,
+    "Path": "$DataFile$/Assets/Chr/WerewolfIdle.dae",
+    "Scale": 1.0,
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/WarriorIdle.dae",
+        "Speed": 1.0
+      }
+    ],
+    "WalkAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/WarriorWalk.dae",
+        "Speed": 1.0
+      }
+    ],
+    "AttackAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/WarriorLeftPunch.dae",
+        "Speed": 1.25
+      },
+      {
+        "Path": "$DataFile$/Assets/Chr/WarriorRightPunch.dae",
+        "Speed": 1.25
+      }
+    ]
+  }
+}
