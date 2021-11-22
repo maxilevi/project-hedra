@@ -40,6 +40,7 @@ namespace Hedra.Engine.WorldBuilding
             {
                 Host.Position = Position + _sitOffset;
                 Host.Rotation = _sitRotation;
+                TaskScheduler.When(() => (Host.Model.ModelPosition - Host.Position).LengthSquared() < 1, () => Host.IsSitting = true);
             }
         }
 
