@@ -360,9 +360,10 @@ def update_ui(pet_item, pet_entity, top_left, top_right, bottom_left, bottom_rig
     else:
         top_left.Text = str()
         top_right.Text = str()
+        timer = get_dead_timer(pet_item)
+        time = timer.AlertTime - timer.AlertTime * timer.Progress
         level.Text = 'RESPAWN IN {0}s'.format(
-            '{:.2f}'.format(get_dead_timer(pet_item).AlertTime - get_dead_timer(pet_item).AlertTime * get_dead_timer(
-                pet_item).Progress)
+            '{:.0f}'.format(time)
         )
         bottom_left.Text = str()
         bottom_right.Text = str()
