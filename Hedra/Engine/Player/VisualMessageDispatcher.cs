@@ -78,7 +78,7 @@ namespace Hedra.Engine.Player
 
         public void ShowTitleMessage(string Message, float Seconds)
         {
-            ShowTitleMessage(Message, Seconds, Color.FromRgb(40, 40, 40));
+            ShowTitleMessage(Message, Seconds, Color.White);
         }
 
         public void ShowMessage(string Message, float Seconds)
