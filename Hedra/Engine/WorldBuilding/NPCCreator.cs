@@ -3,11 +3,14 @@ using System.Numerics;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 using Hedra.Mission;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.WorldBuilding
 {
     public static class NPCCreator
     {
+        public static Vector4[] HairColors { get; private set; }
+
         public static INPCCreatorProvider Provider { get; set; } = new NPCCreatorProvider();
 
         public static Humanoid SpawnHumanoid(HumanType Type, Vector3 DesiredPosition)
@@ -48,6 +51,24 @@ namespace Hedra.Engine.WorldBuilding
         public static Humanoid SpawnBandit(Vector3 Position, int Level, BanditOptions Options)
         {
             return Provider.SpawnBandit(Position, Level, Options);
+        }
+
+        static NPCCreator()
+        {
+            const int columnCount = 8;
+            const int rowCount = 8;
+            var allColors = new Vector4[columnCount * rowCount];
+            const float step = 360f / columnCount;
+            for (var j = 0; j < rowCount; ++j)
+            {
+                for (var i = 0; i < columnCount; ++i)
+                {
+                    allColors[j * columnCount + i] =
+                        Colors.HsLtoRgba(i * step, 1.0f, 1.0f - (j + 1) / (float)(rowCount + 2), 1f);
+                }
+            }
+
+            HairColors = allColors;
         }
     }
 }

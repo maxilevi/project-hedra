@@ -21,6 +21,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Scenes;
 using Hedra.Engine.Windowing;
+using Hedra.Engine.WorldBuilding;
 using Hedra.Framework;
 using Hedra.Game;
 using Hedra.Localization;
@@ -165,15 +166,8 @@ namespace Hedra.Engine.Rendering.UI
 
         private void CreateColorPickers(Panel InPanel)
         {
-            const int columnCount = 8;
-            const int rowCount = 8;
-            var allColors = new Vector4[columnCount * rowCount];
-            const float step = 360f / columnCount;
-            for (var j = 0; j < rowCount; ++j)
-            for (var i = 0; i < columnCount; ++i)
-                allColors[j * columnCount + i] =
-                    Colors.HsLtoRgba(i * step, 1.0f, 1.0f - (j + 1) / (float)(rowCount + 2), 1f);
-
+            var columnCount = 8;
+            var allColors = NPCCreator.HairColors;
             var picker1 = new ColorPicker(allColors, Translation.Create("first_hair_picker"), new Vector2(.3f, .4f),
                 Vector2.One * 0.25f, InPanel, columnCount, 13);
             picker1.ColorPickedEvent += V =>
