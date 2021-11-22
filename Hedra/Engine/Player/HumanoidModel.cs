@@ -396,7 +396,12 @@ namespace Hedra.Engine.Player
             var rotation = TargetRotation * Mathf.Radian;
             _rotationQuaternion = Quaternion.Slerp(_rotationQuaternion, QuaternionMath.FromEuler(rotation),
                 Time.IndependentDeltaTime * 8f);
-            Model.LocalRotation = _rotationQuaternion.ToEuler();
+            var a = _rotationQuaternion.ToEuler();
+            if (a.IsInvalid())
+            {
+                int b = 0;
+            }
+            Model.LocalRotation = a;
             LocalRotation = Model.LocalRotation;
             HandleTransformationMatrix();
             HandleState();
@@ -535,6 +540,12 @@ namespace Hedra.Engine.Player
                     : Owner.Class.FemaleFeetModelTemplate.Path);
         }
 
+        public bool UpdateWhenOutOfView
+        {
+            get => Model.UpdateWhenOutOfView;
+            set => Model.UpdateWhenOutOfView = value;
+        }
+        
         public override void Dispose()
         {
             _food.Dispose();

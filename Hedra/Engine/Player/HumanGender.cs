@@ -3,6 +3,7 @@ namespace Hedra.Engine.Player
     public enum HumanGender
     {
         Male,
-        Female
+        Female,
+        All,
     }
 }

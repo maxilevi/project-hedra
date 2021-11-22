@@ -197,11 +197,11 @@ namespace Hedra.Engine.Rendering.Animation
             {
                 var newValue = value;
                 if (float.IsNaN(value.X))
-                    newValue = new Vector3(0, newValue.Y, newValue.Z);
+                    newValue = new Vector3(_rotation.X, newValue.Y, newValue.Z);
                 if (float.IsNaN(value.Y))
-                    newValue = new Vector3(newValue.X, 0, newValue.Z);
+                    newValue = new Vector3(newValue.X, _rotation.Y, newValue.Z);
                 if (float.IsNaN(value.Z))
-                    newValue = new Vector3(newValue.X, newValue.Y, 0);
+                    newValue = new Vector3(newValue.X, newValue.Y, _rotation.Z);
 
                 _rotation = newValue;
             }

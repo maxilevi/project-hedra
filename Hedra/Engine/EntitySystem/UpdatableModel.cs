@@ -191,5 +191,11 @@ namespace Hedra.Engine.EntitySystem
             _movingTimer.Reset();
             IsMoving = true;
         }
+
+        public void StopMoving()
+        {
+            _movingTimer.Reset();
+            IsMoving = false;
+        }
     }
 }

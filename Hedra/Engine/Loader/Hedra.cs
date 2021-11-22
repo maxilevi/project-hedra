@@ -100,16 +100,25 @@ namespace Hedra.Engine.Loader
             Log.WriteLine(glVersion);
             AssetManager.Load();
             _wasLoading = true;
+            _debugProvider = new DebugInfoProvider();
             _splashScreen = new SplashScreen();
-            Renderer.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit | ClearBufferMask.StencilBufferBit);
             _splashScreen.Draw();
-
-            var t1 = Task.Run(() =>
+            
+            CompatibilityManager.Load();
+            GameLoader.AllocateMemory();
+            Renderer.Load();
+            Log.WriteLine("Supported GLSL version is : " + Renderer.GetString(StringName.ShadingLanguageVersion));
+            OSManager.WriteSpecs();
+            Window.ClearContext();
+            
+            //Task.Run(() =>
             {
+                Window.MakeCurrent();
                 GameLoader.LoadSoundEngine();
                 HedraContent.Register();
                 ModificationsLoader.Reload();
                 NameGenerator.Load();
+                CacheManager.Load();
                 Translations.Load();
                 BackgroundUpdater.Load();
                 BulletPhysics.Load();
@@ -121,38 +130,21 @@ namespace Hedra.Engine.Loader
                 GameSettings.LoadNormalSettings(GameSettings.SettingsPath);
                 Log.WriteLine("Setting loaded successfully.");
 
-                Steam.Instance.Initialize();
-                Log.WriteLine("Hooking steam into necessary events...");
-            });
+                GameManager.LoadWorld();
+                Log.WriteLine("Scene loading was Successful.");
             
-            CompatibilityManager.Load();
-            GameLoader.AllocateMemory();
-            Renderer.Load();
-            Log.WriteLine("Supported GLSL version is : " + Renderer.GetString(StringName.ShadingLanguageVersion));
-            OSManager.WriteSpecs();
+                GameManager.LoadPlayer();
+                Log.WriteLine("UI loading was Successful.");
 
-            CacheManager.Load();
-            GameManager.LoadWorld();
-            Log.WriteLine("Scene loading was Successful.");
+                LoadInterpreter();
+                Window.ClearContext();
+                _splashScreen.Disable();
+            }//);
             
-            GameManager.LoadPlayer();
-            Log.WriteLine("UI loading was Successful.");
-
-            LoadInterpreter();
-
-            t1.Wait();
-
-            _splashScreen.Disable();
             Program.GameWindow.WindowState = WindowState.Maximized;
             return true;
         }
 
-        private void SetupRendering()
-        {
-            Window.MakeCurrent();
-            _debugProvider = new DebugInfoProvider();
-        }
-        
         private static void LoadInterpreter()
         {
             Interpreter.Load();
@@ -214,17 +206,14 @@ namespace Hedra.Engine.Loader
         {
             if (!_splashScreen.FinishedLoading)
             {
+                _splashScreen.Draw();
                 return;
-            }
-            else if(_wasLoading)
-            {
-                SetupRendering();
-                _wasLoading = false;
             }
 
             Renderer.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit | ClearBufferMask.StencilBufferBit);
             DrawManager.Draw();
             _debugProvider.Draw();
+            Window.SwapBuffers();
         }
 
         protected override void Resize(Vector2D<int> NewSize)

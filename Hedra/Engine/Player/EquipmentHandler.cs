@@ -27,7 +27,7 @@ namespace Hedra.Engine.Player
         {
             _owner = Owner;
             _lastCustomization = new CustomizationData();
-            UpdateDefaultModels();
+            UpdateDefaultModels(true);
         }
 
         public Weapon LeftWeapon { get; private set; }
@@ -110,7 +110,7 @@ namespace Hedra.Engine.Player
             if (ShouldUpdateDefaultModels)
             {
                 AddDefaultModels();
-                UpdateDefaultModels();
+                UpdateDefaultModels(false);
             }
         }
 
@@ -155,16 +155,18 @@ namespace Hedra.Engine.Player
             return false;
         }
 
-        private void UpdateDefaultModels()
+        private void UpdateDefaultModels(bool Rebuild)
         {
             if (_defaultHead != null && _owner.Class.Type == _lastClass && !IsCustomizationDifferent()) return;
             if (_defaultHead != null)
             {
                 var model = _owner.Model;
-                model.RemoveModel(_defaultHead);
-                model.RemoveModel(_defaultChest);
-                model.RemoveModel(_defaultPants);
-                model.RemoveModel(_defaultBoots);
+                model.RemoveModel(_defaultHead, false);
+                model.RemoveModel(_defaultChest, false);
+                model.RemoveModel(_defaultPants, false);
+                model.RemoveModel(_defaultBoots, false);
+                if (Rebuild)
+                    model.Rebuild();
             }
 
             _defaultHead = HumanoidModel.LoadHead(_owner);
@@ -193,7 +195,7 @@ namespace Hedra.Engine.Player
 
         public void Reset()
         {
-            UpdateDefaultModels();
+            UpdateDefaultModels(true);
             SetHelmet(null);
             SetChest(null);
             SetPants(null);

@@ -29,10 +29,10 @@ namespace Hedra.Engine.Loader
             {
                 API = new GraphicsAPI(ContextAPI.OpenGL, Profile, Flags, Version),
                 Size = new Vector2D<int>(Width, Height),
-                ShouldSwapAutomatically = true,
+                ShouldSwapAutomatically = false,
                 IsVisible = true,
                 Title = "Project Hedra",
-                VSync = false
+                VSync = false,
             };
             Window = Monitor.CreateWindow(options);
             Window.Load += Load;
@@ -98,6 +98,10 @@ namespace Hedra.Engine.Loader
         }
 
         public double TargetFramerate { get; set; }
+        /*{
+            get => Window.FramesPerSecond;
+            set => Window.FramesPerSecond = value;
+        }*/
 
         public bool IsExiting => Window.Handle == IntPtr.Zero || Window.IsClosing;
 

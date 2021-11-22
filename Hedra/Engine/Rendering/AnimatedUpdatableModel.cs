@@ -47,9 +47,9 @@ namespace Hedra.Engine.Rendering
             Model.AddModel(Data, IsDefault);
         }
 
-        public void RemoveModel(ModelData Data)
+        public void RemoveModel(ModelData Data, bool Rebuild = true)
         {
-            Model.RemoveModel(Data);
+            Model.RemoveModel(Data, Rebuild);
         }
 
         public void ClearModel()

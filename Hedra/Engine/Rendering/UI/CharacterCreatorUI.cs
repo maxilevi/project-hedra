@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
@@ -23,6 +24,7 @@ using Hedra.Engine.Windowing;
 using Hedra.Framework;
 using Hedra.Game;
 using Hedra.Localization;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using SixLabors.Fonts;
@@ -47,29 +49,20 @@ namespace Hedra.Engine.Rendering.UI
             Colors.FromHtml("#FEE3D4")
         };
 
-        private static Vector4[] _hairColors =
-        {
-            Colors.FromHtml("#4E3616"),
-            Colors.FromHtml("#8E7B6A"),
-            Colors.FromHtml("#B2ABA7"),
-            Colors.FromHtml("#59442F"),
-            Colors.FromHtml("#FFFFFF")
-            //Colors.FromHtml("#FFBFA1"),
-            //Colors.FromHtml("#FFBFA1"),
-            //Colors.FromHtml("#FFBFA1"),
-            //Colors.FromHtml("#FFBFA1"),
-        };
-
         private readonly Timer _clickTimer;
-        private readonly Humanoid _human;
+        private Humanoid _human;
         private readonly Button _openFolder;
         private ClassDesign _classType;
         private CustomizationData _customization;
         private float _newRot;
         private ColorPicker _secondHairColorPicker;
+        private Dictionary<string, Humanoid> _humans;
 
         public CharacterCreatorUI(IPlayer Player)
         {
+            var classes =
+                ClassDesign.AvailableClassNames.Select(S =>
+                    new Pair<string, ClassDesign>(S, ClassDesign.FromString(S))).ToArray();
             _customization = new CustomizationData();
             _clickTimer = new Timer(.25f)
             {
@@ -87,31 +80,16 @@ namespace Hedra.Engine.Rendering.UI
 
             _openFolder = new Button(new Vector2(0.8f, bandPosition.Y), new Vector2(0.15f, 0.05f),
                 Translation.Create("character_folder"), Color.White, FontCache.GetNormal(13));
-            _openFolder.Click += delegate { Process.Start(DataManager.CharactersFolder); };
-
-            _human = new Humanoid
-            {
-                Name = "CreatorHumanoid"
-            };
-            _human.Model = new HumanoidModel(_human)
-            {
-                LocalRotation = Vector3.UnitY * -90,
-                TargetRotation = Vector3.UnitY * -90,
-                Position = MenuBackground.PlatformPosition,
-                ApplyFog = true,
-                Enabled = true
-            };
-            _human.SearchComponent<DamageComponent>().Immune = true;
-            _human.Physics.UseTimescale = false;
-            _human.Physics.UsePhysics = false;
-            World.RemoveEntity(_human);
+            _openFolder.Click += (_, __) => Process.Start(DataManager.CharactersFolder);
+            
+            CreateModels(classes);
 
             var rng = new Random();
-            var classChooser = CreateClassChooser(defaultFont, defaultColor, rng);
+            var classChooser = CreateClassChooser(classes, defaultFont, defaultColor, rng);
             var genderChooser = CreateGenderChooser(defaultFont, defaultColor, rng);
             CreateColorPickers(this);
 
-            UpdateModel(null, default);
+            UpdateModel();
 
             var nameField = new TextField(new Vector2(0, -.7f), new Vector2(.15f, .03f).As1920x1080());
             var createChr = new Button(new Vector2(0f, -.8f), new Vector2(.15f, .05f), Translation.Create("create"),
@@ -150,19 +128,31 @@ namespace Hedra.Engine.Rendering.UI
             _human.Model.Enabled = Enabled;
             if (Enabled)
             {
+                _newRot += Time.IndependentDeltaTime * 30f;
+                foreach (var pair in _humans)
+                {
+                    var human = pair.Value;
+                    human.Physics.ResetVelocity();
+                    human.Physics.ResetFall();
+                    human.Physics.ResetSpeed();
+                    var prev = human.Model.Enabled;
+                    human.Model.Enabled = true;
+                    human.Update();
+                    human.UpdateCriticalComponents();
+                    human.Model.Enabled = prev;
+                    
+                    human.Model.LocalRotation = Vector3.UnitY * -90 + Vector3.UnitY * _newRot;
+                    human.Model.TargetRotation = Vector3.UnitY * -90 + Vector3.UnitY * _newRot;
+
+                    human.Position = new Vector3(MenuBackground.PlatformPosition.X, human.Position.Y, MenuBackground.PlatformPosition.Z);
+                    human.Position = new Vector3(human.Position.X,  Physics.HeightAtPosition(human.Position) + 1f, human.Position.Z);
+
+                    human.IsKnocked = false;
+                    human.Model.StopMoving();
+                }
+
                 if (_clickTimer.Tick())
                     _openFolder.CanClick = true;
-                _human.Update();
-                _human.UpdateCriticalComponents();
-                _newRot += Time.IndependentDeltaTime * 30f;
-                _human.Model.LocalRotation = Vector3.UnitY * -90 + Vector3.UnitY * _newRot;
-                _human.Model.TargetRotation = Vector3.UnitY * -90 + Vector3.UnitY * _newRot;
-                _human.Position = new Vector3(MenuBackground.PlatformPosition.X, _human.Position.Y,
-                    MenuBackground.PlatformPosition.Z);
-                if (_human.Position.Y <= Physics.HeightAtPosition(_human.Position))
-                    _human.Position = new Vector3(_human.Position.X, Physics.HeightAtPosition(_human.Position),
-                        _human.Position.Z);
-                _human.IsKnocked = false;
 
                 if (_customization.Gender == HumanGender.Female && _classType.HasSecondFemaleHairColor ||
                     _customization.Gender == HumanGender.Male && _classType.HasSecondHairColor)
@@ -188,7 +178,7 @@ namespace Hedra.Engine.Rendering.UI
             picker1.ColorPickedEvent += V =>
             {
                 _customization.FirstHairColor = V;
-                UpdateModel(null, default);
+                UpdateModel();
             };
             InPanel.AddElement(picker1);
 
@@ -197,7 +187,7 @@ namespace Hedra.Engine.Rendering.UI
             _secondHairColorPicker.ColorPickedEvent += V =>
             {
                 _customization.SecondHairColor = V;
-                UpdateModel(null, default);
+                UpdateModel();
             };
             InPanel.AddElement(_secondHairColorPicker);
 
@@ -206,17 +196,14 @@ namespace Hedra.Engine.Rendering.UI
             skinPicker.ColorPickedEvent += V =>
             {
                 _customization.SkinColor = V;
-                UpdateModel(null, default);
+                UpdateModel();
             };
             InPanel.AddElement(skinPicker);
         }
 
 
-        private OptionChooser CreateClassChooser(Font DefaultFont, Color DefaultColor, Random Rng)
+        private OptionChooser CreateClassChooser(Pair<string, ClassDesign>[] classes, Font DefaultFont, Color DefaultColor, Random Rng)
         {
-            var classes =
-                ClassDesign.AvailableClassNames.Select(S =>
-                    new Pair<string, ClassDesign>(S, ClassDesign.FromString(S))).ToArray();
             classes.Shuffle(Rng);
             var classesNames = classes.Select(S => Translation.Create(S.One.ToLowerInvariant())).ToArray();
             var classChooser = new OptionChooser(new Vector2(0, .5f), Vector2.Zero, Translation.Create("class"),
@@ -227,7 +214,7 @@ namespace Hedra.Engine.Rendering.UI
             {
                 _classType = classes[classChooser.Index].Two;
                 _customization = CustomizationData.FromClass(_classType, _customization.Gender);
-                UpdateModel(null, default);
+                UpdateModel();
             }
 
             UpdateClass(null, default);
@@ -253,7 +240,7 @@ namespace Hedra.Engine.Rendering.UI
             void UpdateGender(object Sender, MouseButtonEventArgs _)
             {
                 _customization = CustomizationData.FromClass(_classType, genders[genderChooser.Index].Two);
-                UpdateModel(null, default);
+                UpdateModel();
             }
 
             genderChooser.RightArrow.Click += UpdateGender;
@@ -263,21 +250,61 @@ namespace Hedra.Engine.Rendering.UI
             return genderChooser;
         }
 
-        private void UpdateModel(object Sender, MouseButtonEventArgs E)
+        private void UpdateModel()
         {
-            var previousModel = _human.Model;
-            var model = new HumanoidModel(_human, _classType.ModelTemplate);
-            _human.Class = _classType;
-            _human.Customization = _customization;
-            _human.Model = model;
-            _human.Model.SetValues(previousModel);
-            _human.SetHelmet(_classType.StartingItems.FirstOrDefault(P => P.Value.IsHelmet).Value);
-            _human.SetWeapon(_classType.StartingItems.First(P => P.Value.IsWeapon).Value.Weapon);
-            /* One time for updating the default body parts */
-            _human.UpdateEquipment();
-            /* The second time is for setting them */
-            _human.UpdateEquipment();
-            previousModel.Dispose();
+            var previousHuman = _human;
+            var human = _humans[_classType.Name + "-" + (int) _customization.Gender];
+            _human = human;
+            if (previousHuman != null)
+                _human.Model.SetValues(previousHuman.Model);
+            _human.Model.Enabled = true;
+            human.Customization = _customization;
+            if (previousHuman != null && previousHuman != human)
+                previousHuman.Model.Enabled = false;
+        }
+
+        private void CreateModels(Pair<string, ClassDesign>[] Classes)
+        {
+            _humans = new Dictionary<string, Humanoid>();
+            foreach (var pair in Classes)
+            {
+                for (var gender = 0; gender < (int)HumanGender.All; ++gender)
+                {
+                    var identifier = pair.One + "-" + gender;
+                    var human = new Humanoid
+                    {
+                        Name = $"CreatorHumanoid_{identifier}",
+                    };
+                    var model = new HumanoidModel(human, pair.Two.ModelTemplate)
+                    {
+                        LocalRotation = Vector3.UnitY * -90,
+                        TargetRotation = Vector3.UnitY * -90,
+                        Position = MenuBackground.PlatformPosition,
+                        ApplyFog = true,
+                        Enabled = false,
+                    };
+                    var classType = pair.Two;
+                    human.Model = model;
+                    human.Class = classType;
+                    human.Customization = CustomizationData.FromClass(classType, (HumanGender)gender);
+                    human.SetHelmet(classType.StartingItems.FirstOrDefault(P => P.Value.IsHelmet).Value);
+                    human.SetWeapon(classType.StartingItems.First(P => P.Value.IsWeapon).Value.Weapon);
+                    /* One time for updating the default body parts */
+                    human.UpdateEquipment();
+                    /* The second time is for setting them */
+                    human.UpdateEquipment();
+                    human.SearchComponent<DamageComponent>().Immune = true;
+                    human.Physics.UseTimescale = false;
+                    human.Physics.UsePhysics = false;
+                    human.Physics.CollidesWithEntities = false;
+                    human.Model.Enabled = false;
+                    human.Model.UpdateWhenOutOfView = true;
+                    World.RemoveEntity(_human);
+                    _humans[identifier] = human;
+                }
+            }
+
+            _human = _humans["Warrior-0"];
         }
 
         private void PanelStateChange(object Sender, PanelState State)
