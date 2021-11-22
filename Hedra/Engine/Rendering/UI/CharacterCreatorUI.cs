@@ -80,6 +80,7 @@ namespace Hedra.Engine.Rendering.UI
 
             _openFolder = new Button(new Vector2(0.8f, bandPosition.Y), new Vector2(0.15f, 0.05f),
                 Translation.Create("character_folder"), Color.White, FontCache.GetNormal(13));
+            _openFolder.Disable();
             _openFolder.Click += (_, __) => Process.Start(DataManager.CharactersFolder);
             
             CreateModels(classes);
@@ -114,7 +115,7 @@ namespace Hedra.Engine.Rendering.UI
             AddElement(nameField);
             AddElement(createChr);
             AddElement(blackBand);
-            AddElement(_openFolder);
+            //AddElement(_openFolder);
             AddElement(currentTab);
             Disable();
 
@@ -317,6 +318,7 @@ namespace Hedra.Engine.Rendering.UI
                 case PanelState.Enabled:
                     MenuBackground.Creator = true;
                     _openFolder.CanClick = false;
+                    _openFolder.Disable();
                     _clickTimer.Reset();
                     break;
             }
