@@ -29,7 +29,7 @@ namespace Hedra.Framework
 
         public T this[int I]
         {
-            [MethodImpl(256)]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
 #if DEBUG
@@ -37,7 +37,7 @@ namespace Hedra.Framework
 #endif
                 return *((T*) _data + I);
             }
-            [MethodImpl(256)]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             set
             {
 #if DEBUG

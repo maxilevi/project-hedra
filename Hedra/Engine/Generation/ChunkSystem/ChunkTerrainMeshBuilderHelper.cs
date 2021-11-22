@@ -220,12 +220,13 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return GetSample(x, y, z, out Type);
         }
 
-        [MethodImpl(256)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private SampledBlock Get(int _x, int _y, int _z)
         {
             return _grid[_x * noiseValuesMapWidth * noiseValuesMapHeight + _y * noiseValuesMapWidth + _z];
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         private float GetSample(int x, int y, int z, out BlockType Type)
         {
             var x2 = (int)(x * _invSampleWidth);
@@ -252,6 +253,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             );
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         private void BuildCell(ref GridCell Cell, int X, int Y, int Z, int HorizontalLod, int VerticalLod)
         {
             var horizontalBlockSize = _blockSize * HorizontalLod;
@@ -267,7 +269,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             Cell.P[7] = new Vector3(Cell.P[0].X, verticalBlockSize + Cell.P[0].Y, horizontalBlockSize + Cell.P[0].Z);
         }
 
-        [MethodImpl(256)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private Chunk GetNeighbourChunk(ref int X, ref int Z)
         {
             var offset = new Vector2(((int)(_offsetX + X * Chunk.BlockSize) >> 7) << 7,
@@ -277,13 +279,13 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return chunk;
         }
 
-        [MethodImpl(256)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private Block GetNeighbourBlock(int X, int Y, int Z)
         {
             return GetNeighbourBlock(ref X, ref Y, ref Z);
         }
 
-        [MethodImpl(256)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private Block GetNeighbourBlock(ref int X, ref int Y, ref int Z)
         {
             var chunk = GetNeighbourChunk(ref X, ref Z);
@@ -292,7 +294,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         }
 
         // Source: https://codereview.stackexchange.com/a/58309
-        [MethodImpl(256)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int Modulo(ref int Index)
         {
             return (Index % Bounds + Bounds) % Bounds;

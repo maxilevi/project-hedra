@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Native;
 using Hedra.Engine.Rendering;
@@ -181,6 +182,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Loop(Helper, 1, 1, ProcessColors, true, ref waterData, ref failed, ref Cache);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveOptimization)]
         private void Loop(ChunkTerrainMeshBuilderHelper Helper, int HorizontalSkip, int VerticalSkip,
             bool ProcessColors, bool isWater, ref NativeVertexData blockData, ref bool failed, ref RegionCache Cache)
         {
@@ -224,6 +226,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveOptimization)]
         private static void PolygoniseCell(ref GridCell Cell, ref NativeVertexData BlockData,
             ref Vector3[] VertexBuffer, ref Triangle[] TriangleBuffer, Vector4 Color, ref bool IsWater,
             ref bool IsRiverConstant)

@@ -112,8 +112,8 @@ namespace Hedra.Framework
 
         public T this[int I]
         {
-            [MethodImpl(256)] get => _array[I];
-            [MethodImpl(256)] set => _array[I] = value;
+            [MethodImpl(MethodImplOptions.AggressiveInlining)] get => _array[I];
+            [MethodImpl(MethodImplOptions.AggressiveInlining)] set => _array[I] = value;
         }
 
         public void Set(ICollection<T> Collection)

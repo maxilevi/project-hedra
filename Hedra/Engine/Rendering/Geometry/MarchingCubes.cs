@@ -8,6 +8,7 @@
 using System;
 using System.Diagnostics;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
@@ -60,6 +61,7 @@ namespace Hedra.Engine.Rendering
             return new Vector3[12];
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveOptimization)]
         public static void Polygonise(ref GridCell Cell, double IsoLevel, ref Vector3[] VertexBuffer,
             ref Triangle[] TriangleBuffer, out int TriangleCount)
         {
@@ -126,6 +128,7 @@ namespace Hedra.Engine.Rendering
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveOptimization)]
         private static Vector3 VertexInterp(double IsoLevel, Vector3 P1, Vector3 P2, double valp1, double valp2)
         {
             var p1 = new Vector4(P1, (float)valp1);
@@ -146,6 +149,7 @@ namespace Hedra.Engine.Rendering
             return p;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveOptimization)]
         public static void Build(ref NativeVertexData Data, ref Vector4 TemplateColor, ref Triangle[] TriangleBuffer,
             ref int TriangleCount, ref bool IsWater, ref bool IsRiverConstant)
         {

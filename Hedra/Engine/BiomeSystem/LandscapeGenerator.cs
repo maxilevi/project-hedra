@@ -345,7 +345,7 @@ namespace Hedra.Engine.BiomeSystem
 
         #endregion
 
-        [MethodImpl(256)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float CalculateDensityForBlock(float heightAtPoint, float densityAtPoint, int Y)
         {
             return 1 - (Y - heightAtPoint) + densityAtPoint;

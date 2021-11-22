@@ -26,7 +26,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public SampledBlock* this[int X, int Y, int Z]
         {
-            [MethodImpl(256)]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
 #if DEBUG

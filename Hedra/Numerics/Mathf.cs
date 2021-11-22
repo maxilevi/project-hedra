@@ -7,6 +7,7 @@
 
 using System;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Hedra.Game;
 using SixLabors.ImageSharp;
@@ -31,6 +32,7 @@ namespace Hedra.Numerics
             return u.f * Z;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveOptimization | MethodImplOptions.AggressiveInlining)]
         public static float LinearInterpolate3D(float xm_ym_zm, float xp_ym_zm, float xm_yp_zm, float xp_yp_zm,
             float xm_ym_zp, float xp_ym_zp, float xm_yp_zp, float xp_yp_zp,
             float x, float y, float z)
