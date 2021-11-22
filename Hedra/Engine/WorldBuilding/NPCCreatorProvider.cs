@@ -97,6 +97,10 @@ namespace Hedra.Engine.WorldBuilding
 
             var classN = Utils.Rng.Next(0, availableClasses.Count);
             var classType = ClassDesign.FromString(availableClasses[classN]);
+            var gender = (HumanGender) Utils.Rng.Next(0, 2);
+            var customization = CustomizationData.FromClass(classType, gender);
+            customization.FirstHairColor = NPCCreator.HairColors.Random(Utils.Rng);
+            customization.SecondHairColor = NPCCreator.HairColors.Random(Utils.Rng);
 
             var behaviour =
                 new HumanoidConfiguration(Options.Friendly ? HealthBarType.Friendly : HealthBarType.Hostile);
@@ -108,6 +112,10 @@ namespace Hedra.Engine.WorldBuilding
             {
                 template.Models = modelTemplate.Models;
                 template.Model = modelTemplate.Model;
+            }
+            else
+            {
+                template.Model = classType.ModelTemplate;
             }
 
             var templateName = modelTemplate != null
@@ -124,6 +132,7 @@ namespace Hedra.Engine.WorldBuilding
                     .Ignore(E => E is IPlayer || E == GameManager.Player.Companion.Entity);
             human.Name = !Options.Friendly ? templateName : NameGenerator.PickMaleName(Utils.Rng);
             human.IsFriendly = Options.Friendly;
+            human.Customization = customization;
             Options.ApplyQuestStatus(human);
             human.UpdateWhenOutOfRange = Options.IsFromQuest;
             return human;
