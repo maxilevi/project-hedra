@@ -92,7 +92,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 new WindmillBlades(
                     vertexData,
                     shapes.FirstOrDefault(),
-                    Vector3.Transform(Vector3.UnitX, Transformation),
+                    Vector3.Transform(Vector3.UnitZ, Transformation),
                     Parameters.Position + offset,
                     Structure
                 )
