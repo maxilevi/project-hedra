@@ -8409,6 +8409,10 @@
             <Link>Sounds\Soundtrack\DawnInTheCity.ogg</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+        <Content Include="..\project-hedra-assets\Sounds\Soundtrack\DeepPlaces.ogg">
+          <Link>Sounds\Soundtrack\DeepPlaces.ogg</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
         <Content Include="..\project-hedra-assets\Sounds\Soundtrack\FacingTheBeast.ogg">
             <Link>Sounds\Soundtrack\FacingTheBeast.ogg</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

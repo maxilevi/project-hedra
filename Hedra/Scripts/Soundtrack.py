@@ -37,6 +37,7 @@ BACKGROUND_SLOW_SONGS = shuffle([
     "Sounds/Soundtrack/Obelisk.ogg",
     "Sounds/Soundtrack/CardinalCity.ogg",
     "Sounds/Soundtrack/BreathOfDay.ogg",
+    "Sounds/Soundtrack/DeepPlaces.ogg",
 ])
 
 BACKGROUND_SONGS = [
