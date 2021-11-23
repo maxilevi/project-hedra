@@ -5,6 +5,7 @@ using Hedra.API;
 using Hedra.Components;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.Game;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.PhysicsSystem;
@@ -108,7 +109,8 @@ namespace Hedra.Engine.WorldBuilding
                 ? HumanoidLoader.HumanoidTemplater[Options.ModelType.Value.ToString()]
                 : null;
             var template = HumanoidLoader.HumanoidTemplater[classType.ToString()].Clone();
-            if (modelTemplate != null)
+            var isPlayableModel = modelTemplate == null;
+            if (!isPlayableModel)
             {
                 template.Models = modelTemplate.Models;
                 template.Model = modelTemplate.Model;
@@ -116,6 +118,7 @@ namespace Hedra.Engine.WorldBuilding
             else
             {
                 template.Model = classType.ModelTemplate;
+                template.Models = null;
             }
 
             var templateName = modelTemplate != null
@@ -126,6 +129,8 @@ namespace Hedra.Engine.WorldBuilding
                 : Translations.Get("bandit");
             var human = SpawnHumanoid(classType.ToString(), template, Level, Position, behaviour);
 
+            if (isPlayableModel)
+                AddArmors(human, Utils.Rng);
             HumanoidFactory.AddAI(human, Options.Friendly);
             if (Options.Friendly)
                 human.SearchComponent<DamageComponent>()
@@ -136,6 +141,46 @@ namespace Hedra.Engine.WorldBuilding
             Options.ApplyQuestStatus(human);
             human.UpdateWhenOutOfRange = Options.IsFromQuest;
             return human;
+        }
+
+        private static void AddArmors(IHumanoid Humanoid, Random Rng)
+        {
+            var addCompleteSet = Rng.Next(0, 16) == 1;
+            if (addCompleteSet)
+            {
+                var helmet = ItemPool.Grab(new ItemPoolSettings(ItemTier.Rare, EquipmentType.Helmet)
+                {
+                    SameTier = false
+                });
+                var chestplate = ItemPool.Grab(new ItemPoolSettings(ItemTier.Rare, EquipmentType.Chestplate)
+                {
+                    SameTier = false
+                });
+                var pants = ItemPool.Grab(new ItemPoolSettings(ItemTier.Rare, EquipmentType.Pants)
+                {
+                    SameTier = false
+                });
+
+                Humanoid.SetHelmet(helmet);
+                Humanoid.SetChestplate(chestplate);
+                Humanoid.SetPants(pants);
+                /* Boots cause a mesh glitch, we should explore all the items */
+                /*
+                 Humanoid.SetBoots(boots);
+                 var boots = ItemPool.Grab(new ItemPoolSettings(ItemTier.Rare, EquipmentType.Boots)
+                {
+                    SameTier = false
+                });
+                 */   
+            }
+            else if(Rng.Next(0, 8) == 1)
+            {
+                var chestplate = ItemPool.Grab(new ItemPoolSettings(ItemTier.Unique, EquipmentType.Chestplate)
+                {
+                    SameTier = false
+                });
+                Humanoid.SetChestplate(chestplate);
+            }
         }
 
         private Humanoid SpawnHumanoid(HumanType Type, Vector3 DesiredPosition, HumanoidConfiguration Configuration)

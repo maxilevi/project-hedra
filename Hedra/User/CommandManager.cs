@@ -464,6 +464,19 @@ namespace Hedra.User
                             .ForEach(D => D.IsLocked = false);
                 }
 
+                if (Parts[0] == "getall" && Parts.Length == 2)
+                {
+                    if (Parts[1] == "boots")
+                    {
+                        var items = ItemPool.Matching(S =>
+                            S.EquipmentType != null && S.EquipmentType.ToLowerInvariant() == EquipmentType.Boots.ToString().ToLowerInvariant());
+                        foreach (var item in items)
+                        {
+                            Caster.AddOrDropItem(item);
+                        }
+                    }
+                }
+
                 if (Parts[0] == "spawn")
                 {
                     if (Parts[1] == "escape")
