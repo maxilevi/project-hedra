@@ -55,17 +55,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public float MinFog { get; private set; }
         public float MaxFog { get; private set; }
 
-        private ChunkWatcher[] Watchers
-        {
-            get
-            {
-                lock (Lock)
-                {
-                    return _chunkWatchers.ToArray();
-                }
-            }
-        }
-
         public int WatcherCount
         {
             get
@@ -81,8 +70,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void UpdateFog(bool Force = false)
         {
-            MaxFog = (float)Math.Max(1, Chunk.Width / Chunk.BlockSize * (Math.Sqrt(_activeChunks) - 1) * 2f);
-            MinFog = MaxFog - 16; //256;
+            MaxFog = Math.Max(1, _activeChunks) * Chunk.Width;
+            MinFog = MaxFog - Chunk.Width * 4;
 
             if (Math.Abs(_activeChunks - _targetActivechunks) > .05f || Force)
                 SkyManager.FogManager.UpdateFogSettings(MinFog, MaxFog);
@@ -90,7 +79,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void Update()
         {
-            _activeChunks = Mathf.Lerp(_activeChunks, _targetActivechunks, Time.IndependentDeltaTime * .5f);
+            _activeChunks = Mathf.Lerp(_activeChunks, _targetActivechunks - (_activeChunks > 4 ? 0.5f : 1.5f), Time.IndependentDeltaTime * .5f);
             UpdateFog();
         }
 
@@ -112,15 +101,20 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private void UpdateWatchers()
         {
-            var watchers = Watchers;
-            for (var i = watchers.Length - 1; i > -1; --i)
+            lock (Lock)
             {
-                watchers[i]?.Update();
-                if (watchers[i]?.Disposed ?? false)
-                    lock (Lock)
+                var watchers = _chunkWatchers;
+                for (var i = watchers.Count-1; i > -1; --i)
+                {
+                    watchers[i]?.Update();
+                    if (watchers[i]?.Disposed ?? false)
                     {
-                        _chunkWatchers.Remove(watchers[i]);
+                        lock (Lock)
+                        {
+                            _chunkWatchers.Remove(watchers[i]);
+                        }
                     }
+                }
             }
         }
 
@@ -129,43 +123,66 @@ namespace Hedra.Engine.Generation.ChunkSystem
             Offset = World.ToChunkSpace(_player.Position);
             if (World.IsGenerated && Enabled)
             {
-                var hadChanges = false;
-                var stopCounting = false;
-                var newTarget = 0;
                 BuildCandidates(_candidates);
                 for (var i = 0; i < _candidates.Count; i++)
                 {
                     var obj = World.GetChunkByOffset(_candidates[i].Xz());
-                    if (obj == null || !obj.BuildedWithStructures || obj.Disposed) stopCounting = true;
-                    if (!stopCounting) newTarget++;
                     if (obj != null) continue;
-                    var chunk = new Chunk((int)_candidates[i].X, (int)_candidates[i].Z);
-                    World.AddChunk(chunk);
-                    var watcher = new ChunkWatcher(chunk);
-                    watcher.OnChunkReady += O => OnChunkReady?.Invoke(O);
-                    lock (Lock)
-                    {
-                        _chunkWatchers.Add(watcher);
-                    }
+                    CreateChunk(_candidates[i].Xz());
                 }
 
-                _targetActivechunks = newTarget;
+
+                var directions = new[]
+                {
+                    new Vector2(Chunk.Width, 0),
+                    new Vector2(0, Chunk.Width),
+                    new Vector2(-Chunk.Width, 0),
+                    new Vector2(0, -Chunk.Width)
+                };
+                var minTarget = int.MaxValue;
+                foreach (var direction in directions)
+                {
+                    var newTarget = 0;
+                    for (var i = 0; i < GameSettings.ChunkLoaderRadius; ++i)
+                    {
+                        var chunk = World.GetChunkByOffset(new Vector2(Offset.X, Offset.Y) + direction * i);
+                        if (chunk == null || !chunk.BuildedWithStructures || chunk.Disposed) break;
+                        newTarget += 1;
+                    }
+
+                    minTarget = Math.Min(minTarget, newTarget);
+                }
+
+                _targetActivechunks = minTarget;
+            }
+        }
+
+        private void CreateChunk(Vector2 NewOffset)
+        {
+            var chunk = new Chunk((int)NewOffset.X, (int)NewOffset.Y);
+            World.AddChunk(chunk);
+            var watcher = new ChunkWatcher(chunk);
+            watcher.OnChunkReady += O => OnChunkReady?.Invoke(O);
+            lock (Lock)
+            {
+                _chunkWatchers.Add(watcher);
             }
         }
 
         private void BuildCandidates(List<Vector3> Candidates)
         {
-            if (World.ToChunkSpace(_closest.Position) == World.ToChunkSpace(_player.Position) &&
-                _lastRadius == GameSettings.ChunkLoaderRadius) return;
+            if (World.ToChunkSpace(_closest.Position) == World.ToChunkSpace(_player.Position) && _lastRadius == GameSettings.ChunkLoaderRadius) return;
             Candidates.Clear();
-            var radius = (int)(GameSettings.ChunkLoaderRadius * .5f);
+            var radius = GameSettings.ChunkLoaderRadius >> 1;
             for (var x = -radius; x < radius; x++)
-            for (var z = -radius; z < radius; z++)
             {
-                var radiusOffset = new Vector2(x, z);
-                if (radiusOffset.LengthSquared() > radius * radius) continue;
-                var chunkPos = Offset + radiusOffset * new Vector2(Chunk.Width, Chunk.Width);
-                Candidates.Add(chunkPos.ToVector3());
+                for (var z = -radius; z < radius; z++)
+                {
+                    var radiusOffset = new Vector2(x, z);
+                    if (radiusOffset.LengthSquared() > radius * radius) continue;
+                    var chunkPos = Offset + radiusOffset * new Vector2(Chunk.Width, Chunk.Width);
+                    Candidates.Add(chunkPos.ToVector3());
+                }
             }
 
             _lastRadius = GameSettings.ChunkLoaderRadius;
