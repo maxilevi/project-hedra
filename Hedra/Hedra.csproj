@@ -27,7 +27,7 @@
         <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
         <UseApplicationTrust>false</UseApplicationTrust>
         <BootstrapperEnabled>true</BootstrapperEnabled>
-        <LangVersion>8</LangVersion>
+        <LangVersion>10</LangVersion>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <Authors>Maximiliano Levi</Authors>
         <Company>LeastSquares</Company>
