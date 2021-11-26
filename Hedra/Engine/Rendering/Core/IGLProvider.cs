@@ -94,7 +94,7 @@ namespace Hedra.Engine.Rendering.Core
         void LineWidth(float Width);
         void PolygonMode(MaterialFace Face, PolygonMode Mode);
         void ReadBuffer(ReadBufferMode Mode);
-        void ReadPixels(int V0, int V1, int V2, int V3, PixelFormat Format, PixelType Type, int[] Pixels);
+        void ReadPixels(int V0, int V1, int V2, int V3, PixelFormat Format, PixelType Type, byte[] Pixels);
         void ShaderSource(int V0, string Source);
 
         void TexImage2D(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2, int V3,

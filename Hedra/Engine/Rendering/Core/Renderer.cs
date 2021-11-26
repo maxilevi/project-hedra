@@ -450,7 +450,7 @@ namespace Hedra.Engine.Rendering.Core
             Provider.ReadBuffer(Mode);
         }
 
-        public static void ReadPixels(int V0, int V1, int V2, int V3, PixelFormat Format, PixelType Type, int[] Pixels)
+        public static void ReadPixels(int V0, int V1, int V2, int V3, PixelFormat Format, PixelType Type, byte[] Pixels)
         {
             Provider.ReadPixels(V0, V1, V2, V3, Format, Type, Pixels);
         }

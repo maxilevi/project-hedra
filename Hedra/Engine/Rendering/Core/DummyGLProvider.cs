@@ -324,7 +324,7 @@ namespace Hedra.Engine.Rendering.Core
         {
         }
 
-        public virtual void ReadPixels(int V0, int V1, int V2, int V3, PixelFormat Format, PixelType Type, int[] Pixels)
+        public virtual void ReadPixels(int V0, int V1, int V2, int V3, PixelFormat Format, PixelType Type, byte[] Pixels)
         {
         }
 

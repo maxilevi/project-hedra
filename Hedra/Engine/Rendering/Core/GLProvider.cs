@@ -625,7 +625,7 @@ namespace Hedra.Engine.Rendering.Core
             EnsureNoErrors();
         }
 
-        public unsafe void ReadPixels(int V0, int V1, int V2, int V3, PixelFormat Format, PixelType Type, int[] Ptr)
+        public unsafe void ReadPixels(int V0, int V1, int V2, int V3, PixelFormat Format, PixelType Type, byte[] Ptr)
         {
             fixed (void* ptr = Ptr)
             {
