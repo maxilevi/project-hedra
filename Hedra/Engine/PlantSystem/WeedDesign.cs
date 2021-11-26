@@ -13,6 +13,7 @@ namespace Hedra.Engine.PlantSystem
         public override Matrix4x4 TransMatrix(Vector3 Position, Random Rng)
         {
             var underChunk = World.GetChunkAt(Position);
+            if (underChunk == null) return new Matrix4x4();
             var blockPosition = World.ToBlockSpace(Position);
             var addon = new Vector3(Rng.NextFloat() * 2f, 0, Rng.NextFloat() * 2f);
             if (blockPosition.X + addon.X / Chunk.BlockSize > Chunk.Width / Chunk.BlockSize) return new Matrix4x4();
