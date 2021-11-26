@@ -289,18 +289,7 @@ namespace Hedra.Engine.Player
             GameManager.SpawningEffect = true;
             PlaySpawningAnimation = true;
             IsRiding = false;
-            var newOffset = Position;
-            while ((Position - newOffset).LengthSquared() < MinimumRespawnDistance * MinimumRespawnDistance)
-                newOffset = Position + new Vector3(
-                    MaximumRespawnDistance * Utils.Rng.NextFloat() * 2 - MaximumRespawnDistance,
-                    0,
-                    MaximumRespawnDistance * Utils.Rng.NextFloat() * 2 - MaximumRespawnDistance
-                );
-
-            var newPosition = World.FindSpawningPoint(newOffset);
-            newPosition = World.FindPlaceablePosition(this,
-                new Vector3(newPosition.X, PhysicsSystem.Physics.HeightAtPosition(newPosition.X, newPosition.Z),
-                    newPosition.Z));
+            var newPosition = GetRespawnPosition();
             Model.Position = newPosition;
             Position = newPosition;
             IsKnocked = false;
@@ -332,6 +321,23 @@ namespace Hedra.Engine.Player
             }
 
             OnRespawn?.Invoke();
+        }
+
+        private Vector3 GetRespawnPosition()
+        {
+            var newOffset = Position;
+            while ((Position - newOffset).LengthSquared() < MinimumRespawnDistance * MinimumRespawnDistance)
+                newOffset = Position + new Vector3(
+                    MaximumRespawnDistance * Utils.Rng.NextFloat() * 2 - MaximumRespawnDistance,
+                    0,
+                    MaximumRespawnDistance * Utils.Rng.NextFloat() * 2 - MaximumRespawnDistance
+                );
+
+            var newPosition = World.FindSpawningPoint(newOffset);
+            newPosition = World.FindPlaceablePosition(this,
+                new Vector3(newPosition.X, PhysicsSystem.Physics.HeightAtPosition(newPosition.X, newPosition.Z),
+                    newPosition.Z));
+            return newPosition;
         }
 
         public void Reset()
