@@ -16,7 +16,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
     {
         public override int PlateauRadius => 128;
         public override bool CanSpawnInside => true;
-        protected override int StructureChance => StructureGrid.ShroomPortalChance;
+        public override int StructureChance => StructureGrid.ShroomPortalChance;
         protected override CacheItem? Cache => CacheItem.ShroomPortal;
         protected override Vector3 StructureScale => Vector3.One * 2.5f;
         protected override BlockType PathType => BlockType.Grass;

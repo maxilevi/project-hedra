@@ -19,7 +19,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private static readonly Dictionary<int, float> LODMap = new Dictionary<int, float>
         {
-            { 1, 0.5f },
+            { 1, 0.4f },
             { 2, 0.2f },
             { 4, 0.125f },
             { 8, 0.075f }

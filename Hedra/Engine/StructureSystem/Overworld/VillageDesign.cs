@@ -19,6 +19,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 {
     public class VillageDesign : StructureDesign
     {
+        public override int StructureChance => StructureGrid.VillageChance;
         public const int MaxVillageSize = 18;
         public const int PlateauVillageRatio = 65;
         public const int MaxVillageRadius = MaxVillageSize * PlateauVillageRatio;
@@ -83,8 +84,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome,
             IRandom Rng)
         {
-            return Rng.Next(0, StructureGrid.VillageChance) == 1
-                   && Biome.Generation.GetMaxHeight(TargetPosition.X, TargetPosition.Z) > BiomePool.SeaLevel
+            return Biome.Generation.GetMaxHeight(TargetPosition.X, TargetPosition.Z) > BiomePool.SeaLevel
                    && (TargetPosition - World.SpawnPoint).LengthFast() >
                    (World.SpawnVillagePoint - World.SpawnPoint).LengthFast() * 2;
         }

@@ -12,6 +12,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 {
     public class ObeliskDesign : StructureDesign
     {
+        public override int StructureChance => StructureGrid.ObeliskChance;
         public override int PlateauRadius { get; } = 256;
         public override VertexData Icon => null;
         public override bool CanSpawnInside => true;
@@ -58,7 +59,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
         protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome,
             IRandom Rng)
         {
-            if (Rng.Next(0, StructureGrid.ObeliskChance) != 1) return false;
             var height = Biome.Generation.GetMaxHeight(TargetPosition.X, TargetPosition.Z);
             return height > BiomePool.SeaLevel &&
                    Math.Abs(Biome.Generation.RiverAtPoint(TargetPosition.X, TargetPosition.Z)) < 0.005f;

@@ -22,7 +22,7 @@ namespace Hedra.Engine.StructureSystem
         public abstract int PlateauRadius { get; }
         public abstract VertexData Icon { get; }
         public abstract bool CanSpawnInside { get; }
-
+        public abstract int StructureChance { get; }
         public virtual int[] AmbientSongs { get; } = new int[0];
         public abstract void Build(CollidableStructure Structure);
 
@@ -43,24 +43,29 @@ namespace Hedra.Engine.StructureSystem
             return new Random((int)(Structure.Position.X / 11 * (Structure.Position.Z / 13)));
         }
 
-        public void CheckForDesign(Vector2 ChunkPosition, Region Biome, RandomDistribution Distribution)
+        public bool PlaceDesign(Vector2 ChunkPosition, RandomDistribution Distribution, Region Biome, CollidableStructure[] Items)
         {
             lock (CheckLock)
             {
-                if (MapBuilder.SampleDesign(this, ChunkPosition, Biome, Distribution,
-                    World.StructureHandler.StructureItems, out var targetPosition))
+                Distribution.Seed = BuildRngSeed(ChunkPosition);
+                var targetPosition = BuildTargetPosition(ChunkPosition, Distribution);
+                if (ShouldSetup(ChunkPosition, ref targetPosition, Items, Biome, Distribution) &&
+                    !InterferesWithAnotherStructure(targetPosition))
                 {
                     var item = Setup(targetPosition, BuildRng(ChunkPosition));
                     item.MapPosition = ChunkPosition;
                     World.StructureHandler.AddStructure(item);
                     World.StructureHandler.Build(item);
+                    return true;
                 }
             }
+
+            return false;
         }
 
         public static bool InterferesWithAnotherStructure(Vector3 TargetPosition)
         {
-            return World.StructureHandler.StructureExistsAtPosition(TargetPosition);
+            return false;//World.StructureHandler.StructureExistsAtPosition(TargetPosition);
         }
 
         public virtual bool ShouldRemove(CollidableStructure Structure)
@@ -114,8 +119,7 @@ namespace Hedra.Engine.StructureSystem
 
         protected virtual bool ShouldBuild(Vector3 NewPosition, CollidableStructure[] Items, StructureDesign[] Designs)
         {
-            return StructureGrid.Sample(World.ToChunkSpace(NewPosition), this, Designs) &&
-                   !AlreadySpawnedStructure(NewPosition, Items);
+            return !AlreadySpawnedStructure(NewPosition, Items);
         }
 
         private bool AlreadySpawnedStructure(Vector3 NewPosition, CollidableStructure[] Items)

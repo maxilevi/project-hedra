@@ -18,7 +18,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public override int PlateauRadius => 384;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.GarrisonIcon);
         public override bool CanSpawnInside => false;
-        protected override int StructureChance => StructureGrid.GarrisonChance;
+        public override int StructureChance => StructureGrid.GarrisonChance;
         protected override CacheItem? Cache => CacheItem.Garrison;
         protected override Vector3 StructureScale => GarrisonCache.Scale;
         private static int Level => 12;

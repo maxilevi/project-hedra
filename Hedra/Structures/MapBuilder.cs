@@ -30,27 +30,24 @@ namespace Hedra.Structures
             if (designAtPosition != null) return designAtPosition;
 
             var chunkOffset = World.ToChunkSpace(Position);
-            for (var i = 0; i < Biome.Structures.Designs.Length; i++)
+            var design = StructureGrid.Sample(chunkOffset, Biome.Structures.Designs);
+            if (design != null && SampleDesign(design, chunkOffset, Biome, _distribution, EmptyItems))
             {
-                var design = Biome.Structures.Designs[i];
-                if (SampleDesign(design, chunkOffset, Biome, _distribution, EmptyItems, out _))
-                {
-                    _cache.TryAdd(Position, design);
-                    return design;
-                }
+                _cache.TryAdd(Position, design);
+                return design;
             }
-
+            
             _cache.TryAdd(Position, null);
             return null;
         }
-
-        public static bool SampleDesign(StructureDesign Design, Vector2 ChunkPosition, Region Biome,
-            RandomDistribution Distribution, CollidableStructure[] Items, out Vector3 TargetPosition)
+        
+        private static bool SampleDesign(StructureDesign Design, Vector2 ChunkPosition, Region Biome,
+            RandomDistribution Distribution, CollidableStructure[] Items)
         {
             Distribution.Seed = StructureDesign.BuildRngSeed(ChunkPosition);
-            TargetPosition = StructureDesign.BuildTargetPosition(ChunkPosition, Distribution);
-            return Design.ShouldSetup(ChunkPosition, ref TargetPosition, Items, Biome, Distribution) &&
-                   !StructureDesign.InterferesWithAnotherStructure(TargetPosition);
+            var targetPosition = StructureDesign.BuildTargetPosition(ChunkPosition, Distribution);
+            return Design.ShouldSetup(ChunkPosition, ref targetPosition, Items, Biome, Distribution) &&
+                   !StructureDesign.InterferesWithAnotherStructure(targetPosition);
         }
 
         public static void Discard()

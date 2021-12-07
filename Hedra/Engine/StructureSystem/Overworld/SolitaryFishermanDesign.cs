@@ -16,7 +16,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public override int PlateauRadius => 16;
         public override VertexData Icon => null;
         public override bool CanSpawnInside => true;
-        protected override int StructureChance => StructureGrid.SolitaryFisherman;
+        public override int StructureChance => StructureGrid.SolitaryFisherman;
         protected override CacheItem? Cache => null;
         protected override BlockType PathType => BlockType.None;
 

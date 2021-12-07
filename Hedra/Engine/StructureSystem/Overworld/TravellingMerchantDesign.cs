@@ -13,6 +13,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 {
     public class TravellingMerchantDesign : CompletableStructureDesign<TravellingMerchant>
     {
+        public override int StructureChance => StructureGrid.TravellingMerchantChance;
         public static bool Spawned { get; private set; }
         public override int PlateauRadius { get; } = 80;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.MerchantIcon);
@@ -46,7 +47,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
         protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome,
             IRandom Rng)
         {
-            if (Rng.Next(0, StructureGrid.TravellingMerchantChance) != 1) return false;
             var height = Biome.Generation.GetMaxHeight(TargetPosition.X, TargetPosition.Z);
 
             return Math.Abs(ChunkOffset.X - World.SpawnPoint.X) < 10000 &&

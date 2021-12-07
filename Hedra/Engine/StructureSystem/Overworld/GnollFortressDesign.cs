@@ -23,7 +23,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public override string DisplayName => Translations.Get("structure_gnoll_fortress");
         public override VertexData Icon => CacheManager.GetModel(CacheItem.GnollFortressIcon);
         public override bool CanSpawnInside => false;
-        protected override int StructureChance => StructureGrid.GnollFortressChance;
+        public override int StructureChance => StructureGrid.GnollFortressChance;
         protected override CacheItem? Cache => CacheItem.GnollFortress;
 
         private SceneSettings GnollFortressSettings { get; } = new SceneSettings

@@ -9,7 +9,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public override int PlateauRadius => 160;
         public override VertexData Icon { get; } = CacheManager.GetModel(CacheItem.GazeboIcon);
         protected override float EffectivePlateauRadius => 80;
-        protected override int StructureChance => StructureGrid.GazeboChance;
+        public override int StructureChance => StructureGrid.GazeboChance;
         protected override CacheItem? Cache => CacheItem.Gazebo;
         protected override Vector3 DefaultLookingDirection => Vector3.UnitX;
         protected override Vector3 NPCHorizontalOffset => Vector3.Zero;

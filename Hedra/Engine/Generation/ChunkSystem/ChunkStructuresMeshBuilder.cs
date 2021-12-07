@@ -19,7 +19,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
     {
         private static readonly Dictionary<int, float> LODMap = new Dictionary<int, float>
         {
-            { 1, 1.0f },
+            { 1, 0.9f },
             { 2, 0.7f },
             { 4, 0.4f },
             { 8, 0.25f }
@@ -62,6 +62,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     MeshOptimizer.SimplifySloppy(Allocator, clone, LODMap[Lod]);
                     clone.Flat(Allocator);
                 }
+                else
+                {
+                   // clone.UniqueVertices();
+                   // MeshOptimizer.Simplify(Allocator, clone, Array.Empty<uint>(), 0.85f);
+                   // clone.Flat(Allocator);
+                }
 
                 if (clone.Extradata.Count != clone.Vertices.Count)
                 {
@@ -96,6 +102,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     ProcessInstanceData(Allocator, lodedInstanceElements[i], nativeInstance, i, Lod, distribution,
                         1f / Lod - 0.2f);
             }
+            
+            //Simplify(Allocator, nativeStatic);
+            //Simplify(Allocator, nativeInstance);
 
             AddManually(
                 Input.StaticData.Vertices, Input.StaticData.Normals, Input.StaticData.Colors,
@@ -114,6 +123,13 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return new ChunkMeshBuildOutput(Input.StaticData, Input.WaterData, Input.InstanceData, Input.Failed);
         }
 
+        private static void Simplify(IAllocator Allocator, NativeVertexData Data)
+        {
+            Data.UniqueVertices();
+            MeshOptimizer.Simplify(Allocator, Data, Array.Empty<uint>(), 0.5f);
+            Data.Flat(Allocator);
+        }
+        
         private void ProcessInstanceData(IAllocator Allocator, InstanceData Instance, NativeVertexData Model, int Index,
             int Lod, RandomDistribution Distribution, float SimplificationThreshold = -1)
         {

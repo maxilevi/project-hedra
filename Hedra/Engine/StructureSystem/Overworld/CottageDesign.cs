@@ -15,7 +15,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         where T : Cottage, IQuestStructure
     {
         public override bool CanSpawnInside => true;
-        protected override int StructureChance => StructureGrid.CottageWithFarmChance;
+        public override int StructureChance => StructureGrid.CottageWithFarmChance;
         protected override BlockType PathType => BlockType.None;
         protected override CacheItem? Cache => null;
         protected override Vector3 NPCHorizontalOffset => Vector3.Zero;

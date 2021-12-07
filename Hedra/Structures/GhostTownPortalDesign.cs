@@ -16,7 +16,7 @@ namespace Hedra.Structures
     public class GhostTownPortalDesign : SimpleFindableStructureDesign<GhostTownPortal>, ICompletableStructureDesign
     {
         public override int PlateauRadius => 140;
-        protected override int StructureChance => StructureGrid.GhostTownPortalChance;
+        public override int StructureChance => StructureGrid.GhostTownPortalChance;
         protected override CacheItem? Cache => CacheItem.Portal;
         protected override Vector3 StructureScale => Vector3.One * 10;
         protected virtual bool SpawnNPC => true;

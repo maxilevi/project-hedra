@@ -23,7 +23,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
     {
         public override int PlateauRadius => 384;
         public override VertexData Icon { get; } = CacheManager.GetModel(CacheItem.WizardTowerIcon);
-        protected override int StructureChance => StructureGrid.WizardTower;
+        public override int StructureChance => StructureGrid.WizardTower;
         protected override CacheItem? Cache => CacheItem.WizardTower;
         protected override bool NoPlantsZone => true;
         protected override Vector3 StructureOffset => Vector3.UnitY * -.5f;

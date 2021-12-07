@@ -10,6 +10,7 @@ namespace Hedra.Engine.PlantSystem
 {
     public class CollectiblePlantDesign : StructureDesign
     {
+        public override int StructureChance => throw new NotImplementedException();
         public override int PlateauRadius
             => throw new NotImplementedException();
 

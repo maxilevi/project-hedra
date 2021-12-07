@@ -30,7 +30,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public override int PlateauRadius => 200;
         protected override float EffectivePlateauRadius => 256;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.FishingPostIcon);
-        protected override int StructureChance => StructureGrid.FishingPostChance;
+        public override int StructureChance => StructureGrid.FishingPostChance;
         protected override CacheItem? Cache => null;
         protected override BlockType PathType => BlockType.Path;
         public override bool CanSpawnInside => true;
@@ -354,8 +354,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome,
             IRandom Rng)
         {
-            return Rng.Next(0, StructureGrid.FishingPostChance) == 1 && IsWater(ChunkOffset.ToVector3(), Biome) &&
-                   SearchForShore(ChunkOffset, Biome, out TargetPosition);
+            return IsWater(ChunkOffset.ToVector3(), Biome) && SearchForShore(ChunkOffset, Biome, out TargetPosition);
         }
 
         public static bool SearchForShore(Vector2 Offset, Region Biome, out Vector3 Position)

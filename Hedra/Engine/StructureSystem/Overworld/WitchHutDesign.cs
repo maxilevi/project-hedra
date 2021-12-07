@@ -18,7 +18,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
     {
         public override int PlateauRadius => 160;
         public override VertexData Icon { get; } = CacheManager.GetModel(CacheItem.WitchHutIcon);
-        protected override int StructureChance => StructureGrid.WitchHut;
+        public override int StructureChance => StructureGrid.WitchHut;
         protected override CacheItem? Cache => CacheItem.WitchHut;
         protected override BlockType PathType => BlockType.Grass;
         protected override bool NoPlantsZone => true;

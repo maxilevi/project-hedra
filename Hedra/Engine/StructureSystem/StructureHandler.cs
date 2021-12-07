@@ -158,19 +158,22 @@ namespace Hedra.Engine.StructureSystem
             /* Beware! This is created locally and we don't maintain a static instance because of multi-threading issues. */
             var distribution = new RandomDistribution(true);
             for (var x = Math.Min(-2, -maxSearchRadius / Chunk.Width * 2);
-                x < Math.Max(2, maxSearchRadius / Chunk.Width * 2);
-                x++)
-            for (var z = Math.Min(-2, -maxSearchRadius / Chunk.Width * 2);
-                z < Math.Max(2, maxSearchRadius / Chunk.Width * 2);
-                z++)
+                 x < Math.Max(2, maxSearchRadius / Chunk.Width * 2);
+                 x++)
             {
-                var offset = new Vector2(ChunkOffset.X + x * Chunk.Width, ChunkOffset.Y + z * Chunk.Width);
-                for (var i = 0; i < Designs.Length; i++)
+                for (var z = Math.Min(-2, -maxSearchRadius / Chunk.Width * 2);
+                     z < Math.Max(2, maxSearchRadius / Chunk.Width * 2);
+                     z++)
                 {
-                    if (!IsWithinSearchRadius(Designs[i], offset, ChunkOffset)) continue;
-                    if (!Designs[i].MeetsRequirements(offset)) continue;
+                    //we should check if chunk is null/doesnt exist
+                    var offset = new Vector2(ChunkOffset.X + x * Chunk.Width, ChunkOffset.Y + z * Chunk.Width);
+                    var design = MapBuilder.Sample(World.ToChunkSpace(offset).ToVector3(), region);
+                    if (design == null) continue;
 
-                    Designs[i].CheckForDesign(offset, region, distribution);
+                    if (!IsWithinSearchRadius(design, offset, ChunkOffset)) continue;
+                    if (!design.MeetsRequirements(offset)) continue;
+
+                    design.PlaceDesign(offset, distribution, region, World.StructureHandler.StructureItems);
                 }
             }
         }

@@ -17,6 +17,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 {
     public class GiantTreeDesign : CompletableStructureDesign<GiantTree>
     {
+        public override int StructureChance => StructureGrid.GiantTreeChance;
         public override int PlateauRadius { get; } = 700;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.BossIcon);
         public override bool CanSpawnInside => false;
@@ -85,7 +86,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
         protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome,
             IRandom Rng)
         {
-            if (Rng.Next(0, StructureGrid.GiantTreeChance) != 1) return false;
             var height = Biome.Generation.GetMaxHeight(TargetPosition.X, TargetPosition.Z);
             return height > BiomePool.SeaLevel;
         }

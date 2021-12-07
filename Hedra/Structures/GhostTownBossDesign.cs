@@ -19,7 +19,7 @@ namespace Hedra.Structures
     public class GhostTownBossDesign : SimpleStructureDesign<GhostTownBoss>, ICompletableStructureDesign,
         IFindableStructureDesign
     {
-        protected override int StructureChance => throw new NotImplementedException();
+        public override int StructureChance => throw new NotImplementedException();
         protected override CacheItem? Cache => null;
         public static bool Spawned { get; set; }
         public override bool CanSpawnInside => false;

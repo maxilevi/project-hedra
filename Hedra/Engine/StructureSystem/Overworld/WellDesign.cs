@@ -9,7 +9,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public override int PlateauRadius => 80;
         public override VertexData Icon => null;
         protected override float EffectivePlateauRadius => 48;
-        protected override int StructureChance => StructureGrid.WellChance;
+        public override int StructureChance => StructureGrid.WellChance;
         protected override CacheItem? Cache => CacheItem.Well;
         protected override Vector3 NPCHorizontalOffset => Vector3.UnitZ * 8f;
         protected override Vector3 StructureOffset => -.5f * Vector3.UnitY;
