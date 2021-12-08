@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 
@@ -8,30 +9,29 @@ namespace Hedra.Engine.StructureSystem
 
     public static class StructureGrid
     {
-        /* Big structures */
-        public const int GraveyardChance = 4;
-        public const int WizardTower = 8;
-        public const int GiantTreeChance = 4;
-        public const int BanditCampChance = 4;
-        public const int VillageChance = 8;
-        public const int WitchHut = 4;
-        public const int Dungeon0Chance = 6;
-        public const int Dungeon1Chance = 6;
-        public const int Dungeon2Chance = 6;
-        public const int GarrisonChance = 4;
-        public const int GnollFortressChance = 4;
 
-        /* Small structures */
-        public const int FishingPostChance = 4;
-        public const int ShroomPortalChance = 4;
-        public const int ObeliskChance = 2;
-        public const int CampfireChance = 2;
-        public const int TravellingMerchantChance = 8;
-        public const int CottageWithFarmChance = 8;
-        public const int SolitaryFisherman = 4;
-        public const int WellChance = 16;
-        public const int GhostTownPortalChance = 64;
-        public const int GazeboChance = 64;
+        /* Check the excel */
+        public const int GhostTownPortalChance = 3;
+        public const int GazeboChance = 3;
+        public const int WellChance = 3;
+        public const int TravellingMerchantChance = 4;
+        public const int ShroomPortalChance = 3;
+        public const int FishingPostChance = 8;
+        public const int CottageWithFarmChance = 5;
+        public const int SolitaryFisherman = 8;
+        public const int ObeliskChance = 10;
+        public const int CampfireChance = 10;
+        public const int GraveyardChance = 5;
+        public const int WizardTower = 2;
+        public const int GiantTreeChance = 5;
+        public const int BanditCampChance = 5;
+        public const int VillageChance = 7;
+        public const int WitchHut = 4;
+        public const int Dungeon0Chance = 2;
+        public const int Dungeon1Chance = 2;
+        public const int Dungeon2Chance = 2;
+        public const int GarrisonChance = 4;
+        public const int GnollFortressChance = 5;
 
         /* Dead realm structures */
         public const int TombstoneChance = 2;
@@ -56,7 +56,7 @@ namespace Hedra.Engine.StructureSystem
             var sampler = SampleDefault;//SelectSampler(Design);
             var isPoint = sampler.Invoke(Position, out var seed);
             var rng = new Random(seed);
-            var isValid = rng.Next(0, 5) == 1;
+            var isValid = rng.Next(0, 4) == 1;
             if (isPoint && isValid)
             {
                 return SelectDesignWeighted(rng, Designs);
@@ -67,13 +67,14 @@ namespace Hedra.Engine.StructureSystem
 
         private static StructureDesign SelectDesignWeighted(Random Rng, StructureDesign[] Designs)
         {
-            var total = Designs.Select(D => 1f / D.StructureChance).Sum();
+            var total = Designs.Select(D => D.StructureChance).Sum();
+            //Debug.Assert(total == 100);
             var accum = 0f;
 
             var n = Rng.NextSingle() * total;
             for (var i = 0; i < Designs.Length; ++i)
             {
-                var c = 1f / Designs[i].StructureChance;
+                var c = Designs[i].StructureChance;
                 if (n <= c + accum)
                     return Designs[i];
                 accum += c;
@@ -104,7 +105,13 @@ namespace Hedra.Engine.StructureSystem
 
         private static bool SampleDefault(Vector2 Position, out int Seed)
         {
-            Seed = new Vector3(Position.X, Position.Y, World.Seed).GetHashCode();
+            unchecked
+            {
+                Seed = 17;
+                Seed = Seed * 31 + Position.X.GetHashCode();
+                Seed = Seed * 31 + Position.Y.GetHashCode();
+                Seed = Seed * 31 + World.Seed.GetHashCode();
+            }
             return (int)Position.X % 11 == 4 && (int)Position.Y % 13 == 6;
         }
 

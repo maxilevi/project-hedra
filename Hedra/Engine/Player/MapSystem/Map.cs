@@ -295,11 +295,12 @@ namespace Hedra.Engine.Player.MapSystem
                             var realPos = new Vector2(coords.X, coords.Y) * ChunkSize * MapSize
                                           + new Vector2((i - MapSize / 2) * ChunkSize,
                                               (j - MapSize / 2) * ChunkSize);
-                            var icon = sample.Icon != null ? sample.Icon.Clone() : VertexData.Load("Assets/Env/ExclamationMark.ply", Vector3.One * 1f);
+                            var icon = sample.Icon != null ? sample.Icon.Clone() : VertexData.Load("Assets/Env/Objects/UnknownIcon.ply", Vector3.One * 1f);
                             var mapItem = new MapItem(icon + CreateBaseVertexData());
                             mapItem.Mesh.ApplyNoiseTexture = true;
                             mapItem.Mesh.LocalRotation = new Vector3(0, Utils.Rng.Next(0, 4) * 90f, 0);
-                            mapItem.Mesh.LocalPosition = realPos.ToVector3() + Vector3.UnitY * 12;
+                            mapItem.Mesh.LocalPosition = realPos.ToVector3() + Vector3.UnitY * 12 
+                                                                             + new Vector3(Utils.Rng.NextSingle(), 0, Utils.Rng.NextSingle()) * (2f - 1f) * 16f;
                             mapItem.Mesh.Scale = Vector3.One * 2f;
                             lock (_iconsLock)
                             {

@@ -8393,6 +8393,10 @@
             <Link>Assets\Env\Objects\Portal.ply</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+        <Content Include="..\project-hedra-assets\Objects\UnknownIcon.ply">
+          <Link>Assets\Env\Objects\UnknownIcon.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
         <Content Include="..\project-hedra-assets\Objects\Windmill.ply">
             <Link>Assets\Env\Objects\Windmill.ply</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
