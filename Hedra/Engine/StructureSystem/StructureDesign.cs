@@ -25,6 +25,7 @@ namespace Hedra.Engine.StructureSystem
         public abstract int StructureChance { get; }
         public virtual int[] AmbientSongs { get; } = new int[0];
         public abstract void Build(CollidableStructure Structure);
+        public virtual bool IsFixed => false;
 
         protected abstract CollidableStructure Setup(Vector3 TargetPosition, Random Rng);
 
@@ -65,7 +66,7 @@ namespace Hedra.Engine.StructureSystem
 
         public static bool InterferesWithAnotherStructure(Vector3 TargetPosition)
         {
-            return false;//World.StructureHandler.StructureExistsAtPosition(TargetPosition);
+            return World.StructureHandler.StructureExistsAtPosition(TargetPosition);
         }
 
         public virtual bool ShouldRemove(CollidableStructure Structure)
@@ -98,9 +99,7 @@ namespace Hedra.Engine.StructureSystem
 
         public static Vector3 BuildTargetPosition(Vector2 ChunkOffset, IRandom Rng)
         {
-            return new Vector3(ChunkOffset.X + Rng.Next(0, (int)(Chunk.Width / Chunk.BlockSize)) * Chunk.BlockSize,
-                0,
-                ChunkOffset.Y + Rng.Next(0, (int)(Chunk.Width / Chunk.BlockSize)) * Chunk.BlockSize);
+            return new Vector3(ChunkOffset.X + Rng.NextFloat() * Chunk.Width, 0, ChunkOffset.Y + Rng.NextFloat() * Chunk.Width);
         }
 
         public virtual bool ShouldSetup(Vector2 ChunkOffset, ref Vector3 TargetPosition, CollidableStructure[] Items,
@@ -151,6 +150,12 @@ namespace Hedra.Engine.StructureSystem
 
         public virtual void OnEnter(IPlayer Player)
         {
+        }
+
+        protected static bool InWater(Vector3 TargetPosition, Region Biome)
+        {
+            return Biome.Generation.GetMaxHeight(TargetPosition.X, TargetPosition.Z) > BiomePool.SeaLevel &&
+                   Biome.Generation.RiverAtPoint(TargetPosition.X, TargetPosition.Z) < 0.005f;
         }
     }
 }

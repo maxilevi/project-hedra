@@ -10,8 +10,8 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
         public NormalBiomeStructureDesign()
         {
             /* Default structures */
-            //AddDesign(new SpawnCampfireDesign());
-            //AddDesign(new SpawnVillageDesign());
+            AddDesign(new SpawnCampfireDesign());
+            AddDesign(new SpawnVillageDesign());
 
             AddDesign(new VillageDesign());
             AddDesign(new GraveyardDesign());

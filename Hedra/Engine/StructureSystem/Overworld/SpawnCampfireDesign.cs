@@ -15,6 +15,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         private static readonly Vector3 SpawnOffset = Vector3.UnitZ * 16f;
         public static bool Spawned { get; set; }
         public override bool CanSpawnInside => true;
+        public override bool IsFixed => true;
 
         public override void Build(CollidableStructure Structure)
         {

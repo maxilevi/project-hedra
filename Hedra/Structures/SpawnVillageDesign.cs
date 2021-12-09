@@ -11,6 +11,7 @@ namespace Hedra.Structures
 {
     public class SpawnVillageDesign : VillageDesign, IFindableStructureDesign
     {
+        public override bool IsFixed => true;
         public static bool Spawned { get; set; }
         public string DisplayName => Translations.Get("quest_village");
 

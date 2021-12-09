@@ -25,6 +25,7 @@ namespace Hedra.Structures
         public override bool CanSpawnInside => false;
         public static Vector3 Position => World.SpawnPoint;
         public override VertexData Icon => null;
+        public override bool IsFixed => true;
 
         public string GetShortDescription(IStructure Structure)
         {

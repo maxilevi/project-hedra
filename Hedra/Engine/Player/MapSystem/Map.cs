@@ -300,7 +300,7 @@ namespace Hedra.Engine.Player.MapSystem
                             mapItem.Mesh.ApplyNoiseTexture = true;
                             mapItem.Mesh.LocalRotation = new Vector3(0, Utils.Rng.Next(0, 4) * 90f, 0);
                             mapItem.Mesh.LocalPosition = realPos.ToVector3() + Vector3.UnitY * 12 
-                                                                             + new Vector3(Utils.Rng.NextSingle(), 0, Utils.Rng.NextSingle()) * (2f - 1f) * 16f;
+                                                                             + new Vector3(Utils.Rng.NextSingle(), 0, Utils.Rng.NextSingle()) * (2f - 1f) * 8f;
                             mapItem.Mesh.Scale = Vector3.One * 2f;
                             lock (_iconsLock)
                             {

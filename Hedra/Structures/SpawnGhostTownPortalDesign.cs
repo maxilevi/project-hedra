@@ -13,6 +13,7 @@ namespace Hedra.Structures
         public override int PlateauRadius => 180;
         protected override bool SpawnNPC => false;
         public static bool Spawned { get; set; }
+        public override bool IsFixed => true;
 
         public static Vector3 Position =>
             World.SpawnPoint + GhostTownGenerationDesign.IslandRadius * -Vector3.One * .25f;

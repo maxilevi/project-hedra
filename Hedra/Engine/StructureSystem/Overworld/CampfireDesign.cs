@@ -119,9 +119,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome,
             IRandom Rng)
         {
-            var height = Biome.Generation.GetMaxHeight(TargetPosition.X, TargetPosition.Z);
-            return height > BiomePool.SeaLevel &&
-                   Math.Abs(Biome.Generation.RiverAtPoint(TargetPosition.X, TargetPosition.Z)) < 0.005f;
+            return InWater(TargetPosition, Biome);
         }
 
         public static Vector4 TentColor(Random Rng)

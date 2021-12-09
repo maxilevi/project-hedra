@@ -81,10 +81,7 @@ namespace Hedra.Engine.StructureSystem
         protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome,
             IRandom Rng)
         {
-            //Debug.Assert(StructureChance != 1);
-            return //Rng.Next(0, StructureChance) == 1 &&
-                   Biome.Generation.GetMaxHeight(TargetPosition.X, TargetPosition.Z) > BiomePool.SeaLevel &&
-                   Math.Abs(Biome.Generation.RiverAtPoint(TargetPosition.X, TargetPosition.Z)) < 0.005f;
+            return InWater(TargetPosition, Biome);
         }
 
         protected Door AddDoor(VertexData Model, Vector3 DoorPosition, Matrix4x4 RotationMatrix,

@@ -1,7 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
+using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.StructureSystem.Overworld;
+using Hedra.Numerics;
+using Hedra.Structures;
 
 namespace Hedra.Engine.StructureSystem
 {
@@ -11,27 +16,28 @@ namespace Hedra.Engine.StructureSystem
     {
 
         /* Check the excel */
-        public const int GhostTownPortalChance = 3;
-        public const int GazeboChance = 3;
-        public const int WellChance = 3;
+        public const int GhostTownPortalChance = 4;
+        public const int GazeboChance = 4;
         public const int TravellingMerchantChance = 4;
         public const int ShroomPortalChance = 3;
-        public const int FishingPostChance = 8;
-        public const int CottageWithFarmChance = 5;
-        public const int SolitaryFisherman = 8;
-        public const int ObeliskChance = 10;
-        public const int CampfireChance = 10;
-        public const int GraveyardChance = 5;
-        public const int WizardTower = 2;
-        public const int GiantTreeChance = 5;
-        public const int BanditCampChance = 5;
-        public const int VillageChance = 7;
-        public const int WitchHut = 4;
-        public const int Dungeon0Chance = 2;
-        public const int Dungeon1Chance = 2;
-        public const int Dungeon2Chance = 2;
-        public const int GarrisonChance = 4;
-        public const int GnollFortressChance = 5;
+        public const int FishingPostChance = 15;
+        public const int GraveyardChance = 7;
+        public const int WizardTower = 4;
+        public const int GiantTreeChance = 7;
+        public const int BanditCampChance = 7;
+        public const int VillageChance = 15;
+        public const int WitchHut = 5;
+        public const int Dungeon0Chance = 4;
+        public const int Dungeon1Chance = 4;
+        public const int Dungeon2Chance = 4;
+        public const int GarrisonChance = 6;
+        public const int GnollFortressChance = 7;
+        
+        public const int WellChance = 15;
+        public const int CampfireChance = 25;
+        public const int ObeliskChance = 20;
+        public const int CottageWithFarmChance = 10;
+        public const int SolitaryFisherman = 30;
 
         /* Dead realm structures */
         public const int TombstoneChance = 2;
@@ -39,54 +45,124 @@ namespace Hedra.Engine.StructureSystem
         private const int SampleTypes = 5;
         private const int BigSampleChance = 1;
 
-
-        private static readonly SamplerType[] Ranges;
-
-        static StructureGrid()
+        private static int GetSeed(Vector2 Position)
         {
-            Ranges = new SamplerType[]
+            unchecked
             {
-                Sample1024,
-                SampleDefault
-            };
+                var seed = 17;
+                seed = seed * 31 + Position.X.GetHashCode();
+                seed = seed * 31 + Position.Y.GetHashCode();
+                seed = seed * 31 + World.Seed.GetHashCode();
+                return seed;
+            }
+        }
+        
+        private static bool IsBig(Vector2 Position, RandomDistribution Distribution, out int Seed)
+        {
+            if ((int)Math.Abs(Position.X % 23) == 4 && Math.Abs((int)Position.Y % 17) == 6)
+            {
+                Seed = GetSeed(Position);
+                Distribution.Seed = Seed;
+                return Distribution.Next(0, 2) == 1;
+            }
+
+            Seed = 0;
+            return false;
+        }
+        
+        private static bool IsSmall(Vector2 Position, RandomDistribution Distribution, out int Seed)
+        {
+            if ((int)Math.Abs(Position.X % 11) == 4 && Math.Abs((int)Position.Y % 13) == 6)
+            {
+                Seed = GetSeed(Position);
+                Distribution.Seed = Seed;
+                return Distribution.Next(0, 2) == 1;
+            }
+            Seed = 0;
+            return false;
+        }
+        
+        private static bool HasBigNeighbours(Vector2 Position, RandomDistribution Distribution)
+        {
+            const int size = 10 * Chunk.Width;
+            for (var nx = Position.X - size; nx < Position.X + size; nx += Chunk.Width)
+            {
+                for (var ny = Position.Y - size; ny < Position.Y + size; ny += Chunk.Width)
+                {
+                    if (IsBig(new Vector2(nx, ny), Distribution, out _))
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool CanPlaceFixedStructure(Vector2 Position, IEnumerable<StructureDesign> FixedDesigns, out StructureDesign Design)
+        {
+            Design = null;
+            foreach (var design in FixedDesigns)
+            {
+                var p = Position.ToVector3();
+                if (design.ShouldSetup(Position, ref p, null, null, null))
+                    Design = design;
+            }
+            return Design != null;
         }
 
         public static StructureDesign Sample(Vector2 Position, StructureDesign[] Designs)
         {
-            var sampler = SampleDefault;//SelectSampler(Design);
-            var isPoint = sampler.Invoke(Position, out var seed);
-            var rng = new Random(seed);
-            var isValid = rng.Next(0, 4) == 1;
-            if (isPoint && isValid)
+            if (CanPlaceFixedStructure(Position, Designs.Where(S => S.IsFixed), out var design))
+                return design;
+
+            var designs = Designs.Where(S => !S.IsFixed);
+            
+            var namedStructures = designs.Where(S => S.Icon != null);
+            var unnamedStructures = designs.Where(S => S.Icon == null);
+            var randomDistribution = new RandomDistribution();
+
+            var isBig = IsBig(Position, randomDistribution, out var seedBig);
+            var isSmall = IsSmall(Position, randomDistribution, out var seedSmall);
+            
+            if (isSmall && !HasBigNeighbours(Position, randomDistribution))
             {
-                return SelectDesignWeighted(rng, Designs);
+                randomDistribution.Seed = seedSmall;
+                return SelectDesignWeighted(randomDistribution, unnamedStructures);
+            }
+            
+            if (isBig)
+            {
+                randomDistribution.Seed = seedBig;
+                return SelectDesignWeighted(randomDistribution, namedStructures);
             }
 
             return null;
         }
 
-        private static StructureDesign SelectDesignWeighted(Random Rng, StructureDesign[] Designs)
+        private static void Shuffle(RandomDistribution Rng, List<StructureDesign> Designs)
+        {
+            for (var i = 0; i < Designs.Count; ++i)
+            {
+                var j = Rng.Next(i, Designs.Count);
+                (Designs[j], Designs[i]) = (Designs[i], Designs[j]);
+            }
+        }
+        
+        private static StructureDesign SelectDesignWeighted(RandomDistribution Rng, IEnumerable<StructureDesign> Designs)
         {
             var total = Designs.Select(D => D.StructureChance).Sum();
-            //Debug.Assert(total == 100);
+            var designs = Designs.ToList();
+            Shuffle(Rng, designs);
             var accum = 0f;
 
-            var n = Rng.NextSingle() * total;
-            for (var i = 0; i < Designs.Length; ++i)
+            var n = Rng.NextFloat() * total;
+            foreach (var design in designs)
             {
-                var c = Designs[i].StructureChance;
+                var c = design.StructureChance;
                 if (n <= c + accum)
-                    return Designs[i];
+                    return design;
                 accum += c;
             }
             return null;
-        }
-
-        private static SamplerType SelectSampler(StructureDesign Design)
-        {
-            if (Design.PlateauRadius >= 1024)
-                return Ranges[0];
-            return Ranges[1];
         }
 
         private static int BaseSample(Vector2 Position, float Frequency)
@@ -94,25 +170,6 @@ namespace Hedra.Engine.StructureSystem
             var wSeed = World.Seed * 0.0001f;
             return (int)((float)World.StructureHandler.SeedGenerator.GetValue(Position.X * Frequency + wSeed,
                 Position.Y * Frequency + wSeed) * 100f);
-        }
-
-        private static bool Sample1024(Vector2 Position, out int Seed)
-        {
-            Seed = 0;
-            return false;
-            //return Sampler(Position, I => I == BigSampleChance, 0.002f, out Seed);
-        }
-
-        private static bool SampleDefault(Vector2 Position, out int Seed)
-        {
-            unchecked
-            {
-                Seed = 17;
-                Seed = Seed * 31 + Position.X.GetHashCode();
-                Seed = Seed * 31 + Position.Y.GetHashCode();
-                Seed = Seed * 31 + World.Seed.GetHashCode();
-            }
-            return (int)Position.X % 11 == 4 && (int)Position.Y % 13 == 6;
         }
 
         private static bool Sampler(Vector2 Position, Predicate<int> IsType, float Frequency, out int Seed)
