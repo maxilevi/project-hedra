@@ -50,6 +50,8 @@ namespace HedraTests.Structure
         public override void Setup()
         {
             HumanoidLoader.LoadModules(AssetManager.AppPath);
+            ItemLoader.LoadModules(GameLoader.AppPath);
+            HedraContent.Register();
             base.Setup();
             DesiredHeight = BiomePool.SeaLevel + 1;
             NameGenerator.Load();
@@ -64,6 +66,7 @@ namespace HedraTests.Structure
                 .Returns(defaultShape);
             CacheManager.Provider = cacheProvider.Object;
             _interceptedEntities = new List<IEntity>();
+            _designs = new NormalBiomeStructureDesign().Designs;
             var defaultRegion = new Region();
             defaultRegion.Colors = new RegionColor(1, new NormalBiomeColors());
             defaultRegion.Generation = new RegionGeneration(1, new SimpleGenerationDesignMock(() => DesiredHeight));
@@ -123,7 +126,6 @@ namespace HedraTests.Structure
             NPCCreator.Provider = npcMock.Object;
             Design = new T();
             _rng = new Random(1);
-            _designs = new NormalBiomeStructureDesign().Designs;
         }
         
         [Test]
@@ -151,12 +153,13 @@ namespace HedraTests.Structure
         [Test]
         public void TestDesignSpawnsEntitiesOrStructures()
         {
+            
             var structure = this.CreateStructure();
             Design.Build(structure);
             Executer.Update();
             Assert.Greater(WorldEntities.Length + GetStructureObjects(structure).Length, 0);
         }
-
+/*
         [Test]
         public void TestDesignPlacementMatchesWithMapPlacement()
         {
@@ -178,7 +181,7 @@ namespace HedraTests.Structure
                     );
                 }
             }
-        }
+        }*/
 
         private void SetDesigns(params StructureDesign[] Designs)
         {
