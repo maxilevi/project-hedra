@@ -62,7 +62,7 @@ namespace Hedra.Rendering
             else
                 TextureRegistry.Unregister(id);
 
-            if (Engine.Loader.Hedra.MainThreadId != Thread.CurrentThread.ManagedThreadId && !GameSettings.TestingMode)
+            if (Engine.Loader.Hedra.RenderingThreadId != Thread.CurrentThread.ManagedThreadId && !GameSettings.TestingMode)
                 Log.WriteLine("[Error] Texture being created outside of the GL thread");
             return id;
         }

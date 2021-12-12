@@ -184,7 +184,7 @@ namespace Hedra.Rendering.UI
                     obj.Bitmap.Dispose();
                 }
 
-                if (Thread.CurrentThread.ManagedThreadId != Engine.Loader.Hedra.MainThreadId)
+                if (Thread.CurrentThread.ManagedThreadId != Engine.Loader.Hedra.RenderingThreadId)
                     Executer.ExecuteOnMainThread(UpdateTexture);
                 else
                     UpdateTexture();

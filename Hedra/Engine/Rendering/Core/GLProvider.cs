@@ -813,7 +813,7 @@ namespace Hedra.Engine.Rendering.Core
         private void EnsureNoErrors()
         {
 #if DEBUG
-            if (Thread.CurrentThread.ManagedThreadId != Loader.Hedra.MainThreadId)
+            if (Thread.CurrentThread.ManagedThreadId != Loader.Hedra.RenderingThreadId)
                 throw new ArgumentException("Invalid GL calls outside of the main thread.");
             var error = _gl.GetError();
             if (error != GLEnum.NoError /*&& ErrorSeverity.Ignore != Severity*/)

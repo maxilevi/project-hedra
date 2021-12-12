@@ -54,7 +54,7 @@ namespace Hedra.Engine.Loader
         {
         }
 
-        public static int MainThreadId { get; private set; }
+        public static int RenderingThreadId { get; private set; }
         public int BuildNumber => 17;
         public string GameVersion => /*"\u03B1 */"1.0";
 
@@ -76,7 +76,7 @@ namespace Hedra.Engine.Loader
 
         public bool LoadBoilerplate()
         {
-            MainThreadId = Thread.CurrentThread.ManagedThreadId;
+            RenderingThreadId = Thread.CurrentThread.ManagedThreadId;
             Time.RegisterThread();
             OSManager.Load(Assembly.GetExecutingAssembly().Location);
             GameLoader.CreateCrashesFolderIfNecessary();
@@ -102,17 +102,22 @@ namespace Hedra.Engine.Loader
             _wasLoading = true;
             _debugProvider = new DebugInfoProvider();
             _splashScreen = new SplashScreen();
-            _splashScreen.Draw();
-            
+
             CompatibilityManager.Load();
             GameLoader.AllocateMemory();
             Renderer.Load();
             Log.WriteLine("Supported GLSL version is : " + Renderer.GetString(StringName.ShadingLanguageVersion));
             OSManager.WriteSpecs();
+            _splashScreen.Draw();
+            Window.SwapBuffers();
+            Window.IsContextControlDisabled = true;
             Window.ClearContext();
-            
-            //Task.Run(() =>
+            var previous = RenderingThreadId;
+
+            Task.Run(() =>
             {
+                RenderingThreadId = Thread.CurrentThread.ManagedThreadId;
+                Time.RegisterThread();
                 Window.MakeCurrent();
                 GameLoader.LoadSoundEngine();
                 HedraContent.Register();
@@ -139,7 +144,9 @@ namespace Hedra.Engine.Loader
                 LoadInterpreter();
                 Window.ClearContext();
                 _splashScreen.Disable();
-            }//);
+                RenderingThreadId = previous;
+                Window.IsContextControlDisabled = false;
+            });
             
             Program.GameWindow.WindowState = WindowState.Maximized;
             return true;
@@ -206,7 +213,7 @@ namespace Hedra.Engine.Loader
         {
             if (!_splashScreen.FinishedLoading)
             {
-                _splashScreen.Draw();
+                //_splashScreen.Draw();
                 return;
             }
 

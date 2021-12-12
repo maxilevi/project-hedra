@@ -100,7 +100,7 @@ namespace Hedra.Engine.Rendering.Core
                 LightsUBO.Update(new LightSettings(lights, _lightColor, _lightPosition, UsedLights));
             }
 
-            if (Thread.CurrentThread.ManagedThreadId == Loader.Hedra.MainThreadId)
+            if (Thread.CurrentThread.ManagedThreadId == Loader.Hedra.RenderingThreadId)
                 DoUpdate();
             else
                 Executer.ExecuteOnMainThread(DoUpdate);

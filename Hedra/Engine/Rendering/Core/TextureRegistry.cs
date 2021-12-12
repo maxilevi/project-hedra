@@ -108,7 +108,7 @@ namespace Hedra.Engine.Rendering.Core
                 Textures.Remove(Id);
             }
 
-            if (Thread.CurrentThread.ManagedThreadId != Loader.Hedra.MainThreadId)
+            if (Thread.CurrentThread.ManagedThreadId != Loader.Hedra.RenderingThreadId)
                 Executer.ExecuteOnMainThread(DisposeProcess);
             else
                 DisposeProcess();
