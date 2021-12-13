@@ -30,7 +30,7 @@ namespace Hedra.Engine.Loader
                 Opacity = 1
             };
 
-            _loadingText = new GUIText("Loading...", new Vector2(0, -0.5f), Color.White, FontCache.GetNormal(72));
+            _loadingText = new GUIText("Loading...", new Vector2(0, -0.5f), Color.White, FontCache.GetBold(32));
             _loadingText.Enable();
         }
 
@@ -61,7 +61,7 @@ namespace Hedra.Engine.Loader
         {
             Renderer.Viewport(0, 0, GameSettings.DeviceWidth, GameSettings.DeviceHeight);
             DrawManager.UIRenderer.Draw(_studioBackground);
-
+            
             _loadingText.Text = GetText();
             _loadingText.RemoveFromRenderer();
             DrawManager.UIRenderer.Draw(_loadingText.UIText);

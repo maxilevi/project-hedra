@@ -255,6 +255,7 @@ namespace Hedra.Engine.Loader
         protected override void Unload()
         {
             AssetManager.Dispose();
+            if (!_splashScreen.FinishedLoading) return;
             GameSettings.Save($"{AssetManager.AppData}/settings.cfg");
             if (!GameManager.InStartMenu) AutosaveManager.Save();
             Graphics2D.Dispose();
