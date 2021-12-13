@@ -29,7 +29,7 @@ namespace Hedra.Engine.Loader
             {
                 API = new GraphicsAPI(ContextAPI.OpenGL, Profile, Flags, Version),
                 Size = new Vector2D<int>(Width, Height),
-                ShouldSwapAutomatically = false,
+                ShouldSwapAutomatically = true,
                 IsVisible = true,
                 Title = "Project Hedra",
                 VSync = false,

@@ -235,7 +235,6 @@ namespace Hedra.Engine.Loader
             Renderer.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit | ClearBufferMask.StencilBufferBit);
             DrawManager.Draw();
             _debugProvider.Draw();
-            Window.SwapBuffers();
         }
 
         protected override void Resize(Vector2D<int> NewSize)
