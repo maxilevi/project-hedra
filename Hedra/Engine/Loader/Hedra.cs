@@ -99,56 +99,69 @@ namespace Hedra.Engine.Loader
             
             Log.WriteLine(glVersion);
             AssetManager.Load();
+            Translations.Load();
             _wasLoading = true;
             _debugProvider = new DebugInfoProvider();
             _splashScreen = new SplashScreen();
+            Program.GameWindow.WindowState = WindowState.Maximized;
 
             CompatibilityManager.Load();
             GameLoader.AllocateMemory();
             Renderer.Load();
             Log.WriteLine("Supported GLSL version is : " + Renderer.GetString(StringName.ShadingLanguageVersion));
             OSManager.WriteSpecs();
-            _splashScreen.Draw();
-            Window.SwapBuffers();
+            DrawSplashScreenAndSwap();
             Window.IsContextControlDisabled = true;
             Window.ClearContext();
             var previous = RenderingThreadId;
+
+            void DrawSplashScreenAndSwap()
+            {
+                _splashScreen.Draw();
+                Window.SwapBuffers();
+            }
 
             Task.Run(() =>
             {
                 RenderingThreadId = Thread.CurrentThread.ManagedThreadId;
                 Time.RegisterThread();
                 Window.MakeCurrent();
+                
                 GameLoader.LoadSoundEngine();
                 HedraContent.Register();
                 ModificationsLoader.Reload();
                 NameGenerator.Load();
                 CacheManager.Load();
-                Translations.Load();
+                
+                DrawSplashScreenAndSwap();
+                
                 BackgroundUpdater.Load();
                 BulletPhysics.Load();
                 Log.WriteLine("Translations loaded successfully.");
 
                 GameLoader.CreateCharacterFolders();
                 Log.WriteLine("Assets loading was successful.");
-
                 GameSettings.LoadNormalSettings(GameSettings.SettingsPath);
                 Log.WriteLine("Setting loaded successfully.");
+                
+                DrawSplashScreenAndSwap();
 
                 GameManager.LoadWorld();
                 Log.WriteLine("Scene loading was Successful.");
+                
+                DrawSplashScreenAndSwap();
             
                 GameManager.LoadPlayer();
                 Log.WriteLine("UI loading was Successful.");
 
+                DrawSplashScreenAndSwap();
+                
                 LoadInterpreter();
                 Window.ClearContext();
-                _splashScreen.Disable();
                 RenderingThreadId = previous;
                 Window.IsContextControlDisabled = false;
+                _splashScreen.Disable();
             });
-            
-            Program.GameWindow.WindowState = WindowState.Maximized;
             return true;
         }
 

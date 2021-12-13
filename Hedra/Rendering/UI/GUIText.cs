@@ -128,6 +128,11 @@ namespace Hedra.Rendering.UI
             if (UIText == null) return;
             TextCache.Remove(UIText.TextureId);
             UIText.Dispose();
+            RemoveFromRenderer();
+        }
+
+        public void RemoveFromRenderer()
+        {
             DrawManager.UIRenderer.Remove(UIText);
         }
 

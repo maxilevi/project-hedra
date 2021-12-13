@@ -155,6 +155,10 @@ namespace Hedra.Engine
             flags = ContextFlags.Debug;
 #endif
             GameWindow = new Loader.Hedra((int)currentSize.X, (int)currentSize.Y, maxMonitor, 3, 3, profile, flags);
+            GameSettings.SurfaceWidth = GameWindow.Width;
+            GameSettings.SurfaceHeight = GameWindow.Height;
+
+            GameSettings.ScreenRatio = GameSettings.Width / (float)GameSettings.Height;
             GameWindow.Setup();
 
             if (OSManager.RunningPlatform == Platform.Windows)
@@ -164,11 +168,6 @@ namespace Hedra.Engine
                 var raw = new RawImage(width, height, new Memory<byte>(pixels));
                 GameWindow.Window.SetWindowIcon(ref raw);
             }
-
-            GameSettings.SurfaceWidth = GameWindow.Width;
-            GameSettings.SurfaceHeight = GameWindow.Height;
-
-            GameSettings.ScreenRatio = GameSettings.Width / (float)GameSettings.Height;
 
             GameSettings.LoadWindowSettings(GameSettings.SettingsPath);
             var previousFullscreen = GameSettings.Fullscreen;
