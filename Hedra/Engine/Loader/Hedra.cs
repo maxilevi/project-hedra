@@ -47,6 +47,7 @@ namespace Hedra.Engine.Loader
         private double _passedMillis;
         private SplashScreen _splashScreen;
         private bool _wasLoading;
+        
 
         public Hedra(int Width, int Height, IMonitor Monitor, int Major, int Minor, ContextProfile Profile,
             ContextFlags Flags) :
@@ -55,6 +56,7 @@ namespace Hedra.Engine.Loader
         }
 
         public static int RenderingThreadId { get; private set; }
+        public static int MainThreadId { get; private set; }
         public int BuildNumber => 17;
         public string GameVersion => /*"\u03B1 */"1.0";
 
@@ -77,6 +79,7 @@ namespace Hedra.Engine.Loader
         public bool LoadBoilerplate()
         {
             RenderingThreadId = Thread.CurrentThread.ManagedThreadId;
+            MainThreadId = Thread.CurrentThread.ManagedThreadId;
             Time.RegisterThread();
             OSManager.Load(Assembly.GetExecutingAssembly().Location);
             GameLoader.CreateCrashesFolderIfNecessary();
@@ -113,7 +116,6 @@ namespace Hedra.Engine.Loader
             DrawSplashScreenAndSwap();
             Window.IsContextControlDisabled = true;
             Window.ClearContext();
-            var previous = RenderingThreadId;
 
             void DrawSplashScreenAndSwap()
             {
@@ -123,10 +125,9 @@ namespace Hedra.Engine.Loader
 
             Task.Run(() =>
             {
-                RenderingThreadId = Thread.CurrentThread.ManagedThreadId;
+                MakeGLContextCurrent();
                 Time.RegisterThread();
-                Window.MakeCurrent();
-                
+
                 GameLoader.LoadSoundEngine();
                 HedraContent.Register();
                 ModificationsLoader.Reload();
@@ -158,7 +159,6 @@ namespace Hedra.Engine.Loader
                 
                 LoadInterpreter();
                 Window.ClearContext();
-                RenderingThreadId = previous;
                 Window.IsContextControlDisabled = false;
                 _splashScreen.Disable();
             });
@@ -171,13 +171,17 @@ namespace Hedra.Engine.Loader
             MissionPool.Load();
         }
 
+        private void MakeGLContextCurrent()
+        {
+            RenderingThreadId = Thread.CurrentThread.ManagedThreadId;
+            Window.MakeCurrent();
+        }
+
         protected override void UpdateFrame(double Delta)
         {
-            if (!_splashScreen.FinishedLoading)
-            {
-                _splashScreen.Update();
-                return;
-            }
+            if (!_splashScreen.FinishedLoading) return;
+            if (RenderingThreadId != MainThreadId)
+                MakeGLContextCurrent();
 
             var frameTime = Delta;
             while (frameTime > 0f)
@@ -224,11 +228,9 @@ namespace Hedra.Engine.Loader
 
         protected override void RenderFrame(double Delta)
         {
-            if (!_splashScreen.FinishedLoading)
-            {
-                //_splashScreen.Draw();
-                return;
-            }
+            if (!_splashScreen.FinishedLoading) return;
+            if (RenderingThreadId != MainThreadId)
+                MakeGLContextCurrent();
 
             Renderer.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit | ClearBufferMask.StencilBufferBit);
             DrawManager.Draw();

@@ -97,11 +97,14 @@ namespace Hedra.Engine.Loader
             set => Window.Size = new Vector2D<int>(Window.Size.X, value);
         }
 
-        public double TargetFramerate { get; set; }
-        /*{
+        public double TargetFramerate
+        {
             get => Window.FramesPerSecond;
-            set => Window.FramesPerSecond = value;
-        }*/
+            set  {
+                Window.FramesPerSecond = value;
+                Window.UpdatesPerSecond = value;
+            }
+        }
 
         public bool IsExiting => Window.Handle == IntPtr.Zero || Window.IsClosing;
 

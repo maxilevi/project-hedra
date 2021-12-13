@@ -55,7 +55,7 @@ namespace Hedra.Rendering
         {
             if (UseCache && TextureRegistry.Contains(BitmapObject.Path, Min, Mag, Wrap, out var cachedId))
                 return cachedId;
-
+            
             var id = Provider.LoadTexture(BitmapObject, Min, Mag, Wrap);
             if (UseCache)
                 TextureRegistry.Add(id, BitmapObject.Path, Min, Mag, Wrap);

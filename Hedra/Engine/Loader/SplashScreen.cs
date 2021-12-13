@@ -41,10 +41,6 @@ namespace Hedra.Engine.Loader
 
         public bool FinishedLoading { get; private set; }
 
-        public void Update()
-        {
-        }
-
         private string GetText()
         {
             var dotCount = _loadingCounter++;
