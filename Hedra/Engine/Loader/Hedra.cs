@@ -187,12 +187,15 @@ namespace Hedra.Engine.Loader
             while (frameTime > 0f)
             {
                 var isOnMenu = GameManager.InStartMenu;
+                var tim = 1.0 / 200.0;
                 var delta = Math.Min(frameTime, Physics.Timestep);
                 Time.Set(delta, false);
                 BulletPhysics.Update(isOnMenu ? Time.IndependentDeltaTime : Time.DeltaTime);
                 RoutineManager.Update();
                 UpdateManager.Update();
-                BackgroundUpdater.Dispatch();
+                BackgroundUpdater.UpdateEntities();
+                BackgroundUpdater.UpdateCommands();
+                //BackgroundUpdater.Dispatch();
                 World.Update();
                 SoundPlayer.Update(LocalPlayer.Instance.Position);
                 SoundtrackManager.Update();

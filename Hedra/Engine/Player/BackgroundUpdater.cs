@@ -26,7 +26,7 @@ namespace Hedra.Engine.Player
         public static void Load()
         {
             _tickSystem = new TickSystem();
-            _updateThread = new Thread(Update);
+            //_updateThread = new Thread(Update);
             _watch = new Stopwatch();
             _updateList = new List<IUpdatable>();
             _resetEvent = new AutoResetEvent(false);
@@ -38,9 +38,9 @@ namespace Hedra.Engine.Player
 
         public static void Dispatch()
         {
-            if (_updateThread.ThreadState == ThreadState.Unstarted)
-                _updateThread.Start();
-            _resetEvent.Set();
+            //if (_updateThread.ThreadState == ThreadState.Unstarted)
+            //    _updateThread.Start();
+            //_resetEvent.Set();
         }
 
         private static void Update()
@@ -71,7 +71,7 @@ namespace Hedra.Engine.Player
             }
         }
 
-        private static void UpdateEntities()
+        public static void UpdateEntities()
         {
             var entities = World.Entities.ToArray();
             for (var i = entities.Length - 1; i > -1; i--)
@@ -86,7 +86,7 @@ namespace Hedra.Engine.Player
             }
         }
 
-        private static void UpdateCommands()
+        public static void UpdateCommands()
         {
             AddTickables();
             AddUpdatables();

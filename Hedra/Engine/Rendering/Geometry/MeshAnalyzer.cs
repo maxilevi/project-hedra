@@ -256,6 +256,11 @@ namespace Hedra.Engine.Rendering.Geometry
             public Vector3 Position;
             public Vector3 Normal;
             public int Count;
+            
+            public override bool Equals(object? obj)
+            {
+                return obj is VertexRemap t && Position.Equals(t.Position) && Normal.Equals(t.Normal) && Count.Equals(t.Count);
+            }
         }
 
         private struct IndexedTriangle
@@ -273,6 +278,11 @@ namespace Hedra.Engine.Rendering.Geometry
                 if (P3.Equals(P))
                     return new[] { P2, P3 };
                 return null;
+            }
+            
+            public override bool Equals(object? obj)
+            {
+                return obj is IndexedTriangle t && P1.Equals(t.P1) && P2.Equals(t.P2) && P3.Equals(t.P3);
             }
         }
 
@@ -296,6 +306,11 @@ namespace Hedra.Engine.Rendering.Geometry
             public Vertex this[int Index] => Index == 0 ? P1 :
                 Index == 1 ? P2 :
                 Index == 2 ? P3 : throw new ArgumentOutOfRangeException();
+                
+            public override bool Equals(object? obj)
+            {
+                return obj is Triangle t && P1.Equals(t.P1) && P2.Equals(t.P2) && P3.Equals(t.P3);
+            }
         }
 
         public struct Vertex
@@ -319,6 +334,11 @@ namespace Hedra.Engine.Rendering.Geometry
             public override int GetHashCode()
             {
                 return Combine(Combine(Position.GetHashCode(), Color.GetHashCode()), Normal.GetHashCode());
+            }
+            
+            public override bool Equals(object? obj)
+            {
+                return obj is Vertex t && Position.Equals(t.Position) && Color.Equals(t.Color) && Normal.Equals(t.Normal);
             }
         }
     }

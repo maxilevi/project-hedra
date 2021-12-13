@@ -222,6 +222,31 @@ namespace Hedra.Engine.Scenes
 
     public struct Waypoint
     {
+        public bool Equals(Waypoint other)
+        {
+            return Position.Equals(other.Position);
+        }
+
+        public override int GetHashCode()
+        {
+            return Position.GetHashCode();
+        }
+
         public Vector3 Position;
+
+        public override bool Equals(object? obj)
+        {
+            return obj is Waypoint w && Position.Equals(w.Position);
+        }
+
+        public static bool operator ==(Waypoint left, Waypoint right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Waypoint left, Waypoint right)
+        {
+            return !(left == right);
+        }
     }
 }

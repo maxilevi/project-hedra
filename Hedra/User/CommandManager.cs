@@ -565,6 +565,13 @@ namespace Hedra.User
                     Caster.AddComponent(new BurningComponent(Caster, null, 3, 10));
                     return true;
                 }
+                
+                if (Parts[0] == "explode")
+                {
+                    var entity = NPCCreator.SpawnHumanoid("mage", Caster.Position);
+                    Firewave.Create(entity, 0);
+                    return true;
+                }
 
                 if (Parts[0] == "watch")
                 {
