@@ -15,6 +15,7 @@ using BulletSharp.Math;
 using Hedra.Components;
 using Hedra.Core;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
@@ -208,6 +209,7 @@ namespace Hedra.Engine.Bullet
                 ? new BulletSharp.Math.Vector3(_accumulatedMovement.X, Math.Min(0, _body.LinearVelocity.Y),
                     _accumulatedMovement.Z) + Impulse.Compatible() * (UseTimescale ? Time.TimeScale : 1f)
                 : BulletSharp.Math.Vector3.Zero;
+            
             //_body.Activate();
             Impulse *= (float)Math.Pow(0.25f, deltaTime * 5f);
             _accumulatedMovement = Vector3.Zero;

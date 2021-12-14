@@ -187,7 +187,6 @@ namespace Hedra.Engine.Loader
             while (frameTime > 0f)
             {
                 var isOnMenu = GameManager.InStartMenu;
-                var tim = 1.0 / 200.0;
                 var delta = Math.Min(frameTime, Physics.Timestep);
                 Time.Set(delta, false);
                 BulletPhysics.Update(isOnMenu ? Time.IndependentDeltaTime : Time.DeltaTime);
