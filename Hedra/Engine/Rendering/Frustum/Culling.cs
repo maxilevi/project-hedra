@@ -9,8 +9,8 @@ namespace Hedra.Engine.Rendering.Frustum
 {
     public static class Culling
     {
-        private const float ZNear = 2.0f;
-        private const float ZFar = 4096.0f;
+        private const float ZNear = 8.0f;
+        private const float ZFar = 2048.0f;
         public static Matrix4x4 ProjectionMatrix;
         public static Matrix4x4 ModelViewMatrix = Matrix4x4.Identity;
 
