@@ -80,7 +80,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 for (var _y = -_sampleHeight; _y < 1 + _sampleHeight; _y += _sampleHeight)
                     AddColorIfNecessary(x + _x, _y + y, z + _z, ref regionColor, ref noise, ref color, ref colorCount);
             
-            return colorCount == 0 ? new Vector4(color.Xyz() / colorCount, 1.0f) : GetDefaultColor(RegionColor);
+            return colorCount != 0 ? new Vector4(color.Xyz() / colorCount, 1.0f) : GetDefaultColor(RegionColor);
         }
 
         private Vector4 GetDefaultColor(RegionColor RegionColor)

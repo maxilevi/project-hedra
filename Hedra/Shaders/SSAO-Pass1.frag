@@ -77,7 +77,7 @@ vec3(0.5192277, -0.3338073, 0.240924)
 );
 const float sample_count = 64.0;
 const float radius = 1.0;
-const float bias = 0.05;
+const float bias = 0.01;
 
 layout(location = 0) out vec4 Color;
 
