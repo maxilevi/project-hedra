@@ -79,19 +79,14 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 for (var _z = -_sampleWidth; _z < 1 + _sampleWidth; _z += _sampleWidth)
                 for (var _y = -_sampleHeight; _y < 1 + _sampleHeight; _y += _sampleHeight)
                     AddColorIfNecessary(x + _x, _y + y, z + _z, ref regionColor, ref noise, ref color, ref colorCount);
-            /*float wSeed = World.Seed * 0.0001f;
-            var f = .005f;
-            var voronoi = (int) (World.StructureHandler.SeedGenerator.GetValue(_offsetX * f + wSeed, _offsetZ * f + wSeed) * 100f);
-            var rng = new Random(voronoi);
-            var pointCoords = World.StructureHandler.SeedGenerator.GetGridPoint(_offsetX * f + wSeed, _offsetZ * f + wSeed);
-            var chunkCoords = World.ToChunkSpace(new Vector2((int)((pointCoords.X - wSeed) / f), (int)((pointCoords.Y - wSeed) / f)));
-            var isPoint = chunkCoords == new Vector2(_offsetX, _offsetZ);
-            var c = new Vector4(rng.NextFloat(), rng.NextFloat(), rng.NextFloat(), 1.0f);
-            return isPoint ? new Vector4(0, 0, 0, 1.0f) : c;*/
-            var defaultShade = CalculateStoneShade(BlockType.Stone);
-            return new Vector4(
-                colorCount == 0 ? new Vector3(defaultShade, defaultShade, defaultShade) : color.Xyz() / colorCount,
-                1.0f);
+            
+            return colorCount == 0 ? new Vector4(color.Xyz() / colorCount, 1.0f) : GetDefaultColor(RegionColor);
+        }
+
+        private Vector4 GetDefaultColor(RegionColor RegionColor)
+        {
+            var shade = CalculateStoneShade(BlockType.Stone) * 0.5f;
+            return Block.GetColor(BlockType.Stone, RegionColor) + new Vector4(shade, shade, shade, 0);
         }
 
         private void AddColorIfNecessary(int X, int Y, int Z, ref RegionColor RegionColor, ref float Noise,
