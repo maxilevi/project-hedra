@@ -293,7 +293,10 @@ namespace Hedra.Engine.Player
                     Callback
                 );
             else
+            {
+                Item.UIObject.Opacity = 0;
                 Callback();
+            }
         }
 
         private IEnumerator FadeOverTimeCoroutine(object[] Params)
