@@ -13,8 +13,8 @@ namespace HedraTests
         {
             return new Animation(1, new KeyFrame[2]
                 {
-                    new KeyFrame(0, new Dictionary<string, JointTransform>()),
-                    new KeyFrame(1, new Dictionary<string, JointTransform>())
+                    new KeyFrame(0, new Dictionary<JointName, JointTransform>()),
+                    new KeyFrame(1, new Dictionary<JointName, JointTransform>())
                 }
             );
         }

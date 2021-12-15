@@ -25,10 +25,10 @@ namespace HedraTests.Rendering
             var frames = new KeyFrame[4];
             for (var i = 0; i < frames.Length; i++)
             {
-                var dict = new Dictionary<string, JointTransform>
+                var dict = new Dictionary<JointName, JointTransform>
                 {
-                    {"Root", new JointTransform(Vector3.UnitY * i, Quaternion.Identity)},
-                    {"Chest", new JointTransform(Vector3.UnitX * i, Quaternion.Identity)}
+                    {new JointName("Root"), new JointTransform(Vector3.UnitY * i, Quaternion.Identity)},
+                    {new JointName("Chest"), new JointTransform(Vector3.UnitX * i, Quaternion.Identity)}
                 };
                 frames[i] = new KeyFrame(i * (1f/frames.Length), dict);
             }

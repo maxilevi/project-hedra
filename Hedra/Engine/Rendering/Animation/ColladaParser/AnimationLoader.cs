@@ -66,7 +66,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
         private void LoadJointTransforms(KeyFrameData[] frames, XmlNode JointData, string rootNodeId)
         {
             var jointNameId = GetJointName(JointData);
-            if (Array.IndexOf(_jointIds, jointNameId) == -1) return;
+            if (Array.IndexOf(_jointIds, jointNameId.Name) == -1) return;
 
             var dataId = GetDataId(JointData);
             var transformData = JointData.ChildWithAttribute("source", "id", dataId);
@@ -81,14 +81,14 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
             return node.GetAttribute("source").Value.Substring(1);
         }
 
-        private string GetJointName(XmlNode jointData)
+        private JointName GetJointName(XmlNode jointData)
         {
             XmlNode channelNode = jointData["channel"];
             var data = channelNode.GetAttribute("target").Value;
-            return data.Split('/')[0].Replace($"{ArmatureName}_", string.Empty);
+            return new JointName(data.Split('/')[0].Replace($"{ArmatureName}_", string.Empty));
         }
 
-        private void ProcessTransforms(string jointName, string[] rawData, KeyFrameData[] keyFrames, bool root)
+        private void ProcessTransforms(JointName jointName, string[] rawData, KeyFrameData[] keyFrames, bool root)
         {
             var matrixData = new float[16];
             for (var i = 0; i < keyFrames.Length; i++)

@@ -60,7 +60,7 @@ namespace Hedra.Engine.Rendering.Animation
 
         private static KeyFrame CreateKeyFrame(KeyFrameData Data)
         {
-            var dic = new Dictionary<string, JointTransform>();
+            var dic = new Dictionary<JointName, JointTransform>();
 
             for (var i = 0; i < Data.JointTransforms.Count; i++)
             {

@@ -20,23 +20,23 @@ namespace Hedra.Engine.Rendering.Animation
     {
         private readonly Joint _rootJoint;
         private float _blendingAnimationTime;
-        private string[] _blendJoints;
-        private readonly ObjectPool<Dictionary<string, int>> _blendMapPool;
-        private Dictionary<string, JointTransform> _currentBlendPose;
-        private readonly Dictionary<string, JointTransform> _currentPose;
+        private JointName[] _blendJoints;
+        private readonly ObjectPool<Dictionary<JointName, int>> _blendMapPool;
+        private Dictionary<JointName, JointTransform> _currentBlendPose;
+        private readonly Dictionary<JointName, JointTransform> _currentPose;
         private readonly ObjectPool<KeyFrame[]> _framePool;
-        private Dictionary<string, JointTransform> _pose;
-        private readonly ObjectPool<List<string>> _stringListPool;
+        private Dictionary<JointName, JointTransform> _pose;
+        private readonly ObjectPool<List<JointName>> _stringListPool;
 
         public Animator(Joint RootJoint)
         {
             _rootJoint = RootJoint;
-            _blendMapPool = new ObjectPool<Dictionary<string, int>>(() => new Dictionary<string, int>());
-            _stringListPool = new ObjectPool<List<string>>(() => new List<string>());
+            _blendMapPool = new ObjectPool<Dictionary<JointName, int>>(() => new Dictionary<JointName, int>());
+            _stringListPool = new ObjectPool<List<JointName>>(() => new List<JointName>());
             _framePool = new ObjectPool<KeyFrame[]>(() => new KeyFrame[2]);
-            _currentPose = new Dictionary<string, JointTransform>();
-            _currentBlendPose = new Dictionary<string, JointTransform>();
-            _pose = new Dictionary<string, JointTransform>();
+            _currentPose = new Dictionary<JointName, JointTransform>();
+            _currentBlendPose = new Dictionary<JointName, JointTransform>();
+            _pose = new Dictionary<JointName, JointTransform>();
             SetupDictionaries(_rootJoint);
         }
 
@@ -139,8 +139,8 @@ namespace Hedra.Engine.Rendering.Animation
          * for all the joints. The transforms are indexed by the name ID of
          * the joint that they should be applied to.
          */
-        private Dictionary<string, JointTransform> CalculateCurrentAnimationPose(
-            Dictionary<string, JointTransform> Pose)
+        private Dictionary<JointName, JointTransform> CalculateCurrentAnimationPose(
+            Dictionary<JointName, JointTransform> Pose)
         {
             var currentFrames = _framePool.GetObject();
             GetPreviousAndNextFrames(AnimationPlaying, AnimationTime, currentFrames);
@@ -197,7 +197,7 @@ namespace Hedra.Engine.Rendering.Animation
          * - the desired model-space transform of the parent joint for
          * the pose.
          */
-        private void ApplyPoseToJoints(Dictionary<string, JointTransform> CurrentPose, Joint Joint,
+        private void ApplyPoseToJoints(Dictionary<JointName, JointTransform> CurrentPose, Joint Joint,
             Matrix4x4 ParentTransform)
         {
             var currentLocalTransform = CurrentPose[Joint.Name];
@@ -245,12 +245,12 @@ namespace Hedra.Engine.Rendering.Animation
             return currentTime / totalTime;
         }
 
-        private Dictionary<string, JointTransform> InterpolatePoses
-        (Dictionary<string, JointTransform> Pose, IDictionary<string, JointTransform> TargetPose, float Progression,
+        private Dictionary<JointName, JointTransform> InterpolatePoses
+        (Dictionary<JointName, JointTransform> Pose, IDictionary<JointName, JointTransform> TargetPose, float Progression,
             out bool Interpolated)
         {
             var interpolated = false;
-            var pool = ArrayPool<KeyValuePair<string, JointTransform>>.Shared;
+            var pool = ArrayPool<KeyValuePair<JointName, JointTransform>>.Shared;
             var buffer = pool.Rent(Pose.Count);
             CopyToArray(Pose, buffer);
             for (var i = 0; i < Pose.Count; ++i)
@@ -271,15 +271,15 @@ namespace Hedra.Engine.Rendering.Animation
             return Pose;
         }
 
-        private void CopyToArray(Dictionary<string, JointTransform> Pose, KeyValuePair<string, JointTransform>[] Buffer)
+        private void CopyToArray(Dictionary<JointName, JointTransform> Pose, KeyValuePair<JointName, JointTransform>[] Buffer)
         {
             var i = 0;
             foreach (var pair in Pose)
                 Buffer[i++] = pair;
         }
 
-        private Dictionary<string, JointTransform> InterpolateJointPosesFromKeyframes(KeyFrame PreviousFrame,
-            KeyFrame NextFrame, float Progression, ref Dictionary<string, JointTransform> Pose)
+        private Dictionary<JointName, JointTransform> InterpolateJointPosesFromKeyframes(KeyFrame PreviousFrame,
+            KeyFrame NextFrame, float Progression, ref Dictionary<JointName, JointTransform> Pose)
         {
             foreach (var pair in PreviousFrame.Pose)
             {
@@ -292,7 +292,7 @@ namespace Hedra.Engine.Rendering.Animation
             return Pose;
         }
 
-        private string[] CalculateJointsToBlend(Animation Animation)
+        private JointName[] CalculateJointsToBlend(Animation Animation)
         {
             var blendedJointsCandidates = _blendMapPool.GetObject();
             for (var i = 0; i < Animation.KeyFrames.Length; i++)

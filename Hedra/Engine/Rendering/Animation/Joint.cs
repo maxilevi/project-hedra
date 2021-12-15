@@ -22,7 +22,7 @@ namespace Hedra.Engine.Rendering.Animation
         public readonly int Index; // ID
 
         private readonly Matrix4x4 LocalBindTransform;
-        public readonly string Name;
+        public readonly JointName Name;
 
         /**
          * @param index
@@ -37,7 +37,7 @@ namespace Hedra.Engine.Rendering.Animation
         public Joint(int Index, string Name, Matrix4x4 BindLocalTransform)
         {
             this.Index = Index;
-            this.Name = Name;
+            this.Name = new JointName(Name);
             LocalBindTransform = BindLocalTransform;
         }
 

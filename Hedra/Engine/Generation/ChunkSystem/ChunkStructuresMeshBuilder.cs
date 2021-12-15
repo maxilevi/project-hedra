@@ -137,7 +137,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var model = element.OriginalMesh.NativeClone(Allocator);
             model.Transform(element.TransMatrix);
 
-            SetColor(model, element, Index);
+            SetColor(model, element, Index, Distribution);
             SetExtraData(model, element, Distribution);
             if (SimplificationThreshold > 0 && SimplificationThreshold < 1f)
             {
@@ -191,7 +191,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     $"Vertex '{Model.Extradata.Count}' and color '{Model.Colors.Count}' mismatch");
         }
 
-        private void SetColor(NativeVertexData Model, InstanceData Element, int Index)
+        private void SetColor(NativeVertexData Model, InstanceData Element, int Index, RandomDistribution Distribution)
         {
             var replacement = Element.ColorCache != null && CacheManager.CachedColors.ContainsKey(Element.ColorCache)
                 ? CacheManager.CachedColors[Element.ColorCache]
@@ -203,8 +203,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
             if (Element.VariateColor)
             {
-                var variateFactor = (new Random(OffsetX + OffsetZ + World.Seed + Index).NextFloat() * 2f - 1f) *
-                                    (24 / 256f);
+                Distribution.Seed = OffsetX + OffsetZ + World.Seed + Index;
+                var variateFactor = (Distribution.NextFloat() * 2f - 1f) * (24 / 256f);
                 for (var l = 0; l < Model.Colors.Count; l++)
                     Model.Colors[l] += new Vector4(variateFactor, variateFactor, variateFactor, 0);
             }
@@ -225,7 +225,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             var replacement = Element.ExtraDataCache != null &&
                               CacheManager.CachedExtradata.ContainsKey(Element.ExtraDataCache)
-                ? CacheManager.CachedExtradata[Element.ExtraDataCache].Clone()
+                ? CacheManager.CachedExtradata[Element.ExtraDataCache]
                 : Element.ExtraData;
 
             if (replacement == null) return;
