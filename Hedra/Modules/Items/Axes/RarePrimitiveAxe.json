@@ -1,0 +1,21 @@
+{
+  "Name": "RarePrimitiveAxe",
+  "DisplayName": "Primitive Axe",
+  "EquipmentType": "Axe",
+  "Tier": "Rare",
+  "Description": "An axe used in primal times.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 8.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.05
+    }
+  ],
+  "Model": {
+    "Scale": 3.0,
+    "Path": "$DataFile$/Items/Axes/PrimitiveAxe.ply"
+  }
+}

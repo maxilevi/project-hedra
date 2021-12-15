@@ -1,0 +1,21 @@
+{
+  "Name": "RarePrimitiveStaff",
+  "DisplayName": "Primitive Staff",
+  "EquipmentType": "Staff",
+  "Tier": "Rare",
+  "Description": "A primal staff",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 6.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.05
+    }
+  ],
+  "Model": {
+    "Scale": 3.0,
+    "Path": "$DataFile$/Items/Staves/PrimitiveStaff.ply"
+  }
+}

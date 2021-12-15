@@ -1,0 +1,21 @@
+{
+  "Name": "UniquePrimitiveBow",
+  "DisplayName": "Unique Primitive Bow",
+  "EquipmentType": "Bow",
+  "Tier": "Unique",
+  "Description": "Primal bow.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 4.5
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.1
+    }
+  ],
+  "Model": {
+    "Scale": 4.0,
+    "Path": "$DataFile$/Items/Bows/PrimitiveBow.ply"
+  }
+}
