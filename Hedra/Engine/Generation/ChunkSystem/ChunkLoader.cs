@@ -71,7 +71,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public void UpdateFog(bool Force = false)
         {
             MaxFog = Math.Max(1, _activeChunks) * Chunk.Width;
-            MinFog = MaxFog - Chunk.Width * 4;
+            MinFog = MaxFog - Chunk.Width * 2;
 
             if (Math.Abs(_activeChunks - _targetActivechunks) > .05f || Force)
                 SkyManager.FogManager.UpdateFogSettings(MinFog, MaxFog);
