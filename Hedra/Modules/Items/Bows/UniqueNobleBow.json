@@ -1,0 +1,21 @@
+{
+  "Name": "UniqueNobleBow",
+  "DisplayName": "Noble Bow",
+  "EquipmentType": "Bow",
+  "Tier": "Unique",
+  "Description": "Noble bow.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 4.75
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.075
+    }
+  ],
+  "Model": {
+    "Scale": 4.0,
+    "Path": "$DataFile$/Items/Bows/NobleBow.ply"
+  }
+}

@@ -4254,6 +4254,18 @@
         <None Update="Modules\Items\Blades\UniquePrimitiveBlades.json">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Update="Modules\Items\Swords\UniqueNobleSword.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Modules\Items\Bows\UniqueNobleBow.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Modules\Items\Blades\UniqueNobleDoubleBlades.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Modules\Items\Staves\UniqueNobleStaff.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
     <ItemGroup>
         <None Include="..\project-hedra-assets\Animations\ArcherIdle.dae">
@@ -8049,6 +8061,10 @@
             <Link>Assets\Items\Boots\UniqueOrientalBoots.dae</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+        <Content Include="..\project-hedra-assets\Models\Blend\Bows\NobleBow.ply">
+          <Link>Assets\Items\Bows\NobleBow.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
         <Content Include="..\project-hedra-assets\Models\Blend\Bows\PrimitiveBow.ply">
           <Link>Assets\Items\Bows\PrimitiveBow.ply</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -8357,6 +8373,10 @@
             <Link>Assets\Items\Potions\StrengthPotion.ply</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+        <Content Include="..\project-hedra-assets\Models\Blend\Staves\NobleStaff.ply">
+          <Link>Assets\Items\Staves\NobleStaff.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
         <Content Include="..\project-hedra-assets\Models\Blend\Staves\PrimitiveStaff.ply">
           <Link>Assets\Items\Staves\PrimitiveStaff.ply</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -8364,6 +8384,14 @@
         <Content Include="..\project-hedra-assets\Models\Blend\Staves\RareChitinStaff.ply">
             <Link>Assets\Items\Staves\RareChitinStaff.ply</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Models\Blend\Swords\NobleDoubleBlades.ply">
+          <Link>Assets\Items\Swords\NobleDoubleBlades.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Models\Blend\Swords\NobleSword.ply">
+          <Link>Assets\Items\Swords\NobleSword.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
         <Content Include="..\project-hedra-assets\Models\Blend\Swords\PrimitiveSword.ply">
           <Link>Assets\Items\Swords\PrimitiveSword.ply</Link>

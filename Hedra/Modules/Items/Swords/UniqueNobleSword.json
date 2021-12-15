@@ -1,0 +1,21 @@
+{
+  "Name": "UniqueNobleSword",
+  "DisplayName": "Noble Sword",
+  "EquipmentType": "Sword",
+  "Tier": "Unique",
+  "Description": "Noble sword.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 7.5
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.1
+    }
+  ],
+  "Model": {
+    "Scale": 3.0,
+    "Path": "$DataFile$/Items/Swords/NobleSword.ply"
+  }
+}

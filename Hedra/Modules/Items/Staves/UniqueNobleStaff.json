@@ -1,0 +1,21 @@
+{
+  "Name": "UniqueNobleStaff",
+  "DisplayName": "Noble Staff",
+  "EquipmentType": "Staff",
+  "Tier": "Unique",
+  "Description": "Noble staff.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 7.5
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 3.0,
+    "Path": "$DataFile$/Items/Staves/NobleStaff.ply"
+  }
+}
