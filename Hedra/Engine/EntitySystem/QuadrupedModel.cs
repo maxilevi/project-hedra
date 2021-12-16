@@ -385,7 +385,7 @@ namespace Hedra.Engine.EntitySystem
 
         private Animation SelectIdleAnimation()
         {
-            return IdleAnimations[Utils.Rng.Next(0, WalkAnimations.Length)];
+            return IdleAnimations[Utils.Rng.Next(0, IdleAnimations.Length)];
         }
 
         private Animation SelectAttackAnimation()
