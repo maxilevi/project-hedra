@@ -73,7 +73,7 @@ namespace Hedra.Engine.Management
             {
                 StartInfo =
                 {
-                    FileName = $@"{AppPath}/../../../utilities/AssetBuilder.exe",
+                    FileName = $@"{AppPath}../../../../AssetBuilder/bin/Release/netcoreapp6.0/AssetBuilder.exe",
                     Arguments = $"\"{AppPath}/Shaders/\" \"{AppPath}/data1.db\" normal text",
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
@@ -302,8 +302,9 @@ namespace Hedra.Engine.Management
             var compatibleAppPath = AppPath.Replace("/", @"\");
 
             Log.Write($"[DEBUG] Copying shader files to executable...{Environment.NewLine}", ConsoleColor.Magenta);
+            Log.WriteLine($"[DEBUG] /C xcopy \"{compatibleAppPath}\\..\\..\\..\\Shaders\" \"{compatibleAppPath}\\Shaders\\\"  /s /e /y");
             var proc = Process.Start("cmd.exe",
-                $"/C xcopy \"{compatibleAppPath}\\..\\..\\Shaders\" \"{compatibleAppPath}\\Shaders\\\"  /s /e /y");
+                $"/C xcopy \"{compatibleAppPath}\\..\\..\\..\\Shaders\" \"{compatibleAppPath}\\Shaders\\\"  /s /e /y");
             proc?.WaitForExit();
         }
 
@@ -438,6 +439,7 @@ namespace Hedra.Engine.Management
                     };
                     entityData.Mesh.Colors.ToList().ForEach(Vector =>
                         vertexData.Colors.Add(new Vector4(Vector.X, Vector.Y, Vector.Z, 1)));
+                    vertexData.Transform(Matrix4x4.CreateScale(entityData.Scale));
                     _hitboxCache.Add(ModelFile, vertexData);
                 }
 
