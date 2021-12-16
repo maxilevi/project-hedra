@@ -10,6 +10,7 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
 
         protected override void Work(Chunk Object)
         {
+            if(Object.IsGenerated) return;
             Object.GenerateStructures();
         }
     }
