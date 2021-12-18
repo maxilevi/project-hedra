@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using Hedra.Engine.Game;
 using Hedra.Engine.IO;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Framework;
 using Hedra.Game;
@@ -431,7 +432,7 @@ namespace Hedra.Engine.Management
                 if (!_hitboxCache.ContainsKey(ModelFile))
                 {
                     var fileContents = Encoding.ASCII.GetString(AssetManager.ReadPath(ModelFile));
-                    var entityData = ColladaLoader.LoadColladaModel(fileContents);
+                    var entityData = ColladaLoader.LoadColladaModel(fileContents, LoadOptions.Default);
                     var vertexData = new VertexData
                     {
                         Vertices = entityData.Mesh.Vertices.ToList(),
@@ -439,6 +440,7 @@ namespace Hedra.Engine.Management
                     };
                     entityData.Mesh.Colors.ToList().ForEach(Vector =>
                         vertexData.Colors.Add(new Vector4(Vector.X, Vector.Y, Vector.Z, 1)));
+                    /* Scale needs to be applied because its applied in the shader for the models and not when loading */
                     vertexData.Transform(Matrix4x4.CreateScale(entityData.Scale));
                     _hitboxCache.Add(ModelFile, vertexData);
                 }

@@ -6,6 +6,7 @@ namespace Hedra.Engine.ModuleSystem.Templates
     {
         public string Handler { get; set; }
         public bool AlignWithTerrain { get; set; } = true;
+        public bool FlipNormals { get; set; }
         public string Path { get; set; }
         public float Scale { get; set; }
         public bool IsUndead { get; set; }

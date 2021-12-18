@@ -40,11 +40,12 @@ uniform mat4 jointTransforms[MAX_JOINTS];
 uniform mat4 projectionViewMatrix;
 uniform mat4 ShadowMVP;
 uniform float Alpha;
+uniform vec3 BaseScale;
 
 void main(void)
 {
     vec3 linear_color = srgb_to_linear(in_color);
-    base_vertex_position = in_position;
+    base_vertex_position = in_position * BaseScale;
     pass_height = U_Height;
     pass_botColor = U_BotColor;
     pass_topColor = U_TopColor;
@@ -73,7 +74,7 @@ void main(void)
     pass_visibility = clamp((MaxDist - DistanceToCamera) / (MaxDist - MinDist), 0.0, 1.0);
 
     pass_position = totalLocalPos.xyz;
-    pass_normal = totalNormal.xyz;
+    pass_normal = normalize(totalNormal.xyz);
 
     vec3 unitNormal = normalize(pass_normal.xyz);
     vec3 unitToLight = normalize(LightPosition);

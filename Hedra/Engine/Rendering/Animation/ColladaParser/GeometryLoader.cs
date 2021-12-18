@@ -42,7 +42,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
             MeshData = GeometryNode["geometry"]["mesh"];
         }
 
-        public ModelData ExtractModelData()
+        public ModelData ExtractModelData(bool FlipNormals)
         {
             var polyNode = MeshData["polylist"] ?? MeshData["triangles"];
             ReadRawData(polyNode);
@@ -59,7 +59,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
             for (var i = 0; i < Vertices.Count; i++)
             {
                 positions.Add(Vertices[i].Position);
-                normalsList.Add(Normals[Vertices[i].NormalIndex]);
+                normalsList.Add((FlipNormals ? -1 : 1) * Normals[Vertices[i].NormalIndex]);
                 colorsList.Add(Colors[Vertices[i].ColorIndex]);
             }
 

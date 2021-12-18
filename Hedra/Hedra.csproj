@@ -4266,6 +4266,9 @@
         <None Update="Modules\Items\Staves\UniqueNobleStaff.json">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Update="Modules\Mobs\Golem.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
     <ItemGroup>
         <None Include="..\project-hedra-assets\Animations\ArcherIdle.dae">
@@ -6988,6 +6991,42 @@
         <Content Include="..\project-hedra-assets\Animations\GnollWarriorIdle.dae">
             <Link>Assets\Chr\Mob\Gnoll\GnollWarriorIdle.dae</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\Golem\GolemBackhandPunch.dae">
+          <Link>Assets\Chr\Mob\Golem\GolemBackhandPunch.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\Golem\GolemGore.dae">
+          <Link>Assets\Chr\Mob\Golem\GolemGore.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\Golem\GolemIdle.dae">
+          <Link>Assets\Chr\Mob\Golem\GolemIdle.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\Golem\GolemOverheadPunch.dae">
+          <Link>Assets\Chr\Mob\Golem\GolemOverheadPunch.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\Golem\GolemPowerPunch.dae">
+          <Link>Assets\Chr\Mob\Golem\GolemPowerPunch.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\Golem\GolemPunchLeft.dae">
+          <Link>Assets\Chr\Mob\Golem\GolemPunchLeft.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\Golem\GolemPunchRight.dae">
+          <Link>Assets\Chr\Mob\Golem\GolemPunchRight.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\Golem\GolemRun.dae">
+          <Link>Assets\Chr\Mob\Golem\GolemRun.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\Golem\GolemRunOpen.dae">
+          <Link>Assets\Chr\Mob\Golem\GolemRunOpen.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
         <Content Include="..\project-hedra-assets\Animations\GorillaWarriorIdle.dae">
             <Link>Assets\Chr\GorillaWarriorIdle.dae</Link>

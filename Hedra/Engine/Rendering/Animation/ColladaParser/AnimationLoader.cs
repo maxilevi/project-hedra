@@ -27,12 +27,18 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
         private readonly XmlNode _animationData;
         private readonly XmlNode _jointHierarchy;
         private readonly string[] _jointIds;
+        public Vector3 _translation;
+        public Vector3 _rotation;
+        public Vector3 _scale;
 
         public AnimationLoader(XmlNode AnimationData, XmlNode JointHierarchy)
         {
             _animationData = AnimationData;
             _jointHierarchy = JointHierarchy;
             _jointIds = JointsLoader.GetJointIds(GetSkeletonNode());
+            _scale = JointsLoader.GetScale(JointHierarchy);
+            _rotation = JointsLoader.GetRotation(JointHierarchy);
+            _translation = JointsLoader.GetTranslation(JointHierarchy);
         }
 
         public AnimationData ExtractAnimation()
@@ -99,8 +105,14 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
                     matrixData[4], matrixData[5], matrixData[6], matrixData[7],
                     matrixData[8], matrixData[9], matrixData[10], matrixData[11],
                     matrixData[12], matrixData[13], matrixData[14], matrixData[15]);
+
                 transform = transform.Transposed();
-                if (root) transform = transform * Correction;
+                if (root)
+                {
+                    transform *= Matrix4x4.CreateFromQuaternion(QuaternionMath.FromEuler(_rotation * Mathf.Radian));
+                    transform *= Correction;
+                    transform *= Matrix4x4.CreateTranslation(_translation);
+                }
 
                 keyFrames[i].AddJointTransform(new JointTransformData(jointName, transform));
             }

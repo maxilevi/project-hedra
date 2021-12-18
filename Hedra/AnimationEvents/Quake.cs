@@ -15,8 +15,9 @@ namespace Hedra.AnimationEvents
 
         public override void Build()
         {
-            var radius = 16 * Parent.Model.Scale.Average();
-            var position = Parent.Position + Parent.Orientation * Parent.Model.Scale * 6f;
+            var scale = Parent.Model.BaseBroadphaseBox.Size;
+            var radius = 2 * scale.Average();
+            var position = Parent.Position + Parent.Orientation * 6f;
 
             World.Particles.VariateUniformly = true;
             World.Particles.GravityEffect = .25f;
@@ -32,11 +33,11 @@ namespace Hedra.AnimationEvents
                                            new Vector3(Utils.Rng.NextFloat() * 2f - 1f, 0,
                                                Utils.Rng.NextFloat() * 2f - 1f) * radius * .5f;
                 World.Particles.Direction = (Utils.Rng.NextFloat() * .5f + .5f) * Vector3.UnitY * 2f;
-                World.Particles.Color = World.GetRegion(position).Colors.DirtColor * .75f;
+                World.Particles.Color = World.GetRegion(position).Colors.StoneColor * .5f;
                 World.Particles.Emit();
             }
 
-            World.HighlightArea(position, World.GetRegion(position).Colors.DirtColor * .75f, radius, 1.5f);
+            World.HighlightArea(position, World.GetRegion(position).Colors.StoneColor * .5f, radius, 1.5f);
 
             var entities = World.Entities;
             foreach (var entity in entities)

@@ -1,27 +1,34 @@
 using System;
+using System.Linq;
+using System.Numerics;
 using System.Xml;
 using Hedra.Game;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Rendering.Animation.ColladaParser
 {
     public class ColladaProvider : IColladaProvider
     {
-        public AnimatedModelData LoadColladaModel(string ColladaFile, bool LoadAllJoints = false)
+        public AnimatedModelData LoadColladaModel(string ColladaFile, LoadOptions Options)
         {
             var node = ParsePath(ColladaFile, true);
             var skinningData = LoadSkinning(node);
             var jointsLoader = new JointsLoader(node["library_visual_scenes"],
-                !LoadAllJoints ? skinningData.JointOrder : null);
+                !Options.LoadAllJoints ? skinningData.JointOrder : null);
             var jointsData = jointsLoader.ExtractBoneData();
 
-            return new AnimatedModelData(LoadGeometry(node, skinningData), jointsData);
+            var modelData = LoadGeometry(node, skinningData, Options.FlipNormals);
+            /* We dont apply the scale here because its applied in the shader */
+            modelData.Transform(Matrix4x4.CreateFromQuaternion(QuaternionMath.FromEuler(jointsLoader.Rotation * Mathf.Radian)));
+            modelData.Transform(Matrix4x4.CreateTranslation(jointsLoader.Translation));
+            return new AnimatedModelData(modelData, jointsData, jointsLoader.Scale, jointsLoader.Rotation, jointsLoader.Translation);
         }
 
         public ModelData LoadModel(string ColladaFile)
         {
             var node = ParsePath(ColladaFile, false);
             var skinningData = LoadSkinning(node);
-            return LoadGeometry(node, skinningData);
+            return LoadGeometry(node, skinningData, false);
         }
 
         public AnimationData LoadColladaAnimation(string ColladaFile)
@@ -51,10 +58,10 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
             return skinLoader.ExtractSkinData();
         }
 
-        private static ModelData LoadGeometry(XmlNode Node, SkinningData SkinningData)
+        private static ModelData LoadGeometry(XmlNode Node, SkinningData SkinningData, bool FlipNormals)
         {
             var geometryLoader = new GeometryLoader(Node["library_geometries"], SkinningData);
-            return geometryLoader.ExtractModelData();
+            return geometryLoader.ExtractModelData(FlipNormals);
         }
 
         private static void AssertCorrectName(XmlDocument Document)

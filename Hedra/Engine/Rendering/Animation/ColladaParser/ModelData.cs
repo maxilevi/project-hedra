@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Hedra.Engine.Rendering.Geometry;
 using Hedra.Framework;
 using Hedra.Rendering;
 
@@ -41,8 +42,8 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
         public string[] JointNames { get; }
         public string Name { get; set; }
 
-        public static ModelData Empty { get; } = new ModelData(new Vector3[0], new Vector3[0], new Vector3[0],
-            new uint[0], new Vector3[0], new Vector3[0], new string[0]);
+        public static ModelData Empty { get; } = new (Array.Empty<Vector3>(), Array.Empty<Vector3>(), Array.Empty<Vector3>(),
+            Array.Empty<uint>(), Array.Empty<Vector3>(), Array.Empty<Vector3>(), Array.Empty<string>());
 
         public uint[] Indices { get; }
 
@@ -51,6 +52,11 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
             for (var i = 0; i < Colors.Length; ++i)
                 if (Colors[i] == Color)
                     Colors[i] = Replacement;
+        }
+
+        public void Transform(Matrix4x4 Transformation)
+        {
+            MeshOperations.Transform(Vertices, Normals, Transformation);
         }
 
         public VertexData ToVertexData()

@@ -7,6 +7,8 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
+using System.Numerics;
+
 namespace Hedra.Engine.Rendering.Animation.ColladaParser
 {
     /// <summary>
@@ -14,13 +16,22 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
     /// </summary>
     public class AnimatedModelData
     {
-        public AnimatedModelData(ModelData Mesh, JointsData Joints)
+        public AnimatedModelData(ModelData Mesh, JointsData Joints, Vector3 Scale, Vector3 Rotation, Vector3 Translation)
         {
             this.Joints = Joints;
             this.Mesh = Mesh;
+            this.Scale = Scale;
+            this.Rotation = Rotation;
+            this.Translation = Translation;
         }
 
         public JointsData Joints { get; }
         public ModelData Mesh { get; }
+        
+        public Vector3 Scale { get; }
+        
+        public Vector3 Rotation { get; }
+        
+        public Vector3 Translation { get; }
     }
 }

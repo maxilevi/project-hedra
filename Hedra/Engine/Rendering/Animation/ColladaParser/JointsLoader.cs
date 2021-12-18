@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Numerics;
 using System.Xml;
+using BulletSharp.SoftBody;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.Rendering.Animation.ColladaParser
@@ -29,13 +30,50 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
         private readonly XmlNode ArmatureData;
         private readonly List<string> BoneOrder;
         private int JointCount;
+        public Vector3 Translation { get; }
+        public Vector3 Rotation { get; }
+        public Vector3 Scale { get; }
 
         public JointsLoader(XmlNode VisualSceneNode, List<string> BoneOrder)
         {
             ArmatureData = VisualSceneNode["visual_scene"].ChildWithAttribute("node", "id", ArmatureName);
             this.BoneOrder = BoneOrder ?? CollectBoneOrder();
+            Translation = GetTranslation(VisualSceneNode);
+            Rotation = GetRotation(VisualSceneNode);
+            Scale = GetScale(VisualSceneNode);
         }
 
+        private static Vector3 GetVector3(string[] data)
+        {
+            return new Vector3(float.Parse(data[0]), float.Parse(data[1]), float.Parse(data[2]));
+        }
+
+        private static XmlNode GetArmatureNode(XmlNode VisualSceneNode)
+        {
+            return VisualSceneNode["visual_scene"].ChildWithAttribute("node", "id", ArmatureName);
+        }
+
+        public static Vector3 GetScale(XmlNode VisualSceneNode)
+        {
+            var armature = GetArmatureNode(VisualSceneNode);
+            return GetVector3(armature["scale"].InnerText.Split(" "));
+        }
+        
+        public static Vector3 GetTranslation(XmlNode VisualSceneNode)
+        {
+            var armature = GetArmatureNode(VisualSceneNode);
+            return GetVector3(armature["translate"].InnerText.Split(" "));
+        }
+
+        public static Vector3 GetRotation(XmlNode VisualSceneNode)
+        {
+            var armature = GetArmatureNode(VisualSceneNode);
+            var x = armature.ChildWithAttribute("rotate", "sid", "rotationX").InnerText.Split(" ");
+            var y = armature.ChildWithAttribute("rotate", "sid", "rotationY").InnerText.Split(" ");
+            var z = armature.ChildWithAttribute("rotate", "sid", "rotationZ").InnerText.Split(" ");
+            return new Vector3(float.Parse(x[3]), float.Parse(y[3]), float.Parse(z[3]));
+        }
+        
         private List<string> CollectBoneOrder()
         {
             var order = new List<string>();
@@ -90,7 +128,13 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
             if (IsRoot && index == -1) throw new ArgumentException("Root bone cannot have an index of -1");
             var matrixData = JointNode["matrix"].InnerText.Split(' ');
             var matrix = Mat4FromString(matrixData).Transposed();
-            if (IsRoot) matrix = matrix * Correction;
+            
+            if (IsRoot)
+            {
+                matrix *= Matrix4x4.CreateFromQuaternion(QuaternionMath.FromEuler(Rotation * Mathf.Radian));
+                matrix *= Correction;
+                matrix *= Matrix4x4.CreateTranslation(Translation);
+            }
             JointCount++;
             return new JointData(index, jointId, matrix);
         }

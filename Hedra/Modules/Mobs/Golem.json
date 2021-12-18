@@ -1,0 +1,66 @@
+{
+  "Name": "Golem",
+  "MaxHealth": 960.0,
+  "AttackDamage": 36.0,
+  "AttackCooldown": 2.0,
+  "Speed": 1.5,
+  "XP": 30.0,
+  "Level": 30,
+  "AIType": "Troll",
+  "Effects": [],
+  "Drops": [],
+  "Model": {
+    "FlipNormals": true,
+    "AlignWithTerrain": false,
+    "Path": "$DataFile$/Assets/Chr/Mob/Golem/GolemIdle.dae",
+    "Scale": 8.0,
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/Golem/GolemIdle.dae",
+        "Speed": 1.0
+      }
+    ],
+    "WalkAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/Golem/GolemRun.dae",
+        "Speed": 1.0
+      }
+    ],
+    "AttackAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/Golem/GolemOverheadPunch.dae",
+        "Speed": 1.5,
+        "OnAnimationProgress": {
+          "Event": "Quake",
+          "Progress": 0.25
+        }
+      },
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/Golem/GolemPowerPunch.dae",
+        "Speed": 1.75,
+        "OnAnimationProgress": {
+          "Event": "Quake",
+          "Progress": 0.5
+        }
+      },
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/Golem/GolemBackhandPunch.dae",
+        "Speed": 1.5,
+        "OnAnimationProgress": {
+          "Event": "Slash",
+          "Progress": 0.5
+        }
+      },
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/Golem/GolemPunchLeft.dae",
+        "Speed": 1.75,
+        "Chance": 0.25
+      },
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/Golem/GolemPunchRight.dae",
+        "Speed": 1.75,
+        "Chance": 0.25
+      }
+    ]
+  }
+}

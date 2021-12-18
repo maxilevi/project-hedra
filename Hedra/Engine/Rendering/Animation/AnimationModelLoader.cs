@@ -25,7 +25,7 @@ namespace Hedra.Engine.Rendering.Animation
     public static class AnimationModelLoader
     {
         private static readonly Dictionary<string, AnimatedModelData> ModelCache =
-            new Dictionary<string, AnimatedModelData>();
+            new ();
 
 
         /**
@@ -41,12 +41,16 @@ namespace Hedra.Engine.Rendering.Animation
         {
             var SkeletonData = EntityData.Joints;
             var HeadJoint = CreateJoints(SkeletonData.HeadJoint);
-            return new AnimatedModel(EntityData.Mesh, HeadJoint, SkeletonData.JointCount);
+            return new AnimatedModel(EntityData.Mesh, HeadJoint, SkeletonData.JointCount, EntityData.Scale);
         }
 
-        public static AnimatedModel LoadEntity(string ModelFile, bool LoadAllJoints = false)
+        public static AnimatedModel LoadEntity(string ModelFile, bool LoadAllJoints = false, bool FlipNormals = false)
         {
-            var animatedModel = LoadEntity(GetEntityData(ModelFile, LoadAllJoints));
+            var animatedModel = LoadEntity(GetEntityData(ModelFile, new LoadOptions
+            {
+                LoadAllJoints = LoadAllJoints,
+                FlipNormals = FlipNormals
+            }));
             animatedModel.CullingBox = AssetManager.LoadHitbox(ModelFile);
             return animatedModel;
         }
@@ -66,7 +70,7 @@ namespace Hedra.Engine.Rendering.Animation
             return Joint;
         }
 
-        private static AnimatedModelData GetEntityData(string ModelFile, bool LoadAllJoints = false)
+        private static AnimatedModelData GetEntityData(string ModelFile, LoadOptions Options)
         {
             AnimatedModelData entityData;
             lock (ModelCache)
@@ -78,7 +82,7 @@ namespace Hedra.Engine.Rendering.Animation
                 else
                 {
                     var fileContents = Encoding.ASCII.GetString(AssetManager.ReadPath(ModelFile));
-                    entityData = ColladaLoader.LoadColladaModel(fileContents, LoadAllJoints);
+                    entityData = ColladaLoader.LoadColladaModel(fileContents, Options);
                     if (entityData.Joints.JointCount > GeneralSettings.MaxJoints)
                         throw new ArgumentOutOfRangeException(
                             $"Max joint count is '{GeneralSettings.MaxJoints}' but model '{ModelFile}' has '{entityData.Joints.JointCount}'");
@@ -100,7 +104,7 @@ namespace Hedra.Engine.Rendering.Animation
         /// <returns>A new AnimatedModel with the colors replaced.</returns>
         public static void Paint(AnimatedModel Model, string Path, Dictionary<Vector3, Vector3> ColorMap)
         {
-            var colorData = GetEntityData(Path).Mesh.Colors.ToArray();
+            var colorData = GetEntityData(Path, LoadOptions.Default).Mesh.Colors.ToArray();
             for (var i = 0; i < colorData.Length; i++)
                 if (ColorMap.ContainsKey(colorData[i]))
                     colorData[i] = ColorMap[colorData[i]];

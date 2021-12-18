@@ -54,6 +54,7 @@ namespace Hedra.Engine.Rendering.Animation
         private StackTrace _trace = new StackTrace();
         private Matrix4x4 _transformationMatrix = Matrix4x4.Identity;
         private VBO<Vector3> _vertices, _normals, _jointIds, _vertexWeights;
+        private Vector3 _baseScale;
 
         static AnimatedModel()
         {
@@ -61,9 +62,10 @@ namespace Hedra.Engine.Rendering.Animation
             NoiseTexture = new Texture3D(noiseValues, width, height, depth);
         }
 
-        public AnimatedModel(ModelData Model, Joint RootJoint, int JointCount)
+        public AnimatedModel(ModelData Model, Joint RootJoint, int JointCount, Vector3 BaseScale)
         {
             Model.AssertTriangulated();
+            _baseScale = BaseScale;
             _baseModelData = Model;
             _addedModels = new List<ModelData>();
             Executer.ExecuteOnMainThread(delegate
@@ -144,7 +146,7 @@ namespace Hedra.Engine.Rendering.Animation
             get
             {
                 if (Scale == _cacheScale) return _scaleCache;
-                _scaleCache = Matrix4x4.CreateScale(Scale);
+                _scaleCache = Matrix4x4.CreateScale(Scale * _baseScale);
                 _cacheScale = Scale;
                 _jointsDirty = true;
                 return _scaleCache;
@@ -351,6 +353,7 @@ namespace Hedra.Engine.Rendering.Animation
             _shader["UseFog"] = ApplyFog ? 1 : 0;
             _shader["Alpha"] = Alpha;
             _shader["Tint"] = Tint + BaseTint;
+            _shader["BaseScale"] = _baseScale;
 
             Data.Bind();
 

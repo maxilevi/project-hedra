@@ -43,7 +43,7 @@ namespace Hedra.AISystem.Behaviours
                 if (ride?.Rider != null) SetTarget(ride.Rider);
             }
 
-            if (!Parent.Model.IsAttacking && Target != null && !InAttackRange(Target, 1.35f)) Follow.Update();
+            if (!Parent.Model.IsAttacking && Target != null && !InAttackRange(Target, 1.3f)) Follow.Update();
             if (Target != null && InAttackRange(Target, 1.35f))
             {
                 FollowTimer.Reset();

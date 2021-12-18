@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Hedra.Core;
@@ -32,7 +33,7 @@ namespace Hedra.Engine.EntitySystem
     /// </summary>
     public sealed class QuadrupedModel : AnimatedUpdatableModel, IMountable, IAudible, IDisposeAnimation
     {
-        private readonly bool _hasAnimationEvent;
+        private readonly bool[] _hasAnimationEvent;
         private readonly float _originalMobSpeed;
         private readonly AreaSound _sound;
         private readonly float[] _walkAnimationSpeed;
@@ -55,12 +56,13 @@ namespace Hedra.Engine.EntitySystem
             IsFlyingModel = Template.IsFlying;
             IsUndead = Template.IsUndead;
             ModelPath = Template.Path;
-            Model = AnimationModelLoader.LoadEntity(Template.Path);
+            Model = AnimationModelLoader.LoadEntity(Template.Path, false, Template.FlipNormals);
             WalkAnimations = new Animation[Template.WalkAnimations.Length];
             IdleAnimations = new Animation[Template.IdleAnimations.Length];
             AttackAnimations = new Animation[Template.AttackAnimations.Length];
             AttackAnimationsEvents = new AttackEvent[Template.AttackAnimations.Length];
             AttackTemplates = Template.AttackAnimations;
+            _hasAnimationEvent = new bool[Template.AttackAnimations.Length];
             _walkAnimationSpeed = new float[WalkAnimations.Length];
             _originalMobSpeed = Parent.Speed;
 
@@ -92,7 +94,7 @@ namespace Hedra.Engine.EntitySystem
                 var k = i;
                 if (Template.AttackAnimations[i].OnAnimationStart != null)
                 {
-                    _hasAnimationEvent = true;
+                    _hasAnimationEvent[i] = true;
                     AttackAnimations[i].OnAnimationStart += delegate
                     {
                         AnimationEventBuilder.Instance.Build(Parent, Template.AttackAnimations[k].OnAnimationStart)
@@ -102,7 +104,7 @@ namespace Hedra.Engine.EntitySystem
 
                 if (Template.AttackAnimations[i].OnAnimationMid != null)
                 {
-                    _hasAnimationEvent = true;
+                    _hasAnimationEvent[i] = true;
                     AttackAnimations[i].OnAnimationMid += delegate
                     {
                         AnimationEventBuilder.Instance.Build(Parent, Template.AttackAnimations[k].OnAnimationMid)
@@ -112,7 +114,7 @@ namespace Hedra.Engine.EntitySystem
 
                 if (Template.AttackAnimations[i].OnAnimationEnd != null)
                 {
-                    _hasAnimationEvent = true;
+                    _hasAnimationEvent[i] = true;
                     AttackAnimations[i].OnAnimationEnd += delegate
                     {
                         AnimationEventBuilder.Instance.Build(Parent, Template.AttackAnimations[k].OnAnimationEnd)
@@ -122,7 +124,7 @@ namespace Hedra.Engine.EntitySystem
 
                 if (Template.AttackAnimations[i].OnAnimationProgress != null)
                 {
-                    _hasAnimationEvent = true;
+                    _hasAnimationEvent[i] = true;
                     AttackAnimations[i].RegisterOnProgressEvent(
                         Template.AttackAnimations[k].OnAnimationProgress.Progress,
                         delegate
@@ -239,8 +241,9 @@ namespace Hedra.Engine.EntitySystem
         {
             if (!CanAttack()) return;
             var selectedAnimation = Animation;
+            var index = Array.IndexOf(AttackAnimations, Animation);
 
-            if (!_hasAnimationEvent || Callback != null)
+            if (!_hasAnimationEvent[index] || Callback != null)
             {
                 void AttackHandler(Animation Sender)
                 {
