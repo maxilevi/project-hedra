@@ -31,9 +31,10 @@ namespace Hedra.Engine.Rendering
 
         public void UpdateText(string Text)
         {
+            var bmp = GUIText.BuildText(Text, _color, _font, out var measurements);
             Executer.ExecuteOnMainThread(() =>
             {
-                TextureId = GUIText.BuildText(Text, _color, _font, out var measurements);
+                TextureId = GUIText.LoadText(bmp);
                 _scale = measurements.ToRelativeSize();
             });
         }

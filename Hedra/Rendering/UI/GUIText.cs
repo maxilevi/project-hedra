@@ -152,9 +152,14 @@ namespace Hedra.Rendering.UI
             return obj;
         }
 
-        public static uint BuildText(string Text, Color Color, Font Font, out Vector2 Measurements)
+        public static BitmapObject BuildText(string Text, Color Color, Font Font, out Vector2 Measurements)
         {
-            return Graphics2D.LoadTexture(BuildBitmap(Text, Color, Font, new TextOptions(), out Measurements));
+            return BuildBitmap(Text, Color, Font, new TextOptions(), out Measurements);
+        }
+
+        public static uint LoadText(BitmapObject Bmp)
+        {
+            return Graphics2D.LoadTexture(Bmp);
         }
 
         public void UpdateText()

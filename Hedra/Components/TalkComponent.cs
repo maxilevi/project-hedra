@@ -258,7 +258,8 @@ namespace Hedra.Components
             {
                 if (passedTime > CharacterThreshold)
                 {
-                    Billboard.UpdateText(TextProvider.Substr(Text, iterator));
+                    var it = iterator;
+                    TaskScheduler.Parallel(() => Billboard.UpdateText(TextProvider.Substr(Text, it)));
                     iterator++;
                     passedTime = 0;
                 }
