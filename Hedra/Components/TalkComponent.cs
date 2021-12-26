@@ -9,9 +9,11 @@
 
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Threading;
 using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Events;
@@ -53,6 +55,7 @@ namespace Hedra.Components
         private IHumanoid _talker;
         private Translation _thought;
         private bool _wasAvailableToTalk;
+        private ConcurrentQueue<Action> _jobQueue; 
 
         static TalkComponent()
         {
@@ -66,6 +69,7 @@ namespace Hedra.Components
 
         public TalkComponent(IHumanoid Parent, Translation LiveTranslation = null) : base(Parent)
         {
+            _jobQueue = new ConcurrentQueue<Action>();
             _lines = new List<Translation>();
             if (LiveTranslation != null) _lines.Add(LiveTranslation);
             _talkingAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorTalk.dae");
@@ -233,6 +237,7 @@ namespace Hedra.Components
         {
             var billboard = (TextBillboard)Args[0];
             var backBoard = (TextureBillboard)Args[1];
+            StartTalkingThread();
             PlayTalkingAnimation();
             var realLines = _lines.SelectMany(GetMany).ToArray();
             for (var i = 0; i < realLines.Length; ++i)
@@ -248,7 +253,7 @@ namespace Hedra.Components
             billboard.Dispose();
         }
 
-        private static IEnumerator SingleLineRoutine(TextBillboard Billboard, string Text)
+        private IEnumerator SingleLineRoutine(TextBillboard Billboard, string Text)
         {
             var strippedText = TextProvider.StripFormat(Text);
             var iterator = 0;
@@ -259,7 +264,7 @@ namespace Hedra.Components
                 if (passedTime > CharacterThreshold)
                 {
                     var it = iterator;
-                    TaskScheduler.Parallel(() => Billboard.UpdateText(TextProvider.Substr(Text, it)));
+                    _jobQueue.Enqueue(() => Billboard.UpdateText(TextProvider.Substr(Text, it)));
                     iterator++;
                     passedTime = 0;
                 }
@@ -267,6 +272,19 @@ namespace Hedra.Components
                 passedTime += Time.DeltaTime;
                 yield return null;
             }
+        }
+
+        private void StartTalkingThread()
+        {
+            TaskScheduler.Parallel(() =>
+            {
+                while (Talking)
+                {
+                    if (_jobQueue.IsEmpty) continue;
+                    _jobQueue.TryDequeue(out var action);
+                    action?.Invoke();
+                }
+            });
         }
 
         public override void Dispose()
