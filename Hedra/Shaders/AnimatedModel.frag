@@ -27,7 +27,7 @@ const float bias = 0.005;
 
 void main(void)
 {
-    if (UseFog && pass_visibility < 0.005 || pass_color.a <= 0)
+    if (UseFog && pass_visibility < 0.005 || pass_color.a <= 0.0)
     {
         discard;
     }
