@@ -95,6 +95,7 @@ def on_mission_start(giver, target):
 
 
 def can_give(position):
-    return len(MissionCore.nearby_structs_designs(position,
-                                                  CottageWithFarmDesign)) > 0 and not MissionCore.is_inside_structure(
-        position, CottageWithFarmDesign)
+    designs_and_positions = MissionCore.nearby_structs_positions_designs(position, CottageWithFarmDesign)
+    return len(designs_and_positions) > 0 \
+        and not MissionCore.is_inside_structure(position, CottageWithFarmDesign)\
+        and any(MissionCore.is_within_distance(position, design_and_position.Two) for design_and_position in designs_and_positions)

@@ -267,6 +267,15 @@ namespace Hedra.User
                     else
                         quest = MissionPool.Random(position);
 
+                    quest.Settings = new MissionDesignSettings
+                    {
+                        Position = position
+                    };
+                    if (!quest.CanGive(position))
+                    {
+                        return false;
+                    }
+                    
                     NPCCreator.SpawnQuestGiver(position, quest, Utils.Rng);
                     Result = "Success";
                     return true;

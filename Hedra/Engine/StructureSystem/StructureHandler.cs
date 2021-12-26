@@ -126,7 +126,7 @@ namespace Hedra.Engine.StructureSystem
                     structs.Add(new Pair<StructureDesign, Vector3>(sample, finalPosition));
             }
 
-            return structs;
+            return structs.OrderBy(S => (Position - S.Two).LengthFast()).ToList();
         }
 
         private static bool ShouldRemove(CollidableStructure Structure)
@@ -250,14 +250,14 @@ namespace Hedra.Engine.StructureSystem
             }
         }
 
-        public CollidableStructure[] Find(Predicate<CollidableStructure> Match)
+        public CollidableStructure[] Find(Predicate<CollidableStructure> Match, Vector3 SortPosition)
         {
             var list = new List<CollidableStructure>();
             var items = StructureItems;
             for (var i = 0; i < items.Length; ++i)
                 if (Match(items[i]))
                     list.Add(items[i]);
-            return list.ToArray();
+            return list.OrderBy(S => (S.Position - SortPosition).LengthFast()).ToArray();
         }
 
         public bool Has(CollidableStructure Structure)

@@ -48,7 +48,7 @@ namespace Hedra.Engine.Scripting
             get
             {
                 if (GameSettings.DebugMode && !GameSettings.TestingMode)
-                    return "../../Scripts/";
+                    return "../../../Scripts/";
                 return $"{AssetManager.AppPath}/Scripts/";
             }
         }

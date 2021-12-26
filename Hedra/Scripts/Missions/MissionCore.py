@@ -20,7 +20,7 @@ def nearby_struct_objects(position, type, max_distance=DEFAULT_MAX_STRUCTURE_SEA
         return isinstance(struct_object.Design, type) and (
                     struct_object.Position - position).Xz().LengthSquared() < max_distance ** 2
 
-    return World.StructureHandler.Find(do_find)
+    return World.StructureHandler.Find(do_find, position)
 
 
 def nearby_structs_positions_designs(position, type, max_distance=DEFAULT_MAX_STRUCTURE_SEARCH_DISTANCE):
