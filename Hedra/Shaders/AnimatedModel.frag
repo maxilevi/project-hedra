@@ -19,7 +19,6 @@ uniform bool UseFog;
 uniform bool UseShadows;
 uniform bool UseNoise;
 uniform vec4 Tint;
-uniform vec4 BaseTint;
 uniform float Alpha;
 uniform bool Outline;
 uniform vec4 OutlineColor;
@@ -28,14 +27,15 @@ const float bias = 0.005;
 
 void main(void)
 {
-    if (UseFog && pass_visibility < 0.005)
+    if (UseFog && pass_visibility < 0.005 || pass_color.a <= 0)
     {
         discard;
     }
     float tex = CalculateNoiseTex(pass_normal, base_vertex_position) * 0.5;
     float ShadowVisibility = UseShadows ? simple_apply_shadows(pass_coords, bias) : 1.0;
-    vec4 new_color = pass_color * (tex + 1.0) * (BaseTint + Tint) * ShadowVisibility;
+    vec4 new_color = pass_color * (tex + 1.0) * Tint * ShadowVisibility;
     new_color = vec4(linear_to_srbg(new_color.xyz), new_color.w);
+    new_color = clamp(new_color, vec4(0), vec4(1));
 
     if (Outline)
     {

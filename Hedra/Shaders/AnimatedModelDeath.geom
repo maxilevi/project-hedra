@@ -42,7 +42,7 @@ void main()
         vec4 addon = vec4(vec3(0.0, 1.0, 0.0) * (abs(faceNormal.y)+.1) * disposeTime * 2.0 + pass_normals[i] * disposeTime * 0.5, 0.0);
         vec4 modelViewSpace = vec4(pass_positions[i].xyz, 1.0);
 
-        pass_color = vec4(pass_colors[i].xyz, 1.0 - disposeTime * .25);
+        pass_color = vec4(pass_colors[i].xyz, 1.0 - disposeTime);
         pass_normal = pass_normals[i];
         pass_position = (viewMatrix * vec4(pass_positions[i], 1.0) + addon).xyz;
         
