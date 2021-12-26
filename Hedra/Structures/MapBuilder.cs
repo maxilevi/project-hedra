@@ -25,9 +25,9 @@ namespace Hedra.Structures
             if (_cache.TryGetValue(Position, out var cachedDesign))
                 return cachedDesign;
 
-            var designAtPosition = World.StructureHandler.StructureItems
-                .FirstOrDefault(C => C.MapPosition == World.ToChunkSpace(Position))?.Design;
-            if (designAtPosition != null) return designAtPosition;
+            //var designAtPosition = World.StructureHandler.StructureItems
+            //    .FirstOrDefault(C => C.MapPosition == World.ToChunkSpace(Position))?.Design;
+            //if (designAtPosition != null) return designAtPosition;
 
             var chunkOffset = World.ToChunkSpace(Position);
             var design = StructureGrid.Sample(chunkOffset, Biome.Structures.Designs);
