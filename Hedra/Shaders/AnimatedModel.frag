@@ -35,7 +35,7 @@ void main(void)
     float ShadowVisibility = UseShadows ? simple_apply_shadows(pass_coords, bias) : 1.0;
     vec4 new_color = pass_color * (tex + 1.0) * Tint * ShadowVisibility;
     new_color = vec4(linear_to_srbg(new_color.xyz), new_color.w);
-    new_color = clamp(new_color, vec4(0), vec4(1));
+    new_color = clamp(new_color, vec4(0.0), vec4(1.0));
 
     if (Outline)
     {
