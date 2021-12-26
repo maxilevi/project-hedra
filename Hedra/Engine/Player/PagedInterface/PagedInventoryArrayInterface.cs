@@ -48,10 +48,10 @@ namespace Hedra.Engine.Player.PagedInterface
             CurrentPageText = new GUIText("00/00", PageSelector.Position, Color.White, FontCache.GetBold(11));
             var footerFont = FontCache.GetBold(14);
             PreviousPageText = new Button(CurrentPageText.Position - Vector2.UnitX * CurrentPageText.Scale.X * 1.25f,
-                Vector2.One, "\u25C0", Color.White, footerFont);
+                Vector2.One, "<", Color.White, footerFont);
             PreviousPageText.Click += (O, E) => PreviousPage();
             NextPageText = new Button(CurrentPageText.Position + Vector2.UnitX * CurrentPageText.Scale.X * 1.25f,
-                Vector2.One, "\u25B6", Color.White, footerFont);
+                Vector2.One, ">", Color.White, footerFont);
             NextPageText.Click += (O, E) => NextPage();
 
             Panel.AddElement(CurrentPageText);
