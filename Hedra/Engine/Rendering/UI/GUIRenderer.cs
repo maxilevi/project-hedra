@@ -156,7 +156,7 @@ namespace Hedra.Engine.Rendering.UI
                 {
                     if (texture == null || !texture.Enabled || texture.Scale == Vector2.Zero) continue;
                     var id = texture.Id;
-                    if (IsValidId(id)) BaseDraw(texture, id);
+                    if (IsValidId(id)) BaseDraw(texture, id, Shader);
                 }
             }
 
@@ -169,33 +169,33 @@ namespace Hedra.Engine.Rendering.UI
             }
         }
 
-        private void BaseDraw(GUITexture Texture, uint Id)
+        private void BaseDraw(GUITexture Texture, uint Id, Shader CustomProgram)
         {
             if (Texture.Scale == Vector2.Zero || !Texture.Enabled) return;
 
             Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.Texture2D, Id);
-            Shader["Texture"] = 0;
+            CustomProgram["Texture"] = 0;
 
             Renderer.ActiveTexture(TextureUnit.Texture1);
             Renderer.BindTexture(TextureTarget.Texture2D, Texture.BackGroundId);
-            Shader["Background"] = 1;
+            CustomProgram["Background"] = 1;
 
             if (Texture.UseMask)
             {
                 Renderer.ActiveTexture(TextureUnit.Texture2);
                 Renderer.BindTexture(TextureTarget.Texture2D, Texture.MaskId);
-                Shader["Mask"] = 2;
+                CustomProgram["Mask"] = 2;
             }
 
-            Shader["Scale"] = Texture.Scale;
-            Shader["Position"] = Texture.AdjustedPosition;
-            Shader["Flipped"] = Texture.IdPointer == null && !Texture.Flipped ? 0 : 1;
-            Shader["Opacity"] = Texture.Opacity;
-            Shader["Grayscale"] = Texture.Grayscale ? 1 : 0;
-            Shader["Tint"] = Texture.Tint;
-            Shader["Rotation"] = Math.Abs(Texture.Angle) < .05f ? Matrix4x4.Identity : Texture.RotationMatrix;
-            Shader["UseMask"] = Texture.UseMask ? 1 : 0;
+            CustomProgram["Scale"] = Texture.Scale;
+            CustomProgram["Position"] = Texture.AdjustedPosition;
+            CustomProgram["Flipped"] = Texture.IdPointer == null && !Texture.Flipped ? 0 : 1;
+            CustomProgram["Opacity"] = Texture.Opacity;
+            CustomProgram["Grayscale"] = Texture.Grayscale ? 1 : 0;
+            CustomProgram["Tint"] = Texture.Tint;
+            CustomProgram["Rotation"] = Math.Abs(Texture.Angle) < .05f ? Matrix4x4.Identity : Texture.RotationMatrix;
+            CustomProgram["UseMask"] = Texture.UseMask ? 1 : 0;
 
             DrawQuad();
             DrawCount++;
@@ -235,7 +235,7 @@ namespace Hedra.Engine.Rendering.UI
             if (IsValidId(id))
             {
                 SetDraw(CustomProgram);
-                BaseDraw(Texture, id);
+                BaseDraw(Texture, id, CustomProgram ?? Shader);
                 UnsetDrawing(CustomProgram);
             }
         }
