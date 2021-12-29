@@ -4269,6 +4269,9 @@
         <None Update="Modules\Mobs\Golem.json">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Update="Modules\NPCs\Vampire.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
     <ItemGroup>
         <None Include="..\project-hedra-assets\Animations\ArcherIdle.dae">
@@ -7075,6 +7078,22 @@
         <Content Include="..\project-hedra-assets\Animations\SkeletonKingIdle.dae">
             <Link>Assets\Chr\SkeletonKingIdle.dae</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\Vampire\VampireIdle0.dae">
+          <Link>Assets\Chr\Mob\Vampire\VampireIdle0.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\Vampire\VampireIdle1.dae">
+          <Link>Assets\Chr\Mob\Vampire\VampireIdle1.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\Vampire\VampireIdle2.dae">
+          <Link>Assets\Chr\Mob\Vampire\VampireIdle2.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\Vampire\VampireIdle3.dae">
+          <Link>Assets\Chr\Mob\Vampire\VampireIdle3.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
         <Content Include="..\project-hedra-assets\Animations\WarriorBattleCry.dae">
             <Link>Assets\Chr\WarriorBattleCry.dae</Link>

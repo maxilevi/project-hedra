@@ -1,0 +1,26 @@
+{
+  "Name": "Vampire",
+  "DisplayName": "Vampire",
+  "Models": [
+    {
+      "Path": "$DataFile$/Assets/Chr/Mob/Vampire/Vampire0Idle.dae",
+      "IsUndead": true,
+      "Scale": 1.0
+    },
+    {
+      "Path": "$DataFile$/Assets/Chr/Mob/Vampire/Vampire1Idle.dae",
+      "IsUndead": true,
+      "Scale": 1.0
+    },
+    {
+      "Path": "$DataFile$/Assets/Chr/Mob/Vampire/Vampire2Idle.dae",
+      "IsUndead": true,
+      "Scale": 1.0
+    },
+    {
+      "Path": "$DataFile$/Assets/Chr/Mob/Vampire/Vampire3Idle.dae",
+      "IsUndead": true,
+      "Scale": 1.0
+    }
+  ]
+}

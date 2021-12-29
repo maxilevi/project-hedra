@@ -479,7 +479,10 @@ namespace Hedra.Engine.Rendering.Animation
                     average += _baseModelData.Vertices[i];
                     count++;
                 }
-
+#if DEBUG
+            if (count == 0)
+                throw new ArgumentException($"Joint {_trace} has no vertices");
+#endif
             average /= count;
             return average;
         }

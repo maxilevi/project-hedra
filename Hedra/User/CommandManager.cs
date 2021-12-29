@@ -522,6 +522,16 @@ namespace Hedra.User
                             });
                         return true;
                     }
+                    
+                    if (Parts[1] == "gnoll")
+                    {
+                        NPCCreator.SpawnBandit(Caster.Position + Caster.Orientation * 32, Caster.Level,
+                            new BanditOptions
+                            {
+                                ModelType = HumanType.Gnoll
+                            });
+                        return true;
+                    }
 
                     if (Parts[1] == "plantling")
                     {
