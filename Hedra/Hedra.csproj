@@ -7071,6 +7071,30 @@
             <Link>Assets\Chr\RogueTigerStrike.dae</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+        <Content Include="..\project-hedra-assets\Animations\SkeletonIdleArcher.dae">
+          <Link>Assets\Chr\Mob\Skeleton\SkeletonIdleArcher.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\SkeletonIdleMage.dae">
+          <Link>Assets\Chr\Mob\Skeleton\SkeletonIdleMage.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\SkeletonIdleOriental.dae">
+          <Link>Assets\Chr\Mob\Skeleton\SkeletonIdleOriental.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\SkeletonIdleRogue1.dae">
+          <Link>Assets\Chr\Mob\Skeleton\SkeletonIdleRogue1.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\SkeletonIdleRogue2.dae">
+          <Link>Assets\Chr\Mob\Skeleton\SkeletonIdleRogue2.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\SkeletonIdleWarrior.dae">
+          <Link>Assets\Chr\Mob\Skeleton\SkeletonIdleWarrior.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
         <Content Include="..\project-hedra-assets\Animations\SkeletonKamikazeIdle.dae">
             <Link>Assets\Chr\SkeletonKamikazeIdle.dae</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

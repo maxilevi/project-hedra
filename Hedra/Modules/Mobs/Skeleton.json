@@ -16,7 +16,15 @@
   ],
   "Model": {
     "AlignWithTerrain": false,
-    "Path": "$DataFile$/Assets/Chr/SkeletonIdle.dae",
+    "Paths": [
+      "$DataFile$/Assets/Chr/SkeletonIdle.dae",
+      "$DataFile$/Assets/Chr/Mob/Skeleton/SkeletonIdleWarrior.dae",
+      "$DataFile$/Assets/Chr/Mob/Skeleton/SkeletonIdleMage.dae",
+      "$DataFile$/Assets/Chr/Mob/Skeleton/SkeletonIdleOriental.dae",
+      "$DataFile$/Assets/Chr/Mob/Skeleton/SkeletonIdleArcher.dae",
+      "$DataFile$/Assets/Chr/Mob/Skeleton/SkeletonIdleRogue1.dae",
+      "$DataFile$/Assets/Chr/Mob/Skeleton/SkeletonIdleRogue2.dae"
+    ],
     "Scale": 0.8,
     "IdleAnimations": [
       {
