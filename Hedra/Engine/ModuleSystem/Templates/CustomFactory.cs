@@ -86,7 +86,15 @@ namespace Hedra.Engine.ModuleSystem.Templates
         public void Load()
         {
             Model.Resolve();
-            AssetManager.LoadHitbox(Model.Path);
+            if (Model.Path != null)
+                AssetManager.LoadHitbox(Model.Path);
+            if (Model.Paths != null)
+            {
+                foreach (var path in Model.Paths)
+                {
+                    AssetManager.LoadHitbox(path);
+                }
+            }
         }
 
         private void AddItemDropPerLevel(IEntity Mob)

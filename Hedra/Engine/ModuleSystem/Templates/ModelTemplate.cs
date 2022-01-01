@@ -1,4 +1,5 @@
 using System;
+using Hedra.Rendering.UI;
 
 namespace Hedra.Engine.ModuleSystem.Templates
 {
@@ -8,6 +9,7 @@ namespace Hedra.Engine.ModuleSystem.Templates
         public bool AlignWithTerrain { get; set; } = true;
         public bool FlipNormals { get; set; }
         public string Path { get; set; }
+        public string[] Paths { get; set; }
         public float Scale { get; set; }
         public bool IsUndead { get; set; }
         public bool IsFlying { get; set; }
@@ -36,6 +38,11 @@ namespace Hedra.Engine.ModuleSystem.Templates
             }
 
             return unusedCount == 0 ? 0 : (1 - used) / unusedCount;
+        }
+
+        public string RandomPath(Random Rng)
+        {
+            return Paths != null ? Paths[Rng.Next(0, Paths.Length)] : Path;
         }
     }
 }

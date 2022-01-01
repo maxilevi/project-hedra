@@ -55,8 +55,8 @@ namespace Hedra.Engine.EntitySystem
             TemplateScale = Vector3.One * Template.Scale;
             IsFlyingModel = Template.IsFlying;
             IsUndead = Template.IsUndead;
-            ModelPath = Template.Path;
-            Model = AnimationModelLoader.LoadEntity(Template.Path, false, Template.FlipNormals);
+            ModelPath = Template.RandomPath(rng);
+            Model = AnimationModelLoader.LoadEntity(ModelPath, false, Template.FlipNormals);
             WalkAnimations = new Animation[Template.WalkAnimations.Length];
             IdleAnimations = new Animation[Template.IdleAnimations.Length];
             AttackAnimations = new Animation[Template.AttackAnimations.Length];
@@ -69,8 +69,8 @@ namespace Hedra.Engine.EntitySystem
             AlignWithTerrain = Template.AlignWithTerrain;
             Model.Scale = Vector3.One * (Template.Scale + Template.Scale * rng.NextFloat() * .3f -
                                          Template.Scale * rng.NextFloat() * .15f);
-            BaseBroadphaseBox = AssetManager.LoadHitbox(Template.Path) * Model.Scale;
-            Dimensions = AssetManager.LoadDimensions(Template.Path) * Model.Scale;
+            BaseBroadphaseBox = AssetManager.LoadHitbox(ModelPath) * Model.Scale;
+            Dimensions = AssetManager.LoadDimensions(ModelPath) * Model.Scale;
 
             for (var i = 0; i < IdleAnimations.Length; i++)
             {
@@ -143,7 +143,7 @@ namespace Hedra.Engine.EntitySystem
                     (AttackEvent)Enum.Parse(typeof(AttackEvent), Template.AttackAnimations[i].AttackEvent);
             }
 
-            Collider = new AnimatedCollider(Template.Path, Model);
+            Collider = new AnimatedCollider(ModelPath, Model);
             Idle();
             var soundType = Parent.MobType == MobType.Horse ? SoundType.HorseRun : SoundType.HumanRun;
             _sound = new AreaSound(soundType, Position, 48f);

@@ -552,7 +552,6 @@ namespace Hedra.Engine.Generation
                 new Vector3(DesiredPosition.X, Physics.HeightAtPosition(DesiredPosition.X, DesiredPosition.Z),
                     DesiredPosition.Z));
             mob.MobId = ++_previousId;
-            mob.Seed = MobSeed;
             mob.Model.TargetRotation = new Vector3(0, new Random(MobSeed).NextFloat() * 360f, 0);
             mob.Position = placeablePosition;
             mob.Model.Position = placeablePosition;

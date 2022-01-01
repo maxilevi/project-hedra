@@ -55,6 +55,7 @@ namespace Hedra.Engine.ModuleSystem
         public SkilledAnimableEntity Build(string Type, int Seed)
         {
             var mob = new SkilledAnimableEntity();
+            mob.Seed = Seed;
 
             lock (_lock)
             {
