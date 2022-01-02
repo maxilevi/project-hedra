@@ -21,6 +21,7 @@ namespace Hedra.Engine.ItemSystem
         EatSitting,
         Accuracy,
         Sorcery,
+        Aggressiveness,
         Price
     }
 }

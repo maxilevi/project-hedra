@@ -1,0 +1,17 @@
+{
+  "Name": "CircletGreen",
+  "DisplayName": "Circlet Green",
+  "EquipmentType": "Helmet",
+  "Tier": "Rare",
+  "Description": "Used by royalty",
+  "Attributes": [
+    {
+      "Name": "Sorcery",
+      "Value": 3.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Helmets/CircletGreen.dae"
+  }
+}

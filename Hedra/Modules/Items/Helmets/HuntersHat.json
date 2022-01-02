@@ -1,0 +1,17 @@
+{
+  "Name": "HuntersHat",
+  "DisplayName": "Hunting Hat",
+  "EquipmentType": "Helmet",
+  "Tier": "Rare",
+  "Description": "Perfect for hunting",
+  "Attributes": [
+    {
+      "Name": "Aggressiveness",
+      "Value": 5.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Helmets/HuntersHat.dae"
+  }
+}

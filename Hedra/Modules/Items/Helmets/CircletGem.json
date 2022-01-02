@@ -1,0 +1,17 @@
+{
+  "Name": "CircletGem",
+  "DisplayName": "Circlet Gem",
+  "EquipmentType": "Helmet",
+  "Tier": "Rare",
+  "Description": "Used by royalty",
+  "Attributes": [
+    {
+      "Name": "Defense",
+      "Value": 2.5
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Helmets/CircletGem.dae"
+  }
+}

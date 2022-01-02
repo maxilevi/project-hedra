@@ -4272,6 +4272,39 @@
         <None Update="Modules\NPCs\Vampire.json">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Update="Modules\Items\Helmets\Glasses.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Modules\Items\Helmets\Bandana.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Modules\Items\Helmets\Blindfold.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Modules\Items\Helmets\CircletGem.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Modules\Items\Helmets\CircletGreen.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Modules\Items\Helmets\CircletHorns.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Modules\Items\Helmets\EyePatch.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Modules\Items\Helmets\HuntersHat.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Modules\Items\Helmets\MilitaryHelmet.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Modules\Items\Helmets\PowerCirclet.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Modules\Items\Helmets\Sunhat.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
     <ItemGroup>
         <None Include="..\project-hedra-assets\Animations\ArcherIdle.dae">
@@ -8267,6 +8300,26 @@
             <Link>Assets\Items\Foods\WaterBowl.ply</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+        <Content Include="..\project-hedra-assets\Models\Blend\Helmet\Bandana.dae">
+          <Link>Assets\Items\Helmets\Bandana.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Models\Blend\Helmet\Blindfold.dae">
+          <Link>Assets\Items\Helmets\Blindfold.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Models\Blend\Helmet\CircletGem.dae">
+          <Link>Assets\Items\Helmets\CircletGem.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Models\Blend\Helmet\CircletGreen.dae">
+          <Link>Assets\Items\Helmets\CircletGreen.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Models\Blend\Helmet\CircletHorns.dae">
+          <Link>Assets\Items\Helmets\CircletHorns.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
         <Content Include="..\project-hedra-assets\Models\Blend\Helmet\CommonArcherHat.dae">
             <Link>Assets\Items\Helmets\CommonArcherHat.dae</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -8275,6 +8328,18 @@
             <Link>Assets\Items\Helmets\CommonWizardHat.dae</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+        <Content Include="..\project-hedra-assets\Models\Blend\Helmet\EyePatch.dae">
+          <Link>Assets\Items\Helmets\EyePatch.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Models\Blend\Helmet\Glasses.dae">
+          <Link>Assets\Items\Helmets\Glasses.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Models\Blend\Helmet\HuntersHat.dae">
+          <Link>Assets\Items\Helmets\HuntersHat.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
         <Content Include="..\project-hedra-assets\Models\Blend\Helmet\LegendaryNobleArcherHat.dae">
             <Link>Assets\Items\Helmets\LegendaryNobleArcherHat.dae</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -8282,6 +8347,14 @@
         <Content Include="..\project-hedra-assets\Models\Blend\Helmet\LegendaryNobleWarriorHat.dae">
             <Link>Assets\Items\Helmets\LegendaryNobleWarriorHat.dae</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Models\Blend\Helmet\MilitaryHelmet.dae">
+          <Link>Assets\Items\Helmets\MilitaryHelmet.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Models\Blend\Helmet\PowerCirclet.dae">
+          <Link>Assets\Items\Helmets\PowerCirclet.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
         <Content Include="..\project-hedra-assets\Models\Blend\Helmet\RareArcherHat.dae">
             <Link>Assets\Items\Helmets\RareArcherHat.dae</Link>
@@ -8298,6 +8371,10 @@
         <Content Include="..\project-hedra-assets\Models\Blend\Helmet\RareWizardHat.dae">
             <Link>Assets\Items\Helmets\RareWizardHat.dae</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Models\Blend\Helmet\Sunhat.dae">
+          <Link>Assets\Items\Helmets\Sunhat.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
         <Content Include="..\project-hedra-assets\Models\Blend\Misc\AnimalFood.ply">
             <Link>Assets\Items\Misc\AnimalFood.ply</Link>

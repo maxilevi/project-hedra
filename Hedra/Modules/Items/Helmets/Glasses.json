@@ -1,0 +1,17 @@
+{
+  "Name": "GlassesHat",
+  "DisplayName": "Glasses",
+  "EquipmentType": "Helmet",
+  "Tier": "Unique",
+  "Description": "Improves your sight!",
+  "Attributes": [
+    {
+      "Name": "Accuracy",
+      "Value": 5
+    },
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Helmets/Glasses.dae"
+  }
+}

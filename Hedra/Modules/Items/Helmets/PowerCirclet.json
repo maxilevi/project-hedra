@@ -1,0 +1,17 @@
+{
+  "Name": "PowerCirclet",
+  "DisplayName": "Power Circlet",
+  "EquipmentType": "Helmet",
+  "Tier": "Rare",
+  "Description": "Used by royalty",
+  "Attributes": [
+    {
+      "Name": "Sorcery",
+      "Value": 5.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Helmets/PowerCirclet.dae"
+  }
+}

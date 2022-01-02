@@ -1,0 +1,17 @@
+{
+  "Name": "Sunhat",
+  "DisplayName": "Sunhat",
+  "EquipmentType": "Helmet",
+  "Tier": "Rare",
+  "Description": "Perfect for exploring",
+  "Attributes": [
+    {
+      "Name": "Speed",
+      "Value": 1.075
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Helmets/Sunhat.dae"
+  }
+}

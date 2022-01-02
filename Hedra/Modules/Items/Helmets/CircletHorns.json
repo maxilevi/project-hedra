@@ -1,0 +1,17 @@
+{
+  "Name": "CircletHorns",
+  "DisplayName": "Circlet Horns",
+  "EquipmentType": "Helmet",
+  "Tier": "Rare",
+  "Description": "Used by royalty",
+  "Attributes": [
+    {
+      "Name": "Aggressiveness",
+      "Value": 3.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Helmets/CircletHorns.dae"
+  }
+}

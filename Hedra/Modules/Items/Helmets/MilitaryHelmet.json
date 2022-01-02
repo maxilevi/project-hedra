@@ -1,0 +1,17 @@
+{
+  "Name": "MilitaryHelmet",
+  "DisplayName": "Military Helmet",
+  "EquipmentType": "Helmet",
+  "Tier": "Rare",
+  "Description": "Stolen from the barracks",
+  "Attributes": [
+    {
+      "Name": "Defense",
+      "Value": 5.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Helmets/MilitaryHelmet.dae"
+  }
+}
