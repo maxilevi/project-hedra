@@ -57,6 +57,9 @@ namespace Hedra.EntitySystem
         float DodgeCost { get; set; }
         float RandomFactor { get; set; }
         float AttackResistance { get; set; }
+        float Sorcery { get; set; }
+        float Accuracy { get; set; }
+        float Aggressiveness { get; set; }
         int Gold { get; set; }
         float DamageEquation { get; }
         float UnRandomizedDamageEquation { get; }

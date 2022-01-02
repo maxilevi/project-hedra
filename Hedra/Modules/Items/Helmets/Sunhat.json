@@ -6,7 +6,7 @@
   "Description": "Perfect for exploring",
   "Attributes": [
     {
-      "Name": "Speed",
+      "Name": "MovementSpeed",
       "Value": 1.075
     }
   ],

@@ -81,6 +81,9 @@ namespace HedraTests.Player
         public float AttackCooldown { get; set; }
         public float RandomFactor { get; set; }
         public float AttackResistance { get; set; }
+        public float Sorcery { get; set; }
+        public float Accuracy { get; set; }
+        public float Aggressiveness { get; set; }
         public float ManaRegenFactor { get; set; }
         public int Gold { get; set; }
         public void SetGold(int Amount, bool Silent = false)

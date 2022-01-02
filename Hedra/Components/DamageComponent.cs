@@ -37,7 +37,7 @@ namespace Hedra.Components
 
     public class DamageComponent : SingularComponent<DamageComponent, IEntity>
     {
-        public const float DefaultMissChance = 0.05f;
+        public const float DefaultMissChance = 0.075f;
         private static readonly Vector4 DamageTint = new Vector4(2.0f, 0.1f, 0.1f, 1);
         private static readonly Vector4 DamageTint2 = Vector4.One;
         private readonly List<BaseBillboard> _damageLabels;
@@ -134,7 +134,9 @@ namespace Hedra.Components
             Amount *= Parent.IsUndead ? Damager?.Attributes.UndeadDamageModifier ?? 1 : 1;
             if (Parent.IsDead || Damager != null && _ignoreList.Any(I => I.Invoke(Damager))) return;
 
-            var shouldMiss = Parent is LocalPlayer && Utils.Rng.NextFloat() < MissChance;
+            var accuracy = Parent is IHumanoid damagerHuman ? damagerHuman.Accuracy : 0;
+            var scaledMissChance = MissChance * (1 - accuracy / 100f);
+            var shouldMiss = Utils.Rng.NextFloat() < scaledMissChance;
             _attackedTimer = 6;
             HasBeenAttacked = true;
             var isImmune = Immune; // || (Parent.IsStuck && !Parent.Model.Pause) || !AICanReach;

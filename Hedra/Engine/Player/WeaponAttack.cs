@@ -92,7 +92,7 @@ namespace Hedra.Engine.Player
                 var charge = _chargeTime / (BaseChargeTime + ExtraChargeTime);
                 var options = new AttackOptions
                 {
-                    Charge = charge,
+                    Charge = Math.Min(charge * (1 + User.Sorcery / 100f), 1f),
                     DamageModifier = AttackOptions.Default.DamageModifier * charge + .15f
                 };
                 if (_type == AttackType.Primary)

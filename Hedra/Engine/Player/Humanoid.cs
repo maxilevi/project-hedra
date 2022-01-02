@@ -87,9 +87,7 @@ namespace Hedra.Engine.Player
         {
             get
             {
-                return GetEquipmentItems().Select(E =>
-                        E.HasAttribute(CommonAttributes.Defense) ? E.GetAttribute<float>(CommonAttributes.Defense) : 0)
-                    .Sum();
+                return GetEquipmentItems().Select(E => E.GetAttribute(CommonAttributes.Defense, 0)).Sum();
             }
         }
 
@@ -133,6 +131,12 @@ namespace Hedra.Engine.Player
         public float BonusHealth { get; set; }
         public float DodgeCost { get; set; }
         public float RandomFactor { get; set; }
+        
+        public float Accuracy { get; set; }
+        
+        public float Sorcery { get; set; }
+        
+        public float Aggressiveness { get; set; }
 
         public virtual bool CanInteract { get; set; } = true;
         public virtual float FacingDirection => throw new NotImplementedException();
@@ -385,7 +389,7 @@ namespace Hedra.Engine.Player
 
         public float WeaponModifier(Item Weapon)
         {
-            return Weapon?.GetAttribute<float>(CommonAttributes.Damage) ?? 0.0f;
+            return Weapon?.GetAttribute<float>(CommonAttributes.Damage) ?? 0.0f + Aggressiveness;
         }
 
         public float AttackSpeed
@@ -566,19 +570,37 @@ namespace Hedra.Engine.Player
         private void ApplyArmorBonuses(Item Item, Func<bool> While)
         {
             if (Item == null) return;
-            var bonusArmor = Item.HasAttribute(CommonAttributes.Defense)
-                ? Item.GetAttribute<float>(CommonAttributes.Defense)
-                : 0;
-            var bonusSpeed = Item.HasAttribute(CommonAttributes.MovementSpeed)
-                ? Item.GetAttribute<float>(CommonAttributes.MovementSpeed)
-                : 1;
-            AddBonusSpeedWhile(BaseSpeed * (bonusSpeed - 1f), While);
+            var bonusArmor = Item.GetAttribute(CommonAttributes.Defense, 0);
+            var bonusSpeed = Item.GetAttribute(CommonAttributes.MovementSpeed, 1);
+            var bonusSorcery = Item.GetAttribute(CommonAttributes.Sorcery, 0);
+            var bonusAccuracy = Item.GetAttribute(CommonAttributes.Accuracy, 0);
+            var bonusAggressiveness = Item.GetAttribute(CommonAttributes.Aggressiveness, 0);
+            
             AddBonusArmorWhile(bonusArmor, While);
+            AddBonusSpeedWhile(BaseSpeed * (bonusSpeed - 1f), While);
+            AddBonusSorceryWhile(bonusSorcery, While);
+            AddBonusAccuracyWhile(bonusAccuracy, While);
+            AddBonusAggressivenessWhile(bonusAggressiveness, While);
         }
 
-        public void AddBonusArmorWhile(float BonusArmor, Func<bool> Condition)
+        private void AddBonusArmorWhile(float BonusArmor, Func<bool> Condition)
         {
             ComponentManager.AddComponentWhile(new ArmorBonusComponent(this, BonusArmor), Condition);
+        }
+        
+        private void AddBonusSorceryWhile(float BonusSorcery, Func<bool> Condition)
+        {
+            ComponentManager.AddComponentWhile(new SorceryBonusComponent(this, BonusSorcery), Condition);
+        }
+        
+        private void AddBonusAccuracyWhile(float BonusAccuracy, Func<bool> Condition)
+        {
+            ComponentManager.AddComponentWhile(new AccuracyBonusComponent(this, BonusAccuracy), Condition);
+        }
+        
+        private void AddBonusAggressivenessWhile(float BonusAggressiveness, Func<bool> Condition)
+        {
+            ComponentManager.AddComponentWhile(new AggressivenessBonusComponent(this, BonusAggressiveness), Condition);
         }
 
         private Item[] GetEquipmentItems()

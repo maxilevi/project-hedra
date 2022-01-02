@@ -58,17 +58,20 @@ namespace Hedra.Engine.Player
 
                 if (Ring != null)
                 {
-                    var effectType =
-                        (EffectType)Enum.Parse(typeof(EffectType), _ring.GetAttribute<string>("EffectType"));
-                    if (effectType != EffectType.None) _owner.ApplyEffectWhile(effectType, () => Ring == value);
-
-                    _owner.AddBonusSpeedWhile(Ring.GetAttribute<float>("MovementSpeed"), () => Ring == value);
-                    _owner.AddBonusAttackSpeedWhile(_owner.AttackSpeed * Ring.GetAttribute<float>("AttackSpeed"),
-                        () => Ring == value);
-                    _owner.AddBonusHealthWhile(_owner.MaxHealth * Ring.GetAttribute<float>("Health"),
-                        () => Ring == value);
+                    AddBonuses(Ring, () => Ring == value);
                 }
             }
+        }
+
+        private void AddBonuses(Item Equipment, Func<bool> While)
+        {
+            var effectType =
+                (EffectType)Enum.Parse(typeof(EffectType), Equipment.GetAttribute<string>(CommonAttributes.EffectType));
+            if (effectType != EffectType.None)
+                _owner.ApplyEffectWhile(effectType, While);
+            _owner.AddBonusSpeedWhile(Equipment.GetAttribute<float>(CommonAttributes.MovementSpeed), While);
+            _owner.AddBonusAttackSpeedWhile(_owner.AttackSpeed * Equipment.GetAttribute<float>(CommonAttributes.AttackSpeed), While);
+            _owner.AddBonusHealthWhile(_owner.MaxHealth * Equipment.GetAttribute<float>(CommonAttributes.Health), While);
         }
 
         public Item[] MainEquipment
