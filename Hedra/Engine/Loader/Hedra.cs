@@ -161,6 +161,7 @@ namespace Hedra.Engine.Loader
                 Window.ClearContext();
                 Window.IsContextControlDisabled = false;
                 _splashScreen.Disable();
+                Window.WindowBorder = WindowBorder.Resizable;
             });
             return true;
         }
