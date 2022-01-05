@@ -1,0 +1,29 @@
+{
+  "Name": "PriestDusk",
+  "MaxHealth": 780.0,
+  "AttackDamage": 28.0,
+  "AttackCooldown": 1.5,
+  "Speed": 1.35,
+  "XP": 24.0,
+  "Level": 25,
+  "Effects": [],
+  "Drops": [],
+  "Model": {
+    "AlignWithTerrain": false,
+    "Path": "$DataFile$/Assets/Chr/PriestDuskIdle.dae",
+    "Scale": 1.0,
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/WarriorIdle.dae",
+        "Speed": 1.0
+      }
+    ],
+    "WalkAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/WarriorWalk.dae",
+        "Speed": 1.0
+      }
+    ],
+    "AttackAnimations": []
+  }
+}
