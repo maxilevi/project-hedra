@@ -18,7 +18,7 @@ namespace Hedra.Engine.StructureSystem
         /* Check the excel */
         public const int GhostTownPortalChance = 4;
         public const int GazeboChance = 4;
-        public const int TravellingMerchantChance = 4;
+        public const int TravellingMerchantChance = 1;
         public const int ShroomPortalChance = 3;
         public const int FishingPostChance = 15;
         public const int GraveyardChance = 7;
