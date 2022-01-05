@@ -7088,6 +7088,18 @@
             <Link>Assets\Chr\NecromancerSiphonBlood.dae</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+        <Content Include="..\project-hedra-assets\Animations\PriestAzathulIdle.dae">
+          <Link>Assets\Chr\Mob\NPCPriest\PriestAzathulIdle.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\PriestDawnIdle.dae">
+          <Link>Assets\Chr\Mob\NPCPriest\PriestDawnIdle.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\PriestDuskIdle.dae">
+          <Link>Assets\Chr\Mob\NPCPriest\PriestDuskIdle.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
         <Content Include="..\project-hedra-assets\Animations\RogueCutthroat.dae">
             <Link>Assets\Chr\RogueCutthroat.dae</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
