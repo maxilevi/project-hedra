@@ -26,105 +26,131 @@
   "Shore": [
     {
       "Type": "Turtle",
-      "Chance": 50.0,
+      "Distribution": "High",
       "MinGroup": 2,
       "MaxGroup": 5
     },
     {
       "Type": "Crab",
-      "Chance": 50.0,
+      "Distribution": "High",
       "MinGroup": 2,
       "MaxGroup": 9
+    },
+    {
+      "Type": "Ooze",
+      "Distribution": "Low",
+      "MinGroup": 1,
+      "MaxGroup": 2
     }
   ],
   "Plains": [
     {
       "Type": "Alpaca",
-      "Chance": 6.0,
+      "Distribution": "Low",
       "MinGroup": 2,
       "MaxGroup": 5
     },
     {
+      "Type": "Ostrich",
+      "Distribution": "Low",
+      "MinGroup": 2,
+      "MaxGroup": 5
+    },
+    {
+      "Type": "Pig",
+      "Distribution": "LowMedium",
+      "MinGroup": 1,
+      "MaxGroup": 3
+    },
+    {
       "Type": "Bison",
-      "Chance": 8.5,
+      "Distribution": "Low",
       "MinGroup": 1,
       "MaxGroup": 4
     },
     {
       "Type": "Cow",
-      "Chance": 12.5,
+      "Distribution": "Medium",
       "MinGroup": 1,
       "MaxGroup": 3
     },
     {
       "Type": "Sheep",
-      "Chance": 17.5,
+      "Distribution": "Medium",
       "MinGroup": 3,
       "MaxGroup": 5
     },
     {
       "Type": "Horse",
-      "Chance": 12.5,
+      "Distribution": "LowMedium",
       "MinGroup": 2,
       "MaxGroup": 4
     },
     {
       "Type": "Boar",
-      "Chance": 8.0,
+      "Distribution": "LowMedium",
       "MinGroup": 1,
       "MaxGroup": 3
     },
     {
       "Type": "Wasp",
-      "Chance": 10.0,
+      "Distribution": "LowMedium",
       "MinGroup": 2,
       "MaxGroup": 5
     },
     {
       "Type": "Ooze",
-      "Chance": 10,
+      "Distribution": "LowMedium",
       "MinGroup": 1,
       "MaxGroup": 2
     },
     {
       "Type": "MeleeBeetle",
-      "Chance": 15,
+      "Distribution": "Medium",
       "MinGroup": 1,
       "MaxGroup": 3
+    },
+    {
+      "Type": "Rat",
+      "Distribution": "VeryLow"
     }
   ],
   "Mountain": [
     {
       "Type": "Alpaca",
-      "Chance": 40.0,
+      "Distribution": "High",
       "MinGroup": 1,
       "MaxGroup": 5
     },
     {
       "Type": "Bison",
-      "Chance": 10.0,
+      "Distribution": "Medium",
       "MinGroup": 1,
       "MaxGroup": 4
     },
     {
       "Type": "Crow",
-      "Chance": 6.0,
+      "Distribution": "Low",
       "MinGroup": 1,
       "MaxGroup": 4
     },
     {
       "Type": "Goat",
-      "Chance": 25.0,
+      "Distribution": "MediumHigh",
       "MinGroup": 1,
       "MaxGroup": 3
     },
     {
       "Type": "Roach",
-      "Chance": 4.0
+      "Distribution": "VeryLow"
+    },
+    {
+      "Type": "Rat",
+      "Distribution": "VeryLow"
     },
     {
       "Type": "RangedBeetle",
-      "Chance": 15.0,
+      "Distribution": "Medium",
       "MinGroup": 1,
       "MaxGroup": 2
     }
@@ -132,63 +158,67 @@
   "Forest": [
     {
       "Type": "Squirrel",
-      "Chance": 10.0,
+      "Distribution": "Medium",
       "MinGroup": 1,
       "MaxGroup": 3
     },
     {
       "Type": "Raccoon",
-      "Chance": 12.5,
+      "Distribution": "Medium",
       "MinGroup": 1,
       "MaxGroup": 3
     },
     {
       "Type": "Deer",
-      "Chance": 10.0,
+      "Distribution": "Medium",
       "MinGroup": 1,
       "MaxGroup": 3
     },
     {
       "Type": "Bear",
-      "Chance": 4.0
+      "Distribution": "Low"
     },
     {
       "Type": "Wolf",
-      "Chance": 12.5,
+      "Distribution": "Medium",
       "MinGroup": 1,
       "MaxGroup": 3
     },
     {
       "Type": "Fox",
-      "Chance": 10.0,
+      "Distribution": "Medium",
       "MinGroup": 1,
       "MaxGroup": 2
     },
     {
       "Type": "Snake",
-      "Chance": 4.0
+      "Distribution": "Low"
     },
     {
       "Type": "RangedBeetle",
-      "Chance": 7.5,
+      "Distribution": "LowMedium",
       "MinGroup": 1,
       "MaxGroup": 2
     },
     {
       "Type": "MeleeBeetle",
-      "Chance": 12,
+      "Distribution": "Medium",
       "MinGroup": 1,
       "MaxGroup": 2
     },
     {
       "Type": "Bee",
-      "Chance": 10.0,
+      "Distribution": "Medium",
       "MinGroup": 2,
       "MaxGroup": 7
     },
     {
       "Type": "Spider",
-      "Chance": 7.5
+      "Distribution": "LowMedium"
+    },
+    {
+      "Type": "Rat",
+      "Distribution": "VeryLow"
     }
   ]
 }

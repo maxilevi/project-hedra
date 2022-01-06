@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Hedra.Engine.IO;
 using Hedra.Engine.ModuleSystem.Templates;
 using Newtonsoft.Json;
@@ -15,37 +16,51 @@ namespace Hedra.Engine.ModuleSystem
             bool result;
             var settings = FromJSON(data, out result);
             if (!result) throw new ArgumentException($"Could not load {Type}Spawner.json");
-            AssertSettings(settings, Type);
+            ResolveSettings(settings, Type);
             return settings;
         }
-
-        private static void AssertSettings(SpawnerSettings Settings, string Name)
+        
+        private static SpawnTemplate[] ResolveTemplate(SpawnTemplate[] Templates, string FileName)
         {
-            void Assert(ISpawnTemplate[] Templates, string TypeName)
+            if (Templates == null) return null;
+            var total = 0f;
+            for (var i = 0; i < Templates.Length; ++i)
             {
-                if (Templates == null) return;
-                var sum = 0f;
-                var set = new HashSet<string>();
-                for (var i = 0; i < Templates.Length; ++i)
-                {
-                    sum += Templates[i].Chance;
-                    if (!set.Contains(Templates[i].Type))
-                        set.Add(Templates[i].Type);
-                    else
-                        Log.WriteWarning(
-                            $"'/Modules/Spawners/{Name}.json' has duplicate entry for '{Templates[i].Type}'");
-                }
-
-                if (Math.Abs(sum - 100f) > 0.005f)
-                    Log.WriteWarning(
-                        $"Entries in '/Modules/Spawners/{Name}.json' for type '{TypeName}' sum up to '{sum}' but should be 100");
+                Templates[i].Chance = (int)ParseDistribution(Templates[i].Distribution);
+                total += Templates[i].Chance;
             }
 
-            Assert(Settings.Forest, "Forest");
-            Assert(Settings.Plains, "Plains");
-            Assert(Settings.Shore, "Shore");
-            Assert(Settings.Mountain, "Mountain");
-            Assert(Settings.MiniBosses, "MiniBosses");
+            for (var i = 0; i < Templates.Length; ++i)
+            {
+                Templates[i].Chance = Templates[i].Chance / total * 100;
+                Log.WriteLine($"{Templates[i].Type} resolved to chance {Templates[i].Chance}");
+            }
+            return Templates;
+        }
+
+        private static Distribution ParseDistribution(string DistributionStr)
+        {
+            return DistributionStr switch
+            {
+                "VeryLow" => Distribution.VeryLow,
+                "Low" => Distribution.Low,
+                "LowMedium" => Distribution.LowMedium,
+                "Medium" => Distribution.Medium,
+                "MediumHigh" => Distribution.MediumHigh,
+                "High" => Distribution.High,
+                "VeryHigh" => Distribution.VeryHigh,
+                _ => throw new ArgumentOutOfRangeException($"Invalid distribution type '{DistributionStr}'")
+            };
+        }
+        
+        private static void ResolveSettings(SpawnerSettings Settings, string FileName)
+        {
+
+            Settings.Forest = ResolveTemplate(Settings.Forest, FileName);
+            Settings.Plains = ResolveTemplate(Settings.Plains, FileName);
+            Settings.Shore = ResolveTemplate(Settings.Shore, FileName);
+            Settings.Mountain = ResolveTemplate(Settings.Mountain, FileName);
+            //Settings.MiniBosses = ResolveTemplate(Settings.MiniBosses, FileName);
         }
 
         private static SpawnerSettings FromJSON(string Data, out bool Success)
@@ -63,6 +78,17 @@ namespace Hedra.Engine.ModuleSystem
             }
 
             return null;
+        }
+
+        private enum Distribution
+        {
+            VeryLow = 3,
+            Low = 7,
+            LowMedium = 14,
+            Medium = 25,
+            MediumHigh = 38,
+            High = 50,
+            VeryHigh = 75
         }
     }
 }
