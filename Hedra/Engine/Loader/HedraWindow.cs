@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Numerics;
 using System.Threading;
 using Hedra.Engine.Events;
+using Hedra.Engine.IO;
 using Hedra.Engine.Windowing;
 using Silk.NET.GLFW;
 using Silk.NET.Input;
@@ -139,7 +140,18 @@ namespace Hedra.Engine.Loader
             set
             {
                 _fullscreen = value;
-                Window.WindowState = _fullscreen ? WindowState.Fullscreen : WindowState.Normal;
+                unsafe
+                {
+                    var glfw = GlfwProvider.GLFW.Value;
+                    var monitor = glfw.GetPrimaryMonitor();
+                    var mode = glfw.GetVideoMode(monitor);
+                    glfw.SetWindowMonitor
+                    (
+                        (WindowHandle*)Window.Handle,
+                        _fullscreen ? monitor : null, 0, 0, mode->Width, mode->Height,
+                        mode->RefreshRate
+                    );
+                }
             }
         }
 

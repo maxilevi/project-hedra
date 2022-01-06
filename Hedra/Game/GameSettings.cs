@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Text;
 using Hedra.Engine;
 using Hedra.Engine.Game;
+using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.Native;
 using Hedra.Engine.Rendering;
@@ -135,11 +136,7 @@ namespace Hedra.Game
         public static bool Fullscreen
         {
             get => Program.GameWindow.Fullscreen;
-            set
-            {
-                Program.GameWindow.Fullscreen = value;
-                if (!value) Program.GameWindow.WindowState = WindowState.Maximized;
-            }
+            set => Program.GameWindow.Fullscreen = value;
         }
 
         [Setting]
