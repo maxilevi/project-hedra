@@ -197,21 +197,15 @@ namespace Hedra.Engine.EntitySystem
                 templates.AddRange(region.Mob.SpawnerSettings.Shore);
 
             if (templates.Count == 0) return null;
-
-            /* Normalize the ranges */
-            for (var i = 0; i < templates.Count; ++i)
-                templates[i].Chance /= count;
-
-            /* We shuffle and then sort to distort relative order, we could also use an unstable sort like heapsort */
+            
             templates.Shuffle(_rng);
-            templates.Sort((T1, T2) => T1.Chance < T2.Chance ? -1 : T1.Chance > T2.Chance ? 1 : 0);
-
-            var rng = _rng.NextFloat() * 100f;
+            var rng = _rng.NextFloat() * 100f * count;
+            var accum = 0f;
             for (var i = 0; i < templates.Count; ++i)
             {
-                if (rng < templates[i].Chance)
+                if (rng < accum + templates[i].Chance)
                     return templates[i];
-                rng -= templates[i].Chance;
+                accum += templates[i].Chance;
             }
 
             return null;
