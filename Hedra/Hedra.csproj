@@ -7064,6 +7064,10 @@
           <Link>Assets\Chr\Mob\Golem\GolemRunOpen.dae</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+        <Content Include="..\project-hedra-assets\Animations\Golem\GolemWalk.dae">
+          <Link>Assets\Chr\Mob\Golem\GolemWalk.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
         <Content Include="..\project-hedra-assets\Animations\GorillaWarriorIdle.dae">
             <Link>Assets\Chr\GorillaWarriorIdle.dae</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -3,7 +3,7 @@
   "MaxHealth": 680.0,
   "AttackDamage": 13.0,
   "AttackCooldown": 1.5,
-  "Speed": 1.35,
+  "Speed": 1.3,
   "XP": 18.0,
   "Level": 25,
   "AIType": "Troll",
@@ -12,7 +12,7 @@
   "Model": {
     "AlignWithTerrain": false,
     "Path": "$DataFile$/Assets/Chr/Mob/StoneGolem/StoneGolem0Idle.dae",
-    "Scale": 3.0,
+    "Scale": 5.0,
     "IdleAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/Mob/StoneGolem/StoneGolem0Idle.dae",
@@ -21,14 +21,28 @@
     ],
     "WalkAnimations": [
       {
-        "Path": "$DataFile$/Assets/Chr/Mob/StoneGolem/StoneGolem0Idle.dae",
-        "Speed": 0.75
+        "Path": "$DataFile$/Assets/Chr/Mob/Golem/GolemRunOpen.dae",
+        "Speed": 1.25
       }
     ],
     "AttackAnimations": [
       {
-        "Path": "$DataFile$/Assets/Chr/Mob/StoneGolem/StoneGolem0Idle.dae",
-        "Speed": 0.75
+        "Path": "$DataFile$/Assets/Chr/Mob/Golem/GolemPowerPunch.dae",
+        "Speed": 1.75,
+        "OnAnimationProgress": {
+          "Event": "Quake",
+          "Progress": 0.5
+        }
+      },
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/Golem/GolemPunchLeft.dae",
+        "Speed": 1.75,
+        "Chance": 0.375
+      },
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/Golem/GolemPunchRight.dae",
+        "Speed": 1.75,
+        "Chance": 0.375
       }
     ]
   }
