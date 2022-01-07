@@ -2,24 +2,28 @@
   "MiniBosses": [
     {
       "Type": "Ent",
-      "Chance": 15.0
+      "Distribution": "Medium"
+    },
+    {
+      "Type": "StoneGolem",
+      "Distribution": "Medium"
     },
     {
       "Type": "Werewolf",
-      "Chance": 10.0
+      "Distribution": "LowMedium"
     },
     {
       "Type": "Gorilla",
-      "Chance": 5.0
+      "Distribution": "Low"
     },
     {
       "Type": "Explorers",
-      "Chance": 50.0,
+      "Distribution": "High",
       "IsCustom": true
     },
     {
       "Type": "AbandonedExplorerWithQuest",
-      "Chance": 20.0,
+      "Distribution": "MediumHigh",
       "IsCustom": true
     }
   ],

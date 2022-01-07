@@ -32,6 +32,7 @@ namespace Hedra.Engine.EntitySystem
     public class MobSpawner
     {
         public static int MobCap = int.MaxValue;
+        private const float MiniBossSpawnChance = 1 / 10f;
         private readonly IPlayer _player;
         private readonly Random _rng;
         private readonly AutoResetEvent _waitHandle;
@@ -56,7 +57,7 @@ namespace Hedra.Engine.EntitySystem
 
             if (!Enabled || GameSettings.Paused || GameManager.InStartMenu) return;
 
-            if (World.Entities.Count >= MobCap || !(Utils.Rng.NextFloat() <= SpawnChance)) return;
+            if (World.Entities.Count >= MobCap || !(_rng.NextFloat() <= SpawnChance)) return;
             var desiredPosition = PlacementPosition();
             var underBlock = World.GetHighestBlockAt((int)desiredPosition.X, (int)desiredPosition.Z);
             if (underBlock.Type == BlockType.Air || underBlock.Type == BlockType.Water ||
@@ -77,18 +78,18 @@ namespace Hedra.Engine.EntitySystem
                 var template = SelectMobTemplate(newPosition);
                 if (template == null) return;
 
-                var count = Utils.Rng.Next(template.MinGroup, template.MaxGroup + 1);
+                var count = _rng.Next(template.MinGroup, template.MaxGroup + 1);
 
                 void DoSpawn()
                 {
                     for (var i = 0; i < count; i++)
                     {
-                        var offset = new Vector3(Utils.Rng.NextFloat() * 8f - 4f, 0, Utils.Rng.NextFloat() * 8f - 4f) *
+                        var offset = new Vector3(_rng.NextFloat() * 8f - 4f, 0, _rng.NextFloat() * 8f - 4f) *
                                      Chunk.BlockSize;
                         var newNearPosition = new Vector3(newPosition.X + offset.X,
                             Physics.HeightAtPosition(newPosition + offset),
                             newPosition.Z + offset.Z);
-                        var mob = World.SpawnMob(template.Type, newNearPosition, Utils.Rng);
+                        var mob = World.SpawnMob(template.Type, newNearPosition, _rng);
                         mob.Removable = true;
 
                         // Log.WriteLine($"Spawned '{template.Type}' at '{newNearPosition}', '{((World.GetChunkAt(newPosition)?.Landscape.FullyGenerated ?? false) ? "EXISTS" : "NOT EXISTS")}'", LogType.WorldBuilding);
@@ -104,7 +105,7 @@ namespace Hedra.Engine.EntitySystem
             {
                 void DoSpawnMiniBoss()
                 {
-                    SelectAndSpawnMiniBoss(desiredPosition, Utils.Rng);
+                    SelectAndSpawnMiniBoss(desiredPosition, _rng);
                 }
 
                 if (GameSettings.TestingMode) DoSpawnMiniBoss();
@@ -112,44 +113,26 @@ namespace Hedra.Engine.EntitySystem
             }
         }
 
-        private static void SelectAndSpawnMiniBoss(Vector3 DesiredPosition, Random Rng)
+        private void SelectAndSpawnMiniBoss(Vector3 DesiredPosition, Random Rng)
         {
             var region = World.BiomePool.GetRegion(DesiredPosition);
             var templates = region.Mob.SpawnerSettings.MiniBosses;
-            var rng = Rng.NextFloat();
-            var sum = Math.Abs(templates.Sum(T => T.Chance) - 100f);
-            if (sum > 0.01f)
-                throw new ArgumentOutOfRangeException(
-                    $"MiniBoss templates need to add to 100.0 but only add up to {sum}");
 
-            var template = default(MiniBossTemplate);
-            var accum = 0f;
-            templates.Shuffle(Rng);
-            for (var i = 0; i < templates.Length; ++i)
-            {
-                var chance = templates[i].Chance / 100f;
-                if (rng < chance + accum)
-                {
-                    template = templates[i];
-                    break;
-                }
-
-                accum += chance;
-            }
+            var template = SelectWeightedTemplate(templates);
 
             if (template == default(MiniBossTemplate))
                 throw new ArgumentOutOfRangeException("Failed to select a mini boss template");
-            SpawnMiniBoss(template, DesiredPosition, Utils.Rng);
+            SpawnMiniBoss(template, DesiredPosition, _rng);
         }
 
-        private static void SpawnMiniBoss(MiniBossTemplate Template, Vector3 Position, Random Rng)
+        private void SpawnMiniBoss(MiniBossTemplate Template, Vector3 Position, Random Rng)
         {
             var dict = new Dictionary<string, Action>
             {
-                { "Explorers", () => TravellingExplorers.Build(Position, Utils.Rng) },
+                { "Explorers", () => TravellingExplorers.Build(Position, _rng) },
                 {
                     "AbandonedExplorerWithQuest",
-                    () => TravellingExplorers.BuildAbandonedExplorerWithQuest(Position, Utils.Rng)
+                    () => TravellingExplorers.BuildAbandonedExplorerWithQuest(Position, _rng)
                 }
             };
             if (Template.IsCustom)
@@ -164,11 +147,10 @@ namespace Hedra.Engine.EntitySystem
             }
         }
 
-        private static bool ShouldSpawnMob(Vector3 NewPosition)
+        private bool ShouldSpawnMob(Vector3 NewPosition)
         {
             var region = World.BiomePool.GetRegion(NewPosition);
-            return Utils.Rng.Next(0, 15) != 1 || region.Mob.SpawnerSettings.MiniBosses == null ||
-                   region.Mob.SpawnerSettings.MiniBosses.Length == 0;
+            return region.Mob.SpawnerSettings.MiniBosses == null || region.Mob.SpawnerSettings.MiniBosses.Length == 0 || _rng.NextFloat() > MiniBossSpawnChance;
         }
 
         private static bool IsNearWater(Vector3 Position)
@@ -196,19 +178,28 @@ namespace Hedra.Engine.EntitySystem
             if (shore && region.Mob.SpawnerSettings.Shore != null)
                 templates.AddRange(region.Mob.SpawnerSettings.Shore);
 
-            if (templates.Count == 0) return null;
-            
-            templates.Shuffle(_rng);
-            var rng = _rng.NextFloat() * 100f * count;
+            return SelectWeightedTemplate(templates);
+        }
+
+        private T SelectWeightedTemplate<T>(IList<T> templates) where T : ISpawnTemplate
+        {
+            var rng = _rng.NextFloat() * 100f;
+            var template = default(T);
             var accum = 0f;
+            templates.Shuffle(_rng);
             for (var i = 0; i < templates.Count; ++i)
             {
-                if (rng < accum + templates[i].Chance)
-                    return templates[i];
-                accum += templates[i].Chance;
+                var chance = templates[i].Chance;
+                if (rng < chance + accum)
+                {
+                    template = templates[i];
+                    break;
+                }
+
+                accum += chance;
             }
 
-            return null;
+            return template;
         }
 
         private bool Conflicts(Vector3 Position)
@@ -242,10 +233,10 @@ namespace Hedra.Engine.EntitySystem
         private Vector3 PlacementPosition()
         {
             return new Vector3(
-                       Utils.Rng.NextFloat() * GameSettings.ChunkLoaderRadius * Chunk.Width -
+                       _rng.NextFloat() * GameSettings.ChunkLoaderRadius * Chunk.Width -
                        GameSettings.ChunkLoaderRadius * Chunk.Width * .5f,
                        0,
-                       Utils.Rng.NextFloat() * GameSettings.ChunkLoaderRadius * Chunk.Width -
+                       _rng.NextFloat() * GameSettings.ChunkLoaderRadius * Chunk.Width -
                        GameSettings.ChunkLoaderRadius * Chunk.Width * .5f)
                    + _player.Position.Xz().ToVector3();
         }
@@ -278,6 +269,7 @@ namespace Hedra.Engine.EntitySystem
         SkeletonKamikaze,
         SkeletonKing,
         Skeleton,
+        Golem,
         TotalCount,
         None,
         Unknown

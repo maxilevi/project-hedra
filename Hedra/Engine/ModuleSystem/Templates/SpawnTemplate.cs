@@ -11,7 +11,8 @@ namespace Hedra.Engine.ModuleSystem.Templates
 
     public interface ISpawnTemplate
     {
-        string Type { get; set; }
+        string Type { get; }
         float Chance { get; set; }
+        string Distribution { get; }
     }
 }

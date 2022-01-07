@@ -20,7 +20,7 @@ namespace Hedra.Engine.ModuleSystem
             return settings;
         }
         
-        private static SpawnTemplate[] ResolveTemplate(SpawnTemplate[] Templates, string FileName)
+        private static T[] ResolveTemplate<T>(T[] Templates, string FileName) where T : ISpawnTemplate
         {
             if (Templates == null) return null;
             var total = 0f;
@@ -60,7 +60,7 @@ namespace Hedra.Engine.ModuleSystem
             Settings.Plains = ResolveTemplate(Settings.Plains, FileName);
             Settings.Shore = ResolveTemplate(Settings.Shore, FileName);
             Settings.Mountain = ResolveTemplate(Settings.Mountain, FileName);
-            //Settings.MiniBosses = ResolveTemplate(Settings.MiniBosses, FileName);
+            Settings.MiniBosses = ResolveTemplate(Settings.MiniBosses, FileName);
         }
 
         private static SpawnerSettings FromJSON(string Data, out bool Success)
