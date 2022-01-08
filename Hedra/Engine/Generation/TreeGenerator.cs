@@ -26,7 +26,7 @@ namespace Hedra.Engine.Generation
         public TreeGenerator(Random Rng)
         {
             _spaceFrequency = Rng.NextFloat() * 0.003f + 0.001f;
-            _forestFrequency = Rng.NextFloat() * 0.005f + 0.00025f;
+            _forestFrequency = Rng.NextFloat() * 0.004f + 0.00025f;
         }
         
         private readonly Vector3[] _previousTrees = new Vector3[8];

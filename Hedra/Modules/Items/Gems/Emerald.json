@@ -1,0 +1,21 @@
+{
+  "Name": "Emerald",
+  "DisplayName": "Emerald",
+  "Tier": "Misc",
+  "Description": "Shiny!",
+  "Attributes": [
+    {
+      "Name": "Amount",
+      "Value": 1
+    },
+    {
+      "Name": "Price",
+      "Value": 80.0,
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 4.0,
+    "Path": "$DataFile$/Items/Gems/Emerald.ply"
+  }
+}

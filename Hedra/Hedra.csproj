@@ -4305,6 +4305,9 @@
         <None Update="Modules\Items\Helmets\Sunhat.json">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Update="Modules\Items\Gems\Emerald.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
     <ItemGroup>
         <None Include="..\project-hedra-assets\Animations\ArcherIdle.dae">
@@ -8315,6 +8318,10 @@
         <Content Include="..\project-hedra-assets\Models\Blend\Foods\WaterBowl.ply">
             <Link>Assets\Items\Foods\WaterBowl.ply</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Models\Blend\Gems\Emerald.ply">
+          <Link>Assets\Items\Gems\Emerald.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
         <Content Include="..\project-hedra-assets\Models\Blend\Helmet\Bandana.dae">
           <Link>Assets\Items\Helmets\Bandana.dae</Link>
