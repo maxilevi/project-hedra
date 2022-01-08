@@ -72,7 +72,7 @@ namespace Hedra.Engine.StructureSystem
         
         private static bool IsSmall(Vector2 Position, RandomDistribution Distribution, out int Seed)
         {
-            if ((int)Math.Abs(Position.X % 11) == 4 && Math.Abs((int)Position.Y % 13) == 6)
+            if ((int)Math.Abs(Position.X % 11) == 4 && Math.Abs((int)Position.Y % 7) == 6)
             {
                 Seed = GetSeed(Position);
                 Distribution.Seed = Seed;

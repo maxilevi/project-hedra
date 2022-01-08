@@ -293,6 +293,12 @@ namespace Hedra.User
                     Caster.AttackSpeed = float.Parse(Parts[1]);
                     return true;
                 }
+                
+                if (Parts[0] == "terraintype")
+                {
+                    Result = MobSpawner.GetTerrainType(Caster.Position).ToString();
+                    return true;
+                }
 
                 if (Parts[0] == "dmg")
                 {

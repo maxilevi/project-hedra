@@ -17,6 +17,13 @@ namespace Hedra.Engine.StructureSystem.Overworld
 {
     public class GiantTreeDesign : CompletableStructureDesign<GiantTree>
     {
+        private static readonly MobType[] AllowedMobTypes = new[]
+        {
+            MobType.GiantBeetle,
+            MobType.GorillaWarrior,
+            MobType.Troll,
+            MobType.Golem
+        };
         public override int StructureChance => StructureGrid.GiantTreeChance;
         public override int PlateauRadius { get; } = 700;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.BossIcon);
@@ -59,8 +66,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
             var chestOffset = Vector3.UnitZ * 10f + Vector3.UnitX * -80f;
             var chestPosition = Vector3.Transform(chestOffset, TransMatrix);
-            var treeBoss = BossGenerator.Generate(
-                new[] { MobType.GiantBeetle, MobType.GorillaWarrior, MobType.Troll },
+            var treeBoss = BossGenerator.Generate(AllowedMobTypes,
                 Vector3.Transform(chestOffset - Vector3.UnitZ * 50, TransMatrix),
                 Rng);
             ((GiantTree)Structure.WorldObject).Boss = treeBoss;

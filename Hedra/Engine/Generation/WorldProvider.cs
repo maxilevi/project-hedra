@@ -115,7 +115,7 @@ namespace Hedra.Engine.Generation
         {
             Seed = MenuSeed;
             BiomePool = new BiomePool(_type = WorldType.Overworld);
-            TreeGenerator = new TreeGenerator();
+            TreeGenerator = new TreeGenerator(new Random(Seed));
             WorldBuilding = new WorldBuilding.WorldBuilding();
             StructureHandler = new StructureHandler();
             EnvironmentGenerator = new EnvironmentGenerator();
@@ -270,7 +270,7 @@ namespace Hedra.Engine.Generation
 
             lock (TreeGenerator)
             {
-                TreeGenerator = new TreeGenerator();
+                TreeGenerator = new TreeGenerator(rng);
             }
 
             lock (SearcheableChunks)

@@ -21,6 +21,14 @@ namespace Hedra.Engine.Generation
     /// </summary>
     public class TreeGenerator
     {
+        private readonly float _forestFrequency;
+        private readonly float _spaceFrequency;
+        public TreeGenerator(Random Rng)
+        {
+            _spaceFrequency = Rng.NextFloat() * 0.003f + 0.001f;
+            _forestFrequency = Rng.NextFloat() * 0.005f + 0.00025f;
+        }
+        
         private readonly Vector3[] _previousTrees = new Vector3[8];
 
         public PlacementObject CanGenerateTree(Vector3 Position, Region BiomeRegion)
@@ -100,14 +108,14 @@ namespace Hedra.Engine.Generation
             underChunk.StaticBuffer.AddInstance(instance);
         }
 
-        public float SpaceNoise(float X, float Z)
+        private float SpaceNoise(float X, float Z)
         {
-            return World.GetNoise(X * .004f, (Z + 100) * .004f) * 40f;
+            return World.GetNoise(X * _spaceFrequency, (Z + 100) * _spaceFrequency) * 40f;
         }
 
-        private static float PlacementNoise(Vector3 Position)
+        public float PlacementNoise(Vector3 Position)
         {
-            return World.GetNoise((Position.X + 743) * .01f, (Position.Z + 14352300) * .01f);
+            return World.GetNoise((Position.X + 743) * _forestFrequency, (Position.Z + 14352300) * _forestFrequency);
         }
     }
 

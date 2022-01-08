@@ -33,6 +33,7 @@ namespace Hedra.Engine.EntitySystem
     {
         public static int MobCap = int.MaxValue;
         private const float MiniBossSpawnChance = 1 / 10f;
+        private const int MountainMinHeight = 80;
         private readonly IPlayer _player;
         private readonly Random _rng;
         private readonly AutoResetEvent _waitHandle;
@@ -161,12 +162,12 @@ namespace Hedra.Engine.EntitySystem
         protected virtual SpawnTemplate SelectMobTemplate(Vector3 NewPosition)
         {
             var region = World.BiomePool.GetRegion(NewPosition);
-            var height = NewPosition.Y / Chunk.BlockSize;
-            var mountain = height > 96;
-            var shore = height >= BiomePool.SeaLevel - 1 && height < 24 || IsNearWater(NewPosition);
-            var forest = !shore && World.TreeGenerator.SpaceNoise(NewPosition.X, NewPosition.Z) > 0;
-            var plains = !forest && !shore && !mountain;
 
+            var terrain = GetTerrainType(NewPosition);
+            var plains = (terrain & SpawnTerrainType.Plains) != 0;
+            var forest = (terrain & SpawnTerrainType.Forest) != 0;
+            var mountain = (terrain & SpawnTerrainType.Mountains) != 0;
+            var shore = (terrain & SpawnTerrainType.Shore) != 0;
             var count = (plains ? 1 : 0) + (forest ? 1 : 0) + (shore ? 1 : 0) + (mountain ? 1 : 0);
             var templates = new List<SpawnTemplate>();
             if (forest && region.Mob.SpawnerSettings.Forest != null)
@@ -179,6 +180,26 @@ namespace Hedra.Engine.EntitySystem
                 templates.AddRange(region.Mob.SpawnerSettings.Shore);
 
             return SelectWeightedTemplate(templates);
+        }
+
+        public static SpawnTerrainType GetTerrainType(Vector3 NewPosition)
+        {
+            var height = NewPosition.Y / Chunk.BlockSize;
+            var mountain = height > MountainMinHeight;
+            var shore = height >= BiomePool.SeaLevel - 1 && height < 20 || IsNearWater(NewPosition);
+            var forest = !shore && World.TreeGenerator.PlacementNoise(NewPosition) > 0;
+            var plains = !forest && !shore && !mountain;
+
+            var result = SpawnTerrainType.NoTerrain;
+            if (plains)
+                result |= SpawnTerrainType.Plains;
+            if (mountain)
+                result |= SpawnTerrainType.Mountains;
+            if (forest)
+                result |= SpawnTerrainType.Forest;
+            if (shore)
+                result |= SpawnTerrainType.Shore;
+            return result;
         }
 
         private T SelectWeightedTemplate<T>(IList<T> templates) where T : ISpawnTemplate
@@ -273,5 +294,15 @@ namespace Hedra.Engine.EntitySystem
         TotalCount,
         None,
         Unknown
+    }
+
+    [Flags]
+    public enum SpawnTerrainType
+    {
+        NoTerrain = 0,
+        Plains = 1,
+        Mountains = 2,
+        Forest = 4,
+        Shore = 8
     }
 }

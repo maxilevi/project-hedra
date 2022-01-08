@@ -12,7 +12,7 @@ namespace HedraTests.Player;
 
 public class SpawnerSettingsTest
 {
-    private static readonly string[] _exceptions =
+    private static readonly string[] _overworldExceptions =
     {
         "RangedBeetle",
         "Ghost",
@@ -20,7 +20,12 @@ public class SpawnerSettingsTest
         "Skeleton",
         "SkeletonKamikaze",
         "Lich",
+        "GiantBeetle",
+        "Golem",
+        "Troll",
+        "SkeletonKing",
         "GorillaWarrior",
+        "Pug"
     };
 
     [Test]
@@ -36,7 +41,7 @@ public class SpawnerSettingsTest
             .Concat(template.Plains.Select(S => S.Type))
             .Concat(template.Shore.Select(S => S.Type))
             .Concat(template.MiniBosses.Select(S => S.Type))
-            .Concat(_exceptions).ToArray();
+            .Concat(_overworldExceptions).ToArray();
         
         
         for (var i = 0; i < templates.Length; ++i)

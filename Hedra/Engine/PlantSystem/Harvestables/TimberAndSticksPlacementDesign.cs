@@ -36,7 +36,7 @@ namespace Hedra.Engine.PlantSystem
         public override bool ShouldPlace(Vector3 Position, Chunk UnderChunk)
         {
             return base.ShouldPlace(Position, UnderChunk)
-                   && World.TreeGenerator.SpaceNoise(Position.X, Position.Z) > 0;
+                   && World.TreeGenerator.PlacementNoise(Position) > 0;
         }
     }
 }

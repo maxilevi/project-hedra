@@ -45,6 +45,10 @@
       "Distribution": "Low",
       "MinGroup": 1,
       "MaxGroup": 2
+    },
+    {
+      "Type": "MeleeBeetle",
+      "Distribution": "Low"
     }
   ],
   "Plains": [
@@ -69,8 +73,8 @@
     {
       "Type": "Bison",
       "Distribution": "Low",
-      "MinGroup": 1,
-      "MaxGroup": 4
+      "MinGroup": 2,
+      "MaxGroup": 5
     },
     {
       "Type": "Cow",
@@ -104,7 +108,7 @@
     },
     {
       "Type": "Ooze",
-      "Distribution": "LowMedium",
+      "Distribution": "Low",
       "MinGroup": 1,
       "MaxGroup": 2
     },

@@ -62,6 +62,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public Vector4 GetColor(ref GridCell Cell, RegionColor RegionColor)
         {
+            //return (World.TreeGenerator.PlacementNoise(new Vector3(Cell.P[0].X + _offsetX, 0, Cell.P[0].Z + _offsetZ)) < 0) ? new Vector4(1, 0, 0, 1) : new Vector4(0, 0, 1, 1);
             var position = Cell.P[0] / _blockSize;
             int x = (int)position.X, y = (int)position.Y, z = (int)position.Z;
             var color = Vector4.Zero;
