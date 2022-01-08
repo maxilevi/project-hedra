@@ -8,11 +8,14 @@ namespace Hedra.EntitySystem
         protected ApplyEffectComponent(IEntity Entity, int Chance, float Damage, float Duration) : base(Entity)
         {
             Parent.AfterDamaging += Apply;
+            this.Chance = Chance;
+            this.Damage = Damage;
+            this.Duration = Duration;
         }
 
-        public int Chance { protected get; set; }
-        public float Damage { protected get; set; }
-        public float Duration { protected get; set; }
+        protected int Chance { get; }
+        protected float Damage { get; }
+        protected float Duration { get; }
 
         public override void Update()
         {

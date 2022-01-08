@@ -2,7 +2,7 @@
   "Name": "Emerald",
   "DisplayName": "Emerald",
   "Tier": "Misc",
-  "Description": "Shiny!",
+  "Description": "Pricey!",
   "Attributes": [
     {
       "Name": "Amount",
@@ -15,7 +15,7 @@
     }
   ],
   "Model": {
-    "Scale": 4.0,
+    "Scale": 3.0,
     "Path": "$DataFile$/Items/Gems/Emerald.ply"
   }
 }

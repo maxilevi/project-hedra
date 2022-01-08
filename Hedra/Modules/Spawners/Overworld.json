@@ -2,7 +2,7 @@
   "MiniBosses": [
     {
       "Type": "Ent",
-      "Distribution": "Medium"
+      "Distribution": "LowMedium"
     },
     {
       "Type": "StoneGolem",
@@ -14,7 +14,7 @@
     },
     {
       "Type": "Gorilla",
-      "Distribution": "Low"
+      "Distribution": "LowMedium"
     },
     {
       "Type": "Explorers",
