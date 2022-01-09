@@ -32,7 +32,7 @@ namespace AssetBuilder
                 builder.AppendLine(fileText);
                 builder.AppendLine("<end>");
             }
-            File.WriteAllBytes(Output, Encoding.ASCII.GetBytes(builder.ToString()));
+            File.WriteAllBytes(Output, this.Zip(builder.ToString()));
         }
 
         private void BinaryBuild(Dictionary<string, object> Input, string Output)
@@ -75,7 +75,7 @@ namespace AssetBuilder
                     bw.Write(contents);
                 }
 
-                var data = ms.ToArray();
+                var data = ZipBytes(ms.ToArray());
                 Console.WriteLine($"Opening file {Output}");
                 using (var fs = new FileStream(Output, FileMode.Create, FileAccess.Write))
                 {

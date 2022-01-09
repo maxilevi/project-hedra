@@ -63,7 +63,7 @@ namespace Hedra.Engine.Management
 
         public void ReloadShaderSources()
         {
-            ShaderCode = Encoding.ASCII.GetString(File.ReadAllBytes(AppPath + ShaderResource));
+            ShaderCode = ZipManager.UnZip(File.ReadAllBytes(AppPath + ShaderResource));
         }
 
         public void GrabShaders()
@@ -312,23 +312,23 @@ namespace Hedra.Engine.Management
         private void DecompileAssets()
         {
             if (_filesDecompressed) return;
-/*
+
             _uniqueId = Guid.NewGuid().ToString();
             TryCleanupTemp(TemporalFolder = $"{AppData}/Temp/");
 
-            var soundBytes = File.ReadAllBytes(AppPath + SoundResource);
-            var assetBytes = File.ReadAllBytes(AppPath + AssetsResource);
+            var soundBytes = ZipManager.UnZipBytes(File.ReadAllBytes(AppPath + SoundResource));
+            var zipBytes = ZipManager.UnZipBytes(File.ReadAllBytes(AppPath + AssetsResource));
 
-            File.WriteAllBytes(GetResourceName(AssetsResource), assetBytes);
+            File.WriteAllBytes(GetResourceName(AssetsResource), zipBytes);
             File.WriteAllBytes(GetResourceName(SoundResource), soundBytes);
-*/
+
             _registeredHandlers = new List<ResourceHandler>();
             _filesDecompressed = true;
         }
 
         private string GetResourceName(string Resource)
         {
-            return $"{AppPath}/{Resource}"; //$"{TemporalFolder}{Path.GetFileNameWithoutExtension(Resource)}-{_uniqueId}";
+            return $"{TemporalFolder}{Path.GetFileNameWithoutExtension(Resource)}-{_uniqueId}";
         }
 
         private void TryCleanupTemp(string Temp)
