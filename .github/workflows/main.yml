@@ -32,8 +32,14 @@ jobs:
       shell: bash
       run: sudo ./build-deps-linux.sh
 
-    - name: Build and Test solution
+    - name: Build solution
+      run: dotnet build -c Release "Project Hedra.sln"
+
+    - name: Test solution
       run: dotnet test -c Release "Project Hedra.sln"
+
+    - name: sas
+      run: ls Hedra/bin/
 
     - uses: actions/upload-artifact@v1
       with:
