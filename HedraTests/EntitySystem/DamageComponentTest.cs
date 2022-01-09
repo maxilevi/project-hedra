@@ -161,6 +161,8 @@ namespace HedraTests.EntitySystem
             _damageComponent.Damage(10, null, out var xp, true, false);
             Time.Set(.5f);
             _damageComponent.Update();
+            Time.Set(.75f);
+            _damageComponent.Update();
             Assert.AreNotEqual(Vector4.Zero, _entity.Model.Tint);
         }
 
