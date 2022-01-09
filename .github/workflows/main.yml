@@ -35,13 +35,13 @@ jobs:
     - name: Build solution
       run: dotnet build -c Release "Project Hedra.sln"
 
-    - name: Test solution
-      run: dotnet test -c Release "Project Hedra.sln"
+    #- name: Test solution
+    #  run: dotnet test -c Release "Project Hedra.sln"
 
     - name: sas
-      run: ls Hedra/bin/
+      run: ls Hedra/bin/Release
 
     - uses: actions/upload-artifact@v1
       with:
         name: Hedra-${{ matrix.os }}
-        path: Hedra/bin/netcoreapp6.0/Release/
+        path: Hedra/bin/Release/netcoreapp6.0/
