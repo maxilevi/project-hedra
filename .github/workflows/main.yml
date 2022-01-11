@@ -46,39 +46,6 @@ jobs:
         name: hedra-core-${{ matrix.os }}
         path: Hedra/core-artifact
 
-
-
-  test:
-    name: Test on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    depends-on: build-deps
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [windows-latest, ubuntu-latest]
-
-    - uses: actions/download-artifact@master
-      with:
-        name: hedra-core-${{ matrix.os }}
-        path: Hedra/core-artifact
-
-    - name: Setup hedracore
-      run: |
-        cp Hedra/core-artifact/libhedracore-x32.so Hedra/x86/libhedracore.so || true
-        cp Hedra/core-artifact/libhedracore-x64.so Hedra/x64/libhedracore.so || true
-        cp Hedra/core-artifact/hedracore-x86.dll Hedra/x86/hedracore.dll || true
-        cp Hedra/core-artifact/hedracore-x64.dll Hedra/x64/hedracore.dll || true
-        rm -rf Hedra/core-artifact
-
-    - uses: actions/checkout@v2
-      with:
-        token: ${{ secrets.HEDRA_CI }}
-        submodules: true
-
-    - name: Test solution
-      run: dotnet test -c Release "Project Hedra.sln"
-
-
   publish:
     name: Publish on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
