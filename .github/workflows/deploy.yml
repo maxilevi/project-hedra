@@ -55,6 +55,7 @@ jobs:
       run: |
         dotnet --info
         dotnet publish Hedra/Hedra.csproj -c Release -r linux-x64 --self-contained true
+        cp -a ../Hedra/bin/Release/netcoreapp6.0/runtimes/linux-x64 ../Hedra/bin/Release/netcoreapp6.0/linux-x64/publish/runtimes/linux-x64
         rm -rf ../Hedra/bin/Release/netcoreapp6.0/linux-x64/publish/Assets
         rm -rf ../Hedra/bin/Release/netcoreapp6.0/linux-x64/publish/Shaders
         rm -rf ../Hedra/bin/Release/netcoreapp6.0/linux-x64/publish/Sounds
