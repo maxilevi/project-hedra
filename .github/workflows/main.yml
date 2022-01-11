@@ -14,9 +14,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        repository: maxilevi/hedra-core
         token: ${{ secrets.HEDRA_CI }}
-        #submodules: true
+        submodules: true
       
     - name: Setup Dotnet for use with actions
       uses: actions/setup-dotnet@v1
@@ -58,6 +57,11 @@ jobs:
         os: [windows-latest, ubuntu-latest]
 
     steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.HEDRA_CI }}
+          submodules: true
+      
       - uses: actions/download-artifact@master
         with:
           name: hedra-core-${{ matrix.os }}
@@ -70,11 +74,6 @@ jobs:
           cp Hedra/core-artifact/hedracore-x86.dll Hedra/x86/hedracore.dll || true
           cp Hedra/core-artifact/hedracore-x64.dll Hedra/x64/hedracore.dll || true
           rm -rf Hedra/core-artifact
-
-      - uses: actions/checkout@v2
-        with:
-          token: ${{ secrets.HEDRA_CI }}
-          submodules: true
 
       - name: Test solution
         run: dotnet test -c Release "Project Hedra.sln"
