@@ -32,8 +32,10 @@ jobs:
       shell: bash  
       run: sudo ./build-deps-linux.sh
 
-    #- name: Test solution
-    #  run: dotnet test -c Release "Project Hedra.sln"
+    - name: Test solution
+      run: |
+        dotnet --version
+        dotnet test -c Release "Project Hedra.sln"
 
     - name: Publish on windows
       if: matrix.os == 'windows-latest'
@@ -50,6 +52,7 @@ jobs:
       if: matrix.os == 'ubuntu-latest'
       shell: bash
       run: |
+        dotnet --version
         sudo ./scripts/publish.sh linux-x64
 
     - uses: actions/upload-artifact@v1
