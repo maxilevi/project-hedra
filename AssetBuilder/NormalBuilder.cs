@@ -27,10 +27,10 @@ namespace AssetBuilder
             var builder = new StringBuilder();
             foreach (var pair in Input)
             {
-                string fileText = (string) pair.Value;
-                builder.AppendLine($"<{pair.Key}>");
-                builder.AppendLine(fileText);
-                builder.AppendLine("<end>");
+                var fileText = (string) pair.Value;
+                builder.Append($"<{pair.Key}>\n");
+                builder.Append($"{fileText}\n");
+                builder.Append($"<end>\n");
             }
             File.WriteAllBytes(Output, this.Zip(builder.ToString()));
         }

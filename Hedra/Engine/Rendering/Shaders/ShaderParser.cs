@@ -179,11 +179,11 @@ namespace Hedra.Engine.Rendering.Shaders
 
         private static string AddBuiltinUniforms(string Source)
         {
-            var lines = Source.Split(Environment.NewLine.ToCharArray()).ToList();
+            var lines = Source.Split("\n".ToCharArray()).ToList();
             var offset = lines.FindIndex(S => S.Contains("#version"));
             lines.Insert(offset + 1, $"uniform mat4 {ShaderManager.ModelViewMatrixName};");
             lines.Insert(offset + 2, $"uniform mat4 {ShaderManager.ModelViewProjectionName};");
-            return string.Join(Environment.NewLine, lines);
+            return string.Join("\n", lines);
         }
     }
 }

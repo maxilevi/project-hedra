@@ -163,7 +163,7 @@ namespace Hedra.Engine.Management
             var builder = new StringBuilder();
             var save = false;
             var regex = $"^<.*{BuildNameRegex(Name)}>$";
-            foreach (var line in ShaderCode.Split(new[] { Environment.NewLine },
+            foreach (var line in ShaderCode.Split(new[] { "\n" },
                 StringSplitOptions.RemoveEmptyEntries))
             {
                 var next = false;
@@ -175,7 +175,7 @@ namespace Hedra.Engine.Management
 
                 if (line.Contains("<end>")) save = false;
 
-                if (save && !next) builder.Append(line + Environment.NewLine);
+                if (save && !next) builder.Append(line + "\n");
             }
 
             if (builder.Length == 0) throw new ArgumentNullException($"Failed to find shader '{Name}'");
