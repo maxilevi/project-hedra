@@ -1,4 +1,4 @@
-name: Hedra CI
+name: Test Hedra
 
 on: [push]
 

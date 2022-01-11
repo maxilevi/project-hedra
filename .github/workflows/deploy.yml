@@ -1,12 +1,6 @@
-name: Hedra CI
+name: Publish Hedra
 
-on:
-  workflow_dispatch:
-    inputs:
-      name:
-        description: 'Person to greet'
-        required: true
-        default: 'Mona the Octocat'
+on: [workflow_dispatch]
 
 jobs:
   deploy:
