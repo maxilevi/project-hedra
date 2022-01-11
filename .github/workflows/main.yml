@@ -44,11 +44,14 @@ jobs:
     - uses: actions/upload-artifact@master
       with:
         name: hedra-core-${{ matrix.os }}
-        path: Hedra/core-artifact      
+        path: Hedra/core-artifact  
+        
+
+    
   test:
     name: Test on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
-    depends-on: build-deps
+    needs: build-deps
     strategy:
       fail-fast: false
       matrix:
@@ -79,7 +82,7 @@ jobs:
   publish:
     name: Publish on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
-    depends-on: build-deps
+    needs: build-deps
     strategy:
       fail-fast: false
       matrix:
