@@ -1,29 +1,49 @@
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AssetBuilder
 {
     public class BinarySerializer : Serializer
     {
+
+        private AssetBuild SerializeFile(string Path)
+        {
+            var data = this.Process(Path);
+            return new AssetBuild
+            {
+                Path = Path,
+                Data = data,
+                Checksum = AssetBuild.CreateHash(Path)
+            };
+        }
+
         public override SerializationOutput Serialize(string[] Files)
         {
-            var sortedInput = new List<string>(Files);
-            sortedInput.Sort(new FileSizeComparer());
-            var output = new Dictionary<string, object>();
-            var builds = new List<AssetBuild>();
-            for (var i = 0; i < sortedInput.Count; i++)
+            var sw = new Stopwatch();
+            sw.Start();
+            var tasks = new List<Task<AssetBuild>>();
+            for (var i = 0; i < Files.Length; i++)
             {
-                var data = this.Process(sortedInput[i]);
-                output.Add(sortedInput[i], data);
-                builds.Add(new AssetBuild
-                {
-                    Path = sortedInput[i],
-                    Checksum = AssetBuild.CreateHash(sortedInput[i])
-                });
+                var k = i;
+                tasks.Add(Task.Run(() => SerializeFile(Files[k])));
             }
+            Console.WriteLine($"Launched {tasks.Count} tasks");
+
+            tasks.ForEach(T => T.Wait());
+
+            var builds = tasks
+                .Select(T => T.Result)
+                .OrderBy(A => A.Size);
+
+            sw.Stop();
+            Console.WriteLine($"All tasks finished, took {sw.ElapsedMilliseconds / 1000f} seconds");
             return new SerializationOutput
             {
-                Results = output,
+                Results = builds.ToDictionary(A => A.Path, A => (object)A.Data),
                 History = new BuildHistory
                 {
                     Builds = builds.ToArray()
@@ -40,20 +60,6 @@ namespace AssetBuilder
                  default:
                      return File.ReadAllBytes(Filename);
             }
-        }
-    }
-
-    public class FileSizeComparer : IComparer<string>
-    {
-        public int Compare(string A, string B)
-        {
-            long s1 = new FileInfo(A).Length;
-            long s2 = new FileInfo(B).Length;
-
-            if (s1 == s2) return 0;
-            if (s1 > s2) return 1;
-
-            return -1;
         }
     }
 }

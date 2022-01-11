@@ -7,7 +7,9 @@ namespace AssetBuilder
     public class AssetBuild
     {
         public string Path { get; set; }
+        public byte[] Data { get; set; }
         public string Checksum { get; set; }
+        public long Size => Data.Length;
 
         public static string CreateHash(string Path)
         {

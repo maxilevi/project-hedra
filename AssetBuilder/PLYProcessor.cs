@@ -20,7 +20,8 @@ namespace AssetBuilder
         }
         
         public static byte[] Process(string Filename)
-        {            Console.WriteLine($"Parsing File {Filename}");
+        {   
+            //Console.WriteLine($"Parsing File {Filename}");
             try
             {
                 return DoProcess(Filename);

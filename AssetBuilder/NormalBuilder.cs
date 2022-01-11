@@ -85,7 +85,7 @@ namespace AssetBuilder
                     while (offset < data.Length)
                     {
                         var actualSize = Math.Min(data.Length - offset, size);
-                        Console.WriteLine($"Wrote {actualSize} at {offset}");
+                        //Console.WriteLine($"Wrote {actualSize} at {offset}");
                         fs.Write(data, offset, actualSize);
                         offset += actualSize;
                     }
