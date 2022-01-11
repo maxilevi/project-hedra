@@ -65,7 +65,10 @@ namespace HedraTests.EntitySystem
             _entity.Health = 100;
             _physics = new PhysicsComponent(_entity);
             GameManager.Player = new PlayerMock();
-            _damageComponent = new DamageComponent(_entity);
+            _damageComponent = new DamageComponent(_entity)
+            {
+                MissChance = 0
+            };
         }
         
         [Test]
