@@ -57,8 +57,13 @@ jobs:
       if: matrix.os == 'ubuntu-latest'
       shell: bash
       run: |
-        dotnet --version
-        sudo ./scripts/publish.sh linux-x64
+        dotnet --info
+        dotnet publish Hedra/Hedra.csproj -c Release -r linux-x64 --self-contained true
+        rm -rf ../Hedra/bin/Release/netcoreapp6.0/linux-x64/publish/Assets
+        rm -rf ../Hedra/bin/Release/netcoreapp6.0/linux-x64/publish/Shaders
+        rm -rf ../Hedra/bin/Release/netcoreapp6.0/linux-x64/publish/Sounds
+        rm -rf ../Hedra/bin/Release/netcoreapp6.0/linux-x64/publish/ref
+      #sudo ./scripts/publish.sh linux-x64
 
     - uses: actions/upload-artifact@v1
       name: Upload ubuntu

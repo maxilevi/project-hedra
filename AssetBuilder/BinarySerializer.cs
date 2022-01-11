@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AssetBuilder
@@ -10,6 +11,7 @@ namespace AssetBuilder
     public class BinarySerializer : Serializer
     {
 
+        private const long MB1 = 1024 * 1024;
         private AssetBuild SerializeFile(string Path)
         {
             var data = this.Process(Path);
@@ -25,11 +27,18 @@ namespace AssetBuilder
         {
             var sw = new Stopwatch();
             sw.Start();
+
+            var sortedFiles = Files.OrderBy(F => new FileInfo(F).Length).ToArray();
             var tasks = new List<Task<AssetBuild>>();
-            for (var i = 0; i < Files.Length; i++)
+            for (var i = 0; i < sortedFiles.Length; i++)
             {
+                var info = new FileInfo(sortedFiles[i]);
                 var k = i;
-                tasks.Add(Task.Run(() => SerializeFile(Files[k])));
+                tasks.Add(info.Length < MB1 
+                    ? Task.Run(() => SerializeFile(sortedFiles[k]))
+                    : Task.FromResult(SerializeFile(sortedFiles[k])));
+                //if(info.Length > MB1)
+                //    Console.WriteLine($"Launching file {sortedFiles[k]} as a task");
             }
             Console.WriteLine($"Launched {tasks.Count} tasks");
 
