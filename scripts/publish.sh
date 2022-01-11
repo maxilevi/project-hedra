@@ -11,10 +11,10 @@ if ! [[ $(echo ${valid_rids[@]} | grep -o $RID | wc -w) ]]; then
 	exit 1
 fi
 
-(cd ../Hedra && dotnet publish -c Release -r $RID --self-contained true)
+dotnet publish Hedra/Hedra.csproj -c Release -r $RID --self-contained true
 
-rm -rf ../Hedra/bin/Release/$FRAMEWORK/$RID/Assets
-rm -rf ../Hedra/bin/Release/$FRAMEWORK/$RID/Shaders
-rm -rf ../Hedra/bin/Release/$FRAMEWORK/$RID/Sounds
-rm -rf ../Hedra/bin/Release/$FRAMEWORK/$RID/ref
+rm -rf ../Hedra/bin/Release/$FRAMEWORK/$RID/publish/Assets
+rm -rf ../Hedra/bin/Release/$FRAMEWORK/$RID/publish/Shaders
+rm -rf ../Hedra/bin/Release/$FRAMEWORK/$RID/publish/Sounds
+rm -rf ../Hedra/bin/Release/$FRAMEWORK/$RID/publish/ref
 
