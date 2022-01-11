@@ -32,8 +32,8 @@ jobs:
       shell: bash
       run: sudo ./build-deps-linux.sh
 
-    - name: Test solution
-      run: dotnet test -c Release "Project Hedra.sln"
+    #- name: Test solution
+    #  run: dotnet test -c Release "Project Hedra.sln"
 
     - name: Publish on windows
       if: matrix.os == 'windows-latest'
