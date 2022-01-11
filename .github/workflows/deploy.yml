@@ -4,7 +4,7 @@ on: [workflow_dispatch]
 
 jobs:
   deploy:
-    name: Build on ${{ matrix.os }}
+    name: Publish on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
