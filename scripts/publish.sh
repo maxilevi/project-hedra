@@ -13,8 +13,6 @@ fi
 
 dotnet publish ../Hedra/Hedra.csproj -c Release -r $RID --self-contained true
 
-cp -a ../Hedra/bin/Release/$FRAMEWORK/$RID/runtimes/ ../Hedra/bin/Release/$FRAMEWORK/$RID/publish/runtimes/
-
 rm -rf ../Hedra/bin/Release/$FRAMEWORK/$RID/publish/Assets
 rm -rf ../Hedra/bin/Release/$FRAMEWORK/$RID/publish/Shaders
 rm -rf ../Hedra/bin/Release/$FRAMEWORK/$RID/publish/Sounds

@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.InteropServices;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
@@ -60,7 +61,7 @@ namespace HedraTests.EntitySystem
             {
                 (DropComponent) lastComponent
             }
-            : new DropComponent[0]);
+            : Array.Empty<DropComponent>());
             _entity = entityMock.Object;
             _entity.Health = 100;
             _physics = new PhysicsComponent(_entity);
