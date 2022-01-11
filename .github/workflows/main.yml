@@ -51,7 +51,7 @@ jobs:
       if: matrix.os == 'ubuntu-latest'
       shell: bash
       run: |
-        ./scripts/publish.sh linux-x64
+        sudo ./scripts/publish.sh linux-x64
 
     - uses: actions/upload-artifact@v1
       name: Upload ubuntu
