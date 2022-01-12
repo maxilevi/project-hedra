@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/sh
+
+dotnet --info
 
 RID=$1
 FRAMEWORK=netcoreapp6.0
