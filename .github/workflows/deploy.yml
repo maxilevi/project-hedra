@@ -48,7 +48,7 @@ jobs:
       shell: bash
       run: |
         cat ./scripts/publish.sh | bash -s linux-x64
-        cat ./scripts/publish.sh | bash -s linux-x86
+    #    cat ./scripts/publish.sh | bash -s linux-x86
 
     - uses: actions/upload-artifact@v1
       name: Upload ubuntu
@@ -57,12 +57,12 @@ jobs:
         name: hedra-linux-x64
         path: Hedra/bin/Release/netcoreapp6.0/linux-x64/publish
 
-    - uses: actions/upload-artifact@v1
-      name: Upload ubuntu
-      if: matrix.os == 'ubuntu-latest'
-      with:
-        name: hedra-linux-x86
-        path: Hedra/bin/Release/netcoreapp6.0/linux-x86/publish
+    #- uses: actions/upload-artifact@v1
+    #  name: Upload ubuntu
+    #  if: matrix.os == 'ubuntu-latest'
+    #  with:
+    #    name: hedra-linux-x86
+    #    path: Hedra/bin/Release/netcoreapp6.0/linux-x86/publish
 
     - uses: actions/upload-artifact@v1
       name: Upload windows x64
