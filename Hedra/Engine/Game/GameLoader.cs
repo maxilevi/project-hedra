@@ -115,7 +115,7 @@ namespace Hedra.Engine.Game
                 TryLoad($"{dllPath}/openal32.{ext}"),
                 TryLoad($"{dllPath}/{prefix}glfw3.{ext}"),
             };
-            NativeLibrary.SetDllImportResolver(Assembly.GetAssembly(typeof(BaseSteamworks)), DllImportResolver);
+            NativeLibrary.SetDllImportResolver(Assembly.GetAssembly(typeof(BaseSteamworks)), SteamLibImportResolver);
             _loadedArchitectureFiles = true;
         }
 
@@ -128,13 +128,13 @@ namespace Hedra.Engine.Game
             return outLib;
         }
         
-        private static IntPtr DllImportResolver(string libraryName, Assembly assembly, DllImportSearchPath? searchPath)
+        private static IntPtr SteamLibImportResolver(string LibraryName, Assembly Assembly, DllImportSearchPath? SearchPath)
         {
-            Log.WriteLine(libraryName);
-            if (libraryName != "libsteam_api64.so") return IntPtr.Zero;
-            var is64 = Environment.Is64BitProcess;
-            var dllPath = $"{AppPath}{(is64 ? "x64" : "x86")}";
-            return NativeLibrary.Load($"{dllPath}/libsteam_api64.so");
+            if (LibraryName == "libsteam_api64.so") 
+                return NativeLibrary.Load($"{AppPath}/x64/libsteam_api64.so");
+            if (LibraryName == "libsteam_api.so") 
+                return NativeLibrary.Load($"{AppPath}/x86/libsteam_api.so");
+            return IntPtr.Zero;
         }
 
         public static void UnloadNativeLibs()
