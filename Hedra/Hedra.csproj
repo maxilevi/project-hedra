@@ -32,7 +32,6 @@
         <Authors>Maximiliano Levi</Authors>
         <Company>LeastSquares</Company>
         <Product>Project Hedra</Product>
-        <InvariantGlobalization>true</InvariantGlobalization>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
         <StartAction>Project</StartAction>
