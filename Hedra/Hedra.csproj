@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>netcoreapp6.0</TargetFramework>
         <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -32,6 +32,7 @@
         <Authors>Maximiliano Levi</Authors>
         <Company>LeastSquares</Company>
         <Product>Project Hedra</Product>
+        <InvariantGlobalization>true</InvariantGlobalization>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
         <StartAction>Project</StartAction>

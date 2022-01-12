@@ -46,7 +46,9 @@ jobs:
     - name: Publish on ubuntu
       if: matrix.os == 'ubuntu-latest'
       shell: bash
-      run: sudo ./scripts/publish.sh linux-x64
+      run: |
+        cat ./scripts/publish.sh | bash -s linux-x64
+        cat ./scripts/publish.sh | bash -s linux-x86
 
     - uses: actions/upload-artifact@v1
       name: Upload ubuntu
