@@ -125,6 +125,7 @@ namespace Hedra.Engine
             }
 
             Log.WriteLine(GameSettings.ResolutionIndex);
+            Log.WriteLine(resolutions.Count);
             GameSettings.AvailableResolutions = resolutions.ToArray();
         }
 
@@ -147,6 +148,9 @@ namespace Hedra.Engine
             var maxMonitor = Monitor.GetMainMonitor(null);
             var monitorSize = maxMonitor.VideoMode.Resolution ?? maxMonitor.Bounds.Size;
             var maxSize = new Vector2(monitorSize.X, monitorSize.Y);
+            Log.WriteLine(GameSettings.AvailableResolutions);
+            Log.WriteLine(GameSettings.AvailableResolutions.Length);
+            Log.WriteLine(GameSettings.ResolutionIndex);
             var currentSize = GameSettings.AvailableResolutions[GameSettings.ResolutionIndex];
 
             GameSettings.DeviceWidth = (int)maxSize.X;
