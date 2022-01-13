@@ -134,14 +134,6 @@ namespace Hedra.Engine
             if (DummyMode) EnableDummyMode();
             LoadLibraries();
             InitializeResolutions();
-            try
-            {
-                Steam.Instance.Load();
-            }
-            catch (Exception e)
-            {
-                Log.WriteLine(e);
-            }
 
             GameSettings.LoadSetupSettings(GameSettings.SettingsPath);
 
@@ -191,6 +183,14 @@ namespace Hedra.Engine
                 GameSettings.Fullscreen = false;
                 GameSettings.Fullscreen = previousFullscreen;
             });
+            try
+            {
+                Steam.Instance.Load();
+            }
+            catch (Exception e)
+            {
+                Log.WriteLine(e);
+            }
             Log.WriteLine("Window settings loading was Successful");
             if (!IsDummy || IsDummy && IsServer) GameWindow.Run();
 
