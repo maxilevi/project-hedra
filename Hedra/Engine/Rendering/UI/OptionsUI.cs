@@ -347,7 +347,7 @@ namespace Hedra.Engine.Rendering.UI
             }
 
             ;
-/*
+
             var resolutionChooser = new OptionChooser(new Vector2(0, -.6f), new Vector2(0.15f, 0.075f),
                 Translation.Create("available_resolutions", "{0}: "), fontColor, _normalFont,
                 GameSettings.AvailableResolutions.Select(V => Translation.Default(V.ToString())).ToArray());
@@ -379,7 +379,7 @@ namespace Hedra.Engine.Rendering.UI
                     GameSettings.AvailableResolutions.Length);
                 SetResolutionName();
                 RestartNotice();
-            };*/
+            };
 
             #region ScaleUI
 
@@ -541,7 +541,7 @@ namespace Hedra.Engine.Rendering.UI
             _displayButtons.Add(language);
             _displayButtons.Add(fovChooser);
             _displayButtons.Add(scaleUI);
-            //_displayButtons.Add(resolutionChooser);
+            _displayButtons.Add(resolutionChooser);
             if (showConsole != null) _displayButtons.Add(showConsole);
 
             AddElement(_controls);
