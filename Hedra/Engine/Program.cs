@@ -93,6 +93,7 @@ namespace Hedra.Engine
             IsDebug = true;
 #endif
             GameLoader.LoadArchitectureSpecificFilesIfNecessary(GameLoader.AppPath);
+            Steam.Instance.Load();
         }
 
         private static void DisposeLibraries()
@@ -123,9 +124,7 @@ namespace Hedra.Engine
                     GameSettings.ResolutionIndex = resolutions.Count - 1;
                 }
             }
-
-            Log.WriteLine(GameSettings.ResolutionIndex);
-            Log.WriteLine(resolutions.Count);
+            
             GameSettings.AvailableResolutions = resolutions.ToArray();
         }
 
@@ -135,16 +134,18 @@ namespace Hedra.Engine
             LoadLibraries();
             InitializeResolutions();
 
+            var prev = GameSettings.ResolutionIndex;
             GameSettings.LoadSetupSettings(GameSettings.SettingsPath);
-
+            if (GameSettings.ResolutionIndex >= GameSettings.AvailableResolutions.Length)
+                GameSettings.ResolutionIndex = prev;
+            
             var maxMonitor = Monitor.GetMainMonitor(null);
             var monitorSize = maxMonitor.VideoMode.Resolution ?? maxMonitor.Bounds.Size;
             var maxSize = new Vector2(monitorSize.X, monitorSize.Y);
-            Log.WriteLine(GameSettings.AvailableResolutions);
-            Log.WriteLine(GameSettings.AvailableResolutions.Length);
-            Log.WriteLine(GameSettings.ResolutionIndex);
+            
+            
             var currentSize = GameSettings.AvailableResolutions[GameSettings.ResolutionIndex];
-
+            Log.WriteLine(currentSize);
             GameSettings.DeviceWidth = (int)maxSize.X;
             GameSettings.DeviceHeight = (int)maxSize.Y;
 
@@ -183,14 +184,7 @@ namespace Hedra.Engine
                 GameSettings.Fullscreen = false;
                 GameSettings.Fullscreen = previousFullscreen;
             });
-            try
-            {
-                Steam.Instance.Load();
-            }
-            catch (Exception e)
-            {
-                Log.WriteLine(e);
-            }
+
             Log.WriteLine("Window settings loading was Successful");
             if (!IsDummy || IsDummy && IsServer) GameWindow.Run();
 
