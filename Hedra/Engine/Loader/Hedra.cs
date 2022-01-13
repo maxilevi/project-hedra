@@ -57,8 +57,8 @@ namespace Hedra.Engine.Loader
 
         public static int RenderingThreadId { get; private set; }
         public static int MainThreadId { get; private set; }
-        public int BuildNumber => 17;
-        public string GameVersion => /*"\u03B1 */"1.0";
+        public int BuildNumber => 20;
+        public string GameVersion => /*"\u03B1 */"";
 
         public void Setup()
         {
