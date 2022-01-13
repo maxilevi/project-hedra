@@ -486,19 +486,19 @@ namespace Hedra.Engine.Rendering.UI
             {
                 GameSettings.MouseSensibility =
                     float.Parse(sensitivityOptions[mouseSensitivity.Index].Get(), NumberStyles.Any,
-                        CultureInfo.InvariantCulture);
+                        CultureInfo.GetCultureInfo("en-US"));
             };
 
             mouseSensitivity.RightArrow.Click += delegate
             {
                 GameSettings.MouseSensibility =
                     float.Parse(sensitivityOptions[mouseSensitivity.Index].Get(), NumberStyles.Any,
-                        CultureInfo.InvariantCulture);
+                        CultureInfo.GetCultureInfo("en-US"));
             };
 
             for (var i = 0; i < sensitivityOptions.Length; i++)
                 if (Math.Abs(
-                    float.Parse(sensitivityOptions[i].Get(), NumberStyles.Any, CultureInfo.InvariantCulture) -
+                    float.Parse(sensitivityOptions[i].Get(), NumberStyles.Any, CultureInfo.GetCultureInfo("en-US")) -
                     GameSettings.MouseSensibility) < 0.005f)
                 {
                     mouseSensitivity.CurrentValue.Text = sensitivityOptions[i].Get();
