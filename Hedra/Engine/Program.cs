@@ -93,7 +93,6 @@ namespace Hedra.Engine
             IsDebug = true;
 #endif
             GameLoader.LoadArchitectureSpecificFilesIfNecessary(GameLoader.AppPath);
-            Steam.Instance.Load();
         }
 
         private static void DisposeLibraries()
@@ -132,6 +131,15 @@ namespace Hedra.Engine
             if (DummyMode) EnableDummyMode();
             LoadLibraries();
             InitializeResolutions();
+            try
+            {
+                Steam.Instance.Load();
+            }
+            catch (Exception e)
+            {
+                Log.WriteLine(e);
+            }
+
             GameSettings.LoadSetupSettings(GameSettings.SettingsPath);
 
             var maxMonitor = Monitor.GetMainMonitor(null);
