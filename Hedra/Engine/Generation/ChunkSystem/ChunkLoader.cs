@@ -31,6 +31,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private float _targetActivechunks;
         private float _targetMax = 1;
         private float _targetMin = 1;
+        private float _fogStep;
 
         public ChunkLoader(IPlayer Player)
         {
@@ -70,8 +71,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void UpdateFog(bool Force = false)
         {
-            MaxFog = Math.Max(1, _activeChunks) * Chunk.Width;
-            MinFog = MaxFog - Chunk.Width * 2;
+            MaxFog = Math.Max(0, _activeChunks - 0.5f) * Chunk.Width;
+            MinFog = Math.Max(0, MaxFog - _fogStep);
 
             if (Math.Abs(_activeChunks - _targetActivechunks) > .05f || Force)
                 SkyManager.FogManager.UpdateFogSettings(MinFog, MaxFog);
@@ -79,7 +80,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void Update()
         {
-            _activeChunks = Mathf.Lerp(_activeChunks, _targetActivechunks - (_activeChunks > 4 ? 0.5f : 1.5f), Time.IndependentDeltaTime * .5f);
+            _fogStep = Mathf.Lerp(_fogStep, _activeChunks >= 1 ? Chunk.Width * 2 : 32, Time.IndependentDeltaTime * .1f);
+            _activeChunks = Mathf.Lerp(_activeChunks, _targetActivechunks >= 1 ? _targetActivechunks : 0f, Time.IndependentDeltaTime * .5f);
             UpdateFog();
         }
 
