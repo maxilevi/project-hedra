@@ -109,7 +109,7 @@ namespace Hedra.Engine
             for (var i = 0; i < count; ++i) resolutions.Add(new Vector2(videoModes[i].Width, videoModes[i].Height));
 
             resolutions = resolutions.Distinct().ToList();
-            Log.WriteLine(resolutions);
+            Log.WriteLine(resolutions.Select(R => $"{R.X},{R.Y}").Aggregate((S1, S2) => S1 + "  " + S2));
             var mainMonitor = Monitor.GetMainMonitor(null);
             if (GameSettings.ResolutionIndex == -1)
             {
