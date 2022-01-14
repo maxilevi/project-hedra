@@ -44,8 +44,8 @@ namespace Hedra.Engine.Rendering.Effects
         public DeferedRenderer()
         {
             FirstPassShader = Shader.Build("Shaders/SSAO.vert", "Shaders/SSAO-Pass1.frag");
-            SecondPassShader = Shader.Build("Shaders/SSAO.vert", "Shaders/SSAO-Pass2.frag");
-            ThirdPassShader = Shader.Build("Shaders/SSAO.vert", "Shaders/SSAO-Pass3.frag");
+            SecondPassShader = Shader.Build("Shaders/SSAO.vert", "Shaders/SSAO-Pass3.frag");
+            //ThirdPassShader = Shader.Build("Shaders/SSAO.vert", "Shaders/SSAO-Pass3.frag");
 
             var attachments = new FramebufferAttachment[3];
             attachments[0] = FramebufferAttachment.ColorAttachment0;
@@ -59,7 +59,7 @@ namespace Hedra.Engine.Rendering.Effects
 
             FirstPass = new FBO(new Size(GameSettings.Width, GameSettings.Height), attachments, formats, false, false,
                 0, true);
-            ThirdPass = new FBO(GameSettings.Width, GameSettings.Height, FramebufferAttachment.ColorAttachment0, PixelInternalFormat.Rgb32f);
+            //ThirdPass = new FBO(GameSettings.Width, GameSettings.Height, FramebufferAttachment.ColorAttachment0, PixelInternalFormat.Rgb32f);
             SecondPass = new FBO(GameSettings.Width, GameSettings.Height, FramebufferAttachment.ColorAttachment0, PixelInternalFormat.Rgb32f);
             WaterPass = new FBO(GameSettings.Width / 4, GameSettings.Height / 4);
 
@@ -70,8 +70,8 @@ namespace Hedra.Engine.Rendering.Effects
             NormalSampler = Renderer.GetUniformLocation(FirstPassShader.ShaderId, "Normal2");
             RandomSampler = Renderer.GetUniformLocation(FirstPassShader.ShaderId, "Random3");
             ProjectionUniform = Renderer.GetUniformLocation(FirstPassShader.ShaderId, "Projection");
-            ColorSampler = Renderer.GetUniformLocation(ThirdPassShader.ShaderId, "ColorInput");
-            AOSampler = Renderer.GetUniformLocation(ThirdPassShader.ShaderId, "SSAOInput");
+            ColorSampler = Renderer.GetUniformLocation(SecondPassShader.ShaderId, "ColorInput");
+            AOSampler = Renderer.GetUniformLocation(SecondPassShader.ShaderId, "SSAOInput");
             Intensity = Renderer.GetUniformLocation(FirstPassShader.ShaderId, "Intensity");
 
             var gen = new Random();

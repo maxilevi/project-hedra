@@ -126,16 +126,24 @@ namespace Hedra.Engine.Rendering.Effects
 
                 Ssao.FirstPassShader.Unbind();
 
-                Ssao.ThirdPass.Bind();
+                DrawFBO.Bind();
                 Ssao.SecondPassShader.Bind();
 
                 //Firstpass output
                 Renderer.ActiveTexture(TextureUnit.Texture0);
                 Renderer.BindTexture(TextureTarget.Texture2D, Ssao.SecondPass.TextureId[0]);
+                
+                Renderer.ActiveTexture(TextureUnit.Texture1);
+                Renderer.BindTexture(TextureTarget.Texture2D, Ssao.FirstPass.TextureId[0]);
 
+                Renderer.Uniform1(Ssao.AOSampler, 0);
+                Renderer.Uniform1(Ssao.ColorSampler, 1);
+                
                 DrawManager.UIRenderer.DrawQuad();
+                
+                DrawFBO.Unbind();
 
-                Ssao.ThirdPass.Unbind();
+                /*Ssao.ThirdPass.Unbind();
                 DrawFBO.Bind();
                 Ssao.ThirdPassShader.Bind();
 
@@ -152,7 +160,7 @@ namespace Hedra.Engine.Rendering.Effects
                 DrawManager.UIRenderer.DrawQuad();
 
                 Ssao.ThirdPassShader.Unbind();
-                DrawFBO.Unbind(); //Unbind is the same
+                DrawFBO.Unbind(); //Unbind is the same*/
 
                 Renderer.Enable(EnableCap.CullFace);
                 Renderer.Disable(EnableCap.Blend);
