@@ -75,9 +75,9 @@ vec3(-0.06047333, -0.789763, 0.4075724),
 vec3(0.378882, -0.224533, 0.05231125),
 vec3(0.5192277, -0.3338073, 0.240924)
 );
-const float sample_count = 64.0;
+const float sample_count = 16.0;
 const float radius = 1.0;
-const float bias = 0.01;
+const float bias = 0.005;
 
 layout(location = 0) out vec4 Color;
 
@@ -121,6 +121,6 @@ void main()
     }
     occlusion = (occlusion / sample_count);
     occlusion = max(0.0, occlusion -0.0);
-    float occ = occlusion * Intensity * .75;
+    float occ = 1.0 - occlusion * Intensity * 1.5;
     Color = vec4(occ, occ, occ, 1.0);
 }
