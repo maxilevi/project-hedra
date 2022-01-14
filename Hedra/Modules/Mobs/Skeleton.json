@@ -25,7 +25,7 @@
       "$DataFile$/Assets/Chr/Mob/Skeleton/SkeletonIdleRogue1.dae",
       "$DataFile$/Assets/Chr/Mob/Skeleton/SkeletonIdleRogue2.dae"
     ],
-    "Scale": 0.8,
+    "Scale": 1.0,
     "IdleAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/SkeletonIdle.dae",
