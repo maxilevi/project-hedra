@@ -31,7 +31,7 @@ void main(void)
     {
         discard;
     }
-    float tex = CalculateNoiseTex(pass_normal, base_vertex_position) * 0.5;
+    float tex = CalculateNoiseTex(pass_normal, base_vertex_position) * 0.75;
     float ShadowVisibility = UseShadows ? simple_apply_shadows(pass_coords, bias) : 1.0;
     vec4 new_color = pass_color * (tex + 1.0) * Tint * ShadowVisibility;
     new_color = vec4(linear_to_srbg(new_color.xyz), new_color.w);
