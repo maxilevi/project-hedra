@@ -64,7 +64,7 @@ void main()
     float layeredScaling = mix(0.15, 1.0, scalingFactor / 10.0);
     
     float ShadowVisibility = use_shadows > 0.0 ? CalculateShadows() : 1.0;
-    float tex = CalculateNoiseTex(InNorm.xyz, base_vertex_position * 0.5) * 0.95;
+    float tex = CalculateNoiseTex(InNorm.xyz, base_vertex_position * 0.55) * 0.95;
     vec3 final_color = linear_to_srbg(completeColor * (tex + 1.0) * ShadowVisibility);
     vec4 NewColor = mix(sky_color(), vec4(final_color, raw_color.w), Visibility);
 
