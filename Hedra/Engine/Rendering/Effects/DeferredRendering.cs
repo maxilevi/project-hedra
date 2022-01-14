@@ -53,14 +53,14 @@ namespace Hedra.Engine.Rendering.Effects
             attachments[2] = FramebufferAttachment.ColorAttachment2;
 
             var formats = new PixelInternalFormat[3];
-            formats[0] = PixelInternalFormat.Rgba8;
+            formats[0] = PixelInternalFormat.Rgba32f;
             formats[1] = PixelInternalFormat.Rgba32f;
-            formats[2] = PixelInternalFormat.Rgba16f;
+            formats[2] = PixelInternalFormat.Rgba32f;
 
             FirstPass = new FBO(new Size(GameSettings.Width, GameSettings.Height), attachments, formats, false, false,
                 0, true);
-            ThirdPass = new FBO(GameSettings.Width, GameSettings.Height);
-            SecondPass = new FBO(GameSettings.Width, GameSettings.Height);
+            ThirdPass = new FBO(GameSettings.Width, GameSettings.Height, FramebufferAttachment.ColorAttachment0, PixelInternalFormat.Rgb32f);
+            SecondPass = new FBO(GameSettings.Width, GameSettings.Height, FramebufferAttachment.ColorAttachment0, PixelInternalFormat.Rgb32f);
             WaterPass = new FBO(GameSettings.Width / 4, GameSettings.Height / 4);
 
             #region SETUP UNIFORMS & TEXTURES

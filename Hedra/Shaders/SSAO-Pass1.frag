@@ -75,17 +75,11 @@ vec3(-0.06047333, -0.789763, 0.4075724),
 vec3(0.378882, -0.224533, 0.05231125),
 vec3(0.5192277, -0.3338073, 0.240924)
 );
-const float sample_count = 16.0;
-const float radius = 1.0;
-const float bias = 0.005;
+const float sample_count = 64.0;
+const float radius = 2.0;
+const float bias = 0.025;
 
 layout(location = 0) out vec4 Color;
-
-
-float when_ge(float x, float y) {
-    return max(sign(x - y), 0.0);
-}
-
 
 void main()
 {
@@ -98,7 +92,8 @@ void main()
     if (isWater > 0.0) return;
 
     vec3 normal = normalize(normalSample.rgb);
-    vec3 randomVec = texture(Random3, gl_FragCoord.xy / vec2(4.0, 4.0)).xyz * vec3(2.0, 2.0, 1.0) - vec3(1.0, 1.0, 0.0);
+    vec2 scale = vec2(textureSize(Position1, 0)) / vec2(4.0, 4.0);
+    vec3 randomVec = texture(Random3, TexCoords * scale).xyz * vec3(2.0, 2.0, 1.0) - vec3(1.0, 1.0, 0.0);
 
     vec3 tangent = normalize(randomVec - normal * dot(randomVec, normal));
     vec3 bitangent = cross(normal, tangent);
@@ -106,21 +101,19 @@ void main()
 
     float occlusion = 0.0;
     for (int i = 0; i < sample_count; ++i) {
-        vec3 sampl = TBN * samples[i];// From tangent to view-spaaaaaace
-        sampl = fragPos + sampl * radius;
+        vec3 samplePos = TBN * samples[i];// From tangent to view-spaaaaaace
+        samplePos = fragPos + samplePos * radius;
 
-        vec4 offset = vec4(sampl, 1.0);
+        vec4 offset = vec4(samplePos, 1.0);
         offset = Projection * offset;// from view to clip-spaaaaaace
         offset.xyz /= offset.w;// perspective divide
         offset.xyz = offset.xyz * 0.5 + 0.5;// transform to range 0.0 - 1.0
 
         float sampleDepth = texture(Position1, offset.xy).z;// Get depth value of kernel sample
 
-        float rangeCheck = smoothstep(0.0, 1.0, radius / abs(fragPos.z - sampleDepth));
-        occlusion += (sampleDepth >= sampl.z + bias ? 1.0 : 0.0) * rangeCheck;
+        float rangeCheck = smoothstep(0.0, 1.0, radius / abs(fragPos.z - sampleDepth) - 1.5 * radius);
+        occlusion += (sampleDepth >= samplePos.z + bias ? 1.0 : 0.0) * rangeCheck;
     }
-    occlusion = (occlusion / sample_count);
-    occlusion = max(0.0, occlusion -0.0);
-    float occ = 1.0 - occlusion * Intensity * 1.5;
-    Color = vec4(occ, occ, occ, 1.0);
+    occlusion = 1.0 - (occlusion / sample_count) * 2.0 * (1 + Intensity * 0.001);
+    Color = vec4(occlusion, occlusion, occlusion, 1.0);
 }
