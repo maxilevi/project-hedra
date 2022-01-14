@@ -18,6 +18,7 @@ out vec4 pass_botColor;
 out vec4 pass_topColor;
 out vec4 Coords;
 out float DitherVisibility;
+out float NoiseScaling;
 out vec3 base_vertex_position;
 out float use_shadows;
 out float shadow_quality;
@@ -85,7 +86,7 @@ void main()
 
     float config_set = when_ge(InColor.a, 0.0) * TimeFancyShadowDistanceUseShadows.y;
     vec2 Unpacked = Unpack(InColor.a, int(2048.0));
-    float Addon = config_set * (cos(TimeFancyShadowDistanceUseShadows.x + Unpacked.y * 8.0) +0.8) * 0.715 * Unpacked.x;
+    float Addon = config_set * (cos(TimeFancyShadowDistanceUseShadows.x + Unpacked.y * 8.0) + 0.8) * 0.715 * Unpacked.x;
 
     float invert_uk = when_lt(Unpacked.y, 0.5);
     Vertex.x += invert_uk * Addon * Scale.x;
@@ -100,6 +101,7 @@ void main()
     float DistanceToCamera = length(vec3(PlayerPosition - Vertex.xyz).xz);
     Visibility = clamp((MaxDist - DistanceToCamera) / (MaxDist - MinDist), 0.0, 1.0);
     DitherVisibility = clamp((MaxDitherDistance - DistanceToCamera) / (MaxDitherDistance - MinDitherDistance), 0.0, 1.0);
+    NoiseScaling = clamp((384.0 - DistanceToCamera) / (384.0 - 24.0), 0.0, 1.0);
 
     Vertex = TransformationMatrix * Vertex;
     gl_Position = _modelViewProjectionMatrix * Vertex;

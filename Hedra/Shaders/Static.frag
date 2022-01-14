@@ -12,6 +12,7 @@ in vec4 InNorm;
 in float Visibility;
 in vec4 Coords;
 in float DitherVisibility;
+in float NoiseScaling;
 in vec3 base_vertex_position;
 in float use_shadows;
 in float shadow_quality;
@@ -59,8 +60,11 @@ void main()
     vec3 point_light_color = diffuse(normalize(unitToLight), normalize(InNorm.xyz), FLightColor).rgb;
     vec3 completeColor = worldColor + point_light_color * raw_color.xyz;
 
+    int scalingFactor = int(NoiseScaling / 0.1);
+    float layeredScaling = mix(0.15, 1.0, scalingFactor / 10.0);
+    
     float ShadowVisibility = use_shadows > 0.0 ? CalculateShadows() : 1.0;
-    float tex = CalculateNoiseTex(InNorm.xyz, base_vertex_position) * 1.55;
+    float tex = CalculateNoiseTex(InNorm.xyz, base_vertex_position * 0.5) * 0.95;
     vec3 final_color = linear_to_srbg(completeColor * (tex + 1.0) * ShadowVisibility);
     vec4 NewColor = mix(sky_color(), vec4(final_color, raw_color.w), Visibility);
 
@@ -83,7 +87,7 @@ void main()
 
 float CalculateShadows()
 {
-    float bias = max(0.001 * (1.0 - dot(InNorm.xyz, unitToLight)), 0.0) + 0.001;
+    float bias = max(0.001 * (1.0 - dot(InNorm.xyz, unitToLight)), 0.0) + 0.0015;
     vec4 ShadowCoords = Coords * vec4(.5, .5, .5, 1.0) + vec4(.5, .5, .5, 0.0);
     float shadow = 0.0;
     vec2 texelSize = 1.0 / textureSize(ShadowTex, 0);
