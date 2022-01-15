@@ -130,7 +130,7 @@ namespace Hedra.Engine.Rendering.Effects
         public void Dispose()
         {
             FirstPass.Dispose();
-            ThirdPass.Dispose();
+            //ThirdPass.Dispose();
             SecondPass.Dispose();
         }
     }

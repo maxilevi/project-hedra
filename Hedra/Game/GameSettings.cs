@@ -28,7 +28,6 @@ namespace Hedra.Game
     public static class GameSettings
     {
         public const int MaxCharacters = 4;
-        public static float AmbientOcclusionIntensity = 1;
         public static bool DarkEffect = false;
         public static bool DistortEffect = false;
         public static bool GlobalShadows = true;

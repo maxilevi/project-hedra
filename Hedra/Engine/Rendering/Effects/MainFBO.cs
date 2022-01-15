@@ -118,7 +118,6 @@ namespace Hedra.Engine.Rendering.Effects
                 Renderer.Uniform1(Ssao.PositionSampler, 0);
                 Renderer.Uniform1(Ssao.NormalSampler, 1);
                 Renderer.Uniform1(Ssao.RandomSampler, 2);
-                Renderer.Uniform1(Ssao.Intensity, GameSettings.AmbientOcclusionIntensity);
 
                 Renderer.UniformMatrix4x4(Ssao.ProjectionUniform, false, ref Culling.ProjectionMatrix);
 

@@ -7,7 +7,6 @@ uniform sampler2D Normal2;
 uniform sampler2D Random3;
 uniform mat4 Projection;
 uniform int MSAASamples = 0;
-uniform float Intensity = 1;
 const vec3 samples[] =
 vec3[](
 vec3(0.001232165, -0.0270802, 0.01733841),
@@ -114,6 +113,6 @@ void main()
         float rangeCheck = smoothstep(0.0, 1.0, radius / abs(fragPos.z - sampleDepth) - 1.5 * radius);
         occlusion += (sampleDepth >= samplePos.z + bias ? 1.0 : 0.0) * rangeCheck;
     }
-    occlusion = 1.0 - (occlusion / sample_count) * 2.0 * (1 + Intensity * 0.001);
+    occlusion = 1.0 - (occlusion / sample_count) * 2.0;
     Color = vec4(occlusion, occlusion, occlusion, 1.0);
 }
