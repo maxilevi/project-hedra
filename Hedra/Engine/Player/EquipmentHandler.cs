@@ -66,12 +66,12 @@ namespace Hedra.Engine.Player
         private void AddBonuses(Item Equipment, Func<bool> While)
         {
             var effectType =
-                (EffectType)Enum.Parse(typeof(EffectType), Equipment.GetAttribute<string>(CommonAttributes.EffectType));
+                (EffectType)Enum.Parse(typeof(EffectType), Equipment.GetAttribute(CommonAttributes.EffectType, "None"));
             if (effectType != EffectType.None)
                 _owner.ApplyEffectWhile(effectType, While);
-            _owner.AddBonusSpeedWhile(Equipment.GetAttribute<float>(CommonAttributes.MovementSpeed), While);
-            _owner.AddBonusAttackSpeedWhile(_owner.AttackSpeed * Equipment.GetAttribute<float>(CommonAttributes.AttackSpeed), While);
-            _owner.AddBonusHealthWhile(_owner.MaxHealth * Equipment.GetAttribute<float>(CommonAttributes.Health), While);
+            _owner.AddBonusSpeedWhile(Equipment.GetAttribute(CommonAttributes.MovementSpeed, 0f), While);
+            _owner.AddBonusAttackSpeedWhile(_owner.AttackSpeed * Equipment.GetAttribute(CommonAttributes.AttackSpeed, 1f), While);
+            _owner.AddBonusHealthWhile(_owner.MaxHealth * Equipment.GetAttribute(CommonAttributes.Health, 0f), While);
         }
 
         public Item[] MainEquipment
