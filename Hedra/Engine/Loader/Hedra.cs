@@ -168,9 +168,6 @@ namespace Hedra.Engine.Loader
                 catch (Exception e)
                 {
                     Log.WriteLine(e);
-                }
-                finally
-                {
                     Log.WriteLine("Crashed while loading");
                     Window.Close();
                 }
