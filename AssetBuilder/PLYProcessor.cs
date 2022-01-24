@@ -76,10 +76,10 @@ namespace AssetBuilder
                 {
                     colors.Add(
                         new Vector4(
-                            float.Parse(numbers[accumulatedOffset + 6]) / 255f,
-                            float.Parse(numbers[accumulatedOffset + 7]) / 255f, 
-                            float.Parse(numbers[accumulatedOffset + 8]) / 255f,
-                            hasAlpha ? float.Parse(numbers[accumulatedOffset + 9]) / 255f : 1.0f
+                            float.Parse(numbers[accumulatedOffset + 6], NumberStyles.Any, CultureInfo.InvariantCulture) / 255f,
+                            float.Parse(numbers[accumulatedOffset + 7], NumberStyles.Any, CultureInfo.InvariantCulture) / 255f, 
+                            float.Parse(numbers[accumulatedOffset + 8], NumberStyles.Any, CultureInfo.InvariantCulture) / 255f,
+                            hasAlpha ? float.Parse(numbers[accumulatedOffset + 9], NumberStyles.Any, CultureInfo.InvariantCulture) / 255f : 1.0f
                             )
                     );
                 }

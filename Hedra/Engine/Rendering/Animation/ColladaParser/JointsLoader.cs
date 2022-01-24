@@ -45,7 +45,11 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 
         private static Vector3 GetVector3(string[] data)
         {
-            return new Vector3(float.Parse(data[0]), float.Parse(data[1]), float.Parse(data[2]));
+            return new Vector3(
+                float.Parse(data[0], NumberStyles.Any, CultureInfo.InvariantCulture),
+                float.Parse(data[1], NumberStyles.Any, CultureInfo.InvariantCulture),
+                float.Parse(data[2], NumberStyles.Any, CultureInfo.InvariantCulture)
+                );
         }
 
         private static XmlNode GetArmatureNode(XmlNode VisualSceneNode)
@@ -71,7 +75,11 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
             var x = armature.ChildWithAttribute("rotate", "sid", "rotationX").InnerText.Split(" ");
             var y = armature.ChildWithAttribute("rotate", "sid", "rotationY").InnerText.Split(" ");
             var z = armature.ChildWithAttribute("rotate", "sid", "rotationZ").InnerText.Split(" ");
-            return new Vector3(float.Parse(x[3]), float.Parse(y[3]), float.Parse(z[3]));
+            return new Vector3(
+                float.Parse(x[3], NumberStyles.Any, CultureInfo.InvariantCulture),
+                float.Parse(y[3], NumberStyles.Any, CultureInfo.InvariantCulture),
+                float.Parse(z[3], NumberStyles.Any, CultureInfo.InvariantCulture)
+                );
         }
         
         private List<string> CollectBoneOrder()
