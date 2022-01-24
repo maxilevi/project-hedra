@@ -125,43 +125,55 @@ namespace Hedra.Engine.Loader
 
             Task.Run(() =>
             {
-                MakeGLContextCurrent();
-                Time.RegisterThread();
+                try
+                {
+                    MakeGLContextCurrent();
+                    Time.RegisterThread();
 
-                GameLoader.LoadSoundEngine();
-                HedraContent.Register();
-                ModificationsLoader.Reload();
-                NameGenerator.Load();
-                CacheManager.Load();
-                
-                DrawSplashScreenAndSwap();
-                
-                BackgroundUpdater.Load();
-                BulletPhysics.Load();
-                Log.WriteLine("Translations loaded successfully.");
+                    GameLoader.LoadSoundEngine();
+                    HedraContent.Register();
+                    ModificationsLoader.Reload();
+                    NameGenerator.Load();
+                    CacheManager.Load();
 
-                GameLoader.CreateCharacterFolders();
-                Log.WriteLine("Assets loading was successful.");
-                GameSettings.LoadNormalSettings(GameSettings.SettingsPath);
-                Log.WriteLine("Setting loaded successfully.");
-                
-                DrawSplashScreenAndSwap();
+                    DrawSplashScreenAndSwap();
 
-                GameManager.LoadWorld();
-                Log.WriteLine("Scene loading was Successful.");
-                
-                DrawSplashScreenAndSwap();
-            
-                GameManager.LoadPlayer();
-                Log.WriteLine("UI loading was Successful.");
+                    BackgroundUpdater.Load();
+                    BulletPhysics.Load();
+                    Log.WriteLine("Translations loaded successfully.");
 
-                DrawSplashScreenAndSwap();
-                
-                LoadInterpreter();
-                Window.ClearContext();
-                Window.IsContextControlDisabled = false;
-                _splashScreen.Disable();
-                Window.WindowBorder = WindowBorder.Resizable;
+                    GameLoader.CreateCharacterFolders();
+                    Log.WriteLine("Assets loading was successful.");
+                    GameSettings.LoadNormalSettings(GameSettings.SettingsPath);
+                    Log.WriteLine("Setting loaded successfully.");
+
+                    DrawSplashScreenAndSwap();
+
+                    GameManager.LoadWorld();
+                    Log.WriteLine("Scene loading was Successful.");
+
+                    DrawSplashScreenAndSwap();
+
+                    GameManager.LoadPlayer();
+                    Log.WriteLine("UI loading was Successful.");
+
+                    DrawSplashScreenAndSwap();
+
+                    LoadInterpreter();
+                    Window.ClearContext();
+                    Window.IsContextControlDisabled = false;
+                    _splashScreen.Disable();
+                    Window.WindowBorder = WindowBorder.Resizable;
+                }
+                catch (Exception e)
+                {
+                    Log.WriteLine(e);
+                }
+                finally
+                {
+                    Log.WriteLine("Crashed while loading");
+                    Window.Close();
+                }
             });
             return true;
         }
