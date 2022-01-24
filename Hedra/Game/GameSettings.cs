@@ -216,27 +216,35 @@ namespace Hedra.Game
             LoadedSetupSettings = true;
         }
 
-        private static void Load(string Path, Predicate<PropertyInfo> Predicate, Action LoadSettings)
+        private static void Load(string Path, Predicate<PropertyInfo> Predicate, Action LoadDefault)
         {
-            if (File.Exists(Path))
+            try
             {
-                var lines = File.ReadAllLines(Path);
-                var properties = GatherProperties();
-                for (var i = 0; i < lines.Length; i++)
+                if (File.Exists(Path))
                 {
-                    var parts = lines[i].Split('=');
-                    for (var k = 0; k < properties.Length; k++)
+                    var lines = File.ReadAllLines(Path);
+                    var properties = GatherProperties();
+                    for (var i = 0; i < lines.Length; i++)
                     {
-                        if (!Predicate(properties[k])) continue;
-                        if (properties[k].Name != parts[0]) continue;
-                        var value = ConvertString(parts[1], properties[k].PropertyType);
-                        properties[k].SetValue(null, value, null);
+                        var parts = lines[i].Split('=');
+                        for (var k = 0; k < properties.Length; k++)
+                        {
+                            if (!Predicate(properties[k])) continue;
+                            if (properties[k].Name != parts[0]) continue;
+                            var value = ConvertString(parts[1], properties[k].PropertyType);
+                            properties[k].SetValue(null, value, null);
+                        }
                     }
                 }
+                else
+                {
+                    LoadDefault();
+                }
             }
-            else
+            catch (Exception e)
             {
-                LoadSettings();
+                Log.WriteLine($"Failed to load settings:\n{e}");
+                LoadDefault();
             }
         }
 
