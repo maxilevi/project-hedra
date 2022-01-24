@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -31,6 +32,8 @@ namespace AssetBuilder
 
         public static void Main(string[] Args)
         {
+            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+            CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
             if (Args.Length != 4)
             {
                 Console.WriteLine("Correct usage: <folder> <file> normal|database text|binary");
