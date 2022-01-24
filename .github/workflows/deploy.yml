@@ -3,7 +3,7 @@ name: Publish Hedra
 on: [workflow_dispatch]
 
 jobs:
-  deploy:
+  build:
     name: Publish on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
@@ -49,53 +49,64 @@ jobs:
       run: |
         cat ./scripts/publish.sh | bash -s linux-x64
 
-    #- uses: actions/upload-artifact@v1
-    #  name: Upload ubuntu
-    #  if: matrix.os == 'ubuntu-latest'
-    #  with:
-    #    name: hedra-linux-x64
-    #    path: Hedra/bin/Release/netcoreapp6.0/linux-x64/publish
-
-    #- uses: actions/upload-artifact@v1
-    #  name: Upload ubuntu
-    #  if: matrix.os == 'ubuntu-latest'
-    #  with:
-    #    name: hedra-linux-x86
-    #    path: Hedra/bin/Release/netcoreapp6.0/linux-x86/publish
-
-    #- uses: actions/upload-artifact@v1
-    #  name: Upload windows x64
-    #  if: matrix.os == 'windows-latest'
-    #  with:
-    #    name: hedra-win-x64
-    #    path: Hedra/bin/Release/netcoreapp6.0/win-x64/publish
-
-    #- uses: actions/upload-artifact@v1
-    #  name: Upload windows x86
-    #  if: matrix.os == 'windows-latest'
-    #  with:
-    #    name: hedra-win-x86
-    #    path: Hedra/bin/Release/netcoreapp6.0/win-x86/publish
-
-    #- uses: actions/upload-artifact@v1
-    #  name: Upload assets
-    #  if: matrix.os == 'windows-latest'
-    #  with:
-    #    name: hedra-assets
-    #    path: Hedra/bin/Release/assets
-
-    - uses: game-ci/steam-deploy@v1
+    - uses: actions/upload-artifact@v1
+      name: Upload ubuntu
+      if: matrix.os == 'ubuntu-latest'
       with:
-        username: ${{ secrets.STEAM_USERNAME }}
-        password: ${{ secrets.STEAM_PASSWORD }}
-        configVdf: ${{ secrets.STEAM_CONFIG_VDF}}
-        ssfnFileName: ${{ secrets.STEAM_SSFN_FILE_NAME }}
-        ssfnFileContents: ${{ secrets.STEAM_SSFN_FILE_CONTENTS }}
-        appId: 1009960
-        buildDescription: ${{ github.sha }}
-        rootPath: Hedra/bin/Release
-        depot2Path: assets
-        depot3Path: netcoreapp6.0/win-x86/publish
-        depot4Path: netcoreapp6.0/win-x64/publish
-        depot5Path: netcoreapp6.0/linux-x64/publish
-        releaseBranch: test
+        name: hedra-linux-x64
+        path: Hedra/bin/Release/netcoreapp6.0/linux-x64/publish
+
+    - uses: actions/upload-artifact@v1
+      name: Upload ubuntu
+      if: matrix.os == 'ubuntu-latest'
+      with:
+        name: hedra-linux-x86
+        path: Hedra/bin/Release/netcoreapp6.0/linux-x86/publish
+
+    - uses: actions/upload-artifact@v1
+      name: Upload windows x64
+      if: matrix.os == 'windows-latest'
+      with:
+        name: hedra-win-x64
+        path: Hedra/bin/Release/netcoreapp6.0/win-x64/publish
+
+    - uses: actions/upload-artifact@v1
+      name: Upload windows x86
+      if: matrix.os == 'windows-latest'
+      with:
+        name: hedra-win-x86
+        path: Hedra/bin/Release/netcoreapp6.0/win-x86/publish
+
+    - uses: actions/upload-artifact@v1
+      name: Upload assets
+      if: matrix.os == 'windows-latest'
+      with:
+        name: hedra-assets
+        path: Hedra/bin/Release/assets
+
+  deploy_steam:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup
+        run: mkdir builds
+
+      - uses: actions/download-artifact@v2
+        with:
+          path: builds
+
+      - uses: game-ci/steam-deploy@v1
+        with:
+          username: ${{ secrets.STEAM_USERNAME }}
+          password: ${{ secrets.STEAM_PASSWORD }}
+          configVdf: ${{ secrets.STEAM_CONFIG_VDF}}
+          ssfnFileName: ${{ secrets.STEAM_SSFN_FILE_NAME }}
+          ssfnFileContents: ${{ secrets.STEAM_SSFN_FILE_CONTENTS }}
+          appId: 1009960
+          buildDescription: ${{ github.sha }}
+          rootPath: builds
+          depot2Path: hedra-assets
+          depot3Path: hedra-win-x86
+          depot4Path: hedra-win-x64
+          depot5Path: hedra-linux-x64
+          releaseBranch: test
