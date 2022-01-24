@@ -156,7 +156,7 @@ namespace Hedra.Engine.Rendering.Geometry
                 }
             }
 
-            using (var allocator = new HeapAllocator(Allocator.Megabyte * 16))
+            using (var allocator = new ResizableHeapAllocator(Allocator.Megabyte * 16, Allocator.Megabyte * 2))
             {
                 for (var i = 0; i < remaining.Length; ++i)
                 {

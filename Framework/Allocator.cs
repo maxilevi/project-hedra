@@ -23,7 +23,7 @@ namespace Hedra.Framework
 
         protected abstract void FreeBuffer();
 
-        public void* Get<T>(int Count)
+        public Pointer Get<T>(int Count)
         {
             if(Count == 0) throw new ArgumentNullException("Cannot allocate 0 bytes");
             EnsureBuffer();
@@ -31,19 +31,24 @@ namespace Hedra.Framework
             var offset = FindSpot(size);
             if(offset + size >= _maxSize)
                 throw new OutOfMemoryException($"Native Allocator has ran out of memory trying to allocate '{size / 1024}' KB\nusedMemory ='{UsedMemory / 1024}' KB, freeMemory ='{FreeMemory / 1024}' KB, totalMemory ='{TotalMemory / 1024}' KB");
-            var ptr = (void*) ((byte*)_buffer + offset);
+            var ptr = GetPointer(offset, size);
             _entries.Add(offset, new AllocationEntry(offset, size, ptr));
 
             return ptr;
         }
 
-        public void* Resize<T>(void* Ptr, int NewCount) where T : unmanaged
+        protected virtual Pointer GetPointer(int Offset, int Size)
+        {
+            return new Pointer(() => (IntPtr)_buffer, Offset);
+        }
+
+        public Pointer Resize<T>(Pointer Ptr, int NewCount) where T : unmanaged
         {
             if(NewCount == 0) throw new ArgumentNullException("Cannot resize to 0 bytes");
             var entry = GetEntry(Ptr, out var index);
             var perElement = SizePerElement<T>();
             var newSize = perElement * NewCount;
-            void* newPtr;
+            Pointer newPtr;
             /* If there is contiguous space available, use that */
             var nextOffset = index < _entries.Count - 1 ? ((AllocationEntry) _entries.GetByIndex(index + 1)).Offset : _maxSize;
             if (entry.Offset + newSize < nextOffset)
@@ -54,8 +59,8 @@ namespace Hedra.Framework
             }
             else
             {
-                newPtr = (T*) Get<T>(NewCount);
-                Buffer.MemoryCopy(Ptr, newPtr, newSize, entry.Length);
+                newPtr = (Pointer) Get<T>(NewCount);
+                Buffer.MemoryCopy(Ptr.Get(), newPtr.Get(), newSize, entry.Length);
                 Free(ref Ptr);
             }
 
@@ -110,22 +115,22 @@ namespace Hedra.Framework
             _entries.Clear();
         }
 
-        private unsafe AllocationEntry GetEntry(void* Ptr, out int Index)
+        private unsafe AllocationEntry GetEntry(Pointer Ptr, out int Index)
         {
             for (var i = _entries.Count-1; i > -1; --i)
             {
                 Index = i;
                 var entry = (AllocationEntry)_entries.GetByIndex(i);
-                if (entry.Ptr == Ptr) return entry;
+                if (entry.Ptr.Same(Ptr)) return entry;
             }
             throw new ArgumentOutOfRangeException("Ptr was not allocated with this allocator.");
         }
 
-        public void Free(ref void* Ptr)
+        public void Free(ref Pointer Ptr)
         {
             GetEntry(Ptr, out var index);
             _entries.RemoveAt(index);
-            Ptr = null;
+            Ptr = new Pointer();
         }
 
         public virtual void Dispose()

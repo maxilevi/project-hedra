@@ -201,10 +201,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if (_terrainBuilder.Sparsity == null) BuildSparsity();
             var buildingLod = Lod;
             PrepareForBuilding();
-            var allocator = new HeapAllocator(Allocator.Megabyte * 128);
+            var allocator = new ResizableHeapAllocator(Allocator.Megabyte * 128, Allocator.Megabyte * 16);
             SetupCollider(allocator, buildingLod);
             if (!allocator.IsEmpty) throw new ArgumentOutOfRangeException("Detected memory leak");
-
+            
             var output = CreateTerrainMesh(allocator, buildingLod);
             if (output == null) return;
             SetChunkStatus(output);
@@ -311,7 +311,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 new Vector3(staticMax.X, Math.Max(staticMax.Y, Input.WaterData.SupportPoint(Vector3.UnitY).Y),
                     staticMax.Z)
             );
-            using (var allocator = new HeapAllocator(Allocator.Megabyte * 64))
+            using (var allocator = new ResizableHeapAllocator(Allocator.Megabyte * 64, Allocator.Megabyte * 8))
             {
                 Input.StaticData.Optimize(allocator);
                 Input.InstanceData.Optimize(allocator);

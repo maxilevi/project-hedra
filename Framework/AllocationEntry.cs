@@ -4,9 +4,9 @@ namespace Hedra.Framework
     {
         public readonly int Offset;
         public readonly int Length;
-        public readonly void* Ptr;
+        public readonly Pointer Ptr;
 
-        public AllocationEntry(int Offset, int Length, void* Ptr)
+        public AllocationEntry(int Offset, int Length, Pointer Ptr)
         { ;
             this.Ptr = Ptr;
             this.Offset = Offset;

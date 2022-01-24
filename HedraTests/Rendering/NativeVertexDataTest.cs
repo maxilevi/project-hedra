@@ -18,42 +18,48 @@ namespace HedraTests.Rendering
         [Test]
         public void TestAdding()
         {
-            using (var allocator = new HeapAllocator(Allocator.Megabyte))
+            using var allocator = new HeapAllocator(Allocator.Megabyte);
+        }
+        
+        [Test]
+        public void TestAddingResizable()
+        {
+            using var allocator = new ResizableHeapAllocator(Allocator.Megabyte, Allocator.Kilobyte * 64);
+        }
+        
+        public void DoTestAdding(IAllocator Allocator)
+        {
+
+            var rng = new Random();
+            var count = 1024;
+            var vertices = GetAsArray(count, () => new Vector3(rng.NextFloat(), rng.NextFloat(), rng.NextFloat()));
+            var normals = GetAsArray(count, () => new Vector3(rng.NextFloat(), rng.NextFloat(), rng.NextFloat()));
+            var extradata = GetAsArray(count, () => rng.NextFloat());
+            var colors = GetAsArray(count, () => new Vector4(rng.NextFloat(), rng.NextFloat(), rng.NextFloat(), rng.NextFloat()));
+
+            var vertexData = new NativeVertexData(Allocator);
+            vertexData.Vertices.AddRange(vertices);
+            vertexData.Colors.AddRange(colors);
+            vertexData.Normals.AddRange(normals);
+            vertexData.Extradata.AddRange(extradata);
+
+            Assert.AreEqual(1024, vertexData.Vertices.Count);
+            Assert.AreEqual(1024, vertexData.Colors.Count);
+            Assert.AreEqual(1024, vertexData.Normals.Count);
+            Assert.AreEqual(1024, vertexData.Extradata.Count);
+            for (var i = 0; i < count; ++i)
             {
-                var rng = new Random();
-                var count = 1024;
-                var vertices = GetAsArray(count, () => new Vector3(rng.NextFloat(), rng.NextFloat(), rng.NextFloat()));
-                var normals = GetAsArray(count, () => new Vector3(rng.NextFloat(), rng.NextFloat(), rng.NextFloat()));
-                var extradata = GetAsArray(count, () => rng.NextFloat());
-                var colors = GetAsArray(count, () => new Vector4(rng.NextFloat(), rng.NextFloat(), rng.NextFloat(), rng.NextFloat()));
-
-
-                var vertexData = new NativeVertexData(allocator);
-                vertexData.Vertices.AddRange(vertices);
-                vertexData.Colors.AddRange(colors);
-                vertexData.Normals.AddRange(normals);
-                vertexData.Extradata.AddRange(extradata);
-
-                Assert.AreEqual(1024, vertexData.Vertices.Count);
-                Assert.AreEqual(1024, vertexData.Colors.Count);
-                Assert.AreEqual(1024, vertexData.Normals.Count);
-                Assert.AreEqual(1024, vertexData.Extradata.Count);
-                for (var i = 0; i < count; ++i)
-                {
-                    Assert.AreEqual(vertices[i], vertexData.Vertices[i]);
-                    Assert.AreEqual(colors[i], vertexData.Colors[i]);
-                    Assert.AreEqual(normals[i], vertexData.Normals[i]);
-                    Assert.AreEqual(extradata[i], vertexData.Extradata[i]);
-                }
+                Assert.AreEqual(vertices[i], vertexData.Vertices[i]);
+                Assert.AreEqual(colors[i], vertexData.Colors[i]);
+                Assert.AreEqual(normals[i], vertexData.Normals[i]);
+                Assert.AreEqual(extradata[i], vertexData.Extradata[i]);
             }
+            
         }
 
-        [Test]
-        public void TestVolume()
+        private static void DoTestVolume(IAllocator Allocator)
         {
-            using (var allocator = new HeapAllocator(Allocator.Megabyte * 64))
-            {
-                var rng = new Random();
+            var rng = new Random();
                 var count = 1000000;
                 var vertices = GetAsArray(count, () => new Vector3(rng.NextFloat(), rng.NextFloat(), rng.NextFloat()));
                 var normals = GetAsArray(count, () => new Vector3(rng.NextFloat(), rng.NextFloat(), rng.NextFloat()));
@@ -66,7 +72,7 @@ namespace HedraTests.Rendering
                 var normalTime = 0L;
 
                 watch.Start();
-                var nativeVertexData = new NativeVertexData(allocator);
+                var nativeVertexData = new NativeVertexData(Allocator);
                 for (var i = 0; i < count; ++i)
                 {
                     nativeVertexData.Vertices.Add(vertices[i]);
@@ -106,7 +112,13 @@ namespace HedraTests.Rendering
 #if RELEASE
                 Assert.Less(nativeTime, normalTime);
 #endif
-            }
+        }
+
+        //[Test]
+        public void TestVolume()
+        {
+            using var allocator = new HeapAllocator(Allocator.Megabyte * 64);
+                DoTestVolume(allocator);
         }
 
         private static T[] GetAsArray<T>(int Count, Func<T> Create)

@@ -11,7 +11,7 @@ namespace Hedra.Framework
     public unsafe struct NativeArray<T> : IDisposable, IEnumerable<T> where T : unmanaged
     {
         private int _size;
-        private void* _data;
+        private Pointer _data;
         private IAllocator _allocator;
         
         public NativeArray(IAllocator Allocator, int Size)
@@ -35,7 +35,7 @@ namespace Hedra.Framework
 #if DEBUG
                 EnsureBounds(I);
 #endif
-                return *((T*) _data + I);
+                return *((T*) _data.Get() + I);
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             set
@@ -43,7 +43,7 @@ namespace Hedra.Framework
 #if DEBUG
                 EnsureBounds(I);
 #endif
-                *((T*) _data + I) = value;
+                *((T*) _data.Get() + I) = value;
             }
         }
 
@@ -53,7 +53,7 @@ namespace Hedra.Framework
                 throw new ArgumentOutOfRangeException();
         }
 
-        public IntPtr Pointer => (IntPtr) _data;
+        public IntPtr Pointer => (IntPtr) _data.Get();
 
         public int Length => _size;
 
