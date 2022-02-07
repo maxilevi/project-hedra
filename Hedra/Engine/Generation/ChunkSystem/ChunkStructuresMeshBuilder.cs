@@ -100,7 +100,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 var lodedInstanceElements = Mesh.LodAffectedInstanceElements;
                 for (var i = 0; i < lodedInstanceElements.Length; i++)
                     ProcessInstanceData(Allocator, lodedInstanceElements[i], nativeInstance, i, Lod, distribution,
-                        1f / Lod - 0.2f);
+                        1f / Lod);
             }
             
             //Simplify(Allocator, nativeStatic);

@@ -164,32 +164,5 @@ namespace Hedra.Engine.StructureSystem
             }
             return null;
         }
-
-        private static int BaseSample(Vector2 Position, float Frequency)
-        {
-            var wSeed = World.Seed * 0.0001f;
-            return (int)((float)World.StructureHandler.SeedGenerator.GetValue(Position.X * Frequency + wSeed,
-                Position.Y * Frequency + wSeed) * 100f);
-        }
-
-        private static bool Sampler(Vector2 Position, Predicate<int> IsType, float Frequency, out int Seed)
-        {
-            var baseSeed = BaseSample(Position, .0005f);
-            Seed = BaseSample(Position, Frequency);
-            var index = new Random(baseSeed).Next(0, SampleTypes);
-            return IsType(index) && IsPoint(Position, Frequency);
-        }
-
-        private static bool IsPoint(Vector2 Position, float Frequency)
-        {
-            var wSeed = World.Seed * 0.0001f;
-            var pointCoords =
-                World.StructureHandler.SeedGenerator.GetGridPoint(Position.X * Frequency + wSeed,
-                    Position.Y * Frequency + wSeed);
-            var chunkCoords = World.ToChunkSpace(new Vector2((int)((pointCoords.X - wSeed) / Frequency),
-                (int)((pointCoords.Y - wSeed) / Frequency)));
-            var isPoint = chunkCoords == Position;
-            return isPoint;
-        }
     }
 }

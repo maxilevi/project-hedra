@@ -20,13 +20,13 @@ namespace Hedra.Engine.PlantSystem
 
         public override PlantDesign GetDesign(Vector3 Position, Chunk UnderChunk, Random Rng)
         {
-            return Rng.Next(0, 7) != 1 ? _grassDesign : _wheatDesign;
+            return Rng.Next(0, 9) != 1 ? _grassDesign : _wheatDesign;
         }
 
         public override bool ShouldPlace(Vector3 Position, Chunk UnderChunk)
         {
             return World.GetHighestBlockAt(Position.X, Position.Z).Type == BlockType.Grass &&
-                   World.GetNoise(Position.X * 0.045f, Position.Z * 0.045f) > 0.35f;
+                   World.GetNoise(Position.X * 0.03f, Position.Z * 0.03f) > 0.35f && Utils.Rng.Next(0, 7) != 1;
         }
     }
 }

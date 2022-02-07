@@ -40,11 +40,8 @@ namespace Hedra.Engine.StructureSystem
         {
             _registeredPositions = new Dictionary<Vector3, CollidableStructure>();
             _itemWatchers = new List<StructureWatcher>();
-            SeedGenerator = new Voronoi();
             World.OnChunkDisposed += OnChunkDisposed;
         }
-
-        public Voronoi SeedGenerator { get; }
 
         public CollidableStructure[] StructureItems
         {

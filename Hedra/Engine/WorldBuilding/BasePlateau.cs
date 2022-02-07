@@ -29,7 +29,7 @@ namespace Hedra.Engine.WorldBuilding
 
         public abstract float Density(Vector2 Point);
 
-        public float Apply(Vector2 Point, float Height, out float Final, float SmallFrequency = 0)
+        public virtual float Apply(Vector2 Point, float Height, out float Final, float SmallFrequency = 0)
         {
             Final = Density(Point);
             var addonHeight = (MaxHeight - Height) * Math.Max(Final, 0f);
