@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Numerics;
 using Hedra.Engine.Management;
 using Hedra.Numerics;
 using Hedra.Rendering;
@@ -21,16 +22,27 @@ public static class LandformLoader
         { LandformType.Landform7, "Assets/Env/Landforms/landform7.png"},
         { LandformType.Landform8, "Assets/Env/Landforms/landform8.png"},
         { LandformType.Landform9, "Assets/Env/Landforms/landform9.png"},
-        { LandformType.Landform10, "Assets/Env/Landforms/landform10.png"},
+        { LandformType.Landform10, "Assets/Env/Landforms/landform10.jpg"},
     };
 
-    public static float[][] Load(LandformType LandformType)
+    private static readonly Dictionary<LandformType, float[][]> Cache = new();
+
+    public static void Load()
+    {
+        foreach (var key in LandformPaths.Keys)
+        {
+            var result = LoadRaw(key);
+            Cache[key] = result;
+        }
+    }
+    
+    private static float[][] LoadRaw(LandformType LandformType)
     {
         var img = Graphics2D.LoadBitmapFromAssets(LandformPaths[LandformType]);
         if (!img.TryGetSinglePixelSpan(out var span))
             throw new ArgumentException();
 
-        var scale = 2;
+        var scale = 1;
         var arr = new float[img.Width * scale][];
         for (var i = 0; i < arr.Length; ++i)
         {
@@ -44,6 +56,12 @@ public static class LandformLoader
         }
 
         return arr;
+    }
+
+    public static Landform New(Vector2 Position, LandformType LandformType)
+    {
+        var data = Cache[LandformType];
+        return new Landform(Position, Cache[LandformType]);
     }
 }
 

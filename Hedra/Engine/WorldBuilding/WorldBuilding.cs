@@ -21,14 +21,17 @@ namespace Hedra.Engine.WorldBuilding
     public class WorldBuilding : IWorldBuilding
     {
         private readonly List<IGroundwork> _groundwork;
-        private readonly object _groundworkLock = new object();
-        private readonly object _plateauLock = new object();
+        private readonly object _groundworkLock = new ();
+        private readonly object _plateauLock = new ();
+        private readonly object _landformsLock = new ();
         private readonly List<BasePlateau> _plateaus;
+        private readonly List<Landform> _landforms;
 
         public WorldBuilding()
         {
             _groundwork = new List<IGroundwork>();
             _plateaus = new List<BasePlateau>();
+            _landforms = new List<Landform>();
         }
 
         public Chest SpawnChest(Vector3 Position, Item Item)
@@ -58,6 +61,21 @@ namespace Hedra.Engine.WorldBuilding
             lock (_plateauLock)
             {
                 return ApplyMultiple(Position, MaxHeight, _plateaus.ToArray());
+            }
+        }
+
+        public IEnumerable<Landform> GetLandformsFor(Vector2 Position)
+        {
+            lock (_landformsLock)
+            {
+                var chunkSpace = World.ToChunkSpace(Position);
+                return _landforms.Where(L =>
+                {
+                    return L.HasPoint(chunkSpace, out _)
+                           || L.HasPoint(chunkSpace + new Vector2(Chunk.Width, 0), out _)
+                           || L.HasPoint(chunkSpace + new Vector2(0, Chunk.Width), out _)
+                           || L.HasPoint(chunkSpace + new Vector2(Chunk.Width, Chunk.Width), out _);
+                }).ToList();
             }
         }
 
@@ -145,6 +163,24 @@ namespace Hedra.Engine.WorldBuilding
         {
             LoopStructure(Structure, RemovePlateau, RemoveGroundwork, true);
         }
+
+        public void RemoveLandform(Landform Land)
+        {
+            lock (_landformsLock)
+            {
+                _landforms.Remove(Land);
+            }
+        }
+
+        public void AddLandform(Landform Land)
+        {
+            lock (_landformsLock)
+            {
+                /* This is here so that houses get correctly positioned on mountains */
+                _landforms.Add(Land);
+            }
+        }
+
 
         private void RemovePlateau(BasePlateau Mount)
         {

@@ -221,7 +221,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if (BuildingLod == 1 || BuildingLod == 2)
             {
                 var mesh = CreateCollisionTerrainMesh(Allocator);
-                BulletPhysics.AddChunk(Position.Xz(), mesh, Mesh.CollisionShapes, Mesh.Offsets);
+                if (!mesh.IsEmpty)
+                    BulletPhysics.AddChunk(Position.Xz(), mesh, Mesh.CollisionShapes, Mesh.Offsets);
                 mesh.Dispose();
             }
             else

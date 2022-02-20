@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -15,6 +16,7 @@ using System.Reflection;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.Steamworks;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Framework;
 using Hedra.Numerics;
@@ -28,18 +30,27 @@ namespace Hedra.Engine.StructureSystem
     public class StructureHandler
     {
         private readonly List<StructureWatcher> _itemWatchers;
-        private readonly object _lock = new object();
+        private readonly object _lock = new ();
         private readonly Dictionary<Vector3, CollidableStructure> _registeredPositions;
-        private readonly object _registerLock = new object();
+        private readonly object _registerLock = new ();
         private bool _dirtyStructures;
         private bool _dirtyStructuresItems;
         private CollidableStructure[] _itemsCache;
         private BaseStructure[] _structureCache;
+        private readonly Dictionary<Vector2, int> _checkedPositions;
+        private readonly Dictionary<Vector2, List<Vector2>> _offsetsToCheckedStructures;
+        private readonly Dictionary<Vector2, Landform> _registeredLandforms;
+        private readonly object _offsetsToCheckedStructuresLock = new (); 
+        private readonly object _checkedPositionsLock = new ();
+        private readonly object _landformLock = new ();
 
         public StructureHandler()
         {
             _registeredPositions = new Dictionary<Vector3, CollidableStructure>();
             _itemWatchers = new List<StructureWatcher>();
+            _offsetsToCheckedStructures = new Dictionary<Vector2, List<Vector2>>();
+            _checkedPositions = new Dictionary<Vector2, int>();
+            _registeredLandforms = new Dictionary<Vector2, Landform>();
             World.OnChunkDisposed += OnChunkDisposed;
         }
 
@@ -101,6 +112,8 @@ namespace Hedra.Engine.StructureSystem
 
                 Dirty();
             }
+
+            DeleteOffset(new Vector2(Chunk.OffsetX, Chunk.OffsetZ));
         }
 
         /* Used from MissionCore.py */
@@ -140,7 +153,7 @@ namespace Hedra.Engine.StructureSystem
                 : World.BiomePool.GetRegion(ChunkOffset.ToVector3());
             CheckStructures(ChunkOffset, region.Structures.Designs);
         }
-
+ 
         /* Used from MissionCore.py */
         public void CheckStructures(Vector2 ChunkOffset, StructureDesign[] Designs)
         {
@@ -154,23 +167,98 @@ namespace Hedra.Engine.StructureSystem
             var maxSearchRadius = Designs.Max(D => D.SearchRadius);
             /* Beware! This is created locally and we don't maintain a static instance because of multi-threading issues. */
             var distribution = new RandomDistribution(true);
-            for (var x = Math.Min(-2, -maxSearchRadius / Chunk.Width * 2);
-                 x < Math.Max(2, maxSearchRadius / Chunk.Width * 2);
+            Search(ChunkOffset, maxSearchRadius, (Offset) =>
+            {
+                if(RegisterOffset(ChunkOffset, Offset)) return;
+
+                SampleLandform(Offset, distribution);
+                
+                var design = MapBuilder.Sample(World.ToChunkSpace(Offset).ToVector3(), region);
+                if (design == null) return;
+
+                if (!IsWithinSearchRadius(design, Offset, ChunkOffset)) return;
+                if (!design.MeetsRequirements(Offset)) return;
+
+                design.PlaceDesign(Offset, distribution, region, World.StructureHandler.StructureItems);
+            });
+        }
+
+        private void SampleLandform(Vector2 Offset, RandomDistribution Rng)
+        {
+            var landform = LandformPlacer.Sample(Offset, Rng);
+            if (landform != null)
+            {
+                lock(_landformLock)
+                    _registeredLandforms.Add(Offset, landform);
+            }
+        }
+        
+        private bool RegisterOffset(Vector2 Original, Vector2 Checked)
+        {
+            var skip = false;
+            lock (_checkedPositionsLock)
+            {
+                lock (_offsetsToCheckedStructuresLock)
+                {
+                    if (!_checkedPositions.ContainsKey(Checked))
+                    {
+                        _checkedPositions.Add(Checked, 1);
+                    }
+                    else
+                    {
+                        _checkedPositions[Checked] += 1;
+                        skip = true;
+                    }
+                    if (!_offsetsToCheckedStructures.ContainsKey(Original))
+                        _offsetsToCheckedStructures.Add(Original, new List<Vector2>());
+                    _offsetsToCheckedStructures[Original].Add(Checked);
+                }
+            }
+
+            return skip;
+        }
+
+        private void DeleteOffset(Vector2 ChunkOffset)
+        {
+            lock (_checkedPositionsLock)
+            {
+                lock (_offsetsToCheckedStructuresLock)
+                {
+                    if (!_offsetsToCheckedStructures.ContainsKey(ChunkOffset)) return;
+                    foreach (var position in _offsetsToCheckedStructures[ChunkOffset])
+                    {
+                        _checkedPositions[position] -= 1;
+                        if (_checkedPositions[position] == 0)
+                        {
+                            _checkedPositions.Remove(position);
+                            lock (_landformLock)
+                            {
+                                if (_registeredLandforms.TryGetValue(position, out var value))
+                                {
+                                    World.WorldBuilding.RemoveLandform(value);
+                                    _registeredLandforms.Remove(position);
+                                }
+                            }
+                        }
+                    }
+
+                    _offsetsToCheckedStructures.Remove(ChunkOffset);
+                }
+            }
+        }
+
+        private static void Search(Vector2 ChunkOffset, int MaxSearchRadius, Action<Vector2> EachAction)
+        {
+            for (var x = Math.Min(-2, -MaxSearchRadius / Chunk.Width * 2);
+                 x < Math.Max(2, MaxSearchRadius / Chunk.Width * 2);
                  x++)
             {
-                for (var z = Math.Min(-2, -maxSearchRadius / Chunk.Width * 2);
-                     z < Math.Max(2, maxSearchRadius / Chunk.Width * 2);
+                for (var z = Math.Min(-2, -MaxSearchRadius / Chunk.Width * 2);
+                     z < Math.Max(2, MaxSearchRadius / Chunk.Width * 2);
                      z++)
                 {
-                    //we should check if chunk is null/doesnt exist
                     var offset = new Vector2(ChunkOffset.X + x * Chunk.Width, ChunkOffset.Y + z * Chunk.Width);
-                    var design = MapBuilder.Sample(World.ToChunkSpace(offset).ToVector3(), region);
-                    if (design == null) continue;
-
-                    if (!IsWithinSearchRadius(design, offset, ChunkOffset)) continue;
-                    if (!design.MeetsRequirements(offset)) continue;
-
-                    design.PlaceDesign(offset, distribution, region, World.StructureHandler.StructureItems);
+                    EachAction(offset);
                 }
             }
         }
@@ -286,6 +374,18 @@ namespace Hedra.Engine.StructureSystem
                 _itemWatchers.Clear();
                 Dirty();
             }
+
+            lock (_checkedPositionsLock)
+            {
+                lock (_offsetsToCheckedStructuresLock)
+                {
+                    _offsetsToCheckedStructures.Clear();
+                    _checkedPositions.Clear();
+                }
+            }
+            
+            lock(_landformLock)
+                _registeredLandforms.Clear();
         }
 
         private void Dirty()

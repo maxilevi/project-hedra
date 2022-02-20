@@ -13,6 +13,7 @@ using System.Runtime.CompilerServices;
 using Hedra.BiomeSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.Management;
 using Hedra.Engine.Scenes;
 using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.WorldBuilding;
@@ -73,6 +74,7 @@ namespace Hedra.Engine.BiomeSystem
             const int border = OutOfChunkBorderSize / 2;
             var realDepth = depth + OutOfChunkBorderSize;
             var plateaus = World.WorldBuilding.GetPlateausFor(new Vector2(OffsetX, OffsetZ));
+            var landforms = World.WorldBuilding.GetLandformsFor(new Vector2(OffsetX, OffsetZ));
             var hasPlateaus = plateaus.Length > 0;
             var noise3D = FillNoise(depth, Chunk.Height);
             var heights = FillHeight(depth, out _);
@@ -82,7 +84,8 @@ namespace Hedra.Engine.BiomeSystem
             {
                 var position = new Vector2(x * Chunk.BlockSize + OffsetX, z * Chunk.BlockSize + OffsetZ);
                 var pathHeight = x >= 0 && z >= 0 && x < depth && z < depth && pathMap != null ? pathMap[x][z] : 0;
-                var calculatedHeight = CalculateHeight(x, z, heights, null, out _);
+                var landformHeight = HandleLandforms(position, landforms);
+                var calculatedHeight = CalculateHeight(x, z, heights, null, out _) + landformHeight;
                 var densityMultiplier = 1.0f;
                 var smallFrequency = SmallFrequency(position.X, position.Y);
                 var affectedByPlateau = hasPlateaus && IsAffectedByPlateau(position, plateaus);
@@ -205,7 +208,7 @@ namespace Hedra.Engine.BiomeSystem
             return false;
         }
 
-        private void HandlePlateaus(Vector2 Position, BasePlateau[] Plateaux, ref float height,
+        private static void HandlePlateaus(Vector2 Position, BasePlateau[] Plateaux, ref float height,
             ref float densityMultiplier, ref float smallFrequency)
         {
             for (var i = 0; i < Plateaux.Length; i++)
@@ -213,6 +216,11 @@ namespace Hedra.Engine.BiomeSystem
                 height = Plateaux[i].Apply(Position, height, out var final, smallFrequency);
                 densityMultiplier = Math.Min(densityMultiplier, 1.0f - final);
             }
+        }
+        
+        private static float HandleLandforms(Vector2 Position, IEnumerable<Landform> Landforms)
+        {
+            return Landforms.Sum(landform => landform.Apply(Position));
         }
 
         private static void HandleStructures(Vector2 position, List<IGroundwork> groundworks,

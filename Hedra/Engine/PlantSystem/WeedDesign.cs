@@ -15,12 +15,12 @@ namespace Hedra.Engine.PlantSystem
             var underChunk = World.GetChunkAt(Position);
             if (underChunk == null) return new Matrix4x4();
             var blockPosition = World.ToBlockSpace(Position);
-            var addon = new Vector3(Rng.NextFloat() * 2f, 0, Rng.NextFloat() * 2f);
+            var addon = new Vector3(Rng.NextFloat(), 0, Rng.NextFloat()) * 4f - (new Vector3(1, 0, 1) * 2f);
             if (blockPosition.X + addon.X / Chunk.BlockSize > Chunk.Width / Chunk.BlockSize) return new Matrix4x4();
             if (blockPosition.Z + addon.Z / Chunk.BlockSize > Chunk.Width / Chunk.BlockSize) return new Matrix4x4();
 
             var height = Physics.HeightAtPosition(Position + addon);
-            var topBlock = World.GetHighestBlockAt((int)(Position.X + addon.X), (int)(Position.Z + addon.Z));
+            //var topBlock = World.GetHighestBlockAt((int)(Position.X + addon.X), (int)(Position.Z + addon.Z));
 
             for (var x = -1; x < 1; x++)
             {

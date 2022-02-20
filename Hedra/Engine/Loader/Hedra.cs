@@ -134,6 +134,7 @@ namespace Hedra.Engine.Loader
                     HedraContent.Register();
                     ModificationsLoader.Reload();
                     NameGenerator.Load();
+                    LandformLoader.Load();
                     CacheManager.Load();
 
                     DrawSplashScreenAndSwap();

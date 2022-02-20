@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Hedra;
 using Hedra.Components;
 using Hedra.Engine.EntitySystem;
@@ -25,6 +26,11 @@ namespace HedraTests.Structure
         public BasePlateau[] GetPlateausFor(Vector2 Position)
         {
             throw new System.NotImplementedException();
+        }
+
+        public IEnumerable<Landform> GetLandformsFor(Vector2 Position)
+        {
+            throw new NotImplementedException();
         }
 
         public IGroundwork[] GetGroundworksFor(Vector2 Position)
@@ -98,6 +104,16 @@ namespace HedraTests.Structure
         public float ApplyMultiple(Vector2 Position, float MaxHeight, params BasePlateau[] Against)
         {
             return MaxHeight;
+        }
+
+        public void RemoveLandform(Landform Land)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddLandform(Landform Land)
+        {
+            throw new NotImplementedException();
         }
     }
 }
