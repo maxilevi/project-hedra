@@ -39,7 +39,8 @@ namespace HedraTests.Structure
         }
 
         public BasePlateau[] Plateaux => null;
-        
+        public List<Landform> Landforms { get; }
+
         public IGroundwork[] Groundworks => null;
 
         public Humanoid SpawnVillager(Vector3 DesiredPosition, Random Rng)

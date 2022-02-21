@@ -37,20 +37,18 @@ namespace Hedra.Engine.StructureSystem
         private bool _dirtyStructuresItems;
         private CollidableStructure[] _itemsCache;
         private BaseStructure[] _structureCache;
-        private readonly Dictionary<Vector2, int> _checkedPositions;
-        private readonly Dictionary<Vector2, List<Vector2>> _offsetsToCheckedStructures;
         private readonly Dictionary<Vector2, Landform> _registeredLandforms;
-        private readonly object _offsetsToCheckedStructuresLock = new (); 
-        private readonly object _checkedPositionsLock = new ();
+        private OffsetChecker _structureChecker;
+        private OffsetChecker _landformChecker;
         private readonly object _landformLock = new ();
 
         public StructureHandler()
         {
             _registeredPositions = new Dictionary<Vector3, CollidableStructure>();
             _itemWatchers = new List<StructureWatcher>();
-            _offsetsToCheckedStructures = new Dictionary<Vector2, List<Vector2>>();
-            _checkedPositions = new Dictionary<Vector2, int>();
             _registeredLandforms = new Dictionary<Vector2, Landform>();
+            _landformChecker = new OffsetChecker();
+            _structureChecker = new OffsetChecker();
             World.OnChunkDisposed += OnChunkDisposed;
         }
 
@@ -113,7 +111,18 @@ namespace Hedra.Engine.StructureSystem
                 Dirty();
             }
 
-            DeleteOffset(new Vector2(Chunk.OffsetX, Chunk.OffsetZ));
+            var offset = new Vector2(Chunk.OffsetX, Chunk.OffsetZ);
+            _structureChecker.DeleteOffset(offset, (P) => {});
+            _landformChecker.DeleteOffset(offset, (P) =>
+            {
+                lock (_landformLock)
+                {
+                    if (!_registeredLandforms.TryGetValue(P, out var value)) return;
+                                
+                    World.WorldBuilding.RemoveLandform(value);
+                    _registeredLandforms.Remove(P);
+                }
+            });
         }
 
         /* Used from MissionCore.py */
@@ -169,10 +178,8 @@ namespace Hedra.Engine.StructureSystem
             var distribution = new RandomDistribution(true);
             Search(ChunkOffset, maxSearchRadius, (Offset) =>
             {
-                if(RegisterOffset(ChunkOffset, Offset)) return;
+                if(_structureChecker.RegisterOffset(ChunkOffset, Offset)) return;
 
-                SampleLandform(Offset, distribution);
-                
                 var design = MapBuilder.Sample(World.ToChunkSpace(Offset).ToVector3(), region);
                 if (design == null) return;
 
@@ -183,6 +190,23 @@ namespace Hedra.Engine.StructureSystem
             });
         }
 
+        public void CheckLandforms(Vector2 ChunkOffset)
+        {
+            var underChunk = World.GetChunkAt(ChunkOffset.ToVector3());
+            var region = underChunk != null
+                ? underChunk.Biome
+                : World.BiomePool.GetRegion(ChunkOffset.ToVector3());
+            var maxSearchRadius = 1024;//Designs.Max(D => D.SearchRadius);
+            /* Beware! This is created locally and we don't maintain a static instance because of multi-threading issues. */
+            var distribution = new RandomDistribution(true);
+            Search(ChunkOffset, maxSearchRadius, (Offset) =>
+            {
+                if(_landformChecker.RegisterOffset(ChunkOffset, Offset)) return;
+
+                SampleLandform(Offset, distribution);
+            });
+        }
+        
         private void SampleLandform(Vector2 Offset, RandomDistribution Rng)
         {
             var landform = LandformPlacer.Sample(Offset, Rng);
@@ -193,59 +217,7 @@ namespace Hedra.Engine.StructureSystem
             }
         }
         
-        private bool RegisterOffset(Vector2 Original, Vector2 Checked)
-        {
-            var skip = false;
-            lock (_checkedPositionsLock)
-            {
-                lock (_offsetsToCheckedStructuresLock)
-                {
-                    if (!_checkedPositions.ContainsKey(Checked))
-                    {
-                        _checkedPositions.Add(Checked, 1);
-                    }
-                    else
-                    {
-                        _checkedPositions[Checked] += 1;
-                        skip = true;
-                    }
-                    if (!_offsetsToCheckedStructures.ContainsKey(Original))
-                        _offsetsToCheckedStructures.Add(Original, new List<Vector2>());
-                    _offsetsToCheckedStructures[Original].Add(Checked);
-                }
-            }
-
-            return skip;
-        }
-
-        private void DeleteOffset(Vector2 ChunkOffset)
-        {
-            lock (_checkedPositionsLock)
-            {
-                lock (_offsetsToCheckedStructuresLock)
-                {
-                    if (!_offsetsToCheckedStructures.ContainsKey(ChunkOffset)) return;
-                    foreach (var position in _offsetsToCheckedStructures[ChunkOffset])
-                    {
-                        _checkedPositions[position] -= 1;
-                        if (_checkedPositions[position] == 0)
-                        {
-                            _checkedPositions.Remove(position);
-                            lock (_landformLock)
-                            {
-                                if (_registeredLandforms.TryGetValue(position, out var value))
-                                {
-                                    World.WorldBuilding.RemoveLandform(value);
-                                    _registeredLandforms.Remove(position);
-                                }
-                            }
-                        }
-                    }
-
-                    _offsetsToCheckedStructures.Remove(ChunkOffset);
-                }
-            }
-        }
+        
 
         private static void Search(Vector2 ChunkOffset, int MaxSearchRadius, Action<Vector2> EachAction)
         {
@@ -375,14 +347,8 @@ namespace Hedra.Engine.StructureSystem
                 Dirty();
             }
 
-            lock (_checkedPositionsLock)
-            {
-                lock (_offsetsToCheckedStructuresLock)
-                {
-                    _offsetsToCheckedStructures.Clear();
-                    _checkedPositions.Clear();
-                }
-            }
+            _landformChecker = new OffsetChecker();
+            _structureChecker = new OffsetChecker();
             
             lock(_landformLock)
                 _registeredLandforms.Clear();

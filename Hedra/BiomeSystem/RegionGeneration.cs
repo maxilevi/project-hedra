@@ -34,6 +34,8 @@ namespace Hedra.BiomeSystem
 
         public float GetMaxHeight(float X, float Z)
         {
+            //return GetAccurateMaxHeight(X, Z);
+            
             lock (_tempMapLock)
             {
                 _noise.Seed = World.Seed;
@@ -67,9 +69,15 @@ namespace Hedra.BiomeSystem
                     Chunk.BlockSize, new Vector3(X, 0, Z));
                 _design.BuildHeightMap(_noise, _tempHeightMap, null, 1, Chunk.BlockSize, new Vector2(X, Z));
 
+                var chunkOffset = World.ToChunkSpace(new Vector2(X, Z));
+                World.StructureHandler.CheckLandforms(chunkOffset);
+                var landformAddon = LandscapeGenerator.HandleLandforms(new Vector2(X, Z), World.WorldBuilding.Landforms);
+                
                 for (var i = 0; i < Chunk.Height; ++i)
                     _tempDensityMap[0][i][0] =
-                        LandscapeGenerator.CalculateDensityForBlock(_tempHeightMap[0][0], _tempDensityMap[0][i][0], i);
+                        LandscapeGenerator.CalculateDensityForBlock(_tempHeightMap[0][0] + landformAddon, _tempDensityMap[0][i][0], i);
+                
+                
 
                 for (var i = 0; i < Chunk.Height; ++i)
                     if (_tempDensityMap[0][i][0] < 0)
@@ -112,6 +120,12 @@ namespace Hedra.BiomeSystem
         {
             PathMap = CreateMap<float>(Width);
             _design.BuildPathMap(Noise, PathMap, Width, Scale, Offset);
+        }
+        
+        public void BuildLandformMap(FastNoiseSIMD Noise, int Width, float Scale, Vector2 Offset, out float[][] PathMap)
+        {
+            PathMap = CreateMap<float>(Width);
+            _design.BuildLandformMap(Noise, PathMap, Width, Scale, Offset);
         }
 
         private T[][][] CreateMap<T>(int Width, int Height)

@@ -663,6 +663,7 @@ namespace Hedra.User
                     }
 
                     World.StructureHandler.Discard();
+                    World.StructureHandler.CheckLandforms(World.ToChunkSpace(Caster.Position));
                     World.StructureHandler.CheckStructures(World.ToChunkSpace(Caster.Position));
                     var objs = BulletObjectTracker.Current.GetUserOwnedObjects();
                     Chat.Log($"Bullet Objects: {objs.Count}");

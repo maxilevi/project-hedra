@@ -78,6 +78,15 @@ namespace Hedra.Engine.WorldBuilding
                 }).ToList();
             }
         }
+        
+        public List<Landform> Landforms
+        {
+            get
+            {
+                lock (_landformsLock)
+                    return _landforms.ToList();
+            }
+        }
 
         public BasePlateau[] GetPlateausFor(Vector2 Position)
         {

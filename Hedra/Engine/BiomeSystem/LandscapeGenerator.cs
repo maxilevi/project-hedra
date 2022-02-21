@@ -218,7 +218,7 @@ namespace Hedra.Engine.BiomeSystem
             }
         }
         
-        private static float HandleLandforms(Vector2 Position, IEnumerable<Landform> Landforms)
+        public static float HandleLandforms(Vector2 Position, IEnumerable<Landform> Landforms)
         {
             return Landforms.Sum(landform => landform.Apply(Position));
         }

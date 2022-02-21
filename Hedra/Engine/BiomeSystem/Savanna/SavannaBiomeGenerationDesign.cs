@@ -42,5 +42,10 @@ namespace Hedra.Engine.BiomeSystem.Savanna
         {
             throw new NotImplementedException();
         }
+
+        protected override void DoBuildLandformMap(FastNoiseSIMD Noise, float[][] LandformMap, int Width, float Scale, Vector2 Offset)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

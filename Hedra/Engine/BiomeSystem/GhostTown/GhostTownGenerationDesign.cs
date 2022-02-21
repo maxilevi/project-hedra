@@ -11,6 +11,10 @@ namespace Hedra.Engine.BiomeSystem.GhostTown
         public override bool HasPaths => false;
         public override bool HasRivers => true;
         public override bool HasDirt => false;
+        protected override void DoBuildLandformMap(FastNoiseSIMD Noise, float[][] LandformMap, int Width, float Scale, Vector2 Offset)
+        {
+            
+        }
 
         protected override float GetHeight(float X, float Z, out BlockType Blocktype)
         {

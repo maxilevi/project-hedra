@@ -8,6 +8,7 @@ namespace Hedra.Engine.WorldBuilding
     public interface IWorldBuilding
     {
         BasePlateau[] Plateaux { get; }
+        List<Landform> Landforms { get; }
         IGroundwork[] Groundworks { get; }
         BasePlateau[] GetPlateausFor(Vector2 Position);
         IEnumerable<Landform> GetLandformsFor(Vector2 Position);

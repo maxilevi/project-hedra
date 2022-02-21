@@ -54,6 +54,7 @@ namespace Hedra.Engine.BiomeSystem
         public ChunkDetails GenerateBlocks(Block[] Blocks)
         {
             if (BlocksDefined) throw new ArgumentException("Cannot generate a chunk multiple times");
+            CheckForNearbyLandforms();
             CheckForNearbyStructures();
             BlocksSetted = true;
             var details = DefineBlocks(Blocks);
@@ -72,6 +73,11 @@ namespace Hedra.Engine.BiomeSystem
         private void CheckForNearbyStructures()
         {
             World.StructureHandler.CheckStructures(new Vector2(Parent.OffsetX, Parent.OffsetZ));
+        }
+
+        private void CheckForNearbyLandforms()
+        {
+            World.StructureHandler.CheckLandforms(new Vector2(Parent.OffsetX, Parent.OffsetZ));
         }
 
         public static float PathFormula(float X, float Z)
