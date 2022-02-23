@@ -121,12 +121,6 @@ namespace Hedra.BiomeSystem
             PathMap = CreateMap<float>(Width);
             _design.BuildPathMap(Noise, PathMap, Width, Scale, Offset);
         }
-        
-        public void BuildLandformMap(FastNoiseSIMD Noise, int Width, float Scale, Vector2 Offset, out float[][] PathMap)
-        {
-            PathMap = CreateMap<float>(Width);
-            _design.BuildLandformMap(Noise, PathMap, Width, Scale, Offset);
-        }
 
         private T[][][] CreateMap<T>(int Width, int Height)
         {

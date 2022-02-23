@@ -1,5 +1,6 @@
 using System;
 using System.Numerics;
+using Hedra.Core;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Numerics;
 
@@ -11,6 +12,7 @@ public class Landform
     private readonly float _width;
     private readonly float _height;
     private readonly float[][] _data;
+    private readonly float _size;
     
     public Landform(Vector2 Position, float[][] Data)
     {
@@ -18,12 +20,13 @@ public class Landform
         _data = Data;
         _width = Data.Length;
         _height = Data[0].Length;
+        _size = new Random(Unique.GetSeed(Position)).NextFloat() * 64 + 48;
     }
 
     public float Apply(Vector2 Position)
     {
         if (!HasPoint(Position, out var delta)) return 0;
-        return _data[(int)delta.X][(int)delta.Y] * 96;
+        return _data[(int)delta.X][(int)delta.Y] * _size;
     }
 
 

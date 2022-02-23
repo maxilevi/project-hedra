@@ -85,11 +85,6 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
 
             AddConstant(HeightMap, BiomePool.SeaLevel);
         }
-
-        protected override void DoBuildLandformMap(FastNoiseSIMD Noise, float[][] LandformMap, int Width, float Scale, Vector2 Offset)
-        {
-            //var voronoi = new Voronoi();
-            //voronoi.GetGridPoint()
-        }
+        
     }
 }

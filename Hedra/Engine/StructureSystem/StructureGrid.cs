@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
+using Hedra.Core;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Numerics;
@@ -45,23 +46,11 @@ namespace Hedra.Engine.StructureSystem
         private const int SampleTypes = 5;
         private const int BigSampleChance = 1;
 
-        private static int GetSeed(Vector2 Position)
-        {
-            unchecked
-            {
-                var seed = 17;
-                seed = seed * 31 + Position.X.GetHashCode();
-                seed = seed * 31 + Position.Y.GetHashCode();
-                seed = seed * 31 + World.Seed.GetHashCode();
-                return seed;
-            }
-        }
-        
         private static bool IsBig(Vector2 Position, RandomDistribution Distribution, out int Seed)
         {
             if ((int)Math.Abs(Position.X % 23) == 4 && Math.Abs((int)Position.Y % 17) == 6)
             {
-                Seed = GetSeed(Position);
+                Seed = Unique.GetSeed(Position);
                 Distribution.Seed = Seed;
                 return Distribution.Next(0, 2) == 1;
             }
@@ -74,7 +63,7 @@ namespace Hedra.Engine.StructureSystem
         {
             if ((int)Math.Abs(Position.X % 11) == 4 && Math.Abs((int)Position.Y % 7) == 6)
             {
-                Seed = GetSeed(Position);
+                Seed = Unique.GetSeed(Position);
                 Distribution.Seed = Seed;
                 return Distribution.Next(0, 2) == 1;
             }

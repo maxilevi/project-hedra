@@ -35,5 +35,17 @@ namespace Hedra.Core
         {
             return Utils.Rng.Next(int.MinValue, int.MaxValue);
         }
+        
+        public static int GetSeed(Vector2 Position)
+        {
+            unchecked
+            {
+                var seed = 17;
+                seed = seed * 31 + Position.X.GetHashCode();
+                seed = seed * 31 + Position.Y.GetHashCode();
+                seed = seed * 31 + World.Seed.GetHashCode();
+                return seed;
+            }
+        }
     }
 }

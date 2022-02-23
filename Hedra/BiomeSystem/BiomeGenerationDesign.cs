@@ -36,15 +36,7 @@ namespace Hedra.BiomeSystem
 
         protected abstract void DoBuildPathMap(FastNoiseSIMD Noise, float[][] PathMap, int Width, float Scale,
             Vector2 Offset);
-        
-        protected abstract void DoBuildLandformMap(FastNoiseSIMD Noise, float[][] LandformMap, int Width, float Scale,
-            Vector2 Offset);
 
-        public void BuildLandformMap(FastNoiseSIMD Noise, float[][] LandformMap, int Width, float Scale, Vector2 Offset)
-        {
-            DoBuildLandformMap(Noise, LandformMap, Width, Scale, Offset);
-        }
-        
         public void BuildPathMap(FastNoiseSIMD Noise, float[][] RiverMap, int Width, float Scale, Vector2 Offset)
         {
             DoBuildPathMap(Noise, RiverMap, Width, Scale, Offset);

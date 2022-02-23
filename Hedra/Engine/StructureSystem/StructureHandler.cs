@@ -349,9 +349,15 @@ namespace Hedra.Engine.StructureSystem
 
             _landformChecker = new OffsetChecker();
             _structureChecker = new OffsetChecker();
-            
-            lock(_landformLock)
+
+            lock (_landformLock)
+            {
+                foreach (var pair in _registeredLandforms)
+                {
+                    World.WorldBuilding.RemoveLandform(pair.Value);
+                }
                 _registeredLandforms.Clear();
+            }
         }
 
         private void Dirty()
