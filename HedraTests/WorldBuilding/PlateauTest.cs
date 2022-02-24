@@ -9,6 +9,7 @@ using Moq;
 using NUnit.Framework;
 using System.Numerics;
 using Hedra.Numerics;
+using HedraTests.Structure;
 
 namespace HedraTests.WorldBuilding
 {
@@ -38,7 +39,8 @@ namespace HedraTests.WorldBuilding
             biomePoolMock.Setup(B => B.GetRegion(It.IsAny<Vector3>())).Returns(regionMock);
             var provider = new SimpleWorldProviderMock
             {
-                BiomePool = biomePoolMock.Object
+                BiomePool = biomePoolMock.Object,
+                WorldBuilding = new StructureDesignWorldBuildingMock()
             };
             World.Provider = provider;
         }

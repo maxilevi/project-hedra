@@ -13,6 +13,7 @@ using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Sound;
+using Hedra.Engine.WorldBuilding;
 using Hedra.Game;
 using Hedra.Localization;
 using Hedra.Mission;
@@ -63,6 +64,7 @@ namespace HedraTests
             GameSettings.Width = 1920;
             GameSettings.Height = 1080;
             BulletPhysics.Load();
+            LandformLoader.Load();
             BackgroundUpdater.Load();
             MissionPool.Load();
         }

@@ -34,7 +34,7 @@ namespace HedraTests
         public virtual IBiomePool BiomePool { get; set; }
         public virtual MobFactory MobFactory => new MobFactory();
         public virtual TreeGenerator TreeGenerator => null;
-        public virtual IWorldBuilding WorldBuilding => null;
+        public virtual IWorldBuilding WorldBuilding { get; set; }
         public virtual StructureHandler StructureHandler { get; } = new StructureHandler();
         public FishingZoneHandler FishingZoneHandler => null;
         public void ResetGenerationProfile()

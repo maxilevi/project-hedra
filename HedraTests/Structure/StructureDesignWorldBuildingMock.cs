@@ -39,7 +39,7 @@ namespace HedraTests.Structure
         }
 
         public BasePlateau[] Plateaux => null;
-        public List<Landform> Landforms { get; }
+        public List<Landform> Landforms { get; } = new List<Landform>();
 
         public IGroundwork[] Groundworks => null;
 
@@ -109,12 +109,10 @@ namespace HedraTests.Structure
 
         public void RemoveLandform(Landform Land)
         {
-            throw new NotImplementedException();
         }
 
         public void AddLandform(Landform Land)
         {
-            throw new NotImplementedException();
         }
     }
 }
