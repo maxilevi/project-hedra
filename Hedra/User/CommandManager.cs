@@ -709,6 +709,12 @@ namespace Hedra.User
                         World.AddChunkToQueue(chunk, ChunkQueueType.Mesh);
                     }
                 }
+                
+                if (Parts[0] == "landforms")
+                {   
+                    Result = $"{World.WorldBuilding.Landforms.Count}";
+                    return true;
+                }
 
                 if (Parts[0] == "rebuild")
                     lock (World.Chunks)

@@ -16,6 +16,7 @@ using System.Reflection;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.IO;
 using Hedra.Engine.Steamworks;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Framework;
@@ -206,14 +207,18 @@ namespace Hedra.Engine.StructureSystem
                 SampleLandform(Offset, distribution);
             });
         }
-        
+
         private void SampleLandform(Vector2 Offset, RandomDistribution Rng)
         {
             var landform = LandformPlacer.Sample(Offset, Rng);
             if (landform != null)
             {
-                lock(_landformLock)
+                lock (_landformLock)
+                {
                     _registeredLandforms.Add(Offset, landform);
+                    if (_registeredLandforms.Count > 35)
+                        Log.WriteLine($"Landforms memory leak {_registeredLandforms.Count}");
+                }
             }
         }
         
