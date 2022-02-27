@@ -82,6 +82,9 @@ namespace Hedra.Engine.CacheSystem
         GarrisonIcon,
         GnollFortress,
         GnollFortressIcon,
+        Cave0,
+        Cave1,
+        //CaveIcon,
         MaxEnums
     }
 }

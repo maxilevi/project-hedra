@@ -19,7 +19,7 @@ public class LandformPlacer
     private static bool CanPlace(Vector2 Offset, RandomDistribution Rng)
     {
         Rng.Seed = GetSeed(Offset) + 1;
-        return (int)Math.Abs(Offset.X % 11) == 4 && Math.Abs((int)Offset.Y % 7) == 6 && Rng.Next(0, 4) == 1;
+        return (int)Math.Abs(Offset.X % 11) == 4 && Math.Abs((int)Offset.Y % 7) == 6 && Rng.Next(0, 6) == 1;
     }
     
     private static int GetSeed(Vector2 Position)

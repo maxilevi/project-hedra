@@ -36,6 +36,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             AddDesign(new GarrisonDesign());
             AddDesign(new GnollFortressDesign());
             AddDesign(new Cave0Design());
+            AddDesign(new Cave1Design());
             //AddDesign(new ShroomDimensionPortalDesign());
         }
 
