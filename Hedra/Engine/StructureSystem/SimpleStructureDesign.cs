@@ -29,6 +29,7 @@ namespace Hedra.Engine.StructureSystem
         protected virtual float GroundworkRadius => EffectivePlateauRadius / 2;
         protected virtual BlockType PathType => BlockType.StonePath;
         protected virtual bool NoPlantsZone { get; }
+        protected virtual bool NoTreesZone { get; }
         protected abstract CacheItem? Cache { get; }
 
         public sealed override void Build(CollidableStructure Structure)
@@ -72,7 +73,8 @@ namespace Hedra.Engine.StructureSystem
             var structure = base.Setup(TargetPosition, Rng, Create(TargetPosition, EffectivePlateauRadius));
             structure.AddGroundwork(new RoundedGroundwork(TargetPosition, GroundworkRadius, PathType)
             {
-                NoPlants = NoPlantsZone
+                NoPlants = NoPlantsZone,
+                NoTrees = NoTreesZone
             });
             structure.Mountain.Radius = EffectivePlateauRadius;
             return structure;

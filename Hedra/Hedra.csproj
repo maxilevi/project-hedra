@@ -8358,6 +8358,38 @@
             <Link>Sounds\Teleport.ogg</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+        <Content Include="..\project-hedra-assets\Structures\Caves\Cave0-Colliders.ply">
+          <Link>Assets\Env\Structures\Caves\Cave0-Colliders.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Structures\Caves\Cave0-Pathfinding.ply">
+          <Link>Assets\Env\Structures\Caves\Cave0-Pathfinding.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Structures\Caves\Cave0-Scene.ply">
+          <Link>Assets\Env\Structures\Caves\Cave0-Scene.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Structures\Caves\Cave0.ply">
+          <Link>Assets\Env\Structures\Caves\Cave0.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Structures\Caves\Cave1-Colliders.ply">
+          <Link>Assets\Env\Structures\Caves\Cave1-Colliders.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Structures\Caves\Cave1-Pathfinding.ply">
+          <Link>Assets\Env\Structures\Caves\Cave1-Pathfinding.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Structures\Caves\Cave1-Scene.ply">
+          <Link>Assets\Env\Structures\Caves\Cave1-Scene.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Structures\Caves\Cave1.ply">
+          <Link>Assets\Env\Structures\Caves\Cave1.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
         <Content Include="..\project-hedra-assets\Structures\Dungeon0\Dungeon0-Colliders.ply">
             <Link>Assets\Env\Structures\Dungeon\Dungeon0-Colliders.ply</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

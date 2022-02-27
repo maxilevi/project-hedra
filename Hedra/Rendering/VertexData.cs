@@ -147,6 +147,13 @@ namespace Hedra.Rendering
             ApplyRecursively(V => V.GraduateColor(Direction));
             return this;
         }
+        
+        public VertexData GraduateColor(Vector3 Direction, float Amount)
+        {
+            MeshOperations.GraduateColor(Vertices, Colors, Direction, Amount);
+            ApplyRecursively(V => V.GraduateColor(Direction, Amount));
+            return this;
+        }
 
 
         public VertexData Transform(Matrix4x4 Mat)
