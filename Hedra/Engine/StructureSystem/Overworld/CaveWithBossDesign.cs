@@ -37,7 +37,7 @@ public abstract class CaveWithBossDesign : DarkStructureWithBossDesign
     protected override IEntity CreateDungeonBoss(Vector3 Position, CollidableStructure Structure)
     {
         const HumanType type = HumanType.BeasthunterSpirit;
-        var boss = NPCCreator.SpawnBandit(Position, ((Cave1Design)Structure.Design).Level,
+        var boss = NPCCreator.SpawnBandit(Position, ((CaveWithBossDesign)Structure.Design).Level,
             new BanditOptions
             {
                 ModelType = type,
