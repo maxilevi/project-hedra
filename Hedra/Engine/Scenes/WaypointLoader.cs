@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using BulletSharp;
 using Hedra.Engine.Bullet;
+using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Rendering;
 
@@ -26,6 +28,7 @@ namespace Hedra.Engine.Scenes
         private static void Sample(VertexData Model, WaypointGraph Graph, float Step, Matrix4x4 Transformation)
         {
             if (Step >= 4.0f) throw new ArgumentOutOfRangeException();
+            //Debug.Log($"Sampling waypoints");
             var world = new BulletWorld(10);
             var shape = BulletPhysics.CreateTriangleShape(Model.Indices, Model.Vertices);
             var mainBody = default(RigidBody);
@@ -40,37 +43,47 @@ namespace Hedra.Engine.Scenes
             var dummy = BulletSharp.Math.Vector3.Zero;
             var callback = new ClosestRayResultCallback(ref dummy, ref dummy);
             var boundX = (Model.SupportPoint(Vector3.UnitX).X - Model.SupportPoint(-Vector3.UnitX).X) * 2;
+            var boundY = (Model.SupportPoint(Vector3.UnitY).Y - Model.SupportPoint(-Vector3.UnitY).Y) * 2;
             var boundZ = (Model.SupportPoint(Vector3.UnitZ).Z - Model.SupportPoint(-Vector3.UnitZ).Z) * 2;
-            var minY = Model.SupportPoint(-Vector3.UnitY).Y;
-            var maxY = Model.SupportPoint(Vector3.UnitY).Y;
-            for (var x = 0f; x < boundX; x += Step)
-            for (var z = 0f; z < boundZ; z += Step)
+
+            for (var y = 0f; y < boundY; y += Step)
             {
-                var offset = new BulletSharp.Math.Vector3(x - boundX / 2f, 0, z - boundZ / 2f);
-                var from = BulletSharp.Math.Vector3.UnitY * (-32 + minY) + offset;
-                var to = BulletSharp.Math.Vector3.UnitY * (32 + maxY) + offset;
-                BulletPhysics.ResetCallback(callback);
-                callback.RayFromWorld = @from;
-                callback.RayToWorld = to;
-                world.DynamicsWorld.RayTestRef(ref @from, ref to, callback);
-                if (callback.HasHit)
+                for (var x = 0f; x < boundX; x += Step)
                 {
-                    var currentPosition = Vector3.Transform(callback.HitPointWorld.Compatible(), Transformation);
-                    var vertices = Graph.Vertices;
-                    for (var i = 0; i < vertices.Length; ++i)
-                        if (Math.Abs(vertices[i].Position.X - currentPosition.X) <= Step &&
-                            Math.Abs(vertices[i].Position.Z - currentPosition.Z) <= Step)
-                            list.Add(vertices[i]);
-                    var waypoint = new Waypoint
+                    for (var z = 0f; z < boundZ; z += Step)
                     {
-                        Position = currentPosition
-                    };
-                    Graph.AddVertex(waypoint);
-                    for (var i = 0; i < list.Count; ++i) Graph.AddEdge(waypoint, list[i]);
-                    list.Clear();
+                        var offset = new BulletSharp.Math.Vector3(x - boundX / 2f, y - boundY / 2f, z - boundZ / 2f);
+                        var from = BulletSharp.Math.Vector3.UnitY * -2 + offset;
+                        var to = BulletSharp.Math.Vector3.UnitY * 2 + offset;
+                        BulletPhysics.ResetCallback(callback);
+                        callback.RayFromWorld = from;
+                        callback.RayToWorld = to;
+                        world.DynamicsWorld.RayTestRef(ref from, ref to, callback);
+                        if (callback.HasHit)
+                        {
+                            var currentPosition =
+                                Vector3.Transform(callback.HitPointWorld.Compatible(), Transformation);
+                            var vertices = Graph.Vertices;
+                            for (var i = 0; i < vertices.Length; ++i)
+                            {
+                                if (Math.Abs(vertices[i].Position.X - currentPosition.X) <= Step &&
+                                    Math.Abs(vertices[i].Position.Y - currentPosition.Y) <= Step &&
+                                    Math.Abs(vertices[i].Position.Z - currentPosition.Z) <= Step)
+                                    list.Add(vertices[i]);
+                            }
+
+                            var waypoint = new Waypoint
+                            {
+                                Position = currentPosition
+                            };
+                            Graph.AddVertex(waypoint);
+                            for (var i = 0; i < list.Count; ++i) Graph.AddEdge(waypoint, list[i]);
+                            list.Clear();
+                        }
+                    }
                 }
             }
-
+            
             callback.Dispose();
             world.DynamicsWorld.RemoveRigidBody(mainBody);
             BulletPhysics.DisposeBody(mainBody);
