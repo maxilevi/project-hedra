@@ -17,9 +17,9 @@ namespace Hedra.Engine.Scenes
         {
             var model = AssetManager.PLYLoader(Path, Scale, Vector3.Zero, Vector3.Zero, false);
             model.Colors = Enumerable.Repeat(Vector4.One, model.Vertices.Count).ToList();
-            var groups = model.Ungroup();
-            if (groups.Length != 1)
-                throw new ArgumentOutOfRangeException("Pathfinding meshes need to be a convex graph");
+            //var groups = model.Ungroup();
+            //if (groups.Length != 1)
+            //    throw new ArgumentOutOfRangeException("Pathfinding meshes need to be a convex graph");
             var graph = new WaypointGraph();
             Sample(model, graph, 3.5f, Transformation);
             return graph;

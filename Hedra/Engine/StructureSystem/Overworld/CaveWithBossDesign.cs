@@ -24,13 +24,14 @@ public abstract class CaveWithBossDesign : DarkStructureWithBossDesign
     protected override bool NoTreesZone => true;
     
     protected override Vector3 StructureScale => Vector3.One;
-    public override VertexData Icon => CacheManager.GetModel(CacheItem.AttentionIcon);
+    public override VertexData Icon => CacheManager.GetModel(CacheItem.CaveIcon);
     
     protected override void ApplyColors(VertexData Model, RegionColor Colors)
     {
         Model.Color(AssetManager.ColorCode0, Colors.StoneColor * 0.6f);
-        Model.Color(AssetManager.ColorCode1, Colors.StoneColor * 0.8f);
+        Model.Color(AssetManager.ColorCode1, Colors.GrassColor * 0.8f);
         Model.Color(AssetManager.ColorCode2, Colors.StoneColor * 0.3f);
+        Model.Color(AssetManager.ColorCode3, Colors.StoneColor * 0.8f);
         Model.GraduateColor(Vector3.UnitY, 0.15f);
     }
     
