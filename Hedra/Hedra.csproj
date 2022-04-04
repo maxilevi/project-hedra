@@ -8426,6 +8426,54 @@
           <Link>Assets\Env\Structures\Caves\Cave4-Colliders.ply</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+        <Content Include="..\project-hedra-assets\Structures\Caves\Cave4-Door0.ply">
+          <Link>Assets\Env\Structures\Caves\Cave4-Door0.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Structures\Caves\Cave4-Door1.ply">
+          <Link>Assets\Env\Structures\Caves\Cave4-Door1.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Structures\Caves\Cave4-Door10.ply">
+          <Link>Assets\Env\Structures\Caves\Cave4-Door10.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Structures\Caves\Cave4-Door11.ply">
+          <Link>Assets\Env\Structures\Caves\Cave4-Door11.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Structures\Caves\Cave4-Door2.ply">
+          <Link>Assets\Env\Structures\Caves\Cave4-Door2.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Structures\Caves\Cave4-Door3.ply">
+          <Link>Assets\Env\Structures\Caves\Cave4-Door3.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Structures\Caves\Cave4-Door4.ply">
+          <Link>Assets\Env\Structures\Caves\Cave4-Door4.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Structures\Caves\Cave4-Door5.ply">
+          <Link>Assets\Env\Structures\Caves\Cave4-Door5.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Structures\Caves\Cave4-Door6.ply">
+          <Link>Assets\Env\Structures\Caves\Cave4-Door6.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Structures\Caves\Cave4-Door7.ply">
+          <Link>Assets\Env\Structures\Caves\Cave4-Door7.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Structures\Caves\Cave4-Door8.ply">
+          <Link>Assets\Env\Structures\Caves\Cave4-Door8.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Structures\Caves\Cave4-Door9.ply">
+          <Link>Assets\Env\Structures\Caves\Cave4-Door9.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
         <Content Include="..\project-hedra-assets\Structures\Caves\Cave4-Pathfinding.ply">
           <Link>Assets\Env\Structures\Caves\Cave4-Pathfinding.ply</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
