@@ -32,7 +32,16 @@ public class Cave4Design : CaveWithBossDesign
             AddDoor(AssetManager.PLYLoader("Assets/Env/Structures/Caves/Cave4-Door8.ply", Vector3.One), Rotation, Structure, false, false);
             AddDoor(AssetManager.PLYLoader("Assets/Env/Structures/Caves/Cave4-Door9.ply", Vector3.One), Rotation, Structure, true, true);
             /*Boss room doors */
-            AddDoor(AssetManager.PLYLoader("Assets/Env/Structures/Caves/Cave4-Door10.ply", Vector3.One), Rotation, Structure, false, false);
-            AddDoor(AssetManager.PLYLoader("Assets/Env/Structures/Caves/Cave4-Door11.ply", Vector3.One), Rotation, Structure, true, true);
+            var bossDoor0 = AddDoor(AssetManager.PLYLoader("Assets/Env/Structures/Caves/Cave4-Door10.ply", Vector3.One), Rotation, Structure, false, false);
+            var bossDoor1 = AddDoor(AssetManager.PLYLoader("Assets/Env/Structures/Caves/Cave4-Door11.ply", Vector3.One), Rotation, Structure, true, true);
+            
+            bossDoor0.IsLocked = true;
+            bossDoor1.IsLocked = true;
+            var lever = AddLever(Structure, Cave4Cache.Lever0, Rotation);
+            lever.OnActivate += _ =>
+            {
+                bossDoor0.InvokeInteraction(_);
+                bossDoor1.InvokeInteraction(_);
+            };
         }
 }
