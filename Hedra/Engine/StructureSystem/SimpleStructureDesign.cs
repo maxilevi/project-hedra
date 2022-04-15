@@ -10,6 +10,7 @@ using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.PlantSystem.Harvestables;
+using Hedra.Engine.Scenes;
 using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
@@ -103,6 +104,13 @@ namespace Hedra.Engine.StructureSystem
                 door
             );
             return door;
+        }
+        
+        protected Door AddDoor(VertexData Model, Matrix4x4 RotationMatrix,
+            CollidableStructure Structure, bool InvertedRotation, bool InvertedPivot)
+        {
+            var calculatedDoorPosition = Model.AverageVertices();
+            return AddDoor(Model, calculatedDoorPosition, RotationMatrix, Structure, InvertedRotation, InvertedPivot);
         }
 
         protected static void AddImmuneTag(IEntity Bandit)

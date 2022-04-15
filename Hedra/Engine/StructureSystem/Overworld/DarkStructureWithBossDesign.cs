@@ -2,11 +2,13 @@ using System;
 using System.Linq;
 using System.Numerics;
 using Hedra.AISystem.Humanoid;
+using Hedra.API;
 using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EntitySystem.BossSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Player;
 using Hedra.Engine.Scenes;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
@@ -20,14 +22,16 @@ namespace Hedra.Engine.StructureSystem.Overworld
         protected abstract string BaseFileName { get; }
         protected abstract string FolderName { get; }
 
-        private static SceneSettings Settings { get; } = new SceneSettings
+        protected virtual bool HasAmbientHandler => false;
+
+        protected virtual SceneSettings Settings => new SceneSettings
         {
             LightRadius = Torch.DefaultRadius * 2,
             LightColor = WorldLight.DefaultColor * 2,
             IsNightLight = false,
             Structure1Creator = BuildDungeonDoorTrigger,
             Structure2Creator = BuildBossRoomTrigger,
-            Structure3Creator = (P, M) => StructureContentHelper.AddRewardChest(P, M, CreateItemForChest()),
+            Structure3Creator = (P, M) => StructureContentHelper.AddRewardChest(P, M, CreateItemForChest(Level)),
             Structure4Creator = (P, _) => new Torch(P),
             Npc1Creator = DungeonSkeleton,
             Npc2Creator = DungeonSkeleton,
@@ -36,7 +40,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         protected override DungeonWithBoss Create(Vector3 Position, float Size)
         {
-            return new DungeonWithBoss(Position);
+            return new DungeonWithBoss(Position, Size, HasAmbientHandler);
         }
 
         protected override void DoBuild(CollidableStructure Structure, Matrix4x4 Rotation, Matrix4x4 Translation,
@@ -120,14 +124,32 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
             var skeleton = NPCCreator.SpawnBandit(Position, ((DarkStructureWithBossDesign)Structure.Design).Level,
                 BanditOptions.Undead);
-            skeleton.Physics.CollidesWithEntities = false;
-            skeleton.SearchComponent<CombatAIComponent>().SetCanExplore(false);
-            skeleton.SearchComponent<CombatAIComponent>().SetGuardSpawnPoint(false);
-            skeleton.Position = Position;
+            ConfigureSkeleton(skeleton, Position);
+            return skeleton;
+        }
+        
+        protected static IHumanoid RangedSkeleton(Vector3 Position, CollidableStructure Structure)
+        {
+            var skeleton = NPCCreator.SpawnBandit(Position, ((DarkStructureWithBossDesign)Structure.Design).Level,
+                new BanditOptions {
+                    Friendly = false,
+                    PossibleClasses = Class.Archer | Class.Mage,
+                    ModelType = Utils.Rng.Next(0, 7) == 1 ? HumanType.VillagerGhost : HumanType.Skeleton
+                });
+            ConfigureSkeleton(skeleton, Position);
+            AddImmuneTag(skeleton);
             return skeleton;
         }
 
-        private static Item CreateItemForChest()
+        private static void ConfigureSkeleton(IHumanoid Skeleton, Vector3 Position)
+        {
+            Skeleton.Physics.CollidesWithEntities = false;
+            Skeleton.SearchComponent<CombatAIComponent>().SetCanExplore(false);
+            Skeleton.SearchComponent<CombatAIComponent>().SetGuardSpawnPoint(false);
+            Skeleton.Position = Position;
+        }
+
+        private static Item CreateItemForChest(int Level)
         {
             return ItemPool.Grab(Utils.Rng.Next(0, 5) == 1 ? ItemTier.Rare : ItemTier.Uncommon);
         }

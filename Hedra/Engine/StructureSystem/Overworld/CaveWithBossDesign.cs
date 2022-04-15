@@ -8,6 +8,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.Player;
+using Hedra.Engine.Scenes;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Items;
@@ -22,9 +23,21 @@ public abstract class CaveWithBossDesign : DarkStructureWithBossDesign
     protected override BlockType PathType => BlockType.Grass;
     protected override bool NoPlantsZone => true;
     protected override bool NoTreesZone => true;
+    public override int PlateauRadius => 480;
+    protected override float GroundworkRadius => 256;
     
     protected override Vector3 StructureScale => Vector3.One;
     public override VertexData Icon => CacheManager.GetModel(CacheItem.CaveIcon);
+
+    protected override SceneSettings Settings
+    {
+        get
+        {
+            var @base = base.Settings;
+            @base.Npc2Creator = RangedSkeleton;
+            return @base;
+        }
+    }
     
     protected override void ApplyColors(VertexData Model, RegionColor Colors)
     {
@@ -32,7 +45,7 @@ public abstract class CaveWithBossDesign : DarkStructureWithBossDesign
         Model.Color(AssetManager.ColorCode1, Colors.GrassColor * 0.8f);
         Model.Color(AssetManager.ColorCode2, Colors.StoneColor * 0.3f);
         Model.Color(AssetManager.ColorCode3, Colors.StoneColor * 0.8f);
-        Model.GraduateColor(Vector3.UnitY, 0.15f);
+        Model.GraduateColor(Vector3.UnitY, 0.25f);
     }
     
     protected override IEntity CreateDungeonBoss(Vector3 Position, CollidableStructure Structure)

@@ -21,14 +21,14 @@ namespace Hedra.Engine.StructureSystem.Overworld
     /// <summary>
     ///     Description of Cementary.
     /// </summary>
-    public sealed class Graveyard : BaseStructureWithChest, IUpdatable, ICompletableStructure
+    public sealed class Graveyard : BaseStructureWithChest, IStructureWithRadius, IUpdatable, ICompletableStructure
     {
-        private readonly GraveyardAmbientHandler _ambientHandler;
+        private readonly StructureAmbientHandler _ambientHandler;
 
         public Graveyard(Vector3 Position, float Radius) : base(Position)
         {
             this.Radius = Radius;
-            _ambientHandler = new GraveyardAmbientHandler(this);
+            _ambientHandler = new StructureAmbientHandler(this);
             UpdateManager.Add(this);
         }
 

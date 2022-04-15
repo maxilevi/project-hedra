@@ -12,8 +12,9 @@ public class Cave4Design : CaveWithBossDesign
     protected override CacheItem? Cache => CacheItem.Cave4;
     protected override Vector3 StructureOffset => Cave4Cache.Offset;
     protected override string BaseFileName => "Cave4";
-    protected override int Level => 17;
-    
+    protected override int Level => 32;
+    protected override bool HasAmbientHandler => true;
+
     protected override void DoBuild(CollidableStructure Structure, Matrix4x4 Rotation, Matrix4x4 Translation,
             Random Rng)
         {
@@ -31,7 +32,7 @@ public class Cave4Design : CaveWithBossDesign
             /* Front doors */
             AddDoor(AssetManager.PLYLoader("Assets/Env/Structures/Caves/Cave4-Door8.ply", Vector3.One), Rotation, Structure, false, false);
             AddDoor(AssetManager.PLYLoader("Assets/Env/Structures/Caves/Cave4-Door9.ply", Vector3.One), Rotation, Structure, true, true);
-            /*Boss room doors */
+            /*Boss room doors */ 
             var bossDoor0 = AddDoor(AssetManager.PLYLoader("Assets/Env/Structures/Caves/Cave4-Door10.ply", Vector3.One), Rotation, Structure, false, false);
             var bossDoor1 = AddDoor(AssetManager.PLYLoader("Assets/Env/Structures/Caves/Cave4-Door11.ply", Vector3.One), Rotation, Structure, true, true);
             

@@ -7,9 +7,9 @@ using Hedra.Sound;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
-    public class GraveyardAmbientHandler : IDisposable
+    public class StructureAmbientHandler : IDisposable
     {
-        private readonly Graveyard _parent;
+        private readonly IStructureWithRadius _parent;
         private readonly ParticleSystem _particles;
         private readonly int _passedTime = 0;
         private float _cementeryTime;
@@ -21,7 +21,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         private float _targetCementeryTime;
         private readonly TimeHandler _timeHandler;
 
-        public GraveyardAmbientHandler(Graveyard Parent)
+        public StructureAmbientHandler(IStructureWithRadius Parent)
         {
             _timeHandler = new TimeHandler(GraveyardDesign.GraveyardSkyTime, SoundType.DarkSound);
             _parent = Parent;
