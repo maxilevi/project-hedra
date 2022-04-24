@@ -21,9 +21,9 @@ namespace Hedra.Engine.StructureSystem.Overworld
         private float _targetCementeryTime;
         private readonly TimeHandler _timeHandler;
 
-        public StructureAmbientHandler(IStructureWithRadius Parent)
+        public StructureAmbientHandler(IStructureWithRadius Parent, int Time)
         {
-            _timeHandler = new TimeHandler(GraveyardDesign.GraveyardSkyTime, SoundType.DarkSound);
+            _timeHandler = new TimeHandler(Time, SoundType.DarkSound);
             _parent = Parent;
             _particles = new ParticleSystem();
         }

@@ -28,7 +28,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public Graveyard(Vector3 Position, float Radius) : base(Position)
         {
             this.Radius = Radius;
-            _ambientHandler = new StructureAmbientHandler(this);
+            _ambientHandler = new StructureAmbientHandler(this, GraveyardDesign.GraveyardSkyTime);
             UpdateManager.Add(this);
         }
 

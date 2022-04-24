@@ -26,7 +26,7 @@ namespace Hedra.Engine.Player
         public HandLamp(IHumanoid Humanoid)
         {
             this.Humanoid = Humanoid;
-            _lamp = new WorldLight(Vector3.Zero)
+            _lamp = new WorldLight(Vector3.Zero, Humanoid is LocalPlayer)
             {
                 LightColor = WorldLight.DefaultColor,
                 IsNightLight = false,

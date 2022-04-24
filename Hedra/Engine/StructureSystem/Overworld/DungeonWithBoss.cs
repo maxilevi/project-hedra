@@ -18,7 +18,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             Radius = Size;
             if (HasAmbientHandler)
             {
-                _ambientHandler = new StructureAmbientHandler(this);
+                _ambientHandler = new StructureAmbientHandler(this, 1000);
                 UpdateManager.Add(this);
             }
         }

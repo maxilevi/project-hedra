@@ -1,5 +1,6 @@
 using System;
 using System.Numerics;
+using BulletSharp.Math;
 using Hedra.AISystem;
 using Hedra.AISystem.Behaviours;
 using Hedra.Components;
@@ -11,6 +12,7 @@ using Hedra.Localization;
 using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Sound;
+using Vector3 = System.Numerics.Vector3;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {

@@ -24,10 +24,11 @@ namespace Hedra.Engine.WorldBuilding
     public class WorldLight : BaseStructure, IUpdatable
     {
         public static readonly Vector3 DefaultColor = new Vector3(1, .6f, .5f);
+        private readonly bool _useReserved;
 
-
-        public WorldLight(Vector3 Position) : base(Position)
+        public WorldLight(Vector3 Position, bool UseReservedLight = false) : base(Position)
         {
+            _useReserved = UseReservedLight;
             BackgroundUpdater.Add(this);
         }
 
@@ -45,7 +46,7 @@ namespace Hedra.Engine.WorldBuilding
 
             if (LightObject == null && isOn)
             {
-                LightObject = ShaderManager.GetAvailableLight();
+                LightObject = ShaderManager.GetAvailableLight(_useReserved);
                 if (LightObject == null) return;
                 LightObject.Position = Position;
                 LightObject.Color = LightColor;

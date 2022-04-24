@@ -3,6 +3,8 @@ using System.Numerics;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
+using Hedra.EntitySystem;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld;
 
@@ -14,6 +16,7 @@ public class Cave4Design : CaveWithBossDesign
     protected override string BaseFileName => "Cave4";
     protected override int Level => 32;
     protected override bool HasAmbientHandler => true;
+    public override int PlateauRadius => 712;
 
     protected override void DoBuild(CollidableStructure Structure, Matrix4x4 Rotation, Matrix4x4 Translation,
             Random Rng)
@@ -38,11 +41,27 @@ public class Cave4Design : CaveWithBossDesign
             
             bossDoor0.IsLocked = true;
             bossDoor1.IsLocked = true;
-            var lever = AddLever(Structure, Cave4Cache.Lever0, Rotation);
-            lever.OnActivate += _ =>
+            var open1 = false;
+            var open2 = false;
+            void OpenDoors(IHumanoid Humanoid)
             {
-                bossDoor0.InvokeInteraction(_);
-                bossDoor1.InvokeInteraction(_);
+                if (!open1 || !open2) return;
+                bossDoor0.InvokeInteraction(Humanoid);
+                bossDoor1.InvokeInteraction(Humanoid);
+            }
+            
+            var lever0 = AddLever(Structure, Cave4Cache.Lever0, Rotation);
+            lever0.OnActivate += _ =>
+            {
+                open1 = true;
+                OpenDoors(_);
+            };
+            
+            var lever1 = AddLever(Structure, Cave4Cache.Lever1, Rotation);
+            lever1.OnActivate += _ =>
+            {
+                open2 = true;
+                OpenDoors(_);
             };
         }
 }

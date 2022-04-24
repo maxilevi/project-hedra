@@ -28,6 +28,7 @@ namespace Hedra.Engine.Rendering.Core
         public const string ModelViewProjectionName = "_modelViewProjectionMatrix";
         public const int LightDistance = 384;
         public const int MaxLights = 32;
+        public const int ReservedLights = 1;
         private static readonly Vector3 _lightPosition;
         private static Vector3 _lightColor;
         private static float _clipPlaneY;
@@ -106,9 +107,9 @@ namespace Hedra.Engine.Rendering.Core
                 Executer.ExecuteOnMainThread(DoUpdate);
         }
 
-        public static PointLight GetAvailableLight()
+        public static PointLight GetAvailableLight(bool UseReserved = false)
         {
-            if (UsedLights == MaxLights) return null;
+            if (UsedLights >= MaxLights - (UseReserved ? 0 : ReservedLights)) return null;
             var light = new PointLight
             {
                 Radius = PointLight.DefaultRadius,

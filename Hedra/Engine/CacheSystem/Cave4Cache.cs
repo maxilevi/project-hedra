@@ -16,4 +16,5 @@ public class Cave4Cache : CacheType
     public static Vector3 Offset => Vector3.UnitY * 0.0f;
 
     public static Vector3 Lever0 => new Vector3(-71.14893f, 56.5f, 23.6824f);
+    public static Vector3 Lever1 => new Vector3(-7.94458f, 168.31076f, -9.53510f);
 }
