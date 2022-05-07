@@ -32,7 +32,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             Structure1Creator = BuildDungeonDoorTrigger,
             Structure2Creator = BuildBossRoomTrigger,
             Structure3Creator = (P, M) => StructureContentHelper.AddRewardChest(P, M, CreateItemForChest(Level)),
-            Structure4Creator = (P, _) => new Torch(P),
+            Structure4Creator = (P, M) => new Torch(P, M.Bounds() * 0.5f),
             Npc1Creator = DungeonSkeleton,
             Npc2Creator = DungeonSkeleton,
             Npc3Creator = BossCreator

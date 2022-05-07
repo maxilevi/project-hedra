@@ -33,13 +33,17 @@ namespace Hedra.Engine.StructureSystem.Overworld
         private readonly AreaSound _fireSound;
         private PointLight _light;
         private long _passedTime;
+        private Vector3 _radius;
 
-        public Campfire(Vector3 Position) : base(Position)
+        public Campfire(Vector3 Position) : this(Position, Vector3.One) {}
+        
+        public Campfire(Vector3 Position, Vector3 Radius) : base(Position)
         {
             if (_fireParticles == null)
                 _fireParticles = new ParticleSystem(Vector3.Zero);
             _fireParticles.HasMultipleOutputs = true;
             _canCraft = true;
+            _radius = Radius;
             _fireSound = new AreaSound(SoundType.Fireplace, FirePosition, 32);
         }
 
@@ -66,12 +70,12 @@ namespace Hedra.Engine.StructureSystem.Overworld
                     _fireParticles.Color = Particle3D.FireColor;
                     _fireParticles.VariateUniformly = false;
                     _fireParticles.Position = FirePosition + Vector3.UnitY * 1f;
-                    _fireParticles.Scale = Vector3.One * .85f;
+                    _fireParticles.Scale = Vector3.One * .65f;
                     _fireParticles.ScaleErrorMargin = new Vector3(.05f, .05f, .05f);
                     _fireParticles.Direction = Vector3.UnitY * 0f;
                     _fireParticles.ParticleLifetime = 1.65f;
                     _fireParticles.GravityEffect = -0.01f;
-                    _fireParticles.PositionErrorMargin = new Vector3(1f, 0f, 1f);
+                    _fireParticles.PositionErrorMargin = new Vector3(1f, 0f, 1f) * _radius;
 
                     _fireParticles.Emit();
                 }

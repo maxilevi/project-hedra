@@ -6,7 +6,9 @@ namespace Hedra.Engine.StructureSystem.Overworld
     {
         public const int DefaultRadius = 8;
 
-        public Torch(Vector3 Position) : base(Position)
+        public Torch(Vector3 Position) : base(Position, Vector3.One) {}
+        
+        public Torch(Vector3 Position, Vector3 Radius) : base(Position, Radius)
         {
         }
 

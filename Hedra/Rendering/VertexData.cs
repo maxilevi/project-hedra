@@ -186,6 +186,21 @@ namespace Hedra.Rendering
             ApplyRecursively(V => V.Center());
             return this;
         }
+        
+        public Vector3 Bounds()
+        {
+            var min = new Vector3(
+                SupportPoint(-Vector3.UnitX).X,
+                SupportPoint(-Vector3.UnitY).Y,
+                SupportPoint(-Vector3.UnitZ).Z
+            );
+            var bounds = new Vector3(
+                SupportPoint(Vector3.UnitX).X - min.X,
+                SupportPoint(Vector3.UnitY).Y - min.Y,
+                SupportPoint(Vector3.UnitZ).Z - min.Z
+            );
+            return bounds;
+        }
 
         public void Optimize(IAllocator Allocator)
         {

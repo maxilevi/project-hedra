@@ -31,6 +31,13 @@ namespace Hedra.Engine.StructureSystem
         public const int Dungeon0Chance = 4;
         public const int Dungeon1Chance = 4;
         public const int Dungeon2Chance = 4;
+        public const int Cave0Chance = 1000;
+        public const int Cave1Chance = 1000;
+        public const int Cave2Chance = 1000;
+        public const int Cave3Chance = 1000;
+        public const int Cave4Chance = 1000;
+        public const int Cave5Chance = 1000;
+        public const int Cave6Chance = 1000;
         public const int GarrisonChance = 6;
         public const int GnollFortressChance = 7;
         
