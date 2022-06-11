@@ -13,5 +13,5 @@ public class Cave6Cache : CacheType
     }
 
     public override CacheItem Type => CacheItem.Cave6;
-    public static Vector3 Offset => Vector3.UnitY * 0.5f;
+    public static Vector3 Offset => Vector3.UnitY * 0f;
 }

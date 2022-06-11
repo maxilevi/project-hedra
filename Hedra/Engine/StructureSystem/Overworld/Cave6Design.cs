@@ -9,6 +9,6 @@ public class Cave6Design : CaveWithBossDesign
     protected override CacheItem? Cache => CacheItem.Cave6;
     protected override Vector3 StructureOffset => Cave6Cache.Offset;
     protected override string BaseFileName => "Cave6";
-    protected override int Level => 17;
+    protected override int Level => 28;
 
 }
