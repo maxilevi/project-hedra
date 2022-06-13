@@ -60,9 +60,9 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         protected override IEntity CreateDungeonBoss(Vector3 Position, CollidableStructure Structure)
         {
-            var boss = BossGenerator.Generate(new[] { MobType.SkeletonKing }, Position, Utils.Rng);
-            boss.Position = Position;
-            return boss;
+            var rng = BuildRng(Structure);
+            var level = ((UndeadDungeon0Design)Structure.Design).Level;
+            return BossGenerator.CreateSkeletonKingBoss(Position, level, rng);
         }
     }
 }

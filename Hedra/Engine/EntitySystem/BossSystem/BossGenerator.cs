@@ -10,8 +10,15 @@
 using System;
 using System.Numerics;
 using Hedra.AISystem;
+using Hedra.API;
 using Hedra.Components;
+using Hedra.Engine.ItemSystem;
+using Hedra.Engine.ModuleSystem;
+using Hedra.Engine.Player;
+using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
+using Hedra.Items;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.EntitySystem.BossSystem
 {
@@ -42,6 +49,53 @@ namespace Hedra.Engine.EntitySystem.BossSystem
             Entity.Name = healthBarComponent.Name;
             Entity.Physics.CollidesWithStructures = true;
             Entity.AddComponent(healthBarComponent);
+        }
+        
+        public static IEntity CreateBeasthunterBoss(Vector3 Position, int Level, Random Rng)
+        {
+            const HumanType type = HumanType.BeasthunterSpirit;
+            var boss = NPCCreator.SpawnBandit(Position, Level,
+                new BanditOptions
+                {
+                    ModelType = type,
+                    Friendly = false,
+                    PossibleClasses = Class.Warrior | Class.Rogue | Class.Mage
+                });
+            boss.Position = Position;
+            var template = HumanoidLoader.HumanoidTemplater[type];
+            MakeBoss(boss, Position, template.XP);
+            boss.BonusHealth = boss.MaxHealth * (1.5f + Rng.NextFloat());
+            boss.Health = boss.MaxHealth;
+            var currentWeapon = boss.MainWeapon;
+            boss.MainWeapon = ItemPool.Grab(new ItemPoolSettings(ItemTier.Unique, currentWeapon.EquipmentType)
+            {
+                RandomizeTier = false
+            });
+            return boss;
+        }
+        
+        public static IEntity CreateSkeletonKingBoss(Vector3 Position, int Level, Random Rng)
+        {
+            var boss = Generate(new[] { MobType.SkeletonKing }, Position, Rng);
+            boss.Level = Level;
+            boss.Position = Position;
+            return boss;
+        }
+        
+        public static IEntity CreateGolemBoss(Vector3 Position, int Level, Random Rng)
+        {
+            var boss = Generate(new[] { MobType.Golem }, Position, Rng);
+            boss.Level = Level;
+            boss.Position = Position;
+            return boss;
+        }
+        
+        public static IEntity CreateGhostBoss(Vector3 Position, int Level, Random Rng)
+        {
+            //var boss = Generate(new[] { MobType. }, Position, Rng);
+            //boss.Level = Level;
+            //boss.Position = Position;
+            return null;
         }
     }
 }

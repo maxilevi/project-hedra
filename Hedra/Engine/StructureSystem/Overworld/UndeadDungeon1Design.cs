@@ -68,25 +68,9 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         protected override IEntity CreateDungeonBoss(Vector3 Position, CollidableStructure Structure)
         {
-            const HumanType type = HumanType.BeasthunterSpirit;
-            var boss = NPCCreator.SpawnBandit(Position, ((UndeadDungeon1Design)Structure.Design).Level,
-                new BanditOptions
-                {
-                    ModelType = type,
-                    Friendly = false,
-                    PossibleClasses = Class.Warrior | Class.Rogue | Class.Mage
-                });
-            boss.Position = Position;
-            var template = HumanoidLoader.HumanoidTemplater[type];
-            BossGenerator.MakeBoss(boss, Position, template.XP);
-            boss.BonusHealth = boss.MaxHealth * (1.5f + Utils.Rng.NextFloat());
-            boss.Health = boss.MaxHealth;
-            var currentWeapon = boss.MainWeapon;
-            boss.MainWeapon = ItemPool.Grab(new ItemPoolSettings(ItemTier.Rare, currentWeapon.EquipmentType)
-            {
-                RandomizeTier = false
-            });
-            return boss;
+            var level = ((UndeadDungeon1Design)Structure.Design).Level;
+            var rng = BuildRng(Structure);
+            return BossGenerator.CreateBeasthunterBoss(Position, level, rng);
         }
     }
 }

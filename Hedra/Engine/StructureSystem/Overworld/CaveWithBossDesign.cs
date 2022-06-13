@@ -1,3 +1,4 @@
+using System;
 using System.Numerics;
 using Hedra.API;
 using Hedra.BiomeSystem;
@@ -47,27 +48,18 @@ public abstract class CaveWithBossDesign : DarkStructureWithBossDesign
         Model.Color(AssetManager.ColorCode3, Colors.StoneColor * 0.8f);
         Model.GraduateColor(Vector3.UnitY, 0.25f);
     }
-    
+
     protected override IEntity CreateDungeonBoss(Vector3 Position, CollidableStructure Structure)
     {
-        const HumanType type = HumanType.BeasthunterSpirit;
-        var boss = NPCCreator.SpawnBandit(Position, ((CaveWithBossDesign)Structure.Design).Level,
-            new BanditOptions
-            {
-                ModelType = type,
-                Friendly = false,
-                PossibleClasses = Class.Warrior | Class.Rogue | Class.Mage
-            });
-        boss.Position = Position;
-        var template = HumanoidLoader.HumanoidTemplater[type];
-        BossGenerator.MakeBoss(boss, Position, template.XP);
-        boss.BonusHealth = boss.MaxHealth * (1.5f + Utils.Rng.NextFloat());
-        boss.Health = boss.MaxHealth;
-        var currentWeapon = boss.MainWeapon;
-        boss.MainWeapon = ItemPool.Grab(new ItemPoolSettings(ItemTier.Rare, currentWeapon.EquipmentType)
+        var rng = BuildRng(Structure);
+        var level = ((CaveWithBossDesign)Structure.Design).Level;
+        var funcs = new Func<Vector3, int, Random, IEntity>[]
         {
-            RandomizeTier = false
-        });
-        return boss;
+            BossGenerator.CreateBeasthunterBoss,
+            BossGenerator.CreateSkeletonKingBoss,
+            BossGenerator.CreateGolemBoss,
+            //BossGenerator.CreateGhostBoss
+        };
+        return funcs[rng.Next(0, funcs.Length)](Position, level, rng);
     }
 }
