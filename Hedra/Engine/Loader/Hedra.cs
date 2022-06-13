@@ -129,7 +129,7 @@ namespace Hedra.Engine.Loader
                 {
                     MakeGLContextCurrent();
                     Time.RegisterThread();
-
+                    
                     GameLoader.LoadSoundEngine();
                     HedraContent.Register();
                     ModificationsLoader.Reload();
@@ -156,6 +156,7 @@ namespace Hedra.Engine.Loader
                     DrawSplashScreenAndSwap();
 
                     GameManager.LoadPlayer();
+                    Steam.Instance.Initialize();
                     Log.WriteLine("UI loading was Successful.");
 
                     DrawSplashScreenAndSwap();
