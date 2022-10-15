@@ -79,11 +79,11 @@ namespace Hedra.Engine.Game
         {
             try
             {
-                Log.WriteLine("Attemping to load sound engine...");
+                Log.WriteLine("Attempting to load sound engine...");
                 SoundPlayer.Provider = new SoundProvider();
                 SoundPlayer.Load();
                 SoundtrackManager.Load();
-                Log.WriteLine("Sound engine loaded succesfully");
+                Log.WriteLine("Sound engine loaded successfully");
             }
             catch (Exception e1)
             {
