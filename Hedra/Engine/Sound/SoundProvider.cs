@@ -18,15 +18,23 @@ namespace Hedra.Engine.Sound
         private readonly Dictionary<string, SoundFamily> _soundFamilies;
         private readonly SoundItem[] _soundItems;
         private readonly SoundSource[] _soundSources;
-        private AudioContext _audioContext;
         private bool _loaded;
 
         public SoundProvider()
         {
-            _audioContext = new AudioContext();
             _soundFamilies = new Dictionary<string, SoundFamily>();
             _soundItems = new SoundItem[8];
             _soundSources = new SoundSource[32];
+            try
+            {
+                var context = AudioContext.CurrentContext;
+                Log.WriteLine(context.CurrentDevice);
+            }
+            catch (Exception e)
+            {
+                Log.WriteLine("Failed to load SoundEngine");
+                Log.WriteLine(e);
+            }
         }
 
         public Vector3 ListenerPosition { get; private set; }
