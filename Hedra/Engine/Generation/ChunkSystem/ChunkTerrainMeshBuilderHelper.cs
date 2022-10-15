@@ -293,7 +293,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int Modulo(ref int Index)
         {
-            return (Index % Bounds + Bounds) % Bounds;
+            return (Index & (Bounds-1) + Bounds) & (Bounds - 1);
         }
     }
 }
