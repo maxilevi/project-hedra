@@ -140,18 +140,7 @@ namespace Hedra.Engine.Loader
             set
             {
                 _fullscreen = value;
-                unsafe
-                {
-                    var glfw = GlfwProvider.GLFW.Value;
-                    var monitor = glfw.GetPrimaryMonitor();
-                    var mode = glfw.GetVideoMode(monitor);
-                    glfw.SetWindowMonitor
-                    (
-                        (WindowHandle*)Window.Handle,
-                        _fullscreen ? monitor : null, 0, 0, mode->Width, mode->Height,
-                        mode->RefreshRate
-                    );
-                }
+                Window.WindowState =  _fullscreen ? WindowState.Fullscreen : WindowState.Maximized;
             }
         }
 
