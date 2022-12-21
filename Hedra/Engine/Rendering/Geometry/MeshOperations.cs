@@ -138,9 +138,9 @@ namespace Hedra.Engine.Rendering.Geometry
         {
             if (Colors.Count == 0) return;
 
-            var size = Indices.Count * sizeof(uint) + Vertices.Count * HedraSize.Vector3 +
+            var size = (Indices.Count * sizeof(uint) + Vertices.Count * HedraSize.Vector3 +
                        Normals.Count * HedraSize.Vector3 + Extradata.Count * sizeof(float) +
-                       Colors.Count * HedraSize.Vector4 + Allocator.Kilobyte * 64;
+                       Colors.Count * HedraSize.Vector4) + Allocator.Kilobyte * 64;
             IAllocator allocator;
             if (size <= Allocator.Megabyte * 2.5f)
             {

@@ -48,7 +48,7 @@ namespace Hedra.Engine
                 pixels[i + 0] = (byte)r;
                 pixels[i + 1] = (byte)g;
                 pixels[i + 2] = (byte)b;
-                pixels[i + 3] = (byte)a;
+                pixels[i + 3] = 255;
             }
             
             using var bmp = Image.LoadPixelData<Rgba32>(pixels, w, h);
