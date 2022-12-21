@@ -57,7 +57,7 @@ namespace Hedra.Engine.Player
         }
 
         protected override bool ShouldDisable => !CanUse();
-        private bool ShouldCharge => AttackType.Secondary == _type || User.LeftWeapon.IsChargeable;
+        private bool ShouldCharge => AttackType.Secondary == _type || User is { LeftWeapon.IsChargeable: true };
         public override uint IconId => _textureId;
 
         protected override bool HasCooldown => AttackType.Secondary == _type

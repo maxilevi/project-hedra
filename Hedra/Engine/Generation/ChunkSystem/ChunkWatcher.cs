@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Hedra.Engine.Management;
 using Hedra.Game;
 using Hedra.Numerics;
@@ -12,6 +13,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private Chunk _object;
         private bool _wasBuilt;
         private bool _wasKilled;
+        private bool _generated;
+        private bool _built;
 
         public ChunkWatcher(Chunk Object)
         {
@@ -41,7 +44,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var result = ManageState();
             if (!result) return;
             if (WasChunkGenerated(_object) && ShouldWeRebuildChunk(_object))
+            {
                 World.AddChunkToQueue(_object, ChunkQueueType.Mesh);
+            }
+
             if (!_wasBuilt && _object.BuildedWithStructures)
             {
                 _wasBuilt = true;
@@ -66,9 +72,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 return false;
             }
 
-            if (!_object.IsGenerated || !_object.Landscape.StructuresPlaced)
+            if (!_generated)//!_object.IsGenerated || !_object.Landscape.StructuresPlaced)
             {
                 World.AddChunkToQueue(_object, ChunkQueueType.Generation);
+                _generated = true;
                 return false;
             }
 
@@ -99,8 +106,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private static bool ShouldWeRebuildChunk(Chunk Chunk)
         {
-            return (!Chunk.BuildedCompletely || Chunk.Lod != Chunk.BuildedLod || Chunk.NeedsRebuilding) &&
-                   Chunk.NeighboursExist;
+            return (!Chunk.BuildedCompletely || Chunk.Lod != Chunk.BuildedLod || Chunk.NeedsRebuilding) && Chunk.NeighboursExist;
         }
 
         public void Kill()

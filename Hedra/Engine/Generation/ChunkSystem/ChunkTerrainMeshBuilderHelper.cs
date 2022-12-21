@@ -5,6 +5,7 @@ using Hedra.BiomeSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Numerics;
 
+
 namespace Hedra.Engine.Generation.ChunkSystem
 {
     public unsafe class ChunkTerrainMeshBuilderHelper
@@ -15,7 +16,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private readonly int _boundsY;
         private readonly int _boundsZ;
         private readonly float _coefficient;
-        private readonly SampledBlock* _grid;
+        public readonly SampledBlock* _grid;
         private readonly int _height;
         private readonly Chunk _parent;
         private float _invSampleHeight;
@@ -254,15 +255,16 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             var horizontalBlockSize = _blockSize * HorizontalLod;
             var verticalBlockSize = _blockSize * VerticalLod;
-            Cell.P[0] = new Vector3(X * _blockSize, Y * _blockSize, Z * _blockSize);
-            Cell.P[1] = new Vector3(horizontalBlockSize + Cell.P[0].X, Cell.P[0].Y, Cell.P[0].Z);
-            Cell.P[2] = new Vector3(horizontalBlockSize + Cell.P[0].X, Cell.P[0].Y, horizontalBlockSize + Cell.P[0].Z);
-            Cell.P[3] = new Vector3(Cell.P[0].X, Cell.P[0].Y, horizontalBlockSize + Cell.P[0].Z);
-            Cell.P[4] = new Vector3(Cell.P[0].X, verticalBlockSize + Cell.P[0].Y, Cell.P[0].Z);
-            Cell.P[5] = new Vector3(horizontalBlockSize + Cell.P[0].X, verticalBlockSize + Cell.P[0].Y, Cell.P[0].Z);
-            Cell.P[6] = new Vector3(horizontalBlockSize + Cell.P[0].X, verticalBlockSize + Cell.P[0].Y,
-                horizontalBlockSize + Cell.P[0].Z);
-            Cell.P[7] = new Vector3(Cell.P[0].X, verticalBlockSize + Cell.P[0].Y, horizontalBlockSize + Cell.P[0].Z);
+            var baseOffset = new Vector3(X, Y, Z) * _blockSize;
+            
+            Cell.P[0] = baseOffset;
+            Cell.P[1] = new Vector3(horizontalBlockSize, 0, 0) + baseOffset;
+            Cell.P[2] = new Vector3(horizontalBlockSize, 0, horizontalBlockSize) + baseOffset;
+            Cell.P[3] = new Vector3(0, 0, horizontalBlockSize) + baseOffset;
+            Cell.P[4] = new Vector3(0, verticalBlockSize, 0) + baseOffset;
+            Cell.P[5] = new Vector3(horizontalBlockSize, verticalBlockSize, 0) + baseOffset;
+            Cell.P[6] = new Vector3(horizontalBlockSize, verticalBlockSize, horizontalBlockSize) + baseOffset;
+            Cell.P[7] = new Vector3(0, verticalBlockSize, horizontalBlockSize) + baseOffset;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

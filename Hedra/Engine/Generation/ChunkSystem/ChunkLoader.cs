@@ -111,10 +111,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     watchers[i]?.Update();
                     if (watchers[i]?.Disposed ?? false)
                     {
-                        lock (Lock)
-                        {
-                            _chunkWatchers.Remove(watchers[i]);
-                        }
+                        _chunkWatchers.Remove(watchers[i]);
                     }
                 }
             }

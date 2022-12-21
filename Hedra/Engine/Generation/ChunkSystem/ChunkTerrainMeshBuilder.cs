@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Native;
 using Hedra.Engine.Rendering;
@@ -172,16 +174,16 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return new ChunkMeshBuildOutput(blockData, waterData, new NativeVertexData(Allocator), failed);
         }
 
-        private void IterateAndBuild(ChunkTerrainMeshBuilderHelper Helper, ref bool failed, bool ProcessWater,
+        private unsafe void IterateAndBuild(ChunkTerrainMeshBuilderHelper Helper, ref bool failed, bool ProcessWater,
             bool ProcessColors, RegionCache Cache, NativeVertexData blockData, NativeVertexData waterData,
             int HorizontalIncrement, int VerticalIncrement)
         {
-            Loop(Helper, HorizontalIncrement, VerticalIncrement, ProcessColors, false, ref blockData, ref failed,
-                ref Cache);
+            Loop(Helper, HorizontalIncrement, VerticalIncrement, ProcessColors, false, ref blockData, ref failed, ref Cache);
+            //MarchingCubes.LoopSIMD(ref blockData, Helper._grid);
             if (ProcessWater && _parent.HasWater)
                 Loop(Helper, 1, 1, ProcessColors, true, ref waterData, ref failed, ref Cache);
         }
-        
+
         private void Loop(ChunkTerrainMeshBuilderHelper Helper, int HorizontalSkip, int VerticalSkip,
             bool ProcessColors, bool isWater, ref NativeVertexData blockData, ref bool failed, ref RegionCache Cache)
         {
@@ -192,7 +194,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             {
                 P = new Vector3[8],
                 Type = new BlockType[8],
-                Density = new double[8]
+                Density = new float[8]
             };
             var width = BoundsX;
             var height = BoundsY;
@@ -205,10 +207,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 if (y == BoundsY - VerticalSkip || y == 0) continue;
 
                 Helper.CreateCell(ref cell, x, y, z, isWater, HorizontalSkip, VerticalSkip, out var success);
-                if (!MarchingCubes.Usable(0f, cell)) continue;
+                if (!MarchingCubes.Usable( cell)) continue;
                 if (!success && y < BoundsY - 2) failed = true;
 
-                var color = Vector4.Zero;
+                var color = Vector4.One * 0.5f;
                 if (isWater)
                 {
                     var regionPosition = new Vector3(cell.P[0].X + OffsetX, 0, cell.P[0].Z + OffsetZ);
@@ -229,7 +231,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             ref Vector3[] VertexBuffer, ref Triangle[] TriangleBuffer, Vector4 Color, ref bool IsWater,
             ref bool IsRiverConstant)
         {
-            MarchingCubes.Polygonise(ref Cell, 0, ref VertexBuffer, ref TriangleBuffer, out var triangleCount);
+            MarchingCubes.Polygonise(ref Cell, ref VertexBuffer, ref TriangleBuffer, out var triangleCount);
             MarchingCubes.Build(ref BlockData, ref Color, ref TriangleBuffer, ref triangleCount, ref IsWater,
                 ref IsRiverConstant);
         }

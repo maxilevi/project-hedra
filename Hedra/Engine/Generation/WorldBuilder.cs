@@ -1,6 +1,11 @@
 using System;
+using System.Collections;
+using System.Threading;
+using System.Threading.Tasks;
+using Hedra.Core;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Generation.ChunkSystem.Builders;
+using Hedra.Engine.Management;
 
 namespace Hedra.Engine.Generation
 {
@@ -14,11 +19,12 @@ namespace Hedra.Engine.Generation
 
         public WorldBuilder()
         {
-            _maxThreads = Environment.ProcessorCount * 2;
+            _maxThreads = (int)(Environment.ProcessorCount / 2);
             _pool = new SharedWorkerPool(_maxThreads);
             _meshBuilder = new MeshBuilder(_pool);
             _blockBuilder = new BlockBuilder(_pool);
             _structuresBuilder = new StructuresBuilder(_pool);
+            RoutineManager.StartRoutine(DoUpdate);
         }
 
         public int MeshThreads => _pool.GetMaxWorkers(QueueType.Meshing);
@@ -51,27 +57,16 @@ namespace Hedra.Engine.Generation
                 _pool.SetMaxWorkers(QueueType.Meshing, 0);
             }
 
-            if (_blockBuilder.Count == 0 && _structuresBuilder.Count == 0)
+            if (_blockBuilder.Count == 0)
             {
                 _pool.SetMaxWorkers(QueueType.Meshing, _maxThreads);
                 _pool.SetMaxWorkers(QueueType.Blocks, 0);
-                _pool.SetMaxWorkers(QueueType.Structures, 0);
-            }
-            else if (_blockBuilder.Count == 0)
-            {
-                _pool.SetMaxWorkers(QueueType.Structures, workerCount);
-                _pool.SetMaxWorkers(QueueType.Blocks, 0);
-            }
-            else if (_structuresBuilder.Count == 0)
-            {
-                _pool.SetMaxWorkers(QueueType.Blocks, workerCount);
-                _pool.SetMaxWorkers(QueueType.Structures, 0);
             }
             else
             {
-                _pool.SetMaxWorkers(QueueType.Blocks, Math.Max(1, workerCount / 2));
-                _pool.SetMaxWorkers(QueueType.Structures, Math.Max(1, workerCount / 2));
+                _pool.SetMaxWorkers(QueueType.Blocks, workerCount);
             }
+            
         }
 
         public void Process(Chunk Chunk, ChunkQueueType Type)
@@ -82,10 +77,7 @@ namespace Hedra.Engine.Generation
             }
             else
             {
-                if (!Chunk.Landscape.BlocksDefined)
-                    _blockBuilder.Add(Chunk);
-                else
-                    _structuresBuilder.Add(Chunk);
+                _blockBuilder.Add(Chunk);
             }
         }
 
@@ -98,10 +90,19 @@ namespace Hedra.Engine.Generation
 
         public void Update()
         {
-            HandleMaxWorkers();
-            _meshBuilder.Update();
-            _blockBuilder.Update();
-            _structuresBuilder.Update();
+
+        }
+        
+        private IEnumerator DoUpdate()
+        {
+            while (Program.GameWindow.Exists)
+            {
+                HandleMaxWorkers();
+                _meshBuilder.Update();
+                _blockBuilder.Update();
+                //_structuresBuilder.Update();
+                yield return null;
+            }
         }
 
         public void Discard()

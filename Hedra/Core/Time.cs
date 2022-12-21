@@ -18,9 +18,20 @@ namespace Hedra.Core
     public static class Time
     {
         private static readonly Dictionary<int, TimeProvider> Providers = new Dictionary<int, TimeProvider>();
+        private static readonly object Lock = new object();
         public static float TimeScale { get; private set; } = 1;
         public static bool Paused => TimeScale <= 0.005f;
-        private static TimeProvider Current => Providers[Thread.CurrentThread.ManagedThreadId];
+        private static TimeProvider Current
+        {
+            get
+            {
+                lock (Lock)
+                {
+                    return Providers[Thread.CurrentThread.ManagedThreadId];
+                }
+            }
+        }
+
         public static int Framerate => Current.Framerate;
         public static float Frametime => Current.Frametime;
         public static float DeltaTime => Current.DeltaTime;
@@ -51,13 +62,19 @@ namespace Hedra.Core
 
         public static void RegisterThread()
         {
-            if (!Providers.ContainsKey(Thread.CurrentThread.ManagedThreadId))
-                Providers.Add(Thread.CurrentThread.ManagedThreadId, new TimeProvider());
+            lock (Lock)
+            {
+                if (!Providers.ContainsKey(Thread.CurrentThread.ManagedThreadId))
+                    Providers.Add(Thread.CurrentThread.ManagedThreadId, new TimeProvider());
+            }
         }
 
         public static TimeProvider GetProvider(int Id)
         {
-            return Providers[Id];
+            lock (Lock)
+            {
+                return Providers[Id];
+            }
         }
 
         public class TimeProvider

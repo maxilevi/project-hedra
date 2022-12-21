@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text.RegularExpressions;
 using Hedra.Engine.IO;
 using Hedra.Engine.Rendering.Core;
@@ -108,6 +109,7 @@ namespace Hedra.Engine.Native
                           "CPU = " + Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER") + Environment.NewLine +
                           "Graphics Card = " + GraphicsCard + Environment.NewLine
             );
+            Log.WriteLine($"SIMD support: {Vector.IsHardwareAccelerated}");
         }
 /*
         public static int GetAvailableGraphicsRam(int Default)

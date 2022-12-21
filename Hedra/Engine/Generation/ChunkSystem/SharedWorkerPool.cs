@@ -35,9 +35,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public bool Work(ICountable User, QueueType Type, Action Do)
         {
-            var maxWorkers = _maxWorkers[Type];
-            var currentWorkers = GetCurrentWorkers(User);
-            if (currentWorkers >= maxWorkers) return false;
+            //var maxWorkers = _maxWorkers[Type];
+            //var currentWorkers = GetCurrentWorkers(User);
+            //if (currentWorkers >= maxWorkers) return false;
             return base.Work(Do, User);
         }
     }

@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Numerics;
+using System.Threading;
+using Hedra.Core;
 using Hedra.Engine.Core;
 using Hedra.Engine.IO;
 using Hedra.Game;
@@ -17,26 +19,31 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
 {
     public abstract class AbstractBuilder : ICountable, IDisposable
     {
+        private const int MaxChunksPerSecond = 30;
         private readonly ChunkComparer _closest;
         private readonly HashSet<Chunk> _hashQueue;
         private readonly object _lock;
         private readonly SharedWorkerPool _pool;
-        private readonly List<Chunk> _queue;
+        private readonly PriorityQueue<Chunk, float> _queue;
         private readonly Stopwatch _watch;
         private float _accumTime;
         private bool _discard;
         private int _lastCount;
         private Vector3 _lastSortedPosition;
         private int _workItems;
+        private Stopwatch _timer;
+        private int _cooldown;
 
         protected AbstractBuilder(SharedWorkerPool Pool)
         {
             _pool = Pool;
             _lock = new object();
-            _queue = new List<Chunk>();
+            _queue = new PriorityQueue<Chunk, float>();
             _hashQueue = new HashSet<Chunk>();
             _closest = new ChunkComparer();
             _watch = new Stopwatch();
+            _timer = new Stopwatch();
+            _timer.Start();
         }
 
         protected abstract QueueType Type { get; }
@@ -50,69 +57,78 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
 
         private Chunk GetFirstClosest()
         {
-            _closest.Position = GameManager.Player?.Position ?? Vector3.Zero;
-            Chunk bestChunk = null;
-            var currDist = 10e9;
-            for (var i = 0; i < _queue.Count; ++i)
+            Chunk ch = null;
+            while (_queue.Count > 0 && (ch == null || !_hashQueue.Contains(ch)))
             {
-                if (_queue[i] == null) continue;
-                var dist = (_queue[i].Position - _closest.Position).LengthSquared();
-                if (dist < currDist)
-                {
-                    bestChunk = _queue[i];
-                    currDist = dist;
-                }
+                ch = _queue.Dequeue();    
             }
 
-            return bestChunk;
+            return ch;
         }
 
         public void Update()
         {
-            lock (_lock)
+            if (_timer.ElapsedMilliseconds < _cooldown) return;
+            
+            if (_discard)
             {
-                if (_discard)
+                lock (_lock)
                 {
                     _queue.Clear();
                     _hashQueue.Clear();
                     _discard = false;
                 }
+            }
 
-                if (_queue.Count > 0)
+            lock (_lock)
+            {
+                if (_queue.Count == 0) return;
+            }
+
+            Chunk chunk;
+            lock (_lock)
+            {
+                chunk = GetFirstClosest();
+                if (chunk?.Disposed ?? false)
                 {
-                    var chunk = GetFirstClosest();
-                    if (chunk?.Disposed ?? false)
+                    _hashQueue.Remove(chunk);
+                    return;
+                }
+            }
+
+            var result = _pool.Work(this, Type, delegate
+            {
+                try
+                {
+                    if (chunk?.Disposed ?? true) return;
+                    StartProfile();
+                    Work(chunk);
+                    EndProfile();
+                }
+                catch (Exception e)
+                {
+                    lock (_lock)
                     {
-                        _queue.Remove(chunk);
+                        Log.WriteLine($"Failed to do job: {Environment.NewLine}{e}");
                         _hashQueue.Remove(chunk);
-                        return;
                     }
+                }
 
-                    var result = _pool.Work(this, Type, delegate
-                    {
-                        try
-                        {
-                            if (chunk?.Disposed ?? true) return;
-                            StartProfile();
-                            Work(chunk);
-                            EndProfile();
-                        }
-                        catch (Exception e)
-                        {
-                            lock (_lock)
-                            {
-                                Log.WriteLine($"Failed to do job: {Environment.NewLine}{e}");
-                                _queue.Remove(chunk);
-                                _hashQueue.Remove(chunk);
-                            }
-                        }
-
-                        lock (_lock)
-                        {
-                            _hashQueue.Remove(chunk);
-                        }
-                    });
-                    if (result) _queue.Remove(chunk);
+                lock (_lock)
+                {
+                    _hashQueue.Remove(chunk);
+                }
+            });
+            if (result)
+            {
+                //_cooldown = 25;//Type == QueueType.Meshing ? 5 : 25;
+                //_timer.Restart();
+            }
+            else
+            {
+                lock (_lock)
+                {
+                    _queue.Enqueue(chunk, Vector3.Distance(GameManager.Player?.Position ?? Vector3.Zero, chunk.Position));
                 }
             }
         }
@@ -124,7 +140,7 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
             lock (_lock)
             {
                 if (Chunk == null || Chunk.Disposed || _hashQueue.Contains(Chunk)) return;
-                _queue.Add(Chunk);
+                _queue.Enqueue(Chunk, Vector3.Distance(GameManager.Player?.Position ?? Vector3.Zero, Chunk.Position));
                 _hashQueue.Add(Chunk);
             }
         }
@@ -134,7 +150,7 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
             lock (_lock)
             {
                 if (Chunk == null || !_hashQueue.Contains(Chunk)) return;
-                _queue.Remove(Chunk);
+                //_queue.Remove(Chunk);
                 _hashQueue.Remove(Chunk);
             }
         }

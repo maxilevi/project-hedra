@@ -443,9 +443,9 @@ namespace Hedra.Engine.BiomeSystem
                 noise3D[x2][y2 + 1][z2], noise3D[x2 + 1][y2 + 1][z2],
                 noise3D[x2][y2][z2 + 1], noise3D[x2 + 1][y2][z2 + 1],
                 noise3D[x2][y2 + 1][z2 + 1], noise3D[x2 + 1][y2 + 1][z2 + 1],
-                x % noise3DScaleWidth / (float)noise3DScaleWidth,
-                y % noise3DScaleHeight / (float)noise3DScaleHeight,
-                z % noise3DScaleWidth / (float)noise3DScaleWidth
+                (x & (noise3DScaleWidth-1)) / (float)noise3DScaleWidth,
+                (y & (noise3DScaleHeight-1)) / (float)noise3DScaleHeight,
+                (z & (noise3DScaleWidth-1)) / (float)noise3DScaleWidth
             );
         }
 

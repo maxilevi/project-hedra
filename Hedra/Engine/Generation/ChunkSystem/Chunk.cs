@@ -42,7 +42,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private readonly RegionCache _regionCache;
         private readonly ChunkStructuresMeshBuilder _structuresBuilder;
         private readonly ChunkTerrainMeshBuilder _terrainBuilder;
-        private readonly object _waterLock = new object();
+        private readonly object _waterLock = new ();
         private readonly Block[] _blocks;
         private int _currentNeedsRebuildCount;
         private byte[] _heightCache;
@@ -82,8 +82,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public bool NeverBuilded { get; private set; } = true;
         public int OffsetX { get; }
         public int OffsetZ { get; }
-        private bool IsBuilding { get; set; }
-        private bool IsGenerating { get; set; }
+        public bool IsBuilding { get; private set; }
+        public bool IsGenerating { get; private set; }
         public ChunkAutomatons Automatons { get; }
 
         public bool NeighboursExist
@@ -148,7 +148,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void GenerateBlocks()
         {
-            if (Disposed) throw new ArgumentException("Cannot build a disposed chunk.");
+            if (Disposed || IsGenerating) throw new ArgumentException("Cannot build a disposed chunk.");
             lock (_blocksLock)
             {
                 IsGenerating = true;
@@ -317,6 +317,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Input.StaticData.Optimize(allocator);
                 Input.InstanceData.Optimize(allocator);
                 Input.WaterData.Optimize(allocator);
+                //Input.StaticData.UniqueVertices();
             }
 
             DistributedExecuter.Execute(delegate

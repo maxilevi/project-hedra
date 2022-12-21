@@ -40,9 +40,12 @@ namespace Hedra.Numerics
             var x_1 = 1 - x;
             var y_1 = 1 - y;
             var z_1 = 1 - z;
-            return xm_ym_zm * x_1 * y_1 * z_1 + xp_ym_zm * x * y_1 * z_1 + xm_yp_zm * x_1 * y * z_1 +
-                   xp_yp_zm * x * y * z_1 +
-                   xm_ym_zp * x_1 * y_1 * z + xp_ym_zp * x * y_1 * z + xm_yp_zp * x_1 * y * z + xp_yp_zp * x * y * z;
+            
+            var xm = new Vector4(xm_ym_zm, xm_yp_zm, xm_ym_zp, xm_yp_zp) * x_1;
+            var xp = new Vector4(xp_ym_zm, xp_yp_zm, xp_ym_zp, xp_yp_zp) * x;
+
+            return Vector4.Dot(Vector4.Multiply(xm, new Vector4(y_1, y, y_1, y)), new Vector4(z_1, z_1, z, z)) +
+                   Vector4.Dot(Vector4.Multiply(xp, new Vector4(y_1, y, y_1, y)), new Vector4(z_1, z_1, z, z));
         }
 
         public static float LinearInterpolate2D(float D, float DX, float DZ, float DXZ, float X, float Z)

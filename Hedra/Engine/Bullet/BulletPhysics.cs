@@ -468,7 +468,7 @@ namespace Hedra.Engine.Bullet
         {
             lock (_bulletLock)
             {
-                if (Mesh.IsEmpty)
+                if (Mesh.IsEmpty || Mesh.Indices.Count == 0)
                     throw new ArgumentOutOfRangeException("Cannot add an empty mesh");
                 var bodies = new List<Pair<RigidBody, PhysicsObjectInformation>>
                 {
