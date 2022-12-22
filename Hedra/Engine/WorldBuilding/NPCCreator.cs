@@ -58,14 +58,16 @@ namespace Hedra.Engine.WorldBuilding
             const int columnCount = 8;
             const int rowCount = 8;
             var allColors = new Vector4[columnCount * rowCount];
-            const float step = 360f / columnCount;
+            const float step = 360f / (columnCount-1);
             for (var j = 0; j < rowCount; ++j)
             {
-                for (var i = 0; i < columnCount; ++i)
+                for (var i = 1; i < columnCount; ++i)
                 {
                     allColors[j * columnCount + i] =
-                        Colors.HsLtoRgba(i * step, 1.0f, 1.0f - (j + 1) / (float)(rowCount + 2), 1f);
+                        Colors.HsLtoRgba((i-1) * step, 1.0f, 1.0f - (j + 1) / (float)(rowCount + 2), 1f);
                 }
+                // Generate all the grays
+                allColors[j * columnCount] = Colors.HsLtoRgba(0, 0, 1.0f - (j + 1) / (float)(rowCount + 2), 1f);
             }
 
             HairColors = allColors;
