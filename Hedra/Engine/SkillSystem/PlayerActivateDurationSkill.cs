@@ -25,15 +25,15 @@ namespace Hedra.Engine.SkillSystem
         public sealed override void Update()
         {
             base.Update();
-            if (_timer.Tick() && _active) Disable();
+            if (_timer.Tick() && _active) DisableEffect();
         }
 
         protected override void DoUse()
         {
-            Enable();
+            EnableEffect();
         }
 
-        private void Enable()
+        private void EnableEffect()
         {
             _timer.Reset();
             _timer.AlertTime = Duration;
@@ -42,7 +42,7 @@ namespace Hedra.Engine.SkillSystem
             InvokeStateUpdated();
         }
 
-        private void Disable()
+        private void DisableEffect()
         {
             _active = false;
             DoDisable();

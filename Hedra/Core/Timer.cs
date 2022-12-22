@@ -18,6 +18,7 @@ namespace Hedra.Core
     public class Timer
     {
         private Time.TimeProvider _provider;
+        private int _lastThreadId;
         private float _timerCount;
 
         public Timer(float AlertTime)
@@ -40,8 +41,12 @@ namespace Hedra.Core
 
         public bool Tick()
         {
-            if (_provider == null)
-                _provider = Time.GetProvider(Thread.CurrentThread.ManagedThreadId);
+            var threadId = Thread.CurrentThread.ManagedThreadId;
+            if (_provider == null || _lastThreadId != threadId)
+            {
+                _provider = Time.Current;
+                _lastThreadId = threadId;
+            }
 
             _timerCount += UseTimeScale ? _provider.DeltaTime : _provider.IndependentDeltaTime;
 

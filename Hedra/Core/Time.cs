@@ -21,7 +21,7 @@ namespace Hedra.Core
         private static readonly object Lock = new object();
         public static float TimeScale { get; private set; } = 1;
         public static bool Paused => TimeScale <= 0.005f;
-        private static TimeProvider Current
+        public static TimeProvider Current
         {
             get
             {
