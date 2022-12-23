@@ -42,6 +42,7 @@ namespace Hedra.Engine.Rendering.Animation
         private Vector3 _cacheRotation = -Vector3.One;
         private Vector3 _cacheScale;
         private VBO<Vector3> _colors;
+        private Dictionary<string, int> _jointNameMap;
 
         private bool _disposed;
         private VBO<uint> _indices;
@@ -89,6 +90,7 @@ namespace Hedra.Engine.Rendering.Animation
             this.JointCount = JointCount;
             _animator = new Animator(this.RootJoint);
             _syncRoot = new object();
+            _jointNameMap = this.PopulateJointNameMap(RootJoint);
             this.RootJoint.CalculateInverseBindTransform(Matrix4x4.Identity);
             Alpha = 1.0f;
             Tint = Vector4.One;
@@ -276,9 +278,27 @@ namespace Hedra.Engine.Rendering.Animation
             RebuildBuffers();
         }
 
+        private Dictionary<string, int> PopulateJointNameMap(Joint RootJoint)
+        {
+            var map = new Dictionary<string, int>();
+
+            void Dfs(Joint Node)
+            {
+                map.Add(Node.Name.Name, Node.Index);
+                for(var i = 0; i < Node.Children.Count; i++)
+                {
+                    var child = Node.Children[i];
+                    Dfs(child);
+                }
+            }
+            Dfs(RootJoint);
+
+            return map;
+        }
+
         public void RebuildBuffers()
         {
-            var model = ModelData.Combine(IgnoreBaseModel ? ModelData.Empty : _baseModelData, _addedModels.ToArray());
+            var model = ModelData.Combine(_jointNameMap, IgnoreBaseModel ? ModelData.Empty : _baseModelData, _addedModels.ToArray());
             Executer.ExecuteOnMainThread(delegate
             {
                 if (_disposed) return;

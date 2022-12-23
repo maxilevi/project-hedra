@@ -22,6 +22,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
     /// </summary>
     public class ModelData : IModelData
     {
+        private const int DefaultStitchJointId = -1;
         public ModelData(Vector3[] Vertices, Vector3[] Colors, Vector3[] Normals, uint[] Indices, Vector3[] JointIds,
             Vector3[] VertexWeights, string[] JointNames)
         {
@@ -251,70 +252,58 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
             return newIndices;
         }
 
-        private static Vector3[] MapJointIds(Vector3[] SourceIds, string[] SourceNames, Dictionary<string, int> Map)
+        private static void MergeJoints(ModelData Model, ModelData[] Models, out string[][] JointIdsAsNames)
         {
-            var newIds = new Vector3[SourceIds.Length];
-            for (var i = 0; i < SourceIds.Length; ++i)
-            {
-                newIds[i].X = Map[SourceNames[(int)SourceIds[i].X]];
-                newIds[i].Y = Map[SourceNames[(int)SourceIds[i].Y]];
-                newIds[i].Z = Map[SourceNames[(int)SourceIds[i].Z]];
-            }
-
-            return newIds;
-        }
-
-        private static void MergeJoints(ModelData Model, ModelData[] Models, out Vector3[] JointIds,
-            out string[] JointNames, out Dictionary<string, int> Map)
-        {
-            JointNames =
-                new HashSet<string>(Models.SelectMany(M => M.JointNames).Concat(Model.JointNames).ToArray()).ToArray();
-
-            Map = new Dictionary<string, int>();
-            for (var i = 0; i < JointNames.Length; ++i) Map.Add(JointNames[i], i);
-
-            var map = Map;
-
-            JointIds = Models.SelectMany(
-                M => MapJointIds(M.JointIds, M.JointNames, map)).Concat(
-                MapJointIds(Model.JointIds, Model.JointNames, map)
+            JointIdsAsNames = Models.SelectMany(
+                M => M.JointIds.Select(X => JointIdsToNames(X, M.JointNames))).Concat(
+                Model.JointIds.Select(X => JointIdsToNames(X, Model.JointNames))
             ).ToArray();
         }
 
-        public static ModelData Combine(ModelData Model, params ModelData[] Models)
+        private static Vector3 JointNamesToIds(string[] Names, Dictionary<string, int> Map)
+        {
+            return new Vector3(
+                Names[0] != null ? Map[Names[0]] : 0,
+                Names[1] != null ? Map[Names[1]] : 0,
+                Names[2] != null ? Map[Names[2]] : 0
+            );
+        }
+
+        public static ModelData Combine(Dictionary<string, int> NameToJointId, ModelData Model, params ModelData[] Models)
         {
             var pairsToMatch = CalculatePairsToMatch(Models);
             var newIndices = MergeIndices(Model, Models);
-            MergeJoints(Model, Models, out var jointIds, out var jointNames, out var jointNameToId);
+            MergeJoints(Model, Models, out var jointIdsAsNames);
 
             var final = new ModelData(
                 Models.SelectMany(M => M.Vertices).Concat(Model.Vertices).ToArray(),
                 Models.SelectMany(M => M.Colors).Concat(Model.Colors).ToArray(),
                 Models.SelectMany(M => M.Normals).Concat(Model.Normals).ToArray(),
                 newIndices,
-                jointIds,
+                new Vector3[jointIdsAsNames.Length],
                 Models.SelectMany(M => M.VertexWeights).Concat(Model.VertexWeights).ToArray(),
-                jointNames
+                NameToJointId.Keys.ToArray()
             );
 
             for (var j = 0; j < final.Vertices.Length; ++j)
             {
-                var output = ClearStitchData(JointIdsToNames(final.JointIds[j], final.JointNames),
-                    final.VertexWeights[j], jointNameToId);
-                final.JointIds[j] = output.One;
+                var output = ClearStitchData(jointIdsAsNames[j], final.VertexWeights[j]);
+                final.JointIds[j] = JointNamesToIds(output.One, NameToJointId);
                 final.VertexWeights[j] = output.Two;
             }
 
             for (var j = 0; j < final.Vertices.Length; ++j)
-            for (var i = pairsToMatch.Count - 1; i > -1; --i)
             {
-                if (final.Vertices[j] != pairsToMatch[i].One) continue;
+                for (var i = pairsToMatch.Count - 1; i > -1; --i)
+                {
+                    if (final.Vertices[j] != pairsToMatch[i].One) continue;
 
-                var output = ClearStitchData(pairsToMatch[i].Two.JointIds, pairsToMatch[i].Two.Weights, jointNameToId);
+                    var output = ClearStitchData(pairsToMatch[i].Two.JointIds, pairsToMatch[i].Two.Weights);
 
-                final.Vertices[j] = pairsToMatch[i].Two.Position;
-                final.JointIds[j] = output.One;
-                final.VertexWeights[j] = output.Two;
+                    final.Vertices[j] = pairsToMatch[i].Two.Position;
+                    final.JointIds[j] = JointNamesToIds(output.One, NameToJointId);
+                    final.VertexWeights[j] = output.Two;
+                }
             }
 
             var freqs = final.JointIds.SelectMany(x => new[] { x.X, x.Y, x.Z }).GroupBy(x => x)
@@ -350,45 +339,52 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
             return final;
         }
 
-        private static Pair<Vector3, Vector3> ClearStitchData(string[] JointIds, Vector3 VertexWeights,
-            Dictionary<string, int> JointNameToId)
+        private static Pair<string[], Vector3> ClearStitchData(string[] JointIds, Vector3 VertexWeights)
         {
             var nameX = JointIds[0];
             var nameY = JointIds[1];
             var nameZ = JointIds[2];
 
-            var ids = new Vector3(JointNameToId[nameX], JointNameToId[nameY], JointNameToId[nameZ]);
+            var ids = new []{nameX, nameY, nameZ};
             var weights = VertexWeights;
+            var cleared = 0;
             if (nameX.Contains("ST"))
             {
-                ids.X = 0;
+                ids[0] = null;
                 weights = DistributeWeight(weights, 0);
+                cleared++;
             }
 
             if (nameY.Contains("ST"))
             {
-                ids.Y = 0;
+                ids[1] = null;
                 weights = DistributeWeight(weights, 1);
+                cleared++;
             }
 
             if (nameZ.Contains("ST"))
             {
-                ids.Z = 0;
+                ids[2] = null;
                 weights = DistributeWeight(weights, 2);
+                cleared++;
             }
 
-            if (ids == Vector3.Zero)
+
+            if (cleared > 1 || Math.Abs(weights.X + weights.Y + weights.Z - 1) > 0.1f )
             {
-                var a = 0;
+                int a = 0;
             }
-
-            return new Pair<Vector3, Vector3>(ids, weights);
+            return new Pair<string[], Vector3>(ids, weights);
         }
 
         public ModelData Clone()
         {
-            return new ModelData(Vertices.ToArray(), Colors.ToArray(), Normals.ToArray(), Indices.ToArray(),
-                JointIds.ToArray(), VertexWeights.ToArray(), JointNames.ToArray());
+            var model = new ModelData(Vertices.ToArray(), Colors.ToArray(), Normals.ToArray(), Indices.ToArray(),
+                JointIds.ToArray(), VertexWeights.ToArray(), JointNames.ToArray())
+            {
+                Name = Name
+            };
+            return model;
         }
 
         private struct StitchVertex
