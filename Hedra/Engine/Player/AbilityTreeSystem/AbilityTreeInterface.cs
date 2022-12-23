@@ -42,7 +42,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             _availablePointsText = new GUIText(Translations.Get("available_points"),
                 _backgroundTexture.Position - _backgroundTexture.Scale.Y * Vector2.UnitY,
                 Color.White, FontCache.GetBold(12f));
-            _availablePointsText.Position += _availablePointsText.Scale.Y * Vector2.UnitY;
+            _availablePointsText.Position += _availablePointsText.Scale.Y * Vector2.UnitY * 2f;
             for (var i = 0; i < Buttons.Length; i++)
             {
                 Buttons[i].Scale = Textures[i].Scale;
