@@ -24,32 +24,41 @@ namespace Hedra.Engine.BiomeSystem
             BaseRiver(Noise, RiverMap, Width, Scale, Offset, 32f);
         }
 
+        private static Func<Vector<float>, Vector<float>> BindRiverTransformFunction(float Border)
+        {
+            Vector<float> TransformFunc(Vector<float> F) => Vector.Min(new Vector<float>(16f),
+                Vector.Max(Vector<float>.Zero, Vector<float>.One - Vector.Abs(F) * Border));
+
+            return TransformFunc;
+        }
+
+
         private static void BaseRiver(FastNoiseSIMD Noise, float[][] RiverMap, int Width, float Scale, Vector2 Offset,
             float Border)
         {
             Noise.PerturbType = PerturbType.Gradient;
             Noise.PerturbFrequency = 32f;
             Noise.PerturbAmp = 0.0075f;
-
+            
             Noise.Seed = World.Seed;
             var set1 = Noise.GetSimplexSetWithFrequency(Offset, new Vector2(Width, Width), new Vector2(Scale, Scale),
                 0.00015f);
-            set1 = TransformSet(set1, F => (float)Math.Min(16f, Math.Max(0, 1.0 - Math.Abs(F) * Border)));
+            set1 = TransformSet(set1, BindRiverTransformFunction(Border));
 
             Noise.Seed = World.Seed + 100;
             var set2 = Noise.GetSimplexSetWithFrequency(Offset, new Vector2(Width, Width), new Vector2(Scale, Scale),
                 0.00015f);
-            set2 = TransformSet(set2, F => (float)Math.Min(16f, Math.Max(0, 1.0 - Math.Abs(F) * Border)));
+            set2 = TransformSet(set2, BindRiverTransformFunction(Border));
 
             Noise.Seed = World.Seed + 2000;
             var set3 = Noise.GetSimplexSetWithFrequency(Offset, new Vector2(Width, Width), new Vector2(Scale, Scale),
                 0.00015f);
-            set3 = TransformSet(set3, F => (float)Math.Min(16f, Math.Max(0, 1.0 - Math.Abs(F) * Border)));
+            set3 = TransformSet(set3, BindRiverTransformFunction(Border));
 
             Noise.Seed = World.Seed + 30000;
             var set4 = Noise.GetSimplexSetWithFrequency(Offset, new Vector2(Width, Width), new Vector2(Scale, Scale),
                 0.00015f);
-            set4 = TransformSet(set4, F => (float)Math.Min(16f, Math.Max(0, 1.0 - Math.Abs(F) * Border)));
+            set4 = TransformSet(set4, BindRiverTransformFunction(Border));
 
 
             Noise.PerturbType = PerturbType.None;
@@ -65,7 +74,7 @@ namespace Hedra.Engine.BiomeSystem
         {
             var set1 = Noise.GetSimplexSetWithFrequency(Offset + new Vector2(1000, 1000), new Vector2(Width, Width),
                 new Vector2(Scale, Scale), 0.00015f);
-            set1 = TransformSet(set1, F => (float)Math.Min(16f, Math.Max(0, 1.0 - Math.Abs(F) * PathBorder)));
+            set1 = TransformSet(set1, BindRiverTransformFunction(PathBorder));
 
             /* Try to avoid increase this otherwise mountains with paths will look very sharp */
             AddSet(PathMap, set1, F => Math.Min(PathDepth, Math.Max(0, F) * 5f));

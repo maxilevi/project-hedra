@@ -28,10 +28,10 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             set1 = MultiplySetsDimensional(
                 set1,
                 TransformSet(Noise.GetSimplexSetWithFrequency(Offset.Xz(), size.Xz(), scale.Xz(), 0.001f),
-                    F => (F - 0.25f).Clamp01() * 2),
+                    F => (F - new Vector<float>(0.25f)).Clamp01() * 2),
                 size
             );
-            AddSet(DensityMap, set1, F => ((F - 0.015f) * 2.5f).Clamp01() * 32.0f * Chunk.BlockSize);
+            AddSet(DensityMap, set1, F => ((F - new Vector<float>(0.015f)) * 2.5f).Clamp01() * 32.0f * Chunk.BlockSize);
 
             var set = Noise.GetPerlinFractalSetWithFrequency(offset, size, scale, 0.00025f);
             set = MultiplySets(
