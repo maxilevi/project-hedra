@@ -11,7 +11,7 @@ namespace Hedra.Structures
     public class SpawnGhostTownPortalDesign : GhostTownPortalDesign
     {
         public override int PlateauRadius => 180;
-        protected override bool SpawnNPC => false;
+        protected override bool SpawnNpc => false;
         public static bool Spawned { get; set; }
         public override bool IsFixed => true;
 

@@ -219,7 +219,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
         public override Vector4[] GrassColors(int Seed)
         {
             var rngGen = new Random(Seed + 52234);
-            var rng = rngGen.Next(0, 5);
+            var rng = rngGen.Next(0, 8);
             if (rngGen.Next(0, 5) == 1)
                 rng = 0;
 
@@ -237,30 +237,30 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
                         Colors.FromHtml("#a49a16"), Colors.FromHtml("#838812"), Colors.FromHtml("#5c6f2a"),
                         Colors.FromHtml("#9ebd42")
                     };
-                //case 2://
-                //    return new[] { GraphicUtils.FromHtml("#ff9b84"), GraphicUtils.FromHtml("#f4802d"), GraphicUtils.FromHtml("#e9674f"), GraphicUtils.FromHtml("#eb9b5a") };
-                case 2: //
+                case 2://
+                    return new[] { Colors.FromHtml("#ff9b84"), Colors.FromHtml("#f4802d"), Colors.FromHtml("#e9674f"), Colors.FromHtml("#eb9b5a") };
+                case 3: //
                     return new[]
                     {
                         Colors.FromHtml("#77b870"), Colors.FromHtml("#2d562e"), Colors.FromHtml("#59954f"),
                         Colors.FromHtml("#3e6834")
                     };
-                case 3: //
+                case 4: //
                     return new[]
                     {
                         Colors.FromHtml("#6a7229"), Colors.FromHtml("#5b6310"), Colors.FromHtml("#276832"),
                         Colors.FromHtml("#679731")
                     };
-                //case 5://
-                //    return new[] { GraphicUtils.FromHtml("#a8a026"), GraphicUtils.FromHtml("#e7dc4f"), GraphicUtils.FromHtml("#957423"), GraphicUtils.FromHtml("#ea8e27") };
-                case 4: //
+                case 5://
+                    return new[] { Colors.FromHtml("#a8a026"), Colors.FromHtml("#e7dc4f"), Colors.FromHtml("#957423"), Colors.FromHtml("#ea8e27") };
+                case 6: //
                     return new[]
                     {
                         Colors.FromHtml("#3d4f16"), Colors.FromHtml("#2e5d08"), Colors.FromHtml("#68771c"),
                         Colors.FromHtml("#659318")
                     };
-                //case 5://
-                //    return new[] { GraphicUtils.FromHtml("#7299fe"), GraphicUtils.FromHtml("#218271"), GraphicUtils.FromHtml("#1d796a"), GraphicUtils.FromHtml("#29ac80") };
+                case 7://
+                    return new[] { Colors.FromHtml("#7299fe"), Colors.FromHtml("#218271"), Colors.FromHtml("#1d796a"), Colors.FromHtml("#29ac80") };
                 default: throw new ArgumentException("Region color does not exist");
             }
         }

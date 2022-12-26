@@ -19,7 +19,7 @@ namespace Hedra.Structures
         public override int StructureChance => StructureGrid.GhostTownPortalChance;
         protected override CacheItem? Cache => CacheItem.Portal;
         protected override Vector3 StructureScale => Vector3.One * 10;
-        protected virtual bool SpawnNPC => true;
+        protected virtual bool SpawnNpc => true;
         public override bool CanSpawnInside => true;
 
         public override string DisplayName => Translations.Get("structure_portal");
@@ -39,7 +39,7 @@ namespace Hedra.Structures
             Random Rng)
         {
             base.DoBuild(Structure, Rotation, Translation, Rng);
-            if (!SpawnNPC) return;
+            if (!SpawnNpc) return;
             DoWhenChunkReady(
                 Vector3.Transform(-Vector3.UnitZ * 5 * StructureScale - Vector3.UnitX * 2 * StructureScale,
                     Rotation * Translation), P =>

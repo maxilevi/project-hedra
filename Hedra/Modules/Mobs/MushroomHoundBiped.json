@@ -1,0 +1,56 @@
+{
+  "DisplayName": "Mushroom Hound",
+  "Name": "MushroomHoundBiped",
+  "MaxHealth": 890.0,
+  "AttackDamage": 19.0,
+  "AttackCooldown": 2.0,
+  "Speed": 1.75,
+  "XP": 24.0,
+  "Level": 26,
+  "AIType": "Hostile",
+  "Effects": [
+    {
+      "Name": "Poison",
+      "Chance": 15.0,
+      "Damage": 16.0,
+      "Duration": 4.0
+    }
+  ],
+  "Drops": [],
+  "Model": {
+    "FlipNormals": true,
+    "AlignWithTerrain": true,
+    "Path": "$DataFile$/Assets/Chr/Mob/MushroomHound/MushroomHoundBipedIdle.dae",
+    "Scale": 6.0,
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/MushroomHound/MushroomHoundBipedIdle.dae",
+        "Speed": 1.0
+      }
+    ],
+    "WalkAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/MushroomHound/MushroomHoundBipedPursue0.dae",
+        "Speed": 1.0
+      },
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/MushroomHound/MushroomHoundBipedPursue1.dae",
+        "Speed": 1.0
+      }
+    ],
+    "AttackAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/MushroomHound/MushroomHoundBipedStab0.dae",
+        "Speed": 1.0
+      },
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/MushroomHound/MushroomHoundBipedStab1.dae",
+        "Speed": 1.0
+      },
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/MushroomHound/MushroomHoundBipedStab0.dae",
+        "Speed": 1.0
+      }
+    ]
+  }
+}

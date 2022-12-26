@@ -4308,6 +4308,18 @@
         <None Update="Modules\Items\Gems\Emerald.json">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Update="Modules\Spawners\ShroomDimension.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Modules\Mobs\MushroomHound.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Modules\Mobs\MushroomHoundBiped.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Modules\Mobs\Azathul.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
     <ItemGroup>
         <None Include="..\project-hedra-assets\Animations\ArcherIdle.dae">
@@ -6698,6 +6710,38 @@
             <Link>Assets\Chr\ArcherWhistle.dae</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+        <Content Include="..\project-hedra-assets\Animations\Azathul\AzathuIdle.dae">
+          <Link>Assets/Chr/Mob/Azathul/AzathuIdle.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\Azathul\AzathulJabLeft.dae">
+          <Link>Assets/Chr/Mob/Azathul/AzathulJabLeft.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\Azathul\AzathulJabRight.dae">
+          <Link>Assets/Chr/Mob/Azathul/AzathulJabRight.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\Azathul\AzathulLaser0.dae">
+          <Link>Assets/Chr/Mob/Azathul/AzathulLaser0.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\Azathul\AzathulLaser1.dae">
+          <Link>Assets/Chr/Mob/Azathul/AzathulLaser1.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\Azathul\AzathulSpecialAttack0.dae">
+          <Link>Assets/Chr/Mob/Azathul/AzathulSpecialAttack0.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\Azathul\AzathulSpecialAttack1.dae">
+          <Link>Assets/Chr/Mob/Azathul/AzathulSpecialAttack1.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\Azathul\AzathuWalk.dae">
+          <Link>Assets/Chr/Mob/Azathul/AzathuWalk.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
         <Content Include="..\project-hedra-assets\Animations\BeeAttack.dae">
             <Link>Assets\Chr\BeeAttack.dae</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -6777,6 +6821,54 @@
         <Content Include="..\project-hedra-assets\Animations\MageTeleport.dae">
             <Link>Assets\Chr\MageTeleport.dae</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\MushroomHound\MushroomHoundBipedIdle.dae">
+          <Link>Assets/Chr/Mob/MushroomHound/MushroomHoundBipedIdle.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\MushroomHound\MushroomHoundBipedPursue0.dae">
+          <Link>Assets/Chr/Mob/MushroomHound/MushroomHoundBipedPursue0.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\MushroomHound\MushroomHoundBipedPursue1.dae">
+          <Link>Assets/Chr/Mob/MushroomHound/MushroomHoundBipedPursue1.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\MushroomHound\MushroomHoundBipedStab0.dae">
+          <Link>Assets/Chr/Mob/MushroomHound/MushroomHoundBipedStab0.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\MushroomHound\MushroomHoundBipedStab1.dae">
+          <Link>Assets/Chr/Mob/MushroomHound/MushroomHoundBipedStab1.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\MushroomHound\MushroomHoundBipedStab2.dae">
+          <Link>Assets/Chr/Mob/MushroomHound/MushroomHoundBipedStab2.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\MushroomHound\MushroomHoundBite.dae">
+          <Link>Assets/Chr/Mob/MushroomHound/MushroomHoundBite.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\MushroomHound\MushroomHoundBiteLounge.dae">
+          <Link>Assets/Chr/Mob/MushroomHound/MushroomHoundBiteLounge.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\MushroomHound\MushroomHoundIdle.dae">
+          <Link>Assets/Chr/Mob/MushroomHound/MushroomHoundIdle.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\MushroomHound\MushroomHoundPursue.dae">
+          <Link>Assets/Chr/Mob/MushroomHound/MushroomHoundPursue.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\MushroomHound\MushroomHoundStagger.dae">
+          <Link>Assets/Chr/Mob/MushroomHound/MushroomHoundStagger.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Animations\MushroomHound\MushroomHoundWalk.dae">
+          <Link>Assets/Chr/Mob/MushroomHound/MushroomHoundWalk.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
         <Content Include="..\project-hedra-assets\Animations\NecromancerRaiseSkeleton.dae">
             <Link>Assets\Chr\NecromancerRaiseSkeleton.dae</Link>
@@ -7529,6 +7621,46 @@
         <Content Include="..\project-hedra-assets\Environment\Misc\WoodLog1_Lod8.ply">
             <Link>Assets\Env\Plants\WoodLog1_Lod8.ply</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Environment\MushromTrees\MushroomGrass0.ply">
+          <Link>Assets/Env/Plants/MushroomGrass0.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Environment\MushromTrees\MushroomGrass1.ply">
+          <Link>Assets/Env/Plants/MushroomGrass1.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Environment\MushromTrees\MushroomTree0-Colliders.ply">
+          <Link>Assets/Env/Trees/MushroomTree0-Colliders.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Environment\MushromTrees\MushroomTree0.ply">
+          <Link>Assets/Env/Trees/MushroomTree0.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Environment\MushromTrees\MushroomTree1-Colliders.ply">
+          <Link>Assets/Env/Trees/MushroomTree1-Colliders.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Environment\MushromTrees\MushroomTree1.ply">
+          <Link>Assets/Env/Trees/MushroomTree1.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Environment\MushromTrees\MushroomTree2-Colliders.ply">
+          <Link>Assets/Env/Trees/MushroomTree2-Colliders.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Environment\MushromTrees\MushroomTree2.ply">
+          <Link>Assets/Env/Trees/MushroomTree2.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Environment\MushromTrees\MushroomTree3-Colliders.ply">
+          <Link>Assets/Env/Trees/MushroomTree3-Colliders.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\Environment\MushromTrees\MushroomTree3.ply">
+          <Link>Assets/Env/Trees/MushroomTree3.ply</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
         <Content Include="..\project-hedra-assets\Environment\Plants\LilyPad0.ply">
             <Link>Assets\Env\Plants\LilyPad0.ply</Link>

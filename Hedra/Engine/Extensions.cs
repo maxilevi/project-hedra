@@ -40,6 +40,11 @@ namespace Hedra.Engine
         {
             return Mathf.Clamp(Value, 0, 1);
         }
+        
+        public static Vector<float> Clamp01(this Vector<float> Value)
+        {
+            return Vector.Max(Vector.Min(Value, Vector<float>.One), Vector<float>.Zero);
+        }
 
         public static float Clamp0(this float Value)
         {

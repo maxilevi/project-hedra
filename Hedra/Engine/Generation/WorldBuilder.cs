@@ -29,7 +29,7 @@ namespace Hedra.Engine.Generation
 
         public int MeshThreads => _pool.GetMaxWorkers(QueueType.Meshing);
         public int BlockThreads => _pool.GetMaxWorkers(QueueType.Blocks);
-        public int StructureThreads => _pool.GetMaxWorkers(QueueType.Structures);
+        public int StructureThreads => 0;//_pool.GetMaxWorkers(QueueType.Structures);
 
         public int AverageBuildTime => _meshBuilder.AverageWorkTime;
 

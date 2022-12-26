@@ -90,6 +90,8 @@ namespace Hedra.Engine.CacheSystem
         Cave5,
         Cave6,
         CaveIcon,
+        MushroomTrees,
+        MushroomGrass,
         MaxEnums
     }
 }

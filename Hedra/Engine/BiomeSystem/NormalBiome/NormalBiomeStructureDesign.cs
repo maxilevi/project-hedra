@@ -14,6 +14,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             AddDesign(new SpawnVillageDesign());
 
             AddDesign(new VillageDesign());
+           
             AddDesign(new GraveyardDesign());
             AddDesign(new GiantTreeDesign());
             AddDesign(new TravellingMerchantDesign());
@@ -42,8 +43,8 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             AddDesign(new Cave4Design());
             AddDesign(new Cave5Design());
             AddDesign(new Cave6Design());
-            //AddDesign(new Cave1Design());
-            //AddDesign(new ShroomDimensionPortalDesign());
+            
+            AddDesign(new ShroomDimensionPortalDesign());
         }
 
         public override VillageType VillageType => VillageType.Woodland;

@@ -1,0 +1,22 @@
+{
+  "Plains": [
+    {
+      "Type": "MushroomHound",
+      "Distribution": "LowMedium",
+      "MinGroup": 1,
+      "MaxGroup": 5
+    }
+  ],
+  "Shore": [
+  ],
+  "Mountain": [
+  ],
+  "Forest": [
+    {
+      "Type": "MushroomHound",
+      "Distribution": "LowMedium",
+      "MinGroup": 1,
+      "MaxGroup": 5
+    }
+  ]
+}

@@ -19,18 +19,22 @@ namespace Hedra.Engine.Rendering.Animation
     {
         public Vector3 Position { get; }
         public Quaternion Rotation { get; }
+        public Vector3 Scale { get; }
 
         private Matrix4x4 _lastLocalTransform;
         private Quaternion _lastRotation;
         private Vector3 _lastPosition;
+        private Vector3 _lastScale;
 
-        public JointTransform(Vector3 Position, Quaternion Rotation)
+        public JointTransform(Vector3 Scale, Vector3 Position, Quaternion Rotation)
         {
+            this.Scale = Scale;
             this.Position = Position;
             this.Rotation = Rotation;
             _lastLocalTransform = Matrix4x4.Identity;
             _lastRotation = Quaternion.Identity;
             _lastPosition = Vector3.Zero;
+            _lastScale = Vector3.One;
         }
 
         /**
@@ -48,12 +52,14 @@ namespace Hedra.Engine.Rendering.Animation
         {
             get
             {
-                if (_lastPosition == Position && _lastRotation == Rotation) return _lastLocalTransform;
+                if (_lastPosition == Position && _lastRotation == Rotation && _lastScale == Scale) return _lastLocalTransform;
                 _lastPosition = Position;
                 _lastRotation = Rotation;
-                var matrix = Matrix4x4.CreateTranslation(Position);
-                matrix = Rotation.ToMatrix() * matrix;
-                return _lastLocalTransform = matrix;
+                _lastScale = Scale;
+                var scaleMatrix = Matrix4x4.CreateScale(Scale);
+                var positionMatrix = Matrix4x4.CreateTranslation(Position);
+                var rotationMatrix = Rotation.ToMatrix();
+                return _lastLocalTransform = scaleMatrix * rotationMatrix * positionMatrix;
             }
         }
 
@@ -80,9 +86,10 @@ namespace Hedra.Engine.Rendering.Animation
          */
         public static JointTransform Interpolate(JointTransform FrameA, JointTransform FrameB, float Progression)
         {
+            var sca = Interpolate(FrameA.Scale, FrameB.Scale, Progression);
             var pos = Interpolate(FrameA.Position, FrameB.Position, Progression);
             var rot = Extensions.SlerpExt(FrameA.Rotation, FrameB.Rotation, Progression);
-            return new JointTransform(pos, rot);
+            return new JointTransform(sca, pos, rot);
         }
 
         /**
@@ -108,7 +115,7 @@ namespace Hedra.Engine.Rendering.Animation
 
         public bool Equals(JointTransform Other)
         {
-            return Position.Equals(Other.Position) && Rotation.Equals(Other.Rotation);
+            return Position.Equals(Other.Position) && Rotation.Equals(Other.Rotation) && Scale.Equals(Other.Scale);
         }
 
         public override bool Equals(object Obj)
@@ -122,15 +129,15 @@ namespace Hedra.Engine.Rendering.Animation
         {
             unchecked
             {
-                return (Position.GetHashCode() * 397) ^ Rotation.GetHashCode();
+                return (Position.GetHashCode() * 397) ^ Rotation.GetHashCode() ^ Scale.GetHashCode();
             }
         }
 
         public JointTransform Clone()
         {
-            return new JointTransform(Position, Rotation);
+            return new JointTransform(Scale, Position, Rotation);
         }
 
-        public static JointTransform Default { get; } = new JointTransform(Vector3.Zero, Quaternion.Identity);
+        public static JointTransform Default { get; } = new JointTransform(Vector3.One, Vector3.Zero, Quaternion.Identity);
     }
 }

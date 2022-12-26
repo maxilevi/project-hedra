@@ -12,6 +12,7 @@ using System.Numerics;
 using Hedra.BiomeSystem;
 using Hedra.Engine.BiomeSystem.GhostTown;
 using Hedra.Engine.BiomeSystem.NormalBiome;
+using Hedra.Engine.BiomeSystem.ShroomDimension;
 using Hedra.Engine.BiomeSystem.UndeadBiome;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Numerics;
@@ -234,12 +235,28 @@ namespace Hedra.Engine.BiomeSystem
                             EnvironmentDesign = new GhostTownEnvironmentDesign()
                         }
                     }
+                },
+                {
+                    WorldType.ShroomDimension, new[]
+                    {
+                        new BiomeDesign
+                        {
+                            ColorDesign = new ShroomDimensionColorsDesign(),
+                            StructureDesign = new ShroomDimensionBiomeStructureDesign(),
+                            TreeDesign = new ShroomDimensionTreeDesign(),
+                            SkyDesign = new ShroomDimensionSkyDesign(),
+                            MobDesign = new ShroomDimensionMobDesign(),
+                            GenerationDesign = new ShroomDimensionGenerationDesign(),
+                            EnvironmentDesign = new ShroomDimensionEnvironmentDesign()
+                        }
+                    }
                 }
             };
             _generatorMap = new Dictionary<WorldType, Type>
             {
                 { WorldType.Overworld, typeof(LandscapeGenerator) },
-                { WorldType.GhostTown, typeof(LandscapeGenerator) }
+                { WorldType.GhostTown, typeof(LandscapeGenerator) },
+                { WorldType.ShroomDimension, typeof(LandscapeGenerator) }
             };
             _biomeDesigns = _designsMap[Type];
         }

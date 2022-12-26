@@ -12,6 +12,7 @@ using System.Numerics;
 using System.Text;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Rendering.Animation
 {
@@ -75,9 +76,9 @@ namespace Hedra.Engine.Rendering.Animation
         {
             var mat4 = Data.JointLocalTransform;
             var translation = new Vector3(mat4.M41, mat4.M42, mat4.M43);
-
+            var scale = mat4.ExtractScale();
             var rotation = Extensions.FromMatrixExt(mat4);
-            return new JointTransform(translation, rotation);
+            return new JointTransform(scale, translation, rotation);
         }
     }
 }

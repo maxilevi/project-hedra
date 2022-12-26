@@ -291,6 +291,7 @@ namespace Hedra.Engine.EntitySystem
         SkeletonKing,
         Skeleton,
         Golem,
+        Azathul,
         TotalCount,
         None,
         Unknown

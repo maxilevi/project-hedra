@@ -8,7 +8,8 @@ namespace Hedra.Engine.BiomeSystem
         private static readonly Dictionary<WorldType, Type> Map = new Dictionary<WorldType, Type>
         {
             { WorldType.Overworld, typeof(OverworldHandler) },
-            { WorldType.GhostTown, typeof(GhostTownHandler) }
+            { WorldType.GhostTown, typeof(GhostTownHandler) },
+            { WorldType.ShroomDimension, typeof(ShroomDimensionHandler) }
         };
 
         public abstract void Dispose();

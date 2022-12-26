@@ -29,7 +29,7 @@ namespace Hedra.Engine.StructureSystem
 
         static Portal()
         {
-            PortalMesh = AssetManager.PLYLoader("Assets/Env/Objects/Portal.ply", Vector3.One * .35f);
+            PortalMesh = AssetManager.PLYLoader("Assets/Env/Objects/Portal.ply", Vector3.One);
             _portalHeight = PortalMesh.SupportPoint(Vector3.UnitY).Y - PortalMesh.SupportPoint(-Vector3.UnitY).Y;
         }
 

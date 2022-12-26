@@ -15,6 +15,7 @@ namespace Hedra.Engine.Player
     {
         public const int Overworld = 0;
         public const int GhostTown = 1;
+        public const int ShroomDimension = 2;
         private readonly List<Realm> _activeRealms;
         private int _currentRealm;
 
@@ -65,6 +66,11 @@ namespace Hedra.Engine.Player
             Go(_activeRealms[Index]);
             if (Index != currentRealm)
                 RealmChanged?.Invoke(_activeRealms[_currentRealm].Type);
+        }
+
+        public bool HasRealm(int Index)
+        {
+            return Index > 0 && Index < _activeRealms.Count;
         }
 
         private Realm DoCreate(int Seed, WorldType Type)

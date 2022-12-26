@@ -134,6 +134,9 @@ namespace Hedra.Engine.Game
             /* We set health and mana last in order to not affect stuff like bonus health */
             Player.Mana = Information.Mana;
             Player.Health = Information.Health;
+            
+            if (!Player.Realms.HasRealm(RealmHandler.ShroomDimension))
+                Player.Realms.Create(World.RandomSeed, WorldType.ShroomDimension);
         }
 
         public void NewRun(PlayerInformation Information)
@@ -142,6 +145,7 @@ namespace Hedra.Engine.Game
             Player.Realms.Reset();
             Player.Realms.Create(World.RandomSeed);
             Player.Realms.Create(World.RandomSeed, WorldType.GhostTown);
+            Player.Realms.Create(World.RandomSeed, WorldType.ShroomDimension);
             Player.Realms.GoTo(RealmHandler.Overworld);
             Player.Model = new HumanoidModel(Player);
             if (Player.Inventory.MainWeapon != null)

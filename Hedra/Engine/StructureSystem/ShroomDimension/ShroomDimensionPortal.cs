@@ -8,5 +8,10 @@ namespace Hedra.Engine.StructureSystem.Overworld
             Scale, Realm, DefaultSpawn)
         {
         }
+        
+        public ShroomDimensionPortal(Vector3 Position, Vector3 Scale, int Realm) : base(Position,
+            Scale, Realm)
+        {
+        }
     }
 }

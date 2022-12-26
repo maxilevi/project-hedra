@@ -27,8 +27,8 @@ namespace HedraTests.Rendering
             {
                 var dict = new Dictionary<JointName, JointTransform>
                 {
-                    {new JointName("Root"), new JointTransform(Vector3.UnitY * i, Quaternion.Identity)},
-                    {new JointName("Chest"), new JointTransform(Vector3.UnitX * i, Quaternion.Identity)}
+                    {new JointName("Root"), new JointTransform(Vector3.One, Vector3.UnitY * i, Quaternion.Identity)},
+                    {new JointName("Chest"), new JointTransform(Vector3.One, Vector3.UnitX * i, Quaternion.Identity)}
                 };
                 frames[i] = new KeyFrame(i * (1f/frames.Length), dict);
             }

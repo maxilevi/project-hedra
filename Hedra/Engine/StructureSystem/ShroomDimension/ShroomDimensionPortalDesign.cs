@@ -16,6 +16,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
     {
         public override int PlateauRadius => 128;
         public override bool CanSpawnInside => true;
+        protected virtual bool SpawnNpc => true;
         public override int StructureChance => StructureGrid.ShroomPortalChance;
         protected override CacheItem? Cache => CacheItem.ShroomPortal;
         protected override Vector3 StructureScale => Vector3.One * 2.5f;
@@ -46,7 +47,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         protected override ShroomDimensionPortal Create(Vector3 Position, float Size)
         {
             return new ShroomDimensionPortal(Position + Vector3.UnitY * 8f, StructureScale * 10f,
-                RealmHandler.GhostTown, SpawnGhostTownPortalDesign.Position);
+                RealmHandler.ShroomDimension, SpawnShroomDimensionPortalDesign.Position);
         }
     }
 }

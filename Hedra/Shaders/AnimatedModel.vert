@@ -60,7 +60,8 @@ void main(void)
     );
 
     float sum = 0.0;
-    for (int i=0;i<MAX_WEIGHTS;i++){
+    for (int i=0; i < MAX_WEIGHTS; i++)
+    {
         mat4 jointTransform = jointTransforms[int(in_jointIndices[i])];
         vec4 posePosition = jointTransform * vec4(in_position, 1.0);
         totalLocalPos += posePosition * in_weights[i];

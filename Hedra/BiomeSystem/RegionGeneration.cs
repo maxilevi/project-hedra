@@ -117,6 +117,25 @@ namespace Hedra.BiomeSystem
             _design.BuildRiverBorderMap(Noise, RiverBorderMap, Width, Scale, Offset);
         }
 
+        public void BuildDirtMap(FastNoiseSIMD Noise, int Width, float Scale, Vector2 Offset, out bool[][] DirtMap)
+        {
+            var size = Width / Scale;
+            DirtMap = new bool[Width][];
+            var noise = HasDirt ? Noise.GetSimplexSetWithFrequency(Offset, new Vector2(size, size),
+                new Vector2(Chunk.BlockSize, Chunk.BlockSize), _design.DirtFrequency) : null;
+
+            var index = 0;
+            for (var x = 0; x < DirtMap.Length; x++)
+            {
+                DirtMap[x] = new bool[Width];
+                if (HasDirt)
+                {
+                    for (var y = 0; y < DirtMap[x].Length; y++)
+                        DirtMap[x][y] = noise[index++] - _design.DirtThreshold > 0;
+                }
+            }
+        }
+
         public void BuildPathMap(FastNoiseSIMD Noise, int Width, float Scale, Vector2 Offset, out float[][] PathMap)
         {
             PathMap = CreateMap<float>(Width);
