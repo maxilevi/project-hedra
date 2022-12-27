@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace Hedra.Engine.StructureSystem.Overworld
+namespace Hedra.Engine.StructureSystem.ShroomDimension
 {
     public class ShroomDimensionPortal : Portal
     {

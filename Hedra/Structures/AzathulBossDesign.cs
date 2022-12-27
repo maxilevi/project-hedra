@@ -7,7 +7,7 @@ using Hedra.Engine.EntitySystem.BossSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.StructureSystem;
-using Hedra.Engine.StructureSystem.GhostTown;
+using Hedra.Engine.StructureSystem.ShroomDimension;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Items;
 using Hedra.Localization;
@@ -23,9 +23,9 @@ public class AzathulBossDesign : SimpleStructureDesign<AzathulBoss>, ICompletabl
         protected override CacheItem? Cache => null;
         public static bool Spawned { get; set; }
         public override bool CanSpawnInside => false;
-        public static Vector3 Position => World.SpawnPoint;
-        public override VertexData Icon => null;
+        public override VertexData Icon => CacheManager.GetModel(CacheItem.BossIcon);
         public override bool IsFixed => true;
+        protected override float GroundworkRadius => 128;
 
         public string GetShortDescription(IStructure Structure)
         {
@@ -57,12 +57,28 @@ public class AzathulBossDesign : SimpleStructureDesign<AzathulBoss>, ICompletabl
                 boss.AddComponent(new DropComponent(boss)
                 {
                     DropChance = 100,
-                    ItemDrop = ItemPool.Grab(new ItemPoolSettings(ItemTier.Unique)
+                    ItemDrop = ItemPool.Grab(new ItemPoolSettings(ItemTier.Divine)
                     {
                         RandomizeTier = false
                     })
                 });
-                ((GhostTownBoss)Structure.WorldObject).Boss = boss;
+                boss.AddComponent(new DropComponent(boss)
+                {
+                    DropChance = 75,
+                    ItemDrop = ItemPool.Grab(new ItemPoolSettings(ItemTier.Divine)
+                    {
+                        RandomizeTier = false
+                    })
+                });
+                boss.AddComponent(new DropComponent(boss)
+                {
+                    DropChance = 100,
+                    ItemDrop = ItemPool.Grab(new ItemPoolSettings(ItemTier.Legendary)
+                    {
+                        RandomizeTier = false
+                    })
+                });
+                ((AzathulBoss)Structure.WorldObject).Boss = boss;
             }, Structure);
         }
 

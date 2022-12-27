@@ -2,10 +2,9 @@ using System;
 using System.Numerics;
 using Hedra.BiomeSystem;
 using Hedra.Engine;
-using Hedra.Engine.BiomeSystem.ShroomDimension;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
-using Hedra.Engine.StructureSystem.Overworld;
+using Hedra.Engine.StructureSystem.ShroomDimension;
 using Hedra.Numerics;
 
 namespace Hedra.Structures;
@@ -34,7 +33,7 @@ public class SpawnShroomDimensionPortalDesign : ShroomDimensionPortalDesign
 
     protected override ShroomDimensionPortal Create(Vector3 TargetPosition, float Size)
     {
-        return new SpawnShroomDimensionPortal(Position, StructureScale);
+        return new SpawnShroomDimensionPortal(Position+ Vector3.UnitY * 8f, StructureScale * 10f);
     }
 }
 

@@ -1,19 +1,22 @@
 {
   "Name": "Azathul",
-  "MaxHealth": 6520.0,
+  "MaxHealth": 9520.0,
   "AttackDamage": 36.0,
   "AttackCooldown": 2.0,
   "Speed": 1.5,
-  "XP": 92.0,
+  "XP": 152.0,
   "Level": 67,
   "AIType": "Azathul",
   "Effects": [],
   "Drops": [],
   "Model": {
+    "Handler": "MushroomMob",
+    "BaseRotation": 180,
+    "BaseOffsetY": -0.025,
     "FlipNormals": true,
     "AlignWithTerrain": false,
     "Path": "$DataFile$/Assets/Chr/Mob/Azathul/AzathulIdle.dae",
-    "Scale": 4.0,
+    "Scale": 17.0,
     "IdleAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/Mob/Azathul/AzathulIdle.dae",
@@ -28,23 +31,23 @@
     ],
     "AttackAnimations": [
       {
-        "Path": "$DataFile$/Assets/Chr/Mob/Golem/GolemOverheadPunch.dae",
+        "Path": "$DataFile$/Assets/Chr/Mob/Azathul/AzathulLaser0.dae",
         "Speed": 1.5,
         "OnAnimationProgress": {
-          "Event": "Quake",
-          "Progress": 0.25
-        }
-      },
-      {
-        "Path": "$DataFile$/Assets/Chr/Mob/Golem/GolemPowerPunch.dae",
-        "Speed": 1.75,
-        "OnAnimationProgress": {
-          "Event": "Quake",
+          "Event": "Spit",
           "Progress": 0.5
         }
       },
       {
-        "Path": "$DataFile$/Assets/Chr/Mob/Golem/GolemBackhandPunch.dae",
+        "Path": "$DataFile$/Assets/Chr/Mob/Azathul/AzathulLaser1.dae",
+        "Speed": 1.5,
+        "OnAnimationProgress": {
+          "Event": "Laser",
+          "Progress": 0.5
+        }
+      },
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/Azathul/AzathulSpecialAttack0.dae",
         "Speed": 1.5,
         "OnAnimationProgress": {
           "Event": "Slash",
@@ -52,14 +55,31 @@
         }
       },
       {
+        "Path": "$DataFile$/Assets/Chr/Mob/Azathul/AzathulSpecialAttack1.dae",
+        "Speed": 1.5,
+        "OnAnimationProgress": {
+          "Event": "Knockback",
+          "Progress": 0.5
+        }
+      },
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/Azathul/AzathulSpawnMinion.dae",
+        "Speed": 0.75,
+        "Chance": 0.1,
+        "OnAnimationProgress": {
+          "Event": "SpawnMushroomMinion",
+          "Progress": 0.5
+        }
+      },
+      {
         "Path": "$DataFile$/Assets/Chr/Mob/Azathul/AzathulJabLeft.dae",
-        "Speed": 1.0,
-        "Chance": 0.25
+        "Speed": 1.5,
+        "Chance": 0.0
       },
       {
         "Path": "$DataFile$/Assets/Chr/Mob/Azathul/AzathulJabRight.dae",
-        "Speed": 1.0,
-        "Chance": 0.25
+        "Speed": 1.5,
+        "Chance": 0.0
       }
     ]
   }

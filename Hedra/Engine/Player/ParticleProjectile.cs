@@ -37,8 +37,10 @@ namespace Hedra.Engine.Player
         public bool UseLight { get; set; } = true;
         public float LightRadius { get; set; } = 64;
         public Vector4 Color { get; set; } = Particle3D.FireColor;
+        
+        public float ParticleLifetime { get; set; } = 0.05f;
 
-        protected static Vector3 Size => Vector3.One;
+        public Vector3 Size { get; set; } = Vector3.One;
 
         public override void Update()
         {
@@ -67,7 +69,7 @@ namespace Hedra.Engine.Player
 
             Particles.Position = Position;
             Particles.Color = Color;
-            Particles.ParticleLifetime = .05f;
+            Particles.ParticleLifetime = ParticleLifetime;
             Particles.GravityEffect = 0f;
             Particles.PositionErrorMargin = Size;
             Particles.Scale = Vector3.One * 1.25f;

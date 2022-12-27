@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using Hedra.Rendering.UI;
 
 namespace Hedra.Engine.ModuleSystem.Templates
@@ -16,6 +17,8 @@ namespace Hedra.Engine.ModuleSystem.Templates
         public AnimationTemplate[] IdleAnimations { get; set; }
         public AnimationTemplate[] WalkAnimations { get; set; }
         public AttackAnimationTemplate[] AttackAnimations { get; set; }
+        public float BaseRotation { get; set; }
+        public float BaseOffsetY { get; set; }
 
         public void Resolve()
         {

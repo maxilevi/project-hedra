@@ -69,6 +69,9 @@ namespace Hedra.Engine.Rendering.Animation
                 dic.Add(Data.JointTransforms[i].JointNameId, jointTransform);
             }
 
+            dic[Animator.ArmatureJointName] =
+                new JointTransform(Data.ArmatureScale, Data.ArmaturePosition, QuaternionMath.FromEuler(Data.ArmatureRotation * Mathf.Radian));
+
             return new KeyFrame(Data.Time, dic);
         }
 

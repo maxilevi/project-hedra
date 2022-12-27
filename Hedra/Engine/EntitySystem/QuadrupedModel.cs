@@ -53,6 +53,8 @@ namespace Hedra.Engine.EntitySystem
             var rng = new Random(Parent.Seed);
 
             TemplateScale = Vector3.One * Template.Scale;
+            BaseRotation = Template.BaseRotation;
+            BaseOffset = Template.BaseOffsetY * Vector3.UnitY * Template.Scale;
             IsFlyingModel = Template.IsFlying;
             IsUndead = Template.IsUndead;
             ModelPath = Template.RandomPath(rng);
@@ -154,6 +156,8 @@ namespace Hedra.Engine.EntitySystem
         public bool AlignWithTerrain { get; set; }
         public bool IsFlyingModel { get; }
         public Vector3 TemplateScale { get; }
+        public float BaseRotation { get; }
+        public Vector3 BaseOffset { get;  }
         public bool HasRider => Rider != null;
         public AttackAnimationTemplate[] AttackTemplates { get; }
         public Animation[] AttackAnimations { get; }
@@ -348,7 +352,7 @@ namespace Hedra.Engine.EntitySystem
                     : Quaternion.Identity;
                 _terrainOrientation = Quaternion.Slerp(_terrainOrientation, _targetTerrainOrientation,
                     Time.IndependentDeltaTime * 8f);
-                Model.TransformationMatrix = Matrix4x4.CreateFromQuaternion(_terrainOrientation);
+                Model.TransformationMatrix = Matrix4x4.CreateFromQuaternion(_terrainOrientation) * Matrix4x4.CreateRotationY(BaseRotation * Mathf.Radian) * Matrix4x4.CreateTranslation(BaseOffset);
                 _quaternionModelRotation = Quaternion.Slerp(_quaternionModelRotation, _quaternionTargetRotation,
                     Time.IndependentDeltaTime * 14f);
                 Model.LocalRotation = _quaternionModelRotation.ToEuler();

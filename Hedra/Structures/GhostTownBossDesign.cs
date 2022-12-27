@@ -23,8 +23,7 @@ namespace Hedra.Structures
         protected override CacheItem? Cache => null;
         public static bool Spawned { get; set; }
         public override bool CanSpawnInside => false;
-        public static Vector3 Position => World.SpawnPoint;
-        public override VertexData Icon => null;
+        public override VertexData Icon => CacheManager.GetModel(CacheItem.BossIcon);
         public override bool IsFixed => true;
 
         public string GetShortDescription(IStructure Structure)

@@ -18,7 +18,6 @@ namespace Hedra.BiomeSystem
     public class RegionColor
     {
         public static Vector4 PathColor = Color.Sienna.AsVector4();
-        public static Vector4 StonePathColor = Color.Gray.AsVector4();
         public static Vector4 DarkStonePathColor = Color.DimGray.AsVector4();
         private readonly int _seed;
         public Vector4 DirtColor;
@@ -29,6 +28,7 @@ namespace Hedra.BiomeSystem
         public Vector4 StoneColor;
         public Vector4 WaterColor;
         public Vector4[] WoodColors;
+        public Vector4[] StonePathColors;
 
         public RegionColor(int Seed)
         {
@@ -47,6 +47,8 @@ namespace Hedra.BiomeSystem
         public Vector4 WoodColor => WoodColors[new Random(_seed + 12).Next(0, WoodColors.Length)];
 
         public Vector4 GrassColor => GrassColors[new Random(_seed + 54).Next(0, GrassColors.Length)];
+        
+        public Vector4 StonePathColor => StonePathColors?[new Random(_seed + 54).Next(0, StonePathColors.Length)] ?? Color.Gray.AsVector4();
 
         public static RegionColor Interpolate(params RegionColor[] RegionsColor)
         {
@@ -115,6 +117,7 @@ namespace Hedra.BiomeSystem
             GrassColors = Design.GrassColors(_seed);
             LeavesColors = Design.LeavesColors(_seed);
             WoodColors = Design.WoodColors(_seed);
+            StonePathColors = Design.StonePathColors(_seed);
 
 
             for (var i = 0; i < GrassColors.Length; i++) GrassColors[i] = GrassColors[i] * 1.25f;

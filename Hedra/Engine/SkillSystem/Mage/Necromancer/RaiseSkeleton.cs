@@ -79,9 +79,9 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
             _skeletons.Add(skeleton);
         }
 
-        private class SkeletonEffectComponent : Component<IHumanoid>
+        public class SkeletonEffectComponent : Component<IEntity>
         {
-            public SkeletonEffectComponent(IHumanoid Parent) : base(Parent)
+            public SkeletonEffectComponent(IEntity Parent) : base(Parent)
             {
             }
 

@@ -18,6 +18,7 @@ namespace Hedra.Engine.Rendering.Animation
 {
     public class Animator
     {
+        public static JointName ArmatureJointName = new JointName("Armature");
         private readonly Joint _rootJoint;
         private float _blendingAnimationTime;
         private JointName[] _blendJoints;
@@ -48,12 +49,22 @@ namespace Hedra.Engine.Rendering.Animation
 
         public Animation BlendingAnimation { get; private set; }
 
-        private void SetupDictionaries(Joint Joint)
+        private void SetupDictionaries(Joint Root)
         {
-            _currentBlendPose.Add(Joint.Name, JointTransform.Default);
-            _currentPose.Add(Joint.Name, JointTransform.Default);
-            _pose.Add(Joint.Name, JointTransform.Default);
-            for (var i = 0; i < Joint.Children.Count; i++) SetupDictionaries(Joint.Children[i]);
+            void DoSetup(Joint Node)
+            {
+                _currentBlendPose.Add(Node.Name, JointTransform.Default);
+                _currentPose.Add(Node.Name, JointTransform.Default);
+                _pose.Add(Node.Name, JointTransform.Default);
+
+                for (var i = 0; i < Node.Children.Count; i++) DoSetup(Node.Children[i]);
+            }
+            
+            _currentBlendPose.Add(ArmatureJointName, JointTransform.Default);
+            _currentPose.Add(ArmatureJointName, JointTransform.Default);
+            _pose.Add(ArmatureJointName, JointTransform.Default);
+            
+            DoSetup(Root);
         }
 
         public void Reset()
@@ -89,7 +100,10 @@ namespace Hedra.Engine.Rendering.Animation
 
             var animationPose = CalculateCurrentAnimationPose(_currentPose);
             _pose = InterpolatePoses(_pose, animationPose, Time.IndependentDeltaTime * 16f, out var interpolated);
-            if (interpolated) ApplyPoseToJoints(_pose, _rootJoint, Matrix4x4.Identity);
+            if (interpolated)
+            {
+                ApplyPoseToJoints(_pose, _rootJoint, Matrix4x4.Identity);
+            }
             IncreaseAnimationTime();
             return interpolated;
         }
@@ -197,17 +211,30 @@ namespace Hedra.Engine.Rendering.Animation
          * - the desired model-space transform of the parent joint for
          * the pose.
          */
-        private void ApplyPoseToJoints(Dictionary<JointName, JointTransform> CurrentPose, Joint Joint,
+        private void ApplyPoseToJoints(Dictionary<JointName, JointTransform> CurrentPose, Joint Root,
             Matrix4x4 ParentTransform)
         {
-            var currentLocalTransform = CurrentPose[Joint.Name];
-            var currentTransform = currentLocalTransform.LocalTransform * ParentTransform;
-            for (var i = 0; i < Joint.Children.Count; i++)
-                ApplyPoseToJoints(CurrentPose, Joint.Children[i], currentTransform);
-            currentTransform = Joint.InverseBindTransform * currentTransform;
-            Joint.AnimatedTransform = currentTransform;
+            void DoApply(Joint Node)
+            {
+                var currentLocalTransform = CurrentPose[Node.Name];
+                var currentTransform = currentLocalTransform.LocalTransform * ParentTransform;
+                for (var i = 0; i < Node.Children.Count; i++)
+                    ApplyPoseToJoints(CurrentPose, Node.Children[i], currentTransform);
+                currentTransform = Node.InverseBindTransform * currentTransform;
+                Node.AnimatedTransform = currentTransform;
+            }
+            DoApply(Root);
+            
+            ArmatureScaleMatrix = Matrix4x4.CreateScale(CurrentPose[ArmatureJointName].Scale);
+            ArmatureRotationMatrix = Matrix4x4.CreateFromQuaternion(CurrentPose[ArmatureJointName].Rotation);
+            ArmatureTranslationMatrix = Matrix4x4.CreateTranslation(CurrentPose[ArmatureJointName].Position);
         }
 
+        public Matrix4x4 ArmatureScaleMatrix { get; private set; } = Matrix4x4.Identity;
+
+        public Matrix4x4 ArmatureRotationMatrix { get; private set; } = Matrix4x4.Identity;
+        
+        public Matrix4x4 ArmatureTranslationMatrix { get; private set; } = Matrix4x4.Identity;
         /**
          * Finds the previous keyframe in the animation and the next keyframe in the
          * animation, and returns them in an array of length 2. If there is no
@@ -249,6 +276,11 @@ namespace Hedra.Engine.Rendering.Animation
         (Dictionary<JointName, JointTransform> Pose, IDictionary<JointName, JointTransform> TargetPose, float Progression,
             out bool Interpolated)
         {
+            if (Pose.Count > 60)
+            {
+                int a = 0;
+            }
+            
             var interpolated = false;
             var pool = ArrayPool<KeyValuePair<JointName, JointTransform>>.Shared;
             var buffer = pool.Rent(Pose.Count);

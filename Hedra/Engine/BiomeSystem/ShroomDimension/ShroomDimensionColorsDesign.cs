@@ -49,9 +49,9 @@ namespace Hedra.Engine.BiomeSystem.ShroomDimension
 
         public override Vector4 StoneColor(int Seed)
         {
-            var rngGen = new Random(Seed + 52234);
+            var rngGen = new Random(Seed + 32443);
 
-            var returnArray = WoodColors(Seed + 424423);
+            var returnArray = WoodColors(Seed + 6435643);
             for(var i = 0; i < returnArray.Length; i++)
             {
                 var shade = 0.8f + 0.125f * (rngGen.NextFloat() * 2 - 1f);
@@ -149,6 +149,11 @@ namespace Hedra.Engine.BiomeSystem.ShroomDimension
             }
 
             return returnArray;
+        }
+
+        public override Vector4[] StonePathColors(int Seed)
+        {
+            return new Vector4[]{StoneColor(Seed + 5523)};
         }
     }
 }

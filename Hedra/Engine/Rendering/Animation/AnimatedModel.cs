@@ -350,7 +350,7 @@ namespace Hedra.Engine.Rendering.Animation
 
             if (_shader == DeathShader && CompatibilityManager.SupportsGeometryShaders)
             {
-                Renderer.Enable(EnableCap.Blend);
+                Renderer.Enable(EnableCap.Blend); 
                 DeathShader["viewMatrix"] = ViewMatrix;
                 DeathShader["disposeTime"] = DisposeTime;
             }
@@ -454,8 +454,8 @@ namespace Hedra.Engine.Rendering.Animation
 
         private void AddJointsToArray(Joint HeadJoint, Matrix4x4[] JointMatrices)
         {
-            var scaleAndRotation = ScaleMatrix * RotationMatrix;
-            var transformationAndPosition = TransformationMatrix * PositionMatrix;
+            var scaleAndRotation = _animator.ArmatureScaleMatrix * ScaleMatrix * _animator.ArmatureRotationMatrix * RotationMatrix;
+            var transformationAndPosition = TransformationMatrix * PositionMatrix * _animator.ArmatureTranslationMatrix;
             var queue = new Queue<Joint>();
             queue.Enqueue(HeadJoint);
             while (queue.Count != 0)

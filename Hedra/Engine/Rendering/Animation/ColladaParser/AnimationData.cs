@@ -21,6 +21,10 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
         {
             this.LengthSeconds = LengthSeconds;
             this.KeyFrames = KeyFrames;
+            for(var i = 0; i < KeyFrames.Length; i++)
+            {
+                //KeyFrames[i].BakeArmatureTransformations();
+            }
         }
     }
 }

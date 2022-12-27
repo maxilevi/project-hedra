@@ -18,6 +18,7 @@
   ],
   "Drops": [],
   "Model": {
+    "Handler": "MushroomMob",
     "FlipNormals": true,
     "AlignWithTerrain": true,
     "Path": "$DataFile$/Assets/Chr/Mob/MushroomHound/MushroomHoundBipedIdle.dae",
@@ -30,11 +31,11 @@
     ],
     "WalkAnimations": [
       {
-        "Path": "$DataFile$/Assets/Chr/Mob/MushroomHound/MushroomHoundBipedPursue0.dae",
+        "Path": "$DataFile$/Assets/Chr/Mob/MushroomHound/MushroomHoundPursue.dae",
         "Speed": 1.0
       },
       {
-        "Path": "$DataFile$/Assets/Chr/Mob/MushroomHound/MushroomHoundBipedPursue1.dae",
+        "Path": "$DataFile$/Assets/Chr/Mob/MushroomHound/MushroomHoundPursue.dae",
         "Speed": 1.0
       }
     ],

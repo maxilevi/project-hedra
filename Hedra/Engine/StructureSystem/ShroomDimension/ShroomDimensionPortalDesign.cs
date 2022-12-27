@@ -9,7 +9,7 @@ using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Structures;
 
-namespace Hedra.Engine.StructureSystem.Overworld
+namespace Hedra.Engine.StructureSystem.ShroomDimension
 {
     public class ShroomDimensionPortalDesign : SimpleFindableStructureDesign<ShroomDimensionPortal>,
         ICompletableStructureDesign

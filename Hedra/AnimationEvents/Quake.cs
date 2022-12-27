@@ -37,7 +37,7 @@ namespace Hedra.AnimationEvents
                 World.Particles.Emit();
             }
 
-            World.HighlightArea(position, World.GetRegion(position).Colors.StoneColor * .5f, radius, 1.5f);
+            World.HighlightArea(position, World.GetRegion(position).Colors.StoneColor * .35f, radius, 1.5f);
 
             var entities = World.Entities;
             foreach (var entity in entities)

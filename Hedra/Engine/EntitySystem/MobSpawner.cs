@@ -292,6 +292,8 @@ namespace Hedra.Engine.EntitySystem
         Skeleton,
         Golem,
         Azathul,
+        MushroomHound,
+        MushroomHoundBiped,
         TotalCount,
         None,
         Unknown

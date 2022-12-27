@@ -6710,8 +6710,8 @@
             <Link>Assets\Chr\ArcherWhistle.dae</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\project-hedra-assets\Animations\Azathul\AzathuIdle.dae">
-          <Link>Assets/Chr/Mob/Azathul/AzathuIdle.dae</Link>
+        <Content Include="..\project-hedra-assets\Animations\Azathul\AzathulIdle.dae">
+          <Link>Assets/Chr/Mob/Azathul/AzathulIdle.dae</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
         <Content Include="..\project-hedra-assets\Animations\Azathul\AzathulJabLeft.dae">
@@ -6730,6 +6730,10 @@
           <Link>Assets/Chr/Mob/Azathul/AzathulLaser1.dae</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+        <Content Include="..\project-hedra-assets\Animations\Azathul\AzathulSpawnMinion.dae">
+          <Link>Assets/Chr/Mob/Azathul/AzathulSpawnMinion.dae</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
         <Content Include="..\project-hedra-assets\Animations\Azathul\AzathulSpecialAttack0.dae">
           <Link>Assets/Chr/Mob/Azathul/AzathulSpecialAttack0.dae</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -6738,8 +6742,8 @@
           <Link>Assets/Chr/Mob/Azathul/AzathulSpecialAttack1.dae</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="..\project-hedra-assets\Animations\Azathul\AzathuWalk.dae">
-          <Link>Assets/Chr/Mob/Azathul/AzathuWalk.dae</Link>
+        <Content Include="..\project-hedra-assets\Animations\Azathul\AzathulWalk.dae">
+          <Link>Assets/Chr/Mob/Azathul/AzathulWalk.dae</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
         <Content Include="..\project-hedra-assets\Animations\BeeAttack.dae">

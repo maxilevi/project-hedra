@@ -1,5 +1,4 @@
 {
-  "DisplayName": "Mushroom Hound",
   "Name": "MushroomHound",
   "MaxHealth": 520.0,
   "AttackDamage": 16.0,
@@ -16,12 +15,20 @@
       "Duration": 4.0
     }
   ],
-  "Drops": [],
+  "Drops": [
+    {
+      "Type": "Mushroom",
+      "Min": 1,
+      "Max": 5,
+      "Chance": 75
+    }
+  ],
   "Model": {
+    "Handler": "MushroomMob",
     "FlipNormals": true,
     "AlignWithTerrain": true,
     "Path": "$DataFile$/Assets/Chr/Mob/MushroomHound/MushroomHoundIdle.dae",
-    "Scale": 3.5,
+    "Scale": 4.0,
     "IdleAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/Mob/MushroomHound/MushroomHoundIdle.dae",

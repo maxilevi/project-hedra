@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Numerics;
 using System.Xml;
@@ -23,6 +24,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
         private const string LinearInterpolationKeyword = "LINEAR";
         private const string BezierInterpolationKeyword = "BEZIER";
         private const string ArmatureName = "Armature";
+        private const int ScaleCorrection = 100;
         private static readonly Matrix4x4 Correction = Matrix4x4.CreateRotationX(-90f * Mathf.Radian);
         private readonly XmlNode _animationData;
         private readonly XmlNode _jointHierarchy;
@@ -45,7 +47,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
         {
             var rootNode = FindRootJointName();
             var times = GetKeyTimes();
-            var duration = times[times.Length - 1];
+            var duration = times[^1];
             var keyFrames = InitKeyFrames(times);
             var animationNodes = _animationData.Children("animation").ToArray();
             for (var i = 0; i < animationNodes.Length; i++) LoadJointTransforms(keyFrames, animationNodes[i], rootNode);
@@ -72,13 +74,18 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
         private void LoadJointTransforms(KeyFrameData[] frames, XmlNode JointData, string rootNodeId)
         {
             var jointNameId = GetJointName(JointData);
-            if (Array.IndexOf(_jointIds, jointNameId.Name) == -1) return;
+            var isJoint = Array.IndexOf(_jointIds, jointNameId.Name) != -1;
+            if (!isJoint && jointNameId != ArmatureName) return;
 
             var dataId = GetDataId(JointData);
             var transformData = JointData.ChildWithAttribute("source", "id", dataId);
             AssertInterpolationMode(JointData.InnerText);
             var rawData = transformData["float_array"].InnerText.Split(' ');
-            ProcessTransforms(jointNameId, rawData, frames, jointNameId == rootNodeId);
+            
+            if (isJoint)
+                ProcessTransforms(jointNameId, rawData, frames, jointNameId == rootNodeId);
+            else
+                ProcessArmatureTransforms(GetUnparsedJointName(JointData), rawData, frames);
         }
 
         private string GetDataId(XmlNode jointData)
@@ -86,11 +93,16 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
             var node = jointData["sampler"].ChildWithAttribute("input", "semantic", "OUTPUT");
             return node.GetAttribute("source").Value.Substring(1);
         }
+        
+        private string GetUnparsedJointName(XmlNode jointData)
+        {
+            XmlNode channelNode = jointData["channel"];
+            return channelNode.GetAttribute("target").Value;
+        }
 
         private JointName GetJointName(XmlNode jointData)
         {
-            XmlNode channelNode = jointData["channel"];
-            var data = channelNode.GetAttribute("target").Value;
+            var data = GetUnparsedJointName(jointData);
             return new JointName(data.Split('/')[0].Replace($"{ArmatureName}_", string.Empty));
         }
 
@@ -109,12 +121,49 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
                 transform = transform.Transposed();
                 if (root)
                 {
-                    transform *= Matrix4x4.CreateFromQuaternion(QuaternionMath.FromEuler(_rotation * Mathf.Radian));
+                    //transform *= Matrix4x4.CreateFromQuaternion(QuaternionMath.FromEuler(_rotation * Mathf.Radian));
                     transform *= Correction;
-                    transform *= Matrix4x4.CreateTranslation(_translation);
+                    //transform *= Matrix4x4.CreateTranslation(_translation);
                 }
 
                 keyFrames[i].AddJointTransform(new JointTransformData(jointName, transform));
+            }
+        }
+        
+        private void ProcessArmatureTransforms(string fullName, string[] rawData, KeyFrameData[] keyFrames)
+        {
+            void Set(ref Vector3 Vector, string Index, float Value)
+            {
+                if (Index == "X")
+                    Vector.X = Value;
+                else if (Index == "Y")
+                    Vector.Y = Value;
+                else if (Index == "Z")
+                    Vector.Z = Value;
+            }
+
+            var armatureScaling = (1 / (_scale.Average() * 100));
+            var scalingFactor = ScaleCorrection * armatureScaling;
+            var actionMap = new Dictionary<string, Action<KeyFrameData, float, string>>
+            {
+                { "location", (K, F, I) => Set(ref K.ArmaturePosition, I, F * armatureScaling) },
+                { "rotation", (K, F, I) => Set(ref K.ArmatureRotation, I, F) },
+                { "scale", (K, F, I) => Set(ref K.ArmatureScale, I, F * scalingFactor) }
+            };
+            
+            for (var i = 0; i < keyFrames.Length; i++)
+            {
+                var valueAtFrame = float.Parse(rawData[i], NumberStyles.Any, CultureInfo.InvariantCulture);
+                var parts = fullName.Split('/')[1].Split('.');
+                var property = parts[0];
+                var coordinate = parts[1];
+                if (property.Contains("rotation") && property.Length == "rotation".Length + 1)
+                {
+                    coordinate = property.Substring(property.Length - 1, 1);
+                    property = "rotation";
+                }
+                
+                actionMap[property](keyFrames[i], valueAtFrame, coordinate);
             }
         }
 
