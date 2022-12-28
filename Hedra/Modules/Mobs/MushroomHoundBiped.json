@@ -21,7 +21,7 @@
     "Handler": "MushroomMob",
     "FlipNormals": true,
     "AlignWithTerrain": true,
-    "Path": "$DataFile$/Assets/Chr/Mob/MushroomHound/MushroomHoundBipedIdle.dae",
+    "Path": "$DataFile$/Assets/Chr/Mob/MushroomHound/MushroomHoundIdle.dae",
     "Scale": 6.0,
     "IdleAnimations": [
       {

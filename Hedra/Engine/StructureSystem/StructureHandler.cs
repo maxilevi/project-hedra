@@ -184,6 +184,7 @@ namespace Hedra.Engine.StructureSystem
                 var design = MapBuilder.Sample(World.ToChunkSpace(Offset).ToVector3(), region);
                 if (design == null) return;
 
+                /// Changes in here will make the world differ from the map, do it in structure grid
                 //if (!IsWithinSearchRadius(design, Offset, ChunkOffset)) return;
                 if (!design.MeetsRequirements(Offset)) return;
 
