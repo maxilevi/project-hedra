@@ -25,7 +25,10 @@ public class SpawnerSettingsTest
         "Troll",
         "SkeletonKing",
         "GorillaWarrior",
-        "Pug"
+        "Pug",
+        "Azathul",
+        "MushroomHound",
+        "MushroomHoundBiped"
     };
 
     [Test]
