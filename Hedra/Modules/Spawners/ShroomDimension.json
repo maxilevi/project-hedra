@@ -5,6 +5,12 @@
       "Distribution": "LowMedium",
       "MinGroup": 1,
       "MaxGroup": 5
+    },
+    {
+      "Type": "MushroomHoundBiped",
+      "Distribution": "LowMedium",
+      "MinGroup": 1,
+      "MaxGroup": 1
     }
   ],
   "Shore": [
@@ -17,6 +23,12 @@
       "Distribution": "LowMedium",
       "MinGroup": 1,
       "MaxGroup": 5
+    },
+    {
+      "Type": "MushroomHoundBiped",
+      "Distribution": "LowMedium",
+      "MinGroup": 1,
+      "MaxGroup": 1
     }
   ]
 }

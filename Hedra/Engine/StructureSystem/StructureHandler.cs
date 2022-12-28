@@ -184,7 +184,7 @@ namespace Hedra.Engine.StructureSystem
                 var design = MapBuilder.Sample(World.ToChunkSpace(Offset).ToVector3(), region);
                 if (design == null) return;
 
-                if (!IsWithinSearchRadius(design, Offset, ChunkOffset)) return;
+                //if (!IsWithinSearchRadius(design, Offset, ChunkOffset)) return;
                 if (!design.MeetsRequirements(Offset)) return;
 
                 design.PlaceDesign(Offset, distribution, region, World.StructureHandler.StructureItems);

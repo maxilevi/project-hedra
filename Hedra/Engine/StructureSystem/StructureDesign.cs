@@ -143,7 +143,7 @@ namespace Hedra.Engine.StructureSystem
                 () => Structure.Disposed);
         }
 
-        public virtual bool MeetsRequirements(Vector2 ChunkOffset)
+        public bool MeetsRequirements(Vector2 ChunkOffset)
         {
             return World.Seed != World.MenuSeed;
         }

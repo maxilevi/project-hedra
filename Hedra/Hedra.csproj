@@ -4320,6 +4320,9 @@
         <None Update="Modules\Mobs\Azathul.json">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Update="Modules\Mobs\PriestDawn.json">
+          <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
     <ItemGroup>
         <None Include="..\project-hedra-assets\Animations\ArcherIdle.dae">
@@ -10105,6 +10108,10 @@
         <Content Include="..\project-hedra-assets\UI\HealthBarBackground.png">
             <Link>Assets\UI\HealthBarBackground.png</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\project-hedra-assets\UI\Logo.png">
+          <Link>Assets/UI/Logo.png</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
         <Content Include="..\project-hedra-assets\UI\MageLogo.png">
             <Link>Assets\UI\MageLogo.png</Link>

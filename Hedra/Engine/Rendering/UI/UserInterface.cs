@@ -54,14 +54,15 @@ namespace Hedra.Engine.Rendering.UI
 
             var bandPosition = new Vector2(0, -.8f);
             const int fontSize = 16;
-            _title = new BackgroundTexture(Graphics2D.LoadFromAssets("Assets/UI/MenuLogo.png"),
-                new Vector2(-.405f, .35f), Graphics2D.SizeFromAssets("Assets/UI/MenuLogo.png").As1920x1080() * .75f);
+            var logoScale = Graphics2D.SizeFromAssets("Assets/UI/Logo.png").As1920x1080();
+            _title = new BackgroundTexture(Graphics2D.LoadFromAssets("Assets/UI/Logo.png"),
+                new Vector2(-1, 1) + logoScale * new Vector2(1, -1) * new Vector2(0.8f, 0.9f), logoScale * .75f);
 
             var blackBand = new BackgroundTexture(Color.FromRgba(69, 69, 69, 0), Color.FromRgba(19, 19, 19, 255),
                 bandPosition, BlackBandSize, GradientType.LeftRight);
 
 
-            var newRun = new Button(new Vector2(.1f, bandPosition.Y),
+            var newRun = new Button(new Vector2(.3f, bandPosition.Y),
                 new Vector2(0.15f, 0.075f), Translation.Create("new_world"), DefaultFontColor,
                 FontCache.GetNormal(fontSize));
 
@@ -80,7 +81,7 @@ namespace Hedra.Engine.Rendering.UI
                 }
             };
 
-            _loadButton = new Button(new Vector2(.3f, bandPosition.Y),
+            _loadButton = new Button(new Vector2(.5f, bandPosition.Y),
                 new Vector2(0.15f, 0.075f), Translation.Create("load_world"), DefaultFontColor,
                 FontCache.GetNormal(fontSize));
             _loadButton.Click += delegate

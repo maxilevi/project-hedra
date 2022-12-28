@@ -17,35 +17,37 @@ namespace Hedra.Engine.StructureSystem
     {
 
         /* Check the excel */
-        public const int GhostTownPortalChance = 4;
-        public const int GazeboChance = 4;
-        public const int TravellingMerchantChance = 1;
-        public const int ShroomPortalChance = 3;
-        public const int FishingPostChance = 15;
-        public const int GraveyardChance = 7;
-        public const int WizardTower = 4;
-        public const int GiantTreeChance = 7;
-        public const int BanditCampChance = 7;
-        public const int VillageChance = 15;
-        public const int WitchHut = 5;
-        public const int Dungeon0Chance = 4;
-        public const int Dungeon1Chance = 4;
-        public const int Dungeon2Chance = 4;
-        public const int Cave0Chance = 1000;
-        public const int Cave1Chance = 1000;
-        public const int Cave2Chance = 1000;
-        public const int Cave3Chance = 1000;
-        public const int Cave4Chance = 1000;
-        public const int Cave5Chance = 1000;
-        public const int Cave6Chance = 1000;
-        public const int GarrisonChance = 6;
-        public const int GnollFortressChance = 7;
+        private const int CaveChance = 15;
+        private const int CaveCount = 6;
         
-        public const int WellChance = 15;
-        public const int CampfireChance = 25;
-        public const int ObeliskChance = 20;
+        public const int GhostTownPortalChance = 20;
+        public const int ShroomPortalChance = 20;
+        public const int TravellingMerchantChance = 15;
+        public const int FishingPostChance = 15;
+        public const int GraveyardChance = 15;
+        public const int WizardTower = 10;
+        public const int GiantTreeChance = 10;
+        public const int BanditCampChance = 10;
+        public const int VillageChance = 40;
+        public const int WitchHut = 10;
+        public const int Dungeon0Chance = 45;
+        public const int Dungeon1Chance = 45;
+        public const int Dungeon2Chance = 45;
+        public const int Cave0Chance = 90;
+        public const int Cave1Chance = 90;
+        public const int Cave2Chance = 90;
+        public const int Cave3Chance = 90;
+        public const int Cave4Chance = 90;
+        public const int Cave5Chance = 90;
+        public const int Cave6Chance = 90;
+        public const int GarrisonChance = 15;
+        public const int GnollFortressChance = 15;
+        public const int WellChance = 5;
+        public const int CampfireChance = 5;
+        public const int ObeliskChance = 5;
+        public const int GazeboChance = 5;
         public const int CottageWithFarmChance = 10;
-        public const int SolitaryFisherman = 30;
+        public const int SolitaryFisherman = 10;
 
         /* Dead realm structures */
         public const int TombstoneChance = 2;
@@ -145,7 +147,7 @@ namespace Hedra.Engine.StructureSystem
         
         private static StructureDesign SelectDesignWeighted(RandomDistribution Rng, IEnumerable<StructureDesign> Designs)
         {
-            var total = Designs.Select(D => D.StructureChance).Sum();
+            var total = Designs.Select(D => ((1f / D.StructureChance) * D.PlateauRadius)).Sum();
             var designs = Designs.ToList();
             Shuffle(Rng, designs);
             var accum = 0f;
@@ -153,10 +155,10 @@ namespace Hedra.Engine.StructureSystem
             var n = Rng.NextFloat() * total;
             foreach (var design in designs)
             {
-                var c = design.StructureChance;
-                if (n <= c + accum)
+                var chance = design.StructureChance * design.PlateauRadius;
+                if (n <= chance + accum)
                     return design;
-                accum += c;
+                accum += chance;
             }
             return null;
         }
