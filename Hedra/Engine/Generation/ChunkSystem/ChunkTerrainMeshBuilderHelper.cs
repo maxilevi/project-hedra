@@ -123,7 +123,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             else if (Type == BlockType.Stone || Type == BlockType.StonePath)
             {
                 var shade = CalculateStoneShade(Type);
-                blockColor += new Vector4(shade, shade, shade, 0);
+                blockColor *= (1 - shade);
             }
             else if (Type == BlockType.FarmDirt)
             {
@@ -136,7 +136,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private static float CalculateStoneShade(BlockType Type)
         {
-            return (Utils.Rng.NextFloat() * 2 - 1f) * .2f * (Type == BlockType.StonePath ? 3f : 1f);
+            return (Utils.Rng.NextFloat() * 2 - 1f) * .2f * (Type == BlockType.StonePath ? 3f : 1.5f);
         }
 
         private void BuildDensityGrid(int Lod)
