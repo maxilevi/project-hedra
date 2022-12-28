@@ -20,8 +20,8 @@ namespace Hedra.Engine.StructureSystem
         private const int CaveChance = 15;
         private const int CaveCount = 6;
         
-        public const int GhostTownPortalChance = 20;
-        public const int ShroomPortalChance = 20;
+        public const int GhostTownPortalChance = 40;
+        public const int ShroomPortalChance = 40;
         public const int TravellingMerchantChance = 15;
         public const int FishingPostChance = 15;
         public const int GraveyardChance = 15;
