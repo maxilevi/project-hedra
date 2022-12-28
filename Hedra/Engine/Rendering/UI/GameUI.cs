@@ -221,7 +221,11 @@ namespace Hedra.Engine.Rendering.UI
             _slingShot.Update();
 
             var isRanged = _player.Class.IsRanged;
-            Cross.Position = isRanged ? new Vector2(0, -0.05f) : new Vector2(0, -0.05f);
+            if (isRanged)
+                Cross.Enable();
+            else
+                Cross.Disable();
+            Cross.Position = Vector2.Zero;//new Vector2(0, -0.05f);
         }
 
         private void UpdateLogo()

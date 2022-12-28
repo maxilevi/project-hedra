@@ -15,12 +15,12 @@ namespace Hedra.Engine.Player
     public class Camera : EventListener, ICamera
     {
         private const float DefaultDistance = DefaultMaxDistance;
-        public const float DefaultMaxDistance = 20f;
+        public const float DefaultMaxDistance = 24f;
         public const float DefaultMinDistance = 2.0f;
         public const float DefaultMaxPitch = 1.5f;
         public const float DefaultMinPitch = -2f;
         private const float DistanceBuffer = 1.75f;
-        public static Vector3 DefaultCameraHeight = Vector3.UnitY * 9.0f;
+        public static Vector3 DefaultCameraHeight = Vector3.UnitY * 12.0f;
         public static Func<Vector3> DefaultDelegate;
 
         private readonly ClosestRayResultCallback _callback;
