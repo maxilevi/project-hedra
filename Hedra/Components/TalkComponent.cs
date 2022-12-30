@@ -198,7 +198,7 @@ namespace Hedra.Components
 
             Vector3 FollowFunc()
             {
-                return Parent.Position + Vector3.UnitY * 12f;
+                return Parent.Position + Vector3.UnitY * 15f;
             }
 
             var lifetime = _lines.Sum(S => TextProvider.StripFormat(S.Get()).Length * CharacterThreshold * 4f);
