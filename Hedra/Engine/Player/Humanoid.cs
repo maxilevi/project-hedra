@@ -193,11 +193,11 @@ namespace Hedra.Engine.Player
             ComponentManager.AddComponentWhile(new SpeedBonusComponent(this, -Speed + Speed * 1.1f),
                 () => IsRolling);
 
-            //Movement.OrientateTowards(Movement.RollFacing);
+            Movement.OrientateTowards(Movement.RollFacing);
+            var modelOrientation = new Vector3((float)Math.Sin(Model.TargetRotation.Y * Mathf.Radian), 0,
+                (float)Math.Cos(Model.TargetRotation.Y * Mathf.Radian));
             TaskScheduler.While(() => IsRolling, () =>
             {
-                var modelOrientation = new Vector3((float)Math.Sin(Model.TargetRotation.Y * Mathf.Radian), 0,
-                    (float)Math.Cos(Model.TargetRotation.Y * Mathf.Radian));
                 Physics.ApplyImpulse(modelOrientation * 2f * Speed * Attributes.TumbleDistanceModifier);
             });
 

@@ -138,6 +138,7 @@ namespace Hedra.Engine.Player
                     _targetYaw = _player.View.TargetYaw;
                     ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Forward) * keysPresses);
                     Orientate();
+                    RollFacing = _characterRotation;
                 }
 
                 _player.Model.TiltMatrix =
