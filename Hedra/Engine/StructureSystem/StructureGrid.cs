@@ -25,8 +25,8 @@ namespace Hedra.Engine.StructureSystem
         public const int TravellingMerchantChance = 15;
         public const int FishingPostChance = 15;
         public const int GraveyardChance = 15;
-        public const int WizardTower = 10;
-        public const int GiantTreeChance = 10;
+        public const int WizardTower = 15;
+        public const int GiantTreeChance = 15;
         public const int BanditCampChance = 10;
         public const int VillageChance = 40;
         public const int WitchHut = 10;
@@ -155,9 +155,12 @@ namespace Hedra.Engine.StructureSystem
             var n = Rng.NextFloat() * total;
             foreach (var design in designs)
             {
-                var chance = design.StructureChance * design.PlateauRadius;
+                var chance = (1f / design.StructureChance) * design.PlateauRadius;
                 if (n <= chance + accum)
+                {
                     return design;
+                }
+
                 accum += chance;
             }
             return null;
