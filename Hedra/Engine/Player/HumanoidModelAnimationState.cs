@@ -51,12 +51,13 @@ namespace Hedra.Engine.Player
             _fishingAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorFishing.dae");
             _helloAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorHello.dae");
             _helloAnimation.Loop = false;
+            _rollAnimation.Speed = 1.25f;
             _helloAnimation.OnAnimationEnd += delegate { };
-            _rollAnimation.OnAnimationEnd += delegate
+            _rollAnimation.RegisterOnProgressEvent(0.8f, delegate
             {
                 Humanoid.Physics.ResetFall();
                 Humanoid.IsRolling = false;
-            };
+            });
         }
 
         public Animation DefaultBlending { get; set; }
