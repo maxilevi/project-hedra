@@ -20,7 +20,7 @@ namespace Hedra.Engine.Player
         public const float DefaultMaxPitch = 1.5f;
         public const float DefaultMinPitch = -2f;
         private const float DistanceBuffer = 1.75f;
-        public static Vector3 DefaultCameraHeight = Vector3.UnitY * 12.0f;
+        public static Vector3 DefaultCameraHeight = Vector3.UnitY * 7.0f;
         public static Func<Vector3> DefaultDelegate;
 
         private readonly ClosestRayResultCallback _callback;

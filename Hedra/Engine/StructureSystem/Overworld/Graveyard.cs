@@ -34,7 +34,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         public Entity[] Enemies { get; set; }
         public float Radius { get; }
-        public int EnemiesLeft => Enemies.Count(E => !E.IsDead);
+        public int EnemiesLeft => Enemies.Count(E => E == null || !E.IsDead);
         public HighlightedAreaWrapper AreaWrapper { get; set; }
         public bool Completed => Enemies != null && EnemiesLeft == 0;
 
@@ -42,7 +42,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
             if (Enemies != null)
                 for (var i = 0; i < Enemies.Length; i++)
-                    Enemies[i].Dispose();
+                    Enemies[i]?.Dispose();
             AreaWrapper?.Dispose();
             _ambientHandler.Dispose();
             UpdateManager.Remove(this);

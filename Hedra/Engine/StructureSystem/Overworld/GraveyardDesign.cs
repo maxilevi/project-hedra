@@ -109,7 +109,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 World.HighlightArea(position, new Vector4(.1f, .1f, .1f, 1f), PlateauRadius, -1);
 
             BuildLamps(position, Structure.WorldObject, Structure);
-            BuildReward(position, (Graveyard)Structure.WorldObject, rng);
+            BuildReward(position, (Graveyard)Structure.WorldObject, rng, Structure);
         }
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
@@ -117,21 +117,28 @@ namespace Hedra.Engine.StructureSystem.Overworld
             return base.Setup(TargetPosition, Rng, new Graveyard(TargetPosition, PlateauRadius));
         }
 
-        private static void BuildReward(Vector3 Position, Graveyard Cementery, Random Rng)
+        private static void BuildReward(Vector3 Position, Graveyard Cementery, Random Rng, CollidableStructure Structure)
         {
-            var enemies = new List<Entity>();
-
             var skeletonCount = 4;
+            Cementery.Enemies = new Entity[skeletonCount];
             for (var i = 0; i < skeletonCount; i++)
             {
-                var skeleton = NPCCreator.SpawnBandit(
-                    Position + new Vector3(Rng.NextFloat() * 60f - 30f, 0, Rng.NextFloat() * 60f - 30f) *
-                    Chunk.BlockSize,
-                    Level, BanditOptions.Undead);
-                enemies.Add(skeleton);
+                var banditPosition = Position +
+                                     new Vector3(Rng.NextFloat() * 60f - 30f, 0, Rng.NextFloat() * 60f - 30f) *
+                                     Chunk.BlockSize;
+                var k = i;
+                DoWhenChunkReady(banditPosition, P =>
+                {
+                    if (Cementery.Disposed) return;
+                    var skeleton = NPCCreator.SpawnBandit(
+                        banditPosition,
+                        Level, BanditOptions.Undead);
+                    Cementery.Enemies[k] = skeleton;
+                     
+                }, Structure);
             }
 
-            Cementery.Enemies = enemies.ToArray();
+
 
             var prize = World.SpawnChest(Position + Vector3.UnitX * 40f,
                 ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon)
