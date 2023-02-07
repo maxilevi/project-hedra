@@ -29,6 +29,7 @@ namespace Hedra.Engine.Player
         private float _targetYaw;
         private float _vehicleCooldown;
         private float _yaw;
+        private float _interpolatedStopMovement  = 1;
 
         public PlayerMovement(LocalPlayer Player) : base(Player)
         {
@@ -73,6 +74,8 @@ namespace Hedra.Engine.Player
                 Human.Model.LocalRotation = new Vector3(0, Human.Model.LocalRotation.Y, Human.Model.LocalRotation.Z);
 
             HandleSprinting();
+            _interpolatedStopMovement = Mathf.Lerp(_interpolatedStopMovement, _player.IsRolling ? 0 : 1,
+                Time.IndependentDeltaTime * 8f);
 
             if (!_player.IsGliding)
             {
@@ -113,6 +116,7 @@ namespace Hedra.Engine.Player
                 keysPresses += aPressed ? 1f : 0f;
                 keysPresses = 1f / (!wPressed && !sPressed && !aPressed && !dPressed ? 1f : keysPresses);
                 if (keysPresses < 1f) keysPresses *= 1.5f;
+                keysPresses *= _interpolatedStopMovement;
 
                 var isRiding = _player.IsRiding;
                 var limit = isRiding ? 25f : 17.5f;
@@ -134,6 +138,7 @@ namespace Hedra.Engine.Player
                     _targetYaw = _player.View.TargetYaw;
                     ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Forward) * keysPresses);
                     Orientate();
+                    RollFacing = _characterRotation;
                 }
 
                 _player.Model.TiltMatrix =

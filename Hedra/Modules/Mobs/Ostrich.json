@@ -9,6 +9,7 @@
   "Effects": [],
   "Drops": [],
   "Model": {
+    "AlignWithTerrain": false,
     "Path": "$DataFile$/Assets/Chr/Mob/Ostrich/OstrichIdle.dae",
     "Scale": 2.15,
     "IdleAnimations": [
