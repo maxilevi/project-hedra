@@ -17,8 +17,8 @@ namespace Hedra.Engine.Player
         private const float DefaultDistance = DefaultMaxDistance;
         public const float DefaultMaxDistance = 24f;
         public const float DefaultMinDistance = 2.0f;
-        public const float DefaultMaxPitch = 1.25f;
-        public const float DefaultMinPitch = -0.45f;
+        public const float DefaultMaxPitch = 1.5f;
+        public const float DefaultMinPitch = -2f;
         private const float DistanceBuffer = 1.75f;
         public static Vector3 DefaultCameraHeight = Vector3.UnitY * 8.0f;
         public static Func<Vector3> DefaultDelegate;
@@ -162,7 +162,7 @@ namespace Hedra.Engine.Player
             {
                 //TargetPitch += Time.IndependentDeltaTime * 4f;
                 //Pitch += Time.IndependentDeltaTime * 8f;
-                TargetDistance = Math.Max(TargetDistance - Time.IndependentDeltaTime * 16f, MinDistance);
+                //TargetDistance = Math.Max(TargetDistance - Time.IndependentDeltaTime * 16f, MinDistance);
                 //Distance = Math.Max(Distance - Time.IndependentDeltaTime * 24f, MinDistance);
             }
         }
