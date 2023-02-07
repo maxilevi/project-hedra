@@ -19,6 +19,7 @@ namespace Hedra.Engine.Sound
         private readonly SoundItem[] _soundItems;
         private readonly SoundSource[] _soundSources;
         private bool _loaded;
+        private AudioContext _audioContext;
 
         public SoundProvider()
         {
@@ -27,8 +28,7 @@ namespace Hedra.Engine.Sound
             _soundSources = new SoundSource[32];
             try
             {
-                var context = AudioContext.CurrentContext;
-                Log.WriteLine(context.CurrentDevice);
+                _audioContext = new AudioContext();
             }
             catch (Exception e)
             {
