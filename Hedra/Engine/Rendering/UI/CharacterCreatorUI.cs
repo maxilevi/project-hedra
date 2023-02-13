@@ -107,6 +107,7 @@ namespace Hedra.Engine.Rendering.UI
 
                 if (!LocalPlayer.CreatePlayer(nameField.Text, _classType, _customization)) return;
                 Disable();
+                DataManager.ReloadPlayerFiles();
                 GameManager.Player.UI.CharacterSelector.Enable();
                 nameField.Text = string.Empty;
             };

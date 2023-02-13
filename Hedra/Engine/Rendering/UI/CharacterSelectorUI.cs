@@ -174,6 +174,7 @@ namespace Hedra.Engine.Rendering.UI
 
         public void ReloadSaveFile()
         {
+            DataManager.ReloadPlayerFiles();
             ReloadInformation(out var same);
             if (!same)
             {

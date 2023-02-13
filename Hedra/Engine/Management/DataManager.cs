@@ -28,44 +28,43 @@ namespace Hedra.Engine.Management
     {
         private const float SaveVersion = 1.61f;
         public static string CharactersFolder => $"{AssetManager.AppPath}/Characters/";
+        public static PlayerInformation[] PlayerFiles { get; private set; }
 
-        public static PlayerInformation[] PlayerFiles
+        public static void ReloadPlayerFiles()
         {
-            get
+            PlayerFiles = GetPlayerFiles();
+        }
+        
+        public static PlayerInformation[] GetPlayerFiles()
+        {
+            var filesList = new List<PlayerInformation>();
+            var files = Directory.GetFiles(CharactersFolder);
+
+            for (var i = 0; i < files.Length; i++)
             {
-                var filesList = new List<PlayerInformation>();
-                var files = Directory.GetFiles(CharactersFolder);
-
-                for (var i = 0; i < files.Length; i++)
+                if (!files[i].EndsWith(".db"))
+                    continue;
+                try
                 {
-                    if (files[i].EndsWith(".bak"))
+                    var information = LoadPlayer(files[i]);
+                    if (information == null) 
                         continue;
-                    try
-                    {
-                        var information = LoadPlayer(files[i]);
-                        if (information == null)
-                        {
-                            File.Delete(files[i]);
-                            if (File.Exists(files[i] + ".bak")) File.Delete(files[i] + ".bak");
-                            continue;
-                        }
 
-                        filesList.Add(information);
-                    }
-                    catch (Exception e)
-                    {
-                        if (e is UnauthorizedAccessException)
-                        {
-                            Log.WriteLine("Unauthorized access in file: " + Path.GetFileName(files[i]));
-                            continue;
-                        }
-
-                        Log.WriteLine(e.ToString());
-                    }
+                    filesList.Add(information);
                 }
+                catch (Exception e)
+                {
+                    Log.WriteLine($"Failed to open file {files[i]}");
+                    if (e is UnauthorizedAccessException)
+                    {
+                        Log.WriteLine($"Unauthorized access in file: {files[i]}");
+                        continue;
+                    }
 
-                return filesList.ToArray();
+                    Log.WriteLine(e.ToString());
+                }
             }
+            return filesList.ToArray();
         }
 
 
@@ -73,79 +72,65 @@ namespace Hedra.Engine.Management
 
         public static void SavePlayer(PlayerInformation Information)
         {
-            var chrFile = $"{CharactersFolder}{Information.Name}";
+            using var fs = File.Create($"{CharactersFolder}{Information.Name}.db");
+            using var bw = new BinaryWriter(fs);
+            
+            bw.Write(SaveVersion);
+            bw.Write(Information.Name);
+            Information.Customization.Write(bw);
 
-            if (File.Exists(chrFile + ".db"))
+            bw.Write(Information.Rotation.X);
+            bw.Write(Information.Rotation.Y);
+            bw.Write(Information.Rotation.Z);
+
+            bw.Write(Information.Health);
+
+            bw.Write(Information.Xp);
+            bw.Write(Information.Level);
+
+            bw.Write(Information.Mana);
+
+            bw.Write(Information.SkillsData.Length);
+            bw.Write(Information.SkillsData);
+
+            bw.Write(Information.RealmData.Length);
+            bw.Write(Information.RealmData);
+
+            bw.Write(Information.ToolbarData.Length);
+            bw.Write(Information.ToolbarData);
+
+            bw.Write(Information.Class.Name);
+            bw.Write(Information.RandomFactor);
+
+            var items = Information.Items;
+            if (items != null)
             {
-                if (File.Exists(chrFile + ".db.bak")) File.Delete(chrFile + ".db.bak");
-                File.Copy(chrFile + ".db", chrFile + ".db.bak");
-
-                var fInfo = new FileInfo(chrFile + ".db.bak");
-                fInfo.Attributes |= FileAttributes.Hidden;
+                bw.Write(items.Length);
+                foreach (var pair in items)
+                {
+                    bw.Write(pair.Key);
+                    var itemBytes = pair.Value.ToArray();
+                    bw.Write(itemBytes.Length);
+                    bw.Write(itemBytes);
+                }
             }
 
-            using (var fs = File.Create(CharactersFolder + Information.Name + ".db"))
+            var recipes = Information.Recipes;
+            if (recipes != null)
             {
-                using (var bw = new BinaryWriter(fs))
+                bw.Write(recipes.Length);
+                for (var i = 0; i < recipes.Length; ++i) bw.Write(recipes[i]);
+            }
+
+            var quests = Information.Quests;
+            if (quests != null)
+            {
+                bw.Write(quests.Length);
+                for (var i = 0; i < quests.Length; ++i)
                 {
-                    bw.Write(SaveVersion);
-                    bw.Write(Information.Name);
-                    Information.Customization.Write(bw);
-
-                    bw.Write(Information.Rotation.X);
-                    bw.Write(Information.Rotation.Y);
-                    bw.Write(Information.Rotation.Z);
-
-                    bw.Write(Information.Health);
-
-                    bw.Write(Information.Xp);
-                    bw.Write(Information.Level);
-
-                    bw.Write(Information.Mana);
-
-                    bw.Write(Information.SkillsData.Length);
-                    bw.Write(Information.SkillsData);
-
-                    bw.Write(Information.RealmData.Length);
-                    bw.Write(Information.RealmData);
-
-                    bw.Write(Information.ToolbarData.Length);
-                    bw.Write(Information.ToolbarData);
-
-                    bw.Write(Information.Class.Name);
-                    bw.Write(Information.RandomFactor);
-
-                    var items = Information.Items;
-                    if (items != null)
-                    {
-                        bw.Write(items.Length);
-                        foreach (var pair in items)
-                        {
-                            bw.Write(pair.Key);
-                            var itemBytes = pair.Value.ToArray();
-                            bw.Write(itemBytes.Length);
-                            bw.Write(itemBytes);
-                        }
-                    }
-
-                    var recipes = Information.Recipes;
-                    if (recipes != null)
-                    {
-                        bw.Write(recipes.Length);
-                        for (var i = 0; i < recipes.Length; ++i) bw.Write(recipes[i]);
-                    }
-
-                    var quests = Information.Quests;
-                    if (quests != null)
-                    {
-                        bw.Write(quests.Length);
-                        for (var i = 0; i < quests.Length; ++i)
-                        {
-                            var questBytes = quests[i].ToArray();
-                            bw.Write(questBytes.Length);
-                            bw.Write(questBytes);
-                        }
-                    }
+                    var questBytes = quests[i].ToArray();
+                    bw.Write(questBytes.Length);
+                    bw.Write(questBytes);
                 }
             }
         }
@@ -176,33 +161,18 @@ namespace Hedra.Engine.Management
 
         public static PlayerInformation LoadPlayer(string FileName)
         {
-            var info = new FileInfo(FileName);
-            FileName = info.Length == 0 ? $"{FileName}.bak" : FileName;
-            var data = LoadPlayer(File.Open(FileName, FileMode.Open));
-            if (data == null)
+            using var handle = File.Open(FileName, FileMode.Open);
+            try
             {
-                Log.WriteLine($"Failed to load character {FileName}. It might be incompatible.");
+                return LoadPlayer(handle);
             }
-            else if (data.IsCorrupt)
+            catch (Exception e)
             {
-                Log.WriteLine($"[IO] Detected corrupt character file '{Path.GetFileName(FileName)}'.");
-                if (!File.Exists($"{FileName}.bak"))
-                {
-                    Log.WriteLine($"[IO] Failed to load character '{Path.GetFileName(FileName)}'.");
-                    return null;
-                }
-
-                Log.WriteLine("[IO] Character backup found! Retrying...");
-                File.Delete(FileName);
-                File.Copy($"{FileName}.bak", FileName);
-                var fInfo = new FileInfo(FileName)
-                {
-                    Attributes = FileAttributes.Normal
-                };
-                return LoadPlayer($"{FileName}.bak");
+                Log.WriteLine($"Failed to load file {FileName}");
+                Log.WriteLine(e.ToString());
             }
 
-            return data;
+            return null;
         }
 
         private static PlayerInformation LoadPlayer(Stream Str)
@@ -235,9 +205,7 @@ namespace Hedra.Engine.Management
                 information.Recipes = LoadRecipes(br);
                 information.Quests = LoadQuests(br);
             }
-
-            Str.Close();
-            Str.Dispose();
+            
             if (useDefaultCustomization)
                 information.Customization = CustomizationData.FromClass(information.Class, HumanGender.Male);
             return information;
@@ -296,7 +264,6 @@ namespace Hedra.Engine.Management
         public static void DeleteCharacter(PlayerInformation Information)
         {
             File.Delete($"{CharactersFolder}{Information.Name}.db");
-            File.Delete($"{CharactersFolder}{Information.Name}.db.bak");
         }
     }
 }
