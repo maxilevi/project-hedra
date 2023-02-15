@@ -184,7 +184,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void GenerateStructures()
         {
-            if (Disposed) throw new ArgumentException("Cannot build a disposed chunk.");
+            if (Disposed) return;//throw new ArgumentException("Cannot build a disposed chunk.");
             lock (_blocksLock)
             {
                 IsGenerating = true;
