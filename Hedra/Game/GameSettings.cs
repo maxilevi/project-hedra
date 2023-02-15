@@ -101,7 +101,7 @@ namespace Hedra.Game
 
         [Setting] public static bool ShowMinimap { get; set; } = true;
 
-        [Setting] public static bool SSAO { get; set; } = true;
+        [Setting] public static bool SSAO { get; set; } = false;
 
         [Setting] public static bool EnableReflections { get; set; } = true;
 
