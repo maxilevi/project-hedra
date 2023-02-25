@@ -4,7 +4,7 @@ dotnet --info
 
 RID=$1
 FRAMEWORK=netcoreapp6.0
-CONFIG=Debug
+CONFIG=Release
 
 dotnet publish Hedra/Hedra.csproj -c $CONFIG -r $RID --self-contained true
 
