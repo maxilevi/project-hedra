@@ -60,14 +60,14 @@ jobs:
       if: matrix.os == 'ubuntu-latest'
       with:
         name: hedra-linux-x64
-        path: Hedra/bin/${{ github.event.inputs.logLevel }}/netcoreapp6.0/linux-x64/publish
+        path: Hedra/bin/${{ github.event.inputs.buildConfig }}/netcoreapp6.0/linux-x64/publish
 
     - uses: actions/upload-artifact@v1
       name: Upload windows x64
       if: matrix.os == 'windows-latest'
       with:
         name: hedra-win-x64
-        path: Hedra/bin/${{ github.event.inputs.logLevel }}/netcoreapp6.0/win-x64/publish
+        path: Hedra/bin/${{ github.event.inputs.buildConfig }}/netcoreapp6.0/win-x64/publish
 
     - uses: actions/upload-artifact@v1
       name: Upload windows x86
