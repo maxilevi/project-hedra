@@ -113,9 +113,8 @@ namespace Hedra.Engine.Loader
                 text +=
                     $"{lineBreak}AIStorage={TraverseStorage.Instance.StorageCount} Updates={UpdateManager.UpdateCount} Seed={World.Seed} FPS={Time.Framerate} MS={Time.Frametime} BDensity={block.Density} Pitch={player.View.Pitch:0.00}";
                 text +=
-                    $"{lineBreak}SkippedBinds={Renderer.TextureHandler.Skipped} SkippedUses={Renderer.ShaderHandler.Skipped} CulledObjects = {DrawManager.CulledObjectsCount}/{DrawManager.CullableObjectsCount}  Cache={CacheManager.CachedColors.Count}|{CacheManager.CachedExtradata.Count} Pitch={player.View.TargetPitch}";
+                    $"{lineBreak} SkippedUses={Renderer.ShaderHandler.Skipped} CulledObjects = {DrawManager.CulledObjectsCount}/{DrawManager.CullableObjectsCount}  Cache={CacheManager.CachedColors.Count}|{CacheManager.CachedExtradata.Count} Pitch={player.View.TargetPitch}";
                 VBO.VBOUpdatesInLastFrame = 0;
-                Renderer.TextureHandler.ResetStats();
                 Renderer.ShaderHandler.ResetStats();
                 _debugText.Text = text;
                 _passedTime += Time.IndependentDeltaTime;

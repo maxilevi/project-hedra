@@ -13,8 +13,7 @@ namespace Hedra.Engine.Rendering.Core
     {
         private const uint DefaultId = 0;
 
-        private static readonly Dictionary<uint, TextureInformation> Textures =
-            new Dictionary<uint, TextureInformation>();
+        private static readonly Dictionary<uint, TextureInformation> Textures = new ();
 
         public static int Count => Textures.Count;
         public static uint[] All => Textures.Keys.ToArray();
@@ -87,7 +86,9 @@ namespace Hedra.Engine.Rendering.Core
         public static void Remove(uint Id)
         {
             if (Id == 0) return;
+            if (!Textures.ContainsKey(Id)) return;
             if (Textures[Id].Static) return;
+            
             Textures[Id].Uses--;
             if (Textures[Id].Uses == 0)
             {
@@ -104,7 +105,7 @@ namespace Hedra.Engine.Rendering.Core
 
             void DisposeProcess()
             {
-                Renderer.TextureHandler.Delete(Id);
+                //Renderer.TextureHandler.Delete(Id);
                 Textures.Remove(Id);
             }
 

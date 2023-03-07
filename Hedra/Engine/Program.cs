@@ -23,6 +23,7 @@ using Monitor = Silk.NET.Windowing.Monitor;
 
 namespace Hedra.Engine
 {
+
     public static class Program
     {
         public static bool IsDebug { get; private set; }
@@ -30,14 +31,13 @@ namespace Hedra.Engine
         public static bool IsServer { get; private set; }
         public static bool IsDummy { get; private set; }
         public static IHedra GameWindow { get; set; }
-
-        [HandleProcessCorruptedStateExceptions]
+        
         private static void Main(string[] Args)
         {
             CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
             CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
-            //GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
-            void ProcessException(object S, UnhandledExceptionEventArgs E)
+ 
+            void ProcessException(object _, UnhandledExceptionEventArgs E)
             {
                 var baseText =
                     $":{Environment.NewLine}{Environment.NewLine}----STACK TRACE----{Environment.NewLine}{Environment.NewLine}{E.ExceptionObject}{Environment.NewLine}{Environment.NewLine}----SCRIPT TRACE---{Environment.NewLine}{Environment.NewLine}{Interpreter.FormatException((Exception)E.ExceptionObject)}";
@@ -61,34 +61,19 @@ namespace Hedra.Engine
             AppDomain.CurrentDomain.UnhandledException += ProcessException;
 
             var dummyMode = Args.Length == 1 && Args[0] == "--dummy-mode";
-            var serverMode = Args.Length == 1 && Args[0] == "--server-mode";
-            var joinArgs = Args.Length == 2 && Args[0] == "--join";
-
-            if (joinArgs)
-                Executer.ExecuteOnMainThread(() =>
-                {
-                    GameManager.MakeCurrent(DataManager.PlayerFiles[0]);
-                    Network.Instance.Connect(ulong.Parse(Args[1]));
-                });
-
-            if (serverMode)
-                RunDedicatedServer();
-            else
+            try
+            {
                 RunNormalAndDummyMode(dummyMode);
-            
+            }
+            catch (Exception e)
+            {
+                ProcessException(null, new UnhandledExceptionEventArgs(e, true));
+                Environment.Exit(1);
+            }
+
             Environment.Exit(0);
         }
 
-        private static void RunDedicatedServer()
-        {
-            LoadLibraries();
-
-            IsServer = IsDummy = true;
-            GameWindow = new HedraServer();
-            GameWindow.Run();
-
-            DisposeLibraries();
-        }
 
         private static void LoadLibraries()
         {

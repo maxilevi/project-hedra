@@ -27,7 +27,7 @@ namespace Hedra.Engine.Rendering.Core
         public uint Create()
         {
             var id = Renderer.Provider.GenTexture();
-            if (!Program.IsDummy && !GameSettings.TestingMode) TextureRegistry.Register(id);
+            //if (!Program.IsDummy && !GameSettings.TestingMode) TextureRegistry.Register(id);
             return id;
         }
 

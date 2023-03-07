@@ -25,7 +25,7 @@ namespace Hedra.Engine.Rendering
             set => Each(B => B.Comparer = value);
         }
 
-        public int TotalMemory => _buffers.Sum(B => B.TotalMemory);
+        public long TotalMemory => _buffers.Sum(B => (long) B.TotalMemory);
 
         public bool Remove(Vector2 Offset)
         {

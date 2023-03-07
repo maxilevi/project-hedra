@@ -24,7 +24,7 @@ namespace Hedra.Engine.Rendering.Core
         static Renderer()
         {
             CapHandler = new CapHandler();
-            TextureHandler = new TextureHandler();
+            //TextureHandler = new TextureHandler();
             ShaderHandler = new ShaderHandler();
             VertexAttributeHandler = new VertexAttributeHandler();
             BufferHandler = new BufferHandler();
@@ -42,7 +42,7 @@ namespace Hedra.Engine.Rendering.Core
         public static Matrix4x4 ViewMatrix { get; private set; }
         public static Matrix4x4 ProjectionMatrix { get; private set; }
         public static CapHandler CapHandler { get; }
-        public static TextureHandler TextureHandler { get; }
+        //public static TextureHandler TextureHandler { get; }
         public static ShaderHandler ShaderHandler { get; }
         public static VertexAttributeHandler VertexAttributeHandler { get; }
         public static FramebufferHandler FramebufferHandler { get; }
@@ -109,7 +109,8 @@ namespace Hedra.Engine.Rendering.Core
 
         public static void BindTexture(TextureTarget Target, uint Id)
         {
-            TextureHandler.Bind(Target, Id);
+            Renderer.Provider.BindTexture(Target, Id);
+            //TextureHandler.Bind(Target, Id);
         }
 
         public static void BindVAO(uint Id)
@@ -164,7 +165,8 @@ namespace Hedra.Engine.Rendering.Core
 
         public static void ActiveTexture(TextureUnit Unit)
         {
-            TextureHandler.Active(Unit);
+            //TextureHandler.Active(Unit);
+            Renderer.Provider.ActiveTexture(Unit);
         }
 
         public static void LoadProjection(Matrix4x4 Projection)
@@ -367,7 +369,7 @@ namespace Hedra.Engine.Rendering.Core
 
         public static uint GenTexture()
         {
-            return TextureHandler.Create();
+            return Provider.GenTexture();
         }
 
         public static void GenVertexArrays(int N, out uint V1)
