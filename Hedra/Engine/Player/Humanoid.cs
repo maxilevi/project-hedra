@@ -190,15 +190,10 @@ namespace Hedra.Engine.Player
             WasAttacking = false;
             IsAttacking = false;
             Physics.ResetSpeed();
-            //ComponentManager.AddComponentWhile(new SpeedBonusComponent(this, -Speed + Speed * 1.1f), () => IsRolling);
+            ComponentManager.AddComponentWhile(new SpeedBonusComponent(this, -Speed + Speed * 1.1f), () => IsRolling);
 
             Movement.OrientateTowards(Movement.RollFacing);
-            var modelOrientation = new Vector3((float)Math.Sin(Model.TargetRotation.Y * Mathf.Radian), 0,
-                (float)Math.Cos(Model.TargetRotation.Y * Mathf.Radian));
-            TaskScheduler.While(() => IsRolling, () =>
-            {
-                Physics.ApplyImpulse(modelOrientation * 1.5f * Speed * Attributes.TumbleDistanceModifier);
-            });
+            Movement.Move(Movement.LastOrientation * 2.5f * Attributes.TumbleDistanceModifier, .5f, false);
 
             SoundPlayer.PlaySoundWithVariation(SoundType.Dodge, Position);
             TaskScheduler.When(() => !IsRolling, () => { SearchComponent<DamageComponent>().Immune = false; });
