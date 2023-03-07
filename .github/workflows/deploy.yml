@@ -1,6 +1,12 @@
 name: Publish Hedra
 
-on: [workflow_dispatch]
+on: 
+  workflow_dispatch:
+    inputs:
+      buildConfig:
+        description: 'Build Configuration (Debug or Release)'     
+        required: true
+        default: 'Release'
 
 jobs:
   build:
@@ -36,46 +42,46 @@ jobs:
       if: matrix.os == 'windows-latest'
       shell: bash
       run: |
-        ./scripts/publish.sh win-x64
-        ./scripts/publish.sh win-x86
-        mkdir Hedra/bin/Release/assets/
-        cp Hedra/bin/Release/netcoreapp6.0/win-x64/data1.db Hedra/bin/Release/assets/data1.db
-        cp Hedra/bin/Release/netcoreapp6.0/win-x64/data2.db Hedra/bin/Release/assets/data2.db
-        cp Hedra/bin/Release/netcoreapp6.0/win-x64/data3.db Hedra/bin/Release/assets/data3.db
+        ./scripts/publish.sh win-x64 ${{ github.event.inputs.buildConfig }}
+        ./scripts/publish.sh win-x86 ${{ github.event.inputs.buildConfig }}
+        mkdir Hedra/bin/${{ github.event.inputs.buildConfig }}/assets/
+        cp Hedra/bin/${{ github.event.inputs.buildConfig }}/netcoreapp6.0/win-x64/data1.db Hedra/bin/${{ github.event.inputs.buildConfig }}/assets/data1.db
+        cp Hedra/bin/${{ github.event.inputs.buildConfig }}/netcoreapp6.0/win-x64/data2.db Hedra/bin/${{ github.event.inputs.buildConfig }}/assets/data2.db
+        cp Hedra/bin/${{ github.event.inputs.buildConfig }}/netcoreapp6.0/win-x64/data3.db Hedra/bin/${{ github.event.inputs.buildConfig }}/assets/data3.db
 
     - name: Publish on ubuntu
       if: matrix.os == 'ubuntu-latest'
       shell: bash
       run: |
-        cat ./scripts/publish.sh | bash -s linux-x64
+        cat ./scripts/publish.sh | bash -s linux-x64 ${{ github.event.inputs.buildConfig }}
 
     - uses: actions/upload-artifact@v1
       name: Upload ubuntu
       if: matrix.os == 'ubuntu-latest'
       with:
         name: hedra-linux-x64
-        path: Hedra/bin/Release/netcoreapp6.0/linux-x64/publish
+        path: Hedra/bin/${{ github.event.inputs.buildConfig }}/netcoreapp6.0/linux-x64/publish
 
     - uses: actions/upload-artifact@v1
       name: Upload windows x64
       if: matrix.os == 'windows-latest'
       with:
         name: hedra-win-x64
-        path: Hedra/bin/Release/netcoreapp6.0/win-x64/publish
+        path: Hedra/bin/${{ github.event.inputs.buildConfig }}/netcoreapp6.0/win-x64/publish
 
     - uses: actions/upload-artifact@v1
       name: Upload windows x86
       if: matrix.os == 'windows-latest'
       with:
         name: hedra-win-x86
-        path: Hedra/bin/Release/netcoreapp6.0/win-x86/publish
+        path: Hedra/bin/${{ github.event.inputs.buildConfig }}/netcoreapp6.0/win-x86/publish
 
     - uses: actions/upload-artifact@v1
       name: Upload assets
       if: matrix.os == 'windows-latest'
       with:
         name: hedra-assets
-        path: Hedra/bin/Release/assets
+        path: Hedra/bin/${{ github.event.inputs.buildConfig }}/assets
 
   deploy_steam:
     needs: build
