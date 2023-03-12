@@ -51,7 +51,7 @@ namespace Hedra.Engine
                 else
                 {
                     Log.WriteLine($"UNEXPECTED EXCEPTION {baseText}");
-                    Log.Flush();
+                    Log.FlushAndClose();
                     File.Copy($"{GameLoader.AppPath}/log.txt",
                         $"{GameLoader.CrashesFolder}/CRASH_{DateTime.UtcNow:dd-MM-yyyy_hh-mm-ss}.txt");
                 }
@@ -70,6 +70,7 @@ namespace Hedra.Engine
                 ProcessException(null, new UnhandledExceptionEventArgs(e, true));
                 Environment.Exit(1);
             }
+            Log.FlushAndClose();
 
             Environment.Exit(0);
         }
