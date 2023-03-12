@@ -5,10 +5,11 @@ using System.IO.Compression;
 using System.Threading.Tasks;
 using Dropbox.Api;
 using Dropbox.Api.Files;
+using Dropbox.Api.Auth;
 
 class Program
 {
-        public const string DropboxAccessToken = "sl.BaJ9bAFqrCZxdDZXuK38ayk39dxVBJ3tCbW8xfw0mWO7p3MtYFOTL1vvzbKpne49mUq6rzfhMAot7JAk6cFzcmv7U7Dkp_Bubhw_yI81i2RbTEYfi8zZ1MSHiHGylc1Jh2cfGmw";
+        public const string DropboxRefreshToken = "NuiXhqhiMMMAAAAAAAAAAQNs4P9JqJ4UcICvS_4jJsFaB4tbO7LbcSFC84SkExxL";
     
         static async Task Main(string[] args)
         {
@@ -95,8 +96,10 @@ class Program
                         }
                     }
                 }
-
-                using (var dbx = new DropboxClient(DropboxAccessToken))
+                    
+                var token = new OAuth2Token(refreshToken, null, null, null, null);
+                var tokenResult = await client.Auth.TokenFromOAuth2Async(token);
+                using (var dbx = new DropboxClient(tokenResult.AccessToken))
                 {
                     string uploadPath = "/" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + "-crash.zip";
                     zipStream.Seek(0, SeekOrigin.Begin);
