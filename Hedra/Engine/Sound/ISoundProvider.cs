@@ -4,7 +4,7 @@ using Silk.NET.OpenAL;
 
 namespace Hedra.Engine.Sound
 {
-    public interface ISoundProvider
+    public interface ISoundProvider : IDisposable
     {
         float Volume { get; set; }
         Vector3 ListenerPosition { get; }

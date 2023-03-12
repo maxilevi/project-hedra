@@ -19,7 +19,8 @@ namespace Hedra.Engine.Sound
         private readonly SoundItem[] _soundItems;
         private readonly SoundSource[] _soundSources;
         private bool _loaded;
-        private AudioContext _audioContext;
+        private unsafe Device* _device;
+        private unsafe Context* _context;
 
         public SoundProvider()
         {
@@ -28,7 +29,27 @@ namespace Hedra.Engine.Sound
             _soundSources = new SoundSource[32];
             try
             {
-                _audioContext = new AudioContext();
+                unsafe
+                {
+                    var alc = ALContext.GetApi();
+                    var al = AL.GetApi();
+                    _device = alc.OpenDevice("");
+                    if (_device == null)
+                    {
+                        Log.WriteLine("Could not create device");
+                        return;
+                    }
+
+                    var err = al.GetError();
+                    if (err != AudioError.NoError)
+                    {
+                        Log.WriteLine($"Error when loading sound engine: {err}");
+                        //return;
+                    }
+
+                    _context = alc.CreateContext(_device, null);
+                    alc.MakeContextCurrent(_context);
+                }
             }
             catch (Exception e)
             {
@@ -280,6 +301,18 @@ namespace Hedra.Engine.Sound
                     ? reader.ReadBytes((int)reader.BaseStream.Length - Offset)
                     : reader.ReadBytes(Length);
             }
+        }
+
+        public unsafe void Dispose()
+        {
+            var alc = ALContext.GetApi();
+            var al = AL.GetApi();
+            if (_context != null)
+                alc.DestroyContext(_context);
+            if (_device != null)
+                alc.CloseDevice(_device);
+            al.Dispose();
+            alc.Dispose();
         }
     }
 }

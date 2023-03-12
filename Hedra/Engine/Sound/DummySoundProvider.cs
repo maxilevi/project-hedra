@@ -48,5 +48,9 @@ namespace Hedra.Engine.Sound
         public void MarkAsReady()
         {
         }
+
+        public void Dispose()
+        {
+        }
     }
 }

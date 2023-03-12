@@ -87,6 +87,7 @@ namespace Hedra.Engine
         private static void DisposeLibraries()
         {
             Steam.Instance.Dispose();
+            GameLoader.DisposeSoundEngine();
             GameLoader.UnloadNativeLibs();
         }
 

@@ -97,6 +97,19 @@ namespace Hedra.Engine.Game
             }
         }
 
+        public static void DisposeSoundEngine()
+        {
+            try
+            {
+                SoundPlayer.Provider?.Dispose();
+                Log.WriteLine("Sound engine disposed successfully");
+            } catch (Exception e)
+            {
+                Log.WriteResult(false, "Sound Engine failed to dispose.");
+                Log.WriteLine(e.ToString());
+            }
+        }
+
         public static void LoadArchitectureSpecificFilesIfNecessary(string Path)
         {
             if (_loadedArchitectureFiles) return;
