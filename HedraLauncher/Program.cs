@@ -40,7 +40,7 @@ class Program
 
                 string output = GetProcessOutput(process);
 
-                await UploadCrashToDropbox(executableName, logContents, output, dumpFilePath);
+                await UploadCrashToDropbox(executableName, logContents, output, dumpFilePath, process.ExitCode);
             }
             else
             {
@@ -66,7 +66,7 @@ class Program
             return output;
         }
 
-        private static async Task UploadCrashToDropbox(string executableName, string logContents, string processOutput, string dumpFilePath)
+        private static async Task UploadCrashToDropbox(string executableName, string logContents, string processOutput, string dumpFilePath, int exitCode)
         {
             using (MemoryStream zipStream = new MemoryStream())
             {
@@ -99,7 +99,7 @@ class Program
                 
                 using (var dbx = new DropboxClient(DropboxRefreshToken, "ylshrx5xujy5bol", "g09mrm6cp7zrhhz"))
                 {
-                    string uploadPath = "/" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + "-crash.zip";
+                    string uploadPath = "/" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + $"-{exitCode}-crash.zip";
                     zipStream.Seek(0, SeekOrigin.Begin);
                     await dbx.Files.UploadAsync(uploadPath, WriteMode.Overwrite.Instance, body: zipStream);
                     Console.WriteLine("Reported crash");
