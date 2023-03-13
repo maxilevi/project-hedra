@@ -96,15 +96,14 @@ class Program
                         }
                     }
                 }
-                    
-                var token = new OAuth2Token(refreshToken, null, null, null, null);
-                var tokenResult = await client.Auth.TokenFromOAuth2Async(token);
-                using (var dbx = new DropboxClient(tokenResult.AccessToken))
+                
+                using (var dbx = new DropboxClient(DropboxRefreshToken, "ylshrx5xujy5bol"))
                 {
                     string uploadPath = "/" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + "-crash.zip";
                     zipStream.Seek(0, SeekOrigin.Begin);
                     await dbx.Files.UploadAsync(uploadPath, WriteMode.Overwrite.Instance, body: zipStream);
-                    Console.WriteLine("Reported crash");
+                    Console.WriteLine("Reported crash");i
+                        
                 }
             }
         }
