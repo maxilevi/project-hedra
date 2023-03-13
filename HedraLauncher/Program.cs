@@ -102,8 +102,7 @@ class Program
                     string uploadPath = "/" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + "-crash.zip";
                     zipStream.Seek(0, SeekOrigin.Begin);
                     await dbx.Files.UploadAsync(uploadPath, WriteMode.Overwrite.Instance, body: zipStream);
-                    Console.WriteLine("Reported crash");i
-                        
+                    Console.WriteLine("Reported crash");
                 }
             }
         }
