@@ -97,7 +97,7 @@ class Program
                     }
                 }
                 
-                using (var dbx = new DropboxClient(DropboxRefreshToken, "ylshrx5xujy5bol"))
+                using (var dbx = new DropboxClient(DropboxRefreshToken, "ylshrx5xujy5bol", "g09mrm6cp7zrhhz"))
                 {
                     string uploadPath = "/" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + "-crash.zip";
                     zipStream.Seek(0, SeekOrigin.Begin);
