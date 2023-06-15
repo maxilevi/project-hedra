@@ -12,7 +12,7 @@ More screenshots at ([Screenshots](#Screenshots))
 
 I started this project when I was in highschool (around 15 yo) in order to learn how OpenGL worked. 
 
-The scope creep quickly arrived and after a few years it turned into a fullfledged 3D game and game engine. The codebase has close to 1 million lines of code and the game has first class support for Linux and Windows.
+The scope creep quickly arrived and after a few years it turned into a fullfledged 3D game and game engine. **The codebase has around 800k LOC** and the game has first class support for Linux and Windows.
 
 ## Features
 
@@ -69,17 +69,18 @@ The million lines of code are not in vain. The game and engine are both full fea
 
 ## Interesting bits
 
-[Block.cs](https://github.com/maxilevi/project-hedra/blob/master/Hedra/Engine/Generation/Block.cs). Core component of the world. Read more at https://maxilevi.com/blog/procedural-meshing-hedra
+* [Block.cs](https://github.com/maxilevi/project-hedra/blob/master/Hedra/Engine/Generation/Block.cs). Core component of the world. Read more at https://maxilevi.com/blog/procedural-meshing-hedra
 
-[Fishing.py](https://github.com/maxilevi/project-hedra/blob/master/Hedra/Scripts/Fishing.py). Written in Python as a mod script using IronPython, directly interacts with the C# API.
+* [Fishing.py](https://github.com/maxilevi/project-hedra/blob/master/Hedra/Scripts/Fishing.py). Written in Python as a mod script using IronPython, directly interacts with the C# API.
 
-[NativeArray.cs](https://github.com/maxilevi/project-hedra/blob/master/Framework/NativeArray.cs) Implementation of an array primitive using a custom allocator. The same project provides heap based allocators as well as stac based ones using `stackalloc`. The idea was to minimize the automatic heap allocations (and thus avoiding the GC) during the game frames.
+* [NativeArray.cs](https://github.com/maxilevi/project-hedra/blob/master/Framework/NativeArray.cs) Implementation of an array primitive using a custom allocator. The same project provides heap based allocators as well as stac based ones using `stackalloc`. The idea was to minimize the automatic heap allocations (and thus avoiding the GC) during the game frames.
 
 ## Interesting facts
 
 * The world is fully procedurally generated, there is no world save file. Only the player contents are saved and the world seed. The rest is created at runtime.
 * The world is voxel based but an isosurface extraction algorithm called [Marching Cubes](https://en.wikipedia.org/wiki/Marching_cubes) is applied to extract an implicit continous surface from the discrete voxels.
 * The name "Hedra" comes from tetrahedra which is the shape used in the original iso surface extraction algorithm I implemented [Marching Tetrahedra](https://en.wikipedia.org/wiki/Marching_tetrahedra)
+* The game only supports loading .PLY and .DAE models, both which are in plaintext and the models have no textures. Therefore if you put this into perspective, this means I wrote a bunch of text that reads text and creates interactive images from this. I think this is pretty cool.
 
 ## Screenshots
 
@@ -98,26 +99,33 @@ The game is a mod to a base engine. The idea of architecturing this way was to f
 
 #### Hedra
 
+Basically the entire game. This includes AI logic, components, world generation, module systems, object placement and lots of other stuff.
+
 ##### Hedra.Engine
 
 The core parts of the engine, this defines all the abstractions to the world. It handles rendering, sound, different base systems as well as the general windowing, game loop and platform features. The split was not done at the start so some stuff might still be outside.
 
-### Framework
+#### Framework
 Core primitives used in the engine. This includes heap and stack allocators, custom implementations of lists and arrays as well as wrappers to pointers to native and some other useful primitives
 
-### HedraTests
+#### HedraTests
 
 Test suite that
 
-### Asset Builder
+#### Asset Builder
 
 Command line tool to compress the game assets into convenient binary files. Combines images, models, sound files, shaders into a single binary file with a structure designed for fast data retrieval.
 
-### Server
+#### Server
 
 Once upong a time Hedra used to support multiplayer. It worked by doing [UDP Hole Punching](https://en.wikipedia.org/wiki/UDP_hole_punching) and having clients communicate P2P, this server was in charge of that. You might also see some networking remnants in the Engine code.
 
 # How to build
 
-TODO
+The build process is pretty straightforward.
+1. Checkout all the submodules
+2. Run the build depedencies scripts
+3. Compile the C# solution
+
+You can check the GitHub actions workflows for some examples on Linux and Windows.
 
