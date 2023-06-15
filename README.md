@@ -6,7 +6,7 @@
 
 ![](https://cdn.akamai.steamstatic.com/steam/apps/1009960/ss_4d11007f15cd0b1b5fd10e5c3464281b020d58ad.jpg?t=1675777899)
 
-See more screenshots at ([Screenshots](#Screenshots))
+More screenshots at ([Screenshots](#Screenshots))
 
 ## Timeline/Context
 
@@ -20,15 +20,18 @@ The million lines of code are not in vain. The game and engine are both full fea
 
 ### Game Features
 * Beatiful procedurally generated worlds
-* Quests
-* 100+ items
+* Quests and bosses
+* 100+ items with rarities system
 * Skills and skill tree system with N+ skills
 * 4 different classes with 2 specializations each ()
 * Procedurally placed structures generated dynamically
 * Fishing, crafting, etc
+* Trading and NPCs
 * Companions and pets
 * Beatiful soundtrack
-* More
+* Navigation, maps
+* Different dimensions
+* More stuff I don't recall :)
 
 ### Engine Features
 * Fully fledged renderer using modern OpenGL
@@ -62,26 +65,26 @@ The million lines of code are not in vain. The game and engine are both full fea
 * Framework for mocking game components and doing integration testing on games
 * Image and asset compression for faster loading and smaller size
 * Entity component system 
-* More
+* More stuff I don't recall :)
 
 ## Interesting bits
 
-[Block.cs](https://github.com/maxilevi/project-hedra/blob/master/Hedra/Engine/Generation/Block.cs). Core component of the world.
+[Block.cs](https://github.com/maxilevi/project-hedra/blob/master/Hedra/Engine/Generation/Block.cs). Core component of the world. Read more at https://maxilevi.com/blog/procedural-meshing-hedra
 
-See more https://maxilevi.com/blog/procedural-meshing-hedra
-
-[Fishing.py](https://github.com/maxilevi/project-hedra/blob/master/Hedra/Scripts/Fishing.py). Written in . Interacts with the C# API.
+[Fishing.py](https://github.com/maxilevi/project-hedra/blob/master/Hedra/Scripts/Fishing.py). Written in Python as a mod script using IronPython, directly interacts with the C# API.
 
 [NativeArray.cs](https://github.com/maxilevi/project-hedra/blob/master/Framework/NativeArray.cs) Implementation of an array primitive using a custom allocator. The same project provides heap based allocators as well as stac based ones using `stackalloc`. The idea was to minimize the automatic heap allocations (and thus avoiding the GC) during the game frames.
 
 ## Interesting facts
 
 * The world is fully procedurally generated, there is no world save file. Only the player contents are saved and the world seed. The rest is created at runtime.
+* The world is voxel based but an isosurface extraction algorithm called [Marching Cubes](https://en.wikipedia.org/wiki/Marching_cubes) is applied to extract an implicit continous surface from the discrete voxels.
+* The name "Hedra" comes from tetrahedra which is the shape used in the original iso surface extraction algorithm I implemented [Marching Tetrahedra](https://en.wikipedia.org/wiki/Marching_tetrahedra)
 
 ## Screenshots
 
 ![image](https://cdn.akamai.steamstatic.com/steam/apps/1009960/ss_b36484e33d3c9f18555a3f55d60149d3913ad73a.jpg?t=1675777899)
-![](https://cdn.akamai.steamstatic.com/steam/apps/1009960/ss_e5a785f7eed4f5e1c652b8f7368f12bbf42f151e.jpg?t=1675777899)
+![image](https://cdn.akamai.steamstatic.com/steam/apps/1009960/ss_e5a785f7eed4f5e1c652b8f7368f12bbf42f151e.jpg?t=1675777899)
 ![image](https://cdn.akamai.steamstatic.com/steam/apps/1009960/ss_b8abea9f49243d1d4f5145e2627019c76b6ad520.jpg?t=1675777899)
 ![image](https://cdn.akamai.steamstatic.com/steam/apps/1009960/ss_0e5de5ddf3c8b23d3efc64a1912dd42b2fdea31c.jpg?t=1675777899)
 
@@ -97,11 +100,22 @@ The game is a mod to a base engine. The idea of architecturing this way was to f
 
 ##### Hedra.Engine
 
-The  
+The core parts of the engine, this defines all the abstractions to the world. It handles rendering, sound, different base systems as well as the general windowing, game loop and platform features. The split was not done at the start so some stuff might still be outside.
 
 ### Framework
+Core primitives used in the engine. This includes heap and stack allocators, custom implementations of lists and arrays as well as wrappers to pointers to native and some other useful primitives
 
+### HedraTests
 
+Test suite that
+
+### Asset Builder
+
+Command line tool to compress the game assets into convenient binary files. Combines images, models, sound files, shaders into a single binary file with a structure designed for fast data retrieval.
+
+### Server
+
+Once upong a time Hedra used to support multiplayer. It worked by doing [UDP Hole Punching](https://en.wikipedia.org/wiki/UDP_hole_punching) and having clients communicate P2P, this server was in charge of that. You might also see some networking remnants in the Engine code.
 
 # How to build
 
