@@ -54,6 +54,7 @@ The million lines of code are not in vain. The game and engine are both full fea
 * Frustum culling, occlusion culling,
 * Mesh simplification for runtime level of detail (LOD)
 * Skybox support
+* Shadows
 * 3D trails renderering support
 * Particle system using object instancing in opengl
 * bulletphysics integration
@@ -68,6 +69,8 @@ The million lines of code are not in vain. The game and engine are both full fea
 * More stuff I don't recall :)
 
 ## Interesting bits
+
+WorldRenderer.cs
 
 * [Block.cs](https://github.com/maxilevi/project-hedra/blob/master/Hedra/Engine/Generation/Block.cs). Core component of the world. Read more at https://maxilevi.com/blog/procedural-meshing-hedra
 
@@ -106,6 +109,7 @@ Basically the entire game. This includes AI logic, components, world generation,
 The core parts of the engine, this defines all the abstractions to the world. It handles rendering, sound, different base systems as well as the general windowing, game loop and platform features. The split was not done at the start so some stuff might still be outside.
 
 #### Framework
+
 Core primitives used in the engine. This includes heap and stack allocators, custom implementations of lists and arrays as well as wrappers to pointers to native and some other useful primitives
 
 #### HedraTests
