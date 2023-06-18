@@ -2,7 +2,7 @@
 ![](https://github.com/maxilevi/project-hedra/actions/workflows/main.yml/badge.svg)
 ![](https://github.com/maxilevi/project-hedra/actions/workflows/deploy.yml/badge.svg)
 
-(Submodule will be open sourced too soon!)
+(Submodules will be open sourced soon!)
 
 [Project Hedra](https://store.steampowered.com/app/1009960/) is an ambitious open-world, low-poly RPG. Choose your class, explore endless procedurally generated worlds, unlock different skills and complete procedurally generated quests.
 
@@ -72,7 +72,7 @@ The million lines of code are not in vain. The game and engine are both full fea
 
 ## Interesting bits
 
-WorldRenderer.cs
+* [WorldRenderer.cs](https://github.com/maxilevi/project-hedra/blob/master/Hedra/Engine/Rendering/WorldRenderer.cs). Renders the entire world in just 3 (actually it depends on how partitioned is the data buffer, but it was designed to be in 3) draw calls (water, terrain, instanced) using glMultiDrawElements.
 
 * [Block.cs](https://github.com/maxilevi/project-hedra/blob/master/Hedra/Engine/Generation/Block.cs). Core component of the world. Read more at https://maxilevi.com/blog/procedural-meshing-hedra
 
