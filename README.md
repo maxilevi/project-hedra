@@ -2,6 +2,8 @@
 ![](https://github.com/maxilevi/project-hedra/actions/workflows/main.yml/badge.svg)
 ![](https://github.com/maxilevi/project-hedra/actions/workflows/deploy.yml/badge.svg)
 
+(Submodule will be open sourced too soon!)
+
 [Project Hedra](https://store.steampowered.com/app/1009960/) is an ambitious open-world, low-poly RPG. Choose your class, explore endless procedurally generated worlds, unlock different skills and complete procedurally generated quests.
 
 ![](https://cdn.akamai.steamstatic.com/steam/apps/1009960/ss_4d11007f15cd0b1b5fd10e5c3464281b020d58ad.jpg?t=1675777899)
