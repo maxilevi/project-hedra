@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HedraTests", "HedraTests\He
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework", "Framework\Framework.csproj", "{12915777-140A-421A-A0C2-EB9BB112962F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HedraLauncher", "HedraLauncher\HedraLauncher.csproj", "{8942A92A-593D-495D-8312-F2044F1A9E08}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,10 +39,6 @@ Global
 		{12915777-140A-421A-A0C2-EB9BB112962F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12915777-140A-421A-A0C2-EB9BB112962F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12915777-140A-421A-A0C2-EB9BB112962F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8942A92A-593D-495D-8312-F2044F1A9E08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8942A92A-593D-495D-8312-F2044F1A9E08}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8942A92A-593D-495D-8312-F2044F1A9E08}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8942A92A-593D-495D-8312-F2044F1A9E08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
