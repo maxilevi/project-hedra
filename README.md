@@ -14,7 +14,7 @@ More screenshots at ([Screenshots](#Screenshots))
 
 I started this project when I was in highschool (around 15 yo) in order to learn how OpenGL worked. 
 
-The scope creep quickly arrived and after a few years it turned into a fullfledged 3D game and game engine. **The codebase has around 800k LOC** and the game has first class support for Linux and Windows.
+The scope creep quickly arrived and after a few years it turned into a fullfledged 3D game and game engine. The codebase has around 250k LOC and the game has first class support for Linux and Windows.
 
 ## Features
 
