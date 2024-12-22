@@ -2,8 +2,6 @@
 ![](https://github.com/maxilevi/project-hedra/actions/workflows/main.yml/badge.svg)
 ![](https://github.com/maxilevi/project-hedra/actions/workflows/deploy.yml/badge.svg)
 
-(Submodules will be open sourced soon!)
-
 [Project Hedra](https://store.steampowered.com/app/1009960/) is an ambitious open-world, low-poly RPG. Choose your class, explore endless procedurally generated worlds, unlock different skills and complete procedurally generated quests.
 
 ![](https://cdn.akamai.steamstatic.com/steam/apps/1009960/ss_4d11007f15cd0b1b5fd10e5c3464281b020d58ad.jpg?t=1675777899)
@@ -18,7 +16,7 @@ The scope creep quickly arrived and after a few years it turned into a fullfledg
 
 ## Features
 
-The million lines of code are not in vain. The game and engine are both full features :)
+The million lines of code are not in vain. The game and engine are both full of features :)
 
 ### Game Features
 * Beatiful procedurally generated worlds
