@@ -145,7 +145,9 @@ git submodule update --init --depth 1 -- hedra-core project-hedra-assets
 ```
 
 `hedra-tools` is optional and is not fetched by CI. Pull requests, including forks,
-can run the checks without the old `HEDRA_CI` secret. CI uses read-only repository
+can run the checks without the old `HEDRA_CI` secret. CI fetches only the asset
+files listed in `Hedra.csproj`, using a sparse, filtered clone at the pinned
+submodule revision; Blender sources and unused assets are excluded. CI uses read-only repository
 permissions and does not expose Steam credentials to build jobs.
 
 On Linux or Windows (Git Bash), run the appropriate `build-deps-*.sh`, then:
