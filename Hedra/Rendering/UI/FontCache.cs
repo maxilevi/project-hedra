@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Hedra.Engine.IO;
 using SixLabors.Fonts;
 
 namespace Hedra.Rendering.UI
 {
     public static class FontCache
     {
-        private static readonly Dictionary<FontEntry, Font> CachedFonts = new Dictionary<FontEntry, Font>();
+        private static readonly Dictionary<FontKey, Font> CachedFonts = new Dictionary<FontKey, Font>();
         private static FontFamily _normalFamily;
         private static FontFamily _boldFamily;
 
@@ -23,12 +22,18 @@ namespace Hedra.Rendering.UI
 
         public static Font Default => Get(_normalFamily, 10);
 
-        public static int Count => CachedFonts.Count;
+        public static int Count
+        {
+            get { lock (CachedFonts) return CachedFonts.Count; }
+        }
 
         public static void SetFonts(FontFamily NormalCollection, FontFamily BoldCollection)
         {
-            _normalFamily = NormalCollection;
-            _boldFamily = BoldCollection;
+            lock (CachedFonts)
+            {
+                _normalFamily = NormalCollection;
+                _boldFamily = BoldCollection;
+            }
         }
 
         public static Font Get(Font Original, float Size)
@@ -38,23 +43,16 @@ namespace Hedra.Rendering.UI
 
         private static Font Get(FontFamily Family, float Size, FontStyle Style = FontStyle.Regular)
         {
-            var entry = new FontEntry(Family, Size, Style);
-            if (!CachedFonts.ContainsKey(entry))
-                try
+            lock (CachedFonts)
+            {
+                var entry = new FontKey(Family, Size, Style);
+                if (!CachedFonts.TryGetValue(entry, out var font))
                 {
-                    CachedFonts.Add(entry, new Font(entry.Family, entry.Size, entry.Style));
+                    font = new Font(entry.Family, entry.Size, entry.Style);
+                    CachedFonts.Add(entry, font);
                 }
-                catch (ArgumentException e)
-                {
-                    Log.WriteLine(Family == null
-                        ? $"Provided font family was null.{Environment.NewLine}Trace:{e}"
-                        : $"Font '{Family.Name}' with size '{Size}' and style '{entry.Style}' failed to create.{Environment.NewLine}Trace:{e}");
-                    if (CachedFonts.Count > 0)
-                        return CachedFonts.Values.First();
-                    throw;
-                }
-
-            return CachedFonts[entry];
+                return font;
+            }
         }
 
         public static Font GetNormal(float Size)
@@ -68,7 +66,25 @@ namespace Hedra.Rendering.UI
         }
     }
 
-    public class FontEntry
+    internal readonly struct FontKey : IEquatable<FontKey>
+    {
+        public readonly FontFamily Family;
+        public readonly float Size;
+        public readonly FontStyle Style;
+
+        public FontKey(FontFamily Family, float Size, FontStyle Style)
+        {
+            this.Family = Family;
+            this.Size = Size;
+            this.Style = Style;
+        }
+
+        public bool Equals(FontKey Other) => Equals(Family, Other.Family) && Size.Equals(Other.Size) && Style == Other.Style;
+        public override bool Equals(object Obj) => Obj is FontKey other && Equals(other);
+        public override int GetHashCode() => System.HashCode.Combine(Family.Name, Family.Culture.Name, Size, Style);
+    }
+
+    public class FontEntry : IEquatable<FontEntry>
     {
         public readonly FontFamily Family;
         public readonly float Size;
@@ -85,12 +101,18 @@ namespace Hedra.Rendering.UI
 
         public override int GetHashCode()
         {
-            return (Family.Name + Family.Culture.Name).GetHashCode() + (int)Size * 29 + (int)Style * 13;
+            // This Fonts version produces unstable FontFamily hash codes; use its stable metadata.
+            return System.HashCode.Combine(Family.Name, Family.Culture.Name, Size, Style);
+        }
+
+        public bool Equals(FontEntry other)
+        {
+            return other != null && Equals(Family, other.Family) && Size.Equals(other.Size) && Style == other.Style;
         }
 
         public override bool Equals(object obj)
         {
-            return obj is FontEntry other && other.GetHashCode() == GetHashCode();
+            return obj is FontEntry other && Equals(other);
         }
     }
 }

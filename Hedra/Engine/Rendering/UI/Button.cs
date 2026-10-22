@@ -206,7 +206,6 @@ namespace Hedra.Engine.Rendering.UI
             {
                 _previousFontColor = Text.TextColor;
                 Text.TextColor = new Vector4(0.937f, 0.624f, 0.047f, 1.000f).ToColor();
-                Text.UpdateText();
                 if (PlaySound)
                     SoundPlayer.PlayUISound(SoundType.ButtonHover, 1f, .2f);
             }
@@ -221,7 +220,6 @@ namespace Hedra.Engine.Rendering.UI
             if (Text != null)
             {
                 Text.TextColor = _previousFontColor;
-                Text.UpdateText();
             }
         }
 

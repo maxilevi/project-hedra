@@ -5,7 +5,6 @@
  *
  */
 
-using System.Diagnostics;
 using System.Numerics;
 using System.Threading;
 using Hedra.Engine.Localization;
@@ -24,6 +23,13 @@ namespace Hedra.Rendering.UI
     public class GUIText : UIElement, ISimpleTexture, ITransparent
     {
         private static readonly Vector2 DefaultSize = new Vector2(GameSettings.Width, GameSettings.Height);
+        private const float CrispModifier = 1.5f;
+        private readonly object _updateLock = new object();
+        private bool _disposed;
+        private int _updateVersion;
+        private bool _stroke;
+        private float _strokeWidth = 1.75f;
+        private Color _strokeColor = Color.Black;
         private readonly TextConfiguration _configuration;
         private readonly AlignMode _align = AlignMode.Center;
         private Vector2 _temporalPosition;
@@ -34,6 +40,8 @@ namespace Hedra.Rendering.UI
         {
             _temporalPosition = Position;
             _configuration = new TextConfiguration(TextColor, TextFont);
+            UIText = new GUITexture(0, Vector2.Zero, Position) { UseTextureCache = false };
+            DrawManager.UIRenderer.Add(UIText);
             SetTranslation(Translation);
         }
 
@@ -59,7 +67,12 @@ namespace Hedra.Rendering.UI
         public Font TextFont
         {
             get => _configuration.Font;
-            set => _configuration.Font = value;
+            set
+            {
+                if (Equals(_configuration.Font, value)) return;
+                _configuration.Font = value;
+                UpdateText();
+            }
         }
 
         public string Text
@@ -79,11 +92,23 @@ namespace Hedra.Rendering.UI
             set => UIText.Grayscale = value;
         }
 
-        public bool Stroke { get; set; }
+        public bool Stroke
+        {
+            get => _stroke;
+            set { if (_stroke == value) return; _stroke = value; UpdateText(); }
+        }
 
-        public float StrokeWidth { get; set; }
+        public float StrokeWidth
+        {
+            get => _strokeWidth;
+            set { if (_strokeWidth == value) return; _strokeWidth = value; UpdateText(); }
+        }
 
-        public Color StrokeColor { get; set; }
+        public Color StrokeColor
+        {
+            get => _strokeColor;
+            set { if (_strokeColor == value) return; _strokeColor = value; UpdateText(); }
+        }
 
         public bool Enabled => UIText.Enabled;
 
@@ -125,10 +150,17 @@ namespace Hedra.Rendering.UI
 
         public void Dispose()
         {
-            if (UIText == null) return;
-            TextCache.Remove(UIText.TextureId);
-            UIText.Dispose();
-            RemoveFromRenderer();
+            lock (_updateLock)
+            {
+                if (_disposed) return;
+                _disposed = true;
+                ++_updateVersion;
+                _translation?.Dispose();
+                TextCache.Remove(UIText.TextureId);
+                UIText.TextureId = 0;
+                UIText.Dispose();
+                RemoveFromRenderer();
+            }
         }
 
         public void RemoveFromRenderer()
@@ -139,11 +171,10 @@ namespace Hedra.Rendering.UI
         private static BitmapObject BuildBitmap(string Text, Color Color, Font Font, TextOptions Options,
             out Vector2 Measurements)
         {
-            const float crispModifier = 1.5f;
-            var textBitmap = Provider.BuildText(Text, FontCache.Get(Font, Font.Size * crispModifier), Color, Options);
+            var textBitmap = Provider.BuildText(Text, FontCache.Get(Font, Font.Size * CrispModifier), Color, Options);
             Measurements =
-                new Vector2((float)(textBitmap.Width * (1.0 / crispModifier)),
-                    (float)(textBitmap.Height * (1.0 / crispModifier)));
+                new Vector2((float)(textBitmap.Width * (1.0 / CrispModifier)),
+                    (float)(textBitmap.Height * (1.0 / CrispModifier)));
             var obj = new BitmapObject
             {
                 Bitmap = textBitmap,
@@ -164,45 +195,67 @@ namespace Hedra.Rendering.UI
 
         public void UpdateText()
         {
-            var obj = BuildBitmap(Text, TextColor, TextFont, BuildTextOptions(), out var measurements);
-            var previousState = UIText?.Enabled ?? false;
-            if (UIText != null)
+            lock (_updateLock)
             {
-                TextCache.Remove(UIText.TextureId);
-                DrawManager.UIRenderer.Remove(UIText);
-                UIText.Dispose();
-            }
-
-            UIText = new GUITexture(0, new Vector2(measurements.X / DefaultSize.X, measurements.Y / DefaultSize.Y),
-                _temporalPosition);
-            UIText.UseTextureCache = false;
-            DrawManager.UIRenderer.Add(UIText);
-
-            if (_align == AlignMode.Left) UIText.Position -= UIText.Scale;
-
-            UIText.Enabled = previousState;
-            if (Text != string.Empty)
-            {
+                if (_disposed) return;
+                var version = ++_updateVersion;
                 var text = Text;
                 var font = TextFont;
                 var color = TextColor;
-                var t = new StackTrace();
+                var rasterScale = TextProvider.RenderingScale;
 
-                void UpdateTexture()
+                if (text == string.Empty)
                 {
-                    UIText.TextureId = TextCache.UseOrCreate(text, font, color, obj, t);
-                    obj.Bitmap.Dispose();
+                    SetTexture(0, Vector2.Zero);
+                    return;
                 }
 
-                if (Thread.CurrentThread.ManagedThreadId != Engine.Loader.Hedra.RenderingThreadId)
-                    Executer.ExecuteOnMainThread(UpdateTexture);
-                else
-                    UpdateTexture();
+                // Cache hits do not need a bitmap, measurement, or render-thread upload.
+                if (TextCache.TryUse(text, font, color, Stroke, StrokeWidth, StrokeColor, rasterScale,
+                    out var cachedId, out var cachedSize))
+                {
+                    SetTexture(cachedId, cachedSize);
+                    return;
+                }
+
+                CreateTexture(text, font, color, BuildTextOptions(), rasterScale, version);
             }
-            else
+        }
+
+        private void CreateTexture(string Text, Font Font, Color Color, TextOptions Options, float RasterScale, int Version)
+        {
+            var bitmap = BuildBitmap(Text, Color, Font, Options, out var measurements);
+            UIText.Scale = measurements / DefaultSize;
+            void UpdateTexture()
             {
-                UIText.TextureId = 0;
+                try
+                {
+                    lock (_updateLock)
+                    {
+                        if (_disposed || Version != _updateVersion) return;
+                        var id = TextCache.UseOrCreate(Text, Font, Color, Options, RasterScale, bitmap,
+                            out var pixelSize);
+                        SetTexture(id, pixelSize);
+                    }
+                }
+                finally
+                {
+                    bitmap.Bitmap.Dispose();
+                }
             }
+            if (Thread.CurrentThread.ManagedThreadId != Engine.Loader.Hedra.RenderingThreadId)
+                Executer.ExecuteOnMainThread(UpdateTexture);
+            else
+                UpdateTexture();
+        }
+
+        private void SetTexture(uint Id, Vector2 PixelSize)
+        {
+            var previous = UIText.TextureId;
+            UIText.TextureId = Id;
+            UIText.Scale = PixelSize / CrispModifier / DefaultSize;
+            if (_align == AlignMode.Left) UIText.Position = _temporalPosition - UIText.Scale;
+            TextCache.Remove(previous);
         }
 
         private TextOptions BuildTextOptions()

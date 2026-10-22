@@ -74,6 +74,7 @@ namespace Hedra.Rendering
 
         public static void Dispose()
         {
+            TextProvider.ClearBitmapCache();
             Renderer.Provider.DeleteTextures(TextureRegistry.Count, TextureRegistry.All);
         }
 

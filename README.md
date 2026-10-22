@@ -133,3 +133,36 @@ The build process is pretty straightforward.
 
 You can check the GitHub actions workflows for some examples on Linux and Windows.
 
+## UI text performance
+
+Text generation keeps up to 128 recently rasterized bitmaps within an 8 MiB
+pixel-and-text budget, using least-recently-used eviction. Callers receive independent
+images; GPU textures are still released when their last user releases them. The
+bitmap cache is cleared during graphics shutdown. Active GPU-cache hits avoid
+rasterization and managed allocations.
+
+Run the CPU benchmark with:
+
+```sh
+HEDRA_UI_BENCHMARK=1 DOTNET_TieredCompilation=0 DOTNET_ROLL_FORWARD=Major \
+  dotnet test HedraTests/HedraTests.csproj -c Release -p:Platform=AnyCPU \
+  --filter FullyQualifiedName~TextGenerationBenchmark --logger 'console;verbosity=normal'
+```
+
+The benchmark compares the optimized renderer with a frozen parser/rasterizer from
+`695dc698`, using seven alternating warmed rounds in one process. It reports the
+runtime, median time per call, and managed allocations on the calling thread.
+ImageSharp uses one worker for these measurements. Repeated-label cases exercise
+the CPU bitmap cache; unique-label cases use matching, never-repeated text in both
+implementations and include cache insertion and eviction costs. GPU uploads,
+menu interaction, and game-loop FPS are excluded.
+
+On the tested Apple Silicon machine with .NET 9, repeated labels took about
+1.5–2 microseconds instead of 4–25 milliseconds. Unique labels took approximately
+the same time as the reference. Plain-text parsing improved about 20 times and
+formatted-text parsing about 2.6 times. These are CPU microbenchmarks, not an
+end-to-end gameplay speedup.
+
+The normal `TextRasterizationTest` and `UITextGenerationTest` fixtures check exact
+RGBA output against the reference across formats, fonts, colors, scales, and
+strokes, along with cache ownership, eviction budgets, and texture lifetime.
