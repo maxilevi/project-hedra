@@ -69,7 +69,7 @@ namespace Hedra.Engine.Rendering.Core
         {
             if (Index > MaxAttributes)
                 throw new ArgumentOutOfRangeException($"A shader can only have up to '{MaxAttributes}'");
-            Renderer.Provider.EnableVertexAttribArray(Index);
+            Renderer.Provider.DisableVertexAttribArray(Index);
             _states[Index] = false;
         }
     }

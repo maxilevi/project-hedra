@@ -27,7 +27,7 @@ namespace Hedra.Engine.Management
     public static class DataManager
     {
         private const float SaveVersion = 1.61f;
-        public static string CharactersFolder => $"{AssetManager.AppPath}/Characters/";
+        public static string CharactersFolder => $"{(OperatingSystem.IsMacOS() ? Game.GameLoader.AppData : AssetManager.AppPath)}/Characters/";
         public static PlayerInformation[] PlayerFiles { get; private set; }
 
         public static void ReloadPlayerFiles()

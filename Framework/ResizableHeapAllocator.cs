@@ -9,6 +9,7 @@ public unsafe class ResizableHeapAllocator : Allocator
     private int _maxSize;
     private int _currentSize;
     private int _step;
+    private readonly Func<IntPtr> _getBuffer;
     
     public ResizableHeapAllocator(int MaxBufferSize, int Step) : base(MaxBufferSize)
     {
@@ -16,6 +17,7 @@ public unsafe class ResizableHeapAllocator : Allocator
         _currentSize = Step;
         _maxSize = MaxBufferSize;
         _step = Step;
+        _getBuffer = () => (IntPtr)_buffer;
     }
 
     protected override void* CreateBuffer() => null;
@@ -32,11 +34,11 @@ public unsafe class ResizableHeapAllocator : Allocator
         if (end > _maxSize)
             throw new OutOfMemoryException("Tried to get pointer outside of buffer");
 
-        while (end > _currentSize) 
-            ResizeBuffer(_currentSize + _step);
+        if (end > _currentSize)
+            ResizeBuffer((int)Math.Min(_maxSize, ((long)end + _step - 1) / _step * _step));
         
 
-        return new Pointer(() => (IntPtr)_buffer, Offset);
+        return new Pointer(_getBuffer, Offset);
     }
 
     private void ResizeBuffer(int NewSize)

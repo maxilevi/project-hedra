@@ -106,7 +106,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private static bool ShouldWeRebuildChunk(Chunk Chunk)
         {
-            return (!Chunk.BuildedCompletely || Chunk.Lod != Chunk.BuildedLod || Chunk.NeedsRebuilding) && Chunk.NeighboursExist;
+            return World.Builder.PendingStructureBuilds == 0 &&
+                (!Chunk.BuildedCompletely || Chunk.Lod != Chunk.BuildedLod || Chunk.NeedsRebuilding) && Chunk.NeighboursExist;
         }
 
         public void Kill()

@@ -136,3 +136,161 @@ The build process is pretty straightforward.
 
 You can check the GitHub actions workflows for some examples on Linux and Windows.
 
+
+
+## macOS
+
+On macOS, install the Xcode command-line tools, CMake, and a .NET SDK (6 or newer),
+and initialize the repository submodules. Then run:
+
+```sh
+./scripts/build-macos.sh
+open ".macos-build/Project Hedra.app"
+```
+
+This builds an optimized, self-contained app with the .NET 6 runtime and native
+world-generation and Bullet physics libraries. The build downloads pinned Bullet
+sources into `.macos-build`; subsequent builds reuse them. The macOS CMake wrapper
+supports Apple Silicon (`arm64`) and Intel (`HEDRA_ARCH=x86_64`); runtime validation
+has been performed on Apple Silicon. An Intel runtime has not been tested.
+
+Use the Release app for playing and performance measurements. Debug builds enable
+expensive OpenGL validation. To build only the native dependencies, run
+`./build-deps-macos.sh`.
+
+Character saves, settings, logs, and crash reports are stored in the user's .NET
+application-data directory (`~/.config/Project Hedra` on the tested runtime).
+Existing characters in the app's `Characters` directory are copied there on first
+launch. Rebuilding the app does not replace these saves. Steam integration remains
+optional: this repository does not include a macOS Steamworks native library, so
+the macOS app runs offline without Steam achievements or networking.
+
+To record actual render-loop FPS and average CPU frame costs every five seconds:
+
+```sh
+HEDRA_PROFILE=1 ".macos-build/Project Hedra.app/Contents/MacOS/Hedra"
+```
+
+The measurements are written to `~/.config/Project Hedra/log.txt`. Allow the initial
+world load to settle before comparing steady-state gameplay. FPS varies with the
+scene, resolution, quality settings, and hardware.
+
+To measure application startup separately from world generation:
+
+```sh
+HEDRA_PROFILE_STARTUP=1 ".macos-build/Project Hedra.app/Contents/MacOS/Hedra"
+```
+
+`STARTUP_PHASE` records archive extraction, asset setup, model caches, rendering,
+player/UI creation, and scripts in milliseconds. Extraction phases are included
+in the `assets` phase; do not add nested phases together. `STARTUP_READY` measures
+elapsed time from entry into `Main` until initialization finishes, before the
+normal game loop resumes. It excludes character selection and playable-world
+generation. Startup profiling is disabled by default.
+
+The macOS packaging script also bakes fixed structure connectivity and navigation
+sample points into `generation.bin`. Structure transforms, biome colors, terrain,
+and placement remain procedural. The runtime checks source fingerprints and uses
+the original algorithms if the file is missing or the source model has changed.
+To rebuild this cache in an existing bundle:
+
+```sh
+".macos-build/Project Hedra.app/Contents/MacOS/Hedra" --bake-generation \
+  "$PWD/.macos-build/Project Hedra.app/Contents/MacOS/generation.bin"
+```
+
+To measure generation using an existing character without changing its save:
+
+```sh
+HEDRA_PROFILE=1 HEDRA_GENERATION_BENCHMARK="$HOME/.config/Project Hedra/Characters/MacTest.db" \
+  ".macos-build/Project Hedra.app/Contents/MacOS/Hedra"
+```
+
+`GEN_RESULT` reports the time from character loading until the target disk has
+finished generation, collision preparation, and GPU uploads at its requested LOD,
+and all scheduled structure builds have completed. Application and asset startup
+are excluded. Optional `HEDRA_VERIFY_TERRAIN=1`, `HEDRA_VERIFY_MESH_CELLS=1`,
+`HEDRA_VERIFY_WAYPOINTS=1`, and `HEDRA_VERIFY_BAKED_ASSETS=1` compare optimized
+results with their original algorithms; these checks add substantial work and
+should be disabled for timing runs.
+
+CPU meshing can also be tested and timed without starting the game or creating a
+graphics context. The headless fixtures use synthetic flat terrain, hills, caves,
+water, and mixed materials with real chunk meshing, welding, border detection,
+simplification, smoothing, and flattening at LODs 1, 2, 4, and 8:
+
+```sh
+HEDRA_MESH_BENCHMARK=1 HEDRA_PROFILE_GENERATION=1 DOTNET_TieredCompilation=0 \
+  DOTNET_ROLL_FORWARD=Major dotnet test HedraTests/HedraTests.csproj -c Release \
+  -p:Platform=AnyCPU --filter 'FullyQualifiedName~TerrainMeshingBenchmark'
+```
+
+The benchmark reports warmed median CPU times and managed allocations, including
+the actual .NET runtime used. It measures the complete CPU terrain mesh path;
+GPU uploads and world/asset generation are excluded. Dense traversal with separate
+welding and optimized traversal with fused indexed emission are timed in the same
+process (`MESH_MODE` identifies these modes). Correctness checks compare
+all mesh attributes and collision meshes against dense traversal, welding against
+the original managed algorithm, and smoothing against the original weighting:
+
+```sh
+DOTNET_ROLL_FORWARD=Major dotnet test HedraTests/HedraTests.csproj -c Release \
+  -p:Platform=AnyCPU --filter 'FullyQualifiedName~TerrainSurfaceMaskTest|FullyQualifiedName~NativeVertexWeldTest|FullyQualifiedName~NativeFlattenEquivalenceTest|FullyQualifiedName~IndexedMarchingCubesTest|FullyQualifiedName~SmoothingEquivalenceTest|FullyQualifiedName~NativeTransformEquivalenceTest|FullyQualifiedName~ChunkMeshBorderDetectorTest'
+```
+
+When changing `hedra-core`, preserve a copy of the previous native library before
+rebuilding. Set `HEDRA_MESH_BASELINE_NATIVE` to its absolute path and run
+`NativeSimplifierEquivalenceTest` to compare simplified indices against the old
+library, including empty, duplicate, and out-of-range border-lock entries,
+vertex counts near powers of two, and planar meshes with seam duplicates or
+unlocked borders. The planar shortcut requires an exact axis-aligned plane with
+no border/seam penalties; other meshes use the full quadric-error calculation.
+Water cache checks also include water-filled caves, the top of a chunk, and
+missing neighbors. `HEDRA_VERIFY_MESH_CELLS=1` checks cached water cells against
+raw block sampling as well as checking terrain samples.
+
+The terrain block generator also has a headless benchmark:
+
+```sh
+HEDRA_BLOCK_BENCHMARK=1 HEDRA_PROFILE_GENERATION=1 HEDRA_VERIFY_TERRAIN=0 \
+  DOTNET_TieredCompilation=0 DOTNET_ROLL_FORWARD=Major \
+  dotnet test HedraTests/HedraTests.csproj -c Release -p:Platform=AnyCPU \
+  --filter 'FullyQualifiedName~HeadlessBlockGenerationTest.MeasureRealBlockGeneration'
+```
+
+`BLOCK_BENCH` reports warmed median times, managed allocations, and the runtime
+for generating all 262,144 blocks in each of three normal-biome chunks. It runs
+the real native biome noise, density interpolation, material and water passes,
+and block packing. The surrounding world is a fixture with no structures or
+landforms and a constant small-frequency world-noise input. Environment placement,
+meshing, assets, GPU work, and the game loop are excluded. These measurements do
+not establish a whole-world loading speedup or gameplay FPS.
+
+Correctness tests replay the original generation passes and compare every packed
+block, water coordinates, and water/river flags. They cover normal and mushroom
+biomes, plus cases with nonzero world noise, plateaus, and groundworks:
+
+```sh
+DOTNET_ROLL_FORWARD=Major dotnet test HedraTests/HedraTests.csproj -c Release \
+  -p:Platform=AnyCPU \
+  --filter 'FullyQualifiedName~HeadlessBlockGenerationTest.RealBlockGenerationMatchesReference|FullyQualifiedName~TerrainBlockPackingTest'
+```
+
+Noise generation has a separate headless benchmark and bitwise regression check.
+Before rebuilding `hedra-core`, copy its current library to a separate path. Set
+`HEDRA_NOISE_BASELINE_NATIVE` to that absolute path to compare the optimized code
+against the previous native implementation:
+
+```sh
+HEDRA_NOISE_BASELINE_NATIVE=/absolute/path/to/previous/libhedracore.dylib \
+  HEDRA_NOISE_BENCHMARK=1 DOTNET_TieredCompilation=0 DOTNET_ROLL_FORWARD=Major \
+  dotnet test HedraTests/HedraTests.csproj -c Release -p:Platform=AnyCPU \
+  --filter 'FullyQualifiedName~NoiseGenerationTest'
+```
+
+The checks cover all nine exposed noise types, all perturbation modes, negative
+coordinates and seeds, short rows, aligned rows, and partial SIMD tails. Without
+a baseline library, they compare the managed results against a scalar copy from
+the current native implementation. `NOISE_BENCH` reports alternating, warmed
+median timings for native generation plus managed allocation and copying. These
+measurements exclude terrain processing, meshing, and the game loop.

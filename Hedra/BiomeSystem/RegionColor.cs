@@ -7,6 +7,7 @@
 
 using System;
 using System.Numerics;
+using System.Threading;
 using Hedra.Numerics;
 using SixLabors.ImageSharp;
 
@@ -20,6 +21,10 @@ namespace Hedra.BiomeSystem
         public static Vector4 PathColor = Color.Sienna.AsVector4();
         public static Vector4 DarkStonePathColor = Color.DimGray.AsVector4();
         private readonly int _seed;
+        private long _leavesSelection = -1;
+        private long _woodSelection = -1;
+        private long _grassSelection = -1;
+        private long _stonePathSelection = -1;
         public Vector4 DirtColor;
         public Vector4[] GrassColors;
         public Vector4[] LeavesColors;
@@ -42,13 +47,28 @@ namespace Hedra.BiomeSystem
             IntegrityCheck();
         }
 
-        public Vector4 LeavesColor => LeavesColors[new Random(_seed + 42).Next(0, LeavesColors.Length)];
+        public Vector4 LeavesColor => SelectColor(LeavesColors, ref _leavesSelection, 42);
 
-        public Vector4 WoodColor => WoodColors[new Random(_seed + 12).Next(0, WoodColors.Length)];
+        public Vector4 WoodColor => SelectColor(WoodColors, ref _woodSelection, 12);
 
-        public Vector4 GrassColor => GrassColors[new Random(_seed + 54).Next(0, GrassColors.Length)];
+        public Vector4 GrassColor => SelectColor(GrassColors, ref _grassSelection, 54);
         
-        public Vector4 StonePathColor => StonePathColors?[new Random(_seed + 54).Next(0, StonePathColors.Length)] ?? Color.Gray.AsVector4();
+        public Vector4 StonePathColor => StonePathColors == null ? Color.Gray.AsVector4()
+            : SelectColor(StonePathColors, ref _stonePathSelection, 54);
+
+        private Vector4 SelectColor(Vector4[] Palette, ref long Selection, int SeedOffset)
+        {
+            // The seeded choice depends on palette length, while palette values can change.
+            // Publish length and index together so concurrent readers see a coherent pair.
+            var cached = Volatile.Read(ref Selection);
+            if ((int)(cached >> 32) != Palette.Length)
+            {
+                var index = new Random(_seed + SeedOffset).Next(0, Palette.Length);
+                cached = ((long)Palette.Length << 32) | (uint)index;
+                Interlocked.Exchange(ref Selection, cached);
+            }
+            return Palette[(int)cached];
+        }
 
         public static RegionColor Interpolate(params RegionColor[] RegionsColor)
         {

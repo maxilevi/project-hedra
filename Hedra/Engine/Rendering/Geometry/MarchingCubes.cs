@@ -6,6 +6,9 @@
  */
 
 using System;
+using System.Buffers;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Numerics;
 using System.Runtime.CompilerServices;
@@ -260,20 +263,26 @@ namespace Hedra.Engine.Rendering
             ref Triangle[] TriangleBuffer, out int TriangleCount)
         {
             TriangleCount = 0;
+            var cubeIndex = InterpolateCellEdges(ref Cell, VertexBuffer);
+            /* Create the triangle */
+            for (var i = 0; TriTable[cubeIndex, i] != -1; i += 3)
+            {
+                TriangleBuffer[TriangleCount].Vertices[0] = VertexBuffer[TriTable[cubeIndex, i + 0]];
+                TriangleBuffer[TriangleCount].Vertices[1] = VertexBuffer[TriTable[cubeIndex, i + 1]];
+                TriangleBuffer[TriangleCount].Vertices[2] = VertexBuffer[TriTable[cubeIndex, i + 2]];
+                TriangleCount++;
+            }
+        }
+
+
+        private static int InterpolateCellEdges(ref GridCell Cell, Vector3[] VertexBuffer)
+        {
             Debug.Assert(VertexBuffer.Length == 12);
-            byte cubeIndex = 0;
-            if (Cell.Density[0] > IsoLevel) cubeIndex |= 1;
-            if (Cell.Density[1] > IsoLevel) cubeIndex |= 2;
-            if (Cell.Density[2] > IsoLevel) cubeIndex |= 4;
-            if (Cell.Density[3] > IsoLevel) cubeIndex |= 8;
-            if (Cell.Density[4] > IsoLevel) cubeIndex |= 16;
-            if (Cell.Density[5] > IsoLevel) cubeIndex |= 32;
-            if (Cell.Density[6] > IsoLevel) cubeIndex |= 64;
-            if (Cell.Density[7] > IsoLevel) cubeIndex |= 128;
+            var cubeIndex = ClassifyCell(ref Cell);
 
             /* Cube is entirely in/out of the surface */
             if (EdgeTable[cubeIndex] == 0)
-                return;
+                return cubeIndex;
 
             /* Find the vertices where the surface intersects the cube */
             if ((EdgeTable[cubeIndex] & 1) > 0)
@@ -312,16 +321,156 @@ namespace Hedra.Engine.Rendering
             if ((EdgeTable[cubeIndex] & 2048) > 0)
                 VertexBuffer[11] = VertexInterp(Cell.P[3], Cell.P[7], Cell.Density[3], Cell.Density[7]);
 
-            /* Create the triangle */
-            for (var i = 0; TriTable[cubeIndex, i] != -1; i += 3)
+            return cubeIndex;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static int ClassifyCell(ref GridCell Cell)
+        {
+            byte cubeIndex = 0;
+            if (Cell.Density[0] > IsoLevel) cubeIndex |= 1;
+            if (Cell.Density[1] > IsoLevel) cubeIndex |= 2;
+            if (Cell.Density[2] > IsoLevel) cubeIndex |= 4;
+            if (Cell.Density[3] > IsoLevel) cubeIndex |= 8;
+            if (Cell.Density[4] > IsoLevel) cubeIndex |= 16;
+            if (Cell.Density[5] > IsoLevel) cubeIndex |= 32;
+            if (Cell.Density[6] > IsoLevel) cubeIndex |= 64;
+            if (Cell.Density[7] > IsoLevel) cubeIndex |= 128;
+
+            return cubeIndex;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static Vector3 InterpolateEdge(ref GridCell Cell, int Edge)
+        {
+            var a = CornerIndexA[Edge];
+            var b = CornerIndexB[Edge];
+            return VertexInterp(Cell.P[a], Cell.P[b], Cell.Density[a], Cell.Density[b]);
+        }
+
+        public sealed class IndexedCellBuffer : IDisposable
+        {
+            internal readonly Vector3[] Positions = new Vector3[12];
+            internal readonly Vector4[] Colors = new Vector4[12];
+            internal readonly Vector3[] Normals = new Vector3[12];
+            internal readonly uint[] Indices = new uint[15];
+            private readonly int[] _edgeSlots = new int[12];
+            private readonly int _firstY;
+            private readonly int _planeSize;
+            private int[] _cachedEdges;
+            private int _lastX = -2;
+
+            public IndexedCellBuffer(int FirstY = 0, int LastY = -1)
             {
-                TriangleBuffer[TriangleCount].Vertices[0] = VertexBuffer[TriTable[cubeIndex, i + 0]];
-                TriangleBuffer[TriangleCount].Vertices[1] = VertexBuffer[TriTable[cubeIndex, i + 1]];
-                TriangleBuffer[TriangleCount].Vertices[2] = VertexBuffer[TriTable[cubeIndex, i + 2]];
-                TriangleCount++;
+                if (LastY < FirstY) return;
+                _firstY = FirstY;
+                _planeSize = (LastY - FirstY + 2) * (Chunk.BoundsZ + 1);
+                _cachedEdges = ArrayPool<int>.Shared.Rent(6 * _planeSize);
+                Array.Clear(_cachedEdges, 0, 6 * _planeSize);
+            }
+
+            public void PrepareCell(int X, int Y, int Z)
+            {
+                if (_cachedEdges == null) return;
+                const int width = Chunk.BoundsZ + 1;
+                var current = X & 1;
+                var forward = (X + 1) & 1;
+                if (X != _lastX)
+                {
+                    // X and Z edges only repeat within this x layer. Vertical
+                    // edges also repeat in the next layer, so retain that plane.
+                    if (X != _lastX + 1) Array.Clear(_cachedEdges, 0, 6 * _planeSize);
+                    else
+                    {
+                        Array.Clear(_cachedEdges, 0, 4 * _planeSize);
+                        Array.Clear(_cachedEdges, (4 + forward) * _planeSize, _planeSize);
+                    }
+                    _lastX = X;
+                }
+                var row = (Y - _firstY) * width + Z;
+                // Opposite interpolation directions remain separate: reversing
+                // an edge can change the last bits of its floating-point result.
+                _edgeSlots[0] = row;
+                _edgeSlots[4] = row + width;
+                _edgeSlots[2] = row + 1 + _planeSize;
+                _edgeSlots[6] = row + width + 1 + _planeSize;
+                _edgeSlots[1] = row + 2 * _planeSize;
+                _edgeSlots[5] = row + width + 2 * _planeSize;
+                _edgeSlots[3] = row + 3 * _planeSize;
+                _edgeSlots[7] = row + width + 3 * _planeSize;
+                _edgeSlots[8] = row + (4 + current) * _planeSize;
+                _edgeSlots[11] = row + 1 + (4 + current) * _planeSize;
+                _edgeSlots[9] = row + (4 + forward) * _planeSize;
+                _edgeSlots[10] = row + 1 + (4 + forward) * _planeSize;
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            internal int CachedIndex(int Edge) => _cachedEdges == null ? -1 : _cachedEdges[_edgeSlots[Edge]] - 1;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            internal void CacheIndex(int Edge, int Index)
+            {
+                if (_cachedEdges != null) _cachedEdges[_edgeSlots[Edge]] = Index + 1;
+            }
+
+            public void Dispose()
+            {
+                if (_cachedEdges == null) return;
+                ArrayPool<int>.Shared.Return(_cachedEdges);
+                _cachedEdges = null;
             }
         }
 
+        public static void PolygoniseIndexedForRendering(ref GridCell Cell, Vector3[] VertexBuffer,
+            NativeVertexData Data, Vector4 Color, bool IsWater, bool IsRiverConstant,
+            Dictionary<Vector3, int> VertexMap, IndexedCellBuffer Buffer)
+        {
+            // Water clipping needs every triangle position before emission. Terrain
+            // can defer interpolation until an edge misses the rolling cache.
+            var cubeIndex = IsWater ? InterpolateCellEdges(ref Cell, VertexBuffer) : ClassifyCell(ref Cell);
+            var vertexCount = 0;
+            var indexCount = 0;
+            // A cell references each intersected edge up to five times. Weld it only on
+            // first use, in triangle order, to preserve vertex IDs and first colors.
+            Span<int> edgeIndices = stackalloc int[12];
+            edgeIndices.Fill(-1);
+            for (var i = 0; TriTable[cubeIndex, i] != -1; i += 3)
+            {
+                if (IsWater && ShouldClip(VertexBuffer[TriTable[cubeIndex, i]],
+                        VertexBuffer[TriTable[cubeIndex, i + 1]], VertexBuffer[TriTable[cubeIndex, i + 2]],
+                        IsRiverConstant)) continue;
+                for (var corner = 0; corner < 3; corner++)
+                {
+                    var edge = TriTable[cubeIndex, i + corner];
+                    var index = edgeIndices[edge];
+                    if (index == -1)
+                    {
+                        index = Buffer.CachedIndex(edge);
+                        if (index == -1)
+                        {
+                            var position = IsWater ? VertexBuffer[edge] : InterpolateEdge(ref Cell, edge);
+                            ref var mapped = ref CollectionsMarshal.GetValueRefOrAddDefault(VertexMap, position, out var exists);
+                            if (!exists)
+                            {
+                                mapped = Data.Vertices.Count + vertexCount;
+                                Buffer.Positions[vertexCount] = position;
+                                Buffer.Colors[vertexCount++] = Color;
+                            }
+                            index = mapped;
+                            Buffer.CacheIndex(edge, index);
+                        }
+                        edgeIndices[edge] = index;
+                    }
+                    Buffer.Indices[indexCount++] = (uint)index;
+                }
+            }
+            // Copy each attribute once per cell, resolving movable arena pointers
+            // after every capacity growth instead of once per triangle corner.
+            Data.Vertices.AddRange(Buffer.Positions, vertexCount);
+            Data.Colors.AddRange(Buffer.Colors, vertexCount);
+            Data.Normals.AddRange(Buffer.Normals, vertexCount);
+            Data.Indices.AddRange(Buffer.Indices, indexCount);
+        }
 
         private static Vector3 VertexInterp(Vector3 v1, Vector3 v2, float valp1, float valp2)
         {
@@ -356,21 +505,50 @@ namespace Hedra.Engine.Rendering
             }
         }
 
+        public static void BuildIndexedForRendering(NativeVertexData Data, Vector4 Color, Triangle[] Triangles, int Count,
+            bool IsWater, bool IsRiverConstant, Dictionary<Vector3, int> VertexMap)
+        {
+            for (var i = 0; i < Count; i++)
+            {
+                if (IsWater && ShouldClip(ref Triangles[i], ref IsRiverConstant)) continue;
+                for (var corner = 0; corner < 3; corner++)
+                {
+                    var position = Triangles[i].Vertices[corner];
+                    ref var index = ref CollectionsMarshal.GetValueRefOrAddDefault(VertexMap, position, out var exists);
+                    if (!exists)
+                    {
+                        index = Data.Vertices.Count;
+                        Data.Vertices.Add(position);
+                        Data.Colors.Add(Color);
+                        // Render meshes recompute normals after simplification/smoothing.
+                        // Neither operation uses input normals to update vertex positions.
+                        Data.Normals.Add(Vector3.Zero);
+                    }
+                    Data.Indices.Add((uint)index);
+                }
+            }
+        }
+
         private static bool ShouldClip(ref Triangle Triangle, ref bool IsRiverConstant)
         {
+            return ShouldClip(Triangle.Vertices[0], Triangle.Vertices[1], Triangle.Vertices[2], IsRiverConstant);
+        }
+
+        private static bool ShouldClip(Vector3 A, Vector3 B, Vector3 C, bool IsRiverConstant)
+        {
             const float oceanClipDistance = (BiomePool.SeaLevel - 2) * Chunk.BlockSize;
-            var isBelowOcean = Triangle.Vertices[0].Y < oceanClipDistance ||
-                               Triangle.Vertices[1].Y < oceanClipDistance ||
-                               Triangle.Vertices[2].Y < oceanClipDistance;
+            var isBelowOcean = A.Y < oceanClipDistance ||
+                               B.Y < oceanClipDistance ||
+                               C.Y < oceanClipDistance;
 
             const float maxRiverClipDistance = (BiomePool.RiverWaterLevel - 2) * Chunk.BlockSize;
             const float minRiverClipDistance = (BiomePool.RiverFloorLevel - 2) * Chunk.BlockSize;
-            var isInRiverClipZone = Triangle.Vertices[0].Y > minRiverClipDistance &&
-                                    Triangle.Vertices[1].Y > minRiverClipDistance &&
-                                    Triangle.Vertices[2].Y > minRiverClipDistance;
-            var isWithinRiver = Triangle.Vertices[0].Y < maxRiverClipDistance &&
-                                Triangle.Vertices[1].Y < maxRiverClipDistance &&
-                                Triangle.Vertices[2].Y < maxRiverClipDistance && isInRiverClipZone;
+            var isInRiverClipZone = A.Y > minRiverClipDistance &&
+                                    B.Y > minRiverClipDistance &&
+                                    C.Y > minRiverClipDistance;
+            var isWithinRiver = A.Y < maxRiverClipDistance &&
+                                B.Y < maxRiverClipDistance &&
+                                C.Y < maxRiverClipDistance && isInRiverClipZone;
             return isWithinRiver && IsRiverConstant || isBelowOcean;
         }
 

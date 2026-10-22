@@ -29,10 +29,10 @@ void main(void){
     }
 
     vec4 Color;
-    vec4 texel = texture2D(Texture, TexCoords);
+    vec4 texel = texture(Texture, TexCoords);
     if (texel.r > .3 && texel.g < 0.7 && texel.b > .3)
     {
-        Color = texture2D(Fill, TexCoords)  * vec4(1.0, 1.0, 1.0, Opacity);
+        Color = texture(Fill, TexCoords)  * vec4(1.0, 1.0, 1.0, Opacity);
         Color.a = texel.a;
     }
     else

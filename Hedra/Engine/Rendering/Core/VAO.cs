@@ -89,9 +89,8 @@ namespace Hedra.Engine.Rendering.Core
 
         public override void Unbind(bool DisableAttributes = true)
         {
+            if (DisableAttributes) Renderer.DisableVertexAttribArray(0);
             base.Unbind(DisableAttributes);
-            if (!DisableAttributes) return;
-            Renderer.DisableVertexAttribArray(0);
         }
     }
 
@@ -113,9 +112,8 @@ namespace Hedra.Engine.Rendering.Core
 
         public override void Unbind(bool DisableAttributes = true)
         {
+            if (DisableAttributes) Renderer.DisableVertexAttribArray(1);
             base.Unbind(DisableAttributes);
-            if (!DisableAttributes) return;
-            Renderer.DisableVertexAttribArray(1);
         }
     }
 
@@ -137,9 +135,8 @@ namespace Hedra.Engine.Rendering.Core
 
         public override void Unbind(bool DisableAttributes = true)
         {
+            if (DisableAttributes) Renderer.DisableVertexAttribArray(2);
             base.Unbind(DisableAttributes);
-            if (!DisableAttributes) return;
-            Renderer.DisableVertexAttribArray(2);
         }
     }
 
@@ -164,9 +161,8 @@ namespace Hedra.Engine.Rendering.Core
 
         public override void Unbind(bool DisableAttributes = true)
         {
+            if (DisableAttributes) Renderer.DisableVertexAttribArray(3);
             base.Unbind(DisableAttributes);
-            if (!DisableAttributes) return;
-            Renderer.DisableVertexAttribArray(3);
         }
     }
 
@@ -193,9 +189,8 @@ namespace Hedra.Engine.Rendering.Core
 
         public override void Unbind(bool DisableAttributes = true)
         {
+            if (DisableAttributes) Renderer.DisableVertexAttribArray(4);
             base.Unbind(DisableAttributes);
-            if (!DisableAttributes) return;
-            Renderer.DisableVertexAttribArray(4);
         }
     }
 }

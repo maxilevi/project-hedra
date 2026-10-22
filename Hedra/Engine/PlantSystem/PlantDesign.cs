@@ -22,6 +22,10 @@ namespace Hedra.Engine.PlantSystem
 
         public abstract NativeVertexData Paint(NativeVertexData Data, Region Region, Random Rng);
 
+        // Preparation must preserve all random draws performed by Paint.
+        // Return null for paint that cannot be completely represented by an immutable key.
+        public virtual PreparedPlantPaint PreparePaint(Region Region, Random Rng) => null;
+
         public virtual void AddShapes(Chunk UnderChunk, Matrix4x4 TransMatrix)
         {
         }

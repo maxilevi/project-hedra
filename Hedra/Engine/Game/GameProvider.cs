@@ -261,11 +261,11 @@ namespace Hedra.Engine.Game
 
         private IEnumerator SpawnCoroutine()
         {
-            SoundtrackManager.PlayAmbient();
+            using (Generation.GenerationMetrics.Measure("frame_spawn_sound")) SoundtrackManager.PlayAmbient();
             Player.SearchComponent<DamageComponent>().Immune = true;
-            var chunkOffset = World.ToChunkSpace(Player.Position);
-            World.StructureHandler.CheckStructures(chunkOffset);
-            while (_loadingScreen.IsLoading) yield return null;
+            // Chunk workers discover structures before generating their terrain.
+            // Wait for those chunks instead of repeating that work on the render thread.
+            while (_loadingScreen.ShouldShow || _loadingScreen.IsLoading) yield return null;
             Player.UI.HideMenu();
             Player.UI.GamePanel.Enable();
 

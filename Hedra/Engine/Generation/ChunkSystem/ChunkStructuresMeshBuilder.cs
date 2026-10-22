@@ -172,11 +172,17 @@ namespace Hedra.Engine.Generation.ChunkSystem
             for (var k = 0; k < NewIndices.Count; k++)
                 NewIndices[k] += (uint)Vertices.Count;
 
-            Vertices.AddRange(NewVertices);
-            Colors.AddRange(NewColors);
-            Normals.AddRange(NewNormals);
-            Indices.AddRange(NewIndices);
-            Extradata.AddRange(NewExtradata);
+            Append(Vertices, NewVertices);
+            Append(Colors, NewColors);
+            Append(Normals, NewNormals);
+            Append(Indices, NewIndices);
+            Append(Extradata, NewExtradata);
+        }
+
+        private static void Append<T>(IList<T> Target, IList<T> Source) where T : unmanaged
+        {
+            if (Target is NativeList<T> native) native.AddRange(Source);
+            else Target.AddRange(Source);
         }
 
         private void AssertValidModel(NativeVertexData Model)

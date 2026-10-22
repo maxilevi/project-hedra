@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>netcoreapp6.0</TargetFramework>
+        <Platform Condition=" $([MSBuild]::IsOSPlatform('OSX')) ">AnyCPU</Platform>
         <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
         <OutputType>Exe</OutputType>
         <NoWin32Manifest>False</NoWin32Manifest>
@@ -14272,10 +14273,10 @@
         <Content Include="x64\glfw3.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="x64\libhedracore.so" Condition=" '$(OS)' != 'Windows_NT' ">
+        <Content Include="x64\libhedracore.so" Condition="$([MSBuild]::IsOSPlatform('Linux'))">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="x86\libhedracore.so" Condition=" '$(OS)' != 'Windows_NT' ">
+        <Content Include="x86\libhedracore.so" Condition="$([MSBuild]::IsOSPlatform('Linux'))">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
         <Content Include="x64\hedracore.dll" Condition=" '$(OS)' == 'Windows_NT' ">
@@ -14308,7 +14309,6 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Framework\Framework.csproj" />
-        <ProjectReference Include="..\HedraLauncher\HedraLauncher.csproj" />
     </ItemGroup>
     <ItemGroup>
         <Folder Include="Assets\Items\Boots\" />
@@ -14371,5 +14371,8 @@
         <Exec Command="dotnet &quot;$(MSBuildProjectDirectory)/../AssetBuilder/bin/Release/netcoreapp6.0/AssetBuilder.dll&quot; &quot;$(TargetDir)/Sounds/&quot; &quot;$(TargetDir)/data2.db&quot; normal binary" />
         <Exec Command="dotnet &quot;$(MSBuildProjectDirectory)/../AssetBuilder/bin/Release/netcoreapp6.0/AssetBuilder.dll&quot; &quot;$(TargetDir)/Assets/&quot; &quot;$(TargetDir)/data3.db&quot; normal binary" />
     </Target>
+    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+        <Content Include="native/osx-*/**/*.dylib" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    </ItemGroup>
     <ProjectExtensions />
 </Project>

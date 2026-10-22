@@ -19,20 +19,13 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
 {
     public abstract class AbstractBuilder : ICountable, IDisposable
     {
-        private const int MaxChunksPerSecond = 30;
         private readonly ChunkComparer _closest;
         private readonly HashSet<Chunk> _hashQueue;
         private readonly object _lock;
         private readonly SharedWorkerPool _pool;
         private readonly PriorityQueue<Chunk, float> _queue;
-        private readonly Stopwatch _watch;
-        private float _accumTime;
-        private bool _discard;
-        private int _lastCount;
-        private Vector3 _lastSortedPosition;
-        private int _workItems;
-        private Stopwatch _timer;
-        private int _cooldown;
+        private long _accumTicks;
+        private long _workItems;
 
         protected AbstractBuilder(SharedWorkerPool Pool)
         {
@@ -41,15 +34,13 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
             _queue = new PriorityQueue<Chunk, float>();
             _hashQueue = new HashSet<Chunk>();
             _closest = new ChunkComparer();
-            _watch = new Stopwatch();
-            _timer = new Stopwatch();
-            _timer.Start();
         }
 
         protected abstract QueueType Type { get; }
 
-        public int AverageWorkTime => (int)(_accumTime / Math.Max(_workItems, 1));
-        public int Count => _queue.Count;
+        public int AverageWorkTime => (int)(Interlocked.Read(ref _accumTicks) * 1000.0 / Stopwatch.Frequency
+                                            / Math.Max(Interlocked.Read(ref _workItems), 1));
+        public int Count { get { lock (_lock) return _queue.Count; } }
 
         public void Dispose()
         {
@@ -57,42 +48,31 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
 
         private Chunk GetFirstClosest()
         {
-            Chunk ch = null;
-            while (_queue.Count > 0 && (ch == null || !_hashQueue.Contains(ch)))
+            while (_queue.Count > 0)
             {
-                ch = _queue.Dequeue();    
+                var chunk = _queue.Dequeue();
+                if (_hashQueue.Contains(chunk)) return chunk;
             }
-
-            return ch;
+            return null;
         }
 
         public void Update()
         {
-            if (_timer.ElapsedMilliseconds < _cooldown) return;
-            
-            if (_discard)
-            {
-                lock (_lock)
-                {
-                    _queue.Clear();
-                    _hashQueue.Clear();
-                    _discard = false;
-                }
-            }
+            while (TryDispatch()) { }
+        }
 
-            lock (_lock)
-            {
-                if (_queue.Count == 0) return;
-            }
-
+        public bool TryDispatch()
+        {
             Chunk chunk;
             lock (_lock)
             {
+                if (_queue.Count == 0) return false;
                 chunk = GetFirstClosest();
+                if (chunk == null) return false;
                 if (chunk?.Disposed ?? false)
                 {
                     _hashQueue.Remove(chunk);
-                    return;
+                    return true;
                 }
             }
 
@@ -101,9 +81,10 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
                 try
                 {
                     if (chunk?.Disposed ?? true) return;
-                    StartProfile();
+                    var start = Stopwatch.GetTimestamp();
                     Work(chunk);
-                    EndProfile();
+                    Interlocked.Add(ref _accumTicks, Stopwatch.GetTimestamp() - start);
+                    Interlocked.Increment(ref _workItems);
                 }
                 catch (Exception e)
                 {
@@ -119,18 +100,14 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
                     _hashQueue.Remove(chunk);
                 }
             });
-            if (result)
-            {
-                //_cooldown = 25;//Type == QueueType.Meshing ? 5 : 25;
-                //_timer.Restart();
-            }
-            else
+            if (!result)
             {
                 lock (_lock)
                 {
                     _queue.Enqueue(chunk, Vector3.Distance(GameManager.Player?.Position ?? Vector3.Zero, chunk.Position));
                 }
             }
+            return result;
         }
 
         protected abstract void Work(Chunk Object);
@@ -157,26 +134,18 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
 
         public void Discard()
         {
-            _discard = true;
+            lock (_lock)
+            {
+                _queue.Clear();
+                _hashQueue.Clear();
+            }
             ResetProfile();
         }
 
         public void ResetProfile()
         {
-            _accumTime = 0;
-            _workItems = 0;
-        }
-
-        private void StartProfile()
-        {
-            _watch.Restart();
-        }
-
-        private void EndProfile()
-        {
-            _watch.Stop();
-            _accumTime += _watch.ElapsedMilliseconds;
-            ++_workItems;
+            Interlocked.Exchange(ref _accumTicks, 0);
+            Interlocked.Exchange(ref _workItems, 0);
         }
     }
 }

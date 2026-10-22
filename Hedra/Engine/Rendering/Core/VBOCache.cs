@@ -87,10 +87,15 @@ namespace Hedra.Engine.Rendering.Core
         private static void DoUpdate<T>(T[] Data, int SizeInBytes, BufferTarget Target, BufferUsageHint Hint, uint Id)
             where T : unmanaged
         {
-            Renderer.BindBuffer(Target, Id);
-            Renderer.BufferData(Target, (IntPtr)SizeInBytes, IntPtr.Zero, Hint);
-            Renderer.BufferSubData(Target, IntPtr.Zero, (IntPtr)SizeInBytes, Data);
-            Renderer.BindBuffer(Target, 0);
+            // Uploads must not change the element buffer of the currently bound VAO.
+            const BufferTarget uploadTarget = BufferTarget.CopyWriteBuffer;
+            var dataBytes = checked(Data.Length * Marshal.SizeOf<T>());
+            if (dataBytes > SizeInBytes) throw new ArgumentOutOfRangeException(nameof(SizeInBytes));
+            Renderer.BindBuffer(uploadTarget, Id);
+            Renderer.BufferData(uploadTarget, (IntPtr)SizeInBytes, IntPtr.Zero, Hint);
+            if (dataBytes > 0)
+                Renderer.BufferSubData(uploadTarget, IntPtr.Zero, (IntPtr)dataBytes, Data);
+            Renderer.BindBuffer(uploadTarget, 0);
         }
 
         private static string HashFromId(uint Id)

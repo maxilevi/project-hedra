@@ -27,7 +27,7 @@ namespace Hedra.Engine.Generation
         }
 
         public void GeneratePlant(IAllocator Allocator, Vector3 Position, Region BiomeRegion, PlantDesign Design,
-            Matrix4x4 CustomTransformationMatrix)
+            Matrix4x4 CustomTransformationMatrix, PlantAppearanceCache Appearances = null)
         {
             var underChunk = World.GetChunkAt(Position);
             if (underChunk == null) return;
@@ -41,11 +41,26 @@ namespace Hedra.Engine.Generation
             if (World.StructureHandler.StructureExistsAtPosition(Vector3.Transform(Vector3.Zero, transMatrix))) return;
 
             var modelData = Design.Model;
+            var paint = !Design.HasCustomPlacement && Appearances != null ? Design.PreparePaint(BiomeRegion, rng) : null;
+            if (paint != null && Appearances.TryGet(Design, modelData, paint, Allocator, out var appearance))
+            {
+                Design.AddShapes(underChunk, transMatrix);
+                underChunk.AddInstance(new InstanceData
+                {
+                    OriginalMesh = modelData,
+                    ColorCache = appearance.ColorCache,
+                    ExtraDataCache = appearance.ExtraDataCache,
+                    TransMatrix = transMatrix,
+                    CanSimplifyProgramatically = Design.AffectedByLod
+                }, Design.AffectedByLod);
+                return;
+            }
             var modelDataClone = modelData.NativeClone(Allocator);
             /* Only simplify objects that are affected by LOD */
             var canSimplify = Design.AffectedByLod;
 
-            Design.Paint(modelDataClone, BiomeRegion, rng);
+            if (paint != null) paint.Apply(modelDataClone);
+            else Design.Paint(modelDataClone, BiomeRegion, rng);
             Design.AddShapes(underChunk, transMatrix);
             if (!Design.HasCustomPlacement)
             {
@@ -58,6 +73,7 @@ namespace Hedra.Engine.Generation
                     CanSimplifyProgramatically = canSimplify
                 };
                 CacheManager.Check(data);
+                if (paint != null) Appearances.Add(Design, modelData, paint, data, modelDataClone);
                 underChunk.AddInstance(data, Design.AffectedByLod);
             }
             else

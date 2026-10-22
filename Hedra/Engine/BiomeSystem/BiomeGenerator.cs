@@ -54,10 +54,14 @@ namespace Hedra.Engine.BiomeSystem
         public ChunkDetails GenerateBlocks(Block[] Blocks)
         {
             if (BlocksDefined) throw new ArgumentException("Cannot generate a chunk multiple times");
-            CheckForNearbyLandforms();
-            CheckForNearbyStructures();
+            using (GenerationMetrics.Measure("discover_structures"))
+            {
+                CheckForNearbyLandforms();
+                CheckForNearbyStructures();
+            }
             BlocksSetted = true;
-            var details = DefineBlocks(Blocks);
+            ChunkDetails details;
+            using (GenerationMetrics.Measure("define_blocks")) details = DefineBlocks(Blocks);
             BlocksDefined = true;
             return details;
         }
@@ -65,8 +69,8 @@ namespace Hedra.Engine.BiomeSystem
         public void GenerateEnvironment(RegionCache Cache)
         {
             if (StructuresPlaced) throw new ArgumentException("Cannot generate a chunk multiple times");
-            DoTreeAndStructurePlacements(Cache);
-            PlaceEnvironment(Cache);
+            using (GenerationMetrics.Measure("trees")) DoTreeAndStructurePlacements(Cache);
+            using (GenerationMetrics.Measure("plants")) PlaceEnvironment(Cache);
             StructuresPlaced = true;
         }
 

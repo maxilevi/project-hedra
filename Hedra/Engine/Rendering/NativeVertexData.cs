@@ -61,12 +61,12 @@ namespace Hedra.Engine.Rendering
 
         public void Flat(IAllocator Allocator)
         {
-            MeshOperations.FlatMesh(Allocator, Indices, Vertices, Normals, Colors, Extradata);
+            MeshOperations.FlatMesh(Allocator, this);
         }
 
         public void UniqueVertices()
         {
-            MeshOperations.UniqueVertices(Indices, Vertices, Normals, Colors, Extradata);
+            MeshOperations.UniqueVertices(this);
         }
 
         public void AddWindValues(float Scalar = 1)
@@ -119,7 +119,7 @@ namespace Hedra.Engine.Rendering
 
         public void Transform(Matrix4x4 Transformation)
         {
-            MeshOperations.Transform(Vertices, Normals, Transformation);
+            MeshOperations.Transform(this, Transformation);
         }
 
         public Vector3 SupportPoint(Vector3 Direction)

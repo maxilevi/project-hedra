@@ -32,6 +32,7 @@ namespace Hedra.Engine.StructureSystem
         protected virtual bool NoPlantsZone { get; }
         protected virtual bool NoTreesZone { get; }
         protected abstract CacheItem? Cache { get; }
+        protected override bool AllowDeferredGeometry => true;
 
         public sealed override void Build(CollidableStructure Structure)
         {
@@ -42,11 +43,14 @@ namespace Hedra.Engine.StructureSystem
             var transformation = Matrix4x4.CreateScale(StructureScale) * rotation * translation;
             if (originalModel != null)
             {
+                using var timing = GenerationMetrics.Measure("structure_static_model");
                 var modelClone = originalModel.Clone();
                 ApplyColors(modelClone, World.BiomePool.GetAverageRegionColor(translation.ExtractTranslation()));
-                Structure.AddStaticElement(
-                    modelClone.Transform(transformation)
-                );
+                modelClone.Transform(transformation);
+                if (BakedGenerationAssets.TrySplit(originalModel, modelClone, out var parts))
+                    Structure.AddStaticElement(parts, false);
+                else Structure.AddStaticElement(modelClone);
+                using var collisionTiming = GenerationMetrics.Measure("structure_collision_shape");
                 Structure.AddCollisionShape(
                     CacheManager.GetShape(originalModel).DeepClone().Select(S => S.Transform(transformation)).ToArray()
                 );
@@ -90,6 +94,7 @@ namespace Hedra.Engine.StructureSystem
         protected Door AddDoor(VertexData Model, Vector3 DoorPosition, Matrix4x4 RotationMatrix,
             CollidableStructure Structure, bool InvertedRotation, bool InvertedPivot)
         {
+            using var timing = GenerationMetrics.Measure("structure_door");
             var door = Builder<IBuildingParameters>.CreateDoor(
                 Model,
                 Structure.Position,

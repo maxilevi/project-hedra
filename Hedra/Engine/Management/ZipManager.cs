@@ -18,6 +18,14 @@ namespace Hedra.Engine.Management
     /// </summary>
     public static class ZipManager
     {
+        // Keep large asset archives out of managed memory while extracting them.
+        // The caller owns both streams, including when decompression fails.
+        public static void UnZipTo(Stream Source, Stream Destination)
+        {
+            using var gzip = new GZipStream(Source, CompressionMode.Decompress, leaveOpen: true);
+            gzip.CopyTo(Destination);
+        }
+
         public static void CopyTo(Stream src, Stream dest)
         {
             var bytes = new byte[4096];

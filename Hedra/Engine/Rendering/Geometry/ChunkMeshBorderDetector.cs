@@ -69,14 +69,18 @@ namespace Hedra.Engine.Rendering.Geometry
             };
         }
 
-        public uint[] ProcessEntireBorder(NativeVertexData Mesh, Vector3 Start, Vector3 End)
+        public unsafe uint[] ProcessEntireBorder(NativeVertexData Mesh, Vector3 Start, Vector3 End)
         {
             const float epsilon = 0.5f;
             var all = new List<uint>();
+            // Only managed allocations occur during this scan, so these arena
+            // pointers stay valid and need not be resolved for each index.
+            var indices = (uint*)Mesh.Indices.Pointer;
+            var vertices = (Vector3*)Mesh.Vertices.Pointer;
             for (var i = 0; i < Mesh.Indices.Count; i++)
             {
-                var index = (int)Mesh.Indices[i];
-                var vertex = Mesh.Vertices[index];
+                var index = (int)indices[i];
+                var vertex = vertices[index];
                 if (Math.Abs(vertex.Z - Start.Z) < epsilon || Math.Abs(vertex.Z - End.Z) < epsilon ||
                     Math.Abs(vertex.X - Start.X) < epsilon || Math.Abs(vertex.X - End.X) < epsilon)
                     all.Add((uint)index);

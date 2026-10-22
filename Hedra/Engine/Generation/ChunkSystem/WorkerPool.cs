@@ -7,23 +7,24 @@ namespace Hedra.Engine.Generation.ChunkSystem
     {
         public const int MaxWorkers = 2;
         protected readonly List<Worker> Workers;
+        protected readonly object PoolLock = new();
+        public event Action WorkerAvailable;
 
         public WorkerPool(int WorkerCount)
         {
             Workers = new List<Worker>();
-            for (var i = 0; i < WorkerCount; i++) Workers.Add(new Worker());
+            for (var i = 0; i < WorkerCount; i++) Workers.Add(new Worker(() => WorkerAvailable?.Invoke()));
         }
 
         public virtual bool Work(Action Job, object Owner)
         {
-            var worker = GetAvailableWorker();
-            if (worker != null)
+            lock (PoolLock)
             {
+                var worker = GetAvailableWorker();
+                if (worker == null) return false;
                 worker.Do(Job, Owner);
                 return true;
             }
-
-            return false;
         }
 
         protected Worker GetAvailableWorker()

@@ -30,7 +30,7 @@ namespace Hedra.Input
 
         public static void Center()
         {
-            Position = new Vector2((float)GameSettings.Width / 2, (float)GameSettings.Height / 2);
+            Position = new Vector2(GameSettings.SurfaceWidth / 2, GameSettings.SurfaceHeight / 2);
         }
     }
 }

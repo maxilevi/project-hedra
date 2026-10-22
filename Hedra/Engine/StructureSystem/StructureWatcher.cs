@@ -23,14 +23,14 @@ namespace Hedra.Engine.StructureSystem
         {
             var chunkSpace = World.ToChunkSpace(Instance.Position);
             var chunk = World.GetChunkByOffset(chunkSpace);
-            if (chunk != null) _instanceDataWatcher.OnChunkReady(chunk);
+            if (chunk != null) _instanceDataWatcher.OnValueAdded(chunk, Instance);
         }
 
         private void ModelAdded(CachedVertexData Model)
         {
             var chunkSpace = World.ToChunkSpace(Model.Position);
             var chunk = World.GetChunkByOffset(chunkSpace);
-            if (chunk != null) _vertexDataWatcher.OnChunkReady(chunk);
+            if (chunk != null) _vertexDataWatcher.OnValueAdded(chunk, Model);
         }
 
         public void Dispose()

@@ -1,5 +1,5 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
@@ -9,14 +9,16 @@ namespace Hedra.Framework
     {
         public const int Megabyte = 1024 * 1024;
         public const int Kilobyte = 1024;
-        private SortedList _entries;
+        private SortedList<int, AllocationEntry> _entries;
+        private readonly Func<IntPtr> _getBuffer;
         private void* _buffer;
         private int _maxSize;
 
         protected Allocator(int BufferSize)
         {
             _maxSize = BufferSize;
-            _entries = new SortedList();
+            _entries = new SortedList<int, AllocationEntry>();
+            _getBuffer = () => (IntPtr)_buffer;
         }
 
         protected abstract void* CreateBuffer();
@@ -39,7 +41,7 @@ namespace Hedra.Framework
 
         protected virtual Pointer GetPointer(int Offset, int Size)
         {
-            return new Pointer(() => (IntPtr)_buffer, Offset);
+            return new Pointer(_getBuffer, Offset);
         }
 
         public Pointer Resize<T>(Pointer Ptr, int NewCount) where T : unmanaged
@@ -48,14 +50,16 @@ namespace Hedra.Framework
             var entry = GetEntry(Ptr, out var index);
             var perElement = SizePerElement<T>();
             var newSize = perElement * NewCount;
+            if (newSize == entry.Length) return Ptr;
             Pointer newPtr;
             /* If there is contiguous space available, use that */
-            var nextOffset = index < _entries.Count - 1 ? ((AllocationEntry) _entries.GetByIndex(index + 1)).Offset : _maxSize;
-            if (entry.Offset + newSize < nextOffset)
+            var nextOffset = index < _entries.Count - 1 ? _entries.Values[index + 1].Offset : _maxSize;
+            if (entry.Offset + newSize <= nextOffset)
             {
-                _entries.RemoveAt(index);
-                _entries.Add(entry.Offset, new AllocationEntry(entry.Offset, newSize, Ptr));
-                newPtr = Ptr;
+                // A virtual allocation may fit while a resizable backing buffer
+                // still needs to grow. Publish the pointer only after that growth.
+                newPtr = GetPointer(entry.Offset, newSize);
+                _entries[entry.Offset] = new AllocationEntry(entry.Offset, newSize, newPtr);
             }
             else
             {
@@ -72,7 +76,7 @@ namespace Hedra.Framework
             var offset = 0;
             for (var i = 0; i < _entries.Count; ++i)
             {
-                var entry = (AllocationEntry)_entries.GetByIndex(i);
+                var entry = _entries.Values[i];
                 if (offset + Size < entry.Offset)
                     return offset;
                 offset = entry.Offset + entry.Length;
@@ -82,7 +86,12 @@ namespace Hedra.Framework
 
         private static int SizePerElement<T>()
         {
-            return Marshal.SizeOf(typeof(T));
+            return ElementSize<T>.Value;
+        }
+
+        private static class ElementSize<T>
+        {
+            public static readonly int Value = Marshal.SizeOf(typeof(T));
         }
 
         private void EnsureBuffer()
@@ -98,7 +107,7 @@ namespace Hedra.Framework
                 var mem = 0;
                 for (var i = 0; i < _entries.Count; ++i)
                 {
-                    mem += ((AllocationEntry)_entries.GetByIndex(i)).Length;
+                    mem += _entries.Values[i].Length;
                 }
                 return mem;
             }
@@ -120,7 +129,7 @@ namespace Hedra.Framework
             for (var i = _entries.Count-1; i > -1; --i)
             {
                 Index = i;
-                var entry = (AllocationEntry)_entries.GetByIndex(i);
+                var entry = _entries.Values[i];
                 if (entry.Ptr.Same(Ptr)) return entry;
             }
             throw new ArgumentOutOfRangeException("Ptr was not allocated with this allocator.");

@@ -74,6 +74,15 @@ namespace Hedra.Engine.Generation
         private readonly object _worldObjectsLock = new object();
         private int _previousId;
         private WorldType _type;
+        private int _chunkLookupVersion;
+        [ThreadStatic] private static WorldProvider _cachedChunkProvider;
+        [ThreadStatic] private static ChunkLookupEntry[] _cachedChunks;
+        [ThreadStatic] private static int _cachedChunkVersion;
+        private struct ChunkLookupEntry
+        {
+            public Vector2 Offset;
+            public Chunk Chunk;
+        }
 
         public WorldProvider()
         {
@@ -275,6 +284,7 @@ namespace Hedra.Engine.Generation
 
             lock (SearcheableChunks)
             {
+                System.Threading.Interlocked.Increment(ref _chunkLookupVersion);
                 SearcheableChunks.Clear();
             }
 
@@ -438,9 +448,24 @@ namespace Hedra.Engine.Generation
         public Chunk GetChunkByOffset(int OffsetX, int OffsetZ)
         {
             var offset = new Vector2(OffsetX, OffsetZ);
+            var version = System.Threading.Volatile.Read(ref _chunkLookupVersion);
+            if (_cachedChunkProvider != this || _cachedChunkVersion != version)
+            {
+                _cachedChunks ??= new ChunkLookupEntry[64];
+                Array.Clear(_cachedChunks, 0, _cachedChunks.Length);
+                _cachedChunkProvider = this;
+                _cachedChunkVersion = version;
+            }
+            // Mix chunk coordinates, rather than the aligned offsets whose low bits are zero.
+            var slot = unchecked(((OffsetX >> 7) * 73856093 ^ (OffsetZ >> 7) * 19349663) & 63);
+            ref var entry = ref _cachedChunks[slot];
+            if (entry.Offset == offset && entry.Chunk != null && !entry.Chunk.Disposed) return entry.Chunk;
             Chunk chunk;
             lock (SearcheableChunks)
                 SearcheableChunks.TryGetValue(offset, out chunk);
+            // Never cache misses: a neighbouring chunk may be added immediately.
+            entry.Offset = offset;
+            entry.Chunk = chunk;
             return chunk;
         }
 
