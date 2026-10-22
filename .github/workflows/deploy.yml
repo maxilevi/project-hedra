@@ -1,106 +1,54 @@
 name: Publish Hedra
 
-on: 
+on:
   workflow_dispatch:
     inputs:
       buildConfig:
-        description: 'Build Configuration (Debug or Release)'     
+        description: Build configuration
+        type: choice
         required: true
-        default: 'Release'
+        default: Release
+        options: [Release, Debug]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: steam-test-deployment
+  cancel-in-progress: false
 
 jobs:
-  build:
-    name: Publish on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [windows-latest, ubuntu-latest]
-    
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        token: ${{ secrets.HEDRA_CI }}
-        submodules: true
-      
-    - name: Setup Dotnet for use with actions
-      uses: actions/setup-dotnet@v1
-      with:
-          dotnet-version: '6.0.100'
-
-    - name: Build Dependencies windows
-      if: matrix.os == 'windows-latest'
-      shell: bash
-      run: ./build-deps-windows.sh
-
-    - name: Build Dependencies ubuntu
-      if: matrix.os == 'ubuntu-latest'
-      shell: bash  
-      run: sudo ./build-deps-linux.sh
-
-    - name: Publish on windows
-      if: matrix.os == 'windows-latest'
-      shell: bash
-      run: |
-        ./scripts/publish.sh win-x64 ${{ github.event.inputs.buildConfig }}
-        ./scripts/publish.sh win-x86 ${{ github.event.inputs.buildConfig }}
-        mkdir Hedra/bin/${{ github.event.inputs.buildConfig }}/assets/
-        cp Hedra/bin/${{ github.event.inputs.buildConfig }}/netcoreapp6.0/win-x64/data1.db Hedra/bin/${{ github.event.inputs.buildConfig }}/assets/data1.db
-        cp Hedra/bin/${{ github.event.inputs.buildConfig }}/netcoreapp6.0/win-x64/data2.db Hedra/bin/${{ github.event.inputs.buildConfig }}/assets/data2.db
-        cp Hedra/bin/${{ github.event.inputs.buildConfig }}/netcoreapp6.0/win-x64/data3.db Hedra/bin/${{ github.event.inputs.buildConfig }}/assets/data3.db
-
-    - name: Publish on ubuntu
-      if: matrix.os == 'ubuntu-latest'
-      shell: bash
-      run: |
-        cat ./scripts/publish.sh | bash -s linux-x64 ${{ github.event.inputs.buildConfig }}
-
-    - uses: actions/upload-artifact@v1
-      name: Upload ubuntu
-      if: matrix.os == 'ubuntu-latest'
-      with:
-        name: hedra-linux-x64
-        path: Hedra/bin/${{ github.event.inputs.buildConfig }}/netcoreapp6.0/linux-x64/publish
-
-    - uses: actions/upload-artifact@v1
-      name: Upload windows x64
-      if: matrix.os == 'windows-latest'
-      with:
-        name: hedra-win-x64
-        path: Hedra/bin/${{ github.event.inputs.buildConfig }}/netcoreapp6.0/win-x64/publish
-
-    - uses: actions/upload-artifact@v1
-      name: Upload windows x86
-      if: matrix.os == 'windows-latest'
-      with:
-        name: hedra-win-x86
-        path: Hedra/bin/${{ github.event.inputs.buildConfig }}/netcoreapp6.0/win-x86/publish
-
-    - uses: actions/upload-artifact@v1
-      name: Upload assets
-      if: matrix.os == 'windows-latest'
-      with:
-        name: hedra-assets
-        path: Hedra/bin/${{ github.event.inputs.buildConfig }}/assets
+  validate:
+    uses: ./.github/workflows/validate.yml
+    with:
+      configuration: ${{ inputs.buildConfig }}
+      publish: true
 
   deploy_steam:
-    needs: build
-    runs-on: ubuntu-latest
+    needs: validate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
     steps:
-      - name: Setup
-        run: mkdir builds
-
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
+          pattern: hedra-*
           path: builds
-
-      - uses: game-ci/steam-deploy@v1
+      - name: Restore Linux executable permissions and verify depots
+        shell: bash
+        run: |
+          tar -xzf builds/hedra-linux-x64/linux-x64.tar.gz -C builds/hedra-linux-x64
+          rm builds/hedra-linux-x64/linux-x64.tar.gz
+          test -x builds/hedra-linux-x64/Hedra
+          test -s builds/hedra-win-x64/Hedra.exe
+          test -s builds/hedra-win-x86/Hedra.exe
+          for archive in data1.db data2.db data3.db; do
+            test -s "builds/hedra-assets/$archive"
+          done
+      - uses: game-ci/steam-deploy@50f6b29fc64922e19a16d202a88fe199d394b536 # v3
         with:
           username: ${{ secrets.STEAM_USERNAME }}
           password: ${{ secrets.STEAM_PASSWORD }}
-          configVdf: ${{ secrets.STEAM_CONFIG_VDF}}
-          ssfnFileName: ${{ secrets.STEAM_SSFN_FILE_NAME }}
-          ssfnFileContents: ${{ secrets.STEAM_SSFN_FILE_CONTENTS }}
+          configVdf: ${{ secrets.STEAM_CONFIG_VDF }}
           appId: 1009960
           buildDescription: ${{ github.sha }}
           rootPath: builds

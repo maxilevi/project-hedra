@@ -1,0 +1,36 @@
+name: Native CPU benchmark
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: native-benchmark-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Fetch native sources
+        run: git submodule update --init --depth 1 -- hedra-core
+      - name: Build native library
+        run: ./scripts/build-hedracore.sh
+      - name: Measure native noise
+        shell: bash
+        run: |
+          mkdir -p .ci/results
+          python3 scripts/ci/check_native.py --benchmark | tee .ci/results/noise-benchmark.txt
+          cat .ci/results/noise-benchmark.txt >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: native-noise-benchmark
+          path: .ci/results/noise-benchmark.txt
+          if-no-files-found: error
+          retention-days: 14

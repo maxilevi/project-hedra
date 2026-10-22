@@ -1,0 +1,132 @@
+name: Validate Hedra
+
+on:
+  workflow_call:
+    inputs:
+      configuration:
+        type: string
+        default: Release
+      publish:
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Workflow and script checks
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Validate workflows
+        run: go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.12 -color
+      - name: Check build script contracts
+        run: python3 -m unittest discover -s scripts/ci -p 'test_*.py' -v
+      - name: Check shell scripts
+        run: shellcheck build-deps-{linux,windows}.sh scripts/{publish,build-hedracore,build-hedracore-linux,build-hedracore-windows}.sh scripts/ci/*.sh
+
+  build:
+    name: Build and test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2022, macos-15-intel]
+    defaults:
+      run:
+        shell: bash
+    env:
+      CONFIGURATION: ${{ inputs.configuration }}
+      DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+      DOTNET_NOLOGO: '1'
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Validate configuration
+        run: |
+          case "$CONFIGURATION" in Debug|Release) ;; *) exit 2 ;; esac
+          mkdir -p .ci/logs .ci/results
+      - uses: ./.github/actions/setup-build
+      - name: Check native ABI and deterministic noise
+        run: python scripts/ci/check_native.py
+      - name: Compare against previous native revision
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: ./scripts/ci/check-native-baseline.sh
+      - name: Build solution
+        env:
+          PACK_ASSETS: ${{ runner.os != 'macOS' }}
+        run: >-
+          dotnet build 'Project Hedra.sln' -c "$CONFIGURATION" --no-restore
+          -p:HedraPackAssets="$PACK_ASSETS" -bl:.ci/logs/build.binlog
+      - name: Run full test suite
+        if: runner.os != 'macOS'
+        run: >-
+          dotnet test HedraTests/HedraTests.csproj -c "$CONFIGURATION" --no-build --no-restore
+          --logger 'trx;LogFileName=tests.trx' --results-directory .ci/results
+          --blame-hang --blame-hang-timeout 5m
+      - name: Run portable headless tests on macOS
+        if: runner.os == 'macOS'
+        run: >-
+          dotnet test HedraTests/HedraTests.csproj -c "$CONFIGURATION" --no-build --no-restore
+          --filter 'FullyQualifiedName~HedraTests.MathExtensions|FullyQualifiedName~HedraTests.Core.AllocatorTest|FullyQualifiedName~HedraTests.Core.HalfBlockTest|FullyQualifiedName~HedraTests.Generation.HeightmapDataTest'
+          --logger 'trx;LogFileName=tests.trx' --results-directory .ci/results
+      - name: Publish Windows packages
+        if: inputs.publish && runner.os == 'Windows'
+        run: |
+          ./scripts/publish.sh win-x64 "$CONFIGURATION"
+          ./scripts/publish.sh win-x86 "$CONFIGURATION"
+      - name: Publish Linux package
+        if: inputs.publish && runner.os == 'Linux'
+        run: |
+          ./scripts/publish.sh linux-x64 "$CONFIGURATION"
+          tar -C .ci/publish/linux-x64 -czf .ci/publish/linux-x64.tar.gz .
+      - name: Upload Windows x64
+        if: inputs.publish && runner.os == 'Windows'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: hedra-win-x64
+          path: .ci/publish/win-x64
+          if-no-files-found: error
+          retention-days: 7
+      - name: Upload Windows x86
+        if: inputs.publish && runner.os == 'Windows'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: hedra-win-x86
+          path: .ci/publish/win-x86
+          if-no-files-found: error
+          retention-days: 7
+      - name: Upload shared assets
+        if: inputs.publish && runner.os == 'Windows'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: hedra-assets
+          path: .ci/publish/assets
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 7
+      - name: Upload Linux package
+        if: inputs.publish && runner.os == 'Linux'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: hedra-linux-x64
+          path: .ci/publish/linux-x64.tar.gz
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 7
+      - name: Upload test results and build diagnostics
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: diagnostics-${{ matrix.os }}-${{ inputs.configuration }}
+          path: |
+            .ci/results
+            .ci/logs
+          retention-days: 7

@@ -1,43 +1,16 @@
 name: Test Hedra
 
-on: [push]
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build-deps:
-    name: Build on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [windows-latest, ubuntu-latest]
-    
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        token: ${{ secrets.HEDRA_CI }}
-        submodules: true
-      
-    - name: Setup Dotnet for use with actions
-      uses: actions/setup-dotnet@v1
-      with:
-          dotnet-version: '6.0.100'
-
-    - name: Build Dependencies windows
-      if: matrix.os == 'windows-latest'
-      shell: bash
-      run: ./build-deps-windows.sh
-
-    - name: Build Dependencies ubuntu
-      if: matrix.os == 'ubuntu-latest'
-      shell: bash  
-      run: sudo ./build-deps-linux.sh
-
-    - name: Set up global.json
-      run: |
-        dotnet --list-sdks
-        dotnet new globaljson --sdk-version 6.0.100
-
-    - name: Test solution
-      run: |
-        dotnet --version
-        dotnet test -c Release "Project Hedra.sln"
+  validate:
+    uses: ./.github/workflows/validate.yml
