@@ -26,6 +26,7 @@ namespace Hedra.Engine.StructureSystem
         public virtual int[] AmbientSongs { get; } = new int[0];
         public abstract void Build(CollidableStructure Structure);
         public virtual bool IsFixed => false;
+        protected virtual bool AllowDeferredGeometry => false;
 
         protected abstract CollidableStructure Setup(Vector3 TargetPosition, Random Rng);
 
@@ -44,8 +45,10 @@ namespace Hedra.Engine.StructureSystem
             return new Random((int)(Structure.Position.X / 11 * (Structure.Position.Z / 13)));
         }
 
-        public bool PlaceDesign(Vector2 ChunkPosition, RandomDistribution Distribution, Region Biome, CollidableStructure[] Items)
+        public bool PlaceDesign(Vector2 ChunkPosition, RandomDistribution Distribution, Region Biome, CollidableStructure[] Items,
+            bool DeferGeometry = false)
         {
+            using var profile = GenerationMetrics.Measure("structure_placement_total");
             lock (CheckLock)
             {
                 Distribution.Seed = BuildRngSeed(ChunkPosition);
@@ -53,10 +56,15 @@ namespace Hedra.Engine.StructureSystem
                 if (ShouldSetup(ChunkPosition, ref targetPosition, Items, Biome, Distribution) &&
                     !InterferesWithAnotherStructure(targetPosition))
                 {
-                    var item = Setup(targetPosition, BuildRng(ChunkPosition));
+                    CollidableStructure item;
+                    using (GenerationMetrics.Measure($"structure_setup_{GetType().Name}"))
+                        item = Setup(targetPosition, BuildRng(ChunkPosition));
                     item.MapPosition = ChunkPosition;
                     World.StructureHandler.AddStructure(item);
-                    World.StructureHandler.Build(item);
+                    var handler = World.StructureHandler;
+                    if (DeferGeometry && AllowDeferredGeometry)
+                        World.Builder.ProcessStructure(() => { if (!item.Disposed) handler.Build(item); });
+                    else handler.Build(item);
                     return true;
                 }
             }

@@ -66,13 +66,15 @@ namespace Hedra.Engine.Rendering.Particles
 
         public override void Unbind(bool DisableAttributes = true)
         {
+            if (DisableAttributes)
+            {
+                Renderer.DisableVertexAttribArray(2);
+                Renderer.DisableVertexAttribArray(3);
+                Renderer.DisableVertexAttribArray(4);
+                Renderer.DisableVertexAttribArray(5);
+                Renderer.DisableVertexAttribArray(6);
+            }
             base.Unbind(DisableAttributes);
-            if (!DisableAttributes) return;
-            Renderer.DisableVertexAttribArray(2);
-            Renderer.DisableVertexAttribArray(3);
-            Renderer.DisableVertexAttribArray(4);
-            Renderer.DisableVertexAttribArray(5);
-            Renderer.DisableVertexAttribArray(6);
         }
     }
 }

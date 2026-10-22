@@ -93,17 +93,11 @@ namespace Hedra.Engine.CacheSystem
 
         public void Check(InstanceData Data)
         {
+            var cHash = MakeHash(Data.Colors);
             lock (_colorLock)
             {
-                var cHash = MakeHash(Data.Colors);
-                lock (_colorLock)
-                {
-                    if (CachedColors.ContainsKey(cHash)) goto COLOR_EXISTS;
-
+                if (!CachedColors.ContainsKey(cHash))
                     CachedColors.Add(cHash, new List<Vector4>(Data.Colors));
-                }
-
-                COLOR_EXISTS:
                 Data.ColorCache = cHash;
                 Data.Colors = null;
             }

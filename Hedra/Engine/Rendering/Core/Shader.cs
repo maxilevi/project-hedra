@@ -216,7 +216,7 @@ namespace Hedra.Engine.Rendering.Core
             Renderer.CompileShader(ID);
             Renderer.GetShader(ID, ShaderParameter.InfoLogLength, out var logLength);
             var log = string.Empty;
-            if (logLength > 0) Renderer.GetShaderInfoLog(ID);
+            if (logLength > 0) log = Renderer.GetShaderInfoLog(ID);
             Renderer.GetShader(ID, ShaderParameter.CompileStatus, out var result);
             if (result != 1)
                 Log.WriteResult(result == 1, "Shader " + Name + " has compiled" + " | " + log + " | " + result);

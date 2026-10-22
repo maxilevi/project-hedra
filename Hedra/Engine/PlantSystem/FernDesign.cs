@@ -14,6 +14,9 @@ namespace Hedra.Engine.PlantSystem
     {
         public override CacheItem Type => CacheItem.Fern;
 
+        public override PreparedPlantPaint PreparePaint(Region Region, Random Rng) => GetType() == typeof(FernDesign)
+            ? new PreparedPlantPaint.Fern(Region.Colors.GrassColor * .7f) : null;
+
         public override Matrix4x4 TransMatrix(Vector3 Position, Random Rng)
         {
             var underChunk = World.GetChunkAt(Position);

@@ -63,7 +63,7 @@ namespace Hedra.Engine.Steamworks
 
         public void Dispose()
         {
-            Client.Dispose();
+            Client?.Dispose();
         }
     }
 }

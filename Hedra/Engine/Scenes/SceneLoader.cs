@@ -46,7 +46,9 @@ namespace Hedra.Engine.Scenes
 
         public static void Load(CollidableStructure Structure, VertexData Scene, SceneSettings Settings)
         {
-            var parts = Scene.Ungroup();
+            using var timing = GenerationMetrics.Measure("scene_load");
+            VertexData[] parts;
+            using (GenerationMetrics.Measure("scene_ungroup")) parts = Scene.Ungroup();
             var map = new Dictionary<Vector3, List<VertexData>>
             {
                 { LightColorCode, new List<VertexData>() },

@@ -220,7 +220,7 @@ namespace Hedra.Engine.Scenes
         }
     }
 
-    public struct Waypoint
+    public struct Waypoint : IEquatable<Waypoint>
     {
         public bool Equals(Waypoint other)
         {

@@ -16,12 +16,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void SetMaxWorkers(QueueType Type, int Max)
         {
-            _maxWorkers[Type] = Max;
+            lock (PoolLock) _maxWorkers[Type] = Max;
         }
 
         public int GetMaxWorkers(QueueType Type)
         {
-            return _maxWorkers[Type];
+            lock (PoolLock) return _maxWorkers.TryGetValue(Type, out var max) ? max : Workers.Count;
         }
 
         private int GetCurrentWorkers(ICountable User)
@@ -33,12 +33,14 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return count;
         }
 
-        public bool Work(ICountable User, QueueType Type, Action Do)
+        public virtual bool Work(ICountable User, QueueType Type, Action Do)
         {
-            //var maxWorkers = _maxWorkers[Type];
-            //var currentWorkers = GetCurrentWorkers(User);
-            //if (currentWorkers >= maxWorkers) return false;
-            return base.Work(Do, User);
+            lock (PoolLock)
+            {
+                var maxWorkers = GetMaxWorkers(Type);
+                if (GetCurrentWorkers(User) >= maxWorkers) return false;
+                return base.Work(Do, User);
+            }
         }
     }
 }

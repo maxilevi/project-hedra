@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Numerics;
+using System.Threading;
 using Hedra.BiomeSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.StructureSystem;
@@ -12,12 +13,11 @@ namespace Hedra.Structures
     {
         private static ConcurrentDictionary<Vector3, StructureDesign> _cache;
         private static readonly CollidableStructure[] EmptyItems = new CollidableStructure[0];
-        private static RandomDistribution _distribution;
+        private static readonly ThreadLocal<RandomDistribution> Distribution = new(() => new RandomDistribution());
 
         static MapBuilder()
         {
             _cache = new ConcurrentDictionary<Vector3, StructureDesign>();
-            _distribution = new RandomDistribution(true);
         }
 
         public static StructureDesign Sample(Vector3 Position, Region Biome)
@@ -31,7 +31,7 @@ namespace Hedra.Structures
 
             var chunkOffset = World.ToChunkSpace(Position);
             var design = StructureGrid.Sample(chunkOffset, Biome.Structures.Designs);
-            if (design != null && SampleDesign(design, chunkOffset, Biome, _distribution, EmptyItems))
+            if (design != null && SampleDesign(design, chunkOffset, Biome, Distribution.Value, EmptyItems))
             {
                 _cache.TryAdd(Position, design);
                 return design;
@@ -53,7 +53,6 @@ namespace Hedra.Structures
         public static void Discard()
         {
             _cache = new ConcurrentDictionary<Vector3, StructureDesign>();
-            _distribution = new RandomDistribution(true);
         }
     }
 }

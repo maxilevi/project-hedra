@@ -59,7 +59,13 @@ namespace Hedra.Engine.Management
 
                 for (var i = Routines.Count - 1; i > -1; i--)
                 {
+                    var start = Generation.GenerationMetrics.Enabled ? System.Diagnostics.Stopwatch.GetTimestamp() : 0;
                     var passed = Routines[i].MoveNext();
+                    if (start != 0)
+                    {
+                        var ms = (System.Diagnostics.Stopwatch.GetTimestamp() - start) * 1000.0 / System.Diagnostics.Stopwatch.Frequency;
+                        if (ms > 100) IO.Log.WriteLine($"GEN_ROUTINE name={Routines[i].GetType().FullName} elapsed_ms={ms:F2}");
+                    }
                     if (!passed)
                         Routines.RemoveAt(i);
                 }

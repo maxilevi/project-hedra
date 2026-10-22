@@ -90,8 +90,8 @@ namespace Hedra.Engine.Player
             if (!GameSettings.Paused && !GameManager.IsLoading && !_player.IsDead && !GameSettings.ContinousMove)
             {
                 var position = Cursor.Position;
-                _xDelta = position.X - GameSettings.Width / 2f;
-                _yDelta = position.Y - GameSettings.Height / 2f;
+                _xDelta = position.X - GameSettings.SurfaceWidth / 2f;
+                _yDelta = position.Y - GameSettings.SurfaceHeight / 2f;
                 if (LockMouse) Cursor.Center();
 
                 if (CaptureMovement) ManageRotations();

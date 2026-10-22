@@ -7,6 +7,7 @@ using System.Numerics;
 using System.Runtime.ExceptionServices;
 using Hedra.Core;
 using Hedra.Engine.Game;
+using Hedra.Engine.Generation;
 using Hedra.Engine.IO;
 using Hedra.Engine.Loader;
 using Hedra.Engine.Management;
@@ -34,6 +35,8 @@ namespace Hedra.Engine
         
         private static void Main(string[] Args)
         {
+            StartupMetrics.Start();
+            GameLoader.CreateCrashesFolderIfNecessary();
             CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
             CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
  
@@ -45,14 +48,14 @@ namespace Hedra.Engine
                 {
                     Log.WriteLine($"UNEXPECTED FATAL EXCEPTION {baseText}");
                     Log.FlushAndClose();
-                    File.Copy($"{GameLoader.AppPath}/log.txt",
+                    File.Copy(GameLoader.LogPath,
                         $"{GameLoader.CrashesFolder}/CRASH_{DateTime.UtcNow:dd-MM-yyyy_hh-mm-ss}.txt");
                 }
                 else
                 {
                     Log.WriteLine($"UNEXPECTED EXCEPTION {baseText}");
                     Log.FlushAndClose();
-                    File.Copy($"{GameLoader.AppPath}/log.txt",
+                    File.Copy(GameLoader.LogPath,
                         $"{GameLoader.CrashesFolder}/CRASH_{DateTime.UtcNow:dd-MM-yyyy_hh-mm-ss}.txt");
                 }
             }
@@ -63,7 +66,14 @@ namespace Hedra.Engine
             var dummyMode = Args.Length == 1 && Args[0] == "--dummy-mode";
             try
             {
-                RunNormalAndDummyMode(dummyMode);
+                if (Args.Length == 2 && Args[0] == "--bake-generation")
+                {
+                    GameLoader.LoadArchitectureSpecificFilesIfNecessary(GameLoader.AppPath);
+                    BakedGenerationAssets.Bake(Args[1]);
+                    AssetManager.Provider.Dispose();
+                    GameLoader.UnloadNativeLibs();
+                }
+                else RunNormalAndDummyMode(dummyMode);
             }
             catch (Exception e)
             {
@@ -108,6 +118,11 @@ namespace Hedra.Engine
                 {
                     var res = mainMonitor.VideoMode.Resolution.Value;
                     GameSettings.ResolutionIndex = resolutions.FindIndex(R => res.X == (int)R.X && res.Y == (int)R.Y);
+                    if (GameSettings.ResolutionIndex < 0)
+                    {
+                        resolutions.Add(new Vector2(res.X, res.Y));
+                        GameSettings.ResolutionIndex = resolutions.Count - 1;
+                    }
                 }
                 else
                 {
@@ -126,7 +141,7 @@ namespace Hedra.Engine
 
             var prev = GameSettings.ResolutionIndex;
             GameSettings.LoadSetupSettings(GameSettings.SettingsPath);
-            if (GameSettings.ResolutionIndex >= GameSettings.AvailableResolutions.Length)
+            if (GameSettings.ResolutionIndex < 0 || GameSettings.ResolutionIndex >= GameSettings.AvailableResolutions.Length)
                 GameSettings.ResolutionIndex = prev;
             
             var maxMonitor = Monitor.GetMainMonitor(null);
@@ -151,7 +166,14 @@ namespace Hedra.Engine
             profile = ContextProfile.Compatability;
             flags = ContextFlags.Debug;
 #endif
+            if (OSManager.RunningPlatform == Platform.Mac)
+            {
+                profile = ContextProfile.Core;
+                flags = ContextFlags.ForwardCompatible;
+            }
             GameWindow = new Loader.Hedra((int)currentSize.X, (int)currentSize.Y, maxMonitor, 3, 3, profile, flags);
+            GameSettings.DeviceWidth = GameWindow.Window.FramebufferSize.X;
+            GameSettings.DeviceHeight = GameWindow.Window.FramebufferSize.Y;
             GameSettings.SurfaceWidth = GameWindow.Width;
             GameSettings.SurfaceHeight = GameWindow.Height;
 
@@ -167,13 +189,18 @@ namespace Hedra.Engine
             }
 
             GameSettings.LoadWindowSettings(GameSettings.SettingsPath);
-            var previousFullscreen = GameSettings.Fullscreen;
-            TaskScheduler.After(1, () =>
+            // Cocoa fullscreen transitions block the UI thread. The legacy reset
+            // cycles through three transitions despite already applying the settings.
+            if (!OperatingSystem.IsMacOS())
             {
-                GameSettings.Fullscreen = true;
-                GameSettings.Fullscreen = false;
-                GameSettings.Fullscreen = previousFullscreen;
-            });
+                var previousFullscreen = GameSettings.Fullscreen;
+                TaskScheduler.After(1, () =>
+                {
+                    GameSettings.Fullscreen = true;
+                    GameSettings.Fullscreen = false;
+                    GameSettings.Fullscreen = previousFullscreen;
+                });
+            }
 
             Log.WriteLine("Window settings loading was Successful");
             if (!IsDummy || IsDummy && IsServer) GameWindow.Run();

@@ -1,5 +1,6 @@
 using System;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using Hedra.Engine.Native;
 
 namespace Hedra.Engine.Generation
@@ -13,6 +14,7 @@ namespace Hedra.Engine.Generation
         public FastNoiseSIMD(int Seed)
         {
             _native = HedraCoreNative.fastnoise_createObject(Seed);
+            _seed = Seed;
         }
 
         public int Seed
@@ -190,16 +192,16 @@ namespace Hedra.Engine.Generation
 
         private float[] PointerToSet(IntPtr Address, uint Size)
         {
-            var buffer = new float[Size];
-            unsafe
+            try
             {
-                var pointer = (float*)Address.ToPointer();
-                var index = 0;
-                for (var i = 0; i < Size; i++) buffer[index++] = pointer[i];
+                var buffer = new float[Size];
+                Marshal.Copy(Address, buffer, 0, buffer.Length);
+                return buffer;
             }
-
-            HedraCoreNative.fastnoise_freeNoise(Address);
-            return buffer;
+            finally
+            {
+                HedraCoreNative.fastnoise_freeNoise(Address);
+            }
         }
 
         ~FastNoiseSIMD()

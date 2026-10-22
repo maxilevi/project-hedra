@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using Hedra.Engine.Generation;
 using Hedra.Framework;
 using Hedra.Rendering;
 
@@ -13,75 +16,114 @@ namespace Hedra.Engine.Rendering.Geometry
          * Reference: https://docs.blender.org/manual/en/latest/modeling/modifiers/deform/smooth.html
          */
         public static void ApplySmoothing(IList<uint> Indices, IList<Vector3> Vertices, IList<Vector4> Colors,
-            IList<Vector3> Normals, HashSet<uint> IgnoreList, int Steps = 1)
+            IList<Vector3> Normals, HashSet<uint> IgnoreList, int Steps = 1, bool SmoothNormals = true)
         {
-            var map = IndexUniqueVertices(Indices, Vertices, Colors, Normals);
+            ApplySmoothing(new ManagedSmoothingBuffer<uint>(Indices), new ManagedSmoothingBuffer<Vector3>(Vertices),
+                new ManagedSmoothingBuffer<Vector3>(Normals), IgnoreList, Steps, SmoothNormals);
+        }
+
+        public static void ApplySmoothing(NativeVertexData Mesh, HashSet<uint> IgnoreList, int Steps = 1,
+            bool SmoothNormals = true)
+        {
+            // The core only allocates managed scratch arrays. Resolve all native
+            // pointers once; no arena allocation/growth can invalidate them here.
+            ApplySmoothing(new NativeSmoothingBuffer<uint>(Mesh.Indices), new NativeSmoothingBuffer<Vector3>(Mesh.Vertices),
+                new NativeSmoothingBuffer<Vector3>(Mesh.Normals), IgnoreList, Steps, SmoothNormals);
+        }
+
+        private interface ISmoothingBuffer<T> where T : unmanaged
+        {
+            int Count { get; }
+            T this[int Index] { get; set; }
+        }
+
+        private readonly struct ManagedSmoothingBuffer<T> : ISmoothingBuffer<T> where T : unmanaged
+        {
+            private readonly IList<T> _list;
+            public ManagedSmoothingBuffer(IList<T> List) { _list = List; }
+            public int Count => _list.Count;
+            public T this[int Index] { get => _list[Index]; set => _list[Index] = value; }
+        }
+
+        private readonly unsafe struct NativeSmoothingBuffer<T> : ISmoothingBuffer<T> where T : unmanaged
+        {
+            private readonly T* _pointer;
+            public NativeSmoothingBuffer(NativeList<T> List) { _pointer = (T*)List.Pointer; Count = List.Count; }
+            public int Count { get; }
+            public T this[int Index]
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)] get => _pointer[Index];
+                [MethodImpl(MethodImplOptions.AggressiveInlining)] set => _pointer[Index] = value;
+            }
+        }
+
+        private static void ApplySmoothing<TIndices, TVertices, TNormals>(TIndices Indices, TVertices Vertices,
+            TNormals Normals, HashSet<uint> IgnoreList, int Steps, bool SmoothNormals)
+            where TIndices : struct, ISmoothingBuffer<uint>
+            where TVertices : struct, ISmoothingBuffer<Vector3>
+            where TNormals : struct, ISmoothingBuffer<Vector3>
+        {
+            var vertexCount = Vertices.Count;
+            var triangles = new List<IndexedTriangle>(Indices.Count / 3);
+            var unique = new HashSet<IndexedTriangle>();
+            var counts = new int[vertexCount];
+            for (var i = 0; i < Indices.Count; i += 3)
+            {
+                var triangle = new IndexedTriangle { P1 = Indices[i], P2 = Indices[i + 1], P3 = Indices[i + 2] };
+                if (!unique.Add(triangle)) continue;
+                triangles.Add(triangle);
+                counts[triangle.P1] += 2;
+                if (triangle.P2 != triangle.P1) counts[triangle.P2] += 2;
+                if (triangle.P3 != triangle.P1 && triangle.P3 != triangle.P2) counts[triangle.P3] += 2;
+            }
+            var offsets = new int[vertexCount + 1];
+            for (var i = 0; i < vertexCount; i++) offsets[i + 1] = checked(offsets[i] + counts[i]);
+            var neighbours = new uint[offsets[vertexCount]];
+            var write = (int[])offsets.Clone();
+            void Add(uint Vertex, uint First, uint Second)
+            {
+                neighbours[write[Vertex]++] = First;
+                neighbours[write[Vertex]++] = Second;
+            }
+            foreach (var triangle in triangles)
+            {
+                Add(triangle.P1, triangle.P2, triangle.P3);
+                if (triangle.P2 != triangle.P1) Add(triangle.P2, triangle.P1, triangle.P3);
+                // Preserve GetConnected's existing third-corner weighting, including self.
+                if (triangle.P3 != triangle.P1 && triangle.P3 != triangle.P2) Add(triangle.P3, triangle.P2, triangle.P3);
+            }
+            var remaps = new VertexRemap[vertexCount];
+            var groups = new int[vertexCount];
+            var positions = new Dictionary<Vector3, int>(vertexCount);
             for (var w = 0; w < Steps; w++)
             {
-                var vertexRemap = new Dictionary<Vector3, VertexRemap>();
-
-                void AddWeight(Vector3 Vertex, int Neighbour)
-                {
-                    var remap = vertexRemap[Vertex];
-                    vertexRemap[Vertex] = new VertexRemap
-                    {
-                        Position = remap.Position + Vertices[Neighbour],
-                        Normal = remap.Normal + Normals[Neighbour],
-                        Count = remap.Count + 1
-                    };
-                }
-
-                for (var i = 0; i < Vertices.Count; ++i)
+                positions.Clear();
+                Array.Clear(remaps, 0, remaps.Length);
+                var groupCount = 0;
+                for (var i = 0; i < vertexCount; ++i)
                 {
                     var vertex = Vertices[i];
-                    var triangles = map[i].ToArray();
-                    if (!vertexRemap.ContainsKey(vertex))
-                        vertexRemap[vertex] = new VertexRemap();
-
-                    for (var j = 0; j < triangles.Length; ++j)
+                    ref var group = ref CollectionsMarshal.GetValueRefOrAddDefault(positions, vertex, out var exists);
+                    if (!exists) group = groupCount++;
+                    groups[i] = group;
+                    ref var remap = ref remaps[group];
+                    for (var j = offsets[i]; j < offsets[i + 1]; j++)
                     {
-                        var neighbours = triangles[j].GetConnected((uint)i);
-                        for (var k = 0; k < neighbours.Length; ++k) AddWeight(vertex, (int)neighbours[k]);
+                        var neighbour = (int)neighbours[j];
+                        remap.Position += Vertices[neighbour];
+                        if (SmoothNormals) remap.Normal += Normals[neighbour];
+                        remap.Count++;
                     }
                 }
 
-                for (var i = 0; i < Vertices.Count; ++i)
+                for (var i = 0; i < vertexCount; ++i)
                 {
-                    var remap = vertexRemap[Vertices[i]];
-                    Normals[i] = remap.Normal / remap.Count;
+                    var remap = remaps[groups[i]];
+                    if (SmoothNormals) Normals[i] = remap.Normal / remap.Count;
                     if (IgnoreList?.Contains((uint)i) ?? false) continue;
                     Vertices[i] = remap.Position / remap.Count;
                 }
             }
-        }
-
-        private static IndexedTriangle[][] IndexUniqueVertices(IList<uint> Indices, IList<Vector3> Vertices,
-            IList<Vector4> Colors, IList<Vector3> Normals)
-        {
-            var map = new HashSet<IndexedTriangle>[Vertices.Count];
-            for (var i = 0; i < Indices.Count; i += 3)
-            {
-                var triangle = new IndexedTriangle
-                {
-                    P1 = Indices[i],
-                    P2 = Indices[i + 1],
-                    P3 = Indices[i + 2]
-                };
-                if (map[triangle.P1] == null)
-                    map[triangle.P1] = new HashSet<IndexedTriangle>();
-                if (map[triangle.P2] == null)
-                    map[triangle.P2] = new HashSet<IndexedTriangle>();
-                if (map[triangle.P3] == null)
-                    map[triangle.P3] = new HashSet<IndexedTriangle>();
-
-                map[triangle.P1].Add(triangle);
-                map[triangle.P2].Add(triangle);
-                map[triangle.P3].Add(triangle);
-            }
-
-            var finalMap = new IndexedTriangle[Vertices.Count][];
-            for (var i = 0; i < Vertices.Count; ++i) finalMap[i] = map[i].ToArray();
-            return finalMap;
         }
 
         /* public static VertexData[] GetConnectedComponents2(VertexData Mesh)
@@ -128,44 +170,83 @@ namespace Hedra.Engine.Rendering.Geometry
  
          }*/
 
-        public static VertexData[] GetConnectedComponents(VertexData Mesh)
+        public static VertexData[] GetConnectedComponents(VertexData Mesh, bool Optimize = true, IAllocator Scratch = null)
         {
+            using var timing = GenerationMetrics.Measure("mesh_components");
             var list = new List<VertexData>();
             if (Mesh.Vertices.Count == 0) return list.ToArray();
-            var map = IndexVertices(Mesh);
-            var remaining = map.Keys.ToArray();
-            var visited = new HashSet<Vector3>();
-
-            void BreadthFirstSearch(Vector3 Start, HashSet<Triangle> Component)
+            var positions = new Dictionary<Vector3, int>();
+            var adjacency = new List<List<int>>();
+            var triangles = new List<Triangle>(Mesh.Indices.Count / 3);
+            var triangleVertices = new List<IndexedTriangle>(Mesh.Indices.Count / 3);
+            var uniqueTriangles = new HashSet<Triangle>();
+            int Index(Vector3 Position)
             {
-                var queue = new Queue<Vector3>();
+                if (positions.TryGetValue(Position, out var index)) return index;
+                index = positions.Count;
+                positions.Add(Position, index);
+                adjacency.Add(new List<int>());
+                return index;
+            }
+
+            using (GenerationMetrics.Measure("mesh_components_index"))
+            for (var i = 0; i < Mesh.Indices.Count; i += 3)
+            {
+                Vertex VertexAt(uint Id) => new(Mesh.Vertices[(int)Id], Mesh.Colors[(int)Id], Mesh.Normals[(int)Id]);
+                var triangle = new Triangle
+                {
+                    P1 = VertexAt(Mesh.Indices[i]),
+                    P2 = VertexAt(Mesh.Indices[i + 1]),
+                    P3 = VertexAt(Mesh.Indices[i + 2])
+                };
+                var p1 = Index(triangle.P1.Position);
+                var p2 = Index(triangle.P2.Position);
+                var p3 = Index(triangle.P3.Position);
+                if (!uniqueTriangles.Add(triangle)) continue;
+                var id = triangles.Count;
+                triangles.Add(triangle);
+                triangleVertices.Add(new IndexedTriangle { P1 = (uint)p1, P2 = (uint)p2, P3 = (uint)p3 });
+                adjacency[p1].Add(id);
+                if (p2 != p1) adjacency[p2].Add(id);
+                if (p3 != p1 && p3 != p2) adjacency[p3].Add(id);
+            }
+            var visited = new bool[positions.Count];
+            var visitedTriangles = new bool[triangles.Count];
+            var queue = new Queue<int>();
+            var component = new List<Triangle>();
+            void BreadthFirstSearch(int Start)
+            {
                 queue.Enqueue(Start);
-                while (queue.Count > 0)
+                while (queue.Count != 0)
                 {
                     var vertex = queue.Dequeue();
-                    if (visited.Contains(vertex)) continue;
-                    visited.Add(vertex);
-                    var triangles = map[vertex];
-                    for (var i = 0; i < triangles.Length; ++i)
+                    if (visited[vertex]) continue;
+                    visited[vertex] = true;
+                    foreach (var id in adjacency[vertex])
                     {
-                        queue.Enqueue(triangles[i].P1.Position);
-                        queue.Enqueue(triangles[i].P2.Position);
-                        queue.Enqueue(triangles[i].P3.Position);
-                        Component.Add(triangles[i]);
+                        if (visitedTriangles[id]) continue;
+                        visitedTriangles[id] = true;
+                        var points = triangleVertices[id];
+                        queue.Enqueue((int)points.P1);
+                        queue.Enqueue((int)points.P2);
+                        queue.Enqueue((int)points.P3);
+                        component.Add(triangles[id]);
                     }
                 }
             }
 
-            using (var allocator = new ResizableHeapAllocator(Allocator.Megabyte * 16, Allocator.Megabyte * 2))
+            using (var ownedAllocator = Scratch == null ? new ResizableHeapAllocator(Allocator.Megabyte * 16, Allocator.Megabyte * 2) : null)
             {
-                for (var i = 0; i < remaining.Length; ++i)
+                var allocator = Scratch ?? ownedAllocator;
+                for (var i = 0; i < visited.Length; ++i)
                 {
-                    if (visited.Contains(remaining[i])) continue;
-                    var component = new HashSet<Triangle>();
-                    BreadthFirstSearch(remaining[i], component);
-
-                    var mesh = BuildComponent(component.ToArray(), Mesh);
-                    mesh.Optimize(allocator);
+                    if (visited[i]) continue;
+                    component.Clear();
+                    using (GenerationMetrics.Measure("mesh_components_traverse")) BreadthFirstSearch(i);
+                    VertexData mesh;
+                    using (GenerationMetrics.Measure("mesh_components_build")) mesh = BuildComponent(component.ToArray(), Mesh);
+                    if (Optimize)
+                        using (GenerationMetrics.Measure("mesh_components_optimize")) mesh.Optimize(allocator);
                     list.Add(mesh);
                 }
             }
@@ -263,7 +344,7 @@ namespace Hedra.Engine.Rendering.Geometry
             }
         }
 
-        private struct IndexedTriangle
+        private struct IndexedTriangle : IEquatable<IndexedTriangle>
         {
             public uint P1;
             public uint P2;
@@ -282,11 +363,13 @@ namespace Hedra.Engine.Rendering.Geometry
             
             public override bool Equals(object? obj)
             {
-                return obj is IndexedTriangle t && P1.Equals(t.P1) && P2.Equals(t.P2) && P3.Equals(t.P3);
+                return obj is IndexedTriangle t && Equals(t);
             }
+            public bool Equals(IndexedTriangle Other) => P1 == Other.P1 && P2 == Other.P2 && P3 == Other.P3;
+            public override int GetHashCode() => HashCode.Combine(P1, P2, P3);
         }
 
-        public struct Triangle
+        public struct Triangle : IEquatable<Triangle>
         {
             public Vertex P1;
             public Vertex P2;
@@ -309,11 +392,13 @@ namespace Hedra.Engine.Rendering.Geometry
                 
             public override bool Equals(object? obj)
             {
-                return obj is Triangle t && P1.Equals(t.P1) && P2.Equals(t.P2) && P3.Equals(t.P3);
+                return obj is Triangle t && Equals(t);
             }
+            public bool Equals(Triangle Other) => P1.Equals(Other.P1) && P2.Equals(Other.P2) && P3.Equals(Other.P3);
+            public override int GetHashCode() => HashCode.Combine(P1, P2, P3);
         }
 
-        public struct Vertex
+        public struct Vertex : IEquatable<Vertex>
         {
             public readonly Vector3 Position;
             public readonly Vector4 Color;
@@ -326,20 +411,16 @@ namespace Hedra.Engine.Rendering.Geometry
                 Normal = n;
             }
 
-            private static int Combine(int h1, int h2)
-            {
-                return ((h1 << 5) + h1) ^ h2;
-            }
-
             public override int GetHashCode()
             {
-                return Combine(Combine(Position.GetHashCode(), Color.GetHashCode()), Normal.GetHashCode());
+                return HashCode.Combine(Position, Color, Normal);
             }
             
             public override bool Equals(object? obj)
             {
-                return obj is Vertex t && Position.Equals(t.Position) && Color.Equals(t.Color) && Normal.Equals(t.Normal);
+                return obj is Vertex t && Equals(t);
             }
+            public bool Equals(Vertex Other) => Position.Equals(Other.Position) && Color.Equals(Other.Color) && Normal.Equals(Other.Normal);
         }
     }
 }

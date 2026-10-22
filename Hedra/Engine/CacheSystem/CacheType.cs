@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Generation;
 using Hedra.Rendering;
 
 namespace Hedra.Engine.CacheSystem
@@ -19,6 +20,7 @@ namespace Hedra.Engine.CacheSystem
         protected void AddModel(VertexData Model)
         {
             Model.Name = Type.ToString();
+            BakedGenerationAssets.Register(Type, _models.Count, Model);
             _models.Add(Model);
         }
 

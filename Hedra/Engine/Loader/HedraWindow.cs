@@ -5,6 +5,7 @@ using System.Threading;
 using Hedra.Engine.Events;
 using Hedra.Engine.IO;
 using Hedra.Engine.Windowing;
+using Hedra.Game;
 using Silk.NET.GLFW;
 using Silk.NET.Input;
 using Silk.NET.Maths;
@@ -40,6 +41,11 @@ namespace Hedra.Engine.Loader
             Window.Render += RenderFrame;
             Window.Update += UpdateFrame;
             Window.Resize += Resize;
+            Window.FramebufferResize += size =>
+            {
+                GameSettings.DeviceWidth = size.X;
+                GameSettings.DeviceHeight = size.Y;
+            };
             Window.FocusChanged += FocusChanged;
             Window.Closing += Unload;
             Window.Initialize();

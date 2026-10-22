@@ -28,7 +28,9 @@ namespace Hedra.Engine.Game
         public static string AppPath =>
             $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/".Replace("\\", "/");
 
-        public static string CrashesFolder => $"{AppPath}/Crashes/";
+        public static string LogPath => System.IO.Path.Combine(System.OperatingSystem.IsMacOS() ? AppData : AppPath, "log.txt");
+
+        public static string CrashesFolder => $"{(System.OperatingSystem.IsMacOS() ? AppData : AppPath)}/Crashes/";
 
         public static void AllocateMemory()
         {
@@ -114,6 +116,29 @@ namespace Hedra.Engine.Game
         {
             if (_loadedArchitectureFiles) return;
 
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                var nativePath = System.IO.Path.Combine(Path, "native", "osx-" +
+                    RuntimeInformation.ProcessArchitecture.ToString().ToLowerInvariant());
+                _nativeLibs = new List<IntPtr>();
+                var handles = new Dictionary<string, IntPtr>();
+                IntPtr Resolve(string name, Assembly assembly, DllImportSearchPath? searchPath)
+                {
+                    var file = name == "hedracore" ? "libhedracore.dylib"
+                        : name == "libbulletc" ? "libbulletc.dylib" : null;
+                    if (file == null) return IntPtr.Zero;
+                    if (handles.TryGetValue(file, out var cached)) return cached;
+                    var handle = NativeLibrary.Load(System.IO.Path.Combine(nativePath, file));
+                    handles.Add(file, handle);
+                    _nativeLibs.Add(handle);
+                    return handle;
+                }
+                NativeLibrary.SetDllImportResolver(typeof(GameLoader).Assembly, Resolve);
+                NativeLibrary.SetDllImportResolver(typeof(BulletSharp.CollisionShape).Assembly, Resolve);
+                _loadedArchitectureFiles = true;
+                return;
+            }
+
             var isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
             var is64 = Environment.Is64BitProcess;
             var dllPath = $"{Path}{(is64 ? "x64" : "x86")}";
@@ -154,13 +179,25 @@ namespace Hedra.Engine.Game
         {
             for (var i = 0; i < _nativeLibs.Count; ++i)
             {
-                NativeLibrary.Free(_nativeLibs[i]);
+                if (_nativeLibs[i] != IntPtr.Zero) NativeLibrary.Free(_nativeLibs[i]);
             }
             _nativeLibs.Clear();
         }
 
         public static void CreateCharacterFolders()
         {
+            if (System.OperatingSystem.IsMacOS())
+            {
+                Directory.CreateDirectory(DataManager.CharactersFolder);
+                var legacyFolder = System.IO.Path.Combine(AppPath, "Characters");
+                if (Directory.Exists(legacyFolder))
+                    foreach (var file in Directory.GetFiles(legacyFolder, "*.db"))
+                    {
+                        var destination = System.IO.Path.Combine(DataManager.CharactersFolder, System.IO.Path.GetFileName(file));
+                        if (!File.Exists(destination)) File.Copy(file, destination);
+                    }
+                return;
+            }
             var appDataCharacters = $"{AppData}Characters/";
             var appPathCharacters = $"{AppPath}Characters/";
             Directory.CreateDirectory(appPathCharacters);

@@ -82,17 +82,27 @@ namespace Hedra.Engine.StructureSystem
                     AddIfNecessary(objects[i], Object);
         }
 
+        public void OnValueAdded(Chunk Object, T1 Value)
+        {
+            // Import objects that predate the first available chunk once. Subsequent
+            // notifications already identify the new object; do not rescan the structure.
+            if (!_addedAfterCreation)
+            {
+                var objects = Get();
+                if (objects != null) AddAfterCreationIfNecessary(objects);
+            }
+            AddIfNecessary(Value, Object);
+        }
+
         private void OnChunkDisposed(Chunk Object)
         {
-            KeyValuePair<T1, Chunk>[] dict;
             lock (_lock)
             {
-                dict = _added.ToArray();
+                var dict = _added.ToArray();
+                foreach (var pair in dict)
+                    if (pair.Value == Object)
+                        _added[pair.Key] = null;
             }
-
-            foreach (var pair in dict)
-                if (pair.Value == Object)
-                    _added[pair.Key] = null;
         }
     }
 }

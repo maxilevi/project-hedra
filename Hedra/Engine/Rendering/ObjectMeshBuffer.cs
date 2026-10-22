@@ -202,17 +202,18 @@ namespace Hedra.Engine.Rendering
         {
             BindDrawBatched();
 
+            ObjectMeshBuffer lastDrawn = null;
             for (var i = 0; i < Meshes.Count; ++i)
-                if (Meshes[i].Enabled && Culling.IsInside(Meshes[i]))
-                    Meshes[i].Mesh.Buffer.DoDraw();
-
-            var isBound = true;
-            for (var i = 0; i < Meshes.Count && isBound; ++i)
-                if (Meshes[i].Mesh.Buffer.Data != null)
+            {
+                var buffer = Meshes[i].Mesh.Buffer;
+                if (Meshes[i].Enabled && buffer.Data != null && buffer.Indices != null && Culling.IsInside(Meshes[i]))
                 {
-                    Meshes[i].Mesh.Buffer.Unbind();
-                    isBound = false;
+                    buffer.DoDraw();
+                    lastDrawn = buffer;
                 }
+            }
+            if (lastDrawn != null) lastDrawn.Unbind();
+            else Shader.Unbind();
         }
 
         private static void BindDrawBatched()
@@ -266,8 +267,8 @@ namespace Hedra.Engine.Rendering
 
         private void Unbind()
         {
-            Data.Unbind();
             Indices.Unbind();
+            Data.Unbind();
             Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.Texture2D, 0);
             Renderer.ActiveTexture(TextureUnit.Texture1);

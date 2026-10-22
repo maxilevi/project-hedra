@@ -57,13 +57,15 @@ namespace Hedra.Engine.StructureSystem
         {
             get
             {
-                if (_dirtyStructuresItems || _itemsCache == null)
+                lock (_lock)
                 {
-                    _itemsCache = Watchers.Select(I => I.Structure).ToArray();
-                    _dirtyStructuresItems = false;
+                    if (_dirtyStructuresItems || _itemsCache == null)
+                    {
+                        _itemsCache = _itemWatchers.Select(I => I.Structure).ToArray();
+                        _dirtyStructuresItems = false;
+                    }
+                    return _itemsCache;
                 }
-
-                return _itemsCache;
             }
         }
 
@@ -82,15 +84,17 @@ namespace Hedra.Engine.StructureSystem
         {
             get
             {
-                if (_dirtyStructures || _structureCache == null)
+                lock (_lock)
                 {
-                    _structureCache = Watchers.SelectMany(
-                        I => I.Structure.WorldObject.Children.Concat(new[] { I.Structure.WorldObject })
-                    ).ToArray();
-                    _dirtyStructures = false;
+                    if (_dirtyStructures || _structureCache == null)
+                    {
+                        _structureCache = _itemWatchers.SelectMany(
+                            I => I.Structure.WorldObject.Children.Concat(new[] { I.Structure.WorldObject })
+                        ).ToArray();
+                        _dirtyStructures = false;
+                    }
+                    return _structureCache;
                 }
-
-                return _structureCache;
             }
         }
 
@@ -167,6 +171,7 @@ namespace Hedra.Engine.StructureSystem
         /* Used from MissionCore.py */
         public void CheckStructures(Vector2 ChunkOffset, StructureDesign[] Designs)
         {
+            using var profile = GenerationMetrics.Measure("structure_discovery");
             if (!World.IsChunkOffset(ChunkOffset))
                 throw new ArgumentException("Provided parameter does not represent a valid offset");
 
@@ -177,23 +182,28 @@ namespace Hedra.Engine.StructureSystem
             var maxSearchRadius = Designs.Max(D => D.SearchRadius);
             /* Beware! This is created locally and we don't maintain a static instance because of multi-threading issues. */
             var distribution = new RandomDistribution(true);
-            Search(ChunkOffset, maxSearchRadius, (Offset) =>
+            var checker = _structureChecker;
+            foreach (var Offset in RegisterSearch(checker, ChunkOffset, maxSearchRadius))
             {
-                if(_structureChecker.RegisterOffset(ChunkOffset, Offset)) return;
-
-                var design = MapBuilder.Sample(World.ToChunkSpace(Offset).ToVector3(), region);
-                if (design == null) return;
-
-                /// Changes in here will make the world differ from the map, do it in structure grid
-                //if (!IsWithinSearchRadius(design, Offset, ChunkOffset)) return;
-                if (!design.MeetsRequirements(Offset)) return;
-
-                design.PlaceDesign(Offset, distribution, region, World.StructureHandler.StructureItems);
-            });
+                try
+                {
+                    var design = MapBuilder.Sample(World.ToChunkSpace(Offset).ToVector3(), region);
+                    if (design != null && design.MeetsRequirements(Offset))
+                        design.PlaceDesign(Offset, distribution, region, World.StructureHandler.StructureItems, true);
+                    checker.CompletePosition(Offset);
+                }
+                catch (Exception e)
+                {
+                    checker.FailRange(ChunkOffset, e);
+                    throw;
+                }
+            }
+            checker.WaitForRange(ChunkOffset);
         }
 
         public void CheckLandforms(Vector2 ChunkOffset)
         {
+            using var profile = GenerationMetrics.Measure("landform_discovery");
             var underChunk = World.GetChunkAt(ChunkOffset.ToVector3());
             var region = underChunk != null
                 ? underChunk.Biome
@@ -201,12 +211,21 @@ namespace Hedra.Engine.StructureSystem
             var maxSearchRadius = 1024;//Designs.Max(D => D.SearchRadius);
             /* Beware! This is created locally and we don't maintain a static instance because of multi-threading issues. */
             var distribution = new RandomDistribution(true);
-            Search(ChunkOffset, maxSearchRadius, (Offset) =>
+            var checker = _landformChecker;
+            foreach (var Offset in RegisterSearch(checker, ChunkOffset, maxSearchRadius))
             {
-                if(_landformChecker.RegisterOffset(ChunkOffset, Offset)) return;
-
-                SampleLandform(Offset, distribution);
-            });
+                try
+                {
+                    SampleLandform(Offset, distribution);
+                    checker.CompletePosition(Offset);
+                }
+                catch (Exception e)
+                {
+                    checker.FailRange(ChunkOffset, e);
+                    throw;
+                }
+            }
+            checker.WaitForRange(ChunkOffset);
         }
 
         private void SampleLandform(Vector2 Offset, RandomDistribution Rng)
@@ -225,21 +244,8 @@ namespace Hedra.Engine.StructureSystem
         
         
 
-        private static void Search(Vector2 ChunkOffset, int MaxSearchRadius, Action<Vector2> EachAction)
-        {
-            for (var x = Math.Min(-2, -MaxSearchRadius / Chunk.Width * 2);
-                 x < Math.Max(2, MaxSearchRadius / Chunk.Width * 2);
-                 x++)
-            {
-                for (var z = Math.Min(-2, -MaxSearchRadius / Chunk.Width * 2);
-                     z < Math.Max(2, MaxSearchRadius / Chunk.Width * 2);
-                     z++)
-                {
-                    var offset = new Vector2(ChunkOffset.X + x * Chunk.Width, ChunkOffset.Y + z * Chunk.Width);
-                    EachAction(offset);
-                }
-            }
-        }
+        private static List<Vector2> RegisterSearch(OffsetChecker Checker, Vector2 Offset, int Radius) =>
+            Checker.RegisterRange(Offset, Math.Min(-2, -Radius / Chunk.Width * 2), Math.Max(2, Radius / Chunk.Width * 2));
 
         private static bool IsWithinSearchRadius(StructureDesign Design, Vector2 Offset, Vector2 Center)
         {
@@ -252,8 +258,10 @@ namespace Hedra.Engine.StructureSystem
         {
             void DoBuild()
             {
+                using var profile = GenerationMetrics.Measure($"structure_geometry_{Struct.Design.GetType().Name}");
                 Struct.Design.Build(Struct);
                 Struct.Built = true;
+                lock (_lock) Dirty();
             }
 
             //if (Loader.Hedra.MainThreadId == Thread.CurrentThread.ManagedThreadId)

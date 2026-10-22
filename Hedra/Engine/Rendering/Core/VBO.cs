@@ -111,9 +111,9 @@ namespace Hedra.Engine.Rendering.Core
                 throw new ArgumentOutOfRangeException(
                     $"Provided data '{Offset + Bytes}' exceeds buffer size of '{SizeInBytes}'");
 
-            Bind();
-            Renderer.BufferSubData(BufferTarget, (IntPtr)Offset, (IntPtr)Bytes, Data);
-            Unbind();
+            Renderer.BindBuffer(BufferTarget.CopyWriteBuffer, Id);
+            Renderer.BufferSubData(BufferTarget.CopyWriteBuffer, (IntPtr)Offset, (IntPtr)Bytes, Data);
+            Renderer.BindBuffer(BufferTarget.CopyWriteBuffer, 0);
         }
 
         public override void Bind()

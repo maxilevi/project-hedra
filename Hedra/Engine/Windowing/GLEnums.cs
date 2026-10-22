@@ -6,6 +6,7 @@ namespace Hedra.Engine.Windowing
     public enum BufferTarget
     {
         ArrayBuffer = GLEnum.ArrayBuffer,
+        CopyWriteBuffer = GLEnum.CopyWriteBuffer,
         ElementArrayBuffer = GLEnum.ElementArrayBuffer,
         UniformBuffer = GLEnum.UniformBuffer
     }

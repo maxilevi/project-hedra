@@ -143,10 +143,9 @@ namespace Hedra.Engine.Management
 
             try
             {
-                lock (_handlerLock)
-                {
-                    return ReadBinaryFromStream(selectedHandler.Stream, Name);
-                }
+                // Each leased handler owns a different stream. Holding the pool
+                // lock here serialized unrelated reads across generation workers.
+                return selectedHandler.Index.Read(selectedHandler.Stream, Name);
             }
             finally
             {
@@ -316,14 +315,19 @@ namespace Hedra.Engine.Management
             _uniqueId = Guid.NewGuid().ToString();
             TryCleanupTemp(TemporalFolder = $"{AppData}/Temp/");
 
-            var soundBytes = ZipManager.UnZipBytes(File.ReadAllBytes(AppPath + SoundResource));
-            var zipBytes = ZipManager.UnZipBytes(File.ReadAllBytes(AppPath + AssetsResource));
-
-            File.WriteAllBytes(GetResourceName(AssetsResource), zipBytes);
-            File.WriteAllBytes(GetResourceName(SoundResource), soundBytes);
+            ExtractResource(SoundResource);
+            ExtractResource(AssetsResource);
 
             _registeredHandlers = new List<ResourceHandler>();
             _filesDecompressed = true;
+        }
+
+        private void ExtractResource(string Resource)
+        {
+            using var timing = StartupMetrics.Measure($"unpack_{Resource}");
+            using var source = File.OpenRead(AppPath + Resource);
+            using var destination = File.Create(GetResourceName(Resource));
+            ZipManager.UnZipTo(source, destination);
         }
 
         private string GetResourceName(string Resource)
@@ -342,40 +346,6 @@ namespace Hedra.Engine.Management
             {
                 Log.WriteLine("Failed to clean temp directory.");
             }
-        }
-
-        private static byte[] ReadBinaryFromStream(Stream Stream, string Name)
-        {
-            if (!Stream.CanRead) return null;
-            var reader = new BinaryReader(Stream);
-            var similarPath = default(string);
-            var sanitizedName = Name.Replace(@"\", "/").Replace("$DataFile$", string.Empty).Trim();
-            var length = reader.BaseStream.Length;
-            var list = new List<string>();
-            while (reader.BaseStream.Position < length)
-            {
-                var header = reader.ReadString();
-                if (header.Equals("<end_header>"))
-                    break;
-
-                var dataPosition = reader.ReadInt64();
-                if (Path.GetFileName(header).Equals(Path.GetFileName(Name))) similarPath = header;
-
-                var sanitizedHeader = header.Replace(@"\", "/");
-                if (Path.GetFileName(sanitizedHeader).Equals(Path.GetFileName(sanitizedName)) &&
-                    sanitizedHeader.Contains(sanitizedName))
-                {
-                    reader.BaseStream.Seek(dataPosition, SeekOrigin.Begin);
-                    return reader.ReadBytes(reader.ReadInt32());
-                }
-
-                list.Add(header);
-            }
-
-            if (similarPath != null)
-                Log.WriteLine(
-                    $"Failed to find path '{sanitizedName}' but found similar path '{similarPath}'. Was it a typo?");
-            return null;
         }
 
         private string BuildNameRegex(string Name)

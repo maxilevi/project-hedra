@@ -25,10 +25,11 @@ namespace Hedra.Engine.IO
 
         static Log()
         {
-            var log = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/log.txt";
+            var log = Game.GameLoader.LogPath;
+            Directory.CreateDirectory(Path.GetDirectoryName(log));
             if (File.Exists(log)) File.Delete(log);
             _lock = new object();
-            _writer = new StreamWriter(new FileStream(log, FileMode.OpenOrCreate));
+            _writer = new StreamWriter(new FileStream(log, FileMode.OpenOrCreate)) { AutoFlush = true };
             //Console.SetOut(_writer);
         }
         

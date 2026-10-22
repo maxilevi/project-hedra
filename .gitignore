@@ -13,3 +13,6 @@ nsight*
 
 /Hedra/x64/libhedracore.so
 /Hedra/x86/libhedracore.so
+
+/Hedra/native/
+/.macos-build/

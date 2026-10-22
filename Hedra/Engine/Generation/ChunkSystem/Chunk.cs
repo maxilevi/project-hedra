@@ -12,6 +12,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Numerics;
+using System.Threading;
 using Hedra.BiomeSystem;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
@@ -38,7 +39,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public const int BoundsZ = (int)(Width / BlockSize);
         private static readonly Block _defaultBlock;
         private readonly object _blocksLock;
-        private readonly object _heightCacheLock = new object();
         private readonly RegionCache _regionCache;
         private readonly ChunkStructuresMeshBuilder _structuresBuilder;
         private readonly ChunkTerrainMeshBuilder _terrainBuilder;
@@ -71,6 +71,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public Region Biome { get; }
         public bool BuildedCompletely { get; set; }
         public int BuildedLod { get; private set; }
+        public int UploadedLod { get; private set; }
         public bool BuildedWithStructures { get; private set; }
         public bool Disposed { get; private set; }
         public bool IsRiverConstant { get; private set; }
@@ -148,6 +149,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void GenerateBlocks()
         {
+            using var profile = GenerationMetrics.Measure("blocks");
             if (Disposed || IsGenerating) throw new ArgumentException("Cannot build a disposed chunk.");
             lock (_blocksLock)
             {
@@ -173,17 +175,16 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 return 0;
             }
 
-            lock (_heightCacheLock)
-            {
-                _heightCache = new byte[BoundsX * BoundsZ];
-                for (var x = 0; x < BoundsX; x++)
-                for (var z = 0; z < BoundsZ; z++)
-                    _heightCache[x * BoundsZ + z] = (byte)GetHighestY(x, z);
-            }
+            var heights = new byte[BoundsX * BoundsZ];
+            for (var x = 0; x < BoundsX; x++)
+            for (var z = 0; z < BoundsZ; z++)
+                heights[x * BoundsZ + z] = (byte)GetHighestY(x, z);
+            Volatile.Write(ref _heightCache, heights);
         }
 
         public void GenerateStructures()
         {
+            using var profile = GenerationMetrics.Measure("environment");
             if (Disposed) return;//throw new ArgumentException("Cannot build a disposed chunk.");
             lock (_blocksLock)
             {
@@ -197,6 +198,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void BuildMesh()
         {
+            using var profile = GenerationMetrics.Measure("mesh_total");
             if (Disposed || !IsGenerated || !Landscape.BlocksSetted || !Landscape.StructuresPlaced) return;
             if (_terrainBuilder.Sparsity == null) BuildSparsity();
             var buildingLod = Lod;
@@ -212,12 +214,13 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
             if (output == null) return;
             /* The allocator will be destroyed when the mesh is uploaded */
-            UploadMesh(allocator, output);
+            UploadMesh(allocator, output, buildingLod);
             FinishUpload(output, buildingLod);
         }
 
         private void SetupCollider(IAllocator Allocator, int BuildingLod)
         {
+            using var profile = GenerationMetrics.Measure("collision");
             if (BuildingLod == 1 || BuildingLod == 2)
             {
                 var mesh = CreateCollisionTerrainMesh(Allocator);
@@ -233,6 +236,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private void BuildSparsity()
         {
+            using var profile = GenerationMetrics.Measure("sparsity");
             /* We should build the sparsity data when all the neighbours exist */
             _terrainBuilder.Sparsity = ChunkSparsity.From(this);
         }
@@ -247,6 +251,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private ChunkMeshBuildOutput CreateTerrainMesh(IAllocator Allocator, int LevelOfDetail)
         {
+            using var profile = GenerationMetrics.Measure("terrain_mesh");
             lock (_blocksLock)
             {
                 return _terrainBuilder.CreateTerrainMesh(Allocator, LevelOfDetail, _regionCache);
@@ -256,6 +261,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private ChunkMeshBuildOutput AddStructuresMeshes(IAllocator Allocator, ChunkMeshBuildOutput Input,
             int LevelOfDetail)
         {
+            using var profile = GenerationMetrics.Measure("structure_mesh");
             return _structuresBuilder.AddStructuresMeshes(Allocator, Input, LevelOfDetail);
         }
 
@@ -282,8 +288,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
             IsBuilding = false;
         }
 
-        private void UploadMesh(IAllocator InputAllocator, ChunkMeshBuildOutput Input)
+        private void UploadMesh(IAllocator InputAllocator, ChunkMeshBuildOutput Input, int BuildingLod)
         {
+            using var profile = GenerationMetrics.Measure("prepare_upload");
             var meshInvalid = Input.StaticData.Colors.Count != Input.StaticData.Vertices.Count ||
                               Input.InstanceData.Colors.Count != Input.InstanceData.Vertices.Count ||
                               Input.InstanceData.Extradata.Count != Input.InstanceData.Vertices.Count ||
@@ -322,11 +329,13 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
             DistributedExecuter.Execute(delegate
             {
+                using var uploadProfile = GenerationMetrics.Measure("gpu_upload");
                 var staticResult = WorldRenderer.UpdateStatic(new Vector2(OffsetX, OffsetZ), Input.StaticData);
                 var instanceResult = WorldRenderer.UpdateInstance(new Vector2(OffsetX, OffsetZ), Input.InstanceData);
                 var waterResult = WorldRenderer.UpdateWater(new Vector2(OffsetX, OffsetZ), Input.WaterData);
 
                 BuildedCompletely = BuildedCompletely && instanceResult && staticResult && waterResult;
+                if (instanceResult && staticResult && waterResult) UploadedLod = BuildingLod;
 
                 if (Mesh != null)
                 {
@@ -356,10 +365,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public int GetHighestY(int X, int Z)
         {
-            lock (_heightCacheLock)
-            {
-                return _heightCache?[X * BoundsX + Z] ?? 0;
-            }
+            return Volatile.Read(ref _heightCache)?[X * BoundsX + Z] ?? 0;
         }
 
         public float GetHighest(int X, int Z)
@@ -521,6 +527,16 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 if (_waterPositions == null) _waterPositions = new List<CoordinateHash3D>();
                 var hash = new CoordinateHash3D(X, Y, Z);
                 _waterPositions.Add(hash);
+            }
+        }
+
+        internal void AddWaterDensities(List<CoordinateHash3D> Positions)
+        {
+            if (Positions.Count == 0) return;
+            lock (_waterLock)
+            {
+                _waterPositions ??= new List<CoordinateHash3D>(Positions.Count);
+                _waterPositions.AddRange(Positions);
             }
         }
 

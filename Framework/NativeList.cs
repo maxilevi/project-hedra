@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace Hedra.Framework
 {
@@ -21,7 +22,7 @@ namespace Hedra.Framework
         public NativeList(IAllocator Allocator, ICollection<T> Collection)
         {
             _allocator = Allocator;
-            _array = new NativeArray<T>(_allocator, InitialSize);
+            _array = new NativeArray<T>(_allocator, Math.Max(InitialSize, Collection?.Count ?? 0));
             _count = 0;
             if(Collection != null)
                 AddRange(Collection);
@@ -29,19 +30,74 @@ namespace Hedra.Framework
 
         public void Add(T Object)
         {
-            EnsureCapacity(_count);
+            EnsureCapacity(_count + 1);
             _array[_count++] = Object;
         }
 
-        public void AddRange(NativeArray<T> Array, int Take)
+        public unsafe void AddRange(NativeArray<T> Array, int Take)
         {
-            for(var i = 0; i < Take; ++i)
-                Add(Array[i]);
+            if (Take < 0 || Take > Array.Length) throw new ArgumentOutOfRangeException(nameof(Take));
+            if (Take == 0) return;
+            var sameSource = Array.Pointer == _array.Pointer;
+            EnsureCapacity(checked(_count + Take));
+            var source = (void*)(sameSource ? _array.Pointer : Array.Pointer);
+            var destination = (T*)_array.Pointer + _count;
+            var bytes = (long)Take * sizeof(T);
+            Buffer.MemoryCopy(source, destination, bytes, bytes);
+            _count += Take;
         }
         
-        public void AddRange(IEnumerable<T> Array)
+        public unsafe void AddRange(T[] Array, int Take)
         {
-            EnsureCapacity(((ICollection<T>)Array).Count);
+            if (Array == null) throw new ArgumentNullException(nameof(Array));
+            if (Take < 0 || Take > Array.Length) throw new ArgumentOutOfRangeException(nameof(Take));
+            if (Take == 0) return;
+            EnsureCapacity(checked(_count + Take));
+            fixed (T* source = Array)
+            {
+                var bytes = (long)Take * sizeof(T);
+                Buffer.MemoryCopy(source, (T*)_array.Pointer + _count, bytes, bytes);
+            }
+            _count += Take;
+        }
+
+        public unsafe void AddRange(IEnumerable<T> Array)
+        {
+            if (Array is NativeList<T> native)
+            {
+                AddRange(native.InternalArray, native.Count);
+                return;
+            }
+            if (Array is NativeArray<T> nativeArray)
+            {
+                AddRange(nativeArray, nativeArray.Length);
+                return;
+            }
+            if (Array is T[] managedArray)
+            {
+                if (managedArray.Length == 0) return;
+                EnsureCapacity(checked(_count + managedArray.Length));
+                fixed (T* source = managedArray)
+                {
+                    var bytes = (long)managedArray.Length * sizeof(T);
+                    Buffer.MemoryCopy(source, (T*)_array.Pointer + _count, bytes, bytes);
+                }
+                _count += managedArray.Length;
+                return;
+            }
+            if (Array is List<T> managedList)
+            {
+                if (managedList.Count == 0) return;
+                EnsureCapacity(checked(_count + managedList.Count));
+                fixed (T* source = CollectionsMarshal.AsSpan(managedList))
+                {
+                    var bytes = (long)managedList.Count * sizeof(T);
+                    Buffer.MemoryCopy(source, (T*)_array.Pointer + _count, bytes, bytes);
+                }
+                _count += managedList.Count;
+                return;
+            }
+            if (Array is ICollection<T> collection) EnsureCapacity(checked(_count + collection.Count));
             foreach (var element in Array)
             {
                 Add(element);
@@ -50,17 +106,14 @@ namespace Hedra.Framework
 
         private void EnsureCapacity(int Size)
         {
-            if (Size < _array.Length) return;
-            Resize(Size * 2);
+            if (Size <= _array.Length) return;
+            Resize(Math.Max(Size, checked(_array.Length * 2)));
         }
 
         public NativeList<T> Clone()
         {
             var list = new NativeList<T>(_allocator);
-            list.EnsureCapacity(_count);
-            for (var i = 0; i < _count; ++i)
-                list._array[i] = _array[i];
-            list._count = _count;
+            list.AddRange(this);
             return list;
         }
         
@@ -119,10 +172,7 @@ namespace Hedra.Framework
         public void Set(ICollection<T> Collection)
         {
             Clear();
-            foreach (var element in Collection)
-            {
-                Add(element);
-            }
+            AddRange(Collection);
         }
         
         public void Set(T Value, int Times)
@@ -137,7 +187,6 @@ namespace Hedra.Framework
         public void Clear()
         {
             _count = 0;
-            Resize(InitialSize);
         }
 
         public int Count => _count;

@@ -6,6 +6,8 @@ using Hedra.Core;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Generation.ChunkSystem.Builders;
 using Hedra.Engine.Management;
+using Hedra.Game;
+using Hedra.Engine.IO;
 
 namespace Hedra.Engine.Generation
 {
@@ -16,20 +18,32 @@ namespace Hedra.Engine.Generation
         private readonly MeshBuilder _meshBuilder;
         private readonly SharedWorkerPool _pool;
         private readonly StructuresBuilder _structuresBuilder;
+        private readonly GenerationJobQueue _geometry;
+        private readonly AutoResetEvent _workAvailable = new(false);
+        private readonly Thread _scheduler;
 
         public WorldBuilder()
         {
-            _maxThreads = (int)(Environment.ProcessorCount / 2);
+            _maxThreads = Math.Max(2, Environment.ProcessorCount / 2);
             _pool = new SharedWorkerPool(_maxThreads);
             _meshBuilder = new MeshBuilder(_pool);
             _blockBuilder = new BlockBuilder(_pool);
             _structuresBuilder = new StructuresBuilder(_pool);
-            RoutineManager.StartRoutine(DoUpdate);
+            _geometry = new GenerationJobQueue(_pool);
+            _pool.WorkerAvailable += () => _workAvailable.Set();
+            _scheduler = new Thread(Schedule)
+            {
+                IsBackground = true,
+                Name = "World generation scheduler",
+                Priority = ThreadPriority.BelowNormal
+            };
+            if (!GameSettings.TestingMode) _scheduler.Start();
         }
 
         public int MeshThreads => _pool.GetMaxWorkers(QueueType.Meshing);
         public int BlockThreads => _pool.GetMaxWorkers(QueueType.Blocks);
-        public int StructureThreads => 0;//_pool.GetMaxWorkers(QueueType.Structures);
+        public int StructureThreads => _pool.GetMaxWorkers(QueueType.Structures);
+        public int PendingStructureBuilds => _geometry.PendingCount;
 
         public int AverageBuildTime => _meshBuilder.AverageWorkTime;
 
@@ -41,12 +55,14 @@ namespace Hedra.Engine.Generation
 
         public int BlockQueueCount => _blockBuilder.Count;
 
-        public int StructureQueueCount => _structuresBuilder.Count;
+        public int StructureQueueCount => _geometry.Count;
 
         private void HandleMaxWorkers()
         {
-            var minMesh = _maxThreads / 2;
-            var workerCount = _maxThreads;
+            var geometryThreads = _geometry.Count > 0 ? Math.Min(2, _maxThreads - 1) : 0;
+            _pool.SetMaxWorkers(QueueType.Structures, geometryThreads);
+            var workerCount = _maxThreads - geometryThreads;
+            var minMesh = Math.Max(1, workerCount / 2);
             if (_meshBuilder.Count > 0)
             {
                 workerCount -= minMesh;
@@ -59,7 +75,7 @@ namespace Hedra.Engine.Generation
 
             if (_blockBuilder.Count == 0)
             {
-                _pool.SetMaxWorkers(QueueType.Meshing, _maxThreads);
+                _pool.SetMaxWorkers(QueueType.Meshing, _maxThreads - geometryThreads);
                 _pool.SetMaxWorkers(QueueType.Blocks, 0);
             }
             else
@@ -79,6 +95,7 @@ namespace Hedra.Engine.Generation
             {
                 _blockBuilder.Add(Chunk);
             }
+            _workAvailable.Set();
         }
 
         public void Remove(Chunk Chunk)
@@ -88,20 +105,37 @@ namespace Hedra.Engine.Generation
             _structuresBuilder.Remove(Chunk);
         }
 
+        public void ProcessStructure(Action Build)
+        {
+            _geometry.Enqueue(Build);
+            _workAvailable.Set();
+        }
+
         public void Update()
         {
 
         }
         
-        private IEnumerator DoUpdate()
+        private void Schedule()
         {
-            while (Program.GameWindow.Exists)
+            while (Program.GameWindow?.Exists ?? false)
             {
-                HandleMaxWorkers();
-                _meshBuilder.Update();
-                _blockBuilder.Update();
-                //_structuresBuilder.Update();
-                yield return null;
+                _workAvailable.WaitOne(100);
+                try
+                {
+                    bool dispatched;
+                    do
+                    {
+                        HandleMaxWorkers();
+                        dispatched = _geometry.TryDispatch();
+                        dispatched |= _meshBuilder.TryDispatch();
+                        dispatched |= _blockBuilder.TryDispatch();
+                    } while (dispatched);
+                }
+                catch (Exception e)
+                {
+                    Log.WriteLine($"World generation scheduler failed: {e}");
+                }
             }
         }
 
@@ -110,6 +144,7 @@ namespace Hedra.Engine.Generation
             _meshBuilder.Discard();
             _blockBuilder.Discard();
             _structuresBuilder.Discard();
+            _geometry.Discard();
         }
 
         public void ResetGenerationProfile()

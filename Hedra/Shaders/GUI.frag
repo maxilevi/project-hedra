@@ -31,10 +31,10 @@ void main(void)
         TexCoords = vec2(clamp(UV.x, 0.001, 0.999), clamp(UV.y, 0.001, 0.999));
     }
 
-    vec4 Color = texture2D(Texture, TexCoords) * vec4(1.0, 1.0, 1.0, Opacity);
+    vec4 Color = texture(Texture, TexCoords) * vec4(1.0, 1.0, 1.0, Opacity);
 
 
-    vec4 Highlight = texture2D(Background, TexCoords)  * vec4(1.0, 1.0, 1.0, Opacity);
+    vec4 Highlight = texture(Background, TexCoords)  * vec4(1.0, 1.0, 1.0, Opacity);
     OutColor = Color + vec4(Highlight.rgb, 0.0);
 
     if (Grayscale)

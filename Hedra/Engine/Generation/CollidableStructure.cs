@@ -183,6 +183,7 @@ namespace Hedra.Engine.Generation
 
         private void AddStaticElement(VertexData[] Models)
         {
+            using var timing = GenerationMetrics.Measure("structure_model_attach");
             lock (_lock)
             {
                 for (var i = 0; i < Models.Length; i++)

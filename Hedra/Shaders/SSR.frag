@@ -39,7 +39,7 @@ vec3 hash(vec3 a);
 
 void main()
 {
-    vec4 normalSample = texture2D(gNormal, TexCoords);
+    vec4 normalSample = texture(gNormal, TexCoords);
     if (normalSample.w < 0.01) discard;
     Metallic = 1.0;
 

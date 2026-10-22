@@ -13,6 +13,7 @@ using Hedra.Core;
 using Hedra.Engine.Bullet;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Game;
+using Hedra.Engine.Generation;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.Native;
@@ -47,6 +48,7 @@ namespace Hedra.Engine.Loader
         private double _passedMillis;
         private SplashScreen _splashScreen;
         private bool _wasLoading;
+        private bool _hasUpdatedGameplay;
         
 
         public Hedra(int Width, int Height, IMonitor Monitor, int Major, int Minor, ContextProfile Profile,
@@ -101,16 +103,16 @@ namespace Hedra.Engine.Loader
             }
             
             Log.WriteLine(glVersion);
-            AssetManager.Load();
-            Translations.Load();
+            using (StartupMetrics.Measure("assets")) AssetManager.Load();
+            using (StartupMetrics.Measure("translations")) Translations.Load();
             _wasLoading = true;
             _debugProvider = new DebugInfoProvider();
             _splashScreen = new SplashScreen();
             Program.GameWindow.WindowState = WindowState.Maximized;
 
-            CompatibilityManager.Load();
-            GameLoader.AllocateMemory();
-            Renderer.Load();
+            using (StartupMetrics.Measure("compatibility")) CompatibilityManager.Load();
+            using (StartupMetrics.Measure("renderer_allocation")) GameLoader.AllocateMemory();
+            using (StartupMetrics.Measure("renderer")) Renderer.Load();
             Log.WriteLine("Supported GLSL version is : " + Renderer.GetString(StringName.ShadingLanguageVersion));
             OSManager.WriteSpecs();
             DrawSplashScreenAndSwap();
@@ -130,12 +132,12 @@ namespace Hedra.Engine.Loader
                     MakeGLContextCurrent();
                     Time.RegisterThread();
                     
-                    GameLoader.LoadSoundEngine();
-                    HedraContent.Register();
-                    ModificationsLoader.Reload();
-                    NameGenerator.Load();
-                    LandformLoader.Load();
-                    CacheManager.Load();
+                    using (StartupMetrics.Measure("sound")) GameLoader.LoadSoundEngine();
+                    using (StartupMetrics.Measure("content")) HedraContent.Register();
+                    using (StartupMetrics.Measure("mods")) ModificationsLoader.Reload();
+                    using (StartupMetrics.Measure("names")) NameGenerator.Load();
+                    using (StartupMetrics.Measure("landforms")) LandformLoader.Load();
+                    using (StartupMetrics.Measure("model_caches")) CacheManager.Load();
 
                     DrawSplashScreenAndSwap();
 
@@ -150,22 +152,23 @@ namespace Hedra.Engine.Loader
 
                     DrawSplashScreenAndSwap();
 
-                    GameManager.LoadWorld();
+                    using (StartupMetrics.Measure("world")) GameManager.LoadWorld();
                     Log.WriteLine("Scene loading was Successful.");
 
                     DrawSplashScreenAndSwap();
 
-                    GameManager.LoadPlayer();
+                    using (StartupMetrics.Measure("player_ui")) GameManager.LoadPlayer();
                     Steam.Instance.Initialize();
                     Log.WriteLine("UI loading was Successful.");
 
                     DrawSplashScreenAndSwap();
 
-                    LoadInterpreter();
+                    using (StartupMetrics.Measure("scripts_missions")) LoadInterpreter();
                     Window.ClearContext();
                     Window.IsContextControlDisabled = false;
                     _splashScreen.Disable();
                     Window.WindowBorder = WindowBorder.Resizable;
+                    StartupMetrics.Ready();
                 }
                 catch (Exception e)
                 {
@@ -189,30 +192,40 @@ namespace Hedra.Engine.Loader
             Window.MakeCurrent();
         }
 
+        private readonly bool _profileFrames = Environment.GetEnvironmentVariable("HEDRA_PROFILE") == "1";
+        private readonly System.Diagnostics.Stopwatch _profileClock = System.Diagnostics.Stopwatch.StartNew();
+        private long _profileRenderTicks, _profileUpdateTicks;
+        private int _profileRenderCount, _profileUpdateCount;
+
         protected override void UpdateFrame(double Delta)
         {
             if (!_splashScreen.FinishedLoading) return;
             if (RenderingThreadId != MainThreadId)
                 MakeGLContextCurrent();
 
-            var frameTime = Delta;
+            GenerationBenchmark.Update();
+            var profileStart = System.Diagnostics.Stopwatch.GetTimestamp();
+            // Asset loading and a suspended window must not become minutes of
+            // fixed-step simulation before the first playable frame.
+            var frameTime = _hasUpdatedGameplay ? Math.Min(Delta, 0.1) : Physics.Timestep;
+            _hasUpdatedGameplay = true;
             while (frameTime > 0f)
             {
                 var isOnMenu = GameManager.InStartMenu;
                 var delta = Math.Min(frameTime, Physics.Timestep);
                 Time.Set(delta, false);
-                BulletPhysics.Update(isOnMenu ? Time.IndependentDeltaTime : Time.DeltaTime);
-                RoutineManager.Update();
-                UpdateManager.Update();
-                BackgroundUpdater.UpdateEntities();
-                BackgroundUpdater.UpdateCommands();
+                using (GenerationMetrics.Measure("frame_physics")) BulletPhysics.Update(isOnMenu ? Time.IndependentDeltaTime : Time.DeltaTime);
+                using (GenerationMetrics.Measure("frame_routines")) RoutineManager.Update();
+                using (GenerationMetrics.Measure("frame_updates")) UpdateManager.Update();
+                using (GenerationMetrics.Measure("frame_entities")) BackgroundUpdater.UpdateEntities();
+                using (GenerationMetrics.Measure("frame_commands")) BackgroundUpdater.UpdateCommands();
                 //BackgroundUpdater.Dispatch();
-                World.Update();
+                using (GenerationMetrics.Measure("frame_world")) World.Update();
                 SoundPlayer.Update(LocalPlayer.Instance.Position);
                 SoundtrackManager.Update();
-                AutosaveManager.Update();
-                Executer.Update();
-                DistributedExecuter.Update();
+                if (!GenerationBenchmark.Enabled) AutosaveManager.Update();
+                using (GenerationMetrics.Measure("frame_executer")) Executer.Update();
+                using (GenerationMetrics.Measure("frame_uploads")) DistributedExecuter.Update();
                 Network.Instance.Update();
                 LocalPlayer.Instance.Loader.Dispatch();
                 frameTime -= delta;
@@ -238,6 +251,11 @@ namespace Hedra.Engine.Loader
             Steam.Update();
             AnalyticsManager.PlayTime += (float)Delta;
             FrameChanged?.Invoke();
+            if (_profileFrames)
+            {
+                _profileUpdateTicks += System.Diagnostics.Stopwatch.GetTimestamp() - profileStart;
+                _profileUpdateCount++;
+            }
         }
 
         protected override void RenderFrame(double Delta)
@@ -246,9 +264,23 @@ namespace Hedra.Engine.Loader
             if (RenderingThreadId != MainThreadId)
                 MakeGLContextCurrent();
 
+            var profileStart = System.Diagnostics.Stopwatch.GetTimestamp();
             Renderer.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit | ClearBufferMask.StencilBufferBit);
             DrawManager.Draw();
             _debugProvider.Draw();
+            if (_profileFrames)
+            {
+                _profileRenderTicks += System.Diagnostics.Stopwatch.GetTimestamp() - profileStart;
+                _profileRenderCount++;
+                if (_profileClock.Elapsed.TotalSeconds >= 5)
+                {
+                    var msPerTick = 1000.0 / System.Diagnostics.Stopwatch.Frequency;
+                    Log.WriteLine($"PERF fps={_profileRenderCount / _profileClock.Elapsed.TotalSeconds:F1} render_ms={_profileRenderTicks * msPerTick / _profileRenderCount:F2} update_ms={_profileUpdateTicks * msPerTick / Math.Max(1, _profileUpdateCount):F2} menu={GameManager.InStartMenu}");
+                    _profileClock.Restart();
+                    _profileRenderTicks = _profileUpdateTicks = 0;
+                    _profileRenderCount = _profileUpdateCount = 0;
+                }
+            }
         }
 
         protected override void Resize(Vector2D<int> NewSize)
@@ -271,8 +303,11 @@ namespace Hedra.Engine.Loader
         {
             AssetManager.Dispose();
             if (!_splashScreen.FinishedLoading) return;
-            GameSettings.Save($"{AssetManager.AppData}/settings.cfg");
-            if (!GameManager.InStartMenu) AutosaveManager.Save();
+            if (!GenerationBenchmark.Enabled)
+            {
+                GameSettings.Save($"{AssetManager.AppData}/settings.cfg");
+                if (!GameManager.InStartMenu) AutosaveManager.Save();
+            }
             Graphics2D.Dispose();
             DrawManager.Dispose();
             InventoryItemRenderer.Dispose();
