@@ -128,6 +128,18 @@ namespace HedraTests.Rendering
         }
 
         [Test]
+        public void UpdatingAnAlreadyCachedLabelDoesNotAllocate()
+        {
+            var label = Label();
+            for (var i = 0; i < 20; i++) label.UpdateText();
+            var before = GC.GetAllocatedBytesForCurrentThread();
+            for (var i = 0; i < 100; i++) label.UpdateText();
+            var allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+            Assert.AreEqual(0, allocated, "Repeated cache hits should not create garbage each frame");
+            Assert.AreEqual(1, _text.Builds);
+        }
+
+        [Test]
         public void QueuedUpdatesCannotOverwriteANewerTexture()
         {
             var label = Label();

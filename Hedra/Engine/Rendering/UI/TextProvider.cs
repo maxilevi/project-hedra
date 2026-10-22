@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using Hedra.Game;
@@ -23,6 +24,29 @@ namespace Hedra.Engine.Rendering.UI
         private static readonly Dictionary<string, float> SizeMap;
         private static readonly Dictionary<string, Func<string, string>> TransformationMap;
         private static readonly object MeasureLock = new object();
+        private static readonly ConditionalWeakTable<Font, LineMetrics> Metrics = new ConditionalWeakTable<Font, LineMetrics>();
+        private static readonly ConditionalWeakTable<Font, LineMetrics>.CreateValueCallback MeasureMetrics = MeasureLineMetrics;
+
+        public const long MaxCachedBitmapBytes = 8 * 1024 * 1024;
+        public const int MaxCachedBitmaps = 128;
+        private static readonly Dictionary<TextRenderKey, LinkedListNode<CachedBitmap>> Bitmaps =
+            new Dictionary<TextRenderKey, LinkedListNode<CachedBitmap>>();
+        private static readonly LinkedList<CachedBitmap> BitmapOrder = new LinkedList<CachedBitmap>();
+        private static long _cachedBitmapBytes;
+
+        public static long CachedBitmapBytes { get { lock (MeasureLock) return _cachedBitmapBytes; } }
+        public static int CachedBitmapCount { get { lock (MeasureLock) return Bitmaps.Count; } }
+
+        public static void ClearBitmapCache()
+        {
+            lock (MeasureLock)
+            {
+                foreach (var entry in BitmapOrder) entry.Bitmap.Dispose();
+                Bitmaps.Clear();
+                BitmapOrder.Clear();
+                _cachedBitmapBytes = 0;
+            }
+        }
 
         static TextProvider()
         {
@@ -59,7 +83,34 @@ namespace Hedra.Engine.Rendering.UI
 
         public Image<Rgba32> BuildText(string Text, Font TextFont, Color TextColor, TextOptions Options)
         {
-            return DoBuildText(BuildParams(Text, TextFont, TextColor, Options));
+            lock (MeasureLock)
+            {
+                var key = new TextRenderKey(Text, TextFont, TextColor, Options, RenderingScale);
+                if (Bitmaps.TryGetValue(key, out var cached))
+                {
+                    BitmapOrder.Remove(cached);
+                    BitmapOrder.AddFirst(cached);
+                    // Callers own their images and may mutate or dispose them.
+                    return cached.Value.Bitmap.Clone();
+                }
+                var bitmap = DoBuildText(BuildParams(Text, TextFont, TextColor, Options));
+                var bytes = (long)bitmap.Width * bitmap.Height * 4 + Text.Length * 2L;
+                if (Text.Length > 0 && Text.Length <= 2048 && bytes <= MaxCachedBitmapBytes)
+                {
+                    while (BitmapOrder.Count >= MaxCachedBitmaps || _cachedBitmapBytes + bytes > MaxCachedBitmapBytes)
+                    {
+                        var oldest = BitmapOrder.Last;
+                        BitmapOrder.RemoveLast();
+                        Bitmaps.Remove(oldest.Value.Key);
+                        _cachedBitmapBytes -= oldest.Value.Bytes;
+                        oldest.Value.Bitmap.Dispose();
+                    }
+                    var entry = new CachedBitmap { Key = key, Bitmap = bitmap.Clone(), Bytes = bytes };
+                    Bitmaps.Add(key, BitmapOrder.AddFirst(entry));
+                    _cachedBitmapBytes += bytes;
+                }
+                return bitmap;
+            }
         }
 
         public Image<Rgba32> BuildText(string Text, Font TextFont, Color TextColor)
@@ -69,6 +120,8 @@ namespace Hedra.Engine.Rendering.UI
 
         private static string[] GetSplits(string Text)
         {
+            if (Text.IndexOf('$') < 0 && Text.IndexOf('\r') < 0 && Text.IndexOf('\n') < 0)
+                return Text.Length == 0 ? Array.Empty<string>() : new[] { Text };
             return Regex.Split(Text, @"(\$.+?{.*?})")
                 .SelectMany(S => Regex.Split(S, @"(\r\n|\n)"))
                 .Where(S => !string.IsNullOrEmpty(S))
@@ -156,15 +209,19 @@ namespace Hedra.Engine.Rendering.UI
         public static TextParams BuildParams(string Text, Font TextFont, Color TextColor, TextOptions Options)
         {
             var splits = GetSplits(Text);
-            var texts = splits.Select(StringMatch).ToArray();
-            var fullText = string.Join(string.Empty, texts);
-            return new TextParams(
-                texts,
-                texts.Select(S => fullText.IndexOf(S, StringComparison.Ordinal)).ToArray(),
-                splits.Select(S => FontMatch(S, TextFont)).ToArray(),
-                splits.Select(S => ColorMatch(S, TextColor)).ToArray(),
-                splits.Select(S => Options).ToArray()
-            );
+            var texts = new string[splits.Length];
+            var fonts = new Font[splits.Length];
+            var colors = new Color[splits.Length];
+            var options = new TextOptions[splits.Length];
+            for (var i = 0; i < splits.Length; i++)
+            {
+                Match(splits[i], TextColor, TextFont, out colors[i], out texts[i], out fonts[i]);
+                options[i] = Options;
+            }
+            var fullText = string.Concat(texts);
+            var offsets = new int[texts.Length];
+            for (var i = 0; i < texts.Length; i++) offsets[i] = fullText.IndexOf(texts[i], StringComparison.Ordinal);
+            return new TextParams(texts, offsets, fonts, colors, options);
         }
 
         private static void Match(string Text, Color Default, Font DefaultFont, out Color Color,
@@ -174,7 +231,7 @@ namespace Hedra.Engine.Rendering.UI
             Font = DefaultFont;
             Color = Default;
             const string regex = @"\$(.+?){.*?}";
-            if (Regex.IsMatch(Text, regex))
+            if (Text.IndexOf('$') >= 0 && Regex.IsMatch(Text, regex))
             {
                 Color = Replace(
                     ref Text,
@@ -218,18 +275,6 @@ namespace Hedra.Engine.Rendering.UI
             return Default;
         }
 
-        private static Font FontMatch(string Text, Font TextFont)
-        {
-            Match(Text, Color.Transparent, TextFont, out _, out _, out var font);
-            return font;
-        }
-
-        private static Color ColorMatch(string Text, Color Default)
-        {
-            Match(Text, Default, FontCache.Default, out var color, out _, out _);
-            return color;
-        }
-
         private static string StringMatch(string Text)
         {
             Match(Text, Color.Transparent, FontCache.Default, out _, out var cleaned, out _);
@@ -239,13 +284,8 @@ namespace Hedra.Engine.Rendering.UI
         private static Image<Rgba32> DoBuildText(TextParams Params)
         {
             if (Params.TextFonts.Any(F => F.Size > 128) || Params.Texts.Length == 0) return new Image<Rgba32>(1, 1);
-            Image<Rgba32> textBitmap;
-            lock (MeasureLock)
-            {
-                textBitmap = DoBuildTextSync(Params);
-            }
-
-            return textBitmap;
+            // BuildText holds MeasureLock across the cache lookup, layout, and rasterization.
+            return DoBuildTextSync(Params);
         }
 
         private static Image<Rgba32> DoBuildTextSync(TextParams Params)
@@ -253,51 +293,58 @@ namespace Hedra.Engine.Rendering.UI
             var layout = BuildLayout(Params);
             var bitmap = new Image<Rgba32>((int)Math.Ceiling(layout.Size.Width),
                 (int)Math.Ceiling(layout.Size.Height));
-            for (var i = 0; i < Params.Texts.Length; ++i)
+            var drawingOptions = CreateDrawingOptions();
+            bitmap.Mutate(context =>
             {
-                if (IsNewLine(Params.Texts[i])) continue;
-                var options = Params.TextOptions[i];
-                var offset = layout.Offsets[i];
-                var font = layout.Fonts[i];
-                if (options.HasStroke)
-                    AddStroke(bitmap, Params.Texts[i], font, offset, options, layout.Scale);
-                else
-                    AddBackground(bitmap, Params.Texts[i], font, Color.FromRgba(0, 0, 0, 90),
-                        offset + new Vector2(1.95f * layout.Scale));
-                AddBackground(bitmap, Params.Texts[i], font, Params.TextColors[i], offset);
-            }
+                for (var i = 0; i < Params.Texts.Length; ++i)
+                {
+                    if (IsNewLine(Params.Texts[i])) continue;
+                    var options = Params.TextOptions[i];
+                    var offset = layout.Offsets[i];
+                    var font = layout.Fonts[i];
+                    if (options.HasStroke)
+                        AddStroke(context, drawingOptions, Params.Texts[i], font, offset, options, layout.Scale);
+                    else
+                        AddBackground(context, drawingOptions, Params.Texts[i], font, Color.FromRgba(0, 0, 0, 90),
+                            offset + new Vector2(1.95f * layout.Scale));
+                    AddBackground(context, drawingOptions, Params.Texts[i], font, Params.TextColors[i], offset);
+                }
+            });
             return bitmap;
         }
 
         private static bool IsNewLine(string Text) => Text == "\n" || Text == "\r\n";
 
-        private static void AddStroke(Image<Rgba32> Bitmap, string Text, Font Font, Vector2 Offset,
+        private static void AddStroke(IImageProcessingContext Context, DrawingOptions DrawingOptions,
+            string Text, Font Font, Vector2 Offset,
             TextOptions Options, float Scale)
         {
             var width = Math.Max(0, Options.StrokeWidth) * Scale;
             var color = Options.StrokeColor.WithAlpha(80);
-            AddBackground(Bitmap, Text, Font, color, Offset + new Vector2(0, width));
-            AddBackground(Bitmap, Text, Font, color, Offset + new Vector2(width, 0));
-            AddBackground(Bitmap, Text, Font, color, Offset - new Vector2(0, width));
-            AddBackground(Bitmap, Text, Font, color, Offset - new Vector2(width, 0));
+            AddBackground(Context, DrawingOptions, Text, Font, color, Offset + new Vector2(0, width));
+            AddBackground(Context, DrawingOptions, Text, Font, color, Offset + new Vector2(width, 0));
+            AddBackground(Context, DrawingOptions, Text, Font, color, Offset - new Vector2(0, width));
+            AddBackground(Context, DrawingOptions, Text, Font, color, Offset - new Vector2(width, 0));
         }
 
-        private static void AddBackground(Image<Rgba32> Bmp, string Text, Font TextFont, Color TextColor,
-            Vector2 Offset)
+        private static void AddBackground(IImageProcessingContext Context, DrawingOptions Options,
+            string Text, Font Font, Color Color, Vector2 Offset)
         {
-            var brush = Brushes.Solid(TextColor);
-            var pen = Pens.Solid(TextColor, 0.25f);
-            var options = new DrawingOptions
+            Context.DrawText(Options, Text, Font, Brushes.Solid(Color), Pens.Solid(Color, .25f), Offset);
+        }
+
+        private static DrawingOptions CreateDrawingOptions()
+        {
+            return new DrawingOptions
             {
                 TextOptions =
                 {
                     DpiX = DefaultDPI,
                     DpiY = DefaultDPI,
                     HorizontalAlignment = HorizontalAlignment.Left,
-                    VerticalAlignment = VerticalAlignment.Top,
+                    VerticalAlignment = VerticalAlignment.Top
                 }
             };
-            Bmp.Mutate(X => X.DrawText(options, Text, TextFont, brush, pen, Offset));
         }
 
         public static SizeF CalculateNeededSize(TextParams Params)
@@ -323,7 +370,7 @@ namespace Hedra.Engine.Rendering.UI
             for (var i = 0; i < Params.Texts.Length; ++i)
             {
                 var renderer = new RendererOptions(fonts[i], DefaultDPI);
-                var defaultHeight = TextMeasurer.Measure("Mg", renderer).Height * 1.1f;
+                var defaultHeight = Metrics.GetValue(fonts[i], MeasureMetrics).Height;
                 lineHeight = Math.Max(lineHeight, defaultHeight);
                 if (IsNewLine(Params.Texts[i]))
                 {
@@ -346,6 +393,23 @@ namespace Hedra.Engine.Rendering.UI
                 Size = new SizeF(Math.Max(1, Math.Max(maxWidth, x) + padding * 2),
                     Math.Max(1, y + lineHeight + padding * 2))
             };
+        }
+
+        private static LineMetrics MeasureLineMetrics(Font Font)
+        {
+            return new LineMetrics { Height = TextMeasurer.Measure("Mg", new RendererOptions(Font, DefaultDPI)).Height * 1.1f };
+        }
+
+        private sealed class CachedBitmap
+        {
+            public TextRenderKey Key;
+            public Image<Rgba32> Bitmap;
+            public long Bytes;
+        }
+
+        private sealed class LineMetrics
+        {
+            public float Height;
         }
 
         private sealed class TextLayout

@@ -202,7 +202,6 @@ namespace Hedra.Rendering.UI
                 var text = Text;
                 var font = TextFont;
                 var color = TextColor;
-                var options = BuildTextOptions();
                 var rasterScale = TextProvider.RenderingScale;
 
                 if (text == string.Empty)
@@ -212,37 +211,42 @@ namespace Hedra.Rendering.UI
                 }
 
                 // Cache hits do not need a bitmap, measurement, or render-thread upload.
-                if (TextCache.TryUse(text, font, color, options, rasterScale, out var cachedId, out var cachedSize))
+                if (TextCache.TryUse(text, font, color, Stroke, StrokeWidth, StrokeColor, rasterScale,
+                    out var cachedId, out var cachedSize))
                 {
                     SetTexture(cachedId, cachedSize);
                     return;
                 }
 
-                var bitmap = BuildBitmap(text, color, font, options, out var measurements);
-                UIText.Scale = measurements / DefaultSize;
-                void UpdateTexture()
+                CreateTexture(text, font, color, BuildTextOptions(), rasterScale, version);
+            }
+        }
+
+        private void CreateTexture(string Text, Font Font, Color Color, TextOptions Options, float RasterScale, int Version)
+        {
+            var bitmap = BuildBitmap(Text, Color, Font, Options, out var measurements);
+            UIText.Scale = measurements / DefaultSize;
+            void UpdateTexture()
+            {
+                try
                 {
-                    try
+                    lock (_updateLock)
                     {
-                        lock (_updateLock)
-                        {
-                            if (_disposed || version != _updateVersion) return;
-                            var id = TextCache.UseOrCreate(text, font, color, options, rasterScale, bitmap,
-                                out var pixelSize);
-                            SetTexture(id, pixelSize);
-                        }
-                    }
-                    finally
-                    {
-                        bitmap.Bitmap.Dispose();
+                        if (_disposed || Version != _updateVersion) return;
+                        var id = TextCache.UseOrCreate(Text, Font, Color, Options, RasterScale, bitmap,
+                            out var pixelSize);
+                        SetTexture(id, pixelSize);
                     }
                 }
-
-                if (Thread.CurrentThread.ManagedThreadId != Engine.Loader.Hedra.RenderingThreadId)
-                    Executer.ExecuteOnMainThread(UpdateTexture);
-                else
-                    UpdateTexture();
+                finally
+                {
+                    bitmap.Bitmap.Dispose();
+                }
             }
+            if (Thread.CurrentThread.ManagedThreadId != Engine.Loader.Hedra.RenderingThreadId)
+                Executer.ExecuteOnMainThread(UpdateTexture);
+            else
+                UpdateTexture();
         }
 
         private void SetTexture(uint Id, Vector2 PixelSize)

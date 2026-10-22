@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Numerics;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Rendering;
-using Hedra.Rendering.UI;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 
@@ -13,7 +11,7 @@ namespace Hedra.Engine.Rendering.UI
     public static class TextCache
     {
         private static readonly object Lock = new object();
-        private static readonly Dictionary<CacheKey, CacheEntry> Cache = new Dictionary<CacheKey, CacheEntry>();
+        private static readonly Dictionary<TextRenderKey, CacheEntry> Cache = new Dictionary<TextRenderKey, CacheEntry>();
         private static readonly Dictionary<uint, CacheEntry> ById = new Dictionary<uint, CacheEntry>();
 
         public static int Count
@@ -29,9 +27,16 @@ namespace Hedra.Engine.Rendering.UI
         public static bool TryUse(string Text, Font Font, Color Color, TextOptions Options, float RasterScale,
             out uint Id, out Vector2 PixelSize)
         {
+            return TryUse(Text, Font, Color, Options.HasStroke, Options.StrokeWidth, Options.StrokeColor,
+                RasterScale, out Id, out PixelSize);
+        }
+
+        public static bool TryUse(string Text, Font Font, Color Color, bool Stroke, float StrokeWidth,
+            Color StrokeColor, float RasterScale, out uint Id, out Vector2 PixelSize)
+        {
             lock (Lock)
             {
-                if (Cache.TryGetValue(new CacheKey(Text, Font, Color, Options, RasterScale), out var entry))
+                if (Cache.TryGetValue(new TextRenderKey(Text, Font, Color, Stroke, StrokeWidth, StrokeColor, RasterScale), out var entry))
                 {
                     entry.Uses++;
                     Id = entry.Id;
@@ -49,7 +54,7 @@ namespace Hedra.Engine.Rendering.UI
         {
             lock (Lock)
             {
-                var key = new CacheKey(Text, Font, Color, Options, RasterScale);
+                var key = new TextRenderKey(Text, Font, Color, Options, RasterScale);
                 if (Cache.TryGetValue(key, out var entry))
                 {
                     entry.Uses++;
@@ -85,42 +90,9 @@ namespace Hedra.Engine.Rendering.UI
             }
         }
 
-        private readonly struct CacheKey : IEquatable<CacheKey>
-        {
-            private readonly string _text;
-            private readonly FontEntry _font;
-            private readonly Color _color;
-            private readonly bool _stroke;
-            private readonly float _strokeWidth;
-            private readonly Color _strokeColor;
-            private readonly float _rasterScale;
-
-            public CacheKey(string Text, Font Font, Color Color, TextOptions Options, float RasterScale)
-            {
-                _text = Text;
-                _font = new FontEntry(Font.Family, Font.Size, Font.Instance.Description.Style);
-                _color = Color;
-                _stroke = Options.HasStroke;
-                _strokeWidth = Options.StrokeWidth;
-                _strokeColor = Options.StrokeColor;
-                _rasterScale = RasterScale;
-            }
-
-            public bool Equals(CacheKey Other)
-            {
-                return _text == Other._text && _font.Equals(Other._font) && _color.Equals(Other._color) &&
-                       _stroke == Other._stroke && _strokeWidth.Equals(Other._strokeWidth) &&
-                       _strokeColor.Equals(Other._strokeColor) && _rasterScale.Equals(Other._rasterScale);
-            }
-
-            public override bool Equals(object Obj) => Obj is CacheKey other && Equals(other);
-            public override int GetHashCode() => HashCode.Combine(_text, _font, _color, _stroke,
-                _strokeWidth, _strokeColor, _rasterScale);
-        }
-
         private sealed class CacheEntry
         {
-            public CacheEntry(CacheKey Key, uint Id, Vector2 PixelSize)
+            public CacheEntry(TextRenderKey Key, uint Id, Vector2 PixelSize)
             {
                 this.Key = Key;
                 this.Id = Id;
@@ -128,7 +100,7 @@ namespace Hedra.Engine.Rendering.UI
                 Uses = 1;
             }
 
-            public CacheKey Key { get; }
+            public TextRenderKey Key { get; }
             public uint Id { get; }
             public Vector2 PixelSize { get; }
             public int Uses { get; set; }

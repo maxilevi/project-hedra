@@ -7,7 +7,7 @@ namespace Hedra.Rendering.UI
 {
     public static class FontCache
     {
-        private static readonly Dictionary<FontEntry, Font> CachedFonts = new Dictionary<FontEntry, Font>();
+        private static readonly Dictionary<FontKey, Font> CachedFonts = new Dictionary<FontKey, Font>();
         private static FontFamily _normalFamily;
         private static FontFamily _boldFamily;
 
@@ -45,7 +45,7 @@ namespace Hedra.Rendering.UI
         {
             lock (CachedFonts)
             {
-                var entry = new FontEntry(Family, Size, Style);
+                var entry = new FontKey(Family, Size, Style);
                 if (!CachedFonts.TryGetValue(entry, out var font))
                 {
                     font = new Font(entry.Family, entry.Size, entry.Style);
@@ -64,6 +64,24 @@ namespace Hedra.Rendering.UI
         {
             return Get(_boldFamily, Size, FontStyle.Bold);
         }
+    }
+
+    internal readonly struct FontKey : IEquatable<FontKey>
+    {
+        public readonly FontFamily Family;
+        public readonly float Size;
+        public readonly FontStyle Style;
+
+        public FontKey(FontFamily Family, float Size, FontStyle Style)
+        {
+            this.Family = Family;
+            this.Size = Size;
+            this.Style = Style;
+        }
+
+        public bool Equals(FontKey Other) => Equals(Family, Other.Family) && Size.Equals(Other.Size) && Style == Other.Style;
+        public override bool Equals(object Obj) => Obj is FontKey other && Equals(other);
+        public override int GetHashCode() => System.HashCode.Combine(Family.Name, Family.Culture.Name, Size, Style);
     }
 
     public class FontEntry : IEquatable<FontEntry>

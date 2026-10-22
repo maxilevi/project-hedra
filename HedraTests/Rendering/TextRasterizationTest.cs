@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Game;
 using Hedra.Rendering.UI;
@@ -28,6 +29,7 @@ namespace HedraTests.Rendering
         {
             GameSettings.Height = _height;
             GameSettings.UIScaling = _scale;
+            TextProvider.ClearBitmapCache();
         }
 
         [TestCase(.5f, 1080)]
@@ -78,6 +80,113 @@ namespace HedraTests.Rendering
             Assert.Greater(InkSize(thick).Width, InkSize(thin).Width);
             Assert.Greater(InkSize(thick).Height, InkSize(thin).Height);
             AssertTransparentBorder(thick);
+        }
+
+        [Test]
+        public void CachedBitmapsRemainIndependentOfCallerMutationAndDisposal()
+        {
+            TextProvider.ClearBitmapCache();
+            var provider = new TextProvider();
+            var font = FontCache.GetNormal(18);
+            const string text = "cached bitmap ownership";
+            using var expected = new ReferenceTextProvider().BuildText(text, font, Color.White);
+            using (var first = provider.BuildText(text, font, Color.White)) first[0, 0] = Color.Magenta;
+            using var second = provider.BuildText(text, font, Color.White);
+            Assert.True(expected.TryGetSinglePixelSpan(out var expectedPixels));
+            Assert.True(second.TryGetSinglePixelSpan(out var actualPixels));
+            Assert.True(expectedPixels.SequenceEqual(actualPixels));
+            Assert.AreEqual(1, TextProvider.CachedBitmapCount);
+            TextProvider.ClearBitmapCache();
+            // Clearing the cache must not dispose the image owned by the caller.
+            Assert.AreEqual(expected[0, 0], second[0, 0]);
+        }
+
+        [Test]
+        public void BitmapCacheEvictsEntriesWithinItsMemoryAndCountBudgets()
+        {
+            TextProvider.ClearBitmapCache();
+            var provider = new TextProvider();
+            var font = FontCache.GetNormal(6);
+            for (var i = 0; i < TextProvider.MaxCachedBitmaps + 3; i++)
+            {
+                using var image = provider.BuildText("entry " + i, font, Color.White);
+                Assert.LessOrEqual(TextProvider.CachedBitmapCount, TextProvider.MaxCachedBitmaps);
+                Assert.LessOrEqual(TextProvider.CachedBitmapBytes, TextProvider.MaxCachedBitmapBytes);
+            }
+            Assert.AreEqual(TextProvider.MaxCachedBitmaps, TextProvider.CachedBitmapCount);
+            TextProvider.ClearBitmapCache();
+            Assert.AreEqual(0, TextProvider.CachedBitmapCount);
+            Assert.AreEqual(0, TextProvider.CachedBitmapBytes);
+        }
+
+        [Test]
+        public void BitmapCacheSeparatesFontsColorsAndMutableStrokeOptions()
+        {
+            var provider = new TextProvider();
+            var options = new TextOptions();
+            const string text = "cache rendering inputs";
+            foreach (var font in new[] { FontCache.GetNormal(16), FontCache.GetBold(16), FontCache.GetNormal(18) })
+            foreach (var color in new[] { Color.White, Color.Red, Color.FromRgba(255, 255, 255, 100) })
+            for (var stroke = 0; stroke < 3; stroke++)
+            {
+                options.HasStroke = stroke != 0;
+                options.StrokeWidth = stroke == 1 ? 1.75f : 3;
+                options.StrokeColor = stroke == 1 ? Color.Black : Color.Blue;
+                using var expected = new ReferenceTextProvider().BuildText(text, font, color, options);
+                using var actual = provider.BuildText(text, font, color, options);
+                Assert.AreEqual(expected.Size(), actual.Size());
+                Assert.True(expected.TryGetSinglePixelSpan(out var expectedPixels));
+                Assert.True(actual.TryGetSinglePixelSpan(out var actualPixels));
+                Assert.True(expectedPixels.SequenceEqual(actualPixels));
+            }
+        }
+
+        [Test]
+        public void BitmapCacheEvictsLargeImagesBeforeExceedingTheByteBudget()
+        {
+            TextProvider.ClearBitmapCache();
+            var provider = new TextProvider();
+            var font = FontCache.GetNormal(18);
+            var text = new string('M', 1024);
+            for (var i = 0; i < 5; i++)
+            {
+                using var image = provider.BuildText(text + i, font, Color.White);
+                Assert.LessOrEqual(TextProvider.CachedBitmapBytes, TextProvider.MaxCachedBitmapBytes);
+            }
+            Assert.Less(TextProvider.CachedBitmapCount, 5, "The byte budget must evict images before the entry limit");
+            TextProvider.ClearBitmapCache();
+        }
+
+        public static IEnumerable<TestCaseData> EquivalenceCases()
+        {
+            foreach (var text in new[] { "Health: 123 / 456", "$(BOLD)(ORANGE){Quest} $(GREEN){ready}",
+                "a$(RED){a}a$(BIGGER){BIG}$(SMALLER){small}", "\nfirst\r\n\nlast", "", "  spaces  ",
+                "$(CAPS){mixed Case}", "$(RED){literal RED} trailing", "malformed ${format", "café Ελληνικά 中文" })
+            foreach (var scale in new[] { .5f, 1f, 1.5f })
+            foreach (var stroke in new[] { false, true })
+                yield return new TestCaseData(text, scale, stroke);
+        }
+
+        [TestCaseSource(nameof(EquivalenceCases))]
+        public void OptimizedRendererMatchesReferencePixels(string Text, float Scale, bool Stroke)
+        {
+            GameSettings.UIScaling = Scale;
+            var font = FontCache.GetNormal(18);
+            var options = new TextOptions { HasStroke = Stroke, StrokeWidth = 2.5f,
+                StrokeColor = Color.FromRgba(40, 80, 120, 200) };
+            var color = Color.FromRgba(180, 210, 220, 170);
+            var expectedParams = ReferenceTextProvider.BuildParams(Text, font, color, options);
+            var actualParams = TextProvider.BuildParams(Text, font, color, options);
+            Assert.AreEqual(expectedParams.Texts, actualParams.Texts);
+            Assert.AreEqual(expectedParams.TextFonts, actualParams.TextFonts);
+            Assert.AreEqual(expectedParams.TextColors, actualParams.TextColors);
+            Assert.AreEqual(expectedParams.Offsets, actualParams.Offsets);
+            using var expected = new ReferenceTextProvider().BuildText(Text, font, color, options);
+            using var actual = new TextProvider().BuildText(Text, font, color, options);
+            Assert.AreEqual(expected.Size(), actual.Size());
+            Assert.True(expected.TryGetSinglePixelSpan(out var expectedPixels));
+            Assert.True(actual.TryGetSinglePixelSpan(out var actualPixels));
+            Assert.True(expectedPixels.SequenceEqual(actualPixels), "Rasterization must preserve every RGBA pixel");
         }
 
         private static SizeF InkSize(Image<Rgba32> Bitmap)
