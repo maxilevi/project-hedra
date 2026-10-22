@@ -8,8 +8,6 @@
  */
 
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using Hedra.Engine.IO;
 
 namespace Hedra.Engine.Generation
 {
@@ -63,16 +61,9 @@ namespace Hedra.Engine.Generation
                     var CurrentVersion = Br.ReadSingle();
                     if (CurrentVersion < 1.3f)
                     {
-                        Log.WriteLine("Old Map Format -> Converting!");
-
-                        using (var Ms2 = new MemoryStream(arrBytes))
-                        {
-                            var binForm = new BinaryFormatter();
-                            var obj = (HeightmapData)binForm.Deserialize(Ms2);
-                            Heightmap = obj.Heightmap;
-                            HeightmapType = obj.HeightmapType;
-                            return this;
-                        }
+                        throw new InvalidDataException(
+                            "Heightmaps older than version 1.3 use the unsupported BinaryFormatter format. " +
+                            "Re-export the heightmap with a version 1.3 writer before loading it.");
                     }
 
                     Heightmap = new float[Br.ReadInt32()][];

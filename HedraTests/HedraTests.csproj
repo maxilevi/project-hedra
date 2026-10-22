@@ -1,6 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp6.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <OutputType>Library</OutputType>
     <LangVersion>10</LangVersion>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -26,10 +26,10 @@
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
     <PackageReference Include="NUnit" Version="3.13.2" />
   </ItemGroup>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="&quot;$(MSBuildProjectDirectory)/../utilities/make_atlas.sh&quot;" />
-    <Exec Command="dotnet &quot;$(MSBuildProjectDirectory)/../AssetBuilder/bin/Release/netcoreapp6.0/AssetBuilder.dll&quot; &quot;$(TargetDir)/Shaders/&quot; &quot;$(TargetDir)/data1.db&quot; normal text" />
-    <Exec Command="dotnet &quot;$(MSBuildProjectDirectory)/../AssetBuilder/bin/Release/netcoreapp6.0/AssetBuilder.dll&quot; &quot;$(TargetDir)/Sounds/&quot; &quot;$(TargetDir)/data2.db&quot; normal binary" />
-    <Exec Command="dotnet &quot;$(MSBuildProjectDirectory)/../AssetBuilder/bin/Release/netcoreapp6.0/AssetBuilder.dll&quot; &quot;$(TargetDir)/Assets/&quot; &quot;$(TargetDir)/data3.db&quot; normal binary" />
+  <Target Name="CopyPackedHedraAssets" AfterTargets="Build" Condition="'$(HedraPackAssets)' != 'false'">
+    <ItemGroup>
+      <_PackedHedraAssets Include="$(MSBuildProjectDirectory)/../Hedra/bin/$(Configuration)/$(TargetFramework)/data1.db;$(MSBuildProjectDirectory)/../Hedra/bin/$(Configuration)/$(TargetFramework)/data2.db;$(MSBuildProjectDirectory)/../Hedra/bin/$(Configuration)/$(TargetFramework)/data3.db" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_PackedHedraAssets)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
   </Target>
 </Project>

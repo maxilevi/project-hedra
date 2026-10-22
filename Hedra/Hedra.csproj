@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>netcoreapp6.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
         <OutputType>Exe</OutputType>
         <NoWin32Manifest>False</NoWin32Manifest>
@@ -14272,10 +14272,7 @@
         <Content Include="x64\glfw3.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="x64\libhedracore.so" Condition=" '$(OS)' != 'Windows_NT' ">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="x86\libhedracore.so" Condition=" '$(OS)' != 'Windows_NT' ">
+        <Content Include="x64\libhedracore.so" Condition="$([MSBuild]::IsOSPlatform('Linux'))">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
         <Content Include="x64\hedracore.dll" Condition=" '$(OS)' == 'Windows_NT' ">
@@ -14308,7 +14305,8 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Framework\Framework.csproj" />
-        <ProjectReference Include="..\HedraLauncher\HedraLauncher.csproj" />
+        <ProjectReference Include="..\AssetBuilder\AssetBuilder.csproj" ReferenceOutputAssembly="false"
+                          GlobalPropertiesToRemove="RuntimeIdentifier;SelfContained;Platform;PlatformTarget" />
     </ItemGroup>
     <ItemGroup>
         <Folder Include="Assets\Items\Boots\" />
@@ -14362,14 +14360,31 @@
     <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
         <DefineConstants>_WINDOWS</DefineConstants>
     </PropertyGroup>
-    <Target Name="PreBuild" AfterTargets="PreBuildEvent">
-        <Exec Command="dotnet build -c Release &quot;$(MSBuildProjectDirectory)/../AssetBuilder/AssetBuilder.csproj&quot;" />
+    <Target Name="PackHedraAssets" AfterTargets="Build" Condition="'$(HedraPackAssets)' != 'false'">
+        <PropertyGroup>
+            <PackedAssetDirectory>$(MSBuildProjectDirectory)/../.ci/assets/$(Configuration)/</PackedAssetDirectory>
+            <AssetBuilderDll>$(MSBuildProjectDirectory)/../AssetBuilder/bin/$(Configuration)/net10.0/AssetBuilder.dll</AssetBuilderDll>
+        </PropertyGroup>
+        <MakeDir Directories="$(PackedAssetDirectory)" />
+        <Exec Command="dotnet &quot;$(AssetBuilderDll)&quot; &quot;$(TargetDir)Shaders/&quot; &quot;$(PackedAssetDirectory)data1.db&quot; normal text" />
+        <Exec Command="dotnet &quot;$(AssetBuilderDll)&quot; &quot;$(TargetDir)Sounds/&quot; &quot;$(PackedAssetDirectory)data2.db&quot; normal binary" />
+        <Exec Command="dotnet &quot;$(AssetBuilderDll)&quot; &quot;$(TargetDir)Assets/&quot; &quot;$(PackedAssetDirectory)data3.db&quot; normal binary" />
+        <ItemGroup>
+            <_PackedAssets Include="$(PackedAssetDirectory)data1.db;$(PackedAssetDirectory)data2.db;$(PackedAssetDirectory)data3.db" />
+        </ItemGroup>
+        <Copy SourceFiles="@(_PackedAssets)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
     </Target>
-    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-        <Exec Command="&quot;$(MSBuildProjectDirectory)/../utilities/make_atlas.sh&quot;" />
-        <Exec Command="dotnet &quot;$(MSBuildProjectDirectory)/../AssetBuilder/bin/Release/netcoreapp6.0/AssetBuilder.dll&quot; &quot;$(TargetDir)/Shaders/&quot; &quot;$(TargetDir)/data1.db&quot; normal text" />
-        <Exec Command="dotnet &quot;$(MSBuildProjectDirectory)/../AssetBuilder/bin/Release/netcoreapp6.0/AssetBuilder.dll&quot; &quot;$(TargetDir)/Sounds/&quot; &quot;$(TargetDir)/data2.db&quot; normal binary" />
-        <Exec Command="dotnet &quot;$(MSBuildProjectDirectory)/../AssetBuilder/bin/Release/netcoreapp6.0/AssetBuilder.dll&quot; &quot;$(TargetDir)/Assets/&quot; &quot;$(TargetDir)/data3.db&quot; normal binary" />
+    <Target Name="PublishPackedHedraAssets" AfterTargets="ComputeFilesToPublish" DependsOnTargets="PackHedraAssets"
+            Condition="'$(HedraPackAssets)' != 'false'">
+        <ItemGroup>
+            <ResolvedFileToPublish Remove="$(TargetDir)data1.db;$(TargetDir)data2.db;$(TargetDir)data3.db" />
+            <ResolvedFileToPublish Include="$(TargetDir)data1.db" RelativePath="data1.db"
+                                   CopyToPublishDirectory="PreserveNewest" />
+            <ResolvedFileToPublish Include="$(TargetDir)data2.db" RelativePath="data2.db"
+                                   CopyToPublishDirectory="PreserveNewest" />
+            <ResolvedFileToPublish Include="$(TargetDir)data3.db" RelativePath="data3.db"
+                                   CopyToPublishDirectory="PreserveNewest" />
+        </ItemGroup>
     </Target>
     <ProjectExtensions />
 </Project>

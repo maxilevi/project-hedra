@@ -133,3 +133,72 @@ The build process is pretty straightforward.
 
 You can check the GitHub actions workflows for some examples on Linux and Windows.
 
+
+## CI and publishing
+
+Builds use the .NET SDK pinned in `global.json` and target .NET 10 LTS. Install
+that SDK before building locally. The C# language version remains 10. Initialize
+only the public dependencies required by the build:
+
+```sh
+git submodule update --init --depth 1 -- hedra-core project-hedra-assets
+```
+
+`hedra-tools` is optional and is not fetched by CI. Pull requests, including forks,
+can run the checks without the old `HEDRA_CI` secret. CI uses read-only repository
+permissions and does not expose Steam credentials to build jobs.
+
+On Linux or Windows (Git Bash), run the appropriate `build-deps-*.sh`, then:
+
+```sh
+dotnet restore "Project Hedra.sln" --locked-mode
+dotnet build "Project Hedra.sln" -c Release --no-restore
+dotnet test HedraTests/HedraTests.csproj -c Release --no-build --no-restore
+```
+
+The lockfiles include the supported runtime identifiers. Restore the solution
+before publishing, then use `./scripts/publish.sh linux-x64 Release` (or `win-x64`
+and `win-x86`). Publishing reuses the archives produced by the tested build in
+`.ci/assets/<configuration>` and stages the Steam depots under `.ci/publish`.
+This avoids repacking assets for each architecture. The asset compiler is a
+project dependency; the tests reuse its output instead of packing it again.
+To update dependencies intentionally, run `dotnet restore "Project Hedra.sln"
+--force-evaluate` and commit the lockfile changes.
+
+The shared validation workflow runs the full test suite on Ubuntu 24.04 and
+Windows 2022. macOS 15 Intel builds the solution and native library and runs the
+portable allocator, block, math, and heightmap tests. This checks the committed
+code without requiring the separate macOS game/physics port. It does not claim
+full macOS gameplay or Apple Silicon coverage. TRX results and MSBuild binary logs
+are retained for seven days, including on failures.
+
+Native CMake outputs are cached per runner image, architecture, native revision,
+and build-script inputs. Builds remain incremental and run without `sudo`.
+Linux builds x64 once; Windows builds real Win32 and x64 variants. A headless
+Python check calls all nine noise exports with positive and negative seeds,
+all six perturbation modes, and SIMD-aligned and tail-sized sample grids. When a
+PR or push changes the native submodule commit, CI also builds its previous
+revision and compares outputs bit for bit. This baseline is supplied to managed
+noise/mesh equivalence fixtures when those fixtures are present. The legacy
+native library can return NaNs for normalization modes; the check preserves those
+bytes in comparisons and requires finite results in non-normalizing modes.
+
+The **Native CPU benchmark** workflow is manually dispatched and has no timing
+threshold in required checks. It reports warmed median noise timings, including
+Python copying and validation; it does not measure world generation or FPS.
+
+The **Publish Hedra** workflow is also manually dispatched. It validates the
+selected Debug/Release configuration, runs the shared checks on the selected
+commit, publishes Windows x64/x86 and Linux x64 packages, then deploys those
+artifacts to Steam's `test` branch. A failed check prevents deployment. Deployments
+are serialized, and Linux packages use a tar archive to preserve executable
+permissions through GitHub artifacts. The deploy job needs `STEAM_USERNAME`,
+`STEAM_PASSWORD`, and `STEAM_CONFIG_VDF`; the pinned Steam action no longer uses
+SSFN inputs. Dependabot checks action pins weekly. Repository branch protection
+should require the validation checks before merging.
+
+.NET 10 no longer implements `BinaryFormatter`. Heightmap format 1.3 continues to
+round-trip; older serialized heightmaps now produce an explicit re-export error.
+They must be converted with a legacy writer before use. Existing NuGet dependency
+advisories remain visible during restore; this CI change does not upgrade the
+rendering, scripting, or image-processing dependencies.

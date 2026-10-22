@@ -13,3 +13,7 @@ nsight*
 
 /Hedra/x64/libhedracore.so
 /Hedra/x86/libhedracore.so
+
+/.ci/
+/Hedra/x64/hedracore.dll
+/Hedra/x86/hedracore.dll

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 cd "$(dirname "$0")"
-
-./scripts/build-hedracore-windows.sh
+exec ./scripts/build-hedracore-windows.sh

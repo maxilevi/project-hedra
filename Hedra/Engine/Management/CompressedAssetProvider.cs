@@ -74,7 +74,7 @@ namespace Hedra.Engine.Management
             {
                 StartInfo =
                 {
-                    FileName = $@"{AppPath}../../../../AssetBuilder/bin/Release/netcoreapp6.0/AssetBuilder.exe",
+                    FileName = $@"{AppPath}../../../../AssetBuilder/bin/Release/net10.0/AssetBuilder.exe",
                     Arguments = $"\"{AppPath}/Shaders/\" \"{AppPath}/data1.db\" normal text",
                     UseShellExecute = false,
                     RedirectStandardOutput = true,

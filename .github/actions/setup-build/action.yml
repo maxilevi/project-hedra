@@ -1,0 +1,35 @@
+name: Set up Hedra build
+description: Restore locked managed dependencies and build cached native dependencies.
+runs:
+  using: composite
+  steps:
+    - name: Initialize build submodules
+      shell: bash
+      run: |
+        git submodule sync -- hedra-core project-hedra-assets
+        git submodule update --init --depth 1 -- hedra-core project-hedra-assets
+    - name: Set up Python
+      uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+      with:
+        python-version: '3.13'
+    - name: Set up .NET
+      uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
+      with:
+        global-json-file: global.json
+        cache: true
+        cache-dependency-path: '*/packages.lock.json'
+    - name: Restore managed dependencies
+      shell: bash
+      run: dotnet restore 'Project Hedra.sln' --locked-mode
+    - name: Identify native revision
+      id: native-key
+      shell: bash
+      run: echo "revision=$(git -C hedra-core rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+    - name: Restore native build cache
+      uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+      with:
+        path: .ci/native
+        key: native-${{ runner.os }}-${{ runner.arch }}-${{ env.ImageVersion }}-${{ steps.native-key.outputs.revision }}-${{ hashFiles('scripts/build-hedracore*.sh') }}
+    - name: Build native dependencies
+      shell: bash
+      run: ./scripts/build-hedracore.sh
