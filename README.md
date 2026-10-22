@@ -1,4 +1,7 @@
 # Project Hedra
+
+All code at the [`pre-ai`](https://github.com/maxilevi/project-hedra/tree/pre-ai) tag and in its earlier history was written before AI-assisted development.
+
 ![](https://github.com/maxilevi/project-hedra/actions/workflows/main.yml/badge.svg)
 ![](https://github.com/maxilevi/project-hedra/actions/workflows/deploy.yml/badge.svg)
 
