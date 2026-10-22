@@ -100,13 +100,15 @@ namespace Hedra.Engine.Rendering.Core
 
         public static void Dispose(uint Id)
         {
+            if (Id == 0) return;
             if (TextCache.Exists(Id))
                 throw new ArgumentOutOfRangeException("Textures should not be in any cache when disposing of them.");
 
+            // Stop offering this texture to cache lookups while its GPU deletion is queued.
+            Textures.Remove(Id);
             void DisposeProcess()
             {
-                //Renderer.TextureHandler.Delete(Id);
-                Textures.Remove(Id);
+                Renderer.Provider.DeleteTextures(1, Id);
             }
 
             if (Thread.CurrentThread.ManagedThreadId != Loader.Hedra.RenderingThreadId)

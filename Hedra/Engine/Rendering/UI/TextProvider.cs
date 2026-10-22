@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing.Text;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -18,6 +17,7 @@ namespace Hedra.Engine.Rendering.UI
     public class TextProvider : ITextProvider
     {
         public const int DefaultDPI = 96;
+        public static float RenderingScale => GameSettings.Height / 1080f * GameSettings.UIScaling;
         private static readonly Dictionary<string, Color> ColorMap;
         private static readonly Dictionary<string, Font> FontMap;
         private static readonly Dictionary<string, float> SizeMap;
@@ -250,62 +250,36 @@ namespace Hedra.Engine.Rendering.UI
 
         private static Image<Rgba32> DoBuildTextSync(TextParams Params)
         {
-            var size = CalculateNeededSize(Params);
-            var textBitmap = new Image<Rgba32>((int)Math.Ceiling(Math.Max(size.Width, 1)),
-                (int)Math.Ceiling(Math.Max(size.Height, 1)));
-            
-
-            var offset = PointF.Empty;
-            var bounds = Vector2.Zero;
+            var layout = BuildLayout(Params);
+            var bitmap = new Image<Rgba32>((int)Math.Ceiling(layout.Size.Width),
+                (int)Math.Ceiling(layout.Size.Height));
             for (var i = 0; i < Params.Texts.Length; ++i)
             {
-                if (Params.Texts[i] == Environment.NewLine)
-                {
-                    offset = new PointF(0, offset.Y + bounds.Y);
-                    continue;
-                }
-
-                /* Draw shadows & strokes */
-                if (Params.TextOptions[i].HasStroke)
-                    AddStroke(textBitmap, Params.Texts[i], Params.TextFonts[i], offset, Params.TextOptions[i]);
+                if (IsNewLine(Params.Texts[i])) continue;
+                var options = Params.TextOptions[i];
+                var offset = layout.Offsets[i];
+                var font = layout.Fonts[i];
+                if (options.HasStroke)
+                    AddStroke(bitmap, Params.Texts[i], font, offset, options, layout.Scale);
                 else
-                    AddShadows(textBitmap, Params.Texts[i], Params.TextFonts[i], offset);
-                
-                AddBackground(textBitmap, Params.Texts[i], Params.TextFonts[i], Params.TextColors[i], offset);
-                
-                var rectangle = TextMeasurer.Measure(Params.Texts[i], new RendererOptions(Params.TextFonts[i], DefaultDPI));
-
-                bounds = rectangle.Size;
-                offset = new PointF(
-                    bounds.X + offset.X,
-                    offset.Y
-                );
-
+                    AddBackground(bitmap, Params.Texts[i], font, Color.FromRgba(0, 0, 0, 90),
+                        offset + new Vector2(1.95f * layout.Scale));
+                AddBackground(bitmap, Params.Texts[i], font, Params.TextColors[i], offset);
             }
-
-            return textBitmap;
+            return bitmap;
         }
 
-        private static void AddStroke(Image<Rgba32> Bmp, string Text, Font TextFont, PointF Offset, TextOptions Options)
-        {
-            AddBackground(Bmp, Text, TextFont,
-                Options.StrokeColor.WithAlpha(80),
-                new Vector2(Offset.X, Offset.Y + 1.75f));
-            AddBackground(Bmp, Text, TextFont,
-                Options.StrokeColor.WithAlpha(80),
-                new Vector2(Offset.X + 1.75f, Offset.Y));
-            AddBackground(Bmp, Text, TextFont,
-                Options.StrokeColor.WithAlpha(80),
-                new Vector2(Offset.X, Offset.Y - 1.75f));
-            AddBackground(Bmp, Text, TextFont,
-                Options.StrokeColor.WithAlpha(80),
-                new Vector2(Offset.X - 1.75f, Offset.Y));
-        }
+        private static bool IsNewLine(string Text) => Text == "\n" || Text == "\r\n";
 
-        private static void AddShadows(Image<Rgba32> Bmp, string Text, Font TextFont, PointF Offset)
+        private static void AddStroke(Image<Rgba32> Bitmap, string Text, Font Font, Vector2 Offset,
+            TextOptions Options, float Scale)
         {
-            AddBackground(Bmp, Text, TextFont, Color.FromRgba(0, 0, 0, 90),
-                new Vector2(Offset.X + 1.95f, Offset.Y + 1.95f));
+            var width = Math.Max(0, Options.StrokeWidth) * Scale;
+            var color = Options.StrokeColor.WithAlpha(80);
+            AddBackground(Bitmap, Text, Font, color, Offset + new Vector2(0, width));
+            AddBackground(Bitmap, Text, Font, color, Offset + new Vector2(width, 0));
+            AddBackground(Bitmap, Text, Font, color, Offset - new Vector2(0, width));
+            AddBackground(Bitmap, Text, Font, color, Offset - new Vector2(width, 0));
         }
 
         private static void AddBackground(Image<Rgba32> Bmp, string Text, Font TextFont, Color TextColor,
@@ -328,32 +302,58 @@ namespace Hedra.Engine.Rendering.UI
 
         public static SizeF CalculateNeededSize(TextParams Params)
         {
-            var max = SizeF.Empty;
-            var sizes = new SizeF[Params.Texts.Length];
-            var fullString = string.Join(string.Empty, Params.Texts);
-            var dpi = new Vector2(1, 1);
+            lock (MeasureLock) return BuildLayout(Params).Size;
+        }
 
+        private static TextLayout BuildLayout(TextParams Params)
+        {
+            var scale = RenderingScale;
+            var fonts = Params.TextFonts.Select(F => FontCache.Get(F, F.Size * scale)).ToArray();
+            var offsets = new Vector2[Params.Texts.Length];
+            var padding = 1.95f * scale + 1;
+            if (Params.TextOptions != null)
+                foreach (var options in Params.TextOptions)
+                    if (options.HasStroke)
+                        padding = Math.Max(padding, Math.Max(0, options.StrokeWidth) * scale + 1);
+            padding = (float)Math.Ceiling(padding);
+            var x = 0f;
+            var y = 0f;
+            var lineHeight = 0f;
+            var maxWidth = 0f;
             for (var i = 0; i < Params.Texts.Length; ++i)
             {
-                if (Params.Texts[i] == Environment.NewLine) continue;
-                var rectangle = TextMeasurer.Measure(fullString, new RendererOptions(Params.TextFonts[i], DefaultDPI)
+                var renderer = new RendererOptions(fonts[i], DefaultDPI);
+                var defaultHeight = TextMeasurer.Measure("Mg", renderer).Height * 1.1f;
+                lineHeight = Math.Max(lineHeight, defaultHeight);
+                if (IsNewLine(Params.Texts[i]))
                 {
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Center,
-                });
-                sizes[i] = new SizeF(rectangle.Width, rectangle.Height * 1.1f);
+                    maxWidth = Math.Max(maxWidth, x);
+                    x = 0;
+                    y += lineHeight;
+                    lineHeight = defaultHeight;
+                    continue;
+                }
+                var bounds = TextMeasurer.Measure(Params.Texts[i], renderer);
+                offsets[i] = new Vector2(x + padding, y + padding);
+                x += bounds.Width;
+                lineHeight = Math.Max(lineHeight, bounds.Height * 1.1f);
             }
-
-            var bounds = SizeF.Empty;
-            var offset = SizeF.Empty;
-            for (var i = 0; i < sizes.Length; ++i)
+            return new TextLayout
             {
-                max = new SizeF(Math.Max(sizes[i].Width, max.Width), Math.Max(max.Height, sizes[i].Height));
-            }
+                Fonts = fonts,
+                Offsets = offsets,
+                Scale = scale,
+                Size = new SizeF(Math.Max(1, Math.Max(maxWidth, x) + padding * 2),
+                    Math.Max(1, y + lineHeight + padding * 2))
+            };
+        }
 
-        var factor = 1f / 1080f * GameSettings.Height;
-            return new SizeF(max.Width * factor * GameSettings.UIScaling,
-                max.Height * factor * GameSettings.UIScaling);
+        private sealed class TextLayout
+        {
+            public Font[] Fonts;
+            public Vector2[] Offsets;
+            public SizeF Size;
+            public float Scale;
         }
     }
 

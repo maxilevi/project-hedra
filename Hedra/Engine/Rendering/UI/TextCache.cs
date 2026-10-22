@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
+using System.Numerics;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Rendering;
+using Hedra.Rendering.UI;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 
@@ -12,78 +13,64 @@ namespace Hedra.Engine.Rendering.UI
     public static class TextCache
     {
         private static readonly object Lock = new object();
-        private static readonly List<CacheOptions> Cache = new List<CacheOptions>();
+        private static readonly Dictionary<CacheKey, CacheEntry> Cache = new Dictionary<CacheKey, CacheEntry>();
+        private static readonly Dictionary<uint, CacheEntry> ById = new Dictionary<uint, CacheEntry>();
 
         public static int Count
         {
-            get
-            {
-                lock (Lock)
-                {
-                    return Cache.Count;
-                }
-            }
-        }
-
-        private static CacheOptions GetCache(string Text, Font TextFont, Color TextColor)
-        {
-            lock (Lock)
-            {
-                return Cache.FirstOrDefault(C =>
-                    C.Text == Text && Math.Abs(C.TextFont.Size - TextFont.Size) < 0.005f &&
-                    C.TextFont.Instance.Description.Style == TextFont.Instance.Description.Style && TextColor == C.TextColor);
-            }
-        }
-
-        private static bool Contains(string Text, Font TextFont, Color TextColor)
-        {
-            return GetCache(Text, TextFont, TextColor) != null;
+            get { lock (Lock) return Cache.Count; }
         }
 
         public static bool Exists(uint Id)
         {
+            lock (Lock) return ById.ContainsKey(Id);
+        }
+
+        public static bool TryUse(string Text, Font Font, Color Color, TextOptions Options, float RasterScale,
+            out uint Id, out Vector2 PixelSize)
+        {
             lock (Lock)
             {
-                return Cache.FirstOrDefault(C => C.Id == Id) != null;
+                if (Cache.TryGetValue(new CacheKey(Text, Font, Color, Options, RasterScale), out var entry))
+                {
+                    entry.Uses++;
+                    Id = entry.Id;
+                    PixelSize = entry.PixelSize;
+                    return true;
+                }
+                Id = 0;
+                PixelSize = Vector2.Zero;
+                return false;
             }
         }
 
+        public static uint UseOrCreate(string Text, Font Font, Color Color, TextOptions Options, float RasterScale,
+            BitmapObject Bitmap, out Vector2 PixelSize)
+        {
+            lock (Lock)
+            {
+                var key = new CacheKey(Text, Font, Color, Options, RasterScale);
+                if (Cache.TryGetValue(key, out var entry))
+                {
+                    entry.Uses++;
+                    PixelSize = entry.PixelSize;
+                    return entry.Id;
+                }
+
+                PixelSize = new Vector2(Bitmap.Bitmap.Width, Bitmap.Bitmap.Height);
+                var id = Graphics2D.LoadTexture(Bitmap, false);
+                if (id == 0 || Program.IsDummy) return id;
+                entry = new CacheEntry(key, id, PixelSize);
+                Cache.Add(key, entry);
+                ById.Add(id, entry);
+                return id;
+            }
+        }
+
+        // Retain the existing entry point for callers supplying their own bitmap.
         public static uint UseOrCreate(string Text, Font TextFont, Color TextColor, BitmapObject Bitmap, StackTrace _t)
         {
-            var cache = GetCache(Text, TextFont, TextColor);
-            var id = 0u;
-            if (cache == null)
-            {
-                Add(Text, TextFont, TextColor, id = Graphics2D.LoadTexture(Bitmap, false), _t);
-            }
-            else
-            {
-                id = cache.Id;
-                cache.Uses++;
-            }
-
-            return id;
-        }
-
-        private static void Add(string Text, Font TextFont, Color TextColor, uint Id, StackTrace T)
-        {
-            if (Contains(Text, TextFont, TextColor))
-                throw new ArgumentOutOfRangeException($"Duplicate cache for '{Text}'");
-            lock (Lock)
-            {
-                var cache = Cache.FirstOrDefault(C => C.Id == Id);
-                if (cache != null) throw new ArgumentOutOfRangeException($"Duplicate cache for '{Text}'");
-                if (Program.IsDummy) return;
-                Cache.Add(new CacheOptions
-                {
-                    TextFont = TextFont,
-                    Text = Text,
-                    TextColor = TextColor,
-                    Id = Id,
-                    Uses = 1,
-                    _stack = T
-                });
-            }
+            return UseOrCreate(Text, TextFont, TextColor, new TextOptions(), TextProvider.RenderingScale, Bitmap, out _);
         }
 
         public static void Remove(uint Id)
@@ -91,43 +78,60 @@ namespace Hedra.Engine.Rendering.UI
             if (Id == 0) return;
             lock (Lock)
             {
-                var cache = Cache.FirstOrDefault(C => C.Id == Id);
-                if (cache == null)
-                    return; // throw new ArgumentOutOfRangeException($"Cache does not exist for id '{Id}'");
-                if (cache.Text.Contains("FXAA"))
-                {
-                    var a = 0;
-                }
-
-                if (--cache.Uses == 0)
-                {
-                    Cache.Remove(cache);
-                    TextureRegistry.Dispose(Id);
-                }
+                if (!ById.TryGetValue(Id, out var entry) || --entry.Uses != 0) return;
+                Cache.Remove(entry.Key);
+                ById.Remove(Id);
+                TextureRegistry.Dispose(Id);
             }
         }
 
-        private class CacheOptions
+        private readonly struct CacheKey : IEquatable<CacheKey>
         {
-            public StackTrace _stack;
+            private readonly string _text;
+            private readonly FontEntry _font;
+            private readonly Color _color;
+            private readonly bool _stroke;
+            private readonly float _strokeWidth;
+            private readonly Color _strokeColor;
+            private readonly float _rasterScale;
 
-            public CacheOptions()
+            public CacheKey(string Text, Font Font, Color Color, TextOptions Options, float RasterScale)
             {
-#if DEBUG
-                _stack = new StackTrace();
-#endif
+                _text = Text;
+                _font = new FontEntry(Font.Family, Font.Size, Font.Instance.Description.Style);
+                _color = Color;
+                _stroke = Options.HasStroke;
+                _strokeWidth = Options.StrokeWidth;
+                _strokeColor = Options.StrokeColor;
+                _rasterScale = RasterScale;
             }
 
-            public string Text { get; set; }
-            public Font TextFont { get; set; }
-            public Color TextColor { get; set; }
-            public uint Id { get; set; }
-            public uint Uses { get; set; }
-
-            public override string ToString()
+            public bool Equals(CacheKey Other)
             {
-                return $"{Id}|{Text}|{Uses}";
+                return _text == Other._text && _font.Equals(Other._font) && _color.Equals(Other._color) &&
+                       _stroke == Other._stroke && _strokeWidth.Equals(Other._strokeWidth) &&
+                       _strokeColor.Equals(Other._strokeColor) && _rasterScale.Equals(Other._rasterScale);
             }
+
+            public override bool Equals(object Obj) => Obj is CacheKey other && Equals(other);
+            public override int GetHashCode() => HashCode.Combine(_text, _font, _color, _stroke,
+                _strokeWidth, _strokeColor, _rasterScale);
+        }
+
+        private sealed class CacheEntry
+        {
+            public CacheEntry(CacheKey Key, uint Id, Vector2 PixelSize)
+            {
+                this.Key = Key;
+                this.Id = Id;
+                this.PixelSize = PixelSize;
+                Uses = 1;
+            }
+
+            public CacheKey Key { get; }
+            public uint Id { get; }
+            public Vector2 PixelSize { get; }
+            public int Uses { get; set; }
         }
     }
 }

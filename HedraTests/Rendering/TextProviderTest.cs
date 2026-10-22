@@ -81,7 +81,7 @@ namespace HedraTests.Rendering
             Assert.AreEqual(new[]
             {
                 defaultFont,
-                FontCache.GetBold(1.5f)
+                FontCache.GetBold(1.25f)
             }, output.TextFonts);
         }
 
