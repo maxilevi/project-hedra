@@ -15,7 +15,6 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Scenes;
-using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Framework;
 using Hedra.Numerics;
@@ -762,8 +761,9 @@ namespace Hedra.Engine.BiomeSystem
             var memory = stackalloc byte[size];
             using var allocator = new StackAllocator(size, memory);
             var appearances = new PlantAppearanceCache();
-            var structs = World.StructureHandler.StructureItems;
-            var groundworks = World.WorldBuilding.Groundworks.Where(P => P.NoPlants).ToArray();
+            var candidates = new VegetationCandidates(OffsetX, OffsetZ, World.StructureHandler.StructureItems,
+                World.WorldBuilding.Groundworks, Array.Empty<BasePlateau>());
+            var groundworks = candidates.PlantGroundworks;
             var hasWater = Parent.HasWater;
             for (var x = 0; x < Chunk.BoundsX; x++)
             for (var z = 0; z < Chunk.BoundsZ; z++)
@@ -772,13 +772,14 @@ namespace Hedra.Engine.BiomeSystem
                 if (noPlantsGroundwork) continue;
                 var groundY = Parent.GetHighestY(x, z);
                 var waterY = hasWater ? Parent.GetHighestWaterY(x, z) : 0;
+                candidates.StructureExclusions(new Vector2(OffsetX + x * Chunk.BlockSize, OffsetZ + z * Chunk.BlockSize),
+                    out var noWeedZone, out _);
 
                 void Sample(int Y, bool IsWaterPlacement)
                 {
                     var samplingPosition = new Vector3(Parent.OffsetX + x * Chunk.BlockSize, Y - 1,
                         Parent.OffsetZ + z * Chunk.BlockSize);
                     var region = Cache.GetRegion(samplingPosition);
-                    LoopStructures(x, z, structs, out var noWeedZone, out _, out _);
                     DoEnvironmentPlacements(allocator, samplingPosition, noWeedZone, region, IsWaterPlacement, appearances);
                 }
 
@@ -791,9 +792,10 @@ namespace Hedra.Engine.BiomeSystem
 
         protected override void DoTreeAndStructurePlacements(RegionCache Cache)
         {
-            var structs = World.StructureHandler.StructureItems;
-            var plateaus = World.WorldBuilding.Plateaux.Where(P => P.NoTrees).ToArray();
-            var groundworks = World.WorldBuilding.Groundworks.Where(P => P.NoTrees).ToArray();
+            var candidates = new VegetationCandidates(OffsetX, OffsetZ, World.StructureHandler.StructureItems,
+                World.WorldBuilding.Groundworks, World.WorldBuilding.Plateaux);
+            var plateaus = candidates.TreePlateaus;
+            var groundworks = candidates.TreeGroundworks;
             for (var _x = 0; _x < Chunk.BoundsX; _x++)
             for (var _z = 0; _z < Chunk.BoundsZ; _z++)
             {
@@ -803,7 +805,8 @@ namespace Hedra.Engine.BiomeSystem
                 var block = Parent.GetBlockAt(x, y, z);
 
                 if (block.Type != BlockType.Grass) continue;
-                LoopStructures(_x, _z, structs, out _, out var noTreesZone, out _);
+                candidates.StructureExclusions(new Vector2(OffsetX + x * Chunk.BlockSize, OffsetZ + z * Chunk.BlockSize),
+                    out _, out var noTreesZone);
                 LoopPlateaus(_x, _z, plateaus, out var noTreesPlateau);
                 LoopGroundworks(_x, _z, groundworks, out var noTreesGroundwork);
 
@@ -873,37 +876,5 @@ namespace Hedra.Engine.BiomeSystem
             }
         }
 
-        private void LoopStructures(int X, int Z, CollidableStructure[] Structs,
-            out bool NoGrassZone, out bool NoTreesZone, out bool InMerchant)
-        {
-            NoGrassZone = false;
-            NoTreesZone = false;
-            InMerchant = false;
-            foreach (var structPosition in Structs)
-            {
-                var possiblePosition = new Vector3(Parent.OffsetX + X * Chunk.BlockSize, 0,
-                    Parent.OffsetZ + Z * Chunk.BlockSize);
-
-                if (structPosition.Design is GiantTreeDesign)
-                {
-                    var radius = structPosition.Mountain.Radius;
-                    if ((structPosition.Mountain.Position - possiblePosition.Xz()).LengthSquared() <
-                        radius * .3f * radius * .3f)
-                        NoGrassZone = true;
-
-                    if (!NoTreesZone && (structPosition.Mountain.Position - possiblePosition.Xz()).LengthSquared() <
-                        radius * 0.5f * radius * 0.5f)
-                        NoTreesZone = true;
-                }
-
-                if (structPosition.Design is TravellingMerchantDesign)
-                {
-                    var radius = structPosition.Mountain.Radius;
-                    if ((structPosition.Mountain.Position - possiblePosition.Xz()).LengthSquared() <
-                        radius * .5f * radius * .5f)
-                        InMerchant = true;
-                }
-            }
-        }
     }
 }
